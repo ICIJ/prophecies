@@ -1,0 +1,76 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+*.pyc
+*.log
+*.pot
+__pycache__/
+*.py[cod]
+*.orig
+
+# Users media
+prophecies/media/*
+# Topic Skeleton images exception rules
+!prophecies/media/topics-skeletons/body-count.jpg
+!prophecies/media/topics-skeletons/corporate-nets.jpg
+!prophecies/media/topics-skeletons/family-affairs-schema.jpg
+!prophecies/media/topics-skeletons/family-affairs.jpg
+!prophecies/media/topics-skeletons/political-influence.jpg
+!prophecies/media/topics-skeletons/supply-chain.jpg
+
+# Binary files and database
+*.db
+*.sqlite3
+*.sqlite3-journal
+
+# Virtualenv
+venv
+.venv
+.env
+.cache
+Pipfile.graph
+
+# Generated files
+prophecies/static/components
+prophecies/static/CACHE
+staticfiles
+node_modules
+catalog-v001.xml
+.coverage
+*.egg-info
+./dist
+./sdist
+./build
+
+# Configuration file
+.env_dev
+*.sublime-*
+
+# IDEs related
+.idea
+.vscode
+
+# notebook's checkpoints
+*checkpoint.ipynb
+.ipynb_checkpoints/
+notebooks/*.html
+notebooks/*.pdf
+
+# Ready to import data files
+data/
+!data/*_to_import.csv
+!data/*-users-*.csv
+!data/xemx_users.csv
+!data/sars_priority_2.csv
+!data/05_dpv_all_addresses_classified.v2.csv
+!data/country_choice.csv
+
+todelete*.txt
+
+!zipped_data/

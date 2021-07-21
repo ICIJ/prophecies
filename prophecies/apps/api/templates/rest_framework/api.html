@@ -1,0 +1,26 @@
+{% extends "rest_framework/base.html" %}
+{% load i18n %}
+{% load rest_framework %}
+
+{% block title %}
+  {% if name %}{{ name }} – {% endif %}{% trans 'Prophecies API' %}
+{% endblock %}
+
+{% block branding %}
+  <a class="navbar-brand" rel="nofollow" href="/api/">
+    {% trans 'Prophecies API' %}
+  </a>
+{% endblock %}
+
+{% block userlinks %}
+  {% if user.is_authenticated %}
+    {% optional_logout request user %}
+    {% if user.is_staff %}
+      <li class="navbar-link">
+        <a href="{% url 'admin:index' %}">Admin Panel</a>
+      </li>
+    {% endif %}
+  {% else %}
+    {% optional_login request %}
+  {% endif %}
+{% endblock %}

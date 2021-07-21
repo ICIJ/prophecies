@@ -1,0 +1,71 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+*.pyc
+*.log
+*.pot
+__pycache__/
+*.py[cod]
+*.orig
+
+# Users media
+prophecies/run/media/*
+# Topic Skeleton images exception rules
+!prophecies/media/topics-skeletons/body-count.jpg
+!prophecies/media/topics-skeletons/corporate-nets.jpg
+!prophecies/media/topics-skeletons/family-affairs-schema.jpg
+!prophecies/media/topics-skeletons/family-affairs.jpg
+!prophecies/media/topics-skeletons/political-influence.jpg
+!prophecies/media/topics-skeletons/supply-chain.jpg
+
+# Binary files and database
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+
+# Virtualenv
+venv
+.venv
+.env
+Pipfile.graph
+
+# Generated files
+prophecies/run/static/*
+staticfiles
+node_modules
+catalog-v001.xml
+.coverage
+*.egg-info
+./static/*
+
+# Configuration file
+.env_dev
+*.sublime-*
+
+# data files
+data/
+data_import_reports/
+
+# Unignore ready to import data files
+!data/*_to_import.csv
+!data/*_to_import.*.v3*.csv
+!data/*-users-*.csv
+!data/xemx_users.csv
+!data/sars_priority_2.csv
+!data/current_country_identifications_*.sciki
+!data/05_dpv_all_addresses_classified.v2.csv
+!data/country_choice.csv
+!data/uploaded-files-joined.csv
+
+# Put data in zip format here
+!zipped_data/
+
+# Ignore the git
+.git
