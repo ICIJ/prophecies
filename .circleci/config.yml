@@ -59,10 +59,10 @@ jobs:
           name: Restore virtualenv from previous builds
           key: venv-dependencies-cache-{{ checksum "Pipefile.lock" }}
       - run:
-        name: Install pipenv and project's pip packages
-        command: |
-          (sudo apt update || /bin/true) && sudo apt install pipenv
-          pipenv install
+          name: Install pipenv and project's pip packages
+          command: |
+            (sudo apt update || /bin/true) && sudo apt install pipenv
+            pipenv install
       - save_cache:
           name: Save virtualenv cache for future builds
           key: venv-dependencies-cache-{{ checksum "Pipefile.lock" }}
