@@ -20,7 +20,7 @@ jobs:
       - checkout
 
   # This job will build the frontend environment with the correct dependencies
-  build:
+  build-frontend:
     docker:
       - image: circleci/node:14.15.5
     working_directory: ~/repository/prophecies/apps/frontend/
@@ -43,7 +43,7 @@ jobs:
             - ~/repository/prophecies/apps/frontend/
 
   # This job will run unit tests for the frontend
-  test:
+  test-frontend:
     docker:
       - image: circleci/node:14.15.5
     working_directory: ~/repository/prophecies/apps/frontend/
