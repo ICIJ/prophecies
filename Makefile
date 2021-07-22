@@ -13,7 +13,7 @@ install-pip:
 		pipenv install
 
 install-yarn:
-		yarn --cwd prophecies/apps/frontend
+		yarn
 
 migrate:
 		pipenv run python manage.py migrate
@@ -22,10 +22,10 @@ run:
 		pipenv run python manage.py runserver 0.0.0.0:8008
 
 webpack-build:
-		yarn --cwd prophecies/apps/frontend build
+		yarn build
 
 webpack-serve:
-		yarn --cwd prophecies/apps/frontend serve
+		yarn serve
 
 shell:
 		pipenv run python manage.py shell
