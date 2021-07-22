@@ -57,7 +57,7 @@ jobs:
           key: repository-cache-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           name: Restore virtualenv from previous builds
-          key: venv-dependencies-cache-{{ checksum "Pipefile.lock" }}
+          key: venv-dependencies-cache-{{ checksum "Pipfile.lock" }}
       - run:
           name: Install pipenv and project's pip packages
           command: |
@@ -65,7 +65,7 @@ jobs:
             pipenv install
       - save_cache:
           name: Save virtualenv cache for future builds
-          key: venv-dependencies-cache-{{ checksum "Pipefile.lock" }}
+          key: venv-dependencies-cache-{{ checksum "Pipfile.lock" }}
           paths:
             - "{{ pipenv --venv }}"
       - run:
