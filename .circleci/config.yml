@@ -5,7 +5,7 @@ workflows:
   test:
     jobs:
       - checkout
-      - build-frontend
+      - build-frontend:
         requries:
           - checkout
       - test-frontend:
