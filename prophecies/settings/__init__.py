@@ -1,4 +1,4 @@
-from os.path import normpath
+from os.path import normpath, exists
 import sys
 import environ
 
@@ -7,7 +7,10 @@ project_root = root.path('prophecies')
 
 # Read .env from the root path and load environment variables
 env = environ.Env()
-env.read_env(root.path('.env').root)
+env_root = root.path('.env').root
+# Load the .env file only if it exists
+if exists(env_root):
+    env.read_env(env_root)
 
 # Build paths inside the project
 BASE_DIR = root()
@@ -107,7 +110,6 @@ STATICFILES_DIRS = [
     project_root.path('apps', 'frontend', 'dist').root,
 ]
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 # https://github.com/jacobian/dj-database-url#url-schema
@@ -165,7 +167,7 @@ SOCIAL_AUTH_SANITIZE_REDIRECTS = not DEBUG
 SOCIAL_AUTH_LOGIN_URL = '/login/xemx'
 SOCIAL_AUTH_XEMX_KEY = env.str('SOCIAL_AUTH_XEMX_KEY', default='')
 SOCIAL_AUTH_XEMX_SECRET = env.str('SOCIAL_AUTH_XEMX_SECRET', default='')
-SOCIAL_AUTH_XEMX_HOSTNAME = env.str('SOCIAL_AUTH_XEMX_HOSTNAME', default='http://localhost:3001')
+SOCIAL_AUTH_XEMX_HOSTNAME = env.str('SOCIAL_AUTH_XEMX_HOSTNAME', default='http://xemx:3001')
 
 SOCIAL_AUTH_PIPELINE = (
     # Get the information we can about the user and return it in a simple

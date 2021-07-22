@@ -1,20 +1,37 @@
 version: '3'
 
+volumes:
+  shared_static: {}
+
 services:
+  nginx:
+      image: nginx:latest
+      ports:
+        - "9999:9999"
+      volumes:
+        - ./bin/nginx.conf:/etc/nginx/conf.d/default.conf
+        - shared_static:/static/:ro
+      depends_on:
+        - web
+
   web:
     image: prophecies
-    ports:
-      - 8765:8765
     environment:
       - WAIT_HOSTS=db:5432
       - WAIT_HOSTS_TIMEOUT=60
       - DATABASE_URL=postgres://postgres:postgres@db/prophecies
-      - ALLOWED_HOSTS=0.0.0.0,localhost
-      - PORT=8765
+      - ALLOWED_HOSTS=0.0.0.0,localhost,web
+      - PORT=8008
       - DEBUG=false
+      - SOCIAL_AUTH_XEMX_KEY=tM5vvMH0iI5kPihIShXO7N2_L5JPKCChGniKFoh1PvU
+      - SOCIAL_AUTH_XEMX_SECRET=W_fdu-_p_Z1QpsMC8vRBCdPOJx6CFkp5VnLcrt8KZtk
+    volumes:
+      - shared_static:/code/prophecies/run/static
     depends_on:
       - db
       - migration
+    expose:
+      - "8008"
 
   migration:
     build: .

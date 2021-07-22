@@ -7,14 +7,25 @@ clean:
 		find . -name "*.pyc" -exec rm -rf {} \;
 		rm -rf dist *.egg-info __pycache__
 
-install:
+install: install-pip install-yarn
+
+install-pip:
 		pipenv install
+
+install-yarn:
+		yarn --cwd prophecies/apps/frontend
 
 migrate:
 		pipenv run python manage.py migrate
 
 run:
 		pipenv run python manage.py runserver 0.0.0.0:8008
+
+webpack-build:
+		yarn --cwd prophecies/apps/frontend build
+
+webpack-serve:
+		yarn --cwd prophecies/apps/frontend build
 
 shell:
 		pipenv run python manage.py shell

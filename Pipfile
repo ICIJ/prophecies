@@ -12,6 +12,8 @@ django-environ = "*"
 bumpversion = "*"
 social-auth-app-django = "*"
 django-webpack-loader = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
 
 [dev-packages]
 
