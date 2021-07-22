@@ -25,7 +25,7 @@ webpack-build:
 		yarn --cwd prophecies/apps/frontend build
 
 webpack-serve:
-		yarn --cwd prophecies/apps/frontend build
+		yarn --cwd prophecies/apps/frontend serve
 
 shell:
 		pipenv run python manage.py shell
