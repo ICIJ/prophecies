@@ -1,14 +1,14 @@
 import Murmur from '@icij/murmur'
 import { createLocalVue } from '@vue/test-utils'
-import axios from 'axios'
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 
+import api from '@/api'
 import { Core } from '@/core'
 
-jest.mock('axios', () => {
+jest.mock('@/api', () => {
   return {
     get: jest.fn().mockResolvedValue({ data: {} })
   }
@@ -25,7 +25,7 @@ describe('Core', () => {
     const app = document.createElement('div')
     app.setAttribute('id', 'core')
     document.body.appendChild(app)
-    axios.get.mockClear()
+    api.get.mockClear()
   })
 
   it('should instantiate the Core class', () => {

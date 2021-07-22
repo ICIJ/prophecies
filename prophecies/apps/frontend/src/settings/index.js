@@ -1,4 +1,5 @@
 export default {
+  apiUrl: '/api/v1',
   defaultLocale: 'en',
   helpLink: 'https://support.icij.org',
   locales: [

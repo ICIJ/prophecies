@@ -1,7 +1,6 @@
 // BootstrapVue recommends using this
 import 'mutationobserver-shim'
 
-import axios from 'axios'
 import Murmur from '@icij/murmur'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
@@ -11,6 +10,7 @@ import VueScrollTo from 'vue-scrollto'
 import VueShortkey from 'vue-shortkey'
 import VueWait from 'vue-wait'
 
+import api from '@/api'
 import router from '@/router'
 import guards from '@/router/guards'
 import store from '@/store'
@@ -201,7 +201,7 @@ class Core {
    */
   async getUser (cache = true) {
     if (!this._user || !cache) {
-      const { data: user } = await axios.get('/api/v1/users/me.json')
+      const { data: user } = await api.get('/users/me.json')
       this._user = user
     }
     return this._user

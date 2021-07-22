@@ -3,7 +3,7 @@ import { createLocalVue } from '@vue/test-utils'
 
 import { createCore } from '@/core'
 
-jest.mock('axios', () => {
+jest.mock('@/api', () => {
   return {
     get: jest.fn().mockResolvedValue({ data: { } })
   }
