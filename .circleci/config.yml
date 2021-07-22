@@ -56,20 +56,18 @@ jobs:
           name: Restore app bundle repository from the `checkout` job
           key: repository-cache-{{ .Branch }}-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          name: Restore virtualenv from previous builds
-          key: virtualenv-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          name: Restore virtualenvs from previous builds
+          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
           name: Install pipenv and project's pip packages
           command: |
             sudo pip install pipenv
             pipenv install
       - save_cache:
-          name: Save virtualenv cache for future builds
-          key: virtualenv-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          name: Save virtualenvs cache for future builds
+          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
           paths:
-            - "~/.local/share/virtualenvs"
-            - "/usr/local/bin"
-            - "/usr/local/lib/python3.8/site-packages"
+            - "~/.local/share/virtualenvs/"
       - run:
           name: Run unit tests
           command: pipenv run python manage.py test prophecies
