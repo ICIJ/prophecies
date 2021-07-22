@@ -14,7 +14,7 @@ migrate:
 		pipenv run python manage.py migrate
 
 run:
-		pipenv run python manage.py runserver 0.0.0.0:9009
+		pipenv run python manage.py runserver 0.0.0.0:8008
 
 shell:
 		pipenv run python manage.py shell

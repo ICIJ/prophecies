@@ -42,9 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'social_django',
     'debug_toolbar',
+    'social_django',
     'rest_framework',
+    'webpack_loader',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +67,7 @@ TEMPLATES = [
         'DIRS': [
             project_root.path('core', 'templates').root,
             project_root.path('apps', 'api', 'templates').root,
+            project_root.path('apps', 'frontend', 'templates').root,
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -81,7 +83,29 @@ TEMPLATES = [
     },
 ]
 
+FRONTEND_DIR = project_root.path('apps', 'frontend')
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': DEBUG,
+        'BUNDLE_DIR_NAME': 'dist/',  # must end with slash
+        'STATS_FILE': FRONTEND_DIR.path('dist', 'webpack-stats.json'),
+    }
+}
+
 WSGI_APPLICATION = 'prophecies.wsgi.application'
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+STATIC_URL = env.str('STATIC_URL', default='/static/')
+STATIC_ROOT = env.str('STATIC_ROOT', default=project_root.path('run', 'static'))
+
+STATICFILES_DIRS = [
+    project_root.path('static').root,
+    project_root.path('apps', 'frontend', 'dist').root,
+]
 
 
 # Database
@@ -127,12 +151,17 @@ REST_FRAMEWORK = {
     ]
 }
 
+
+USE_X_FORWARDED_HOST = DEBUG
+
 # Xemx configuration using python-socual-auth
 # https://python-social-auth.readthedocs.io
 
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'last_name', 'email']
+SOCIAL_AUTH_IMMUTABLE_USER_FIELDS = ['username', 'email',]
 SOCIAL_AUTH_URL_NAMESPACE = 'sso'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/api'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_SANITIZE_REDIRECTS = not DEBUG
 SOCIAL_AUTH_LOGIN_URL = '/login/xemx'
 SOCIAL_AUTH_XEMX_KEY = env.str('SOCIAL_AUTH_XEMX_KEY', default='')
 SOCIAL_AUTH_XEMX_SECRET = env.str('SOCIAL_AUTH_XEMX_SECRET', default='')
@@ -191,18 +220,6 @@ USE_TZ = True
 CACHES = {
     'default': env.cache('CACHE_URL', default='dummycache://')
 }
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_URL = env.str('STATIC_URL', default='/static/')
-STATIC_ROOT = env.str('STATIC_ROOT', default=project_root.path('run', 'static'))
-
-STATICFILES_DIRS = [
-    project_root.path('static').root,
-    # Add app's static dir here, for instance:
-    # project_root.path('apps', 'exampleapp', 'static').root,
-]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

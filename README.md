@@ -44,7 +44,7 @@ To run app inside its virtualenv, use the following command:
 make run
 ```
 
-Then visit [http://0.0.0.0:9009](http://0.0.0.0:9009)
+Then visit [http://0.0.0.0:8008](http://0.0.0.0:8008)
 
 ## Publishing a new Docker image
 

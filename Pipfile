@@ -11,6 +11,7 @@ django-debug-toolbar = "*"
 django-environ = "*"
 bumpversion = "*"
 social-auth-app-django = "*"
+django-webpack-loader = "*"
 
 [dev-packages]
 
