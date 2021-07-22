@@ -1,0 +1,7 @@
+@mixin animation-delay-loop($from:0, $to:10, $delay: 300ms) {
+  @for $i from $from through $to {
+    &:nth-child(#{$i}) {
+      animation-delay: $i * $delay;
+    }
+  }
+}

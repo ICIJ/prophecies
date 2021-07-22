@@ -1,0 +1,67 @@
+@keyframes rotateLogo {
+  100% {
+    transform: translate(-50%, -50%) rotate(1turn);
+  }
+}
+
+.splashscreen {
+  align-items: center;
+  background: theme-color('dark');
+  bottom: 0;
+  color: white;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+
+  &__panel {
+    font-weight: bolder;
+    margin: $spacer;
+    text-align: center;
+    max-width: 330px;
+
+    &__spinner {
+      border-radius: $spacer;
+      display: flex;
+      height: 130px;
+      margin: auto;
+      margin-bottom: $spacer;
+      overflow: hidden;
+      position: relative;
+      width: 130px;
+
+      &:before {
+        animation: rotateLogo 4s linear infinite;
+        background-image: linear-gradient($primary, $primary),
+                          linear-gradient($dark, $dark),
+                          linear-gradient($primary, $primary),
+                          linear-gradient($dark, $dark);
+        background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+        background-repeat: no-repeat;
+        background-size: 50% 50%, 50% 50%;
+        border-radius: inherit;
+        content: "";
+        height: 200%;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 200%;
+        z-index: -1;
+      }
+
+      &:after {
+        background: white url('~images/icij-black.svg') no-repeat center center;
+        background-size: 80% 80%;
+        border-radius: inherit;
+        content: "";
+        display: block;
+        height: 95%;
+        margin: auto;
+        width: 95%;
+      }
+    }
+  }
+}

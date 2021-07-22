@@ -1,0 +1,88 @@
+$primary: #9288B9;
+$danger: #FF2222;
+$success: #5FB672;
+$info: #45C4FF;
+$light: #F6F6F8;
+
+$link-color: $primary;
+$body-bg: #E5E5E5;
+
+$card-cap-bg: mix($body-bg, white);
+$translation-bg: #fcf8e3;
+
+$theme-colors: (
+  icij: #852308,
+  primary: $primary,
+  success: $success,
+  info: $info,
+  danger: $danger,
+  light: $light,
+  dark: darken($primary, 20),
+  darker: darken($primary, 30),
+  darkest: darken($primary, 40),
+  mark: #fff5bd
+);
+
+$enable-shadows: true;
+$enable-rounded: true;
+
+$font-family-sans-serif: "Lato", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-family-serif: "Merriweather", Georgia, "Times New Roman", Times, serif;
+
+$headings-font-family: $font-family-sans-serif;
+$headings-font-weight: 700;
+
+$text-muted: #717171;
+
+$btn-box-shadow: none;
+
+$popover-max-width: 480px;
+$popover-box-shadow: 0 20px 40px 10px rgba(black, .2);
+$popover-border-color: white;
+$popover-bg: black;
+$popover-border-width: 0;
+$popover-border-color: $popover-bg;
+$popover-body-color: white;
+$popover-header-bg: #31313a;
+$popover-header-color: white;
+
+$mark-bg: map-get($theme-colors, 'mark');
+
+$modal-content-border-width: 0;
+$modal-content-box-shadow-xs: 0 1px 3px 0 rgba(black, .15);
+$modal-content-box-shadow-sm-up: 0 2px 6px 0 rgba(black, .25);
+$modal-backdrop-bg: #292930;
+$modal-backdrop-opacity: .5;
+$modal-inner-padding: 1.5rem;
+
+$kbd-padding-y: .2em;
+$kbd-padding-x: .4em;
+$kbd-bg: rgba(#222, .7);
+
+$tooltip-max-width: 260px;
+$tooltip-opacity: 1;
+
+$input-box-shadow: none;
+$b-toast-background-opacity: $tooltip-opacity;
+
+$font-size-sm: .9rem;
+$font-size-lg: 1.2rem;
+$line-height-sm: 1.7;
+
+$table-accent-bg: mix($body-bg, white);
+
+$nav-tabs-link-active-bg: white;
+
+// Bootstrap variables and mixins must be available everywhere
+@import '~node_modules/bootstrap/scss/_functions.scss';
+@import '~node_modules/bootstrap/scss/_variables.scss';
+@import '~node_modules/bootstrap/scss/_mixins.scss';
+// We also defines a few functions and mixins internally
+@import './_functions.scss';
+@import './_mixins.scss';
+
+$spacer-xs: $spacer * 0.5;
+$spacer-sm: $spacer * 0.75;
+$spacer-lg: $spacer * 1.5;
+$spacer-xl: $spacer * 2;
+$spacer-xxl: $spacer * 4;
