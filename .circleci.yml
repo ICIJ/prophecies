@@ -1,0 +1,56 @@
+version: 2
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - checkout
+      - build-frontend
+        requries:
+          - checkout
+      - test-frontend:
+        requires:
+          - build-frontend
+jobs:
+  checkout:
+    docker:
+      - image: circleci/node:14.15.5
+    working_directory: ~/repository
+    steps:
+      - checkout
+
+  # This job will build the frontend environment with the correct dependencies
+  build:
+    docker:
+      - image: circleci/node:14.15.5
+    working_directory: ~/repository/prophecies/apps/frontend/
+    steps:
+      - restore_cache:
+          name: Restore dependencies cache from previous builds
+          key: dependencies-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies
+          command: make install
+      - save_cache:
+          name: Save dependencies cache for future builds
+          key: dependencies-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - save_cache:
+          name: Save the app bundle (repo + dependencies) for downstream jobs
+          key: bundle-cache-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/repository/prophecies/apps/frontend/
+
+  # This job will run unit tests for the frontend
+  test:
+    docker:
+      - image: circleci/node:14.15.5
+    working_directory: ~/repository/prophecies/apps/frontend/
+    steps:
+      - restore_cache:
+          name: Restore app bundle (repo + dependencies) from the `build` job
+          key: bundle-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+          name: Run unit tests
+          command: yarn test:unit
