@@ -20,7 +20,7 @@ jobs:
       - checkout
       - save_cache:
           name: Save the app bundle for downstream jobs
-          key: repository-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: repository-cache-{{ .Branch }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/repository/
 
@@ -31,16 +31,16 @@ jobs:
     steps:
       - restore_cache:
           name: Restore app bundle repository from the `checkout` job
-          key: repository-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: repository-cache-{{ .Branch }}-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           name: Restore node dependencies from previous builds
-          key: node-dependencies-cache-{{ checksum "prophecies/apps/frontend/package.json" }}
+          key: node-dependencies-cache-{{ .Branch }}-{{ checksum "prophecies/apps/frontend/package.json" }}
       - run:
           name: Install node dependencies with yarn
           command: yarn
       - save_cache:
           name: Save dependencies cache for future builds
-          key: node-dependencies-cache-{{ checksum "prophecies/apps/frontend/package.json" }}
+          key: node-dependencies-cache-{{ .Branch }}-{{ checksum "prophecies/apps/frontend/package.json" }}
           paths:
             - ./prophecies/apps/frontend/node_modules/
       - run:
@@ -54,20 +54,22 @@ jobs:
     steps:
       - restore_cache:
           name: Restore app bundle repository from the `checkout` job
-          key: repository-cache-{{ .Environment.CIRCLE_SHA1 }}
+          key: repository-cache-{{ .Branch }}-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           name: Restore virtualenv from previous builds
-          key: venv-dependencies-cache-{{ checksum "Pipfile.lock" }}
+          key: venv-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
           name: Install pipenv and project's pip packages
           command: |
-            (sudo apt update || /bin/true) && sudo apt install pipenv
+            sudo pip install pipenv
             pipenv install
       - save_cache:
           name: Save virtualenv cache for future builds
-          key: venv-dependencies-cache-{{ checksum "Pipfile.lock" }}
+          key: venv-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
           paths:
             - "{{ pipenv --venv }}"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.8/site-packages"
       - run:
           name: Run unit tests
           command: pipenv run python manage.py test prophecies
