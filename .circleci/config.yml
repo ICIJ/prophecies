@@ -8,6 +8,9 @@ workflows:
       - test-frontend:
           requires:
             - checkout
+      - test-backend:
+          requires:
+            - checkout
 jobs:
   checkout:
     docker:
@@ -43,8 +46,28 @@ jobs:
       - run:
           name: Run unit tests
           command: yarn test:unit
+
+  test-backend:
+    docker:
+      - image: circleci/python:3.8
+    working_directory: ~/repository/
+    steps:
+      - restore_cache:
+          name: Restore app bundle repository from the `checkout` job
+          key: repository-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          name: Restore virtualenv from previous builds
+          key: venv-dependencies-cache-{{ checksum "Pipefile.lock" }}
+      - run:
+        name: Install pipenv and project's pip packages
+        command: |
+          (sudo apt update || /bin/true) && sudo apt install pipenv
+          pipenv install
       - save_cache:
-          name: Save the app bundle (repo + dependencies) for downstream jobs
-          key: bundle-cache-{{ .Environment.CIRCLE_SHA1 }}
+          name: Save virtualenv cache for future builds
+          key: venv-dependencies-cache-{{ checksum "Pipefile.lock" }}
           paths:
-            - ~/repository/prophecies/apps/frontend/
+            - "{{ pipenv --venv }}"
+      - run:
+          name: Run unit tests
+          command: pipenv run python manage.py test prophecies
