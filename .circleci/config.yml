@@ -6,11 +6,11 @@ workflows:
     jobs:
       - checkout
       - build-frontend:
-        requires:
-          - checkout
+          requires:
+            - checkout
       - test-frontend:
-        requires:
-          - build-frontend
+          requires:
+            - build-frontend
 jobs:
   checkout:
     docker:
