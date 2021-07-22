@@ -7,7 +7,7 @@
       </div>
       <div class="login__card__body">
         <ul class="list-group">
-          <li class="list-group-item bg-light border-top border-bottom border-left-0 border-right-0 rounded-0">
+          <li class="list-group-item bg-muted border-top border-bottom border-left-0 border-right-0 rounded-0">
             <p>
               {{ $t('login.authenticationPlatform') }}
             </p>
@@ -18,7 +18,7 @@
           </li>
           <li class="list-group-item border-0">
             <p>{{ $t('login.supportDesk') }}</p>
-            <a class="btn btn-outline-secondary btn-lg" :href="helpLink" target="_blank" :title="$t('login.askHelp')">
+            <a class="btn btn-outline-tertiary btn-lg" :href="helpLink" target="_blank" :title="$t('login.askHelp')">
               <fa icon="ambulance" class="mr-2"></fa>
               {{ $t('login.askHelp') }}
             </a>
@@ -61,7 +61,7 @@ export default {
 
 <style lang="scss" scoped>
   .login {
-    background: theme-color('dark');
+    background: theme-color('primary');
     min-height: 100vh;
     padding: 10vh;
 

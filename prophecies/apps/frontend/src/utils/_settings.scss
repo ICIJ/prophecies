@@ -1,38 +1,58 @@
-$primary: #9288B9;
-$danger: #FF2222;
-$success: #5FB672;
+$primary: #235B59;
+$secondary: #BEBFBF;
+$tertiary: #31807D;
+$danger: #FE6565;
+$warning: #FFE980;
+$success: #73B782;
 $info: #45C4FF;
-$light: #F6F6F8;
-
-$link-color: $primary;
-$body-bg: #E5E5E5;
-
-$card-cap-bg: mix($body-bg, white);
-$translation-bg: #fcf8e3;
+$light: #CCE3E6;
 
 $theme-colors: (
   icij: #852308,
   primary: $primary,
+  secondary: $secondary,
+  tertiary: $tertiary,
+  danger: $danger,
+  warning: $warning,
   success: $success,
   info: $info,
-  danger: $danger,
   light: $light,
-  dark: darken($primary, 20),
-  darker: darken($primary, 30),
-  darkest: darken($primary, 40),
-  mark: #fff5bd
+  dark: darken($primary, 10),
+  mark: #fff5bd,
+  muted: #EFEFEF
 );
+
+$link-color: $primary;
+$body-bg: #E5E5E5;
+$body-color: darken($primary, 20);
+$text-muted: #BEBFBF;
+
+$font-size-base: 1rem;
+$small-font-size: 85%;
+
+$display1-size: 35px;
+$display2-size: 20px;
+$display3-size: 18px;
+$display4-size: 16px;
+
+$display1-weight: 800;
+$display2-weight: 600;
+$display3-weight: 600;
+$display4-weight: 500;
+
+$font-weight-bold: 700;
+
+$card-cap-bg: mix($body-bg, white);
+$translation-bg: #fcf8e3;
 
 $enable-shadows: true;
 $enable-rounded: true;
 
-$font-family-sans-serif: "Lato", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$font-family-sans-serif: "Inter", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 $font-family-serif: "Merriweather", Georgia, "Times New Roman", Times, serif;
 
 $headings-font-family: $font-family-sans-serif;
-$headings-font-weight: 700;
-
-$text-muted: #717171;
+$headings-font-weight: 800;
 
 $btn-box-shadow: none;
 
@@ -72,6 +92,11 @@ $line-height-sm: 1.7;
 $table-accent-bg: mix($body-bg, white);
 
 $nav-tabs-link-active-bg: white;
+
+$alert-bg-level: -6;
+$alert-border-level: 0;
+$alert-color-level: 7;
+
 
 // Bootstrap variables and mixins must be available everywhere
 @import '~node_modules/bootstrap/scss/_functions.scss';
