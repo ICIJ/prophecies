@@ -18,8 +18,7 @@ $theme-colors: (
   info: $info,
   light: $light,
   dark: darken($primary, 10),
-  mark: #fff5bd,
-  muted: #EFEFEF
+  mark: #fff5bd
 );
 
 $link-color: $primary;
