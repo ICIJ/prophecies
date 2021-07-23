@@ -1,13 +1,7 @@
 import Vue from 'vue'
 import { createLocalVue } from '@vue/test-utils'
 
-import { createCore } from '@/core'
-
-jest.mock('@/api', () => {
-  return {
-    get: jest.fn().mockResolvedValue({ data: { } })
-  }
-})
+import { Core, createCore } from '@/core'
 
 describe('main', () => {
   const { localVue } = createLocalVue()
@@ -18,9 +12,17 @@ describe('main', () => {
     const app = document.createElement('div')
     app.setAttribute('id', 'app')
     document.body.appendChild(app)
+    // Mock Core methods that use the backend
+    jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({ username: 'foo' })
+    jest.spyOn(Core.prototype, 'getSettings').mockResolvedValue({ })
+    // Create a core instance
     core = createCore(localVue)
     vm = await core.ready
     vm = vm.mount()
+  })
+
+  afterAll(() => {
+    jest.restoreAllMocks()
   })
 
   it('should instantiate Vue', () => {

@@ -5,27 +5,23 @@ import VueI18n from 'vue-i18n'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 
-import api from '@/api'
-import { Core } from '@/core'
-
-jest.mock('@/api', () => {
-  return {
-    get: jest.fn().mockResolvedValue({ data: {} })
-  }
-})
+import Core from '@/core'
 
 describe('Core', () => {
   let localVue
 
   beforeEach(() => {
-    localVue = createLocalVue()
-  })
-
-  beforeEach(() => {
     const app = document.createElement('div')
     app.setAttribute('id', 'core')
     document.body.appendChild(app)
-    api.get.mockClear()
+    localVue = createLocalVue()
+    // Mock Core methods that use the backend
+    jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({ username: 'foo' })
+    jest.spyOn(Core.prototype, 'getSettings').mockResolvedValue({ })
+  })
+
+  afterAll(() => {
+    jest.restoreAllMocks()
   })
 
   it('should instantiate the Core class', () => {
