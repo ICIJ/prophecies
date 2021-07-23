@@ -70,7 +70,7 @@ jobs:
             - "~/.local/share/virtualenvs/"
       - run:
           name: Collect static file
-          command: pipenv run python manage.py collectstatic
+          command: pipenv run python manage.py collectstatic --noinput
       - run:
           name: Run unit tests
           command: pipenv run python manage.py test prophecies
