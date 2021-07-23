@@ -3,6 +3,9 @@ import { createLocalVue } from '@vue/test-utils'
 
 import { Core, createCore } from '@/core'
 
+// Mock the router's configuration
+jest.mock('@/router', () => ({ router: { routes: [] } }))
+
 describe('main', () => {
   const { localVue } = createLocalVue()
   let core = null

@@ -8,11 +8,16 @@ import Vuex from 'vuex'
 
 import Core from '@/core'
 
+jest.mock('@/router', () => ({ router: { routes: [] } }))
 jest.mock('@/api')
 jest.mock('@/utils/icons', () => {
   const BarIcon = { name: 'BarIcon', template: '<i></i>' }
   const FooIcon = { name: 'FooIcon', template: '<i></i>' }
-  return { BarIcon, FooIcon }
+  return {
+    ...jest.requireActual('@/utils/icons'),
+    BarIcon,
+    FooIcon
+  }
 })
 
 describe('Core', () => {
@@ -26,7 +31,7 @@ describe('Core', () => {
     // Clear Murmur config
     Murmur.config.set('foo', null)
     // Mock Core methods that use the backend
-    jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({ username: 'foo' })
+    jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({ username: 'foo', is_staff: true })
     jest.spyOn(Core.prototype, 'getSettings').mockResolvedValue({ foo: 'bar' })
   })
 

@@ -1,4 +1,11 @@
 {
+  "appHeader": {
+    "admin": "Admin",
+    "tips": "Tips",
+    "search": "Search",
+    "shortcuts": "Shortcuts",
+    "logOut": "Sign out"
+  },
   "login": {
     "welcome": "Welcome to Prophecies",
     "sumUp": "<a href=\"https://icij.org\">ICIJ</a> data cleaning and validation platform.",

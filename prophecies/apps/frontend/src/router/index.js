@@ -1,3 +1,4 @@
+import Boilerplate from '@/views/Boilerplate.vue'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 
@@ -9,6 +10,14 @@ export const router = {
       component: Home,
       meta: {
         title: 'Home'
+      }
+    },
+    {
+      name: 'boilerplate',
+      path: '/boilerplate',
+      component: Boilerplate,
+      meta: {
+        title: 'Boilerplate'
       }
     },
     {

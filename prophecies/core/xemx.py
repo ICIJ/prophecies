@@ -36,7 +36,7 @@ def map_xemx_groups(strategy, details, user=None, *args, **kwargs):
         return
     # All Xemx user are "staff"
     user.is_staff = True
-    user.is_superuser = 'Admin' in details['xemx_groups']
+    user.is_superuser = 'icijstaff' in details['xemx_groups']
     user.save()
     # Get groups ids with the same name
     group_ids = Group.objects.filter(name__in=details['xemx_groups']).values_list('id', flat=True)
