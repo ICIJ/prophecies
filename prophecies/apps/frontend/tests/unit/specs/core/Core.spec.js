@@ -1,6 +1,6 @@
 import api from '@/api'
 import Murmur from '@icij/murmur'
-import { createLocalVue } from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import VueRouter from 'vue-router'
@@ -9,6 +9,11 @@ import Vuex from 'vuex'
 import Core from '@/core'
 
 jest.mock('@/api')
+jest.mock('@/utils/icons', () => {
+  const BarIcon = { name: 'BarIcon', template: '<i></i>' }
+  const FooIcon = { name: 'FooIcon', template: '<i></i>' }
+  return { BarIcon, FooIcon }
+})
 
 describe('Core', () => {
   let localVue
@@ -101,9 +106,17 @@ describe('Core', () => {
   it('should transform settings list into an object', async () => {
     jest.restoreAllMocks()
     api.get.mockResolvedValue({ data: [{ key: 'searchEngine', value: 'https://duckduckgo.com' }] })
-    const core = new Core()
+    const core = new Core(localVue)
     const settings = await core.getSettings()
     expect(settings).toBeInstanceOf(Object)
     expect(settings.searchEngine).toBe('https://duckduckgo.com')
+  })
+
+  it('should register all icons exported by the @/utils/icons', () => {
+    Core.init(localVue)
+    const Component = { render: h => h('bar-icon') }
+    const vm = shallowMount(Component, { localVue })
+    expect(vm.findComponent({ name: 'bar-icon' }).exists()).toBeTruthy()
+    expect(vm.findComponent({ name: 'foo-icon' }).exists()).toBeFalsy()
   })
 })

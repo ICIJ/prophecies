@@ -17,6 +17,7 @@
     "lodash": "^4.17.21",
     "mutationobserver-shim": "^0.3.7",
     "vue": "^2.6.11",
+    "vue-feather-icons": "^5.1.0",
     "vue-i18n": "^8.25.0",
     "vue-router": "^3.2.0",
     "vue-scrollto": "^2.20.0",

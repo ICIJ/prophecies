@@ -12,7 +12,7 @@
               {{ $t('login.authenticationPlatform') }}
             </p>
             <a class="btn btn-dark btn-lg" :href="loginUrl">
-              <fa icon="user-shield" class="mr-2"></fa>
+              <shield-icon size="1x" class="mr-1" />
               {{ $t('login.account') }}
             </a>
           </li>

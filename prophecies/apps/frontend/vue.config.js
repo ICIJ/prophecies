@@ -5,6 +5,7 @@ const resolve = filepath => join(__dirname, filepath)
 
 module.exports = {
   lintOnSave: false,
+  runtimeCompiler: process.env.NODE_ENV === 'test',
   // Temporary workarround for map file not being created
   // @see https://github.com/django-webpack/django-webpack-loader/issues/280#issuecomment-871447482
   productionSourceMap: false,

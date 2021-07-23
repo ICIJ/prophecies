@@ -17,6 +17,7 @@ import guards from '@/router/guards'
 import store from '@/store'
 import messages from '@/messages/en'
 import settings from '@/settings'
+import * as icons from '@/utils/icons'
 
 /**
   @class
@@ -31,8 +32,22 @@ class Core {
     this.LocalVue = LocalVue
     // Disable production tip when not in production
     this.LocalVue.config.productionTip = process.env.NODE_ENV === 'development'
+    // All icon must be added to the local vue
+    this.registerIcons()
     // Setup deferred state
     this.defer()
+  }
+
+  /**
+   * Register all icons components
+   * @returns {Array} icons components
+   */
+  registerIcons () {
+    Object.values(icons).forEach(({ name, ...icon }) => {
+      if (name) {
+        this.LocalVue.component(name, icon)
+      }
+    })
   }
 
   /**
