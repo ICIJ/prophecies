@@ -34,7 +34,6 @@ INTERNAL_IPS = ('127.0.0.1', )
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,6 +48,9 @@ INSTALLED_APPS = [
     'social_django',
     'rest_framework',
     'webpack_loader',
+    'constance',
+    'constance.backends.database',
+    'prophecies.apps.api'
 ]
 
 MIDDLEWARE = [
@@ -221,6 +223,17 @@ USE_TZ = True
 # https://django-environ.readthedocs.io/en/latest/index.html#multiple-redis-cache-locations
 CACHES = {
     'default': env.cache('CACHE_URL', default='dummycache://')
+}
+
+# Dynamique settings
+# https://django-constance.readthedocs.io/en/latest/backends.html#database
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
+CONSTANCE_CONFIG = {
+    'defaultLocale': ('en', 'Define locale code (ie. "en", "fr", "jp", ...)'),
+    'helpLink': ('https://support.cloud.icij.org', 'Link to the support'),
+    'loginUrl': ('/login/xemx/?next=/', 'Link to create a user session'),
+    'logoutUrl': ('/admin/logout/?next=/', 'Link to logout'),
 }
 
 # Default primary key field type

@@ -1,0 +1,38 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$U1Tls15hRDXc7tBE8J8Z5X$WskFDAw8Z7/W6/kY+Sz74wvt7PHpWQwLP0iOocc1yAQ=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "olivia",
+      "first_name": "Olivia",
+      "last_name": "Reinhardt",
+      "email": "engineering@icij.org",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2021-07-23T11:49:32.026Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$IsAChLctN5jSpPOP0OKHN9$It7ePS9GlZpywt2U0jJeJ8Pmrtip/3mhTCo5Dkv+0bk=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "django",
+      "first_name": "Django",
+      "last_name": "Reinhardt",
+      "email": "support@icij.org",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2021-07-23T12:10:36.041Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

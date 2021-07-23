@@ -14,6 +14,8 @@ social-auth-app-django = "*"
 django-webpack-loader = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
+django-constance = {extras = ["database"], version = "*"}
+pillow = "*"
 
 [dev-packages]
 

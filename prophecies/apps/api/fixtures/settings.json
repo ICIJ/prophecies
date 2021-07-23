@@ -1,0 +1,34 @@
+[
+  {
+    "model": "database.constance",
+    "pk": 1,
+    "fields": {
+      "key": "defaultLocale",
+      "value": "en"
+    }
+  },
+  {
+    "model": "database.constance",
+    "pk": 2,
+    "fields": {
+      "key": "helpLink",
+      "value": "https://support.cloud.icij.org"
+    }
+  },
+  {
+    "model": "database.constance",
+    "pk": 3,
+    "fields": {
+      "key": "loginUrl",
+      "value": "/login/xemx"
+    }
+  },
+  {
+    "model": "database.constance",
+    "pk": 4,
+    "fields": {
+      "key": "logoutUrl",
+      "value": "/admin/logout/"
+    }
+  }
+]
