@@ -22,11 +22,11 @@ run:
 		pipenv run python manage.py runserver 0.0.0.0:8008
 
 test:
-		pipenv run python manage.py test
+		pipenv run python manage.py test --settings=prophecies.settings.test
 
 # Requires the `entr` binary (can be installed with apt)
 entr-test:
-		pipenv run find . -name '*.py' | entr python manage.py test
+		pipenv run find . -name '*.py' | entr python manage.py test --settings=prophecies.settings.test
 
 webpack-build:
 		yarn build

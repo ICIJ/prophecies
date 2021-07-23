@@ -70,4 +70,4 @@ jobs:
             - "~/.local/share/virtualenvs/"
       - run:
           name: Run unit tests
-          command: pipenv run python manage.py test prophecies
+          command: pipenv run python manage.py test prophecies --settings=prophecies.settings.test
