@@ -16,10 +16,10 @@ describe('utils/keys', () => {
   })
 
   describe('metaKeyDisplay', () => {
-    let platformGetter = null
+    let userAgentGetter
 
     beforeAll(() => {
-      platformGetter = jest.spyOn(window.navigator, 'platform', 'get')
+      userAgentGetter = jest.spyOn(window.navigator, 'userAgent', 'get')
     })
 
     afterAll(() => {
@@ -27,32 +27,30 @@ describe('utils/keys', () => {
     })
 
     it('should convert the "meta" key work to "⌘" on Mac', () => {
-      platformGetter.mockReturnValue('Mac OS')
+      userAgentGetter.mockReturnValue('Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:77.0) Gecko/20100101 Firefox/77.0')
       expect(metaKeyDisplay('meta')).toBe('⌘')
-      platformGetter.mockReturnValue('Mac OS X')
+      userAgentGetter.mockReturnValue('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15')
       expect(metaKeyDisplay('meta')).toBe('⌘')
     })
 
     it('should convert the "meta" key work to "Ctrl" on Windows', () => {
-      platformGetter.mockReturnValue('Windows XP')
+      userAgentGetter.mockReturnValue('Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.3')
       expect(metaKeyDisplay('meta')).toBe('Ctrl')
-      platformGetter.mockReturnValue('Windows 7')
-      expect(metaKeyDisplay('meta')).toBe('Ctrl')
-      platformGetter.mockReturnValue('Windows 10')
+      userAgentGetter.mockReturnValue('Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36')
       expect(metaKeyDisplay('meta')).toBe('Ctrl')
     })
 
     it('should convert the "meta" key work to "Ctrl" on Linux', () => {
-      platformGetter.mockReturnValue('Linux')
+      userAgentGetter.mockReturnValue('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36')
       expect(metaKeyDisplay('meta')).toBe('Ctrl')
-      platformGetter.mockReturnValue('Linux Ubuntu')
+      userAgentGetter.mockReturnValue('Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1')
       expect(metaKeyDisplay('meta')).toBe('Ctrl')
     })
 
     it('should convert the "meta" key work to "Ctrl" by default', () => {
-      platformGetter.mockReturnValue('Future OS')
+      userAgentGetter.mockReturnValue('Mozilla/5.0 (CrKey armv7l 1.5.16041) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.0 Safari/537.36')
       expect(metaKeyDisplay('meta')).toBe('Ctrl')
-      platformGetter.mockReturnValue('No OS')
+      userAgentGetter.mockReturnValue('Dalvik/2.1.0 (Linux; U; Android 6.0.1; Nexus Player Build/MMB29T)')
       expect(metaKeyDisplay('meta')).toBe('Ctrl')
     })
   })

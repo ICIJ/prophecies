@@ -7,7 +7,7 @@ export function toUpperCaseForSingleChar (str = '') {
 
 export function metaKeyDisplay (str = '') {
   if (str.toLowerCase() === 'meta') {
-    if (navigator.platform.toLowerCase().indexOf('mac') !== -1) {
+    if (navigator.userAgent.toLowerCase().indexOf('mac os') !== -1) {
       return '⌘'
     }
     return 'Ctrl'
