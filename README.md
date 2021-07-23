@@ -4,6 +4,13 @@ An ICIJ app to conduct data validation and cleaning.
 
 ## Installation
 
+Required:
+
+* Python 3.8
+* Node 12.x
+* Pipenv 11.x
+* Yarn 1.x
+
 To setup a virtualenv with `Pipenv` and to install required packages:
 
 ```bash
@@ -44,7 +51,13 @@ To run app inside its virtualenv, use the following command:
 make run
 ```
 
-Then visit [http://0.0.0.0:8008](http://0.0.0.0:8008)
+Then in a separated terminal, build and serve assets with Webpack:
+
+```
+make webpack-serve
+```
+
+Then visit [http://0.0.0.0:9009](http://0.0.0.0:9009)
 
 ## Publishing a new Docker image
 
