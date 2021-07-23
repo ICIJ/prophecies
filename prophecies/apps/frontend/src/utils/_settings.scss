@@ -25,7 +25,21 @@ $theme-colors: (
 $link-color: $primary;
 $body-bg: #fff;
 $body-color: darken($primary, 20);
-$text-muted: #BEBFBF;
+$text-muted: $secondary;
+
+$border-color: #EFEFEF;
+$border-width: 0.7px;
+
+$border-radius: 5px;
+$border-radius-lg: 8px;
+
+$box-shadow-sm: 0px 4px 30px rgba(204, 227, 230, 0.20);
+$box-shadow: 0px 4px 50px rgba(204, 227, 230, 0.25);
+$box-shadow-lg: 0px 4px 50px rgba(190, 191, 191, 0.2);
+
+$card-border-radius: $border-radius-lg;
+$card-border-color: $border-color;
+$hr-border-color: $border-color;
 
 $font-size-base: 1rem;
 $small-font-size: 85%;

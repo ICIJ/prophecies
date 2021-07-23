@@ -1,6 +1,6 @@
 <template>
   <div class="home container my-4">
-    <div class="card card-body">
+    <div class="card card-body shadow">
       <div class="d-flex align-items-start">
         <brand :background="primaryColor" color="#FFFF" />
         <div class="pl-4">
