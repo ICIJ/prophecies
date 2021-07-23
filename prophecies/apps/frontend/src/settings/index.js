@@ -1,7 +1,7 @@
 export default {
   apiUrl: '/api/v1',
   defaultLocale: 'en',
-  helpLink: 'https://support.icij.org',
+  helpLink: 'https://support.cloud.icij.org',
   locales: [
     {
       key: 'en',

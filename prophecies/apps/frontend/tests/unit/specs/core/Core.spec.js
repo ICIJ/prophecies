@@ -1,3 +1,4 @@
+import api from '@/api'
 import Murmur from '@icij/murmur'
 import { createLocalVue } from '@vue/test-utils'
 import Vue from 'vue'
@@ -7,6 +8,8 @@ import Vuex from 'vuex'
 
 import Core from '@/core'
 
+jest.mock('@/api')
+
 describe('Core', () => {
   let localVue
 
@@ -15,12 +18,14 @@ describe('Core', () => {
     app.setAttribute('id', 'core')
     document.body.appendChild(app)
     localVue = createLocalVue()
+    // Clear Murmur config
+    Murmur.config.set('foo', null)
     // Mock Core methods that use the backend
     jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({ username: 'foo' })
-    jest.spyOn(Core.prototype, 'getSettings').mockResolvedValue({ })
+    jest.spyOn(Core.prototype, 'getSettings').mockResolvedValue({ foo: 'bar' })
   })
 
-  afterAll(() => {
+  afterEach(() => {
     jest.restoreAllMocks()
   })
 
@@ -83,5 +88,22 @@ describe('Core', () => {
     const core = Core.init(localVue).useAll()
     const vm = core.mount('#core')
     expect(vm.$core).toBeInstanceOf(Core)
+  })
+
+  it('should copy settings from the backend into Murmur config', async () => {
+    // Create and configure the core
+    const core = Core.init(localVue).useAll()
+    expect(core.config.get('foo', null)).toBe(null)
+    await core.configure()
+    expect(core.config.get('foo', null)).toBe('bar')
+  })
+
+  it('should transform settings list into an object', async () => {
+    jest.restoreAllMocks()
+    api.get.mockResolvedValue({ data: [{ key: 'searchEngine', value: 'https://duckduckgo.com' }] })
+    const core = new Core()
+    const settings = await core.getSettings()
+    expect(settings).toBeInstanceOf(Object)
+    expect(settings.searchEngine).toBe('https://duckduckgo.com')
   })
 })

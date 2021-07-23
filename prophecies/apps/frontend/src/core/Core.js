@@ -1,6 +1,7 @@
 // BootstrapVue recommends using this
 import 'mutationobserver-shim'
 
+import { camelCase } from 'lodash'
 import Murmur from '@icij/murmur'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
@@ -144,16 +145,14 @@ class Core {
    */
   async configure () {
     try {
-      // Get the config object
-      // @todo fetch the settings from the sever
-      const serverSettings = { }
-      // Load the user into a specific attribue
-      this.config.set('user', await this.getUser())
-      // Murmur exposes a config attribute which share a Config object with the
-      // current vue instance. The backend can yet override some configuration
-      this.config.merge(serverSettings)
-      // Merge Murmur settings with the vue app settings
+      // Murmur exposes a config attribute which share a Config object
+      // with the current vue instance.
+      // First, merge Murmur settings with the vue app settings:
       this.config.merge(settings)
+      // Then, the backend can yet override some configuration.
+      this.config.merge(await this.getSettings())
+      // Finally, load the user into a specific attribute.
+      this.config.set('user', await this.getUser())
       // Old a promise that is resolved when the core is configured
       return this.ready && this._readyResolve(this)
     } catch (error) {
@@ -205,6 +204,24 @@ class Core {
       this._user = user
     }
     return this._user
+  }
+
+  /**
+   * Get settings from the backend
+   * @async
+   * @param {Boolean} cache - Cache the result from the API
+   * @fullfil {Object} Current user
+   * @type {Promise<Object>}
+   */
+  async getSettings (cache = true) {
+    if (!this._settings || !cache) {
+      const { data: settings } = await api.get('/settings.json')
+      this._settings = settings.reduce((all, { key, value }) => {
+        all[camelCase(key)] = value
+        return all
+      }, {})
+    }
+    return this._settings
   }
 
   /**

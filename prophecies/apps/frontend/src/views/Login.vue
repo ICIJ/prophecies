@@ -30,16 +30,14 @@
 </template>
 
 <script>
-import settings from '@/settings'
-
 export default {
   name: 'Login',
   computed: {
     loginUrl () {
-      return settings.loginUrl
+      return this.$core.config.get('loginUrl')
     },
     helpLink () {
-      return settings.helpLink
+      return this.$core.config.get('helpLink')
     }
   },
   async mounted () {
