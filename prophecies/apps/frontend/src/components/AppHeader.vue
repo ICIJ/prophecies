@@ -28,15 +28,17 @@
     <b-navbar-toggle target="nav-collapse" />
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="app-header__nav-left">
-        <b-nav-item href="#">
-          <search-icon size="1x" class="mr-2" />
-          {{ $t('appHeader.search') }}
-        </b-nav-item>
         <slot name="nav-left" />
       </b-navbar-nav>
       <div class="ml-auto" >
-        <slot name="nav-right" />
         <b-navbar-nav class="app-header__nav-right">
+          <slot name="nav-right" />
+          <b-nav-item href="#">
+            <span class="d-flex">
+              <search-icon size="1x" class="mr-2" />
+              {{ $t('appHeader.search') }}
+            </span>
+          </b-nav-item>
           <b-nav-item href="#">
             <smile-icon size="1x" class="app-header__nav-right__tips mr-2" />
             {{ $t('appHeader.tips') }}
