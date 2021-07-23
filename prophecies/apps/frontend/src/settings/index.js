@@ -1,7 +1,7 @@
 export default {
   apiUrl: '/api/v1',
   defaultLocale: 'en',
-  helpLink: 'https://support.cloud.icij.org',
+  helpLink: 'https://github.com/ICIJ/prophecies/issues/new',
   locales: [
     {
       key: 'en',

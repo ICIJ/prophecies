@@ -12,7 +12,7 @@
     "pk": 2,
     "fields": {
       "key": "helpLink",
-      "value": "https://support.cloud.icij.org"
+      "value": "https://github.com/ICIJ/prophecies/issues/new"
     }
   },
   {

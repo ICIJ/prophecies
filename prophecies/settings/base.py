@@ -231,7 +231,7 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 CONSTANCE_CONFIG = {
     'defaultLocale': ('en', 'Define locale code (ie. "en", "fr", "jp", ...)'),
-    'helpLink': ('https://support.cloud.icij.org', 'Link to the support'),
+    'helpLink': ('https://github.com/ICIJ/prophecies/issues/new', 'Link to the support'),
     'loginUrl': ('/login/xemx/?next=/', 'Link to create a user session'),
     'logoutUrl': ('/admin/logout/?next=/', 'Link to logout'),
 }
