@@ -1,3 +1,4 @@
+from hashlib import md5
 from django.contrib.auth.models import User
 from rest_framework import viewsets, serializers, permissions
 from rest_framework.decorators import action
@@ -5,9 +6,14 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    email_md5 = serializers.SerializerMethodField()
+
+    def get_email_md5(self, user):
+        return md5(user.email.encode()).hexdigest()
+
     class Meta:
         model = User
-        fields = ['id', 'url', 'username', 'email', 'is_staff']
+        fields = ['id', 'url', 'username', 'email', 'email_md5', 'is_staff']
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
