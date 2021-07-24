@@ -236,6 +236,7 @@ CONSTANCE_CONFIG = {
     'helpLink': ('https://github.com/ICIJ/prophecies/issues/new', 'Link to the support'),
     'loginUrl': ('/login/xemx/?next=/', 'Link to create a user session'),
     'logoutUrl': ('/admin/logout/?next=/', 'Link to logout'),
+    'orgName': ('ICIJ', 'Name of the organization deploying this app')
 }
 
 # Default primary key field type

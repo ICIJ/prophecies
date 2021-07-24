@@ -1,15 +1,15 @@
 import Boilerplate from '@/views/Boilerplate.vue'
-import Home from '@/views/Home.vue'
+import Dashboard from '@/views/Dashboard.vue'
 import Login from '@/views/Login.vue'
 
 export const router = {
   routes: [
     {
-      name: 'home',
+      name: 'dashboard',
       path: '/',
-      component: Home,
+      component: Dashboard,
       meta: {
-        title: 'Home'
+        title: 'Dashboard'
       }
     },
     {

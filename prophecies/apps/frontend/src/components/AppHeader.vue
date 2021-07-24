@@ -29,7 +29,7 @@
 
 <template>
   <b-navbar toggleable="lg" class="app-header py-3">
-    <b-navbar-toggle target="nav-collapse" />
+    <b-navbar-toggle target="nav-collapse" class="ml-auto" />
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="app-header__nav-left">
         <slot name="nav-left" />
@@ -59,7 +59,7 @@
               <span class="app-header__nav-right__user__display-name">
                 {{ userDisplayName }}
               </span>
-              <img :src="userAvatarUrl" class="app-header__nav-right__user__avatar rounded-circle ml-2" height="42" width="42" />
+              <img :src="userAvatarUrl" class="app-header__nav-right__user__avatar rounded-circle ml-2 d-none d-lg-inline" height="42" width="42" />
             </template>
             <template v-if="user.is_staff">
               <b-dropdown-item :href="$config.get('adminUrl')" class="app-header__nav-right__user__admin">

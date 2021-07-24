@@ -6,6 +6,9 @@
     "shortcuts": "Shortcuts",
     "logOut": "Sign out"
   },
+  "appVersion": {
+    "version": "Version {version}"
+  },
   "login": {
     "welcome": "Welcome to Prophecies",
     "sumUp": "<a href=\"https://icij.org\">ICIJ</a> data cleaning and validation platform.",
