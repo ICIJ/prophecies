@@ -7,6 +7,11 @@ const spyAxiosRequest = jest.spyOn(axios, 'request').mockResolvedValue({ data: [
 describe('User', () => {
   beforeEach(() => {
     store.dispatch('entities/deleteAll')
+    spyAxiosRequest.mockClear()
+  })
+
+  afterAll(() => {
+    spyAxiosRequest.mockRestore()
   })
 
   it('should call the /api/v1/users/ endpoint', async () => {
