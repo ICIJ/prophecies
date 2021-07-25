@@ -2,7 +2,7 @@ import isFunction from 'lodash/isFunction'
 
 export default (core) => {
   async function setPageTitleFromMeta ({ meta }, from, next) {
-    const params = { router: core.router, store: core.store, config: core.store }
+    const params = { router: core.router, store: core.store, config: core.store, i18n: core.i18n }
     const title = isFunction(meta.title) ? await meta.title(params) : meta.title
     core.setPageTitle(title)
     next()

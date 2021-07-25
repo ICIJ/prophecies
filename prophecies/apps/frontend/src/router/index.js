@@ -10,7 +10,7 @@ export const router = {
       path: '/',
       component: Dashboard,
       meta: {
-        title: 'Dashboard'
+        title: ({ i18n }) => i18n.t('dashboard.title')
       }
     },
     {
@@ -26,7 +26,7 @@ export const router = {
       path: '/login',
       component: Login,
       meta: {
-        title: 'Login'
+        title: ({ i18n }) => i18n.t('login.title')
       }
     },
     {
@@ -35,7 +35,7 @@ export const router = {
       props: true,
       component: Error,
       meta: {
-        title: 'Something went wrong'
+        title: ({ i18n }) => i18n.t('error.title')
       }
     }
   ]
