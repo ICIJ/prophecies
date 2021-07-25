@@ -217,7 +217,7 @@ class Core {
     if (!User.exists() || !cache) {
       await User.api().me()
     }
-    return User.query().where('is_me', true).first()
+    return User.me()
   }
 
   /**
