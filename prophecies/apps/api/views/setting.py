@@ -1,25 +1,35 @@
-from constance.backends.database.models import Constance
-from django.shortcuts import get_object_or_404
 from rest_framework import permissions, serializers, viewsets
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
+from rest_framework.views import APIView
+from ..models.setting import Setting
+
 
 class SettingSerializer(serializers.ModelSerializer):
     key = serializers.CharField()
     value = serializers.CharField()
 
     class Meta:
-        model = Constance
+        model = Setting
         fields = ['key', 'value']
 
 
 class SettingViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Constance.objects.all()
+    queryset = Setting.objects.all()
     serializer_class = SettingSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
 
+    def list(self, request, **kwargs):
+        with_env = Setting.objects.with_env()
+        serializer = SettingSerializer(with_env, context={'request': request}, many=True)
+        return Response(serializer.data)
+
     def retrieve(self, request, pk=None, **kargs):
-        queryset = Constance.objects.all()
-        setting = get_object_or_404(queryset, key=pk)
+        try:
+            with_statics = Setting.objects.with_env()
+            setting = next(s for s in with_env if s.key == pk)
+        except StopIteration:
+            raise NotFound()
         serializer = SettingSerializer(setting)
         return Response(serializer.data)

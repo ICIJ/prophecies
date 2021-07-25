@@ -2,7 +2,6 @@ from hashlib import md5
 from django.contrib.auth.models import User
 from rest_framework import viewsets, serializers, permissions
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -26,7 +25,5 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         """
         Profile of the current user.
         """
-        if not request.user.is_authenticated:
-            raise PermissionDenied()
         serializer = UserSerializer(request.user, context={'request': request})
         return Response(serializer.data)
