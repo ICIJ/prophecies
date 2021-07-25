@@ -1,12 +1,12 @@
+import '@/store'
 import axios from 'axios'
-import store from '@/store'
 import Setting from '@/models/Setting'
 
 const spyAxiosRequest = jest.spyOn(axios, 'request').mockResolvedValue({ data: [] })
 
 describe('Setting', () => {
   beforeEach(() => {
-    store.dispatch('entities/deleteAll')
+    Setting.deleteAll()
     spyAxiosRequest.mockClear()
   })
 
