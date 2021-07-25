@@ -2,7 +2,7 @@ from rest_framework import permissions, serializers, viewsets
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
-from ..models.setting import Setting
+from prophecies.apps.api.models.setting import Setting
 
 
 class SettingSerializer(serializers.ModelSerializer):

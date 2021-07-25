@@ -1,8 +1,8 @@
 from django.urls import include, path
 from django.views.generic import RedirectView
 from rest_framework import routers
-from .views.user import UserViewSet
-from .views.setting import SettingViewSet
+from prophecies.apps.api.views.user import UserViewSet
+from prophecies.apps.api.views.setting import SettingViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
