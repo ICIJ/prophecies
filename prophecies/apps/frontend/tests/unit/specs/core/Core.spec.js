@@ -1,6 +1,6 @@
-import api from '@/api'
-import Murmur from '@icij/murmur'
 import { createLocalVue, shallowMount } from '@vue/test-utils'
+import axios from 'axios'
+import Murmur from '@icij/murmur'
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import VueRouter from 'vue-router'
@@ -8,8 +8,8 @@ import Vuex from 'vuex'
 
 import Core from '@/core'
 
+jest.mock('axios')
 jest.mock('@/router', () => ({ router: { routes: [] } }))
-jest.mock('@/api')
 jest.mock('@/utils/icons', () => {
   const BarIcon = { name: 'BarIcon', template: '<i></i>' }
   const FooIcon = { name: 'FooIcon', template: '<i></i>' }
@@ -110,7 +110,7 @@ describe('Core', () => {
 
   it('should transform settings list into an object', async () => {
     jest.restoreAllMocks()
-    api.get.mockResolvedValue({ data: [{ key: 'searchEngine', value: 'https://duckduckgo.com' }] })
+    axios.request.mockResolvedValue({ data: [{ key: 'searchEngine', value: 'https://duckduckgo.com' }] })
     const core = new Core(localVue)
     const settings = await core.getSettings()
     expect(settings).toBeInstanceOf(Object)

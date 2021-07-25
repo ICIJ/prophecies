@@ -18,7 +18,7 @@ class SettingViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, pk=None, **kargs):
         queryset = Constance.objects.all()
         setting = get_object_or_404(queryset, key=pk)
         serializer = SettingSerializer(setting)

@@ -1,7 +1,6 @@
 // BootstrapVue recommends using this
 import 'mutationobserver-shim'
 
-import { camelCase } from 'lodash'
 import Murmur from '@icij/murmur'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
@@ -11,7 +10,8 @@ import VueScrollTo from 'vue-scrollto'
 import VueShortkey from 'vue-shortkey'
 import VueWait from 'vue-wait'
 
-import api from '@/api'
+import Setting from '@/models/Setting'
+import User from '@/models/User'
 import router from '@/router'
 import guards from '@/router/guards'
 import store from '@/store'
@@ -214,11 +214,10 @@ class Core {
    * @type {Promise<Object>}
    */
   async getUser (cache = true) {
-    if (!this._user || !cache) {
-      const { data: user } = await api.get('/users/me.json')
-      this._user = user
+    if (!User.exists() || !cache) {
+      await User.api().me()
     }
-    return this._user
+    return User.query().where('is_me', true).first()
   }
 
   /**
@@ -229,14 +228,10 @@ class Core {
    * @type {Promise<Object>}
    */
   async getSettings (cache = true) {
-    if (!this._settings || !cache) {
-      const { data: settings } = await api.get('/settings.json')
-      this._settings = settings.reduce((all, { key, value }) => {
-        all[camelCase(key)] = value
-        return all
-      }, {})
+    if (!Setting.exists() || !cache) {
+      await Setting.api().get()
     }
-    return this._settings
+    return Setting.allAsObject()
   }
 
   /**

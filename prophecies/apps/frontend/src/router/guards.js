@@ -20,7 +20,6 @@ export default (core) => {
       if (String(error?.response?.status).startsWith(40)) {
         next({ name: 'login' })
       } else {
-        console.log(error.response)
         next({ name: 'error', params: { error } })
       }
     }

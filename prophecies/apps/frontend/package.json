@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@icij/murmur": "^2.26.0",
+    "@vuex-orm/core": "^0.36.4",
+    "@vuex-orm/plugin-axios": "^0.9.4",
     "axios": "^0.21.1",
     "bootstrap": "4.5.3",
     "bootstrap-vue": "^2.21.2",
