@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== 'test' && window) {
       // redirect the user to the login page
       if (error?.response?.status === 403 && currentRoute.name !== 'login') {
         prophecies.router.push({ name: 'login' })
-      } else {
+      } else if (currentRoute.name !== 'error') {
         prophecies.router.push({ name: 'error', params: { error } })
       }
     })

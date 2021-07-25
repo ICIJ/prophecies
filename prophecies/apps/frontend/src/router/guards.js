@@ -1,12 +1,31 @@
 import isFunction from 'lodash/isFunction'
 
-export default ({ router, store, config, setPageTitle }) => {
+export default (core) => {
   async function setPageTitleFromMeta ({ meta }, from, next) {
-    const params = { router, store, config }
+    const params = { router: core.router, store: core.store, config: core.store }
     const title = isFunction(meta.title) ? await meta.title(params) : meta.title
-    setPageTitle(title)
+    core.setPageTitle(title)
     next()
   }
 
-  router.beforeEach(setPageTitleFromMeta)
+  async function checkUserAuthentication (to, from, next) {
+    try {
+      // This route doesn't need auth
+      // or the user is authenticated
+      if (['login', 'error'].includes(to.name) || await core.getUser()) {
+        next()
+      }
+    } catch (error) {
+      // The error has a status starting with 40
+      if (String(error?.response?.status).startsWith(40)) {
+        next({ name: 'login' })
+      } else {
+        console.log(error.response)
+        next({ name: 'error', params: { error } })
+      }
+    }
+  }
+
+  core.router.beforeEach(setPageTitleFromMeta)
+  core.router.beforeEach(checkUserAuthentication)
 }
