@@ -30,4 +30,9 @@ export default class User extends Model {
       }
     }
   }
+
+  static me () {
+    const [user = null] = this.query().where('is_me', true).get()
+    return user
+  }
 }
