@@ -1,5 +1,6 @@
 import Boilerplate from '@/views/Boilerplate.vue'
 import Dashboard from '@/views/Dashboard.vue'
+import Error from '@/views/Error.vue'
 import Login from '@/views/Login.vue'
 
 export const router = {
@@ -31,6 +32,8 @@ export const router = {
     {
       name: 'error',
       path: '*',
+      props: true,
+      component: Error,
       meta: {
         title: 'Something went wrong'
       }

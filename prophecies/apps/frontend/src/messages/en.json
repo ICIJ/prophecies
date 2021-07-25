@@ -9,6 +9,13 @@
   "appVersion": {
     "version": "Version {version}"
   },
+  "error": {
+    "title": "Something's wrong here",
+    "description": "An error has occurred. Please try again later or contact your administrator if the problem persists.",
+    "connectedAs": "Your are connected as {username}",
+    "logout": "Sign out",
+    "help": "Ask for help"
+  },
   "login": {
     "welcome": "Welcome to Prophecies",
     "sumUp": "<a href=\"https://icij.org\">ICIJ</a> data cleaning and validation platform.",
