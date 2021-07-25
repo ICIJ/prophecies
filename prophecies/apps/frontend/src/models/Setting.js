@@ -5,6 +5,7 @@ import settings from '@/settings'
 export default class Setting extends Model {
   // This is the name used as module name of the Vuex Store.
   static entity = 'settings'
+  static primaryKey = 'key'
 
   static fields () {
     return {
