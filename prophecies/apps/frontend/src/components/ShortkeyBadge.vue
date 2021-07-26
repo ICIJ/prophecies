@@ -26,7 +26,7 @@ export default {
 </script>
 
 <template>
-  <span class="shortkey-badge badge bg-white font-weight-normal text-muted">
+  <span class="shortkey-badge badge bg-white font-weight-normal text-secondary">
     {{ keysAsString }}
   </span>
 </template>

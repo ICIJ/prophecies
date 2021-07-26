@@ -13,3 +13,24 @@
 html {
   font-size: 14px;
 }
+
+.progress {
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: $secondary;
+    z-index: 0;
+  }
+
+  &-bar {
+    border-radius: inherit;
+    z-index: 10;
+  }
+}

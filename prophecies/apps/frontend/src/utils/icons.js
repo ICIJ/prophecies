@@ -1,5 +1,7 @@
 export {
+  ArrowRightIcon,
   BellIcon,
+  ChevronDownIcon,
   CodeIcon,
   ClockIcon,
   CommandIcon,
@@ -10,5 +12,6 @@ export {
   SearchIcon,
   ShieldIcon,
   SmileIcon,
-  TrelloIcon
+  TrelloIcon,
+  UsersIcon
 } from 'vue-feather-icons'
