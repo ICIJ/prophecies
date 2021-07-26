@@ -61,13 +61,19 @@
               </span>
               <img :src="userAvatarUrl" class="app-header__nav-right__user__avatar rounded-circle ml-2 d-none d-lg-inline" height="42" width="42" />
             </template>
+            <b-dropdown-item :href="$config.get('apiUrl')" class="app-header__nav-right__user__api">
+              <code-icon class="mr-2" />
+              {{ $t('appHeader.api') }}
+            </b-dropdown-item>
             <template v-if="user.is_staff">
               <b-dropdown-item :href="$config.get('adminUrl')" class="app-header__nav-right__user__admin">
+                <trello-icon class="mr-2" />
                 {{ $t('appHeader.admin') }}
               </b-dropdown-item>
               <b-dropdown-divider />
             </template>
             <b-dropdown-item :href="$config.get('logoutUrl')" class="app-header__nav-right__user__logout">
+              <log-out-icon class="mr-2" />
               {{ $t('appHeader.logOut') }}
             </b-dropdown-item>
           </b-nav-item-dropdown>

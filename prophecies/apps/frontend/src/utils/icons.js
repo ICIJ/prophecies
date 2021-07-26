@@ -1,10 +1,12 @@
 export {
   BellIcon,
+  CodeIcon,
   ClockIcon,
   CommandIcon,
   FrownIcon,
   GridIcon,
   LifeBuoyIcon,
+  LogOutIcon,
   SearchIcon,
   ShieldIcon,
   SmileIcon,

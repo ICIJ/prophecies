@@ -1,5 +1,6 @@
 {
   "appHeader": {
+    "api": "API",
     "admin": "Admin",
     "tips": "Tips",
     "search": "Search",
