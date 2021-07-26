@@ -27,9 +27,9 @@ class SettingViewSet(viewsets.ReadOnlyModelViewSet):
 
     def retrieve(self, request, pk=None, **kargs):
         try:
-            with_statics = Setting.objects.with_env()
+            with_env = Setting.objects.with_env()
             setting = next(s for s in with_env if s.key == pk)
         except StopIteration:
             raise NotFound()
-        serializer = SettingSerializer(setting)
+        serializer = SettingSerializer(setting, context={'request': request}, many=False)
         return Response(serializer.data)

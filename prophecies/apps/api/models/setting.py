@@ -16,17 +16,22 @@ class SettingManager(models.Manager):
     def from_env(self):
         settings = []
         # A dict of static settings targeting to be visible publicaly
-        for (key, value) in Setting.objects.env().items():
+        for (key, value) in self.env().items():
             # Remove the 'APP_' part from the key and convert to camel case
             key = to_camel_case(key[len(self.env_prefix):])
-            # Finally, add the setting to the list
-            settings.append(Setting(key=key, value=value))
+            # Avoid overriding existing keys
+            if not self.key_exists(key):
+                # Finally, add the setting to the list
+                settings.append(Setting(key=key, value=value))
         return settings
 
+    def key_exists(self, key):
+        existing_keys = self.values_list('key', flat=True)
+        return key in existing_keys
 
     def with_env(self):
-        all_as_list = list(Setting.objects.all())
-        return all_as_list + Setting.objects.from_env()
+        all_as_list = list(self.all())
+        return all_as_list + self.from_env()
 
 
 class Setting(Constance):
