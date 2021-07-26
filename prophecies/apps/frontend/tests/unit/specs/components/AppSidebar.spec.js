@@ -22,6 +22,7 @@ describe('AppSidebar', () => {
     i18n = core.i18n
     config = core.config
     router = core.router
+    wrapper = mount(AppSidebar, { i18n, localVue, router })
   })
 
   afterEach(() => {
@@ -29,27 +30,25 @@ describe('AppSidebar', () => {
   })
 
   it('should display the backend value of `appName` as app name', () => {
-    wrapper = mount(AppSidebar, { i18n, localVue, router })
     const brandName = wrapper.find('.app-sidebar__brand__app-name')
     expect(brandName.text()).toBe('Data Fact Check')
   })
 
-  it('should display the config value of `appName` as app name', () => {
+  it('should display the config value of `appName` as app name', async () => {
     config.set('appName', 'Prophecies')
-    wrapper = mount(AppSidebar, { i18n, localVue, router })
+    await wrapper.vm.$nextTick()
     const brandName = wrapper.find('.app-sidebar__brand__app-name')
     expect(brandName.text()).toBe('Prophecies')
   })
 
   it('should display the backend value of `orgName` as org name', () => {
-    wrapper = mount(AppSidebar, { i18n, localVue, router })
     const brandName = wrapper.find('.app-sidebar__brand__org-name')
     expect(brandName.text()).toBe('ICIJ.org')
   })
 
-  it('should display the config value of `orgName` as org name', () => {
+  it('should display the config value of `orgName` as org name', async () => {
     config.set('orgName', 'ICIJ')
-    wrapper = mount(AppSidebar, { i18n, localVue, router })
+    await wrapper.vm.$nextTick()
     const brandName = wrapper.find('.app-sidebar__brand__org-name')
     expect(brandName.text()).toBe('ICIJ')
   })
