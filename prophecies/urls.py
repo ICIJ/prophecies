@@ -4,9 +4,10 @@ from django.contrib.sites.models import Site
 from django.urls import include, path
 from django.views.generic import TemplateView
 from social_django.models import UserSocialAuth, Nonce, Association
+from constance import config
 
-admin.site.site_header = "Prophecies"
-admin.site.site_title = "Prophecies"
+admin.site.site_header = config.appName
+admin.site.site_title = config.appName
 admin.site.unregister(Site)
 admin.site.unregister(UserSocialAuth)
 admin.site.unregister(Nonce)

@@ -38,5 +38,4 @@ class Setting(Constance):
     objects = SettingManager()
 
     class Meta:
-        app_label = 'constance'
         proxy = True

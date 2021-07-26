@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'webpack_loader',
     'constance',
     'constance.backends.database',
-    'prophecies.apps.api'
+    'prophecies.apps.api',
+    'prophecies.core',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +78,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'constance.context_processors.config',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
