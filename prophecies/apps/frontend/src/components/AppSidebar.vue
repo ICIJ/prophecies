@@ -14,7 +14,7 @@ export default {
 <template>
   <div class="app-sidebar d-flex flex-column">
     <router-link class="app-sidebar__brand" :to="{ name: 'dashboard' }">
-      <h1 class="app-sidebar__brand__app-name mb-0">
+      <h1 class="app-sidebar__brand__app-name mb-0 font-weight-bold">
         {{ $config.get('appName') }}
       </h1>
       <div class="app-sidebar__brand__org-name">
