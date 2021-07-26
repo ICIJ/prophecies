@@ -38,24 +38,24 @@
         <b-navbar-nav class="app-header__nav-right">
           <slot name="nav-right" />
           <b-nav-item href="#">
-            <search-icon size="1x" class="mr-2" />
+            <search-icon class="mr-2" />
             {{ $t('appHeader.search') }}
             <shortkey-badge :value="['meta', 'f']" class="ml-2" />
           </b-nav-item>
           <b-nav-item href="#">
-            <smile-icon size="1x" class="app-header__nav-right__tips mr-2" />
+            <smile-icon class="app-header__nav-right__tips mr-2" />
             {{ $t('appHeader.tips') }}
             <shortkey-badge :value="['meta', 't']" class="ml-2" />
           </b-nav-item>
           <b-nav-item href="#">
-            <command-icon size="1x" class="app-header__nav-right__shortcuts mr-2" />
+            <command-icon class="app-header__nav-right__shortcuts mr-2" />
             {{ $t('appHeader.shortcuts') }}
             <shortkey-badge :value="['meta', 'k']" class="ml-2" />
           </b-nav-item>
           <b-nav-item-dropdown right no-caret class="app-header__nav-right__user">
             <!-- Using 'button-content' slot -->
             <template #button-content>
-              <bell-icon size="1x" class="mr-2" />
+              <bell-icon class="mr-2" />
               <span class="app-header__nav-right__user__display-name">
                 {{ userDisplayName }}
               </span>
@@ -86,6 +86,11 @@
 
 <style lang="scss" scoped>
   .app-header {
+
+    & /deep/ .nav-item .nav-link .feather {
+      height: 20px;
+      width: 20px
+    }
 
     & /deep/ .nav-item,
     & /deep/ .nav-item .nav-link,
