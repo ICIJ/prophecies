@@ -87,7 +87,8 @@
 <style lang="scss" scoped>
   .app-header {
 
-    & /deep/ .nav-item .nav-link .feather {
+    & /deep/ .nav-item .nav-link .feather,
+    & /deep/ .dropdown-item .feather {
       height: 20px;
       width: 20px
     }
