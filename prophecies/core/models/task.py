@@ -1,8 +1,9 @@
 from colorfield.fields import ColorField
+from django.contrib.auth.models import User
 from django.db import models
 from prophecies.core.models.project import Project
 from prophecies.core.models.task_choices_group import TaskChoicesGroup
-from django.contrib.auth.models import User
+from prophecies.core.contrib.colors import hex_scale_brightness
 
 
 class Task(models.Model):
@@ -19,5 +20,15 @@ class Task(models.Model):
     allow_items_addition = models.BooleanField(default=False, verbose_name="Allow checker to add items")
     color = ColorField(default='#31807D')
 
+
     def __str__(self):
         return self.name
+
+
+    @property
+    def colors(self):
+        """
+        Generate 3 colors tones based on the `color` attribute
+        """
+        scales = [0.75, 1.0, 1.25]
+        return tuple(hex_scale_brightness(self.color, s) for s in scales)
