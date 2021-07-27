@@ -123,9 +123,7 @@ STATICFILES_DIRS = [
 
 DATABASES = {
     'default': env.db(default='sqlite:///%s' % root.path('db.sqlite3')()),
-    'test_dpv': env.db(default='sqlite:///%s' % root.path('test_dpv.sqlite3')())
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
