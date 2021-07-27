@@ -20,14 +20,14 @@ class XemxOauth2(BaseOAuth2):
         try:
             first_name, last_name = response.get('name').split(' ', 1)
         except ValueError:
-            first_name = response.get('name')
+            first_name = response.get('name', '')
             last_name = ''
         return {
             'username': response.get('uid'),
             'email': response.get('email') or '',
             'first_name': first_name,
             'last_name': last_name,
-            'xemx_groups': response.get('xemx_groups', []),
+            'xemx_groups': response.get('groups_by_applications', {}).get('prophecies', []),
         }
 
 
@@ -35,8 +35,7 @@ def map_xemx_groups(strategy, details, user=None, *args, **kwargs):
     if not user:
         return
     # All Xemx user are "staff"
-    user.is_staff = True
-    user.is_superuser = 'icijstaff' in details['xemx_groups']
+    user.is_staff = 'icijstaff' in details['xemx_groups']
     user.save()
     # Get groups ids with the same name
     group_ids = Group.objects.filter(name__in=details['xemx_groups']).values_list('id', flat=True)
