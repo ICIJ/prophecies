@@ -1,6 +1,4 @@
-from rest_framework import permissions, serializers, viewsets
-from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
+from rest_framework import serializers
 from prophecies.core.models.task_choice import TaskChoice
 
 class TaskChoiceSerializer(serializers.ModelSerializer):

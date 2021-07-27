@@ -1,4 +1,4 @@
-from rest_framework import filters, viewsets, serializers, permissions
+from rest_framework import filters, viewsets, serializers
 from prophecies.core.models.task import Task
 from prophecies.apps.api.views.task_choices_group import TaskChoicesGroupSerializer
 from prophecies.apps.api.views.project import ProjectSerializer
@@ -18,7 +18,6 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 class TaskViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = [permissions.IsAuthenticated]
     search_fields = ['name', 'description']
     ordering_fields = ['name']
     filterset_fields = ['name', 'rounds', 'priority']

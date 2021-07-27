@@ -1,6 +1,6 @@
 from hashlib import md5
 from django.contrib.auth.models import User
-from rest_framework import viewsets, serializers, permissions
+from rest_framework import viewsets, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -18,7 +18,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
     search_fields = ['email', 'first_name', 'last_name', 'username']
     ordering_fields = ['email', 'first_name', 'last_name', 'username']
     filterset_fields = ['email', 'first_name', 'last_name', 'username', 'is_staff']

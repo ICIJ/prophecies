@@ -1,4 +1,4 @@
-from rest_framework import status, viewsets, serializers, permissions
+from rest_framework import status, viewsets, serializers
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from prophecies.apps.api.views.user import UserSerializer
@@ -16,7 +16,6 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [permissions.IsAuthenticated]
     search_fields = ['name']
     ordering_fields = ['name']
     filterset_fields = ['name']
