@@ -47,7 +47,10 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'social_django',
     'rest_framework',
+    'django_filters',
+    'crispy_forms',
     'webpack_loader',
+    'colorfield',
     'constance',
     'constance.backends.database',
     'prophecies.apps.api',
@@ -154,6 +157,14 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissions',
     ]
 }
 

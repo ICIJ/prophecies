@@ -4,6 +4,7 @@
   --body-bg: #fff;
   --body-fg: #071111;
   --body-quiet-color: #515858;
+  --body-loud-color: #071111;
   --darkened-bg: #EFEFEF;
   --hairline-color: #efefef;
   --border-color: #bebfbf;
@@ -11,7 +12,7 @@
   --link-hover-color: #31807D;
 
   --header-color: #fff;
-  --header-bg: #000;
+  --header-bg: #071111;
   --breadcrumbs-bg: #333;
 
   --primary: #235B59;

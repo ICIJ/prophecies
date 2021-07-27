@@ -19,6 +19,9 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+    search_fields = ['email', 'first_name', 'last_name', 'username']
+    ordering_fields = ['email', 'first_name', 'last_name', 'username']
+    filterset_fields = ['email', 'first_name', 'last_name', 'username', 'is_staff']
 
     @action(methods=['get'], detail=False)
     def me(self, request, **kwargs):

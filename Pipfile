@@ -14,8 +14,11 @@ social-auth-app-django = "*"
 django-webpack-loader = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
-django-constance = {extras = ["database"], version = "*"}
 pillow = "*"
+django-colorfield = "*"
+django-constance = {extras = [ "database",], version = "*"}
+django-filter = "*"
+django-crispy-forms = "*"
 
 [dev-packages]
 

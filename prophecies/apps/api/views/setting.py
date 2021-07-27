@@ -8,6 +8,10 @@ from prophecies.core.models.setting import Setting
 class SettingSerializer(serializers.ModelSerializer):
     key = serializers.CharField()
     value = serializers.CharField()
+    search_fields = ['key', 'value']
+    ordering_fields = ['key']
+    ordering = ['key']
+    filterset_fields = ['key', 'value']
 
     class Meta:
         model = Setting
