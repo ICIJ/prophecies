@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin.helpers import AdminForm
 from django.shortcuts import redirect, render
 from django.urls import path
@@ -9,7 +9,7 @@ from prophecies.core.models import TaskRecord
 @admin.register(TaskRecord)
 class TaskRecordAdmin(admin.ModelAdmin):
     change_list_template = "admin/task_record_changelist.html"
-    readonly_fields = ['rounds', 'status']
+    readonly_fields = ['uid', 'rounds', 'status']
     list_display = ('__str__', 'task', 'rounds', 'status')
 
 
@@ -33,8 +33,9 @@ class TaskRecordAdmin(admin.ModelAdmin):
         return self.upload_form_view(request)
 
 
-    def upload_form_view(self, request):
-        form = TaskRecordUploadForm()
+    def upload_form_view(self, request, extra_context = None):
+        extra_context = extra_context or {}
+        form = extra_context.get('form', TaskRecordUploadForm())
         context = dict(
             self.admin_site.each_context(request),
             form=form,
@@ -49,6 +50,14 @@ class TaskRecordAdmin(admin.ModelAdmin):
 
 
     def handle_upload(self, request):
-        # Nothing yet
-        self.message_user(request, "Your csv file has been imported")
-        return redirect("..")
+        form = TaskRecordUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            # The save method will take care of handling the CSV and creating/updating task records
+            form.save()
+            self.message_user(request, "Your csv file has been imported", messages.INFO)
+            # Everything is fine, go back to the list of task records
+            return redirect("..")
+        else:
+            self.message_user(request, "Unable to import the task records", messages.ERROR)
+            # Call the same view with the received form
+            return self.upload_form_view(request, extra_context={ 'form': form })
