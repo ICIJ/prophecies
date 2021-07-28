@@ -22,10 +22,9 @@
                 </template>
               </b-dropdown>
             </div>
-            <stats-card title="SAR transaction" project="Chronos" :priority="1" class="my-5" />
-            <stats-card title="Addresses" project="Hemeras" :priority="1" class="my-5" />
-            <stats-card title="Transactions' amounts" project="Pontus" :priority="2" class="my-5" />
-            <stats-card title="Passports" project="Pontus" :priority="1" class="my-5" />
+            <app-waiter :for="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
+              <task-stats-card :task="task" v-for="task in tasks" :key="task.id" class="my-5" />
+            </app-waiter>
           </div>
           <div class="col-4 offset-2">
             <progress-card class="mb-5" />
@@ -38,20 +37,48 @@
 </template>
 
 <script>
+import { uniqueId } from 'lodash'
+import { waitFor } from 'vue-wait'
+
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
+import AppWaiter from '@/components/AppWaiter'
 import LatestTipsCard from '@/components/LatestTipsCard'
 import ProgressCard from '@/components/ProgressCard'
-import StatsCard from '@/components/StatsCard'
+import TaskStatsCard from '@/components/TaskStatsCard'
+import Project from '@/models/Project'
+import Task from '@/models/Task'
 
 export default {
   name: 'Dashboard',
   components: {
     AppHeader,
     AppSidebar,
+    AppWaiter,
     LatestTipsCard,
     ProgressCard,
-    StatsCard
+    TaskStatsCard
+  },
+  async mounted () {
+    await this.waitFor(this.fetchTaskLoader, this.fetchTask)
+  },
+  computed: {
+    tasks () {
+      return Task.query().with('project').all()
+    },
+    fetchTaskLoader () {
+      return uniqueId('load-dashboard-task-')
+    }
+  },
+  methods: {
+    fetchTask () {
+      return Task.api().get()
+    },
+    async waitFor (loader, fn) {
+      this.$wait.start(loader)
+      await fn()
+      this.$wait.end(loader)
+    }
   }
 }
 </script>
