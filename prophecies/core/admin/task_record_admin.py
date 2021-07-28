@@ -9,6 +9,8 @@ from prophecies.core.models import TaskRecord
 @admin.register(TaskRecord)
 class TaskRecordAdmin(admin.ModelAdmin):
     change_list_template = "admin/task_record_changelist.html"
+    readonly_fields = ['rounds', 'status']
+    list_display = ('__str__', 'task', 'rounds', 'status')
 
 
     def get_urls(self):

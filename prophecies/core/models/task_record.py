@@ -23,4 +23,4 @@ class TaskRecord(models.Model):
     rounds = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f'Record #{self.id} for task #{self.task.id}'
+        return f'Record #{self.id} to be review in {self.task.name}'
