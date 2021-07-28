@@ -1,7 +1,10 @@
+import json
+
 from django.contrib import admin, messages
 from django.contrib.admin.helpers import AdminForm
 from django.shortcuts import redirect, render
 from django.urls import path
+from django.utils.html import format_html
 from prophecies.core.forms import TaskRecordUploadForm
 from prophecies.core.models import TaskRecord
 
@@ -9,8 +12,18 @@ from prophecies.core.models import TaskRecord
 @admin.register(TaskRecord)
 class TaskRecordAdmin(admin.ModelAdmin):
     change_list_template = "admin/task_record_changelist.html"
-    readonly_fields = ['uid', 'rounds', 'status']
+    exclude = ['metadata']
+    readonly_fields = ['uid', 'rounds', 'original_value', 'suggested_value', 'status', 'metadata_json_preview']
     list_display = ('__str__', 'task', 'rounds', 'status')
+
+
+    def metadata_json_preview(self, task_record):
+        if task_record.metadata is None:
+            return '-'
+        metadata_pretty = json.dumps(task_record.metadata, indent=2)
+        return format_html('<pre class="m-0 p-0"><code class="language-json">{0}</code></pre>', metadata_pretty)
+
+    metadata_json_preview.short_description = "Metadata"
 
 
     def get_urls(self):
@@ -38,16 +51,14 @@ class TaskRecordAdmin(admin.ModelAdmin):
         task = request.GET.get('task')
         form = extra_context.get('form', TaskRecordUploadForm(initial={'task': task}))
         adminform = self.form_as_adminform(form, request)
-        context = dict(
-            self.admin_site.each_context(request),
-            form=form,
-            adminform=adminform,
-            opts=TaskRecord._meta,
-            has_change_permission=self.has_change_permission(request),
-            has_view_permission=self.has_view_permission(request),
-            original='Upload task records',
-            title='Upload task records'
-        )
+        context = dict(self.admin_site.each_context(request),
+                      form=form,
+                      adminform=adminform,
+                      opts=TaskRecord._meta,
+                      has_change_permission=self.has_change_permission(request),
+                      has_view_permission=self.has_view_permission(request),
+                      original='Upload task records',
+                      title='Upload task records')
         return render(request, "admin/task_record_upload_form.html", context)
 
 
