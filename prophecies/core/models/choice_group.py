@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class TaskChoicesGroup(models.Model):
+class ChoiceGroup(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):

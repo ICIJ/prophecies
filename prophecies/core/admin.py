@@ -3,8 +3,8 @@ from django.contrib import admin
 from constance import config
 from constance.admin import ConstanceAdmin, Config
 from prophecies.core.models import Project
-from prophecies.core.models import TaskChoice
-from prophecies.core.models import TaskChoicesGroup
+from prophecies.core.models import Choice
+from prophecies.core.models import ChoiceGroup
 from prophecies.core.models import Task
 
 
@@ -26,15 +26,15 @@ class ProjectAdmin(admin.ModelAdmin):
 
 
 
-class TaskChoiceInline(admin.TabularInline):
-    model = TaskChoice
-    fk_name = "choices_group"
+class ChoiceInline(admin.TabularInline):
+    model = Choice
+    fk_name = "choice_group"
     extra = 0
 
 
-@admin.register(TaskChoicesGroup)
-class TaskChoicesGroupAdmin(admin.ModelAdmin):
-    inlines = [TaskChoiceInline,]
+@admin.register(ChoiceGroup)
+class ChoiceGroupAdmin(admin.ModelAdmin):
+    inlines = [ChoiceInline,]
 
 
 @admin.register(Task)

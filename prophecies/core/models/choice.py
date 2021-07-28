@@ -1,12 +1,12 @@
 from django.contrib.auth.models import User
 from django.db import models
-from prophecies.core.models.task_choices_group import TaskChoicesGroup
+from prophecies.core.models.choice_group import ChoiceGroup
 
 
-class TaskChoice(models.Model):
+class Choice(models.Model):
     name = models.CharField(max_length=100)
     value = models.CharField(max_length=100, blank=True)
-    choices_group = models.ForeignKey(TaskChoicesGroup, on_delete=models.CASCADE, related_name="choices")
+    choice_group = models.ForeignKey(ChoiceGroup, on_delete=models.CASCADE, related_name="choices")
 
     def __str__(self):
         return self.name

@@ -2,7 +2,7 @@ from colorfield.fields import ColorField
 from django.contrib.auth.models import User
 from django.db import models
 from prophecies.core.models.project import Project
-from prophecies.core.models.task_choices_group import TaskChoicesGroup
+from prophecies.core.models.choice_group import ChoiceGroup
 from prophecies.core.contrib.colors import hex_scale_brightness
 
 
@@ -16,7 +16,7 @@ class Task(models.Model):
     automatic_round_attributions = models.BooleanField(default=True, verbose_name="Attribute rounds (if not checked, all checkers will participate in all rounds)")
     allow_multiple_checks = models.BooleanField(default=True, verbose_name="Allow checkers to check several time the same item")
     priority = models.PositiveIntegerField(default=1, verbose_name="Priority")
-    choices_group = models.ForeignKey(TaskChoicesGroup, verbose_name="Choices", on_delete=models.SET_NULL, null=True, blank=True)
+    choice_group = models.ForeignKey(ChoiceGroup, verbose_name="Choices", on_delete=models.SET_NULL, null=True, blank=True)
     allow_items_addition = models.BooleanField(default=False, verbose_name="Allow checker to add items")
     color = ColorField(default='#31807D')
 

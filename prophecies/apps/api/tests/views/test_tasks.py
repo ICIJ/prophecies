@@ -2,8 +2,8 @@ from django.test import TestCase
 from rest_framework.test import APIClient, force_authenticate
 from prophecies.core.models.project import Project
 from prophecies.core.models.task import Task
-from prophecies.core.models.task_choice import TaskChoice
-from prophecies.core.models.task_choices_group import TaskChoicesGroup
+from prophecies.core.models.choice import Choice
+from prophecies.core.models.choice_group import ChoiceGroup
 
 
 
@@ -41,14 +41,14 @@ class TestProject(TestCase):
 
 
     def test_details_returns_paintings_task_with_choices(self):
-        task_choices_group = TaskChoicesGroup.objects.create(name='Which option?')
-        self.task_paintings.choices_group = task_choices_group
+        choice_group = ChoiceGroup.objects.create(name='Which option?')
+        self.task_paintings.choice_group = choice_group
         self.task_paintings.save()
         self.client.login(username='olivia', password='olivia')
         id = self.task_paintings.id
         request = self.client.get('/api/v1/tasks/%s.json' % id)
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(request.json().get('choices_group').get('name'), 'Which option?')
+        self.assertEqual(request.json().get('choice_group').get('name'), 'Which option?')
 
 
     def test_list_reject_unauthenticated_request(self):

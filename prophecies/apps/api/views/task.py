@@ -1,18 +1,18 @@
 from rest_framework import filters, viewsets, serializers
 from prophecies.core.models.task import Task
-from prophecies.apps.api.views.task_choices_group import TaskChoicesGroupSerializer
+from prophecies.apps.api.views.choice_group import ChoiceGroupSerializer
 from prophecies.apps.api.views.project import ProjectSerializer
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     project = ProjectSerializer(many=False)
-    choices_group = TaskChoicesGroupSerializer(many=False)
+    choice_group = ChoiceGroupSerializer(many=False)
 
     def get_colors(self, task):
         return [task.color]
 
     class Meta:
         model = Task
-        fields = ['id', 'url', 'choices_group', 'colors', 'description', 'name', 'project', 'priority', 'rounds']
+        fields = ['id', 'url', 'choice_group', 'colors', 'description', 'name', 'project', 'priority', 'rounds']
 
 
 class TaskViewSet(viewsets.ReadOnlyModelViewSet):
