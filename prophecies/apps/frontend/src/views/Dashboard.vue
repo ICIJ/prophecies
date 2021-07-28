@@ -64,7 +64,11 @@ export default {
   },
   computed: {
     tasks () {
-      return Task.query().with('project').all()
+      return Task.query()
+        .with('project')
+        .with('choice_group')
+        .with('choice_group.choices')
+        .all()
     },
     fetchTaskLoader () {
       return uniqueId('load-dashboard-task-')

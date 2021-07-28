@@ -8,4 +8,4 @@ class ChoiceGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChoiceGroup
-        fields = ['name', 'choices']
+        fields = ['id', 'name', 'choices']

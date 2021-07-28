@@ -1,5 +1,6 @@
 import { Model } from '@vuex-orm/core'
 import settings from '@/settings'
+import ChoiceGroup from '@/models/ChoiceGroup'
 import Project from '@/models/Project'
 
 export default class Task extends Model {
@@ -9,8 +10,11 @@ export default class Task extends Model {
     return {
       id: this.attr(null),
       name: this.string(),
+      priority: this.number(null),
       project_id: this.attr(null),
-      project: this.belongsTo(Project, 'project_id')
+      project: this.belongsTo(Project, 'project_id'),
+      choice_group_id: this.attr(null),
+      choice_group: this.belongsTo(ChoiceGroup, 'choice_group_id')
     }
   }
 
