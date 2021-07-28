@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.urls import reverse
 from django.utils.html import format_html
 from prophecies.core.models import Task
 from prophecies.core.models import TaskRecord
@@ -11,7 +12,9 @@ class TaskAdmin(admin.ModelAdmin):
 
 
     def task_actions(self, obj):
-        return format_html('<a href="{}">Upload records</a>', '/')
+        path = reverse('admin:core_taskrecord_upload')
+        url = f'{path}?task={obj.id}'
+        return format_html('<a href="{}">Upload records</a>', url)
 
     task_actions.short_description = 'Actions'
     task_actions.allow_tags = True

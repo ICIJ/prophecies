@@ -35,11 +35,13 @@ class TaskRecordAdmin(admin.ModelAdmin):
 
     def upload_form_view(self, request, extra_context = None):
         extra_context = extra_context or {}
-        form = extra_context.get('form', TaskRecordUploadForm())
+        task = request.GET.get('task')
+        form = extra_context.get('form', TaskRecordUploadForm(initial={'task': task}))
+        adminform = self.form_as_adminform(form, request)
         context = dict(
             self.admin_site.each_context(request),
             form=form,
-            adminform=self.form_as_adminform(form, request),
+            adminform=adminform,
             opts=TaskRecord._meta,
             has_change_permission=self.has_change_permission(request),
             has_view_permission=self.has_view_permission(request),
