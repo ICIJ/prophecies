@@ -3,7 +3,7 @@ from django.test import TestCase
 from prophecies.core.models import Project, Task, TaskRecord
 from prophecies.core.forms import TaskRecordUploadForm
 
-class TaskRecordFormTests(TestCase):
+class TaskRecordUploadFormTests(TestCase):
     def setUp(self):
         self.project = Project.objects.create(name='Pencil Papers')
         self.task = Task.objects.create(name='Art', project=self.project, color='#fe6565')
@@ -60,7 +60,6 @@ class TaskRecordFormTests(TestCase):
         ])
         files = { 'csv_file': self.build_csv_file(csv_content) }
         form = TaskRecordUploadForm(data, files)
-        form.full_clean()
         form.save()
         self.assertEqual(TaskRecord.objects.count(), 2)
         self.assertTrue(TaskRecord.objects.filter(original_value='foo').exists())
@@ -78,7 +77,6 @@ class TaskRecordFormTests(TestCase):
         ])
         files = { 'csv_file': self.build_csv_file(csv_content) }
         form = TaskRecordUploadForm(data, files)
-        form.full_clean()
         form.save()
         self.assertEqual(TaskRecord.objects.count(), 2)
         self.assertTrue(TaskRecord.objects.filter(original_value='green').exists())
@@ -96,7 +94,6 @@ class TaskRecordFormTests(TestCase):
         ])
         files = { 'csv_file': self.build_csv_file(csv_content) }
         form = TaskRecordUploadForm(data, files)
-        form.full_clean()
         form.save()
         self.assertEqual(TaskRecord.objects.count(), 3)
         self.assertTrue(TaskRecord.objects.filter(original_value='green').exists())

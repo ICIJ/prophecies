@@ -42,7 +42,8 @@ class TaskRecordUploadForm(forms.Form):
         return csv.DictReader(stream)
 
 
-    def save(self):
+    def save(self, commit=True):
+        self.full_clean()
         task = self.cleaned_data["task"]
         # This list will contain all records to be created
         queues = { 'bulk_update': [], 'bulk_create': [] }
@@ -60,5 +61,7 @@ class TaskRecordUploadForm(forms.Form):
             else:
                 queues['bulk_create'].append(task_record)
         # And finally, create and update all the task record at once)
-        TaskRecord.objects.bulk_create(queues['bulk_create'])
-        TaskRecord.objects.bulk_update(queues['bulk_update'], TaskRecordUploadForm.ALLOWED_MODEL_FIELDS)
+        if commit:
+            TaskRecord.objects.bulk_create(queues['bulk_create'])
+            TaskRecord.objects.bulk_update(queues['bulk_update'], TaskRecordUploadForm.ALLOWED_MODEL_FIELDS)
+        return queues
