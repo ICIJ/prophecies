@@ -7,6 +7,7 @@ from functools import lru_cache
 from prophecies.core.models import Task
 from prophecies.core.models import TaskRecord
 
+
 class TaskRecordUploadForm(forms.Form):
     csv_file = forms.FileField(required=True, label="CSV file")
     task = forms.ModelChoiceField(required=True, queryset=Task.objects.all())
