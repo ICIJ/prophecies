@@ -13,10 +13,12 @@ class TaskRecordAttributionInline(admin.TabularInline):
     exclude = ['status']
     readonly_fields = ['checker', 'note', 'alternative_value', 'choice', 'round', 'status_badge',]
 
+
     def status_badge(self, task_record):
         return display_status(task_record.get_status_display())
 
     status_badge.short_description = "Status"
+
 
     def has_add_permission(self, request, obj=None):
         return False
