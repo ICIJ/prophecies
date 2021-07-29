@@ -1,5 +1,6 @@
 from django.contrib import admin, messages
 from django.contrib.admin.helpers import AdminForm
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import redirect, render
 from django.urls import path
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon
@@ -11,14 +12,21 @@ from prophecies.core.models import TaskRecord
 class TaskRecordAdmin(admin.ModelAdmin):
     change_list_template = "admin/task_record_changelist.html"
     exclude = ['metadata']
-    readonly_fields = ['uid', 'rounds', 'original_value', 'suggested_value', 'status_badge', 'metadata_json']
-    list_display = ('__str__', 'task_with_addon', 'rounds', 'status_badge')
+    readonly_fields = ['uid', 'round_count', 'original_value', 'suggested_value', 'status_badge', 'metadata_json']
+    list_display = ('__str__', 'task_with_addon', 'round_count', 'status_badge')
+    list_filter = ('rounds', 'task', 'task__project', 'status')
 
 
     def metadata_json(self, task_record):
         return display_json(task_record.metadata)
 
     metadata_json.short_description = "Metadata"
+
+
+    def round_count(self, task_record):
+        return f'{task_record.rounds}/{task_record.task.rounds}'
+
+    round_count.short_description = "Round"
 
 
     def status_badge(self, task_record):

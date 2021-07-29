@@ -22,9 +22,9 @@ class TaskRecord(models.Model):
     # An optional unique identifier used to update task records in bulk
     uid = models.CharField(max_length=50, blank=True, null=True, verbose_name='UID')
     # Original value of the record
-    original_value = models.TextField()
+    original_value = models.TextField(blank=True, null=True)
     # Suggested value to be reviewed
-    suggested_value = models.TextField()
+    suggested_value = models.TextField(blank=True, null=True)
     # Optional metadata for this record (in JSON)
     metadata = models.JSONField(blank=True, null=True)
     # Status of the record. Set to done after it passes all task's rounds
