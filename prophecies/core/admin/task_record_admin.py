@@ -1,10 +1,8 @@
-import json
-
 from django.contrib import admin, messages
 from django.contrib.admin.helpers import AdminForm
 from django.shortcuts import redirect, render
 from django.urls import path
-from django.utils.html import format_html
+from prophecies.core.contrib.display import display_json, display_status, display_task_addon
 from prophecies.core.forms import TaskRecordUploadForm
 from prophecies.core.models import TaskRecord
 
@@ -13,17 +11,26 @@ from prophecies.core.models import TaskRecord
 class TaskRecordAdmin(admin.ModelAdmin):
     change_list_template = "admin/task_record_changelist.html"
     exclude = ['metadata']
-    readonly_fields = ['uid', 'rounds', 'original_value', 'suggested_value', 'status', 'metadata_json_preview']
-    list_display = ('__str__', 'task', 'rounds', 'status')
+    readonly_fields = ['uid', 'rounds', 'original_value', 'suggested_value', 'status_badge', 'metadata_json']
+    list_display = ('__str__', 'task_with_addon', 'rounds', 'status_badge')
 
 
-    def metadata_json_preview(self, task_record):
-        if task_record.metadata is None:
-            return '-'
-        metadata_pretty = json.dumps(task_record.metadata, indent=2)
-        return format_html('<pre class="m-0 p-0"><code class="language-json">{0}</code></pre>', metadata_pretty)
+    def metadata_json(self, task_record):
+        return display_json(task_record.metadata)
 
-    metadata_json_preview.short_description = "Metadata"
+    metadata_json.short_description = "Metadata"
+
+
+    def status_badge(self, task_record):
+        return display_status(task_record.get_status_display())
+
+    status_badge.short_description = "Status"
+
+
+    def task_with_addon(self, task_record):
+        return display_task_addon(task_record.task)
+
+    task_with_addon.short_description = "Task"
 
 
     def get_urls(self):

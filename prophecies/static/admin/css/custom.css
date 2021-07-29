@@ -1,31 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
 
 :root {
+  --primary: #235B59;
+  --secondary: #31807D;
+  --quiet: #515858;
+  --info: #17a2b8;
+  --danger: #FE6565;
+  --success: #73B782;
+  --warning: #FFE980;
+  --accent: #fff;
+
+  --primary-fg: #fff;
+  --secondary-fg: #fff;
+  --quiet-fg: #fff;
+  --info-fg: #fff;
+  --danger-fg: #fff;
+  --success-fg: #fff;
+  --warning-fg: #fff;
+  --accent-fg: #000;
+
   --body-bg: #fff;
   --body-fg: #071111;
-  --body-quiet-color: #515858;
+  --body-quiet-color: var(--quiet);
   --body-loud-color: #071111;
   --darkened-bg: #EFEFEF;
   --hairline-color: #efefef;
   --border-color: #bebfbf;
-  --link-fg: #31807D;
+  --link-fg: var(--secondary);
   --link-hover-color: #31807D;
 
   --header-color: #fff;
   --header-bg: #071111;
   --breadcrumbs-bg: #333;
 
-  --primary: #235B59;
-  --primary-fg: #fff;
-  --secondary: #31807D;
-  --accent: #fff;
-
   --selected-bg: #CCE3E6;
   --selected-row: #CCE3E6;
-  --delete-button-bg: #FE6565;
-  --message-warning-bg: #FFE980;
-  --message-success-bg: #73B782;
-  --message-error-bg: #FE6565;
+  --delete-button-bg: var(--danger);
+  --message-warning-bg: var(--warning);
+  --message-success-bg:  var(--success);
+  --message-error-bg: var(--danger);
 
   --nav-sidebar-width: 305px;
 }
