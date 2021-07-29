@@ -5,7 +5,26 @@ from django.shortcuts import redirect, render
 from django.urls import path
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon
 from prophecies.core.forms import TaskRecordAttributeForm, TaskRecordUploadForm
-from prophecies.core.models import TaskRecord
+from prophecies.core.models import TaskRecord, TaskRecordAttribution
+
+class TaskRecordAttributionInline(admin.TabularInline):
+    model = TaskRecordAttribution
+    fk_name = "task_record"
+    exclude = ['status']
+    readonly_fields = ['checker', 'note', 'alternative_value', 'choice', 'round', 'status_badge',]
+
+    def status_badge(self, task_record):
+        return display_status(task_record.get_status_display())
+
+    status_badge.short_description = "Status"
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 
 @admin.register(TaskRecord)
@@ -13,8 +32,9 @@ class TaskRecordAdmin(admin.ModelAdmin):
     change_list_template = "admin/task_record_changelist.html"
     exclude = ['metadata', 'rounds', 'status']
     readonly_fields = ['uid', 'round_count', 'original_value', 'suggested_value', 'status_badge', 'metadata_json']
-    list_display = ('__str__', 'task_with_addon', 'round_count', 'status_badge')
-    list_filter = ('rounds', 'task', 'task__project', 'status')
+    list_display = ['__str__', 'task_with_addon', 'round_count', 'status_badge']
+    list_filter = ['rounds', 'task', 'task__project', 'status']
+    inlines = [TaskRecordAttributionInline,]
     actions = ['attribute_action']
 
 
