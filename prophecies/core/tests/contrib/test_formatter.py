@@ -14,3 +14,9 @@ class TestFormatter(TestCase):
         formatter = URLEncodedFormatter()
         link = formatter.format('https://duckduckgo.com/?q={0}', 'Kuala Lumpur')
         self.assertEqual(link, 'https://duckduckgo.com/?q=Kuala Lumpur')
+
+
+    def test_unkown_fields_are_ignored(self):
+        formatter = URLEncodedFormatter()
+        link = formatter.format('https://duckduckgo.com/?q={foo}', bar=1)
+        self.assertEqual(link, 'https://duckduckgo.com/?q=')
