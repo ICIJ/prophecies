@@ -15,3 +15,9 @@ class URLEncodedFormatter(string.Formatter):
             return super().get_value(*kwarg)
         except KeyError:
             return ''
+
+    def get_field(self, *kwarg):
+        try:
+            return super().get_field(*kwarg)
+        except AttributeError:
+            return ('','')

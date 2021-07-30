@@ -71,3 +71,21 @@ class TestTaskRecord(TestCase):
         task = Task.objects.create(name='Addresses', project=self.project, recordLinkTemplate='https://www.openstreetmap.org/search?query={metadata.city:u}')
         task_record = TaskRecord.objects.create(task=task, metadata={'city': 'Kuala Lumpur'})
         self.assertEqual(task_record.computed_link(), 'https://www.openstreetmap.org/search?query=Kuala%20Lumpur')
+
+
+    def test_it_should_use_task_link_template_with_unknown_key(self):
+        task = Task.objects.create(name='Addresses', project=self.project, recordLinkTemplate='https://www.openstreetmap.org/search?query={foo}')
+        task_record = TaskRecord.objects.create(task=task)
+        self.assertEqual(task_record.computed_link(), 'https://www.openstreetmap.org/search?query=')
+
+
+    def test_it_should_use_task_link_template_with_unknown_metadata_key(self):
+        task = Task.objects.create(name='Addresses', project=self.project, recordLinkTemplate='https://www.openstreetmap.org/search?query={metadata.foo}')
+        task_record = TaskRecord.objects.create(task=task)
+        self.assertEqual(task_record.computed_link(), 'https://www.openstreetmap.org/search?query=')
+
+
+    def test_it_should_use_task_link_template_with_nunknown_nested_metadata_key(self):
+        task = Task.objects.create(name='Addresses', project=self.project, recordLinkTemplate='https://www.openstreetmap.org/search?query={metadata.foo.bar}')
+        task_record = TaskRecord.objects.create(task=task)
+        self.assertEqual(task_record.computed_link(), 'https://www.openstreetmap.org/search?query=')
