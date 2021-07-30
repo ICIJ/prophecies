@@ -3,7 +3,7 @@ from django.contrib.admin.helpers import AdminForm
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import redirect, render
 from django.urls import path
-from prophecies.core.contrib.display import display_json, display_status, display_task_addon
+from prophecies.core.contrib.display import display_json, display_status, display_task_addon, display_task_record_link
 from prophecies.core.forms import TaskRecordAttributeForm, TaskRecordUploadForm
 from prophecies.core.models import TaskRecord, TaskRecordAttribution
 
@@ -27,8 +27,8 @@ class TaskRecordAttributionInline(admin.TabularInline):
 @admin.register(TaskRecord)
 class TaskRecordAdmin(admin.ModelAdmin):
     change_list_template = "admin/task_record_changelist.html"
-    exclude = ['metadata', 'rounds', 'status']
-    readonly_fields = ['uid', 'round_count', 'original_value', 'suggested_value', 'status_badge', 'metadata_json']
+    exclude = ['metadata', 'rounds', 'link', 'status']
+    readonly_fields = ['round_count', 'status_badge', 'computed_link', 'metadata_json']
     list_display = ['__str__', 'task_with_addon', 'round_count', 'status_badge']
     list_filter = ['rounds', 'task', 'task__project', 'status']
     inlines = [TaskRecordAttributionInline,]
@@ -45,6 +45,11 @@ class TaskRecordAdmin(admin.ModelAdmin):
         return f'{task_record.rounds}/{task_record.task.rounds}'
 
     round_count.short_description = "Round"
+
+    def computed_link(self, task_record):
+        return display_task_record_link(task_record)
+
+    computed_link.short_description = "Link"
 
 
     def status_badge(self, task_record):

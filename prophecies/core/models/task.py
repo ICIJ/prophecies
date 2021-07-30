@@ -7,9 +7,9 @@ from prophecies.core.contrib.colors import hex_scale_brightness
 
 
 class Task(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Task name")
-    description = models.CharField(max_length=100, verbose_name="Task description")
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks", verbose_name="Project this task belong to")
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks", help_text="Project this task belong to")
     checkers = models.ManyToManyField(User, through='TaskChecker', through_fields=('task', 'checker'), verbose_name="User in charge of checking this task's data", related_name='task')
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='tasks')
     rounds = models.PositiveIntegerField(default=3, verbose_name="Number of rounds")
@@ -19,6 +19,7 @@ class Task(models.Model):
     choice_group = models.ForeignKey(ChoiceGroup, verbose_name="Choices", on_delete=models.SET_NULL, null=True, blank=True)
     allow_items_addition = models.BooleanField(default=False, verbose_name="Allow checker to add items")
     color = ColorField(default='#31807D')
+    recordLinkTemplate = models.CharField(max_length=1000, null=True, blank=True, verbose_name="Record link template", help_text="A link template to build a link for each task record. Task record can override this value with their own link")
 
 
     def __str__(self):
