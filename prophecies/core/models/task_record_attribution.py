@@ -65,5 +65,12 @@ class TaskRecordAttribution(models.Model):
                 raise ValidationError(f'Task record #{self.task_record.id} was already attributed to {self.checker} before')
 
 
+    def check_round_upper_bound(self, **kwarg):
+        if self.task_record:
+            max_round = self.task_record.task.rounds
+            if self.task_record.attributions.count() >= max_round:
+                raise ValidationError(f'Task record #{self.task_record.id} cannot get more than {max_round} attributions')
+
+
 signals.post_save.connect(TaskRecord.update_rounds_and_status, sender=TaskRecordAttribution)
 signals.post_delete.connect(TaskRecord.update_rounds_and_status, sender=TaskRecordAttribution)
