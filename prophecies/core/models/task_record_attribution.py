@@ -58,6 +58,12 @@ class TaskRecordAttribution(models.Model):
         return f'Task record #{self.task_record.id} on round {self.round}'
 
 
+    def save(self, *args, **kwargs):
+        if not self.choice is None:
+            self.status = StatusType.DONE
+        super().save(*args, **kwargs)
+
+
     def check_unique_constraints(self, **kwargs):
         for fields in self._meta.unique_together:
             opts = { field: getattr(self, field) for field in fields }
@@ -72,5 +78,5 @@ class TaskRecordAttribution(models.Model):
                 raise ValidationError(f'Task record #{self.task_record.id} cannot get more than {max_round} attributions')
 
 
-signals.post_save.connect(TaskRecord.update_rounds_and_status, sender=TaskRecordAttribution)
-signals.post_delete.connect(TaskRecord.update_rounds_and_status, sender=TaskRecordAttribution)
+signals.post_save.connect(TaskRecord.signal_update_rounds_and_status, sender=TaskRecordAttribution)
+signals.post_delete.connect(TaskRecord.signal_update_rounds_and_status, sender=TaskRecordAttribution)

@@ -1,5 +1,6 @@
 from copy import deepcopy
 from django.db import models
+from django.db.models import signals
 from django.utils.translation import gettext_lazy as _
 from types import SimpleNamespace
 from prophecies.core.contrib.namespace import ExtendedNamespace
@@ -67,17 +68,30 @@ class TaskRecord(models.Model):
             return self.link
         elif self.task.recordLinkTemplate:
             opts = deepcopy(self.__dict__)
-            # Convert metadata field into namespace to use dot notation
+            # Convert metadata field into ExtendedNamespace to use dot notation
             if type(opts['metadata']) == dict or type(opts['metadata']) == list:
                 opts['metadata'] = ExtendedNamespace(opts.get('metadata', {}))
             formatter = URLEncodedFormatter()
             return formatter.format(self.task.recordLinkTemplate, **opts)
 
 
+    def update_rounds_and_status(self):
+        self.status = self.computed_status()
+        self.rounds = self.computed_rounds()
+        self.save(update_fields=['rounds', 'status'])
+
+
     @staticmethod
-    def update_rounds_and_status(sender, instance=None, created=False, **kwargs):
-        task_record = instance.task_record
-        # Update the round for this record
-        task_record.status = task_record.computed_status()
-        task_record.rounds = task_record.computed_rounds()
-        task_record.save(update_fields=['rounds', 'status'])
+    def signal_update_rounds_and_status(sender, instance=None, created=False, **kwargs):
+        if instance.task_record:
+            # Call the instance method
+            instance.task_record.update_rounds_and_status()
+
+
+    @staticmethod
+    def signal_update_all_rounds_and_status(sender, instance=None, created=False, **kwargs):
+        for task_record in TaskRecord.objects.all():
+            task_record.update_rounds_and_status()
+
+
+signals.post_save.connect(TaskRecord.signal_update_all_rounds_and_status, sender=Task)

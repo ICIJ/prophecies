@@ -7,12 +7,9 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     project = ProjectSerializer(many=False)
     choice_group = ChoiceGroupSerializer(many=False)
 
-    def get_colors(self, task):
-        return [task.color]
-
     class Meta:
         model = Task
-        fields = ['id', 'url', 'choice_group', 'colors', 'description', 'name', 'project', 'priority', 'rounds']
+        fields = ['id', 'url', 'choice_group', 'colors', 'description', 'name', 'project', 'priority', 'rounds']        
 
 
 class TaskViewSet(viewsets.ReadOnlyModelViewSet):
