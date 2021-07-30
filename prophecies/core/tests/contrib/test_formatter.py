@@ -20,3 +20,9 @@ class TestFormatter(TestCase):
         formatter = URLEncodedFormatter()
         link = formatter.format('https://duckduckgo.com/?q={foo}', bar=1)
         self.assertEqual(link, 'https://duckduckgo.com/?q=')
+
+
+    def test_unkown_field_attributes_are_ignored(self):
+        formatter = URLEncodedFormatter()
+        link = formatter.format('https://duckduckgo.com/?q={foo.qux}', bar=1)
+        self.assertEqual(link, 'https://duckduckgo.com/?q=')
