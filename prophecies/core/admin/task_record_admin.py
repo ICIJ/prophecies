@@ -10,8 +10,7 @@ from prophecies.core.models import TaskRecord, TaskRecordAttribution
 class TaskRecordAttributionInline(admin.TabularInline):
     model = TaskRecordAttribution
     fk_name = "task_record"
-    exclude = ['status']
-    readonly_fields = ['checker', 'note', 'alternative_value', 'choice', 'round', 'status_badge',]
+    readonly_fields = ['checker', 'note', 'alternative_value', 'choice', 'round',]
 
 
     def status_badge(self, task_record):
@@ -21,10 +20,6 @@ class TaskRecordAttributionInline(admin.TabularInline):
 
 
     def has_add_permission(self, request, obj=None):
-        return False
-
-
-    def has_delete_permission(self, request, obj=None):
         return False
 
 

@@ -1,10 +1,14 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, signals
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from prophecies.core.models.choice import Choice
 from prophecies.core.models.task_record import TaskRecord
+
+class StatusType(models.TextChoices):
+    PENDING = 'PENDING', _('Pending')
+    DONE = 'DONE', _('Done')
 
 
 class TaskRecordAttributionManager(models.Manager):
@@ -16,12 +20,16 @@ class TaskRecordAttributionManager(models.Manager):
         return 0
 
 
+    def pending(self):
+        return self.filter(status=StatusType.PENDING)
+
+
+    def done(self):
+        return self.filter(status=StatusType.DONE)
+
+
 class TaskRecordAttribution(models.Model):
     objects = TaskRecordAttributionManager()
-
-    class StatusType(models.TextChoices):
-        PENDING = 'PENDING', _('Pending')
-        DONE = 'DONE', _('Done')
 
 
     class Meta:
@@ -29,8 +37,8 @@ class TaskRecordAttribution(models.Model):
         get_latest_by = 'round'
 
 
-    task_record = models.ForeignKey(TaskRecord, null=True, on_delete=models.SET_NULL)
-    checker = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    task_record = models.ForeignKey(TaskRecord, null=True, on_delete=models.SET_NULL, related_name='attributions')
+    checker = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='attributions')
     round = models.PositiveIntegerField(verbose_name="Attribution round", null=True, default=None)
     status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.PENDING, max_length=7)
     choice = models.ForeignKey(Choice, null=True, on_delete=models.SET_NULL)
@@ -50,15 +58,12 @@ class TaskRecordAttribution(models.Model):
         return f'Task record #{self.task_record.id} on round {self.round}'
 
 
-    def validate_unique(self):
+    def check_unique_constraints(self, **kwargs):
         for fields in self._meta.unique_together:
-            opts = { field: getattr(self, field)  for field in fields }
+            opts = { field: getattr(self, field) for field in fields }
             if TaskRecordAttribution.objects.filter(**opts).exists():
                 raise ValidationError(f'Task record #{self.task_record.id} was already attributed to {self.checker} before')
 
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        # Update the round for this record
-        self.task_record.rounds = self.round
-        self.task_record.save()
+signals.post_save.connect(TaskRecord.update_rounds_and_status, sender=TaskRecordAttribution)
+signals.post_delete.connect(TaskRecord.update_rounds_and_status, sender=TaskRecordAttribution)

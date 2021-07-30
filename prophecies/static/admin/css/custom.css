@@ -72,3 +72,8 @@ body {
 .module h2, .module caption, .inline-group h2 {
   font-weight: 600;
 }
+
+#changelist-filter li.selected:not(:first-of-type) {
+  background: var(--selected-bg);
+  font-weight: bold;
+}

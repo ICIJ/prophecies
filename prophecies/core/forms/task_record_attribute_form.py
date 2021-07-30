@@ -14,7 +14,7 @@ class TaskRecordAttributeForm(forms.Form):
         super().clean()
         if self.is_valid():
             for object in self.task_record_attributions():
-                    object.validate_unique()
+                    object.check_unique_constraints()
 
 
     def task_record_attributions(self):

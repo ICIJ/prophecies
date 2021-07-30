@@ -9,9 +9,10 @@ variants_map = {
     'fail': 'danger',
     'failed': 'danger',
     'failure': 'danger',
+    'pending': 'quiet',
+    'queued': 'quiet',
     'info': 'info',
-    'pending': 'info',
-    'queued': 'info',
+    'assigned': 'info',
     'running': 'info',
     'warning': 'warning',
     'cancelled': 'warning'
@@ -20,4 +21,4 @@ variants_map = {
 
 def to_variant(string='', default_variant='quiet', prefix=''):
     variant_key = slugify(string)
-    return prefix + (variants_map[variant_key] or defaultVariant)
+    return prefix + variants_map.get(variant_key, default_variant)
