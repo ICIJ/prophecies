@@ -1,16 +1,21 @@
+from django import forms
 from django.contrib import admin
+from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.html import format_html
 from prophecies.core.contrib.display import display_task_addon
-from prophecies.core.models import Task
-from prophecies.core.models import TaskRecord
+from prophecies.core.models import Task, TaskChecker, TaskRecord
+
+
+class TaskAdminForm(forms.ModelForm):
+    checkers = forms.ModelMultipleChoiceField(required=True, queryset=User.objects.all(), widget=forms.CheckboxSelectMultiple)
 
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     exclude = ['creator']
     list_display = ('task_with_addon', 'description', 'task_actions',)
-
+    form = TaskAdminForm
 
     def task_actions(self, obj):
         path = reverse('admin:core_taskrecord_upload')

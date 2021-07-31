@@ -64,6 +64,11 @@ class TaskRecordAttribution(models.Model):
         super().save(*args, **kwargs)
 
 
+    def check_user_is_authorized(self, **kwargs):
+        if not self.task_record.task.checkers.filter(pk=self.checker.pk).exists():
+            raise ValidationError(f'{self.checker} is not a checker for the task "{self.task_record.task}"')
+
+
     def check_unique_constraints(self, **kwargs):
         for fields in self._meta.unique_together:
             opts = { field: getattr(self, field) for field in fields }

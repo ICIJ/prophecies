@@ -8,12 +8,13 @@ class TaskRecordAttributeForm(forms.Form):
     task_records = forms.ModelMultipleChoiceField(required=True, queryset=TaskRecord.objects.all(), widget=forms.MultipleHiddenInput())
     checker = forms.ModelChoiceField(required=True, queryset=User.objects.all())
     round = forms.IntegerField(required=False, min_value=1, help_text="Leave empty to select the round automaticaly based on the latest record's attribution.")
-
+        
 
     def clean(self):
         super().clean()
         if self.is_valid():
             for object in self.task_record_attributions():
+                    object.check_user_is_authorized()
                     object.check_unique_constraints()
                     object.check_round_upper_bound()
 

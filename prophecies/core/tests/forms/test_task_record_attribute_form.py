@@ -12,6 +12,9 @@ class TaskRecordAttributeFormTests(TestCase):
         self.task = Task.objects.create(name='Art', project=self.project, color='#fe6565', rounds=2)
         self.task_record_blue = TaskRecord.objects.create(original_value='blue', task=self.task)
         self.task_record_pink = TaskRecord.objects.create(original_value='pink', task=self.task)
+        self.task.checkers.add(self.olivia)
+        self.task.checkers.add(self.pierre)
+        self.task.checkers.add(self.maxime)
 
 
     def test_is_valid(self):

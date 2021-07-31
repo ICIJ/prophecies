@@ -8,4 +8,7 @@ class TaskChecker(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.checker} is cheker on task #{self.task.id}'
+        return f'{self.checker} is checker on task #{self.task}'
+
+    class Meta:
+        unique_together = ('checker', 'task')
