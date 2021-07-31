@@ -32,4 +32,6 @@ class TaskRecordAttributionViewSet(viewsets.ModelViewSet):
         """
         All the task record attribution for the currently authenticated user.
         """
-        return TaskRecordAttribution.objects.filter(checker=self.request.user).prefetch_related('task_record')
+        return TaskRecordAttribution.objects \
+            .filter(checker=self.request.user) \
+            .prefetch_related('task_record', 'task_record__task', 'task_record__task__project', 'checker')
