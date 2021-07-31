@@ -43,7 +43,7 @@ class TaskRecordAttribution(models.Model):
     status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.PENDING, max_length=7)
     choice = models.ForeignKey(Choice, null=True, on_delete=models.SET_NULL)
     note = models.CharField(max_length=100, blank=True, verbose_name="Checker note")
-    alternative_value = models.TextField()
+    alternative_value = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

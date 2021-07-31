@@ -1,4 +1,5 @@
-from rest_framework import viewsets, serializers
+from rest_framework import viewsets, permissions, serializers
+from rest_framework.permissions import IsAuthenticated
 from prophecies.core.models import Choice, TaskRecordAttribution
 from prophecies.apps.api.views.choice import ChoiceSerializer
 from prophecies.apps.api.views.task_record import TaskRecordSerializer
@@ -20,13 +21,17 @@ class TaskRecordAttributionSerializer(serializers.HyperlinkedModelSerializer):
     def filter_choice_queryset(self, f, instance=None, data=serializers.empty, request=None, **kwargs):
         if instance is None or not hasattr(instance, 'task_record'):
             return
-        f.queryset = instance.task_record.task.choice_group.choices.all()
+        if instance.task_record.task.choice_group is None:
+            f.queryset = Choice.objects.none()
+        else:
+            f.queryset = instance.task_record.task.choice_group.choices.all()
 
 
 class TaskRecordAttributionViewSet(viewsets.ModelViewSet):
     serializer_class = TaskRecordAttributionSerializer
     queryset = TaskRecordAttribution.objects.all()
     http_method_names = ['get', 'put', 'head']
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         """
@@ -35,3 +40,8 @@ class TaskRecordAttributionViewSet(viewsets.ModelViewSet):
         return TaskRecordAttribution.objects \
             .filter(checker=self.request.user) \
             .prefetch_related('task_record', 'task_record__task', 'task_record__task__project', 'checker')
+            
+
+    def check_object_permissions(self, request, obj):
+        if obj.checker != request.user:
+            raise exceptions.PermissionDenied(detail='You do not have permission to update this resource.')
