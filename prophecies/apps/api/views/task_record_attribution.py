@@ -3,8 +3,6 @@ from prophecies.core.models import Choice, TaskRecordAttribution
 from prophecies.apps.api.views.choice import ChoiceSerializer
 from prophecies.apps.api.views.task_record import TaskRecordSerializer
 
-def get_queryset(obj):
-    pass
 
 class TaskRecordAttributionSerializer(serializers.HyperlinkedModelSerializer):
     task_record = TaskRecordSerializer(many=False, read_only=True)
@@ -27,12 +25,11 @@ class TaskRecordAttributionSerializer(serializers.HyperlinkedModelSerializer):
 
 class TaskRecordAttributionViewSet(viewsets.ModelViewSet):
     serializer_class = TaskRecordAttributionSerializer
-    queryset = TaskRecordAttribution.objects.all().prefetch_related('task_record')
+    queryset = TaskRecordAttribution.objects.all()
     http_method_names = ['get', 'put', 'head']
 
     def get_queryset(self):
         """
         All the task record attribution for the currently authenticated user.
         """
-        checker = self.request.user
-        return TaskRecordAttribution.objects.filter(checker=checker)
+        return TaskRecordAttribution.objects.filter(checker=self.request.user).prefetch_related('task_record')
