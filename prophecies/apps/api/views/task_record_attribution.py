@@ -32,6 +32,9 @@ class TaskRecordAttributionViewSet(viewsets.ModelViewSet):
     queryset = TaskRecordAttribution.objects.all()
     http_method_names = ['get', 'put', 'head']
     permission_classes = [IsAuthenticated]
+    search_fields = ['task_record__original_value', 'task_record__suggested_value']
+    ordering_fields = ['task_record__original_value', 'task_record__suggested_value', 'task_record__id']
+    filterset_fields = ['task_record__original_value', 'task_record__suggested_value']
 
     def get_queryset(self):
         """
@@ -40,7 +43,7 @@ class TaskRecordAttributionViewSet(viewsets.ModelViewSet):
         return TaskRecordAttribution.objects \
             .filter(checker=self.request.user) \
             .prefetch_related('task_record', 'task_record__task', 'task_record__task__project', 'checker')
-            
+
 
     def check_object_permissions(self, request, obj):
         if obj.checker != request.user:

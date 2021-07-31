@@ -9,7 +9,7 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Task
-        fields = ['id', 'url', 'choice_group', 'colors', 'description', 'name', 'project', 'priority', 'rounds']        
+        fields = ['id', 'url', 'choice_group', 'colors', 'description', 'name', 'project', 'priority', 'rounds']
 
 
 class TaskViewSet(viewsets.ReadOnlyModelViewSet):
