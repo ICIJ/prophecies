@@ -19,10 +19,6 @@ describe('TaskRecordReview', () => {
     expect(TaskRecordReview.query().with('task_record').find(37).task_record.id).toBe(1)
   })
 
-  it('should return a choice', async () => {
-    expect(TaskRecordReview.find(37).choice).toBe(2)
-  })
-
   it('should return a status', async () => {
     expect(TaskRecordReview.find(37).status).toBe('DONE')
   })
@@ -33,5 +29,13 @@ describe('TaskRecordReview', () => {
 
   it('should return an alternative_value', async () => {
     expect(TaskRecordReview.find(37).alternative_value).toBe('FRA')
+  })
+
+  it('should return a choice', async () => {
+    expect(TaskRecordReview.find(37).choice).toBe(2)
+  })
+
+  it('should return a choice', async () => {
+    expect(TaskRecordReview.find(37).choiceEntity.id).toBe(2)
   })
 })
