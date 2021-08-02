@@ -11,9 +11,6 @@ describe('AppSidebar', () => {
 
   beforeEach(async () => {
     localVue = createLocalVue()
-    // Mock Core methods that use the backend
-    jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({ })
-    jest.spyOn(Core.prototype, 'getSettings').mockResolvedValue({ appName: 'Data Fact Check', orgName: 'ICIJ.org' })
     // Configure the local vue
     const core = Core.init(localVue).useAll()
     // Load the settings
@@ -23,10 +20,6 @@ describe('AppSidebar', () => {
     config = core.config
     router = core.router
     wrapper = mount(AppSidebar, { i18n, localVue, router })
-  })
-
-  afterEach(() => {
-    jest.restoreAllMocks()
   })
 
   it('should display the backend value of `appName` as app name', () => {

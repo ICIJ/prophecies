@@ -10,9 +10,6 @@ describe('AppVersion', () => {
 
   beforeEach(async () => {
     localVue = createLocalVue()
-    // Mock Core methods that use the backend
-    jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({ })
-    jest.spyOn(Core.prototype, 'getSettings').mockResolvedValue({ appVersion: '0.4.6' })
     // Configure the local vue
     const core = Core.init(localVue).useAll()
     // Load the settings
@@ -20,10 +17,6 @@ describe('AppVersion', () => {
     // Those core properties must be available for each test
     i18n = core.i18n
     config = core.config
-  })
-
-  afterEach(() => {
-    jest.restoreAllMocks()
   })
 
   it('should display the backend version using the `appVersion` config value', () => {

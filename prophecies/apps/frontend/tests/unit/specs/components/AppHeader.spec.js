@@ -1,6 +1,8 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+import { server, rest } from '../../mocks/server'
 import AppHeader from '@/components/AppHeader'
 import Core from '@/core'
+import User from '@/models/User'
 
 describe('AppHeader', () => {
   describe('for a staff user', () => {
@@ -9,16 +11,17 @@ describe('AppHeader', () => {
 
     beforeEach(async () => {
       localVue = createLocalVue()
-      // Mock Core methods that use the backend
-      jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({
-        username: 'olivia',
-        first_name: 'Olivia',
-        last_name: 'Reinhardt',
-        email: 'engineering@icij.org',
-        email_md5: '628e9a99d87799e9d434b63d2c3744ca',
-        is_staff: true
-      })
-      jest.spyOn(Core.prototype, 'getSettings').mockResolvedValue({ foo: 'bar' })
+      // Mock current user
+      server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => {
+        return res.once(ctx.json({
+          username: 'olivia',
+          first_name: 'Olivia',
+          last_name: 'Reinhardt',
+          email: 'engineering@icij.org',
+          email_md5: '628e9a99d87799e9d434b63d2c3744ca',
+          is_staff: true
+        }))
+      }))
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       await core.configure()
@@ -26,8 +29,9 @@ describe('AppHeader', () => {
       wrapper = mount(AppHeader, { i18n: core.i18n, localVue })
     })
 
-    afterEach(() => {
-      jest.restoreAllMocks()
+    afterEach(async () => {
+      server.resetHandlers()
+      User.deleteAll()
     })
 
     it('should display the full name of the user', () => {
@@ -50,16 +54,17 @@ describe('AppHeader', () => {
 
     beforeEach(async () => {
       localVue = createLocalVue()
-      // Mock Core methods that use the backend
-      jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({
-        username: 'django',
-        first_name: 'Django',
-        last_name: '',
-        email: 'support@icij.org',
-        email_md5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
-        is_staff: false
-      })
-      jest.spyOn(Core.prototype, 'getSettings').mockResolvedValue({ foo: 'bar' })
+      // Mock current user
+      server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => {
+        return res.once(ctx.json({
+          username: 'django',
+          first_name: 'Django',
+          last_name: '',
+          email: 'support@icij.org',
+          email_md5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
+          is_staff: false
+        }))
+      }))
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       await core.configure()
@@ -68,7 +73,8 @@ describe('AppHeader', () => {
     })
 
     afterEach(() => {
-      jest.restoreAllMocks()
+      server.resetHandlers()
+      User.deleteAll()
     })
 
     it('should display the username of the user', () => {

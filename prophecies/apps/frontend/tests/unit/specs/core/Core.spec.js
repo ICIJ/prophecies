@@ -1,14 +1,14 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
-import axios from 'axios'
 import Murmur from '@icij/murmur'
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 
+import { server, rest } from '../../mocks/server'
 import Core from '@/core'
+import Setting from '@/models/Setting'
 
-jest.mock('axios')
 jest.mock('@/router', () => ({ router: { routes: [] } }))
 jest.mock('@/utils/icons', () => {
   const BarIcon = { name: 'BarIcon', template: '<i></i>' }
@@ -30,13 +30,15 @@ describe('Core', () => {
     localVue = createLocalVue()
     // Clear Murmur config
     Murmur.config.set('foo', null)
-    // Mock Core methods that use the backend
-    jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({ username: 'foo', is_staff: true })
-    jest.spyOn(Core.prototype, 'getSettings').mockResolvedValue({ foo: 'bar' })
+    // Mock settings
+    server.use(rest.get('/api/v1/settings', (req, res, ctx) => {
+      return res.once(ctx.json([{ key: 'foo', value: 'bar' }]))
+    }))
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    server.resetHandlers()
+    Setting.deleteAll()
   })
 
   it('should instantiate the Core class', () => {
@@ -110,7 +112,10 @@ describe('Core', () => {
 
   it('should transform settings list into an object', async () => {
     jest.restoreAllMocks()
-    axios.request.mockResolvedValue({ data: [{ key: 'searchEngine', value: 'https://duckduckgo.com' }] })
+    // Mock settings
+    server.use(rest.get('/api/v1/settings', (req, res, ctx) => {
+      return res.once(ctx.json([{ key: 'searchEngine', value: 'https://duckduckgo.com' }]))
+    }))
     const core = new Core(localVue)
     const settings = await core.getSettings()
     expect(settings).toBeInstanceOf(Object)

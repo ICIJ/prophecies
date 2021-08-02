@@ -11,6 +11,9 @@ import app from './modules/app'
 
 Vue.use(Vuex)
 
+Vue.config.productionTip = process.env.NODE_ENV === 'development'
+Vue.config.devtools = process.env.NODE_ENV === 'development'
+
 export default new Vuex.Store({
   modules: {
     app

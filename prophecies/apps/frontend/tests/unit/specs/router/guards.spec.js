@@ -1,5 +1,8 @@
 import { createLocalVue } from '@vue/test-utils'
+
+import { server, rest } from '../../mocks/server'
 import { Core } from '@/core'
+import User from '@/models/User'
 
 // Mock the router's configuration
 jest.mock('@/router', () => ({
@@ -33,12 +36,13 @@ describe('router/guards', () => {
   })
 
   afterAll(() => {
-    jest.restoreAllMocks()
+    User.deleteAll()
+    server.resetHandlers()
   })
 
   it('should redirect to "login" if the user is not authenticated', async () => {
     // Mock reject promise for the user endpoint
-    jest.spyOn(Core.prototype, 'getUser').mockRejectedValue({ response: { status: 403 } })
+    server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => res(ctx.status(403))))
     // The navigation is going to throw an exception
     await expect(core.router.push({ name: 'dashboard' })).rejects.toBeInstanceOf(Error)
     // The router should now be on the login page
@@ -47,7 +51,7 @@ describe('router/guards', () => {
 
   it('should not redirect to "login" when user is not authenticated but heading to "login"', async () => {
     // Mock reject promise for the user endpoint
-    jest.spyOn(Core.prototype, 'getUser').mockRejectedValue({ response: { status: 403 } })
+    server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => res(ctx.status(403))))
     // The navigation is not going to throw an exception
     await core.router.push({ name: 'login' })
     // The router should now be on the login page
@@ -56,7 +60,7 @@ describe('router/guards', () => {
 
   it('should not redirect to "login" when user is not authenticated but heading to "error"', async () => {
     // Mock reject promise for the user endpoint
-    jest.spyOn(Core.prototype, 'getUser').mockRejectedValue({ response: { status: 403 } })
+    server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => res(ctx.status(403))))
     // The navigation is not going to throw an exception
     await core.router.push({ name: 'error' })
     // The router should now be on the error page
@@ -64,8 +68,8 @@ describe('router/guards', () => {
   })
 
   it('should not redirect to "login" if the user is authenticated', async () => {
-    // Mock reject promise for the user endpoint
-    jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({ username: 'foo' })
+    const me = { id: 20, username: 'bar' }
+    server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => res.once(ctx.json(me))))
     // The navigation is not going to throw an exception
     await core.router.push({ name: 'dashboard' })
     // The router should now be on the dashboard page

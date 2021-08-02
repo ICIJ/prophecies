@@ -1,28 +1,20 @@
 import '@/store'
-import axios from 'axios'
+import { server, rest } from '../../mocks/server'
 import Setting from '@/models/Setting'
 
-const spyAxiosRequest = jest.spyOn(axios, 'request').mockResolvedValue({ data: [] })
-
 describe('Setting', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     Setting.deleteAll()
-    spyAxiosRequest.mockClear()
   })
 
-  afterAll(() => {
-    spyAxiosRequest.mockRestore()
-  })
-
-  it('should call the /api/v1/settings/ endpoint', async () => {
-    await Setting.api().get()
-    const callArguments = expect.objectContaining({ method: 'get', baseURL: '/api/v1/settings/' })
-    expect(spyAxiosRequest).toHaveBeenCalledWith(callArguments)
+  afterEach(() => {
+    Setting.deleteAll()
+    server.resetHandlers()
   })
 
   it('should returns a list of settings', async () => {
-    const data = [{ key: 'foo', value: 1 }, { key: 'bar', value: 2 }]
-    spyAxiosRequest.mockResolvedValue({ data })
+    const settings = [{ key: 'foo', value: 1 }, { key: 'bar', value: 2 }]
+    server.use(rest.get('/api/v1/settings', (req, res, ctx) => res.once(ctx.json(settings))))
     await Setting.api().get()
     expect(Setting.all()).toHaveLength(2)
     expect(Setting.query().where('key', 'foo').first().value).toBe(1)
@@ -32,7 +24,7 @@ describe('Setting', () => {
   describe('`allAsObject` static method', () => {
     it('should returns an object with all values', async () => {
       const data = [{ key: 'foo', value: 1 }, { key: 'bar', value: 2 }]
-      spyAxiosRequest.mockResolvedValue({ data })
+      server.use(rest.get('/api/v1/settings', (req, res, ctx) => res.once(ctx.json(data))))
       await Setting.api().get()
       const settings = Setting.allAsObject()
       expect(settings.foo).toBe(1)
@@ -41,7 +33,7 @@ describe('Setting', () => {
 
     it('should convert key to camelCase', async () => {
       const data = [{ key: 'org_name', value: 'ICIJ' }, { key: 'app_name', value: 'Prophecies' }]
-      spyAxiosRequest.mockResolvedValue({ data })
+      server.use(rest.get('/api/v1/settings', (req, res, ctx) => res.once(ctx.json(data))))
       await Setting.api().get()
       const settings = Setting.allAsObject()
       expect(settings.orgName).toBe('ICIJ')

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { createLocalVue } from '@vue/test-utils'
 
-import { Core, createCore } from '@/core'
+import { createCore } from '@/core'
 
 // Mock the router's configuration
 jest.mock('@/router', () => ({ router: { routes: [] } }))
@@ -15,9 +15,6 @@ describe('main', () => {
     const app = document.createElement('div')
     app.setAttribute('id', 'app')
     document.body.appendChild(app)
-    // Mock Core methods that use the backend
-    jest.spyOn(Core.prototype, 'getUser').mockResolvedValue({ username: 'foo' })
-    jest.spyOn(Core.prototype, 'getSettings').mockResolvedValue({ })
     // Create a core instance
     core = createCore(localVue)
     vm = await core.ready

@@ -45,6 +45,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^6.2.2",
     "lint-staged": "^9.5.0",
+    "msw": "^0.33.2",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
     "sass-resources-loader": "^2.2.3",
@@ -82,7 +83,8 @@
     "not dead"
   ],
   "jest": {
-    "preset": "@vue/cli-plugin-unit-jest"
+    "preset": "@vue/cli-plugin-unit-jest",
+    "setupFilesAfterEnv": ["<rootDir>/tests/unit/setup.js"]
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
