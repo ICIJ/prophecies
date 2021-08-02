@@ -21,16 +21,22 @@ class Task(models.Model):
     color = ColorField(default='#31807D')
     recordLinkTemplate = models.CharField(max_length=1000, null=True, blank=True, verbose_name="Record link template", help_text="A link template to build a link for each task record. Task record can override this value with their own link")
 
-
     def __str__(self):
         return self.name
-
 
     def progress_by_round(self, **task_record_review_filter):
         from prophecies.core.models.task_record_review import TaskRecordReview
         filter = dict(task_record__task=self, **task_record_review_filter)
-        return TaskRecordReview.objects.progress_by_round(**filter)
+        progress = TaskRecordReview.objects.progress_by_round(**filter)
+        # Get all task's rounds to only display the progress by existing rounds
+        rounds = range(1, self.rounds + 1)
+        return { round: progress.get(round, 0) for round in rounds }
 
+    @property
+    def progress(self):
+        all = self.task_records.count()
+        done = self.task_records.done().count()
+        return 100 if all == 0 else done / all * 100
 
     @property
     def colors(self):

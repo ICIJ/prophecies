@@ -6,10 +6,17 @@ from prophecies.apps.api.views.project import ProjectSerializer
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     project = ProjectSerializer(many=False)
     choice_group = ChoiceGroupSerializer(many=False)
+    user_progress_by_round = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
-        fields = ['id', 'url', 'choice_group', 'colors', 'description', 'name', 'project', 'priority', 'rounds']
+        fields = ['id', 'url', 'choice_group', 'colors', 'description', 'name',
+            'project', 'priority', 'user_progress_by_round', 'progress_by_round',
+            'progress', 'rounds']
+
+    def get_user_progress_by_round(self, task):
+        checker = self.context.get('request').user
+        return task.progress_by_round(checker=checker)
 
 
 class TaskViewSet(viewsets.ReadOnlyModelViewSet):
