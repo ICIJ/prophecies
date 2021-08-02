@@ -12,7 +12,7 @@ describe('Setting', () => {
     server.resetHandlers()
   })
 
-  it('should returns a list of settings', async () => {
+  it('should return a list of settings', async () => {
     const settings = [{ key: 'foo', value: 1 }, { key: 'bar', value: 2 }]
     server.use(rest.get('/api/v1/settings', (req, res, ctx) => res.once(ctx.json(settings))))
     await Setting.api().get()
@@ -22,7 +22,7 @@ describe('Setting', () => {
   })
 
   describe('`allAsObject` static method', () => {
-    it('should returns an object with all values', async () => {
+    it('should return an object with all values', async () => {
       const data = [{ key: 'foo', value: 1 }, { key: 'bar', value: 2 }]
       server.use(rest.get('/api/v1/settings', (req, res, ctx) => res.once(ctx.json(data))))
       await Setting.api().get()

@@ -10,7 +10,7 @@ describe('Task', () => {
     Task.deleteAll()
   })
 
-  it('should returns a list of task record', () => {
+  it('should return a list of task record', () => {
     expect(Task.all()).toHaveLength(1)
     expect(Task.find(1).url).toBe('http://localhost/api/v1/tasks/1/')
   })
