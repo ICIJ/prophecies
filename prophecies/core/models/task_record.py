@@ -52,15 +52,15 @@ class TaskRecord(models.Model):
 
 
     def computed_status(self):
-        if self.attributions.count() == 0:
+        if self.reviews.count() == 0:
             return StatusType.PENDING
-        elif self.attributions.done().count() >= self.task.rounds:
+        elif self.reviews.done().count() >= self.task.rounds:
             return StatusType.DONE
         else:
             return StatusType.ASSIGNED
 
     def computed_rounds(self):
-        return self.attributions.latest_round(self)
+        return self.reviews.latest_round(self)
 
 
     def computed_link(self):

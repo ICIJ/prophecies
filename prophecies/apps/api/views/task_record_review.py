@@ -1,16 +1,16 @@
 from rest_framework import viewsets, permissions, serializers
 from rest_framework.permissions import IsAuthenticated
-from prophecies.core.models import Choice, TaskRecordAttribution
+from prophecies.core.models import Choice, TaskRecordReview
 from prophecies.apps.api.views.choice import ChoiceSerializer
 from prophecies.apps.api.views.task_record import TaskRecordSerializer
 
 
-class TaskRecordAttributionSerializer(serializers.HyperlinkedModelSerializer):
+class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     task_record = TaskRecordSerializer(many=False, read_only=True)
     choice = serializers.PrimaryKeyRelatedField(queryset=Choice.objects.all())
 
     class Meta:
-        model = TaskRecordAttribution
+        model = TaskRecordReview
         fields = ['id', 'url', 'choice', 'status', 'note', 'alternative_value', 'task_record']
         read_only_fields = ['task_record', 'status']
 
@@ -27,9 +27,9 @@ class TaskRecordAttributionSerializer(serializers.HyperlinkedModelSerializer):
             f.queryset = instance.task_record.task.choice_group.choices.all()
 
 
-class TaskRecordAttributionViewSet(viewsets.ModelViewSet):
-    serializer_class = TaskRecordAttributionSerializer
-    queryset = TaskRecordAttribution.objects.all()
+class TaskRecordReviewViewSet(viewsets.ModelViewSet):
+    serializer_class = TaskRecordReviewSerializer
+    queryset = TaskRecordReview.objects.all()
     http_method_names = ['get', 'put', 'head']
     permission_classes = [IsAuthenticated]
     search_fields = ['task_record__original_value', 'task_record__suggested_value']
@@ -40,7 +40,7 @@ class TaskRecordAttributionViewSet(viewsets.ModelViewSet):
         """
         All the task record attribution for the currently authenticated user.
         """
-        return TaskRecordAttribution.objects \
+        return TaskRecordReview.objects \
             .filter(checker=self.request.user) \
             .prefetch_related('task_record', 'task_record__task', 'task_record__task__project', 'checker')
 

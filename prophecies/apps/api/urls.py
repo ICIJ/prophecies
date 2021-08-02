@@ -4,7 +4,7 @@ from rest_framework import routers
 from prophecies.apps.api.views.project import ProjectViewSet
 from prophecies.apps.api.views.setting import SettingViewSet
 from prophecies.apps.api.views.task_record import TaskRecordViewSet
-from prophecies.apps.api.views.task_record_attribution import TaskRecordAttributionViewSet
+from prophecies.apps.api.views.task_record_review import TaskRecordReviewViewSet
 from prophecies.apps.api.views.task import TaskViewSet
 from prophecies.apps.api.views.user import UserViewSet
 
@@ -13,7 +13,7 @@ router.register(r'projects', ProjectViewSet)
 router.register(r'settings', SettingViewSet)
 router.register(r'tasks', TaskViewSet)
 router.register(r'task-records', TaskRecordViewSet)
-router.register(r'task-record-attributions', TaskRecordAttributionViewSet)
+router.register(r'task-record-reviews', TaskRecordReviewViewSet)
 router.register(r'users', UserViewSet)
 
 urlpatterns = [
