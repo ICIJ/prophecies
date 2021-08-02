@@ -8,6 +8,7 @@ import Project from '@/models/Project'
 import Setting from '@/models/Setting'
 import Task from '@/models/Task'
 import TaskRecord from '@/models/TaskRecord'
+import TaskRecordReview from '@/models/TaskRecordReview'
 import User from '@/models/User'
 
 import settings from '@/settings'
@@ -25,4 +26,5 @@ database.register(Project)
 database.register(Setting)
 database.register(Task)
 database.register(TaskRecord)
+database.register(TaskRecordReview)
 database.register(User)

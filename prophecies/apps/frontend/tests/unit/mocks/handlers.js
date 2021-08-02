@@ -71,10 +71,85 @@ export const handlers = [
               email_md5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
               is_staff: true
             },
-            name: 'Aladdin'
+            name: 'Chronos'
           },
           priority: 1,
           rounds: 3
+        }
+      ])
+    )
+  }),
+
+  rest.get('/api/v1/task-record-reviews', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json([
+        {
+          id: 37,
+          url: 'http://localhost/api/v1/task-record-reviews/37/',
+          choice: 2,
+          status: 'DONE',
+          note: 'This is bad',
+          alternative_value: 'FRA',
+          task_record: {
+            id: 1,
+            url: 'http://localhost/api/v1/task-records/1/',
+            task: {
+              id: 1,
+              url: 'http://localhost/api/v1/tasks/1/',
+              choice_group: {
+                id: 1,
+                name: 'Is it correct?',
+                choices: [
+                  {
+                    id: 1,
+                    name: 'Correct',
+                    value: 'correct'
+                  },
+                  {
+                    id: 2,
+                    name: 'Incorrect',
+                    value: 'incorrect'
+                  },
+                  {
+                    id: 3,
+                    name: 'Unkown',
+                    value: 'unkown'
+                  }
+                ]
+              },
+              colors: [
+                '#60245c',
+                '#80307b',
+                '#a03c9a'
+              ],
+              description: 'A collection of adresses to fact check.',
+              name: 'Addresses',
+              project: {
+                id: 1,
+                url: 'http://localhost/api/v1/projects/1/',
+                creator: {
+                  id: 2,
+                  url: 'http://localhost/api/v1/users/2/',
+                  first_name: 'Django',
+                  last_name: '',
+                  username: 'django',
+                  email: 'support@icij.org',
+                  email_md5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
+                  is_staff: true
+                },
+                name: 'Chronos'
+              },
+              priority: 1,
+              rounds: 3
+            },
+            original_value: 'fronce',
+            suggested_value: 'France',
+            link: 'https://www.openstreetmap.org/search?query=fronce',
+            metadata: null,
+            rounds: 3,
+            status: 'ASSIGNED'
+          }
         }
       ])
     )
@@ -132,7 +207,7 @@ export const handlers = [
                   email_md5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
                   is_staff: true
                 },
-                name: 'Aladdin'
+                name: 'Chronos'
               },
               priority: 1,
               rounds: 3
@@ -191,7 +266,7 @@ export const handlers = [
                   email_md5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
                   is_staff: true
                 },
-                name: 'Aladdin'
+                name: 'Chronos'
               },
               priority: 1,
               rounds: 3
