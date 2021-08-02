@@ -9,7 +9,9 @@ export default class Task extends Model {
   static fields () {
     return {
       id: this.attr(null),
+      url: this.string(),
       name: this.string(),
+      description: this.string(),
       priority: this.number(null),
       project_id: this.attr(null),
       project: this.belongsTo(Project, 'project_id'),
