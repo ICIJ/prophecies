@@ -7,6 +7,7 @@ import ChoiceGroup from '@/models/ChoiceGroup'
 import Project from '@/models/Project'
 import Setting from '@/models/Setting'
 import Task from '@/models/Task'
+import TaskRecord from '@/models/TaskRecord'
 import User from '@/models/User'
 
 import settings from '@/settings'
@@ -23,4 +24,5 @@ database.register(ChoiceGroup)
 database.register(Project)
 database.register(Setting)
 database.register(Task)
+database.register(TaskRecord)
 database.register(User)
