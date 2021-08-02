@@ -26,6 +26,12 @@ class Task(models.Model):
         return self.name
 
 
+    def progress_by_round(self, **task_record_review_filter):
+        from prophecies.core.models.task_record_review import TaskRecordReview
+        filter = dict(task_record__task=self, **task_record_review_filter)
+        return TaskRecordReview.objects.progress_by_round(**filter)
+
+
     @property
     def colors(self):
         """

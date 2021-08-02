@@ -28,6 +28,34 @@ class TaskRecordReviewManager(models.Manager):
         return self.filter(status=StatusType.DONE)
 
 
+    def all_by_round(self, **filter):
+        buckets = self.all() \
+            .filter(**filter) \
+            .values('round') \
+            .annotate(count=models.Count('round')) \
+            .order_by('count')
+        return { i['round']: i['count'] for i in buckets }
+
+
+    def done_by_round(self, **filter):
+        buckets = self.done() \
+            .filter(**filter) \
+            .values('round') \
+            .annotate(count=models.Count('round')) \
+            .order_by('count')
+        return { i['round']: i['count'] for i in buckets }
+
+
+    def progress_by_round(self, **filter):
+        all = self.all_by_round(**filter)
+        done = self.done_by_round(**filter)
+        # A lambda to calculate the progression for a given round
+        progress = lambda round, total: done.get(round, 0) / total * 100
+        # Return a dictionnary combinings both aggregations dict
+        return { round: progress(round, count) for (round, count) in all.items() }
+
+
+
 class TaskRecordReview(models.Model):
     objects = TaskRecordReviewManager()
 
@@ -81,6 +109,7 @@ class TaskRecordReview(models.Model):
             max_round = self.task_record.task.rounds
             if self.task_record.reviews.count() >= max_round:
                 raise ValidationError(f'Task record #{self.task_record.id} cannot get more than {max_round} reviews')
+
 
 
 signals.post_save.connect(TaskRecord.signal_update_rounds_and_status, sender=TaskRecordReview)
