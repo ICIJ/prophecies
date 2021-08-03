@@ -84,7 +84,9 @@
   ],
   "jest": {
     "preset": "@vue/cli-plugin-unit-jest",
-    "setupFilesAfterEnv": ["<rootDir>/tests/unit/setup.js"]
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/unit/setup.js"
+    ]
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
