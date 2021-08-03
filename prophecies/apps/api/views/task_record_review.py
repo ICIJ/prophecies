@@ -1,18 +1,26 @@
 from rest_framework import viewsets, permissions, serializers
 from rest_framework.permissions import IsAuthenticated
-from prophecies.core.models import Choice, TaskRecordReview
+from rest_framework_json_api.relations import ResourceRelatedField
+from prophecies.core.models import Choice, TaskRecord, TaskRecordReview
 from prophecies.apps.api.views.choice import ChoiceSerializer
 from prophecies.apps.api.views.task_record import TaskRecordSerializer
 
 
 class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
-    task_record = TaskRecordSerializer(many=False, read_only=True)
-    choice = serializers.PrimaryKeyRelatedField(queryset=Choice.objects.all())
+    choice = ResourceRelatedField(many=False, queryset=Choice.objects)
+    task_record = ResourceRelatedField(many=False, read_only=True)
+    included_serializers = {
+        'choice': ChoiceSerializer,
+        'task_record': TaskRecordSerializer,
+    }
+
+    class JSONAPIMeta:
+        included_resources = ['choice', 'task_record']
 
     class Meta:
         model = TaskRecordReview
         fields = ['id', 'url', 'choice', 'status', 'note', 'alternative_value', 'task_record']
-        read_only_fields = ['task_record', 'status']
+        read_only_fields = ['status', 'task_record']
 
     def __init__(self, *args, **kwargs):
         self.filter_choice_queryset(self.fields['choice'], *args, **kwargs)
@@ -33,6 +41,7 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'put', 'head']
     permission_classes = [IsAuthenticated]
     search_fields = ['task_record__original_value', 'task_record__suggested_value']
+    ordering = ['-id']
     ordering_fields = ['task_record__original_value', 'task_record__suggested_value', 'task_record__id']
     filterset_fields = ['task_record__original_value', 'task_record__suggested_value']
 

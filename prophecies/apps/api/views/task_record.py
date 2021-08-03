@@ -1,10 +1,17 @@
 from rest_framework import viewsets, serializers
-from prophecies.core.models.task_record import TaskRecord
+from rest_framework_json_api.relations import ResourceRelatedField
+from prophecies.core.models import Task, TaskRecord
 from prophecies.apps.api.views.task import TaskSerializer
 
 class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
-    task = TaskSerializer(many=False)
+    task = ResourceRelatedField(many=False, queryset=Task.objects)
     link = serializers.SerializerMethodField()
+    included_serializers = {
+        'task': TaskSerializer
+    }
+
+    class JSONAPIMeta:
+        included_resources = ['task']
 
     class Meta:
         model = TaskRecord
@@ -17,3 +24,4 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
 class TaskRecordViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TaskRecord.objects.all()
     serializer_class = TaskRecordSerializer
+    ordering = ['-id']

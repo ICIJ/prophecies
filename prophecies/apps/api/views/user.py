@@ -19,8 +19,13 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     search_fields = ['email', 'first_name', 'last_name', 'username']
-    ordering_fields = ['email', 'first_name', 'last_name', 'username']
-    filterset_fields = ['email', 'first_name', 'last_name', 'username', 'is_staff']
+    ordering = ['-id']
+    ordering_fields = ['id', 'email', 'first_name', 'last_name', 'username']
+    filterset_fields = {
+       'email': ('icontains', 'exact', 'iexact', 'contains', 'in'),
+       'username': ('icontains', 'exact', 'iexact', 'contains', 'in'),
+       'is_staff': ('exact',),
+    }
 
     @action(methods=['get'], detail=False)
     def me(self, request, **kwargs):

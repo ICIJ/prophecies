@@ -16,24 +16,27 @@ class TestTask(TestCase):
 
     def test_it_returns_all_tasks(self):
         self.client.login(username='olivia', password='olivia')
-        request = self.client.get('/api/v1/tasks.json')
-        self.assertEqual(len(request.json()), 2)
+        request = self.client.get('/api/v1/tasks/')
+        data = request.json().get('data')
+        self.assertEqual(len(data), 2)
 
 
     def test_details_returns_paintings_task(self):
         self.client.login(username='olivia', password='olivia')
         id = self.task_paintings.id
-        request = self.client.get('/api/v1/tasks/%s.json' % id)
+        request = self.client.get('/api/v1/tasks/%s/' % id)
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(request.json().get('name'), 'paintings')
+        data = request.json().get('data')
+        self.assertEqual(data['attributes']['name'], 'paintings')
 
 
     def test_details_returns_paintings_task(self):
         self.client.login(username='olivia', password='olivia')
         id = self.task_shops.id
-        request = self.client.get('/api/v1/tasks/%s.json' % id)
+        request = self.client.get('/api/v1/tasks/%s/' % id)
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(request.json().get('name'), 'shops')
+        data = request.json().get('data')
+        self.assertEqual(data['attributes']['name'], 'shops')
 
 
     def test_details_returns_paintings_task_with_choices(self):
@@ -42,12 +45,14 @@ class TestTask(TestCase):
         self.task_paintings.save()
         self.client.login(username='olivia', password='olivia')
         id = self.task_paintings.id
-        request = self.client.get('/api/v1/tasks/%s.json' % id)
+        request = self.client.get('/api/v1/tasks/%s/' % id)
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(request.json().get('choice_group').get('name'), 'Which option?')
+        included = request.json().get('included')
+        choice_group_entity = next(entity for entity  in included if entity['type'] == 'ChoiceGroup')
+        self.assertEqual(choice_group_entity['attributes']['name'], 'Which option?')
 
 
     def test_list_reject_unauthenticated_request(self):
         self.client.logout()
-        request = self.client.get('/api/v1/tasks.json')
+        request = self.client.get('/api/v1/tasks/')
         self.assertEqual(request.status_code, 403)

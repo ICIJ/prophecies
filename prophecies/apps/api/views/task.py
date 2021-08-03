@@ -1,12 +1,20 @@
 from rest_framework import filters, viewsets, serializers
-from prophecies.core.models.task import Task
+from rest_framework_json_api.relations import ResourceRelatedField
+from prophecies.core.models import ChoiceGroup, Project, Task
 from prophecies.apps.api.views.choice_group import ChoiceGroupSerializer
 from prophecies.apps.api.views.project import ProjectSerializer
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
-    project = ProjectSerializer(many=False)
-    choice_group = ChoiceGroupSerializer(many=False)
+    project = ResourceRelatedField(many=False, queryset=Project.objects)
+    choice_group = ResourceRelatedField(many=False, queryset=ChoiceGroup.objects)
     user_progress_by_round = serializers.SerializerMethodField()
+    included_serializers = {
+        'choice_group': ChoiceGroupSerializer,
+        'project': ProjectSerializer
+    }
+
+    class JSONAPIMeta:
+        included_resources = ['choice_group', 'project']
 
     class Meta:
         model = Task
@@ -29,3 +37,5 @@ class TaskViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['name', 'description']
     ordering_fields = ['name']
     filterset_fields = ['name', 'rounds', 'priority']
+    pagination_class = None
+    ordering = ['-id']

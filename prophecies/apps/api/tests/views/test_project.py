@@ -15,34 +15,34 @@ class TestProject(TestCase):
 
     def test_list_returns_all_projects(self):
         self.client.login(username='olivia', password='olivia')
-        request = self.client.get('/api/v1/projects.json')
+        request = self.client.get('/api/v1/projects/')
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(len(request.json()), 2)
+        self.assertEqual(len(request.json().get('data')), 2)
 
 
     def test_details_returns_project_foo(self):
         self.client.login(username='olivia', password='olivia')
         id = self.project_foo.id
-        request = self.client.get('/api/v1/projects/%s.json' % id)
+        request = self.client.get('/api/v1/projects/%s/' % id)
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(request.json().get('name'), 'foo')
+        self.assertEqual(request.json().get('data').get('attributes').get('name'), 'foo')
 
 
     def test_details_returns_project_bar(self):
         self.client.login(username='olivia', password='olivia')
         id = self.project_bar.id
-        request = self.client.get('/api/v1/projects/%s.json' % id)
+        request = self.client.get('/api/v1/projects/%s/' % id)
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(request.json().get('name'), 'bar')
+        self.assertEqual(request.json().get('data').get('attributes').get('name'), 'bar')
 
 
     def test_details_returns_project_foo_tasks(self):
         self.client.login(username='olivia', password='olivia')
         Task.objects.create(name="paintings", project=self.project_foo)
         id = self.project_foo.id
-        request = self.client.get('/api/v1/projects/%s/tasks.json' % id)
+        request = self.client.get('/api/v1/projects/%s/tasks/' % id)
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(len(request.json()), 1)
+        self.assertEqual(len(request.json().get('data')), 1)
 
 
     def test_details_returns_project_bar_tasks(self):
@@ -50,12 +50,12 @@ class TestProject(TestCase):
         Task.objects.create(name="addresses", project=self.project_bar)
         Task.objects.create(name="transactions", project=self.project_bar)
         id = self.project_bar.id
-        request = self.client.get('/api/v1/projects/%s/tasks.json' % id)
+        request = self.client.get('/api/v1/projects/%s/tasks/' % id)
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(len(request.json()), 2)
+        self.assertEqual(len(request.json().get('data')), 2)
 
 
     def test_list_reject_unauthenticated_request(self):
         self.client.logout()
-        request = self.client.get('/api/v1/projects.json')
+        request = self.client.get('/api/v1/projects/')
         self.assertEqual(request.status_code, 403)

@@ -1,10 +1,18 @@
 from rest_framework import serializers
-from prophecies.core.models.choice_group import ChoiceGroup
+from rest_framework_json_api.relations import ResourceRelatedField
+from prophecies.core.models import Choice, ChoiceGroup
 from prophecies.apps.api.views.choice import ChoiceSerializer
 
 
 class ChoiceGroupSerializer(serializers.ModelSerializer):
-    choices = ChoiceSerializer(many=True)
+    choices = ResourceRelatedField(many=True, queryset=Choice.objects)
+
+    included_serializers = {
+        'choices': ChoiceSerializer
+    }
+
+    class JSONAPIMeta:
+        included_resources = ['choices']
 
     class Meta:
         model = ChoiceGroup
