@@ -47,8 +47,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'social_django',
     'rest_framework',
+    'rest_framework_json_api',
     'django_filters',
-    'crispy_forms',
     'webpack_loader',
     'colorfield',
     'constance',
@@ -153,15 +153,35 @@ AUTHENTICATION_BACKENDS = (
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_FILTER_BACKENDS': [
-        'rest_framework.filters.SearchFilter',
-        'rest_framework.filters.OrderingFilter',
-        'django_filters.rest_framework.DjangoFilterBackend'
-    ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.DjangoModelPermissions',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS':'rest_framework_json_api.pagination.JsonApiPageNumberPagination',
+    'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
+    'PAGE_SIZE': 50,
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework_json_api.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework_json_api.renderers.JSONRenderer',
+        'rest_framework_json_api.renderers.BrowsableAPIRenderer'
+    ),
+    'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework_json_api.schemas.openapi.AutoSchema',
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework_json_api.filters.QueryParameterValidationFilter',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework_json_api.filters.OrderingFilter',
+        'prophecies.apps.api.filters.DjangoFilterBackendWithoutForm',
+    ),
+    'SEARCH_PARAM': 'filter[search]',
+    'TEST_REQUEST_RENDERER_CLASSES': (
+        'rest_framework_json_api.renderers.JSONRenderer',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
 }
 
 

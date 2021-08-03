@@ -19,6 +19,7 @@ django-colorfield = "*"
 django-constance = {extras = [ "database",], version = "*"}
 django-filter = "*"
 django-crispy-forms = "*"
+djangorestframework-jsonapi = {extras = ["django-filter"], version = "*"}
 
 [dev-packages]
 
