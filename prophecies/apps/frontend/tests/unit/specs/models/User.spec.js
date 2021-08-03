@@ -14,8 +14,16 @@ describe('User', () => {
     })
 
     it('should return a User instance', async () => {
-      const me = { id: 20, username: 'bar' }
-      server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => res.once(ctx.json(me))))
+      server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
+        return res.once(ctx.json({
+          data: {
+            id: 20,
+            attributes: {
+              username: 'bar'
+            }
+          }
+        }))
+      }))
       await User.api().me()
       expect(User.me()).toBeInstanceOf(User)
       expect(User.me().id).toBe(20)

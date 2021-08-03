@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core'
+import { responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 
 export default class User extends Model {
@@ -20,11 +21,12 @@ export default class User extends Model {
 
   static apiConfig = {
     baseURL: `${settings.apiUrl}/users/`,
+    dataTransformer: responseNormalizer,
     actions: {
       me () {
         return this.get('me/', {
-          dataTransformer ({ data }) {
-            return { is_me: true, ...data }
+          dataTransformer (response) {
+            return { is_me: true, ...responseNormalizer(response) }
           }
         })
       }

@@ -14,12 +14,17 @@ describe('AppHeader', () => {
       // Mock current user
       server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
         return res.once(ctx.json({
-          username: 'olivia',
-          first_name: 'Olivia',
-          last_name: 'Reinhardt',
-          email: 'engineering@icij.org',
-          email_md5: '628e9a99d87799e9d434b63d2c3744ca',
-          is_staff: true
+          data: {
+            id: 20,
+            attributes: {
+              username: 'olivia',
+              first_name: 'Olivia',
+              last_name: 'Reinhardt',
+              email: 'engineering@icij.org',
+              email_md5: '628e9a99d87799e9d434b63d2c3744ca',
+              is_staff: true
+            }
+          }
         }))
       }))
       // Configure the local vue
@@ -57,12 +62,17 @@ describe('AppHeader', () => {
       // Mock current user
       server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
         return res.once(ctx.json({
-          username: 'django',
-          first_name: 'Django',
-          last_name: '',
-          email: 'support@icij.org',
-          email_md5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
-          is_staff: false
+          data: {
+            id: 20,
+            attributes: {
+              username: 'django',
+              first_name: 'Django',
+              last_name: '',
+              email: 'support@icij.org',
+              email_md5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
+              is_staff: false
+            }
+          }
         }))
       }))
       // Configure the local vue
