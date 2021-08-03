@@ -11,8 +11,8 @@ describe('TaskRecordReview', () => {
   })
 
   it('should return a list of task record', () => {
-    expect(TaskRecordReview.all()).toHaveLength(1)
-    expect(TaskRecordReview.find(37).url).toBe('http://localhost/api/v1/task-record-reviews/37/')
+    expect(TaskRecordReview.all()).toHaveLength(2)
+    expect(TaskRecordReview.find(37)).not.toBeNull()
   })
 
   it('should return a nested of task record', () => {
@@ -32,10 +32,6 @@ describe('TaskRecordReview', () => {
   })
 
   it('should return a choice', async () => {
-    expect(TaskRecordReview.find(37).choice).toBe(2)
-  })
-
-  it('should return a choice', async () => {
-    expect(TaskRecordReview.find(37).choiceEntity.id).toBe(2)
+    expect(TaskRecordReview.query().with('choice').find(37).choice.id).toBe(2)
   })
 })

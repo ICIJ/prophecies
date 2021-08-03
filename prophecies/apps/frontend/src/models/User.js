@@ -7,7 +7,7 @@ export default class User extends Model {
 
   static fields () {
     return {
-      id: this.attr(null),
+      id: this.number(null),
       username: this.attr(''),
       first_name: this.string(null).nullable(),
       last_name: this.string(null).nullable(),
@@ -22,7 +22,7 @@ export default class User extends Model {
     baseURL: `${settings.apiUrl}/users/`,
     actions: {
       me () {
-        return this.get('me.json', {
+        return this.get('me/', {
           dataTransformer ({ data }) {
             return { is_me: true, ...data }
           }

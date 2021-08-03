@@ -32,7 +32,11 @@ describe('Core', () => {
     Murmur.config.set('foo', null)
     // Mock settings
     server.use(rest.get('/api/v1/settings', (req, res, ctx) => {
-      return res.once(ctx.json([{ key: 'foo', value: 'bar' }]))
+      return res.once(ctx.json({
+        data: [
+          { type: 'Setting', id: '1', attributes: { key: 'foo', value: 'bar' } }
+        ]
+      }))
     }))
   })
 
@@ -114,7 +118,11 @@ describe('Core', () => {
     jest.restoreAllMocks()
     // Mock settings
     server.use(rest.get('/api/v1/settings', (req, res, ctx) => {
-      return res.once(ctx.json([{ key: 'searchEngine', value: 'https://duckduckgo.com' }]))
+      return res.once(ctx.json({
+        data: [
+          { type: 'Setting', id: '1', attributes: { key: 'searchEngine', value: 'https://duckduckgo.com' } }
+        ]
+      }))
     }))
     const core = new Core(localVue)
     const settings = await core.getSettings()

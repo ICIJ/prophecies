@@ -1,5 +1,6 @@
 import { camelCase } from 'lodash'
 import { Model } from '@vuex-orm/core'
+import { responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 
 export default class Setting extends Model {
@@ -15,7 +16,8 @@ export default class Setting extends Model {
   }
 
   static apiConfig = {
-    baseURL: `${settings.apiUrl}/settings/`
+    baseURL: `${settings.apiUrl}/settings/`,
+    dataTransformer: responseNormalizer
   }
 
   static allAsObject () {

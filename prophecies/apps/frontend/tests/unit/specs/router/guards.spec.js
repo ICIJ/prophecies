@@ -42,7 +42,7 @@ describe('router/guards', () => {
 
   it('should redirect to "login" if the user is not authenticated', async () => {
     // Mock reject promise for the user endpoint
-    server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => res(ctx.status(403))))
+    server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => res(ctx.status(403))))
     // The navigation is going to throw an exception
     await expect(core.router.push({ name: 'dashboard' })).rejects.toBeInstanceOf(Error)
     // The router should now be on the login page
@@ -51,7 +51,7 @@ describe('router/guards', () => {
 
   it('should not redirect to "login" when user is not authenticated but heading to "login"', async () => {
     // Mock reject promise for the user endpoint
-    server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => res(ctx.status(403))))
+    server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => res(ctx.status(403))))
     // The navigation is not going to throw an exception
     await core.router.push({ name: 'login' })
     // The router should now be on the login page
@@ -60,7 +60,7 @@ describe('router/guards', () => {
 
   it('should not redirect to "login" when user is not authenticated but heading to "error"', async () => {
     // Mock reject promise for the user endpoint
-    server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => res(ctx.status(403))))
+    server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => res(ctx.status(403))))
     // The navigation is not going to throw an exception
     await core.router.push({ name: 'error' })
     // The router should now be on the error page
@@ -69,7 +69,7 @@ describe('router/guards', () => {
 
   it('should not redirect to "login" if the user is authenticated', async () => {
     const me = { id: 20, username: 'bar' }
-    server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => res.once(ctx.json(me))))
+    server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => res.once(ctx.json(me))))
     // The navigation is not going to throw an exception
     await core.router.push({ name: 'dashboard' })
     // The router should now be on the dashboard page

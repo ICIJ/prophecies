@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core'
+import { responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Project from '@/models/Project'
@@ -8,7 +9,7 @@ export default class Task extends Model {
 
   static fields () {
     return {
-      id: this.attr(null),
+      id: this.number(null),
       url: this.string(),
       name: this.string(),
       description: this.string(),
@@ -26,6 +27,7 @@ export default class Task extends Model {
   }
 
   static apiConfig = {
-    baseURL: `${settings.apiUrl}/tasks/`
+    baseURL: `${settings.apiUrl}/tasks/`,
+    dataTransformer: responseNormalizer
   }
 }

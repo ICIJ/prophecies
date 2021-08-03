@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core'
+import { responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import Task from '@/models/Task'
 
@@ -7,7 +8,7 @@ export default class TaskRecord extends Model {
 
   static fields () {
     return {
-      id: this.attr(null),
+      id: this.number(null),
       url: this.string(),
       original_value: this.string(),
       suggested_value: this.string(),
@@ -21,6 +22,7 @@ export default class TaskRecord extends Model {
   }
 
   static apiConfig = {
-    baseURL: `${settings.apiUrl}/task-records/`
+    baseURL: `${settings.apiUrl}/task-records/`,
+    dataTransformer: responseNormalizer
   }
 }

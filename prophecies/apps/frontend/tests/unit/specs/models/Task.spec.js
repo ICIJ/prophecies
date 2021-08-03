@@ -11,8 +11,7 @@ describe('Task', () => {
   })
 
   it('should return a list of task record', () => {
-    expect(Task.all()).toHaveLength(1)
-    expect(Task.find(1).url).toBe('http://localhost/api/v1/tasks/1/')
+    expect(Task.all()).toHaveLength(2)
   })
 
   it('should return a name and a description', () => {
@@ -29,16 +28,5 @@ describe('Task', () => {
     expect(task.choice_group).not.toBeNull()
     expect(task.choice_group.id).toBe(1)
     expect(task.choice_group.name).toBe('Is it correct?')
-  })
-
-  it('should not return nested choices if not requested explicitely', () => {
-    const task = Task.query().with('choice_group').find(1)
-    expect(task.choice_group.choices).toHaveLength(0)
-  })
-
-  it('should return nested choices if requested explicitely', () => {
-    const task = Task.query().with('choice_group').with('choice_group.choices').find(1)
-    expect(task.choice_group.choices).toHaveLength(3)
-    expect(task.choice_group.choices[0].value).toBe('correct')
   })
 })

@@ -6,7 +6,7 @@ export default class ChoiceGroup extends Model {
 
   static fields () {
     return {
-      id: this.attr(null),
+      id: this.number(null),
       name: this.string(),
       choices: this.hasMany(Choice, 'choice_group_id')
     }

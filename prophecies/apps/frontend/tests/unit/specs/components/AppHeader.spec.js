@@ -12,7 +12,7 @@ describe('AppHeader', () => {
     beforeEach(async () => {
       localVue = createLocalVue()
       // Mock current user
-      server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => {
+      server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
         return res.once(ctx.json({
           username: 'olivia',
           first_name: 'Olivia',
@@ -55,7 +55,7 @@ describe('AppHeader', () => {
     beforeEach(async () => {
       localVue = createLocalVue()
       // Mock current user
-      server.use(rest.get('/api/v1/users/me.json', (req, res, ctx) => {
+      server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
         return res.once(ctx.json({
           username: 'django',
           first_name: 'Django',

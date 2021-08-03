@@ -12,8 +12,8 @@ describe('TaskRecord', () => {
 
   it('should return a list of task record', async () => {
     expect(TaskRecord.all()).toHaveLength(2)
-    expect(TaskRecord.find(1).url).toBe('http://localhost/api/v1/task-records/1/')
-    expect(TaskRecord.find(3).url).toBe('http://localhost/api/v1/task-records/3/')
+    expect(TaskRecord.find(1)).not.toBeNull()
+    expect(TaskRecord.find(3)).not.toBeNull()
   })
 
   it('should return a nested of task', async () => {
