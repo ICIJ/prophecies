@@ -20,7 +20,11 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TaskViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Task.objects.all()
+    queryset = Task.objects.all() \
+        .prefetch_related('project') \
+        .prefetch_related('project__creator') \
+        .prefetch_related('choice_group') \
+        .prefetch_related('choice_group__choices')
     serializer_class = TaskSerializer
     search_fields = ['name', 'description']
     ordering_fields = ['name']

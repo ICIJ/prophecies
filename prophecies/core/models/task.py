@@ -36,7 +36,7 @@ class Task(models.Model):
     def progress(self):
         all = self.task_records.count()
         done = self.task_records.done().count()
-        return 100 if all == 0 else done / all * 100
+        return 100 if all == 0 else done / all * 100                
 
     @property
     def colors(self):

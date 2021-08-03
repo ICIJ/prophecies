@@ -21,33 +21,18 @@
       </p>
       <div class="d-flex align-items-center">
         <ul class="list-inline m-0">
-          <li class="list-inline-item">
-            Round 1
+          <li class="list-inline-item" v-for="round in task.rounds" :key="round">
+            Round {{ round }}
             <span class="font-weight-bold ml-3">
-              77%
+              {{ task.user_progress_by_round[round] }}%
             </span>
-            <span class="text-muted mx-2">
+            <span class="text-muted mx-2" v-if="round !== task.rounds">
               |
-            </span>
-          </li>
-          <li class="list-inline-item">
-            Round 2
-            <span class="font-weight-bold ml-3">
-              10%
-            </span>
-            <span class="text-muted mx-2">
-              |
-            </span>
-          </li>
-          <li class="list-inline-item">
-            Round 3
-            <span class="font-weight-bold ml-3">
-              0%
             </span>
           </li>
         </ul>
         <span class="bg-primary text-white font-weight-bold rounded py-1 px-2 ml-auto">
-          29%
+          {{ task.progress }}%
         </span>
       </div>
     </div>
@@ -56,12 +41,21 @@
 
 <script>
 import Task from '@/models/Task'
-
 export default {
-  name: 'TaskStatsCard',
+  name: 'StatsCard',
   props: {
-    task: {
-      type: Object
+    taskId: {
+      type: Number
+    }
+  },
+  computed: {
+    task () {
+      return Task
+        .query()
+        .with('project')
+        .with('choice_group')
+        .with('choice_group.choices')
+        .find(this.taskId)
     }
   }
 }

@@ -23,11 +23,13 @@
               </b-dropdown>
             </div>
             <app-waiter :for="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-              <task-stats-card :task="task" v-for="task in tasks" :key="task.id" class="my-5" />
+              <task-stats-card :task-id="task.id" v-for="task in tasks" :key="task.id" class="my-5" />
             </app-waiter>
           </div>
           <div class="col-4 offset-2">
-            <progress-card class="mb-5" />
+            <app-waiter :for="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
+              <progress-card class="mb-5" />
+            </app-waiter>
             <latest-tips-card />
           </div>
         </div>
@@ -59,16 +61,12 @@ export default {
     ProgressCard,
     TaskStatsCard
   },
-  async mounted () {
+  async created () {
     await this.waitFor(this.fetchTaskLoader, this.fetchTask)
   },
   computed: {
     tasks () {
-      return Task.query()
-        .with('project')
-        .with('choice_group')
-        .with('choice_group.choices')
-        .all()
+      return Task.all()
     },
     fetchTaskLoader () {
       return uniqueId('load-dashboard-task-')
