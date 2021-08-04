@@ -40,10 +40,10 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
     queryset = TaskRecordReview.objects.all()
     http_method_names = ['get', 'put', 'head']
     permission_classes = [IsAuthenticated]
-    search_fields = ['task_record__original_value', 'task_record__suggested_value']
+    search_fields = ['task_record__original_value', 'task_record__predicted_value']
     ordering = ['-id']
-    ordering_fields = ['task_record__original_value', 'task_record__suggested_value', 'task_record__id']
-    filterset_fields = ['task_record__original_value', 'task_record__suggested_value']
+    ordering_fields = ['task_record__original_value', 'task_record__predicted_value', 'task_record__id']
+    filterset_fields = ['task_record__original_value', 'task_record__predicted_value']
 
     def get_queryset(self):
         """

@@ -15,7 +15,7 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TaskRecord
-        fields = ['id', 'url', 'task', 'original_value', 'suggested_value', 'link', 'metadata', 'rounds', 'status']
+        fields = ['id', 'url', 'task', 'original_value', 'predicted_value', 'link', 'metadata', 'rounds', 'status']
 
     def get_link(self, task_record):
         return task_record.computed_link()

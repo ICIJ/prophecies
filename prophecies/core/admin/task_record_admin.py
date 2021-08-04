@@ -33,7 +33,7 @@ class TaskRecordAdmin(admin.ModelAdmin):
     list_filter = ['rounds', 'task', 'task__project', 'status']
     inlines = [TaskRecordReviewInline,]
     actions = ['assign_action']
-    search_fields = ['original_value', 'suggested_value', 'metadata', 'link']
+    search_fields = ['original_value', 'predicted_value', 'metadata', 'link']
 
 
     def metadata_json(self, task_record):

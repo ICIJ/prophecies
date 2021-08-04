@@ -96,7 +96,7 @@ export default [
             id: '1',
             attributes: {
               original_value: 'fronce',
-              suggested_value: 'France',
+              predicted_value: 'France',
               link: 'https://www.openstreetmap.org/search?query=fronce',
               metadata: null,
               rounds: 3,
@@ -119,7 +119,7 @@ export default [
             id: '3',
             attributes: {
               original_value: 'La France',
-              suggested_value: 'FRA',
+              predicted_value: 'FRA',
               link: 'https://www.openstreetmap.org/search?query=La%20France',
               metadata: null,
               rounds: 3,

@@ -40,7 +40,7 @@ class TaskRecord(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='task_records')
     uid = models.CharField(max_length=50, blank=True, null=True, verbose_name='UID', help_text="An optional unique identifier used to update task records in bulk")
     original_value = models.TextField(blank=True, null=True, help_text="Original value of the record")
-    suggested_value = models.TextField(blank=True, null=True, help_text="Suggested value to be reviewed")
+    predicted_value = models.TextField(blank=True, null=True, help_text="Suggested value to be reviewed")
     metadata = models.JSONField(blank=True, null=True, help_text="Optional metadata for this record (in JSON)")
     status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.PENDING, max_length=8, help_text="Status of the record. Set to done after it passes all task's rounds")
     rounds = models.PositiveIntegerField(default=0, help_text="Number of rounds this record was submitted to")

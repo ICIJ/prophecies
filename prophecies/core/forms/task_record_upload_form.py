@@ -12,7 +12,7 @@ class TaskRecordUploadForm(forms.Form):
     csv_file = forms.FileField(required=True, label="CSV file")
     task = forms.ModelChoiceField(required=True, queryset=Task.objects.all())
 
-    ALLOWED_MODEL_FIELDS = ['original_value', 'suggested_value', 'uid', 'metadata']
+    ALLOWED_MODEL_FIELDS = ['original_value', 'predicted_value', 'uid', 'metadata']
 
 
     def csv_valid_fieldnames(self):
