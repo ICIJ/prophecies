@@ -1,4 +1,5 @@
 <script>
+import { uniqueId } from 'lodash'
 import { toVariant } from '@/utils/variant'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -23,11 +24,23 @@ export default {
         'task-record-review-choice-form__choices__item--selected': this.choiceIsSelected(choice)
       }
     },
+    async selectChoiceWithLoader (choice) {
+      this.$wait.start(this.updateLoader)
+      await this.selectChoice(choice)
+      this.$wait.end(this.updateLoader)
+    },
     async selectChoice (choice) {
       await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, { choice })
+      /**
+       * @event Fired when the task record review is updated
+       */
+      this.$emit('update')
     }
   },
   computed: {
+    updateLoader () {
+      return uniqueId('update-task-record-review-')
+    },
     taskRecordReview () {
       return TaskRecordReview
         .query()
@@ -55,22 +68,25 @@ export default {
 </script>
 
 <template>
-  <div class="task-record-review-choice-form" :class="classList">
-    <ul class="task-record-review-choice-form__choices list-unstyled row no-gutters m-0">
-      <li v-for="choice in choiceGroup.choices" :key="choice.id" class="col px-2 pb-3">
-        <b-btn @click="selectChoice(choice)"
-               block
-               class="task-record-review-choice-form__choices__item"
-               :class="choiceClassList(choice)"
-               :variant="choice.value | toVariant">
-          {{ choice.name }}
-        </b-btn>
-      </li>
-    </ul>
-    <div class="px-2">
-      <b-form-input placeholder="Alternative value" />
-    </div>
-  </div>
+  <b-overlay :show="$wait.is(updateLoader)" variant="white">
+    <b-spinner variant="light" slot="overlay" />
+    <fieldset class="task-record-review-choice-form py-1" :class="classList">
+      <ul class="task-record-review-choice-form__choices list-unstyled row no-gutters m-0">
+        <li v-for="choice in choiceGroup.choices" :key="choice.id" class="col px-2 pb-3">
+          <b-btn @click="selectChoiceWithLoader(choice)"
+                 block
+                 class="task-record-review-choice-form__choices__item"
+                 :class="choiceClassList(choice)"
+                 :variant="choice.value | toVariant">
+            {{ choice.name }}
+          </b-btn>
+        </li>
+      </ul>
+      <div class="px-2">
+        <b-form-input placeholder="Alternative value" />
+      </div>
+    </fieldset>
+  </b-overlay>
 </template>
 
 <style lang="scss" scoped>

@@ -15,7 +15,7 @@
     </div>
     <div class="task-record-reviews__container">
       <div class="container-fluid p-5">
-        <app-waiter :for="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
+        <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
           <div class="row mb-5" v-if="pagination">
             <div class="col-auto">
               <b-btn variant="outline-dark" class="border" tag="label" disabled>
@@ -54,7 +54,6 @@
 
 <script>
 import { get, find, uniqueId } from 'lodash'
-import { waitFor } from 'vue-wait'
 
 import AppHeader from '@/components/AppHeader'
 import AppWaiter from '@/components/AppWaiter'
@@ -101,7 +100,7 @@ export default {
       return { 'page[number]': this.page }
     },
     fetchAllLoader () {
-      return uniqueId('load-task-record-reviews')
+      return uniqueId('load-task-record-review-')
     },
     firstPendingTaskRecordReview () {
       const all = TaskRecordReview.all()
@@ -121,7 +120,7 @@ export default {
       await this.waitFor(this.fetchAllLoader, this.fetchTaskRecordReviews)
     },
     isTaskRecordReviewActive (id) {
-      return id === this.firstPendingTaskRecordReview.id
+      return get(this, 'firstPendingTaskRecordReview.id') === id
     },
     async fetchTaskRecordReviews () {
       TaskRecordReview.deleteAll()

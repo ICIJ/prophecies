@@ -1,8 +1,8 @@
 import { Model } from '@vuex-orm/core'
-import { responseNormalizer } from '@/utils/jsonapi'
+import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
-import TaskRecord from '@/models/TaskRecord'
 import Choice from '@/models/Choice'
+import TaskRecord from '@/models/TaskRecord'
 
 export default class TaskRecordReview extends Model {
   static entity = 'task-record-reviews'
@@ -29,19 +29,17 @@ export default class TaskRecordReview extends Model {
         return this.get(`${id}/`)
       },
       selectChoice (id, { choice, ...attributes }) {
-        return this.put(`${id}/`, {
-          type: 'TaskRecordReview',
-          id: id,
-          attributes,
-          relationships: {
-            choice: {
-              data: {
-                type: 'Choice',
-                id: choice.id
-              }
+        const relationships = {
+          choice: {
+            data: {
+              type: 'Choice',
+              id: choice.id
             }
           }
-        })
+        }
+        const type = 'TaskRecordReview'
+        const data = { type, id, attributes, relationships }
+        return this.put(`${id}/`, { data }, { headers: defaultHeaders() })
       }
     }
   }

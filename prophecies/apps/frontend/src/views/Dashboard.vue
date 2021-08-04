@@ -21,12 +21,12 @@
                 </template>
               </b-dropdown-->
             </div>
-            <app-waiter :for="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
+            <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
               <task-stats-card :team="teamTaskStats" :task-id="task.id" v-for="task in tasks" :key="task.id" class="my-5" />
             </app-waiter>
           </div>
           <div class="col-4 offset-2">
-            <app-waiter :for="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
+            <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
               <progress-card class="mb-5" />
             </app-waiter>
             <latest-tips-card />
@@ -39,7 +39,6 @@
 
 <script>
 import { uniqueId } from 'lodash'
-import { waitFor } from 'vue-wait'
 
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
