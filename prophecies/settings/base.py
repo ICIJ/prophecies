@@ -159,7 +159,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS':'rest_framework_json_api.pagination.JsonApiPageNumberPagination',
     'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
-    'PAGE_SIZE': 50,
+    'PAGE_SIZE': 10,
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework_json_api.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
