@@ -1,4 +1,3 @@
-import Boilerplate from '@/views/Boilerplate.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import Error from '@/views/Error.vue'
 import Login from '@/views/Login.vue'
@@ -11,14 +10,6 @@ export const router = {
       component: Dashboard,
       meta: {
         title: ({ i18n }) => i18n.t('dashboard.title')
-      }
-    },
-    {
-      name: 'boilerplate',
-      path: '/boilerplate',
-      component: Boilerplate,
-      meta: {
-        title: 'Boilerplate'
       }
     },
     {
