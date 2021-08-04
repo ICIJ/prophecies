@@ -37,6 +37,29 @@ export default [
           },
           {
             type: 'TaskRecord',
+            id: '2',
+            attributes: {
+              original_value: 'Germany',
+              predicted_value: 'DE',
+              link: 'https://www.openstreetmap.org/search?query=Germany',
+              metadata: null,
+              rounds: 3,
+              status: 'ASSIGNED'
+            },
+            relationships: {
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '1'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/task-records/2/'
+            }
+          },
+          {
+            type: 'TaskRecord',
             id: '1',
             attributes: {
               original_value: 'fronce',

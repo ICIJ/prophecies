@@ -27,7 +27,7 @@ export default [
     )
   }),
 
-  rest.get('/api/v1/users/me/', (req, res, ctx) => {
+  rest.get('/api/v1/users/me', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({

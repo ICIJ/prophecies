@@ -168,7 +168,7 @@ export default [
             }
           },
           links: {
-            self: 'http://0.0.0.0:8008/api/v1/choice-groups/1/'
+            self: 'http://localhost/api/v1/choice-groups/1/'
           }
         },
         included: [
@@ -233,7 +233,7 @@ export default [
             }
           },
           links: {
-            self: 'http://0.0.0.0:8008/api/v1/choice-groups/2/'
+            self: 'http://localhost/api/v1/choice-groups/2/'
           }
         },
         included: [

@@ -63,6 +63,29 @@ export default [
             links: {
               self: 'http://localhost/api/v1/task-record-reviews/37/'
             }
+          },
+          {
+            type: 'TaskRecordReview',
+            id: '36',
+            attributes: {
+              status: 'PENDING',
+              note: '',
+              alternative_value: ''
+            },
+            relationships: {
+              choice: {
+                data: null
+              },
+              task_record: {
+                data: {
+                  type: 'TaskRecord',
+                  id: '1'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/task-record-reviews/285/'
+            }
           }
         ],
         included: [
