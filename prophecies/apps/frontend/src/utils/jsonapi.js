@@ -1,11 +1,13 @@
 import { isArray, find, reduce } from 'lodash'
 
-export function recordNormalizer ({ id, type, attributes, relationships }, included = []) {
+export function recordNormalizer ({ id, type, attributes = {}, relationships }, included = []) {
   const include = find(included, { type, id })
   relationships = relationships || include?.relationships || {}
-  const relationshipFields = reduce(relationships, (all, { data }, field) => {
+  const relationshipFields = reduce(relationships, (all, { data = null }, field) => {
     if (isArray(data)) {
       all[field] = data.map(relatedRecord => recordNormalizer(relatedRecord, included))
+    } else if (data === null) {
+      all[field] = null
     } else {
       all[field] = recordNormalizer(data, included)
     }
