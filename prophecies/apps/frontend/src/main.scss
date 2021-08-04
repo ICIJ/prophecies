@@ -34,3 +34,9 @@ html {
     z-index: 10;
   }
 }
+
+.custom-pagination--compact {
+  .custom-pagination__form input {
+    border-radius: 0 $input-border-radius $input-border-radius 0;
+  }
+}
