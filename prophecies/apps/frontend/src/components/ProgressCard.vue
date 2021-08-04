@@ -1,36 +1,37 @@
 <template>
-  <div class="card card-body py-4 px-5 shadow progress-card">
+  <div class="progress-card card card-body py-4 px-5 shadow">
     <div class="card-flex align-items-center mt-3 mb-5">
       <users-icon class="text-primary mr-4" />
-      <b-btn-group>
-        <b-btn variant="primary" class="font-weight-bold">
-          Team progress
-        </b-btn>
-        <b-btn variant="outline-primary">
-          Your progress
-        </b-btn>
-      </b-btn-group>
+      <b-form-radio-group
+        v-model="team"
+        buttons
+        button-variant="outline-primary"
+        :options="progressOptions" />
     </div>
     <ul class="list-unstyled progress-card__items">
-      <li class="font-weight-bold progress-card__items__item">
+      <li class="font-weight-bold progress-card__items__item progress-card__items__item--mean">
         <div class="d-flex align-items-start">
           <div class="mr-1 progress-card__items__item__value">
-            {{ meanProgress }}%
+            {{ meanProgress | round }}%
           </div>
           <div class="flex-grow-1 pt-1 pb-4">
             <b-progress :value="meanProgress" :max="100" class="mb-1" />
-            all open tasks
+            <span class="progress-card__items__item__name">
+              all open tasks
+            </span>
           </div>
         </div>
       </li>
       <li v-for="task in tasks" :key="task.id" class="progress-card__items__item">
         <div class="d-flex align-items-start">
           <div class="mr-1 progress-card__items__item__value">
-            {{ task.progress }}%
+            {{ taskProgress(task) | round }}%
           </div>
           <div class="flex-grow-1 pt-1 pb-4">
-            <b-progress :value="task.progress" :style="task | taskProgressStyle" :max="100" class="mb-1" />
-            {{ task.name }}
+            <b-progress :value="taskProgress(task)" :style="task | taskProgressStyle" :max="100" class="mb-1" />
+            <span class="progress-card__items__item__name">
+              {{ task.name }}
+            </span>
           </div>
         </div>
       </li>
@@ -47,6 +48,22 @@ export default {
   filters: {
     taskProgressStyle ({ colors }) {
       return `--progress-fg: ${colors[1]}`
+    },
+    round (value) {
+      return Math.round(value)
+    }
+  },
+  data () {
+    return {
+      team: true
+    }
+  },
+  methods: {
+    taskProgress (task) {
+      if (this.team) {
+        return task.progress
+      }
+      return task.user_progress
     }
   },
   computed: {
@@ -54,7 +71,13 @@ export default {
       return Task.all()
     },
     meanProgress () {
-      return mean(Task.all().map(t => t.progress))
+      return mean(this.tasks.map(this.taskProgress))
+    },
+    progressOptions () {
+      return [
+        { text: 'Team progress', value: true },
+        { text: 'Your progress', value: false }
+      ]
     }
   }
 }

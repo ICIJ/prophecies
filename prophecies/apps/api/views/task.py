@@ -1,13 +1,19 @@
 from rest_framework import filters, viewsets, serializers
 from rest_framework_json_api.relations import ResourceRelatedField
-from prophecies.core.models import ChoiceGroup, Project, Task
+from prophecies.core.models import ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models.task_record import StatusType
 from prophecies.apps.api.views.choice_group import ChoiceGroupSerializer
 from prophecies.apps.api.views.project import ProjectSerializer
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     project = ResourceRelatedField(many=False, queryset=Project.objects)
     choice_group = ResourceRelatedField(many=False, queryset=ChoiceGroup.objects)
+    task_records_count = serializers.SerializerMethodField()
+    task_records_done_count = serializers.SerializerMethodField()
+    user_task_records_count = serializers.SerializerMethodField()
+    user_task_records_done_count = serializers.SerializerMethodField()
     user_progress_by_round = serializers.SerializerMethodField()
+    user_progress = serializers.SerializerMethodField()
     included_serializers = {
         'choice_group': ChoiceGroupSerializer,
         'project': ProjectSerializer
@@ -18,13 +24,37 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Task
-        fields = ['id', 'url', 'choice_group', 'colors', 'description', 'name',
-            'project', 'priority', 'user_progress_by_round', 'progress_by_round',
-            'progress', 'rounds']
+        fields = ['id', 'url', 'choice_group', 'colors', 'description',
+            'name', 'project', 'priority', 'rounds',
+            'task_records_count',  'task_records_done_count',
+            'user_task_records_count', 'user_task_records_done_count',
+            'user_progress_by_round', 'user_progress',
+            'progress', 'progress_by_round',]
 
     def get_user_progress_by_round(self, task):
         checker = self.context.get('request').user
         return task.progress_by_round(checker=checker)
+
+    def get_user_progress(self, task):
+        user_records = self.get_user_task_records_done_count(task)
+        all_records = self.get_user_task_records_count(task)
+        return 100 if all_records == 0 else user_records / all_records * 100
+
+    def get_user_task_records_count(self, task):
+        checker = self.context.get('request').user
+        filter = dict(task_record__task=task, checker=checker)
+        return TaskRecordReview.objects.filter(**filter).count()
+
+    def get_user_task_records_done_count(self, task):
+        checker = self.context.get('request').user
+        filter = dict(task_record__task=task, task_record__status=StatusType.DONE, checker=checker)
+        return TaskRecordReview.objects.filter(**filter).count()
+
+    def get_task_records_done_count(self, task):
+        return TaskRecord.objects.done().filter(task=task).count()
+
+    def get_task_records_count(self, task):
+        return TaskRecord.objects.filter(task=task).count()
 
 
 class TaskViewSet(viewsets.ReadOnlyModelViewSet):

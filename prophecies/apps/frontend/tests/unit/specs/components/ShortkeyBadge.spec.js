@@ -1,7 +1,7 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
 
-describe('AppHeader', () => {
+describe('ShortkeyBadge', () => {
   let localVue
   let wrapper
   let userAgentGetter

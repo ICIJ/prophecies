@@ -73,18 +73,23 @@ export default [
               description: 'A collection of adresses to fact check.',
               name: 'Addresses',
               priority: 1,
+              rounds: 3,
+              task_records_count: 1000,
+              task_records_done_count: 500,
+              user_task_records_count: 300,
+              user_task_records_done_count: 100,
               user_progress_by_round: {
-                1: 0,
-                2: 100.0,
-                3: 0
+                1: 100,
+                2: 25,
+                3: 25
               },
+              user_progress: 50,
+              progress: 50,
               progress_by_round: {
-                1: 50.0,
-                2: 100.0,
-                3: 50.0
-              },
-              progress: 50.0,
-              rounds: 3
+                1: 200,
+                2: 100,
+                3: 200
+              }
             },
             relationships: {
               choice_group: {
@@ -114,5 +119,5 @@ export default [
         }
       })
     )
-  }),
+  })
 ]

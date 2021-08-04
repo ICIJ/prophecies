@@ -7,23 +7,22 @@
         <div class="row">
           <div class="col-4 offset-1">
             <div class="d-flex align-items-center">
-              <b-btn-group>
-                <b-btn variant="primary" class="font-weight-bold">
-                  Team stats
-                </b-btn>
-                <b-btn variant="outline-primary">
-                  Your stats
-                </b-btn>
-              </b-btn-group>
-              <b-dropdown right no-caret variant="link" class="ml-auto">
+              <b-form-group>
+                <b-form-radio-group
+                  v-model="teamTaskStats"
+                  buttons
+                  button-variant="outline-primary"
+                  :options="taskStatsOptions" />
+              </b-form-group>
+              <!--b-dropdown right no-caret variant="link" class="ml-auto">
                 <template #button-content>
                   Sort by
                   <chevron-down-icon class="mr-2" />
                 </template>
-              </b-dropdown>
+              </b-dropdown-->
             </div>
             <app-waiter :for="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-              <task-stats-card :task-id="task.id" v-for="task in tasks" :key="task.id" class="my-5" />
+              <task-stats-card :team="teamTaskStats" :task-id="task.id" v-for="task in tasks" :key="task.id" class="my-5" />
             </app-waiter>
           </div>
           <div class="col-4 offset-2">
@@ -61,6 +60,11 @@ export default {
     ProgressCard,
     TaskStatsCard
   },
+  data () {
+    return {
+      teamTaskStats: true
+    }
+  },
   async created () {
     await this.waitFor(this.fetchTaskLoader, this.fetchTask)
   },
@@ -70,6 +74,12 @@ export default {
     },
     fetchTaskLoader () {
       return uniqueId('load-dashboard-task-')
+    },
+    taskStatsOptions () {
+      return [
+        { text: 'Team stats', value: true },
+        { text: 'Your stats', value: false }
+      ]
     }
   },
   methods: {
