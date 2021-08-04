@@ -60,11 +60,3 @@ export default {
     </div>
   </div>
 </template>
-
-<style lang="scss" scope>
-  .task-record-review-card {
-    &:hover {
-      box-shadow: $box-shadow-lg !important;
-    }
-  }
-</style>
