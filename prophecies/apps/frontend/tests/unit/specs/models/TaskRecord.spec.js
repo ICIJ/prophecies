@@ -11,14 +11,14 @@ describe('TaskRecord', () => {
   })
 
   it('should return a list of task record', async () => {
-    expect(TaskRecord.all()).toHaveLength(2)
+    expect(TaskRecord.all()).toHaveLength(3)
     expect(TaskRecord.find(1)).not.toBeNull()
     expect(TaskRecord.find(3)).not.toBeNull()
   })
 
   it('should return a nested of task', async () => {
-    expect(TaskRecord.query().with('task').find(1).task.id).toBe(1)
-    expect(TaskRecord.query().with('task').find(3).task.id).toBe(1)
+    expect(TaskRecord.query().with('task').find(1).task.name).toBe('Addresses')
+    expect(TaskRecord.query().with('task').find(3).task.name).toBe('Addresses')
   })
 
   it('should return an original_value', async () => {

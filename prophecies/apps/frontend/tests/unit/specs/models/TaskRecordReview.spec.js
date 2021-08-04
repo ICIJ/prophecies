@@ -11,12 +11,12 @@ describe('TaskRecordReview', () => {
   })
 
   it('should return a list of task record', () => {
-    expect(TaskRecordReview.all()).toHaveLength(2)
+    expect(TaskRecordReview.all()).toHaveLength(3)
     expect(TaskRecordReview.find(37)).not.toBeNull()
   })
 
   it('should return a nested of task record', () => {
-    expect(TaskRecordReview.query().with('task_record').find(37).task_record.id).toBe(1)
+    expect(TaskRecordReview.query().with('task_record').find(37).task_record.predicted_value).toBe('France')
   })
 
   it('should return a status', async () => {
@@ -32,6 +32,6 @@ describe('TaskRecordReview', () => {
   })
 
   it('should return a choice', async () => {
-    expect(TaskRecordReview.query().with('choice').find(37).choice.id).toBe(2)
+    expect(TaskRecordReview.query().with('choice').find(37).choice.id).toBe('2')
   })
 })

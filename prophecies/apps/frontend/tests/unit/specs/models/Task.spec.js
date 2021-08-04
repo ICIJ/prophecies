@@ -24,9 +24,9 @@ describe('Task', () => {
   })
 
   it('should return a choice_group if requested explicitely', () => {
-    const task = Task.query().with('choice_group').find(1)
+    const task = Task.query().with('choice_group').find(2)
     expect(task.choice_group).not.toBeNull()
-    expect(task.choice_group.id).toBe(1)
+    expect(task.choice_group.id).toBe('1')
     expect(task.choice_group.name).toBe('Is it correct?')
   })
 })
