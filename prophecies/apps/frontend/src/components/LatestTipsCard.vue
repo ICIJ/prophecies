@@ -1,5 +1,5 @@
 <template>
-  <div class="latest-tips-card card card-body py-4 px-5 shadow-lg">
+  <div class="latest-tips-card card card-body py-4 px-5 shadow">
     <div class="d-flex align-items-center mt-3 mb-5">
       <smile-icon class="text-primary mr-4" />
       <h2 class="latest-tips-card__title text-primary mb-0">
