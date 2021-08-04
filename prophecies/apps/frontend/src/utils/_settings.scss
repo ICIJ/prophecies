@@ -21,6 +21,9 @@ $theme-colors: (
   mark: #fff5bd
 );
 
+// The yiq lightness value that determines when the lightness of color changes from "dark" to "light". Acceptable values are between 0 and 255.
+$yiq-contrasted-threshold: 200;
+
 $link-color: $primary;
 $body-bg: #fff;
 $body-color: #071111;
@@ -32,9 +35,9 @@ $border-width: 0.7px;
 $border-radius: 5px;
 $border-radius-lg: 8px;
 
-$box-shadow-sm: 0px 4px 30px rgba(204, 227, 230, 0.20);
-$box-shadow: 0px 4px 50px rgba(204, 227, 230, 0.25);
-$box-shadow-lg: 0px 4px 50px rgba(204, 227, 230, 0.5);
+$box-shadow-sm: 0px 4px 50px rgba(204, 227, 230, 0.25);
+$box-shadow: 0px 4px 50px rgba(204, 227, 230, 0.5);
+$box-shadow-lg: 0px 0px 50px 2px rgba(35, 91, 89, 0.2);
 
 $card-border-radius: $border-radius-lg;
 $card-border-color: $border-color;
@@ -83,7 +86,11 @@ $kbd-bg: rgba(#222, .7);
 $tooltip-max-width: 260px;
 $tooltip-opacity: 1;
 
+
+$input-border-color: $border-color;
 $input-box-shadow: none;
+$input-btn-padding-x: 1.5rem;
+$pagination-border-color: $input-border-color;
 $b-toast-background-opacity: $tooltip-opacity;
 
 $font-size-base: 1rem;
