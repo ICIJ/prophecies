@@ -15,7 +15,8 @@ export default class User extends Model {
       email: this.attr(''),
       email_md5: this.attr(''),
       is_staff: this.boolean(false),
-      is_me: this.boolean(false)
+      is_me: this.boolean(false),
+      csrf_token: this.string(null).nullable()
     }
   }
 

@@ -1,4 +1,12 @@
 import { isArray, find, reduce } from 'lodash'
+import User from '@/models/User'
+
+export function defaultHeaders () {
+  return {
+    'content-type': 'application/vnd.api+json',
+    'x-csrftoken': User.me().csrf_token
+  }
+}
 
 export function recordNormalizer ({ id, type, attributes = {}, relationships }, included = []) {
   const include = find(included, { type, id })
