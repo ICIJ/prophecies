@@ -20,8 +20,8 @@ describe('TaskRecordReviewChoiceForm', () => {
       const localVue = createLocalVue()
       const propsData = { taskRecordReviewId: '36' }
       // Configure the local vue with plugins
-      Core.init(localVue).useAll()
-      wrapper = mount(TaskRecordReviewChoiceForm, { localVue, propsData })
+      const { store, wait } = Core.init(localVue).useAll()
+      wrapper = mount(TaskRecordReviewChoiceForm, { localVue, propsData, store, wait })
     })
 
     it('should show 3 choices items', () => {
@@ -30,7 +30,8 @@ describe('TaskRecordReviewChoiceForm', () => {
     })
 
     it('should not be in selected state', () => {
-      expect(wrapper.classes('task-record-review-choice-form--has-choice')).toBeFalsy()
+      const element = wrapper.find('.task-record-review-choice-form')
+      expect(element.classes('task-record-review-choice-form--has-choice')).toBeFalsy()
     })
   })
 
@@ -39,12 +40,13 @@ describe('TaskRecordReviewChoiceForm', () => {
       const localVue = createLocalVue()
       const propsData = { taskRecordReviewId: '37' }
       // Configure the local vue with plugins
-      Core.init(localVue).useAll()
-      wrapper = mount(TaskRecordReviewChoiceForm, { localVue, propsData })
+      const { store, wait } = Core.init(localVue).useAll()
+      wrapper = mount(TaskRecordReviewChoiceForm, { localVue, propsData, store, wait })
     })
 
     it('should be in selected state', async () => {
-      expect(wrapper.classes('task-record-review-choice-form--has-choice')).toBeTruthy()
+      const element = wrapper.find('.task-record-review-choice-form')
+      expect(element.classes('task-record-review-choice-form--has-choice')).toBeTruthy()
     })
   })
 })
