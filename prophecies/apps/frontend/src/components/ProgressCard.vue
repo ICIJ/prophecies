@@ -1,5 +1,5 @@
 <template>
-  <div class="progress-card card card-body py-4 px-5 shadow">
+  <div class="progress-card card card-body py-4 px-5 shadow-sm">
     <div class="card-flex align-items-center mt-3 mb-5">
       <users-icon class="text-primary mr-4" />
       <b-form-radio-group
