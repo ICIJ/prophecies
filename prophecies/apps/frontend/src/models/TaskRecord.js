@@ -8,7 +8,7 @@ export default class TaskRecord extends Model {
 
   static fields () {
     return {
-      id: this.number(null),
+      id: this.attr(null),
       url: this.string(),
       original_value: this.string(),
       predicted_value: this.string(),

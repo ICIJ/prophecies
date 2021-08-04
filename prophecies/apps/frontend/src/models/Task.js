@@ -9,7 +9,7 @@ export default class Task extends Model {
 
   static fields () {
     return {
-      id: this.number(null),
+      id: this.attr(null),
       url: this.string(),
       name: this.string(),
       description: this.string(),
@@ -33,6 +33,11 @@ export default class Task extends Model {
 
   static apiConfig = {
     baseURL: `${settings.apiUrl}/tasks/`,
-    dataTransformer: responseNormalizer
+    dataTransformer: responseNormalizer,
+    actions: {
+      find (id) {
+        return this.get(`${id}/`)
+      }
+    }
   }
 }

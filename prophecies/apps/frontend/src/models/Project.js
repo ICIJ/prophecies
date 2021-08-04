@@ -7,7 +7,7 @@ export default class Project extends Model {
 
   static fields () {
     return {
-      id: this.number(null),
+      id: this.attr(null),
       name: this.string()
     }
   }

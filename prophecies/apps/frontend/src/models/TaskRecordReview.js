@@ -9,7 +9,7 @@ export default class TaskRecordReview extends Model {
 
   static fields () {
     return {
-      id: this.number(null),
+      id: this.attr(null),
       url: this.string(),
       status: this.string(),
       note: this.string(),
