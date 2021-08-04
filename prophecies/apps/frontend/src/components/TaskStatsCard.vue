@@ -1,10 +1,12 @@
 <template>
-  <div class="task-stats-card card card-body shadow d-flex">
+  <div class="task-stats-card card card-body shadow-sm d-flex">
     <div></div>
     <div>
       <div class="d-flex align-items-center mb-3 task-stats-card__heading">
         <h3 class="m-0">
-          {{ task.name }}
+          <router-link :to="{ name: 'task-record-reviews', params: { taskId: task.id } }">
+            {{ task.name }}
+          </router-link>
           <b-badge class="task-stats-card__heading__project bg-transparent font-weight-normal text-muted">
             {{ task.project.name }}
           </b-badge>
@@ -41,11 +43,12 @@
 
 <script>
 import Task from '@/models/Task'
+
 export default {
-  name: 'StatsCard',
+  name: 'TaskStatsCard',
   props: {
     taskId: {
-      type: Number
+      type: [Number, String]
     },
     team: {
       type: Boolean
@@ -61,7 +64,6 @@ export default {
       return Task
         .query()
         .with('project')
-        .with('choice_group')
         .find(this.taskId)
     },
     task_records_count () {

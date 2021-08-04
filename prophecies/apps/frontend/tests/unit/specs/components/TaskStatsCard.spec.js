@@ -1,4 +1,5 @@
-import { createLocalVue, mount } from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
+
 import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
@@ -15,8 +16,8 @@ describe('TaskStatsCard', () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
     Core.init(localVue).useAll()
-    const propsData = { taskId: 1, team: false }
-    wrapper = mount(TaskStatsCard, { localVue, propsData })
+    const propsData = { taskId: '1', team: false }
+    wrapper = shallowMount(TaskStatsCard, { localVue, propsData })
   })
 
   it('should show the user progress', () => {
