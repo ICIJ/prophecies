@@ -2,7 +2,7 @@
   <div class="dashboard d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top" />
     <div class="dashboard__container flex-grow-1">
-      <app-header />
+      <app-header reduced />
       <div class="container-fluid p-5">
         <div class="row">
           <div class="col-4 offset-1">
@@ -47,7 +47,6 @@ import AppWaiter from '@/components/AppWaiter'
 import LatestTipsCard from '@/components/LatestTipsCard'
 import ProgressCard from '@/components/ProgressCard'
 import TaskStatsCard from '@/components/TaskStatsCard'
-import Project from '@/models/Project'
 import Task from '@/models/Task'
 
 export default {
