@@ -43,7 +43,7 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
     search_fields = ['task_record__original_value', 'task_record__predicted_value']
     ordering = ['-id']
     ordering_fields = ['task_record__original_value', 'task_record__predicted_value', 'task_record__id']
-    filterset_fields = ['task_record__original_value', 'task_record__predicted_value']
+    filterset_fields = ['task_record__task', 'task_record__original_value', 'task_record__predicted_value']
 
     def get_queryset(self):
         """

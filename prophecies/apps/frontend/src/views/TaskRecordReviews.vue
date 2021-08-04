@@ -97,7 +97,10 @@ export default {
       return TaskRecordReview.query().all()
     },
     taskRecordReviewsParams () {
-      return { 'page[number]': this.page }
+      return {
+        'filter[task_record.task]': this.taskId,
+        'page[number]': this.page
+      }
     },
     fetchAllLoader () {
       return uniqueId('load-task-record-review-')
@@ -114,6 +117,13 @@ export default {
     fetchChoiceGroup () {
       return ChoiceGroup.api().find(this.task.choice_group_id)
     },
+    async fetchTaskRecordReviews () {
+      TaskRecordReview.deleteAll()
+      const params = this.taskRecordReviewsParams
+      const result = await TaskRecordReview.api().get('', { params })
+      const pagination = get(result, 'response.data.meta.pagination', null)
+      this.$set(this, 'pagination', pagination)
+    },
     async goToPage (page) {
       const query = { ...this.$route_query, page }
       await this.$router.push({ path: this.$route.path, query })
@@ -121,13 +131,6 @@ export default {
     },
     isTaskRecordReviewActive (id) {
       return get(this, 'firstPendingTaskRecordReview.id') === id
-    },
-    async fetchTaskRecordReviews () {
-      TaskRecordReview.deleteAll()
-      const params = this.taskRecordReviewsParams
-      const result = await TaskRecordReview.api().get('', { params })
-      const pagination = get(result, 'response.data.meta.pagination', null)
-      this.$set(this, 'pagination', pagination)
     },
     async fetchAll () {
       await this.fetchTask()
