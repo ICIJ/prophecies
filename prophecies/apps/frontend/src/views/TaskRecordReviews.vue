@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { get, uniqueId } from 'lodash'
+import { get, find, uniqueId } from 'lodash'
 import { waitFor } from 'vue-wait'
 
 import AppHeader from '@/components/AppHeader'
@@ -95,13 +95,17 @@ export default {
       return Task.all()
     },
     taskRecordReviews () {
-      return TaskRecordReview.query().limit(50).all()
+      return TaskRecordReview.query().all()
     },
     taskRecordReviewsParams () {
       return { 'page[number]': this.page }
     },
     fetchAllLoader () {
       return uniqueId('load-task-record-reviews')
+    },
+    firstPendingTaskRecordReview () {
+      const all = TaskRecordReview.all()
+      return find(all, { status: 'PENDING' })
     }
   },
   methods: {
@@ -117,7 +121,7 @@ export default {
       await this.waitFor(this.fetchAllLoader, this.fetchTaskRecordReviews)
     },
     isTaskRecordReviewActive (id) {
-      return id === TaskRecordReview.query('status', 'PENDING').first().id
+      return id === this.firstPendingTaskRecordReview.id
     },
     async fetchTaskRecordReviews () {
       TaskRecordReview.deleteAll()
