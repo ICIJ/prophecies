@@ -7,6 +7,11 @@
     components: {
       ShortkeyBadge
     },
+    props: {
+      reduced: {
+        type: Boolean
+      }
+    },
     computed: {
       user () {
         return this.$config.get('user')
@@ -42,16 +47,18 @@
             {{ $t('appHeader.search') }}
             <shortkey-badge :value="['meta', 'f']" class="ml-2" />
           </b-nav-item>
-          <b-nav-item href="#">
-            <smile-icon class="app-header__nav-right__tips mr-2" />
-            {{ $t('appHeader.tips') }}
-            <shortkey-badge :value="['meta', 't']" class="ml-2" />
-          </b-nav-item>
-          <b-nav-item href="#">
-            <command-icon class="app-header__nav-right__shortcuts mr-2" />
-            {{ $t('appHeader.shortcuts') }}
-            <shortkey-badge :value="['meta', 'k']" class="ml-2" />
-          </b-nav-item>
+          <template v-if="!reduced">
+            <b-nav-item href="#">
+              <smile-icon class="app-header__nav-right__tips mr-2" />
+              {{ $t('appHeader.tips') }}
+              <shortkey-badge :value="['meta', 't']" class="ml-2" />
+            </b-nav-item>
+            <b-nav-item href="#">
+              <command-icon class="app-header__nav-right__shortcuts mr-2" />
+              {{ $t('appHeader.shortcuts') }}
+              <shortkey-badge :value="['meta', 'k']" class="ml-2" />
+            </b-nav-item>
+          </template>
           <b-nav-item-dropdown right no-caret class="app-header__nav-right__user">
             <!-- Using 'button-content' slot -->
             <template #button-content>
