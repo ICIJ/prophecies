@@ -22,6 +22,9 @@ export default {
       return {
         'task-record-review-choice-form__choices__item--selected': this.choiceIsSelected(choice)
       }
+    },
+    async selectChoice (choice) {
+      await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, { choice })
     }
   },
   computed: {
@@ -55,7 +58,8 @@ export default {
   <div class="task-record-review-choice-form" :class="classList">
     <ul class="task-record-review-choice-form__choices list-unstyled row no-gutters m-0">
       <li v-for="choice in choiceGroup.choices" :key="choice.id" class="col px-2 pb-3">
-        <b-btn block
+        <b-btn @click="selectChoice(choice)"
+               block
                class="task-record-review-choice-form__choices__item"
                :class="choiceClassList(choice)"
                :variant="choice.value | toVariant">
