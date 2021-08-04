@@ -1,5 +1,5 @@
 from django.test import TestCase
-from rest_framework.test import APIClient, force_authenticate
+from rest_framework.test import APIClient
 from prophecies.core.models.project import Project
 from prophecies.core.models.task import Task
 

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from rest_framework.test import APIClient, force_authenticate
+from rest_framework.test import APIClient
 from unittest import mock
 import os
 
