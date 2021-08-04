@@ -1,8 +1,8 @@
 import { slugger } from '@/utils/strings'
 import settings from '@/settings'
 
-export function toVariant (string = '', defaultVariant = 'darker', prefix = '') {
-  return prefix + settings.variantsMap[slugger(string).toLowerCase()] || defaultVariant
+export function toVariant (string = '', defaultVariant = 'secondary', prefix = '') {
+  return prefix + (settings.variantsMap[slugger(string).toLowerCase()] || defaultVariant)
 }
 
 export function toVariantColor (string = '', defaultVariant = 'darker') {
