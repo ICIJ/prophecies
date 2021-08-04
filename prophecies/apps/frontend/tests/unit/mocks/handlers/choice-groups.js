@@ -1,7 +1,7 @@
 import { rest } from 'msw'
 
 export default [
-  rest.get('/api/v1/task-record-reviews', (req, res, ctx) => {
+  rest.get('/api/v1/choice-groups', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -136,7 +136,7 @@ export default [
     )
   }),
 
-  rest.get('/api/v1/task-record-reviews/1', (req, res, ctx) => {
+  rest.get('/api/v1/choice-groups/1', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -201,7 +201,7 @@ export default [
     )
   }),
 
-  rest.get('/api/v1/task-record-reviews/2', (req, res, ctx) => {
+  rest.get('/api/v1/choice-groups/2', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
