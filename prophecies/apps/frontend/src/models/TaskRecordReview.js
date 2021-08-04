@@ -23,6 +23,26 @@ export default class TaskRecordReview extends Model {
 
   static apiConfig = {
     baseURL: `${settings.apiUrl}/task-record-reviews/`,
-    dataTransformer: responseNormalizer
+    dataTransformer: responseNormalizer,
+    actions: {
+      find (id) {
+        return this.get(`${id}/`)
+      },
+      selectChoice (id, { choice, ...attributes }) {
+        return this.put(`${id}/`, {
+          type: 'TaskRecordReview',
+          id: id,
+          attributes,
+          relationships: {
+            choice: {
+              data: {
+                type: 'Choice',
+                id: choice.id
+              }
+            }
+          }
+        })
+      }
+    }
   }
 }
