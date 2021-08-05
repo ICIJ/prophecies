@@ -18,6 +18,9 @@ install-yarn:
 migrate:
 		pipenv run python manage.py migrate
 
+makemigrations:
+		pipenv run python manage.py makemigrations
+
 run:
 		pipenv run python manage.py runserver 0.0.0.0:8008
 
