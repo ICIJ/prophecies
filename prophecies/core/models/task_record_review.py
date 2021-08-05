@@ -87,7 +87,7 @@ class TaskRecordReview(models.Model):
 
     @property
     def history(self):
-        return self.task_record.reviews.all()
+        return self.task_record.reviews.exclude(choice__isnull=True).all()
 
 
     def save(self, *args, **kwargs):

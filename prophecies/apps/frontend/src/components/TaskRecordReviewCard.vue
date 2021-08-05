@@ -1,12 +1,14 @@
 <script>
 import { get } from 'lodash'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
+import TaskRecordReviewHistory from '@/components/TaskRecordReviewHistory'
 import TaskRecordReview from '@/models/TaskRecordReview'
 
 export default {
   name: 'TaskRecordReviewCard',
   components: {
-    TaskRecordReviewChoiceForm
+    TaskRecordReviewChoiceForm,
+    TaskRecordReviewHistory
   },
   props: {
     taskRecordReviewId: {
@@ -58,7 +60,7 @@ export default {
             <task-record-review-choice-form :task-record-review-id="taskRecordReviewId" />
           </div>
           <div class="task-record-review-card__choice_history col-lg">
-            <b-badge variant="light">History</b-badge>
+            <task-record-review-history :task-record-review-id="taskRecordReviewId" />
           </div>
         </div>
       </div>

@@ -20,7 +20,8 @@ export default class TaskRecordReview extends Model {
       task_record_id: this.attr(null),
       task_record: this.belongsTo(TaskRecord, 'task_record_id'),
       checker_id: this.attr(null),
-      checker: this.belongsTo(User, 'checker_id')
+      checker: this.belongsTo(User, 'checker_id'),
+      history: this.hasMany(TaskRecordReview, 'task_record_id')
     }
   }
 

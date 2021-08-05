@@ -8,25 +8,42 @@ from prophecies.apps.api.views.task_record import TaskRecordSerializer
 from prophecies.apps.api.views.user import UserSerializer
 
 
-class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
+class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     checker = ResourceRelatedField(many=False, read_only=True)
-    choice = ResourceRelatedField(many=False, queryset=Choice.objects)
-    task_record = ResourceRelatedField(many=False, read_only=True)
-    history = SerializerMethodResourceRelatedField(many=True, model=TaskRecordReview)
+    choice = ResourceRelatedField(many=False, read_only=True)
     included_serializers = {
         'checker': UserSerializer,
-        'choice': ChoiceSerializer,
-        'task_record': TaskRecordSerializer,
-        'history': 'prophecies.apps.api.views.task_record_review.TaskRecordReviewSerializer'
     }
 
     class JSONAPIMeta:
-        included_resources = ['checker', 'choice', 'task_record', 'history']
+        included_resources = ['checker', 'choice']
 
     class Meta:
         model = TaskRecordReview
-        fields = ['id', 'url', 'checker', 'choice', 'status', 'note', 'alternative_value', 'task_record', 'history']
-        read_only_fields = ['checker', 'status', 'task_record', 'history']
+        fields = ['id', 'url', 'checker', 'choice', 'status', 'note', 'alternative_value']
+
+
+class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
+    checker = ResourceRelatedField(many=False, read_only=True)
+    collaborators = SerializerMethodResourceRelatedField(many=True, model=UserSerializer, read_only=True)
+    choice = ResourceRelatedField(many=False, queryset=Choice.objects)
+    task_record = ResourceRelatedField(many=False, read_only=True)
+    history = SerializerMethodResourceRelatedField(many=True, model=TaskRecordReview, read_only=True)
+    included_serializers = {
+        'checker': UserSerializer,
+        'collaborators': UserSerializer,
+        'choice': ChoiceSerializer,
+        'task_record': TaskRecordSerializer,
+        'history': FlatTaskRecordReviewSerializer
+    }
+
+    class JSONAPIMeta:
+        included_resources = ['checker', 'collaborators', 'choice', 'task_record', 'history']
+
+    class Meta:
+        model = TaskRecordReview
+        fields = ['id', 'url', 'checker', 'collaborators', 'choice', 'status', 'note', 'alternative_value', 'task_record', 'history']
+        read_only_fields = ['status',]
 
     def __init__(self, *args, **kwargs):
         self.filter_choice_queryset(self.fields['choice'], *args, **kwargs)
@@ -41,18 +58,22 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
             f.queryset = instance.task_record.task.choice_group.choices.all()
 
     def get_history(self, instance):
-        return instance.history
+        return instance.history.select_related('checker', 'choice')
+
+    def get_collaborators(self, instance):
+        return [ i.checker for i in instance.history if i.checker != instance.checker ]
 
 
 class TaskRecordReviewViewSet(viewsets.ModelViewSet):
     serializer_class = TaskRecordReviewSerializer
-    queryset = TaskRecordReview.objects.all()
     http_method_names = ['get', 'put', 'head']
     permission_classes = [IsAuthenticated]
     search_fields = ['task_record__original_value', 'task_record__predicted_value']
     ordering = ['-id']
     ordering_fields = ['task_record__original_value', 'task_record__predicted_value', 'task_record__id']
     filterset_fields = ['task_record__task', 'task_record__original_value', 'task_record__predicted_value']
+    # Queryset is overridden within the `get_queryset` method
+    queryset = TaskRecordReview.objects.none()
 
     def get_queryset(self):
         """

@@ -20,17 +20,16 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'url', 'first_name', 'last_name', 'username',
-            'email', 'email_md5', 'is_staff', 'csrf_token']
+            'email_md5', 'is_staff', 'csrf_token']
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    search_fields = ['email', 'first_name', 'last_name', 'username']
+    search_fields = ['first_name', 'last_name', 'username']
     ordering = ['-id']
-    ordering_fields = ['id', 'email', 'first_name', 'last_name', 'username']
+    ordering_fields = ['id', 'first_name', 'last_name', 'username']
     filterset_fields = {
-       'email': ('icontains', 'exact', 'iexact', 'contains', 'in'),
        'username': ('icontains', 'exact', 'iexact', 'contains', 'in'),
        'is_staff': ('exact',),
     }

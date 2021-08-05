@@ -68,7 +68,7 @@ describe('router/guards', () => {
   })
 
   it('should not redirect to "login" if the user is authenticated', async () => {
-    const me = { id: 20, username: 'bar' }
+    const me = { data: { id: 20, username: 'bar' } }
     server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => res.once(ctx.json(me))))
     // The navigation is not going to throw an exception
     await core.router.push({ name: 'dashboard' })

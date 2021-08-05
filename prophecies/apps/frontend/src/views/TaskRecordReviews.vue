@@ -61,6 +61,7 @@ import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Task from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
+import User from '@/models/User'
 
 export default {
   name: 'TaskRecordReviews',
@@ -94,7 +95,10 @@ export default {
       return Task.all()
     },
     taskRecordReviews () {
-      return TaskRecordReview.query().all()
+      return TaskRecordReview
+        .query()
+        .where('checker_id', User.me().id)
+        .all()
     },
     taskRecordReviewsParams () {
       return {

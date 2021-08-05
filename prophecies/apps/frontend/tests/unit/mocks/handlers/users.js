@@ -19,7 +19,7 @@ export default [
               is_staff: true
             },
             links: {
-              self: 'http://localhost:9009/api/v1/users/2/'
+              self: 'http://localhost/api/v1/users/2/'
             }
           }
         ]
@@ -44,7 +44,7 @@ export default [
             is_staff: true
           },
           links: {
-            self: 'http://localhost:9009/api/v1/users/2/'
+            self: 'http://localhost/api/v1/users/2/'
           }
         }
       })
