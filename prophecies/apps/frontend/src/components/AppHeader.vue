@@ -38,15 +38,15 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="app-header__nav-left">
         <slot name="nav-left" />
+        <b-nav-item href="#">
+          <search-icon class="mr-2" />
+          {{ $t('appHeader.search') }}
+          <shortkey-badge :value="['meta', 'f']" class="ml-2" />
+        </b-nav-item>
       </b-navbar-nav>
-      <div class="ml-auto" >
+      <div class="ml-auto">
         <b-navbar-nav class="app-header__nav-right">
           <slot name="nav-right" />
-          <b-nav-item href="#">
-            <search-icon class="mr-2" />
-            {{ $t('appHeader.search') }}
-            <shortkey-badge :value="['meta', 'f']" class="ml-2" />
-          </b-nav-item>
           <template v-if="!reduced">
             <b-nav-item href="#">
               <smile-icon class="app-header__nav-right__tips mr-2" />
