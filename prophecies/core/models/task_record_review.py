@@ -85,6 +85,10 @@ class TaskRecordReview(models.Model):
     def __str__(self):
         return f'Task record #{self.task_record.id} on round {self.round}'
 
+    @property
+    def history(self):
+        return self.task_record.reviews.all()
+
 
     def save(self, *args, **kwargs):
         if not self.choice is None:

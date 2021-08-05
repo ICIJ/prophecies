@@ -3,6 +3,7 @@ import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import Choice from '@/models/Choice'
 import TaskRecord from '@/models/TaskRecord'
+import User from '@/models/User'
 
 export default class TaskRecordReview extends Model {
   static entity = 'task-record-reviews'
@@ -17,7 +18,9 @@ export default class TaskRecordReview extends Model {
       choice_id: this.attr(null),
       choice: this.belongsTo(Choice, 'choice_id'),
       task_record_id: this.attr(null),
-      task_record: this.belongsTo(TaskRecord, 'task_record_id')
+      task_record: this.belongsTo(TaskRecord, 'task_record_id'),
+      checker_id: this.attr(null),
+      checker: this.belongsTo(User, 'checker_id')
     }
   }
 
