@@ -1,3 +1,18 @@
+from functools import reduce
+
+def get_path(mixed, path, default=None):
+    def get(d, key):
+        if isinstance(d, dict):
+            return d.get(key, default)
+        elif isinstance(d, list):
+            try:
+                return d[int(key)]
+            except IndexError:
+                return default
+        return default
+    return reduce(get, str(path).split("."), mixed)
+
+
 class ExtendedNamespace:
 
     @staticmethod
