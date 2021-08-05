@@ -2,6 +2,7 @@ import axios from 'axios'
 import VuexORM from '@vuex-orm/core'
 import VuexORMAxios from '@vuex-orm/plugin-axios'
 
+import AlternativeValue from '@/models/AlternativeValue'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Project from '@/models/Project'
@@ -20,6 +21,7 @@ VuexORM.use(VuexORMAxios, { axios, baseURL })
 // Initialize the database
 export const database = new VuexORM.Database()
 // Models must be registered manually so a store module is created
+database.register(AlternativeValue)
 database.register(Choice)
 database.register(ChoiceGroup)
 database.register(Project)

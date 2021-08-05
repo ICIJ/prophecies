@@ -91,7 +91,7 @@ export default [
             attributes: {
               name: 'Incorrect',
               value: 'incorrect',
-              require_alternative_value: false
+              require_alternative_value: true
             }
           },
           {
@@ -100,7 +100,7 @@ export default [
             attributes: {
               name: 'Unkown',
               value: 'unkown',
-              require_alternative_value: true
+              require_alternative_value: false
             }
           },
           {

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from prophecies.core.models.choice import Choice
+from prophecies.core.models import Choice
 
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:

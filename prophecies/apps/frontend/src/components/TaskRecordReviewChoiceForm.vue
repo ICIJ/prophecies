@@ -1,5 +1,5 @@
 <script>
-import { get, uniqueId } from 'lodash'
+import { find, get, uniqueId } from 'lodash'
 import { toVariant } from '@/utils/variant'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -39,17 +39,25 @@ export default {
       }
     },
     async selectChoiceWithLoader (choice) {
+      if (choice.require_alternative_value && !this.alternativeValue) {
+        return this.$refs.alternativeValueInput.focus()
+      }
       this.$wait.start(this.updateLoader)
       await this.selectChoice(choice)
       this.$wait.end(this.updateLoader)
     },
     async selectChoice (choice) {
-      const data = {  choice, note: this.note, alternative_value: this.alternativeValue }
+      const alternativeValue = choice.require_alternative_value ? this.alternativeValue : ''
+      const note = this.note
+      const data = { alternative_value: alternativeValue, choice, note }
       await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, data)
       /**
        * @event Fired when the task record review is updated
        */
       this.$emit('update')
+    },
+    async selectAlternativeValue () {
+      await this.selectChoice(this.alternativeValueChoice)
     },
     setInitialValues () {
       this.alternativeValue = get(this, 'taskRecordReview.alternative_value', '')
@@ -68,10 +76,18 @@ export default {
         .with('task_record.task')
         .find(this.taskRecordReviewId)
     },
+    alternativeValueChoice () {
+      const choices = get(this, 'choiceGroup.choices', [])
+      return find(choices, { require_alternative_value: true })
+    },
+    alternativeValues () {
+      return get(this, 'choiceGroup.alternative_values', [])
+    },
     choiceGroup () {
       return ChoiceGroup
         .query()
         .with('choices')
+        .with('alternative_values')
         .find(this.taskRecordReview.task_record.task.choice_group_id)
     },
     classList () {
@@ -115,8 +131,15 @@ export default {
           </b-btn>
         </li>
       </ul>
-      <div class="px-2 task-record-review-choice-form__alternative-value">
-        <b-form-input v-model="alternativeValue" placeholder="Alternative value" />
+      <div class="px-2 task-record-review-choice-form__alternative-value" v-if="alternativeValueChoice">
+        <b-form-select v-model="alternativeValue" @change="selectAlternativeValue" class="mb-3" ref="alternativeValueInput">
+          <b-form-select-option value="">
+            Select the correct value
+          </b-form-select-option>
+          <b-form-select-option v-for="{ id, value, name } in alternativeValues" :value="value" :key="id">
+            {{ name }}
+          </b-form-select-option>
+        </b-form-select>
       </div>
     </fieldset>
   </b-overlay>
@@ -141,7 +164,7 @@ export default {
       }
     }
 
-    &--has-choice:not(&--has-alternative-value) &__alternative-value {
+    &--has-choice:not(&--has-alternative-value) &__alternative-value select:not(:focus) {
       opacity: 0.25;
     }
   }
