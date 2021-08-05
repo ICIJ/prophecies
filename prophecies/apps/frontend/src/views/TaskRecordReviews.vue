@@ -1,7 +1,7 @@
 <template>
   <div class="task-record-reviews">
     <div class="d-flex align-items-center">
-      <ul class="task-record-reviews__breadcrumb list-inline flex-grow-1 mx-5">
+      <ul class="task-record-reviews__breadcrumb list-inline my-3 mx-5">
         <li class="list-inline-item task-record-reviews__breadcrumb__item">
           <router-link :to="{ name: 'dashboard' }">
             <home-icon size="1.5x" />
@@ -11,7 +11,7 @@
           {{ task.name }}
         </li>
       </ul>
-      <app-header />
+      <app-header class="flex-grow-1" />
     </div>
     <div class="task-record-reviews__container">
       <div class="container-fluid p-5">
