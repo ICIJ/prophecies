@@ -81,7 +81,8 @@ export default [
             id: '1',
             attributes: {
               name: 'Correct',
-              value: 'correct'
+              value: 'correct',
+              require_alternative_value: false
             }
           },
           {
@@ -89,7 +90,8 @@ export default [
             id: '2',
             attributes: {
               name: 'Incorrect',
-              value: 'incorrect'
+              value: 'incorrect',
+              require_alternative_value: false
             }
           },
           {
@@ -97,7 +99,8 @@ export default [
             id: '3',
             attributes: {
               name: 'Unkown',
-              value: 'unkown'
+              value: 'unkown',
+              require_alternative_value: true
             }
           },
           {
@@ -105,7 +108,8 @@ export default [
             id: '4',
             attributes: {
               name: 'Babka',
-              value: 'Babka'
+              value: 'Babka',
+              require_alternative_value: false
             }
           },
           {
@@ -113,7 +117,8 @@ export default [
             id: '5',
             attributes: {
               name: 'Croissant',
-              value: 'Croissant'
+              value: 'Croissant',
+              require_alternative_value: false
             }
           },
           {
@@ -121,7 +126,8 @@ export default [
             id: '6',
             attributes: {
               name: 'Muffin',
-              value: 'Muffin'
+              value: 'Muffin',
+              require_alternative_value: false
             }
           }
         ],

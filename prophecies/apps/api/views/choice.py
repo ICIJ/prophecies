@@ -4,4 +4,4 @@ from prophecies.core.models.choice import Choice
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Choice
-        fields = ['id', 'name', 'value']
+        fields = ['id', 'name', 'value', 'require_alternative_value']
