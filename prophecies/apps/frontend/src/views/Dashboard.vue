@@ -4,8 +4,8 @@
     <div class="dashboard__container flex-grow-1">
       <app-header reduced />
       <div class="container-fluid p-5">
-        <div class="row">
-          <div class="col-4 offset-1">
+        <div class="row justify-content-between">
+          <div class="col-4">
             <div class="d-flex align-items-center">
               <b-form-group>
                 <b-form-radio-group
@@ -25,7 +25,7 @@
               <task-stats-card :team="teamTaskStats" :task-id="task.id" v-for="task in tasks" :key="task.id" class="my-5" />
             </app-waiter>
           </div>
-          <div class="col-4 offset-2">
+          <div class="col-4">
             <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
               <progress-card class="mb-5" />
             </app-waiter>
