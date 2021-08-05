@@ -1,5 +1,5 @@
 <script>
-import { uniqueId } from 'lodash'
+import { get, uniqueId } from 'lodash'
 import { toVariant } from '@/utils/variant'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -14,6 +14,20 @@ export default {
   },
   filters: {
     toVariant
+  },
+  data () {
+    return {
+      alternativeValue: '',
+      note: ''
+    }
+  },
+  created () {
+    this.setInitialValues()
+  },
+  watch: {
+    taskRecordReview () {
+      this.setInitialValues()
+    }
   },
   methods: {
     choiceIsSelected (choice) {
@@ -30,11 +44,16 @@ export default {
       this.$wait.end(this.updateLoader)
     },
     async selectChoice (choice) {
-      await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, { choice })
+      const data = {  choice, note: this.note, alternative_value: this.alternativeValue }
+      await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, data)
       /**
        * @event Fired when the task record review is updated
        */
       this.$emit('update')
+    },
+    setInitialValues () {
+      this.alternativeValue = get(this, 'taskRecordReview.alternative_value', '')
+      this.note = get(this, 'taskRecordReview.note', '')
     }
   },
   computed: {
@@ -57,18 +76,32 @@ export default {
     },
     classList () {
       return {
-        'task-record-review-choice-form--has-choice': this.hasChoice
+        'task-record-review-choice-form--has-choice': this.hasChoice,
+        'task-record-review-choice-form--has-alternative-value': this.hasAlternativeValue,
+        'task-record-review-choice-form--has-note': this.hasNote
       }
     },
+    hasAlternativeValue () {
+      return !!get(this, 'taskRecordReview.alternative_value', '')
+    },
     hasChoice () {
-      return !!this.taskRecordReview.choice
+      return !!get(this, 'taskRecordReview.choice', false)
+    },
+    hasNote () {
+      return !!get(this, 'taskRecordReview.note', '')
+    },
+    overlayVariant () {
+      if (this.taskRecordReview.status === 'DONE') {
+        return 'lighter'
+      }
+      return 'white'
     }
   }
 }
 </script>
 
 <template>
-  <b-overlay :show="$wait.is(updateLoader)" variant="white">
+  <b-overlay :show="$wait.is(updateLoader)" :variant="overlayVariant">
     <b-spinner variant="light" slot="overlay" />
     <fieldset class="task-record-review-choice-form py-1" :class="classList">
       <ul class="task-record-review-choice-form__choices list-unstyled row no-gutters m-0">
@@ -83,7 +116,7 @@ export default {
         </li>
       </ul>
       <div class="px-2 task-record-review-choice-form__alternative-value">
-        <b-form-input placeholder="Alternative value" />
+        <b-form-input v-model="alternativeValue" placeholder="Alternative value" />
       </div>
     </fieldset>
   </b-overlay>
@@ -106,9 +139,9 @@ export default {
         opacity: 1;
         font-weight: bold;
       }
-    }    
+    }
 
-    .task-record-review-choice-form--has-choice &__alternative-value {
+    &--has-choice:not(&--has-alternative-value) &__alternative-value {
       opacity: 0.25;
     }
   }
