@@ -8,16 +8,16 @@ export function defaultHeaders () {
   }
 }
 
-export function recordNormalizer ({ id, type, attributes = {}, relationships }, included = []) {
+export function recordNormalizer ({ id, type, attributes = {}, relationships }, included = [], depth = 4) {
   const include = find(included, { type, id })
   relationships = relationships || include?.relationships || {}
   const relationshipFields = reduce(relationships, (all, { data = null }, field) => {
-    if (isArray(data)) {
-      all[field] = data.map(relatedRecord => recordNormalizer(relatedRecord, included))
-    } else if (data === null) {
+    if (depth < 1 || data === null) {
       all[field] = null
+    } else if (isArray(data)) {
+      all[field] = data.map(relatedRecord => recordNormalizer(relatedRecord, included, depth - 1))
     } else {
-      all[field] = recordNormalizer(data, included)
+      all[field] = recordNormalizer(data, included, depth - 1)
     }
     return all
   }, {})
@@ -27,7 +27,7 @@ export function recordNormalizer ({ id, type, attributes = {}, relationships }, 
 export function responseNormalizer ({ data: { data = [], included = [] } }) {
   if (isArray(data)) {
     return data.map(record => {
-      return recordNormalizer(record, included)
+      return recordNormalizer(record, included, 4)
     })
   }
   return recordNormalizer(data, included)
