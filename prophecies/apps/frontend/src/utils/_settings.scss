@@ -6,6 +6,8 @@ $warning: #FFE980;
 $success: #73B782;
 $info: #45C4FF;
 $light: #CCE3E6;
+$lighter: #f5f9fa;
+$dark: darken($primary, 10);
 
 $theme-colors: (
   icij: #852308,
@@ -17,7 +19,8 @@ $theme-colors: (
   success: $success,
   info: $info,
   light: $light,
-  dark: darken($primary, 10),
+  lighter: $lighter,
+  dark: $dark,
   mark: #fff5bd
 );
 
