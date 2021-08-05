@@ -82,7 +82,7 @@ export default {
           </b-btn>
         </li>
       </ul>
-      <div class="px-2">
+      <div class="px-2 task-record-review-choice-form__alternative-value">
         <b-form-input placeholder="Alternative value" />
       </div>
     </fieldset>
@@ -95,16 +95,21 @@ export default {
     &__choices {
 
       &__item {
-        font-weight: bold;
+        font-weight: normal;
       }
 
-      .task-record-review-choice-form--has-choice &__item:not(:hover) {
-        opacity: 0.5;
+      .task-record-review-choice-form--has-choice &__item {
+        opacity: 0.25;
       }
 
       .task-record-review-choice-form--has-choice & &__item--selected {
         opacity: 1;
+        font-weight: bold;
       }
+    }    
+
+    .task-record-review-choice-form--has-choice &__alternative-value {
+      opacity: 0.25;
     }
   }
 </style>
