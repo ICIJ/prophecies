@@ -2,18 +2,19 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.utils.http import urlencode
 from social_core.backends.oauth import BaseOAuth2
+from prophecies.core.contrib.namespace import get_path
 
 
-class XemxOauth2(BaseOAuth2):
-    name = 'xemx'
-    AUTHORIZATION_URL = '%s/oauth/authorize' % settings.SOCIAL_AUTH_XEMX_HOSTNAME
-    ACCESS_TOKEN_URL = '%s/oauth/token' % settings.SOCIAL_AUTH_XEMX_HOSTNAME
-    ACCESS_TOKEN_METHOD = 'POST'
+class OAuth2Provider(BaseOAuth2):
+    name = 'provider'
+    AUTHORIZATION_URL = settings.SOCIAL_AUTH_PROVIDER_AUTHORIZATION_URL
+    ACCESS_TOKEN_URL = settings.SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_URL
+    ACCESS_TOKEN_METHOD = settings.SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_METHOD
     SCOPE_SEPARATOR = ','
 
     def user_data(self, access_token, *args, **kwargs):
         params = urlencode({ 'access_token': access_token })
-        url = ('%s/api/v1/me.json?' % settings.SOCIAL_AUTH_XEMX_HOSTNAME) + params
+        url = settings.SOCIAL_AUTH_PROVIDER_PROFILE_URL + params
         return self.get_json(url)
 
     def get_user_details(self, response):
@@ -23,28 +24,25 @@ class XemxOauth2(BaseOAuth2):
             first_name = response.get('name', '')
             last_name = ''
         return {
-            'username': response.get('uid'),
+            'username': get_path(response, settings.SOCIAL_AUTH_PROVIDER_USERNAME_FIELD),
             'email': response.get('email') or '',
             'first_name': first_name,
             'last_name': last_name,
-            'xemx_groups': response.get('groups_by_applications', {}).get('prophecies', []),
+            'provider_groups': get_path(response, settings.SOCIAL_AUTH_PROVIDER_GROUPS_FIELD, []),
         }
 
 
-def map_xemx_groups(strategy, details, user=None, *args, **kwargs):
+def map_provider_groups(strategy, details, user=None, *args, **kwargs):
     if not user:
         return
-    # All Xemx user are "staff"
-    user.is_staff = 'icijstaff' in details['xemx_groups']
+    user.is_staff = settings.SOCIAL_AUTH_PROVIDER_STAFF_GROUP in details['provider_groups']
     user.save()
     # Get groups ids with the same name
-    group_ids = Group.objects.filter(name__in=details['xemx_groups']).values_list('id', flat=True)
-
+    group_ids = Group.objects.filter(name__in=details['provider_groups']).values_list('id', flat=True)
     # DON'T Replace all existings groups, only add
     # user.groups.set(group_ids)
     for gid in group_ids:
         try:
             user.groups.add(gid)
         except Exception as e:
-            print("Trying to add group {} to user {}: ".format(gid, user))
-            print(e)
+            print("Trying to add group {} to user {} failed.".format(gid, user))

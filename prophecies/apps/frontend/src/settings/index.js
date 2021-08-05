@@ -10,7 +10,7 @@ export default {
       label: 'English'
     }
   ],
-  loginUrl: '/login/xemx/?next=/',
+  loginUrl: '/login/provider/?next=/',
   logoutUrl: '/admin/logout/?next=/',
   templateInterpolate: /{{ ?([\s\S]+?) ?}}/g,
   variantsMap: {

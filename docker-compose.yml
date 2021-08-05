@@ -23,8 +23,8 @@ services:
       - ALLOWED_HOSTS=0.0.0.0,localhost,web
       - PORT=8008
       - DEBUG=false
-      - SOCIAL_AUTH_XEMX_KEY=
-      - SOCIAL_AUTH_XEMX_SECRET=
+      - SOCIAL_AUTH_PROVIDER_KEY=
+      - SOCIAL_AUTH_PROVIDER_SECRET=
     volumes:
       - shared_static:/code/prophecies/run/static
     depends_on:

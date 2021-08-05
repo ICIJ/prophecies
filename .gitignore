@@ -84,7 +84,6 @@ notebooks/*.pdf
 data/
 !data/*_to_import.csv
 !data/*-users-*.csv
-!data/xemx_users.csv
 !data/sars_priority_2.csv
 !data/05_dpv_all_addresses_classified.v2.csv
 !data/country_choice.csv

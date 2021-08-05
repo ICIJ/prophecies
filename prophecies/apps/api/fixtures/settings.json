@@ -20,7 +20,7 @@
     "pk": 3,
     "fields": {
       "key": "loginUrl",
-      "value": "/login/xemx"
+      "value": "/login/provider"
     }
   },
   {

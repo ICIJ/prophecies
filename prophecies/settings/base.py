@@ -145,7 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 AUTHENTICATION_BACKENDS = (
-    'prophecies.core.xemx.XemxOauth2',
+    'prophecies.core.oauth2_provider.OAuth2Provider',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -192,13 +192,23 @@ USE_X_FORWARDED_HOST = DEBUG
 
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'last_name', 'email']
 SOCIAL_AUTH_IMMUTABLE_USER_FIELDS = ['username', 'email',]
-SOCIAL_AUTH_URL_NAMESPACE = 'sso'
+SOCIAL_AUTH_URL_NAMESPACE = env.str('SOCIAL_AUTH_URL_NAMESPACE', default='sso')
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_SANITIZE_REDIRECTS = not DEBUG
-SOCIAL_AUTH_LOGIN_URL = '/login/xemx'
-SOCIAL_AUTH_XEMX_KEY = env.str('SOCIAL_AUTH_XEMX_KEY', default='')
-SOCIAL_AUTH_XEMX_SECRET = env.str('SOCIAL_AUTH_XEMX_SECRET', default='')
-SOCIAL_AUTH_XEMX_HOSTNAME = env.str('SOCIAL_AUTH_XEMX_HOSTNAME', default='http://xemx:3001')
+SOCIAL_AUTH_LOGIN_URL = '/login/provider'
+
+# All OAuth2 provider's settings
+SOCIAL_AUTH_PROVIDER_NAME = env.str('SOCIAL_AUTH_PROVIDER_NAME', default=SOCIAL_AUTH_URL_NAMESPACE)
+SOCIAL_AUTH_PROVIDER_HOSTNAME = env.str('SOCIAL_AUTH_PROVIDER_HOSTNAME', default='')
+SOCIAL_AUTH_PROVIDER_KEY = env.str('SOCIAL_AUTH_PROVIDER_KEY', default='')
+SOCIAL_AUTH_PROVIDER_SECRET = env.str('SOCIAL_AUTH_PROVIDER_SECRET', default='')
+SOCIAL_AUTH_PROVIDER_PROFILE_URL = env.str('SOCIAL_AUTH_PROVIDER_PROFILE_URL', default='%s/api/v1/me.json?' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
+SOCIAL_AUTH_PROVIDER_AUTHORIZATION_URL = env.str('SOCIAL_AUTH_PROVIDER_AUTHORIZATION_URL', default='%s/oauth/authorize' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
+SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_URL = env.str('SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_URL', default='%s/oauth/token' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
+SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_METHOD = env.str('SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_METHOD', default='POST')
+SOCIAL_AUTH_PROVIDER_USERNAME_FIELD = env.str('SOCIAL_AUTH_PROVIDER_USERNAME_FIELD', default='username')
+SOCIAL_AUTH_PROVIDER_GROUPS_FIELD = env.str('SOCIAL_AUTH_PROVIDER_GROUPS_FIELD', default='groups')
+SOCIAL_AUTH_PROVIDER_STAFF_GROUP = env.str('SOCIAL_AUTH_PROVIDER_STAFF_GROUP', default='staff')
 
 SOCIAL_AUTH_PIPELINE = (
     # Get the information we can about the user and return it in a simple
@@ -230,8 +240,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     # Update the user record with any changed info from the auth service.
     'social_core.pipeline.user.user_details',
-    # Map Xemx Groups to Django Groups using their names
-    'prophecies.core.xemx.map_xemx_groups',
+    # Map Provider Groups to Django Groups using their names
+    'prophecies.core.oauth2_provider.map_provider_groups',
 )
 
 # Internationalization
@@ -263,7 +273,7 @@ CONSTANCE_CONFIG = {
     'avatarUrlTemplate': ('https://www.gravatar.com/avatar/{{ email_md5 }}', 'Template to build the avatar URL'),
     'defaultLocale': ('en', 'Define locale code (ie. "en", "fr", "jp", ...)'),
     'helpLink': ('https://github.com/ICIJ/prophecies/issues/new', 'Link to the support'),
-    'loginUrl': ('/login/xemx/?next=/', 'Link to create a user session'),
+    'loginUrl': ('/login/provider/?next=/', 'Link to create a user session'),
     'logoutUrl': ('/admin/logout/?next=/', 'Link to logout'),
     'orgName': ('ICIJ', 'Name of the organization deploying this app')
 }

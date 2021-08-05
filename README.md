@@ -31,16 +31,19 @@ make createsuperuser
 
 For more customization, this app utilizes [12factor](https://www.12factor.net/)
 inspired environment variables to configure your Django application. You can
-create `.env` file using the following variables:
+create `.env` file using the custom settings variables:
 
 ```
 DEBUG=on
 DATABASE_URL=
 CACHE_URL=dummycache://
 STATIC_URL=/static/
-SOCIAL_AUTH_XEMX_KEY=
-SOCIAL_AUTH_XEMX_SECRET=
-SOCIAL_AUTH_XEMX_HOSTNAME=http://xemx:3001
+SOCIAL_AUTH_PROVIDER_KEY=
+SOCIAL_AUTH_PROVIDER_SECRET=
+SOCIAL_AUTH_PROVIDER_HOSTNAME=http://localhost:3001
+SOCIAL_AUTH_PROVIDER_USERNAME_FIELD=uid
+SOCIAL_AUTH_PROVIDER_GROUPS_FIELD=groups_by_applications.prophecies
+SOCIAL_AUTH_PROVIDER_STAFF_GROUP=icijstaff
 ```
 
 ## Run
