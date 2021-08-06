@@ -84,8 +84,13 @@ export default {
       pagination: null
     }
   },
-  async created () {
-    await this.waitFor(this.fetchAllLoader, this.fetchAll)
+  watch: {
+    taskId () {
+      return this.setup()
+    }
+  },
+  created () {
+    return this.setup()
   },
   computed: {
     task () {
@@ -115,6 +120,15 @@ export default {
     }
   },
   methods: {
+    async setup () {
+      try {
+        await this.waitFor(this.fetchAllLoader, this.fetchAll)
+        this.$core.setPageTitle(this.task.name)
+      } catch (error) {
+        const title = 'Unable to found this task'
+        this.$router.replace({ name: 'error', params: { title, error } })
+      }
+    },
     fetchTask () {
       return Task.api().find(this.taskId)
     },
