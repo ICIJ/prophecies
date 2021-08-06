@@ -83,16 +83,18 @@ export default {
         </div>
         <div class="task-record-review-card__choice col-6">
           <div class="row align-items-center">
-            <div class="task-record-review-card__choice__form col-lg">
+            <div class="task-record-review-card__choice__form col-lg-6">
               <task-record-review-choice-form @submit="selectChoiceWithLoader" :task-record-review-id="taskRecordReviewId" />
             </div>
-            <div class="task-record-review-card__choice_history col-lg">
+            <div class="task-record-review-card__choice_history col-lg-6">
               <task-record-review-history :task-record-review-id="taskRecordReviewId" />
             </div>
           </div>
         </div>
         <div class="task-record-review-card__actions col-auto">
-          <b-badge variant="light">Actions</b-badge>
+          <b-badge variant="light">
+            Actions
+          </b-badge>
         </div>
       </div>
     </div>

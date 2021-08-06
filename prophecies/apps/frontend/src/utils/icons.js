@@ -11,6 +11,7 @@ export {
   HomeIcon,
   LifeBuoyIcon,
   LogOutIcon,
+  MessageSquareIcon,
   SearchIcon,
   ShieldIcon,
   SmileIcon,
