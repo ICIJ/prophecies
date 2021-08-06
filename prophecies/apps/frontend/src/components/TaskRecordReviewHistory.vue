@@ -29,6 +29,13 @@ export default {
   methods: {
     isMe (checker) {
       return checker.id === User.me().id
+    },
+    emitToggleNotes () {
+      /**
+       * @event toggle-notes
+       * @param TaskRecordReview
+       */
+      this.$emit('toggle-notes', this.taskRecordReview)
     }
   },
   computed: {
@@ -80,8 +87,13 @@ export default {
           {{ alternative_value | alternativeValueName }}
         </span>
       </div>
-      <b-btn variant="link" size="sm" class="task-record-review-history__checker__note" v-if="!!note" @click="$emit('toggle', id)">
-        <message-square-icon size="1x" class="mr-1" />1 note
+      <b-btn variant="link" size="sm" class="task-record-review-history__checker__note" @click="emitToggleNotes">
+        <template v-if="!!note">
+          <message-square-icon size="1x" class="mr-1" />1 note
+        </template>
+        <template v-else>
+          <edit-3-icon size="1x" class="mr-1" />Comment
+        </template>
       </b-btn>
     </div>
   </div>

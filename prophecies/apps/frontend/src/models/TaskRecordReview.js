@@ -32,18 +32,23 @@ export default class TaskRecordReview extends Model {
       find (id) {
         return this.get(`${id}/`)
       },
-      selectChoice (id, { choice, ...attributes }) {
-        const relationships = {
-          choice: {
-            data: {
-              type: 'Choice',
-              id: choice.id
-            }
-          }
-        }
+      save (id, { attributes = { }, relationships = { } } = { }) {
         const type = 'TaskRecordReview'
         const data = { type, id, attributes, relationships }
         return this.put(`${id}/`, { data }, { headers: defaultHeaders() })
+      },
+      selectChoice (id, { choice, ...attributes }) {
+        return this.save(id, {
+          attributes,
+          relationships: {
+            choice: {
+              data: {
+                type: 'Choice',
+                id: choice.id
+              }
+            }
+          }
+        })
       }
     }
   }

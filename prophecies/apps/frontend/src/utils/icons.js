@@ -6,6 +6,7 @@ export {
   ClockIcon,
   CommandIcon,
   CopyIcon,
+  Edit3Icon,
   FrownIcon,
   FilterIcon,
   GridIcon,

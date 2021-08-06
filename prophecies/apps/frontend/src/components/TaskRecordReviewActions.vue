@@ -60,23 +60,23 @@ export default {
 
 <template>
   <div class="task-record-review-actions" :class="classList">
-    <b-button-group vertical size="sm">
-      <b-button variant="link" class="text-dark" :href="link" target="_blank" v-if="link" title="Link" v-b-tooltip.left>
+    <b-btn-group vertical size="sm">
+      <b-btn variant="link" class="text-dark" :href="link" target="_blank" v-if="link" title="Link" v-b-tooltip.left>
         <link-icon size="1.5x" />
         <span class="sr-only">Link</span>
-      </b-button>
-      <b-button variant="link" class="text-dark" title="Copy" v-b-tooltip.left @click="emitCopy">
+      </b-btn>
+      <b-btn variant="link" class="text-dark" title="Copy" v-b-tooltip.left @click="emitCopy">
         <copy-icon size="1.5x" />
         <span class="sr-only">Copy</span>
-      </b-button>
-      <b-button variant="link" class="text-dark" title="Lock" v-b-tooltip.left @click="emitToggleLock">
+      </b-btn>
+      <b-btn variant="link" class="text-dark" title="Lock" v-b-tooltip.left @click="emitToggleLock">
         <unlock-icon size="1.5x" />
         <span class="sr-only">Lock</span>
-      </b-button>
-      <b-button variant="link" class="text-dark" title="See history" v-b-tooltip.left @click="emitHistory">
+      </b-btn>
+      <b-btn variant="link" class="text-dark" title="See history" v-b-tooltip.left @click="emitHistory">
         <clock-icon size="1.5x" />
         <span class="sr-only">See history</span>
-      </b-button>
-    </b-button-group>
+      </b-btn>
+    </b-btn-group>
   </div>
 </template>

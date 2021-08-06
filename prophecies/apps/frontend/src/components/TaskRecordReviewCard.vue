@@ -3,6 +3,7 @@ import { get, uniqueId } from 'lodash'
 import TaskRecordReviewActions from '@/components/TaskRecordReviewActions'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
 import TaskRecordReviewHistory from '@/components/TaskRecordReviewHistory'
+import TaskRecordReviewNotes from '@/components/TaskRecordReviewNotes'
 import TaskRecordReview from '@/models/TaskRecordReview'
 
 export default {
@@ -10,7 +11,13 @@ export default {
   components: {
     TaskRecordReviewActions,
     TaskRecordReviewChoiceForm,
-    TaskRecordReviewHistory
+    TaskRecordReviewHistory,
+    TaskRecordReviewNotes
+  },
+  data () {
+    return {
+      showNotes: false
+    }
   },
   props: {
     taskRecordReviewId: {
@@ -30,12 +37,17 @@ export default {
       // We use a dedicated method that will format the data for the JSONAPI spec
       // and return the updated object (the store shall be updated as well).
       await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, data)
+      // Hide node to avoid using unecessary space
+      this.showNotes = false
       /**
        * Fired when the task record review is updated
        * @event update
        * @param The updated attributes and relationships
        */
       this.$emit('update', data)
+    },
+    toggleNotes () {
+      this.showNotes = !this.showNotes
     }
   },
   computed: {
@@ -91,7 +103,7 @@ export default {
               <task-record-review-choice-form @submit="selectChoiceWithLoader" :task-record-review-id="taskRecordReviewId" />
             </div>
             <div class="task-record-review-card__choice_history col-xl-6">
-              <task-record-review-history :task-record-review-id="taskRecordReviewId" />
+              <task-record-review-history :task-record-review-id="taskRecordReviewId" @toggle-notes="toggleNotes" />
             </div>
           </div>
         </div>
@@ -99,6 +111,9 @@ export default {
           <task-record-review-actions :task-record-review-id="taskRecordReviewId" />
         </div>
       </div>
+      <b-collapse :visible="showNotes">
+        <task-record-review-notes :task-record-review-id="taskRecordReviewId" />
+      </b-collapse>
     </div>
   </b-overlay>
 </template>

@@ -26,7 +26,7 @@ class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     checker = ResourceRelatedField(many=False, read_only=True)
     collaborators = SerializerMethodResourceRelatedField(many=True, model=UserSerializer, read_only=True)
-    choice = ResourceRelatedField(many=False, queryset=Choice.objects)
+    choice = ResourceRelatedField(many=False, queryset=Choice.objects, required=False)
     task_record = ResourceRelatedField(many=False, read_only=True)
     history = SerializerMethodResourceRelatedField(many=True, model=TaskRecordReview, read_only=True)
     included_serializers = {
@@ -62,6 +62,12 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_collaborators(self, instance):
         return [ i.checker for i in instance.history if i.checker != instance.checker ]
+
+    # For some reason the validator require the choice to be set.
+    # This is a workaround to allow empty value for the choice relationship.
+    def get_validation_exclusions(self):
+        exclusions = super(TaskRecordReviewSerializer, self).get_validation_exclusions()
+        return exclusions + ['choice',]
 
 
 class TaskRecordReviewViewSet(viewsets.ModelViewSet):

@@ -93,5 +93,5 @@ class TaskRecord(models.Model):
         for task_record in TaskRecord.objects.all():
             task_record.update_rounds_and_status()
 
-
-signals.post_save.connect(TaskRecord.signal_update_all_rounds_and_status, sender=Task)
+# Disable temporarly
+# signals.post_save.connect(TaskRecord.signal_update_all_rounds_and_status, sender=Task)
