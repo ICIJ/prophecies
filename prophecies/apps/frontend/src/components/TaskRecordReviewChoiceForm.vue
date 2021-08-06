@@ -38,23 +38,17 @@ export default {
         'task-record-review-choice-form__choices__item--selected': this.choiceIsSelected(choice)
       }
     },
-    async selectChoiceWithLoader (choice) {
+    async selectChoice (choice) {
       if (choice.require_alternative_value && !this.alternativeValue) {
         return this.$refs.alternativeValueInput.focus()
       }
-      this.$wait.start(this.updateLoader)
-      await this.selectChoice(choice)
-      this.$wait.end(this.updateLoader)
-    },
-    async selectChoice (choice) {
       const alternativeValue = choice.require_alternative_value ? this.alternativeValue : ''
       const note = this.note
       const data = { alternative_value: alternativeValue, choice, note }
-      await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, data)
       /**
-       * @event Fired when the task record review is updated
+       * @event Fired when the form is submitted
        */
-      this.$emit('update')
+      this.$emit('submit', data)
     },
     async selectAlternativeValue () {
       await this.selectChoice(this.alternativeValueChoice)
@@ -65,9 +59,6 @@ export default {
     }
   },
   computed: {
-    updateLoader () {
-      return uniqueId('update-task-record-review-')
-    },
     taskRecordReview () {
       return TaskRecordReview
         .query()
@@ -105,44 +96,35 @@ export default {
     },
     hasNote () {
       return !!get(this, 'taskRecordReview.note', '')
-    },
-    overlayVariant () {
-      if (this.taskRecordReview.status === 'DONE') {
-        return 'lighter'
-      }
-      return 'white'
     }
   }
 }
 </script>
 
 <template>
-  <b-overlay :show="$wait.is(updateLoader)" :variant="overlayVariant">
-    <b-spinner variant="light" slot="overlay" />
-    <fieldset class="task-record-review-choice-form py-1" :class="classList">
-      <ul class="task-record-review-choice-form__choices list-unstyled row no-gutters m-0">
-        <li v-for="choice in choiceGroup.choices" :key="choice.id" class="col px-2 pb-3">
-          <b-btn @click="selectChoiceWithLoader(choice)"
-                 block
-                 class="task-record-review-choice-form__choices__item"
-                 :class="choiceClassList(choice)"
-                 :variant="choice.value | toVariant">
-            {{ choice.name }}
-          </b-btn>
-        </li>
-      </ul>
-      <div class="px-2 task-record-review-choice-form__alternative-value" v-if="alternativeValueChoice">
-        <b-form-select v-model="alternativeValue" @change="selectAlternativeValue" class="mb-3" ref="alternativeValueInput">
-          <b-form-select-option value="">
-            Select the correct value
-          </b-form-select-option>
-          <b-form-select-option v-for="{ id, value, name } in alternativeValues" :value="value" :key="id">
-            {{ name }}
-          </b-form-select-option>
-        </b-form-select>
-      </div>
-    </fieldset>
-  </b-overlay>
+  <fieldset class="task-record-review-choice-form py-1" :class="classList">
+    <ul class="task-record-review-choice-form__choices list-unstyled row no-gutters m-0">
+      <li v-for="choice in choiceGroup.choices" :key="choice.id" class="col px-2 pb-3">
+        <b-btn @click="selectChoice(choice)"
+               block
+               class="task-record-review-choice-form__choices__item"
+               :class="choiceClassList(choice)"
+               :variant="choice.value | toVariant">
+          {{ choice.name }}
+        </b-btn>
+      </li>
+    </ul>
+    <div class="px-2 task-record-review-choice-form__alternative-value" v-if="alternativeValueChoice">
+      <b-form-select v-model="alternativeValue" @change="selectAlternativeValue" class="mb-3" ref="alternativeValueInput">
+        <b-form-select-option value="">
+          Select the correct value
+        </b-form-select-option>
+        <b-form-select-option v-for="{ id, value, name } in alternativeValues" :value="value" :key="id">
+          {{ name }}
+        </b-form-select-option>
+      </b-form-select>
+    </div>
+  </fieldset>
 </template>
 
 <style lang="scss" scoped>
