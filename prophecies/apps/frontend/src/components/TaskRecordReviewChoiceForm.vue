@@ -17,8 +17,7 @@ export default {
   },
   data () {
     return {
-      alternativeValue: '',
-      note: ''
+      alternativeValue: ''
     }
   },
   created () {
@@ -43,8 +42,7 @@ export default {
         return this.$refs.alternativeValueInput.focus()
       }
       const alternativeValue = choice.require_alternative_value ? this.alternativeValue : ''
-      const note = this.note
-      const data = { alternative_value: alternativeValue, choice, note }
+      const data = { alternative_value: alternativeValue, choice }
       /**
        * @event Fired when the form is submitted
        */
@@ -55,7 +53,6 @@ export default {
     },
     setInitialValues () {
       this.alternativeValue = get(this, 'taskRecordReview.alternative_value', '')
-      this.note = get(this, 'taskRecordReview.note', '')
     }
   },
   computed: {
@@ -84,8 +81,7 @@ export default {
     classList () {
       return {
         'task-record-review-choice-form--has-choice': this.hasChoice,
-        'task-record-review-choice-form--has-alternative-value': this.hasAlternativeValue,
-        'task-record-review-choice-form--has-note': this.hasNote
+        'task-record-review-choice-form--has-alternative-value': this.hasAlternativeValue
       }
     },
     hasAlternativeValue () {
@@ -93,9 +89,6 @@ export default {
     },
     hasChoice () {
       return !!get(this, 'taskRecordReview.choice', false)
-    },
-    hasNote () {
-      return !!get(this, 'taskRecordReview.note', '')
     }
   }
 }
