@@ -31,6 +31,29 @@ export default {
     link () {
       return get(this, 'taskRecordReview.task_record.link')
     }
+  },
+  methods: {
+    emitCopy () {
+      /**
+       * @event copy
+       * @param TaskRecordReview
+       */
+      this.$emit('copy', this.taskRecordReview)
+    },
+    emitToggleLock () {
+      /**
+       * @event toggle-lock
+       * @param TaskRecordReview
+       */
+      this.$emit('toggle-lock', this.taskRecordReview)
+    },
+    emitHistory () {
+      /**
+       * @event history
+       * @param TaskRecordReview
+       */
+      this.$emit('history', this.taskRecordReview)
+    }
   }
 }
 </script>
@@ -42,15 +65,15 @@ export default {
         <link-icon size="1.5x" />
         <span class="sr-only">Link</span>
       </b-button>
-      <b-button variant="link" class="text-dark" title="Copy" v-b-tooltip.left>
+      <b-button variant="link" class="text-dark" title="Copy" v-b-tooltip.left @click="emitCopy">
         <copy-icon size="1.5x" />
         <span class="sr-only">Copy</span>
       </b-button>
-      <b-button variant="link" class="text-dark" title="Lock" v-b-tooltip.left>
+      <b-button variant="link" class="text-dark" title="Lock" v-b-tooltip.left @click="emitToggleLock">
         <unlock-icon size="1.5x" />
         <span class="sr-only">Lock</span>
       </b-button>
-      <b-button variant="link" class="text-dark" title="See history" v-b-tooltip.left>
+      <b-button variant="link" class="text-dark" title="See history" v-b-tooltip.left @click="emitHistory">
         <clock-icon size="1.5x" />
         <span class="sr-only">See history</span>
       </b-button>
