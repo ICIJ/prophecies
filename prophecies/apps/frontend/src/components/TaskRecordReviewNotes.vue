@@ -65,6 +65,10 @@ export default {
 
 <template>
   <div class="task-record-review-notes">
+    <b-btn class="task-record-review-notes__close text-muted" variant="link" squared size="sm" @click="$emit('close')">
+      <x-icon />
+      <span class="sr-only">Close</span>
+    </b-btn>
     <div v-for="{ id, checker, note } in history" :key="id" class="task-record-review-notes__item">
       <div class="task-record-review-notes__item__checker">
         <span class="text-truncate">
@@ -109,6 +113,15 @@ export default {
   .task-record-review-notes {
     max-width: 630px;
     margin: auto;
+    position: relative;
+
+    &__close {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      margin-left: $spacer;
+      background: #F5F5F5;
+    }
 
     &__item {
       background: #F5F5F5;

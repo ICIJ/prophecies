@@ -20,5 +20,6 @@ export {
   SmileIcon,
   TrelloIcon,
   UsersIcon,
-  UnlockIcon
+  UnlockIcon,
+  XIcon
 } from 'vue-feather-icons'
