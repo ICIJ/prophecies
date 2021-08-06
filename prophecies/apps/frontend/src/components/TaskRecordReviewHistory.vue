@@ -1,6 +1,9 @@
 <script>
+import { get } from 'lodash'
+
 import User from '@/models/User'
 import { toVariant } from '@/utils/variant'
+import AlternativeValue from '@/models/AlternativeValue'
 import TaskRecordReview from '@/models/TaskRecordReview'
 
 export default {
@@ -12,6 +15,10 @@ export default {
     },
     skipFirstLetter (str) {
       return String(str).slice(1)
+    },
+    alternativeValueName (value) {
+      const alternativeValue = AlternativeValue.query('value', value).first()
+      return get(alternativeValue, 'name', value)
     }
   },
   props: {
@@ -70,7 +77,7 @@ export default {
       </div>
       <div class="task-record-review-history__checker__alternative-value flex-grow-1">
         <span class="text-truncate">
-          {{ alternative_value }}
+          {{ alternative_value | alternativeValueName }}
         </span>
       </div>
       <b-btn variant="link" size="sm" class="task-record-review-history__checker__note" v-if="!!note" @click="$emit('toggle', id)">

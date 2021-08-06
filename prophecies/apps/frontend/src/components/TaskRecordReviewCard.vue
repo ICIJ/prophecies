@@ -1,5 +1,6 @@
 <script>
 import { get, uniqueId } from 'lodash'
+import TaskRecordReviewActions from '@/components/TaskRecordReviewActions'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
 import TaskRecordReviewHistory from '@/components/TaskRecordReviewHistory'
 import TaskRecordReview from '@/models/TaskRecordReview'
@@ -7,6 +8,7 @@ import TaskRecordReview from '@/models/TaskRecordReview'
 export default {
   name: 'TaskRecordReviewCard',
   components: {
+    TaskRecordReviewActions,
     TaskRecordReviewChoiceForm,
     TaskRecordReviewHistory
   },
@@ -70,7 +72,7 @@ export default {
 <template>
   <b-overlay :show="$wait.is(updateLoader)" :variant="overlayVariant" rounded="lg">
     <b-spinner variant="light" slot="overlay" />
-    <div class="task-record-review-card card card-body py-5 px-4" :class="classList">
+    <div class="task-record-review-card card card-body p-4" :class="classList">
       <div class="row align-items-center">
         <div class="task-record-review-card__id col-auto font-weight-bold">
           {{ taskRecordReview.task_record.id }}
@@ -81,20 +83,18 @@ export default {
         <div class="task-record-review-card__original-value col-1 font-weight-bold">
           {{ taskRecordReview.task_record.predicted_value }}
         </div>
-        <div class="task-record-review-card__choice col-6">
+        <div class="task-record-review-card__choice col">
           <div class="row align-items-center">
-            <div class="task-record-review-card__choice__form col-lg-6">
+            <div class="task-record-review-card__choice__form col-xl-6">
               <task-record-review-choice-form @submit="selectChoiceWithLoader" :task-record-review-id="taskRecordReviewId" />
             </div>
-            <div class="task-record-review-card__choice_history col-lg-6">
+            <div class="task-record-review-card__choice_history col-xl-6">
               <task-record-review-history :task-record-review-id="taskRecordReviewId" />
             </div>
           </div>
         </div>
         <div class="task-record-review-card__actions col-auto">
-          <b-badge variant="light">
-            Actions
-          </b-badge>
+          <task-record-review-actions :task-record-review-id="taskRecordReviewId" />
         </div>
       </div>
     </div>
@@ -112,6 +112,16 @@ export default {
 
     &--done {
       background: $lighter;
+    }
+
+    &__actions {
+      min-width: 0;
+      opacity: 0.25;
+    }
+
+    &:hover &__actions,
+    &--active &__actions {
+      opacity: 1;
     }
   }
 </style>

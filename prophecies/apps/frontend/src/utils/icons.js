@@ -5,16 +5,19 @@ export {
   CodeIcon,
   ClockIcon,
   CommandIcon,
+  CopyIcon,
   FrownIcon,
   FilterIcon,
   GridIcon,
   HomeIcon,
   LifeBuoyIcon,
+  LinkIcon,
   LogOutIcon,
   MessageSquareIcon,
   SearchIcon,
   ShieldIcon,
   SmileIcon,
   TrelloIcon,
-  UsersIcon
+  UsersIcon,
+  UnlockIcon
 } from 'vue-feather-icons'

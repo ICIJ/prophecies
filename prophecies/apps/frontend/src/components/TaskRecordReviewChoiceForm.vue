@@ -107,7 +107,7 @@ export default {
       <li v-for="choice in choiceGroup.choices" :key="choice.id" class="col px-2 pb-3">
         <b-btn @click="selectChoice(choice)"
                block
-               class="task-record-review-choice-form__choices__item"
+               class="task-record-review-choice-form__choices__item text-nowrap"
                :class="choiceClassList(choice)"
                :variant="choice.value | toVariant">
           {{ choice.name }}
