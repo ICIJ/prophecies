@@ -1,4 +1,5 @@
 <script>
+import { get } from 'lodash'
 import AppVersion from '@/components/AppVersion'
 import User from '@/models/User'
 
@@ -9,28 +10,41 @@ export default {
   },
   props: {
     error: {
-      type: [String, Error]
+      type: [String, Error],
+      default: null
     },
     title: {
-      type: String
+      type: String,
+      default: null
     },
     description: {
-      type: String
+      type: String,
+      default: null
     },
     code: {
-      type: Number
+      type: Number,
+      default: null
     }
   },
   computed: {
+    codeAsString () {
+      return this.code || get(this, 'error.response.status')
+    },
     username () {
       const { username = null } = User.me() || {}
       return username
     },
     titleAsString () {
       if (!this.title) {
-        return this.error instanceof Error ? this.error.message : this.error
+        return get(this, 'error.response.statusText', this.error)
       }
       return this.title
+    },
+    descriptionAsString () {
+      if (!this.description) {
+        return get(this, 'error.message')
+      }
+      return this.description
     },
     helpLink () {
       return this.$config.get('helpLink')
@@ -60,12 +74,12 @@ export default {
         <h1 class="mb-3 error__container__heading">
           <span class="error__container__heading__code mr-3">
             <frown-icon class="error__container__heading__code__icon" />
-            <span class="px-2 error__container__heading__code__value">{{ code }}</span>
+            <span class="px-2 error__container__heading__code__value">{{ codeAsString }}</span>
           </span>
           {{ titleAsString || $t('error.title') }}
         </h1>
         <p class="error__container__description lead">
-          {{ description || $t('error.description') }}
+          {{ descriptionAsString || $t('error.description') }}
         </p>
         <ul class="error__container__links list-inline text-capitalize">
           <li class="list-inline-item error__container__links__item">
