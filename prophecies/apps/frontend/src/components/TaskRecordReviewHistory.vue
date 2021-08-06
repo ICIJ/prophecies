@@ -17,8 +17,8 @@ export default {
       return String(str).slice(1)
     },
     alternativeValueName (value) {
-      const alternativeValue = AlternativeValue.query('value', value).first()
-      return get(alternativeValue, 'name', value)
+      const alternativeValue = AlternativeValue.query().where('value', value).first()
+      return get(alternativeValue, 'name', '')
     }
   },
   props: {

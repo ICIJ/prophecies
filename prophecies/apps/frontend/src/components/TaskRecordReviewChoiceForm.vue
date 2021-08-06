@@ -17,7 +17,7 @@ export default {
   },
   data () {
     return {
-      alternativeValue: ''
+      alternativeValue: null
     }
   },
   created () {
@@ -41,12 +41,12 @@ export default {
       if (choice.require_alternative_value && !this.alternativeValue) {
         return this.$refs.alternativeValueInput.focus()
       }
-      const alternativeValue = choice.require_alternative_value ? this.alternativeValue : ''
+      const alternativeValue = choice.require_alternative_value ? this.alternativeValue : null
       const data = { alternative_value: alternativeValue, choice }
       /**
        * Fired when the form is submitted
        * @event submit
-       * @param The changed attributes and relationships 
+       * @param The changed attributes and relationships
        */
       this.$emit('submit', data)
     },
@@ -54,7 +54,7 @@ export default {
       await this.selectChoice(this.alternativeValueChoice)
     },
     setInitialValues () {
-      this.alternativeValue = get(this, 'taskRecordReview.alternative_value', '')
+      this.alternativeValue = get(this, 'taskRecordReview.alternative_value', null) || null
     }
   },
   computed: {
@@ -87,7 +87,7 @@ export default {
       }
     },
     hasAlternativeValue () {
-      return !!get(this, 'taskRecordReview.alternative_value', '')
+      return !!get(this, 'taskRecordReview.alternative_value', null)
     },
     hasChoice () {
       return !!get(this, 'taskRecordReview.choice', false)
@@ -111,7 +111,7 @@ export default {
     </ul>
     <div class="px-2 task-record-review-choice-form__alternative-value" v-if="alternativeValueChoice">
       <b-form-select v-model="alternativeValue" @change="selectAlternativeValue" class="mb-3" ref="alternativeValueInput">
-        <b-form-select-option value="">
+        <b-form-select-option :value="null">
           Select the correct value
         </b-form-select-option>
         <b-form-select-option v-for="{ id, value, name } in alternativeValues" :value="value" :key="id">
