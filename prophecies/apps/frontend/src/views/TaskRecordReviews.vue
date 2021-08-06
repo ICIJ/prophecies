@@ -86,8 +86,8 @@ export default {
     }
   },
   watch: {
-    taskId () {
-      return this.setup()
+    page () {
+      return this.waitFor(this.fetchAllLoader, this.fetchTaskRecordReviews)
     }
   },
   created () {
@@ -149,7 +149,6 @@ export default {
     async goToPage (page) {
       const query = { ...this.$route_query, page }
       await this.$router.push({ path: this.$route.path, query }, () => {})
-      await this.waitFor(this.fetchAllLoader, this.fetchTaskRecordReviews)
     },
     async goToNextPage () {
       const currentPage = parseInt(this.page)
