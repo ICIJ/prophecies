@@ -77,7 +77,6 @@ export default {
         <message-square-icon size="1x" class="mr-1" />1 note
       </b-btn>
     </div>
-    </ul>
   </div>
 </template>
 
