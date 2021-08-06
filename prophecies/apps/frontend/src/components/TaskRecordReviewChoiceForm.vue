@@ -44,7 +44,9 @@ export default {
       const alternativeValue = choice.require_alternative_value ? this.alternativeValue : ''
       const data = { alternative_value: alternativeValue, choice }
       /**
-       * @event Fired when the form is submitted
+       * Fired when the form is submitted
+       * @event submit
+       * @param The changed attributes and relationships 
        */
       this.$emit('submit', data)
     },

@@ -43,6 +43,7 @@
           </div>
           <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
             <task-record-review-card
+              @update="scrollToActiveTaskRecordReviewCard({ id })"
               :task-record-review-id="id"
               :active="isTaskRecordReviewActive(id)" />
           </div>
@@ -111,6 +112,9 @@ export default {
         'page[number]': this.page
       }
     },
+    trailingTaskRecordReview () {
+      return this.taskRecordReviews[this.taskRecordReviews.length - 1]
+    },
     fetchAllLoader () {
       return uniqueId('load-task-record-review-')
     },
@@ -144,11 +148,29 @@ export default {
     },
     async goToPage (page) {
       const query = { ...this.$route_query, page }
-      await this.$router.push({ path: this.$route.path, query })
+      await this.$router.push({ path: this.$route.path, query }, () => {})
       await this.waitFor(this.fetchAllLoader, this.fetchTaskRecordReviews)
+    },
+    async goToNextPage () {
+      const currentPage = parseInt(this.page)
+      // Don't go to a page if it doesn't exist
+      if (currentPage < parseInt(this.pagination.pages)) {
+        return this.goToPage(currentPage + 1)
+      }
+    },
+    async scrollToActiveTaskRecordReviewCard ({ id }) {
+      if (!this.firstPendingTaskRecordReview && this.isTrailingTaskRecordReview(id)) {
+        return this.goToNextPage()
+      }
+      const selector = '.task-record-review-card--active'
+      const options = { behavior: 'smooth', block: 'center' }
+      this.$el.querySelector(selector)?.scrollIntoView(options)
     },
     isTaskRecordReviewActive (id) {
       return get(this, 'firstPendingTaskRecordReview.id') === id
+    },
+    isTrailingTaskRecordReview (id) {
+      return this.trailingTaskRecordReview.id === id
     },
     async fetchAll () {
       await this.fetchTask()

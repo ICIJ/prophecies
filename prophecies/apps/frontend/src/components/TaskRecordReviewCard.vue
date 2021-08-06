@@ -31,7 +31,9 @@ export default {
       // and return the updated object (the store shall be updated as well).
       await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, data)
       /**
-       * @event Fired when the task record review is updated
+       * Fired when the task record review is updated
+       * @event update
+       * @param The updated attributes and relationships
        */
       this.$emit('update', data)
     }
