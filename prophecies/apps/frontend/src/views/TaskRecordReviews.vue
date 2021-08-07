@@ -47,6 +47,13 @@
               :task-record-review-id="id"
               :active="isTaskRecordReviewActive(id)" />
           </div>
+          <custom-pagination
+            @input="goToPage"
+            class="mx-auto"
+            compact
+            :value="Number(page)"
+            :total-rows="pagination.count"
+            :per-page="10" />
         </app-waiter>
       </div>
     </div>
