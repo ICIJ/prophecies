@@ -141,7 +141,7 @@ class TaskRecordAdmin(admin.ModelAdmin):
         form = extra_context.get('form', TaskRecordUploadForm(initial={'task': task}))
         title = 'Upload task records'
         context = self.build_intermediate_form_context(request=request, form=form, title=title)
-        return render(request, "admin/task_record_upload_form.html", context)
+        return render(request, "admin/upload_form.html", context)
 
 
     def upload_form_handler(self, request):

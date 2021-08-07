@@ -1,45 +1,23 @@
-import csv
-import io
-
 from django import forms
-from django.core.exceptions import ValidationError
-from functools import lru_cache
-from prophecies.core.models import Task
-from prophecies.core.models import TaskRecord
+from prophecies.core.models import Task, TaskRecord
+from prophecies.core.forms import AbstractUploadForm
 
 
-class TaskRecordUploadForm(forms.Form):
+class TaskRecordUploadForm(AbstractUploadForm):
     csv_file = forms.FileField(required=True, label="CSV file")
     task = forms.ModelChoiceField(required=True, queryset=Task.objects.all())
 
-    ALLOWED_MODEL_FIELDS = ['original_value', 'predicted_value', 'uid', 'metadata']
-
-
-    def csv_valid_fieldnames(self):
-        return [ f.name for f in TaskRecord._meta.get_fields() ]
-
-
-    def clean_csv_file(self):
-        csv_fieldnames = self.csv_file_reader().fieldnames or []
-        for fieldname in csv_fieldnames:
-            if fieldname not in self.csv_valid_fieldnames():
-                raise ValidationError('Your CSV contains a column "%s" which is not a valid' % fieldname)
-        return self.cleaned_data['csv_file']
+    class Meta:
+        model = TaskRecord
+        csv_columns = ['original_value', 'predicted_value', 'uid', 'metadata']
 
 
     def row_to_task_record(self, task, row={}):
         opts = { 'task': task }
         # collect allowed model field
-        for field_name in TaskRecordUploadForm.ALLOWED_MODEL_FIELDS:
+        for field_name in self._meta.csv_columns:
             opts[field_name] = row.get(field_name, None)
         return TaskRecord(**opts)
-
-
-    @lru_cache(maxsize=None)
-    def csv_file_reader(self):
-        csv_file = self.cleaned_data["csv_file"]
-        stream = io.StringIO(csv_file.read().decode("UTF8"), newline=None)
-        return csv.DictReader(stream)
 
 
     def save(self, commit=True):
@@ -63,5 +41,5 @@ class TaskRecordUploadForm(forms.Form):
         # And finally, create and update all the task record at once)
         if commit:
             TaskRecord.objects.bulk_create(queues['bulk_create'])
-            TaskRecord.objects.bulk_update(queues['bulk_update'], TaskRecordUploadForm.ALLOWED_MODEL_FIELDS)
+            TaskRecord.objects.bulk_update(queues['bulk_update'], self._meta.csv_columns)
         return queues
