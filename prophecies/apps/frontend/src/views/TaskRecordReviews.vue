@@ -48,6 +48,7 @@
               :active="isTaskRecordReviewActive(id)" />
           </div>
           <custom-pagination
+            v-if="pagination"
             @input="goToPage"
             class="mx-auto"
             compact

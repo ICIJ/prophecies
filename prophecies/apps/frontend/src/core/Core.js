@@ -122,7 +122,7 @@ class Core {
   useCommons () {
     // Common plugins
     this.use(Murmur)
-    this.use(VueShortkey, {})
+    this.use(VueShortkey, { prevent: ['input', 'textarea'] })
     this.use(VueScrollTo)
     return this
   }

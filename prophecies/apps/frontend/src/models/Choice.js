@@ -10,6 +10,7 @@ export default class Choice extends Model {
       name: this.string(),
       value: this.string(),
       requireAlternativeValue: this.boolean(),
+      shortkeys: this.string(null).nullable(),
       choiceGroup_id: this.attr(null),
       choiceGroup: this.belongsTo(ChoiceGroup, 'choiceGroup_id')
     }

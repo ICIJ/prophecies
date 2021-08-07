@@ -26,14 +26,16 @@ export default {
 </script>
 
 <template>
-  <span class="shortkey-badge badge bg-white font-weight-normal text-secondary">
+  <span class="shortkey-badge badge font-weight-normal">
     {{ keysAsString }}
   </span>
 </template>
 
 <style lang="scss" scoped>
   .shortkey-badge {
+    color: $secondary;
     border: 1px solid currentColor;
-    background: transparent !important;
+    background: transparent;
+    min-width: calc(1em + #{$badge-padding-x * 2});
   }
 </style>

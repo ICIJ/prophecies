@@ -4,13 +4,20 @@ import { toVariant } from '@/utils/variant'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import TaskRecordReview from '@/models/TaskRecordReview'
+import ShortkeyBadge from '@/components/ShortkeyBadge'
 
 export default {
   name: 'TaskRecordReviewChoiceForm',
   props: {
     taskRecordReviewId: {
       type: [String, Number]
+    },
+    activateShortkeys: {
+      type: Boolean
     }
+  },
+  components: {
+    ShortkeyBadge
   },
   filters: {
     toVariant
@@ -36,6 +43,12 @@ export default {
       return {
         'task-record-review-choice-form__choices__item--selected': this.choiceIsSelected(choice)
       }
+    },
+    choiceShortkeys (choice) {
+      if (!this.activateShortkeys || !choice.shortkeys) {
+        return null
+      }
+      return choice.shortkeys.split(',')
     },
     async selectChoice (choice) {
       if (choice.requireAlternativeValue && !this.alternativeValue) {
@@ -101,11 +114,16 @@ export default {
     <ul class="task-record-review-choice-form__choices list-unstyled row">
       <li v-for="choice in choiceGroup.choices" :key="choice.id" class="col pb-3 task-record-review-choice-form__choices__item">
         <b-btn @click="selectChoice(choice)"
+               @shortkey="selectChoice(choice)"
+               v-shortkey="choiceShortkeys(choice)"
                block
                class="task-record-review-choice-form__choices__item__button text-nowrap"
                :class="choiceClassList(choice)"
                :variant="choice.value | toVariant">
           {{ choice.name }}
+          <template v-if="choiceShortkeys(choice)">
+            <shortkey-badge class="ml-1" :value="choice.shortkeys" />
+          </template>
         </b-btn>
       </li>
     </ul>
@@ -133,6 +151,10 @@ export default {
         font-weight: normal;
         padding: 0 $spacer-xs;
         transition: $transition-fade;
+
+        &__button /deep/ .shortkey-badge {
+          color: inherit;
+        }
       }
 
       .task-record-review-choice-form--has-choice:not(:hover) &__item {
