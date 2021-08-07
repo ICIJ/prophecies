@@ -98,19 +98,19 @@ export default {
 
 <template>
   <fieldset class="task-record-review-choice-form py-1" :class="classList">
-    <ul class="task-record-review-choice-form__choices list-unstyled row no-gutters m-0">
-      <li v-for="choice in choiceGroup.choices" :key="choice.id" class="col px-2 pb-3">
+    <ul class="task-record-review-choice-form__choices list-unstyled row">
+      <li v-for="choice in choiceGroup.choices" :key="choice.id" class="col pb-3 task-record-review-choice-form__choices__item">
         <b-btn @click="selectChoice(choice)"
                block
-               class="task-record-review-choice-form__choices__item text-nowrap"
+               class="task-record-review-choice-form__choices__item__button text-nowrap"
                :class="choiceClassList(choice)"
                :variant="choice.value | toVariant">
           {{ choice.name }}
         </b-btn>
       </li>
     </ul>
-    <div class="px-2 task-record-review-choice-form__alternative-value" v-if="alternativeValueChoice">
-      <b-form-select v-model="alternativeValue" @change="selectAlternativeValue" class="mb-3" ref="alternativeValueInput">
+    <div class="task-record-review-choice-form__alternative-value" v-if="alternativeValueChoice">
+      <b-form-select v-model="alternativeValue" @change="selectAlternativeValue"  ref="alternativeValueInput">
         <b-form-select-option :value="null">
           Select the correct value
         </b-form-select-option>
@@ -126,9 +126,12 @@ export default {
   .task-record-review-choice-form {
 
     &__choices {
+      margin: 0 -$spacer-xs;
+      margin-bottom: 0;
 
       &__item {
         font-weight: normal;
+        padding: 0 $spacer-xs;
       }
 
       .task-record-review-choice-form--has-choice &__item {

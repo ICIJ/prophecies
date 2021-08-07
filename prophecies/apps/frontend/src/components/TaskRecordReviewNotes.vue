@@ -114,22 +114,36 @@ export default {
     max-width: 630px;
     margin: auto;
     position: relative;
+    padding: $spacer-xs 0 0;
+    display: flex;
+    flex-direction: column;
 
     &__close {
       position: absolute;
-      top: 0;
+      top: $spacer-xs;
       left: 100%;
       margin-left: $spacer;
       background: #F5F5F5;
+
+
+      @media (max-width: 860px) {
+        position: static;
+        margin: 0;
+        margin-left: auto;
+      }
     }
 
     &__item {
       background: #F5F5F5;
-      margin-bottom: $spacer-xl;
       padding: $spacer-lg $spacer-xl;
       display: flex;
       flex-direction: row;
       align-items: flex-start;
+      margin-bottom: $spacer-xl;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
 
       &__checker {
         display: flex;

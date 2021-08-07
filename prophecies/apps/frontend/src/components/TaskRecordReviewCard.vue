@@ -88,13 +88,13 @@ export default {
     <b-spinner variant="light" slot="overlay" />
     <div class="task-record-review-card card card-body p-4" :class="classList">
       <div class="row align-items-center">
-        <div class="task-record-review-card__id col-auto font-weight-bold">
+        <div class="task-record-review-card__id col-1 col-lg-auto font-weight-bold pb-4 text-nowrap">
           {{ taskRecordReview.task_record.id }}
         </div>
-        <div class="task-record-review-card__original-value col-3 font-weight-bold">
+        <div class="task-record-review-card__original-value col-8 col-lg-3 font-weight-bold pb-4 text-center text-lg-left">
           {{ taskRecordReview.task_record.original_value }}
         </div>
-        <div class="task-record-review-card__original-value col-1 font-weight-bold">
+        <div class="task-record-review-card__original-value col-3 col-lg-1 font-weight-bold pb-4 text-center text-lg-left">
           {{ taskRecordReview.task_record.predicted_value }}
         </div>
         <div class="task-record-review-card__choice col">
