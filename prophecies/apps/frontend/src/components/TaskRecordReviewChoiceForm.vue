@@ -87,10 +87,10 @@ export default {
       }
     },
     hasAlternativeValue () {
-      return !!get(this, 'taskRecordReview.alternative_value', null)
+      return get(this, 'taskRecordReview.alternative_value', false)
     },
     hasChoice () {
-      return !!get(this, 'taskRecordReview.choice', false)
+      return !!get(this, 'taskRecordReview.choice_id', false)
     }
   }
 }
@@ -132,9 +132,10 @@ export default {
       &__item {
         font-weight: normal;
         padding: 0 $spacer-xs;
+        transition: $transition-fade;
       }
 
-      .task-record-review-choice-form--has-choice &__item {
+      .task-record-review-choice-form--has-choice:not(:hover) &__item {
         opacity: 0.25;
       }
 
@@ -144,7 +145,11 @@ export default {
       }
     }
 
-    &--has-choice:not(&--has-alternative-value) &__alternative-value select:not(:focus) {
+    &__alternative-value select {      
+      transition: $transition-fade;
+    }
+
+    &--has-choice:not(:hover):not(&--has-alternative-value) &__alternative-value select:not(:focus) {
       opacity: 0.25;
     }
   }
