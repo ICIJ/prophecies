@@ -42,7 +42,7 @@ export default {
         return this.$refs.alternativeValueInput.focus()
       }
       const alternativeValue = choice.requireAlternativeValue ? this.alternativeValue : null
-      const data = { alternativeValue: alternativeValue, choice }
+      const data = { alternativeValue, choice }
       /**
        * Fired when the form is submitted
        * @event submit
@@ -145,7 +145,7 @@ export default {
       }
     }
 
-    &__alternative-value select {      
+    &__alternative-value select {
       transition: $transition-fade;
     }
 
