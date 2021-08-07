@@ -63,7 +63,7 @@ export default {
       if (this.team) {
         return task.progress
       }
-      return task.user_progress
+      return task.userProgress
     }
   },
   computed: {

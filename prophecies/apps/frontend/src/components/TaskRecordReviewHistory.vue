@@ -50,7 +50,7 @@ export default {
         .find(this.taskRecordReviewId)
     },
     taskRecordId () {
-      return this.taskRecordReview.task_record_id
+      return this.taskRecordReview.taskRecord_id
     },
     history () {
       return [this.taskRecordReview, ...this.taskRecordReview.history]
@@ -68,10 +68,10 @@ export default {
 
 <template>
   <div class="task-record-review-history">
-    <div class="task-record-review-history__checker d-flex p-1" v-for="{ id, checker, alternative_value, choice, note } in history" :key="id">
+    <div class="task-record-review-history__checker d-flex p-1" v-for="{ id, checker, alternativeValue, choice, note } in history" :key="id">
       <div class="task-record-review-history__checker__name">
         <span class="text-truncate">
-          {{ checker.first_name || checker.username }}
+          {{ checker.firstName || checker.username }}
           <template v-if="isMe(checker)">
             (you)
           </template>
@@ -84,7 +84,7 @@ export default {
       </div>
       <div class="task-record-review-history__checker__alternative-value flex-grow-1">
         <span class="text-truncate">
-          {{ alternative_value | alternativeValueName }}
+          {{ alternativeValue | alternativeValueName }}
         </span>
       </div>
       <b-btn variant="link" size="sm" class="task-record-review-history__checker__note" @click="emitToggleNotes">

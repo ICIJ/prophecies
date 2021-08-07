@@ -14,14 +14,14 @@ export default class TaskRecordReview extends Model {
       url: this.string(),
       status: this.string(),
       note: this.string(),
-      alternative_value: this.string(null).nullable(),
+      alternativeValue: this.string(null).nullable(),
       choice_id: this.attr(null),
       choice: this.belongsTo(Choice, 'choice_id'),
-      task_record_id: this.attr(null),
-      task_record: this.belongsTo(TaskRecord, 'task_record_id'),
+      taskRecord_id: this.attr(null),
+      taskRecord: this.belongsTo(TaskRecord, 'taskRecord_id'),
       checker_id: this.attr(null),
       checker: this.belongsTo(User, 'checker_id'),
-      history: this.hasMany(TaskRecordReview, 'task_record_id')
+      history: this.hasMany(TaskRecordReview, 'taskRecord_id')
     }
   }
 

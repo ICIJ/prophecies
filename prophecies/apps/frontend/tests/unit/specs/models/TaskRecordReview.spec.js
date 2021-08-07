@@ -16,7 +16,7 @@ describe('TaskRecordReview', () => {
   })
 
   it('should return a nested of task record', () => {
-    expect(TaskRecordReview.query().with('task_record').find(37).task_record.predicted_value).toBe('France')
+    expect(TaskRecordReview.query().with('taskRecord').find(37).taskRecord.predictedValue).toBe('France')
   })
 
   it('should return a status', async () => {
@@ -27,8 +27,8 @@ describe('TaskRecordReview', () => {
     expect(TaskRecordReview.find(37).note).toBe('This is bad')
   })
 
-  it('should return an alternative_value', async () => {
-    expect(TaskRecordReview.find(37).alternative_value).toBe('FRA')
+  it('should return an alternativeValue', async () => {
+    expect(TaskRecordReview.find(37).alternativeValue).toBe('FRA')
   })
 
   it('should return a choice', async () => {

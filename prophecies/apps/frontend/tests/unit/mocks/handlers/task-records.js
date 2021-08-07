@@ -16,8 +16,8 @@ export default [
             type: 'TaskRecord',
             id: '3',
             attributes: {
-              original_value: 'La France',
-              predicted_value: 'FRA',
+              originalValue: 'La France',
+              predictedValue: 'FRA',
               link: 'https://www.openstreetmap.org/search?query=La%20France',
               metadata: null,
               rounds: 3,
@@ -39,8 +39,8 @@ export default [
             type: 'TaskRecord',
             id: '2',
             attributes: {
-              original_value: 'Germany',
-              predicted_value: 'DE',
+              originalValue: 'Germany',
+              predictedValue: 'DE',
               link: 'https://www.openstreetmap.org/search?query=Germany',
               metadata: null,
               rounds: 3,
@@ -62,8 +62,8 @@ export default [
             type: 'TaskRecord',
             id: '1',
             attributes: {
-              original_value: 'fronce',
-              predicted_value: 'France',
+              originalValue: 'fronce',
+              predictedValue: 'France',
               link: 'https://www.openstreetmap.org/search?query=fronce',
               metadata: null,
               rounds: 3,
@@ -96,25 +96,25 @@ export default [
               name: 'Addresses',
               priority: 1,
               rounds: 3,
-              task_records_count: 1000,
-              task_records_done_count: 500,
-              user_task_records_count: 300,
-              user_task_records_done_count: 100,
-              user_progress_by_round: {
+              taskRecordsCount: 1000,
+              taskRecordsDoneCount: 500,
+              userTaskRecordsCount: 300,
+              userTaskRecordsDoneCount: 100,
+              userProgressByRound: {
                 1: 100,
                 2: 25,
                 3: 25
               },
-              user_progress: 50,
+              userProgress: 50,
               progress: 50,
-              progress_by_round: {
+              progressByRound: {
                 1: 200,
                 2: 100,
                 3: 200
               }
             },
             relationships: {
-              choice_group: {
+              choiceGroup: {
                 data: {
                   type: 'ChoiceGroup',
                   id: '1'

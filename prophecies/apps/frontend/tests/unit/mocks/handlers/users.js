@@ -11,12 +11,12 @@ export default [
             id: 2,
             attributes: {
               url: 'http://localhost/api/v1/users/2/',
-              first_name: 'Django',
-              last_name: '',
+              firstName: 'Django',
+              lastName: '',
               username: 'django',
               email: 'support@icij.org',
-              email_md5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
-              is_staff: true
+              emailMd5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
+              isStaff: true
             },
             links: {
               self: 'http://localhost/api/v1/users/2/'
@@ -36,12 +36,12 @@ export default [
           id: 2,
           attributes: {
             url: 'http://localhost/api/v1/users/2/',
-            first_name: 'Django',
-            last_name: '',
+            firstName: 'Django',
+            lastName: '',
             username: 'django',
             email: 'support@icij.org',
-            email_md5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
-            is_staff: true
+            emailMd5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
+            isStaff: true
           },
           links: {
             self: 'http://localhost/api/v1/users/2/'

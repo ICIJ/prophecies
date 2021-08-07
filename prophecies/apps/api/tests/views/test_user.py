@@ -39,4 +39,4 @@ class TestSetting(TestCase):
         email = 'engineering@icij.org'
         email_md5 = '628e9a99d87799e9d434b63d2c3744ca'
         self.assertEqual(request.json().get('data').get('attributes').get('email'), None)
-        self.assertEqual(request.json().get('data').get('attributes').get('email_md5'), email_md5)
+        self.assertEqual(request.json().get('data').get('attributes').get('emailMd5'), email_md5)

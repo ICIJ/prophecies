@@ -25,11 +25,11 @@ export default {
     taskRecordReview () {
       return TaskRecordReview
         .query()
-        .with('task_record')
+        .with('taskRecord')
         .find(this.taskRecordReviewId)
     },
     link () {
-      return get(this, 'taskRecordReview.task_record.link')
+      return get(this, 'taskRecordReview.taskRecord.link')
     }
   },
   methods: {

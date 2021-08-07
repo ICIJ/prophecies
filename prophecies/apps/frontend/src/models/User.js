@@ -10,13 +10,13 @@ export default class User extends Model {
     return {
       id: this.attr(null),
       username: this.attr(''),
-      first_name: this.string(null).nullable(),
-      last_name: this.string(null).nullable(),
+      firstName: this.string(null).nullable(),
+      lastName: this.string(null).nullable(),
       email: this.attr(''),
-      email_md5: this.attr(''),
-      is_staff: this.boolean(false),
-      is_me: this.boolean(false),
-      csrf_token: this.string(null).nullable()
+      emailMd5: this.attr(''),
+      isStaff: this.boolean(false),
+      isMe: this.boolean(false),
+      csrfToken: this.string(null).nullable()
     }
   }
 
@@ -27,7 +27,7 @@ export default class User extends Model {
       me () {
         return this.get('me/', {
           dataTransformer (response) {
-            return { is_me: true, ...responseNormalizer(response) }
+            return { isMe: true, ...responseNormalizer(response) }
           }
         })
       }
@@ -35,7 +35,7 @@ export default class User extends Model {
   }
 
   static me () {
-    const [user = null] = this.query().where('is_me', true).get()
+    const [user = null] = this.query().where('isMe', true).get()
     return user
   }
 }

@@ -18,11 +18,11 @@ describe('AppHeader', () => {
             id: 20,
             attributes: {
               username: 'olivia',
-              first_name: 'Olivia',
-              last_name: 'Reinhardt',
+              firstName: 'Olivia',
+              lastName: 'Reinhardt',
               email: 'engineering@icij.org',
-              email_md5: '628e9a99d87799e9d434b63d2c3744ca',
-              is_staff: true
+              emailMd5: '628e9a99d87799e9d434b63d2c3744ca',
+              isStaff: true
             }
           }
         }))
@@ -43,7 +43,7 @@ describe('AppHeader', () => {
       expect(wrapper.find('.app-header__nav-right__user__display-name').text()).toBe('Olivia Reinhardt')
     })
 
-    it('should build an avatar URL using the email_md5', () => {
+    it('should build an avatar URL using the emailMd5', () => {
       const src = wrapper.find('.app-header__nav-right__user__avatar').attributes('src')
       expect(src).toBe('https://www.gravatar.com/avatar/628e9a99d87799e9d434b63d2c3744ca')
     })
@@ -66,11 +66,11 @@ describe('AppHeader', () => {
             id: 20,
             attributes: {
               username: 'django',
-              first_name: 'Django',
-              last_name: '',
+              firstName: 'Django',
+              lastName: '',
               email: 'support@icij.org',
-              email_md5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
-              is_staff: false
+              emailMd5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
+              isStaff: false
             }
           }
         }))

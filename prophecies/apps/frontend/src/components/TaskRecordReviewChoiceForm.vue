@@ -38,11 +38,11 @@ export default {
       }
     },
     async selectChoice (choice) {
-      if (choice.require_alternative_value && !this.alternativeValue) {
+      if (choice.requireAlternativeValue && !this.alternativeValue) {
         return this.$refs.alternativeValueInput.focus()
       }
-      const alternativeValue = choice.require_alternative_value ? this.alternativeValue : null
-      const data = { alternative_value: alternativeValue, choice }
+      const alternativeValue = choice.requireAlternativeValue ? this.alternativeValue : null
+      const data = { alternativeValue: alternativeValue, choice }
       /**
        * Fired when the form is submitted
        * @event submit
@@ -54,7 +54,7 @@ export default {
       await this.selectChoice(this.alternativeValueChoice)
     },
     setInitialValues () {
-      this.alternativeValue = get(this, 'taskRecordReview.alternative_value', null) || null
+      this.alternativeValue = get(this, 'taskRecordReview.alternativeValue', null) || null
     }
   },
   computed: {
@@ -62,23 +62,23 @@ export default {
       return TaskRecordReview
         .query()
         .with('choice')
-        .with('task_record')
-        .with('task_record.task')
+        .with('taskRecord')
+        .with('taskRecord.task')
         .find(this.taskRecordReviewId)
     },
     alternativeValueChoice () {
       const choices = get(this, 'choiceGroup.choices', [])
-      return find(choices, { require_alternative_value: true })
+      return find(choices, { requireAlternativeValue: true })
     },
     alternativeValues () {
-      return get(this, 'choiceGroup.alternative_values', [])
+      return get(this, 'choiceGroup.alternativeValues', [])
     },
     choiceGroup () {
       return ChoiceGroup
         .query()
         .with('choices')
-        .with('alternative_values')
-        .find(this.taskRecordReview.task_record.task.choice_group_id)
+        .with('alternativeValues')
+        .find(this.taskRecordReview.taskRecord.task.choiceGroup_id)
     },
     classList () {
       return {
@@ -87,7 +87,7 @@ export default {
       }
     },
     hasAlternativeValue () {
-      return get(this, 'taskRecordReview.alternative_value', false)
+      return get(this, 'taskRecordReview.alternativeValue', false)
     },
     hasChoice () {
       return !!get(this, 'taskRecordReview.choice_id', false)

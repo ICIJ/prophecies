@@ -1,6 +1,6 @@
 export default {
   adminUrl: '/admin',
-  avatarUrlTemplate: 'https://www.gravatar.com/avatar/{{ email_md5 }}',
+  avatarUrlTemplate: 'https://www.gravatar.com/avatar/{{ emailMd5 }}',
   apiUrl: '/api/v1',
   defaultLocale: 'en',
   helpLink: 'https://github.com/ICIJ/prophecies/issues/new',

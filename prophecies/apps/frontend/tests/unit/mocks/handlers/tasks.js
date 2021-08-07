@@ -19,25 +19,25 @@ export default [
               name: 'Addresses',
               priority: 1,
               rounds: 3,
-              task_records_count: 1000,
-              task_records_done_count: 500,
-              user_task_records_count: 300,
-              user_task_records_done_count: 100,
-              user_progress_by_round: {
+              taskRecordsCount: 1000,
+              taskRecordsDoneCount: 500,
+              userTaskRecordsCount: 300,
+              userTaskRecordsDoneCount: 100,
+              userProgressByRound: {
                 1: 100,
                 2: 25,
                 3: 25
               },
-              user_progress: 50,
+              userProgress: 50,
               progress: 40,
-              progress_by_round: {
+              progressByRound: {
                 1: 50,
                 2: 25,
                 3: 30
               }
             },
             relationships: {
-              choice_group: {
+              choiceGroup: {
                 data: {
                   type: 'ChoiceGroup',
                   id: '1'
@@ -67,25 +67,25 @@ export default [
               name: 'Shops',
               priority: 1,
               rounds: 3,
-              task_records_count: 1000,
-              task_records_done_count: 500,
-              user_task_records_count: 300,
-              user_task_records_done_count: 100,
-              user_progress_by_round: {
+              taskRecordsCount: 1000,
+              taskRecordsDoneCount: 500,
+              userTaskRecordsCount: 300,
+              userTaskRecordsDoneCount: 100,
+              userProgressByRound: {
                 1: 100,
                 2: 25,
                 3: 25
               },
-              user_progress: 45,
+              userProgress: 45,
               progress: 60,
-              progress_by_round: {
+              progressByRound: {
                 1: 50,
                 2: 25,
                 3: 25
               }
             },
             relationships: {
-              choice_group: {
+              choiceGroup: {
                 data: {
                   type: 'ChoiceGroup',
                   id: '1'

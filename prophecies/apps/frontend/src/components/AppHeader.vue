@@ -17,10 +17,10 @@
         return this.$config.get('user')
       },
       userDisplayName () {
-        if (!this.user.first_name || !this.user.last_name) {
+        if (!this.user.firstName || !this.user.lastName) {
           return this.user.username
         }
-        return `${this.user.first_name} ${this.user.last_name}`
+        return `${this.user.firstName} ${this.user.lastName}`
       },
       userAvatarUrl () {
         const interpolate = this.$config.get('templateInterpolate')
@@ -72,7 +72,7 @@
               <code-icon class="mr-2" />
               {{ $t('appHeader.api') }}
             </b-dropdown-item>
-            <template v-if="user.is_staff">
+            <template v-if="user.isStaff">
               <b-dropdown-item :href="$config.get('adminUrl')" class="app-header__nav-right__user__admin">
                 <trello-icon class="mr-2" />
                 {{ $t('appHeader.admin') }}

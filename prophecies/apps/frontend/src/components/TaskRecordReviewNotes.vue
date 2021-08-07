@@ -85,7 +85,7 @@ export default {
     <div v-for="{ id, checker, note } in history" :key="id" class="task-record-review-notes__item">
       <div class="task-record-review-notes__item__checker">
         <span class="text-truncate">
-          {{ checker.first_name || checker.username }}
+          {{ checker.firstName || checker.username }}
         </span>
       </div>
       <div class="task-record-review-notes__item__note">

@@ -21,8 +21,8 @@ describe('TaskRecord', () => {
     expect(TaskRecord.query().with('task').find(3).task.name).toBe('Addresses')
   })
 
-  it('should return an original_value', async () => {
-    expect(TaskRecord.find(1).original_value).toBe('fronce')
-    expect(TaskRecord.find(3).original_value).toBe('La France')
+  it('should return an originalValue', async () => {
+    expect(TaskRecord.find(1).originalValue).toBe('fronce')
+    expect(TaskRecord.find(3).originalValue).toBe('La France')
   })
 })

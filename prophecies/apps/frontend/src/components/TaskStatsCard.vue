@@ -18,7 +18,7 @@
       <p>
         Fully checked items:
         <span class="text-danger font-weight-bold ml-2 task-stats-card__checked">
-          {{ task_records_done_count }} / {{ task_records_count }}
+          {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
         </span>
       </p>
       <div class="d-flex align-items-center">
@@ -26,7 +26,7 @@
           <li class="task-stats-card__progress-by-round__item list-inline-item" v-for="round in task.rounds" :key="round">
             Round {{ round }}
             <span class="task-stats-card__progress-by-round__item__value font-weight-bold ml-3">
-              {{ progress_by_round[round] | round }}%
+              {{ progressByRound[round] | round }}%
             </span>
             <span class="text-muted mx-2" v-if="round !== task.rounds">
               |
@@ -66,29 +66,29 @@ export default {
         .with('project')
         .find(this.taskId)
     },
-    task_records_count () {
+    taskRecordsCount () {
       if (this.team) {
-        return this.task.task_records_count
+        return this.task.taskRecordsCount
       }
-      return this.task.user_task_records_count
+      return this.task.userTaskRecordsCount
     },
-    task_records_done_count () {
+    taskRecordsDoneCount () {
       if (this.team) {
-        return this.task.task_records_done_count
+        return this.task.taskRecordsDoneCount
       }
-      return this.task.user_task_records_done_count
+      return this.task.userTaskRecordsDoneCount
     },
     progress () {
       if (this.team) {
         return this.task.progress
       }
-      return this.task.user_progress
+      return this.task.userProgress
     },
-    progress_by_round () {
+    progressByRound () {
       if (this.team) {
-        return this.task.progress_by_round
+        return this.task.progressByRound
       }
-      return this.task.user_progress_by_round
+      return this.task.userProgressByRound
     }
   }
 }

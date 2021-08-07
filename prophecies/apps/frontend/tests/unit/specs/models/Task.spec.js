@@ -19,14 +19,14 @@ describe('Task', () => {
     expect(Task.find(1).description).toBe('A collection of adresses to fact check.')
   })
 
-  it('should not return a nested choice_group if not requested explicitely', () => {
-    expect(Task.find(1).choice_group).toBeNull()
+  it('should not return a nested choiceGroup if not requested explicitely', () => {
+    expect(Task.find(1).choiceGroup).toBeNull()
   })
 
-  it('should return a choice_group if requested explicitely', () => {
-    const task = Task.query().with('choice_group').find(2)
-    expect(task.choice_group).not.toBeNull()
-    expect(task.choice_group.id).toBe('1')
-    expect(task.choice_group.name).toBe('Is it correct?')
+  it('should return a choiceGroup if requested explicitely', () => {
+    const task = Task.query().with('choiceGroup').find(2)
+    expect(task.choiceGroup).not.toBeNull()
+    expect(task.choiceGroup.id).toBe('1')
+    expect(task.choiceGroup.name).toBe('Is it correct?')
   })
 })

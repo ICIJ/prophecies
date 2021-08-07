@@ -108,7 +108,7 @@ export default {
     },
     taskRecordReviewsParams () {
       return {
-        'filter[task_record.task]': this.taskId,
+        'filter[taskRecord.task]': this.taskId,
         'page[number]': this.page
       }
     },
@@ -137,7 +137,7 @@ export default {
       return Task.api().find(this.taskId)
     },
     fetchChoiceGroup () {
-      return ChoiceGroup.api().find(this.task.choice_group_id)
+      return ChoiceGroup.api().find(this.task.choiceGroup_id)
     },
     async fetchTaskRecordReviews () {
       TaskRecordReview.deleteAll()

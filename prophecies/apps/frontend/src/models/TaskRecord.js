@@ -10,8 +10,8 @@ export default class TaskRecord extends Model {
     return {
       id: this.attr(null),
       url: this.string(),
-      original_value: this.string(),
-      predicted_value: this.string(),
+      originalValue: this.string(),
+      predictedValue: this.string(),
       link: this.string(),
       metadata: this.attr(null),
       rounds: this.number(),

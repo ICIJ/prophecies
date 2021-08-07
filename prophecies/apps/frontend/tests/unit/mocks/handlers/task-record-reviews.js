@@ -18,7 +18,7 @@ export default [
             attributes: {
               status: 'DONE',
               note: "I really don't know",
-              alternative_value: '??'
+              alternativeValue: '??'
             },
             relationships: {
               choice: {
@@ -27,7 +27,7 @@ export default [
                   id: '3'
                 }
               },
-              task_record: {
+              taskRecord: {
                 data: {
                   type: 'TaskRecord',
                   id: '3'
@@ -44,7 +44,7 @@ export default [
             attributes: {
               status: 'DONE',
               note: 'This is bad',
-              alternative_value: 'FRA'
+              alternativeValue: 'FRA'
             },
             relationships: {
               choice: {
@@ -53,7 +53,7 @@ export default [
                   id: '2'
                 }
               },
-              task_record: {
+              taskRecord: {
                 data: {
                   type: 'TaskRecord',
                   id: '1'
@@ -70,13 +70,13 @@ export default [
             attributes: {
               status: 'PENDING',
               note: '',
-              alternative_value: ''
+              alternativeValue: ''
             },
             relationships: {
               choice: {
                 data: null
               },
-              task_record: {
+              taskRecord: {
                 data: {
                   type: 'TaskRecord',
                   id: '1'
@@ -117,8 +117,8 @@ export default [
             type: 'TaskRecord',
             id: '1',
             attributes: {
-              original_value: 'fronce',
-              predicted_value: 'France',
+              originalValue: 'fronce',
+              predictedValue: 'France',
               link: 'https://www.openstreetmap.org/search?query=fronce',
               metadata: null,
               rounds: 3,
@@ -140,8 +140,8 @@ export default [
             type: 'TaskRecord',
             id: '3',
             attributes: {
-              original_value: 'La France',
-              predicted_value: 'FRA',
+              originalValue: 'La France',
+              predictedValue: 'FRA',
               link: 'https://www.openstreetmap.org/search?query=La%20France',
               metadata: null,
               rounds: 3,

@@ -15,19 +15,19 @@ export default class Task extends Model {
       description: this.string(),
       colors: this.attr(),
       priority: this.number(1),
-      task_records_count: this.number(0),
-      task_records_done_count: this.number(0),
-      user_task_records_count: this.number(0),
-      user_task_records_done_count: this.number(0),
-      user_progress_by_round: this.attr(),
-      user_progress: this.number(0),
+      taskRecordsCount: this.number(0),
+      taskRecordsDoneCount: this.number(0),
+      userTaskRecordsCount: this.number(0),
+      userTaskRecordsDoneCount: this.number(0),
+      userProgressByRound: this.attr(),
+      userProgress: this.number(0),
       progress: this.number(0),
-      progress_by_round: this.attr(),
+      progressByRound: this.attr(),
       project_id: this.attr(null),
       project: this.belongsTo(Project, 'project_id'),
       rounds: this.number(1),
-      choice_group_id: this.attr(null),
-      choice_group: this.belongsTo(ChoiceGroup, 'choice_group_id')
+      choiceGroup_id: this.attr(null),
+      choiceGroup: this.belongsTo(ChoiceGroup, 'choiceGroup_id')
     }
   }
 

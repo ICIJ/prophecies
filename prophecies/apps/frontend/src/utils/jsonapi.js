@@ -4,7 +4,7 @@ import User from '@/models/User'
 export function defaultHeaders () {
   return {
     'content-type': 'application/vnd.api+json',
-    'x-csrftoken': User.me().csrf_token
+    'x-csrftoken': User.me().csrfToken
   }
 }
 

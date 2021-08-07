@@ -184,6 +184,7 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
 }
 
+JSON_API_FORMAT_FIELD_NAMES = 'camelize'
 
 USE_X_FORWARDED_HOST = DEBUG
 
@@ -269,7 +270,7 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 CONSTANCE_CONFIG = {
     'appName': ('Prophecies', 'Name of the app to display publicaly'),
-    'avatarUrlTemplate': ('https://www.gravatar.com/avatar/{{ email_md5 }}', 'Template to build the avatar URL'),
+    'avatarUrlTemplate': ('https://www.gravatar.com/avatar/{{ emailMd5 }}', 'Template to build the avatar URL'),
     'defaultLocale': ('en', 'Define locale code (ie. "en", "fr", "jp", ...)'),
     'helpLink': ('https://github.com/ICIJ/prophecies/issues/new', 'Link to the support'),
     'loginUrl': ('%s?next=/' % SOCIAL_AUTH_LOGIN_URL, 'Link to create a user session'),

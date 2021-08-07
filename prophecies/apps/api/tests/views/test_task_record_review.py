@@ -72,7 +72,7 @@ class TestTaskRecordReview(TestCase):
         self.assertEqual(request.status_code, 200)
         data = request.json().get('data')
         relationships = data.get('relationships')
-        self.assertEqual(relationships['task_record']['data']['id'], str(self.task_record_foo.id))
+        self.assertEqual(relationships['taskRecord']['data']['id'], str(self.task_record_foo.id))
 
 
     def test_it_returns_task_record_with_link_from_task(self):
