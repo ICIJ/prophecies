@@ -45,7 +45,9 @@
             <task-record-review-card
               @update="scrollToActiveTaskRecordReviewCard({ id })"
               :task-record-review-id="id"
-              :active="isTaskRecordReviewActive(id)" />
+              :active="isTaskRecordReviewActive(id)"
+              :selected="isTaskRecordReviewSelected(id)"
+              @update:selected="selectTaskRecordReview(id, $event)" />
           </div>
           <custom-pagination
             v-if="pagination"
@@ -90,7 +92,8 @@ export default {
   },
   data () {
     return {
-      pagination: null
+      pagination: null,
+      selectedIds: {}
     }
   },
   watch: {
@@ -178,6 +181,12 @@ export default {
     },
     isTrailingTaskRecordReview (id) {
       return this.trailingTaskRecordReview.id === id
+    },
+    isTaskRecordReviewSelected (id) {
+      return !!this.selectedIds[id]
+    },
+    selectTaskRecordReview (id, toggler) {
+      this.$set(this.selectedIds, id, toggler)
     },
     async fetchAll () {
       await this.fetchTask()
