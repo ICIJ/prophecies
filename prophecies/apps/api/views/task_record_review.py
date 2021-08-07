@@ -1,3 +1,4 @@
+from functools import lru_cache
 from django.db.models import Prefetch
 from rest_framework import viewsets, permissions, serializers
 from rest_framework.permissions import IsAuthenticated
@@ -57,14 +58,17 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
         else:
             f.queryset = instance.task_record.task.choice_group.choices.all()
 
+    @lru_cache(maxsize=None)
     def get_history(self, instance):
         return instance.history.select_related('checker', 'choice')
 
+    @lru_cache(maxsize=None)
     def get_collaborators(self, instance):
         return [ i.checker for i in instance.history if i.checker != instance.checker ]
 
     # For some reason the validator require the choice to be set.
     # This is a workaround to allow empty value for the choice relationship.
+    @lru_cache(maxsize=None)
     def get_validation_exclusions(self):
         exclusions = super(TaskRecordReviewSerializer, self).get_validation_exclusions()
         return exclusions + ['choice',]

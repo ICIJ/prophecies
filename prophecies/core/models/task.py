@@ -1,6 +1,7 @@
 from colorfield.fields import ColorField
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.functional import cached_property
 from prophecies.core.models.project import Project
 from prophecies.core.models.choice_group import ChoiceGroup
 from prophecies.core.contrib.colors import hex_scale_brightness
@@ -24,6 +25,7 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
+
     def progress_by_round(self, **task_record_review_filter):
         from prophecies.core.models.task_record_review import TaskRecordReview
         filter = dict(task_record__task=self, **task_record_review_filter)
@@ -32,13 +34,13 @@ class Task(models.Model):
         rounds = range(1, self.rounds + 1)
         return { round: progress.get(round, 0) for round in rounds }
 
-    @property
+    @cached_property
     def progress(self):
         all = self.task_records.count()
         done = self.task_records.done().count()
-        return 100 if all == 0 else done / all * 100                
+        return 100 if all == 0 else done / all * 100
 
-    @property
+    @cached_property
     def colors(self):
         """
         Generate 3 colors tones based on the `color` attribute

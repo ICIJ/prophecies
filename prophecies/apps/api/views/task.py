@@ -1,3 +1,4 @@
+from functools import lru_cache
 from rest_framework import filters, viewsets, serializers
 from rest_framework_json_api.relations import ResourceRelatedField
 from prophecies.core.models import ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview
@@ -31,28 +32,34 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
             'user_progress_by_round', 'user_progress',
             'progress', 'progress_by_round',]
 
+    @lru_cache(maxsize=None)
     def get_user_progress_by_round(self, task):
         checker = self.context.get('request').user
         return task.progress_by_round(checker=checker)
 
+    @lru_cache(maxsize=None)
     def get_user_progress(self, task):
         user_records = self.get_user_task_records_done_count(task)
         all_records = self.get_user_task_records_count(task)
         return 100 if all_records == 0 else user_records / all_records * 100
 
+    @lru_cache(maxsize=None)
     def get_user_task_records_count(self, task):
         checker = self.context.get('request').user
         filter = dict(task_record__task=task, checker=checker)
         return TaskRecordReview.objects.filter(**filter).count()
 
+    @lru_cache(maxsize=None)
     def get_user_task_records_done_count(self, task):
         checker = self.context.get('request').user
         filter = dict(task_record__task=task, task_record__status=StatusType.DONE, checker=checker)
         return TaskRecordReview.objects.filter(**filter).count()
 
+    @lru_cache(maxsize=None)
     def get_task_records_done_count(self, task):
         return TaskRecord.objects.done().filter(task=task).count()
 
+    @lru_cache(maxsize=None)
     def get_task_records_count(self, task):
         return TaskRecord.objects.filter(task=task).count()
 

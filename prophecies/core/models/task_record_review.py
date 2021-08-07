@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Max, signals
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.utils.functional import cached_property
 from prophecies.core.models.choice import Choice
 from prophecies.core.models.task_record import TaskRecord
 
@@ -85,7 +86,7 @@ class TaskRecordReview(models.Model):
     def __str__(self):
         return f'Task record #{self.task_record.id} on round {self.round}'
 
-    @property
+    @cached_property
     def history(self):
         return self.task_record.reviews.exclude(choice__isnull=True).all()
 
