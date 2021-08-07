@@ -112,7 +112,7 @@ export default {
         </div>
       </div>
       <b-collapse :visible="showNotes">
-        <task-record-review-notes :task-record-review-id="taskRecordReviewId" @close="toggleNotes" />
+        <task-record-review-notes :task-record-review-id="taskRecordReviewId" :autofocus="showNotes" @close="toggleNotes" />
       </b-collapse>
     </div>
   </b-overlay>

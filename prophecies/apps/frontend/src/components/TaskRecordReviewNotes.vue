@@ -12,6 +12,19 @@ export default {
   props: {
     taskRecordReviewId: {
       type: [String, Number]
+    },
+    autofocus: {
+      type: Boolean
+    }
+  },
+  watch: {
+    async autofocus (autofocus) {
+      if (autofocus) {
+        // The component must be munted
+        await this.$nextTick()
+        const selector = '.task-record-review-notes__item__note__form__input'
+        this.$el.querySelector(selector).focus()
+      }
     }
   },
   data () {
@@ -77,7 +90,7 @@ export default {
       </div>
       <div class="task-record-review-notes__item__note">
         <template v-if="isMe(checker)">
-            <form class="task-record-review-notes__item__note__form__input" @submit.prevent="saveInputNote">
+            <form class="task-record-review-notes__item__note__form" @submit.prevent="saveInputNote">
               <fieldset :disabled="$wait.is(saveNoteLoader)">
                 <b-overlay :show="$wait.is(saveNoteLoader)" variant="transparent">
                   <b-spinner variant="light" slot="overlay" />
