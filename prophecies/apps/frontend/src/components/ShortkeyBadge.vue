@@ -34,5 +34,6 @@ export default {
 <style lang="scss" scoped>
   .shortkey-badge {
     border: 1px solid currentColor;
+    background: transparent !important;
   }
 </style>
