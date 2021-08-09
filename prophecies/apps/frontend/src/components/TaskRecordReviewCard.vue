@@ -170,7 +170,8 @@ export default {
         }
       }
 
-      &:hover &__checkbox /deep/ label {
+      &:hover &__checkbox /deep/ label,
+      .task-record-review-card--selected & &__checkbox /deep/ label {
         text-indent: -1000px;
 
         &:after, &:before {

@@ -18,9 +18,9 @@
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
           <div class="row mb-5" v-if="pagination">
             <div class="col-auto">
-              <b-btn variant="outline-dark" class="border" tag="label" disabled>
+              <b-btn variant="outline-dark" class="border" tag="label">
                 <span class="custom-control custom-checkbox">
-                  <input class="custom-control-input" type="checkbox" id="select-all-input" />
+                  <input class="custom-control-input" v-model="selectAll" type="checkbox" id="select-all-input" />
                   <div class="custom-control-label" for="select-all-input">
                     Select all {{ taskRecordReviews.length }} items
                   </div>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { get, find, uniqueId } from 'lodash'
+import { get, find, keys, uniqueId } from 'lodash'
 
 import AppHeader from '@/components/AppHeader'
 import AppWaiter from '@/components/AppWaiter'
@@ -105,6 +105,16 @@ export default {
     return this.setup()
   },
   computed: {
+    selectAll: {
+      set (checked) {
+        this.taskRecordReviews.forEach(({ id }) => {
+          this.$set(this.selectedIds, id, checked)
+        })
+      },
+      get () {
+        return keys(this.selectedIds).length === this.tasks.length
+      }
+    },
     task () {
       return Task.find(this.taskId)
     },
