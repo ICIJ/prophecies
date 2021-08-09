@@ -1,16 +1,9 @@
 <template>
   <div class="task-record-reviews">
     <div class="d-flex align-items-center">
-      <ul class="task-record-reviews__breadcrumb list-inline my-3 mx-5">
-        <li class="list-inline-item task-record-reviews__breadcrumb__item">
-          <router-link :to="{ name: 'dashboard' }">
-            <home-icon size="1.5x" />
-          </router-link>
-        </li>
-        <li class="list-inline-item task-record-reviews__breadcrumb__item" v-if="task">
-          {{ task.name }}
-        </li>
-      </ul>
+      <app-breadcrumb v-if="task">
+        {{ task.name }}
+      </app-breadcrumb>
       <app-header class="flex-grow-1" />
     </div>
     <div class="task-record-reviews__container">
@@ -66,6 +59,7 @@
 <script>
 import { get, find, keys, uniqueId } from 'lodash'
 
+import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
 import AppWaiter from '@/components/AppWaiter'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
@@ -77,6 +71,7 @@ import User from '@/models/User'
 export default {
   name: 'TaskRecordReviews',
   components: {
+    AppBreadcrumb,
     AppHeader,
     AppWaiter,
     TaskRecordReviewCard
@@ -211,33 +206,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  .task-record-reviews {
-
-    &__breadcrumb {
-      display: inline-flex;
-      align-items: center;
-
-      &__item.list-inline-item {
-        font-size: $font-size-lg;
-        padding-right: $spacer-sm;
-        margin-right: 0;
-        display: inline-flex;
-        align-items: center;
-        font-weight: 600;
-
-        &:not(:last-of-type):after {
-          content: "";
-          background: center right no-repeat;
-          background-size: contain;
-          background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNyIgaGVpZ2h0PSIxMiIgdmlld0JveD0iMCAwIDcgMTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHBhdGggZD0iTTEgMTAuNzIwOUw2IDUuODYwNDRMMSAxIiBzdHJva2U9IiMyMzVCNTkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=);
-          margin-left: $spacer-sm;
-          display: block;
-          height: 1em;
-          width: 0.5em;
-        }
-      }
-    }
-  }
-</style>
