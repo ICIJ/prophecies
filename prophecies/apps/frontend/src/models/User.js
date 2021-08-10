@@ -38,4 +38,15 @@ export default class User extends Model {
     const [user = null] = this.query().where('isMe', true).get()
     return user
   }
+
+  /**
+   * Get full name of the user.
+   */
+  get displayName () {
+    if (this.firstName) {
+      return this.firstName
+    }
+    return this.username
+  }
+
 }
