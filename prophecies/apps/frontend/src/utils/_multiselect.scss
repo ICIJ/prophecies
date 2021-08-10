@@ -1,0 +1,68 @@
+@import url('~node_modules/vue-multiselect/dist/vue-multiselect.min.css');
+
+.multiselect {
+
+  &--active .multiselect__tags {
+    background-color: $input-focus-bg;
+    border: 1px solid $input-focus-border-color;
+    border-radius: $input-border-radius;
+  }
+
+  & &__placeholder, &__input::placeholder {
+    color: $input-placeholder-color;
+    opacity: 1;
+    font-size: 1rem;
+    margin-bottom: 11px;
+  }
+
+  & &__input {
+    margin-top: 3px;
+    margin-bottom: 11px;
+    padding-left: 0;
+  }
+
+  & .multiselect__content {
+    max-width: 100%;
+  }
+
+  & .multiselect__option {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  & .multiselect__tag {
+    background: $primary;
+    border-radius: $btn-border-radius;
+    padding-top: $btn-padding-y;
+    padding-bottom: $btn-padding-y;
+
+    &-icon {
+
+      &:hover {
+        background: darken($primary, 10%);
+      }
+
+      &:after {
+        color: inherit;
+      }
+    }
+  }
+
+  &__option {
+    white-space: normal;
+  }
+
+  .multiselect__option--highlight {
+    font-weight: bold;
+
+    &, &:after {
+      color: $body-color;
+      background: $warning;
+    }
+
+    &:after {
+      font-weight: normal;
+    }
+  }
+}
