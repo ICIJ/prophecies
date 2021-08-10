@@ -1,14 +1,16 @@
 from functools import lru_cache
 from rest_framework import filters, viewsets, serializers
 from rest_framework_json_api.relations import ResourceRelatedField
-from prophecies.core.models import ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Task, TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record import StatusType
 from prophecies.apps.api.views.choice_group import ChoiceGroupSerializer
 from prophecies.apps.api.views.project import ProjectSerializer
+from prophecies.apps.api.views.user import UserSerializer
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
-    project = ResourceRelatedField(many=False, queryset=Project.objects)
-    choice_group = ResourceRelatedField(many=False, queryset=ChoiceGroup.objects)
+    project = ResourceRelatedField(many=False, read_only=True)
+    checkers = ResourceRelatedField(many=True, read_only=True)
+    choice_group = ResourceRelatedField(many=False, read_only=True)
     task_records_count = serializers.SerializerMethodField()
     task_records_done_count = serializers.SerializerMethodField()
     user_task_records_count = serializers.SerializerMethodField()
@@ -16,17 +18,18 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     user_progress_by_round = serializers.SerializerMethodField()
     user_progress = serializers.SerializerMethodField()
     included_serializers = {
+        'checkers': UserSerializer,
         'choice_group': ChoiceGroupSerializer,
-        'project': ProjectSerializer
+        'project': ProjectSerializer,
     }
 
     class JSONAPIMeta:
-        included_resources = ['choice_group', 'project']
+        included_resources = ['checkers', 'choice_group', 'project']
 
     class Meta:
         model = Task
-        fields = ['id', 'url', 'choice_group', 'colors', 'description',
-            'name', 'project', 'priority', 'rounds',
+        fields = ['id', 'url', 'choice_group', 'checkers', 'colors',
+            'description', 'name', 'project', 'priority', 'rounds',
             'task_records_count',  'task_records_done_count',
             'user_task_records_count', 'user_task_records_done_count',
             'user_progress_by_round', 'user_progress',
