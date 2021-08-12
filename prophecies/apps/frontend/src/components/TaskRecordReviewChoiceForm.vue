@@ -112,13 +112,15 @@ export default {
 <template>
   <fieldset class="task-record-review-choice-form py-1" :class="classList">
     <ul class="task-record-review-choice-form__choices list-unstyled row">
-      <li v-for="choice in choiceGroup.choices" :key="choice.id" class="col pb-3 task-record-review-choice-form__choices__item">
+      <li v-for="choice in choiceGroup.choices"
+          class="col pb-3 task-record-review-choice-form__choices__item"
+          :class="choiceClassList(choice)"
+          :key="choice.id">
         <b-btn @click="selectChoice(choice)"
                @shortkey="selectChoice(choice)"
                v-shortkey="choiceShortkeys(choice)"
                block
                class="task-record-review-choice-form__choices__item__button text-nowrap"
-               :class="choiceClassList(choice)"
                :variant="choice.value | toVariant">
           {{ choice.name }}
           <template v-if="choiceShortkeys(choice)">
