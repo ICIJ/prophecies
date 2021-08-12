@@ -37,6 +37,21 @@ export default [
                     id: '6'
                   }
                 ]
+              },
+              alternativeValues: {
+                meta: {
+                  count: 2
+                },
+                data: [
+                  {
+                    type: 'AlternativeValue',
+                    id: '10'
+                  },
+                  {
+                    type: 'AlternativeValue',
+                    id: '11'
+                  }
+                ]
               }
             },
             links: {
@@ -129,6 +144,22 @@ export default [
               value: 'Muffin',
               requireAlternativeValue: false
             }
+          },
+          {
+            type: 'AlternativeValue',
+            id: '10',
+            attributes: {
+              name: 'Albania (ALB)',
+              value: 'ALB'
+            }
+          },
+          {
+            type: 'AlternativeValue',
+            id: '11',
+            attributes: {
+              name: 'Algeria (DZA)',
+              value: 'DZA'
+            }
           }
         ],
         meta: {
@@ -171,6 +202,21 @@ export default [
                   id: '3'
                 }
               ]
+            },
+            alternativeValues: {
+              meta: {
+                count: 2
+              },
+              data: [
+                {
+                  type: 'AlternativeValue',
+                  id: '10'
+                },
+                {
+                  type: 'AlternativeValue',
+                  id: '11'
+                }
+              ]
             }
           },
           links: {
@@ -200,6 +246,22 @@ export default [
             attributes: {
               name: 'Unkown',
               value: 'unkown'
+            }
+          },
+          {
+            type: 'AlternativeValue',
+            id: '10',
+            attributes: {
+              name: 'Albania (ALB)',
+              value: 'ALB'
+            }
+          },
+          {
+            type: 'AlternativeValue',
+            id: '11',
+            attributes: {
+              name: 'Algeria (DZA)',
+              value: 'DZA'
             }
           }
         ]

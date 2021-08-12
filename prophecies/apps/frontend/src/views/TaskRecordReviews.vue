@@ -28,21 +28,31 @@
               :total-rows="pagination.count"
               :per-page="10" />
             <div class="col-auto">
-              <b-btn variant="outline-dark" class="border font-weight-bold" disabled>
+              <b-btn :variant="filtersTogglerVariant" class="border font-weight-bold" @click="toggleFilters">
                 <filter-icon size="1x" class="mr-1" />
                 Filters
               </b-btn>
             </div>
           </div>
-          <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
-            <task-record-review-card
-              @update="scrollToActiveTaskRecordReviewCard({ id })"
-              :task-record-review-id="id"
-              :active="isTaskRecordReviewActive(id)"
-              :selected="isTaskRecordReviewSelected(id)"
-              @update:selected="selectTaskRecordReview(id, $event)" />
-          </div>
-          <custom-pagination
+          <b-collapse :visible="showFilters">
+            <task-record-review-filters
+              @change="applyFilters"
+              :route-filters="routeFilters"
+              :task-id="taskId" />
+          </b-collapse>
+          <b-collapse :visible="!showFilters">
+            {{ routeFilters }}
+          </b-collapse>
+          <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
+            <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
+              <task-record-review-card
+                @update="scrollToActiveTaskRecordReviewCard({ id })"
+                @update:selected="selectTaskRecordReview(id, $event)"
+                :task-record-review-id="id"
+                :active="isTaskRecordReviewActive(id)"
+                :selected="isTaskRecordReviewSelected(id)"  />
+            </div>
+            <custom-pagination
             v-if="pagination"
             @input="goToPage"
             class="mx-auto"
@@ -50,6 +60,7 @@
             :value="Number(page)"
             :total-rows="pagination.count"
             :per-page="10" />
+          </app-waiter>
         </app-waiter>
       </div>
     </div>
@@ -63,6 +74,8 @@ import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
 import AppWaiter from '@/components/AppWaiter'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
+import TaskRecordReviewFilters from '@/components/TaskRecordReviewFilters'
+import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Task from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
@@ -70,30 +83,32 @@ import User from '@/models/User'
 
 export default {
   name: 'TaskRecordReviews',
+  mixins: [taskRecordReviewFiltersMixin],
   components: {
     AppBreadcrumb,
     AppHeader,
     AppWaiter,
-    TaskRecordReviewCard
+    TaskRecordReviewCard,
+    TaskRecordReviewFilters
   },
   props: {
     taskId: {
       type: [Number, String]
     },
-    page: {
-      type: [Number, String],
-      default: 1
-    }
   },
   data () {
     return {
       pagination: null,
-      selectedIds: {}
+      selectedIds: {},
+      showFilters: false
     }
   },
   watch: {
     page () {
       return this.waitFor(this.fetchAllLoader, this.fetchTaskRecordReviews)
+    },
+    routeFilters () {
+      return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
     }
   },
   created () {
@@ -110,6 +125,24 @@ export default {
         return keys(this.selectedIds).length === this.tasks.length
       }
     },
+    page () {
+      return this.$route.query.page || 1
+    },
+    routeFiltersQueryParams () {
+      return Object.entries(this.$route.query).reduce((all, [key, value]) => {
+        if (key.startsWith('filter[')) {
+          all[key] = value
+        }
+        return all
+      }, {})
+    },
+    routeFilters () {
+      return Object.entries(this.routeFiltersQueryParams).reduce((all, [key, value]) => {
+        const param = key.split('filter[').pop().split(']').shift()
+        all[param] = value
+        return all
+      }, {})
+    },
     task () {
       return Task.find(this.taskId)
     },
@@ -124,6 +157,7 @@ export default {
     },
     taskRecordReviewsParams () {
       return {
+        ...this.routeFiltersQueryParams,
         'filter[taskRecord.task]': this.taskId,
         'page[number]': this.page
       }
@@ -132,11 +166,17 @@ export default {
       return this.taskRecordReviews[this.taskRecordReviews.length - 1]
     },
     fetchAllLoader () {
+      return uniqueId('load-all-task-record-review-')
+    },
+    fetchTaskRecordReviewsLoader () {
       return uniqueId('load-task-record-review-')
     },
     firstPendingTaskRecordReview () {
       const all = TaskRecordReview.all()
       return find(all, { status: 'PENDING' })
+    },
+    filtersTogglerVariant () {
+      return this.showFilters ? 'primary' : 'outline-primary'
     }
   },
   methods: {
@@ -148,6 +188,9 @@ export default {
         const title = 'Unable to found this task'
         this.$router.replace({ name: 'error', params: { title, error } })
       }
+    },
+    applyFilters (query) {
+      return this.$router.push({ path: this.$route.path, query }, () => {})
     },
     fetchTask () {
       return Task.api().find(this.taskId)
@@ -202,6 +245,9 @@ export default {
       this.$wait.start(loader)
       await fn()
       this.$wait.end(loader)
+    },
+    toggleFilters () {
+      this.showFilters = !this.showFilters
     }
   }
 }

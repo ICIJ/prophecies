@@ -78,10 +78,19 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
     serializer_class = TaskRecordReviewSerializer
     http_method_names = ['get', 'put', 'head']
     permission_classes = [IsAuthenticated]
-    search_fields = ['task_record__original_value', 'task_record__predicted_value']
+    search_fields = ['task_record__original_value',
+                     'task_record__predicted_value']
     ordering = ['-id']
-    ordering_fields = ['task_record__original_value', 'task_record__predicted_value', 'task_record__id']
-    filterset_fields = ['task_record__task', 'task_record__original_value', 'task_record__predicted_value']
+    ordering_fields = ['task_record__original_value', 'task_record__predicted_value',
+                       'task_record__id']
+    filterset_fields = {
+       'choice': ('exact', 'in'),
+       'task_record__task': ('exact', 'in'),
+       'task_record__predicted_value': ('icontains', 'exact', 'iexact', 'contains', 'in', 'iregex'),
+       'task_record__original_value': ('icontains', 'exact', 'iexact', 'contains', 'in'),
+       'task_record__reviews__checker': ('exact', 'in'),
+       'task_record__reviews__choice': ('exact', 'in'),
+    }
     # Queryset is overridden within the `get_queryset` method
     queryset = TaskRecordReview.objects.none()
 

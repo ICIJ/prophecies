@@ -25,9 +25,7 @@ export const router = {
       name: 'task-record-reviews',
       path: '/task-record-reviews/:taskId',
       component: TaskRecordReviews,
-      props (route) {
-        return { ...route.params, ...route.query }
-      }
+      props: true
     },
     {
       name: 'error',

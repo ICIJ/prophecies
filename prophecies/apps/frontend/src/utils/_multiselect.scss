@@ -2,6 +2,10 @@
 
 .multiselect {
 
+  &, &__input, &__single, &__input::placeholder {
+    font-size: 1rem;
+  }
+
   &--active .multiselect__tags {
     background-color: $input-focus-bg;
     border: 1px solid $input-focus-border-color;
@@ -11,7 +15,6 @@
   & &__placeholder, &__input::placeholder {
     color: $input-placeholder-color;
     opacity: 1;
-    font-size: 1rem;
     margin-bottom: 11px;
   }
 

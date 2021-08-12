@@ -48,6 +48,17 @@ export default [
                   type: 'Project',
                   id: '1'
                 }
+              },
+              checkers: {
+                meta: {
+                  count: 1
+                },
+                data: [
+                  {
+                    type: 'User',
+                    id: '2'
+                  }
+                ]
               }
             },
             links: {
@@ -96,6 +107,17 @@ export default [
                   type: 'Project',
                   id: '1'
                 }
+              },
+              checkers: {
+                meta: {
+                  count: 1
+                },
+                data: [
+                  {
+                    type: 'User',
+                    id: '2'
+                  }
+                ]
               }
             },
             links: {
@@ -129,6 +151,21 @@ export default [
                     id: '3'
                   }
                 ]
+              },
+              alternativeValues: {
+                meta: {
+                  count: 2
+                },
+                data: [
+                  {
+                    type: 'AlternativeValue',
+                    id: '10'
+                  },
+                  {
+                    type: 'AlternativeValue',
+                    id: '11'
+                  }
+                ]
               }
             }
           },
@@ -148,6 +185,38 @@ export default [
             },
             links: {
               self: 'http://localhost/api/v1/projects/1/'
+            }
+          },
+          {
+            type: 'User',
+            id: '2',
+            attributes: {
+              url: 'http://localhost/api/v1/users/2/',
+              firstName: 'Django',
+              lastName: '',
+              username: 'django',
+              email: 'support@icij.org',
+              emailMd5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
+              isStaff: true
+            },
+            links: {
+              self: 'http://localhost/api/v1/users/2/'
+            }
+          },
+          {
+            type: 'AlternativeValue',
+            id: '10',
+            attributes: {
+              name: 'Albania (ALB)',
+              value: 'ALB'
+            }
+          },
+          {
+            type: 'AlternativeValue',
+            id: '11',
+            attributes: {
+              name: 'Algeria (DZA)',
+              value: 'DZA'
             }
           }
         ]
