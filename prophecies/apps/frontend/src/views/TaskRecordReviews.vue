@@ -214,7 +214,7 @@ export default {
       this.$set(this, 'pagination', pagination)
     },
     async goToPage (page) {
-      const query = { ...this.$route_query, page }
+      const query = { ...this.$route.query, page }
       await this.$router.push({ path: this.$route.path, query }, () => {})
     },
     async goToNextPage () {
