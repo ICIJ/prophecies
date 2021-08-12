@@ -5,36 +5,44 @@ export default {
     getTaskFilters (task) {
       return {
         predictedValues: {
+          name: 'Predicted value',
           param: 'task_record__predicted_value__iregex',
           options: task.choiceGroup.alternativeValues,
-          field: 'value'
+          field: 'value',
+          label: 'name'
         },
         assignedTo: {
+          name: 'Assigned to',
           param: 'task_record__reviews__checker__in',
           options: task.checkers,
-          field: 'id'
+          field: 'id',
+          label: 'displayName'
         },
         reviewedBy: {
+          name: 'Reviewed by',
           param: '',
           options: task.checkers,
-          field: 'id'
+          field: 'id',
+          label: 'displayName'
         },
         choices: {
+          name: 'Choices',
           param: 'choice__in',
           options: task.choiceGroup.choices,
-          field: 'id'
+          field: 'id',
+          label: 'name'
         }
       }
     },
     getSelectedFiltersAsQueryParams (filters, selected = {}) {
       return Object.entries(filters).reduce((params, [filter, { field, param }]) => {
-        const selected = this.selected[filter] || []
-        if (selected.length) {
+        const filterSelection = selected[filter] || []
+        if (filterSelection.length) {
           if (param.endsWith('__iregex') || param.endsWith('__regex')) {
-            const values = map(selected, field).join('|')
+            const values = map(filterSelection, field).join('|')
             params[`filter[${param}]`] = `(${values})`
           } else {
-            params[`filter[${param}]`] = map(selected, field).join(',')
+            params[`filter[${param}]`] = map(filterSelection, field).join(',')
           }
         }
         return params

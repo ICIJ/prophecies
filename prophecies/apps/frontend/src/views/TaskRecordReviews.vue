@@ -36,12 +36,13 @@
           </div>
           <b-collapse :visible="showFilters">
             <task-record-review-filters
-              @change="applyFilters"
-              :route-filters="routeFilters"
+              :route-filters.sync="routeFilters"
               :task-id="taskId" />
           </b-collapse>
           <b-collapse :visible="!showFilters">
-            {{ routeFilters }}
+            <task-record-review-applied-filters
+              :route-filters.sync="routeFilters"
+              :task-id="taskId" />
           </b-collapse>
           <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
             <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
@@ -74,6 +75,7 @@ import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
 import AppWaiter from '@/components/AppWaiter'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
+import TaskRecordReviewAppliedFilters from '@/components/TaskRecordReviewAppliedFilters'
 import TaskRecordReviewFilters from '@/components/TaskRecordReviewFilters'
 import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -89,6 +91,7 @@ export default {
     AppHeader,
     AppWaiter,
     TaskRecordReviewCard,
+    TaskRecordReviewAppliedFilters,
     TaskRecordReviewFilters
   },
   props: {
@@ -136,12 +139,17 @@ export default {
         return all
       }, {})
     },
-    routeFilters () {
-      return Object.entries(this.routeFiltersQueryParams).reduce((all, [key, value]) => {
-        const param = key.split('filter[').pop().split(']').shift()
-        all[param] = value
-        return all
-      }, {})
+    routeFilters: {
+      get () {
+        return Object.entries(this.routeFiltersQueryParams).reduce((all, [key, value]) => {
+          const param = key.split('filter[').pop().split(']').shift()
+          all[param] = value
+          return all
+        }, {})
+      },
+      set (query) {
+        return this.$router.push({ path: this.$route.path, query }, () => {})
+      }
     },
     task () {
       return Task.find(this.taskId)

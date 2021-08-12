@@ -1,5 +1,5 @@
 <script>
-  import { find, map, trim, uniqueId } from 'lodash'
+  import { find, map, mapValues, trim, uniqueId } from 'lodash'
   import Multiselect from 'vue-multiselect'
   import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
   import ChoiceGroup from '@/models/ChoiceGroup'
@@ -76,7 +76,11 @@
       selected: {
         deep: true,
         handler () {
-          this.$emit('change', this.filtersAsQueryParams)
+          /**
+           * @event update:routeFilters
+           * @param routes query params after updating filters
+           */
+          this.$emit('update:routeFilters', this.filtersAsQueryParams)
         }
       }
     }
@@ -87,11 +91,11 @@
   <form class="task-record-review-filters" @submit.prevent>
     <div class="row">
       <label class="col-3">
-        Predicted values
+        {{ filters.predictedValues.name }}
         <multiselect class="mt-3 mb-5"
                      placeholder="Type here..."
                      v-model="selected.predictedValues"
-                     label="name"
+                     :label="filters.predictedValues.label"
                      track-by="id"
                      multiple
                      hide-selected
@@ -101,33 +105,33 @@
                      :options="filters.predictedValues.options" />
       </label>
       <label class="col-3">
-        Assigned to
+        {{ filters.assignedTo.name }}
         <multiselect class="mt-3 mb-5"
                      placeholder="Type here..."
                      v-model="selected.assignedTo"
-                     label="displayName"
+                     :label="filters.assignedTo.label"
                      track-by="id"
                      multiple
                      hide-selected
                      :options="filters.assignedTo.options" />
       </label>
       <label class="col-3">
-        Reviewed by
+        {{ filters.reviewedBy.name }}
         <multiselect class="mt-3 mb-5"
                      placeholder="Type here..."
                      v-model="selected.reviewedBy"
-                     label="displayName"
+                     :label="filters.reviewedBy.label"
                      track-by="id"
                      multiple
                      hide-selected
                      :options="filters.reviewedBy.options" />
       </label>
       <label class="col-3">
-        Classification
+        {{ filters.choices.name }}
         <multiselect class="mt-3 mb-5"
                      placeholder="Type here..."
                      v-model="selected.choices"
-                     label="name"
+                     :label="filters.choices.label"
                      track-by="id"
                      multiple
                      hide-selected
