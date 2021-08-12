@@ -18,7 +18,7 @@ export default {
     },
     alternativeValueName (value) {
       const alternativeValue = AlternativeValue.query().where('value', value).first()
-      return get(alternativeValue, 'name', '')
+      return get(alternativeValue, 'name', value)
     }
   },
   props: {
@@ -27,8 +27,8 @@ export default {
     }
   },
   methods: {
-    isMe (checker) {
-      return checker.id === User.me().id
+    isMe ({ id = null } = {}) {
+      return id === User.me().id
     },
     emitToggleNotes () {
       /**
@@ -54,13 +54,6 @@ export default {
     },
     history () {
       return [this.taskRecordReview, ...this.taskRecordReview.history]
-    },
-    classList () {
-      return {
-        'task-record-review-choice-form--has-choice': this.hasChoice,
-        'task-record-review-choice-form--has-alternative-value': this.hasAlternativeValue,
-        'task-record-review-choice-form--has-note': this.hasNote
-      }
     }
   }
 }
@@ -69,9 +62,9 @@ export default {
 <template>
   <div class="task-record-review-history">
     <div class="task-record-review-history__checker d-flex p-1" v-for="{ id, checker, alternativeValue, choice, note } in history" :key="id">
-      <div class="task-record-review-history__checker__name">
+      <div class="task-record-review-history__checker__name" :class="{ 'task-record-review-history__checker__name--is-me': isMe(checker) }">
         <span class="text-truncate">
-          {{ checker.firstName || checker.username }}
+          {{ checker.displayName }}
           <template v-if="isMe(checker)">
             (you)
           </template>

@@ -32,6 +32,23 @@ export default [
                   type: 'TaskRecord',
                   id: '3'
                 }
+              },
+              checker: {
+                data: {
+                  type: 'User',
+                  id: '2'
+                }
+              },
+              collaborators: {
+                data: []
+              },
+              history: {
+                data: [
+                  {
+                    type: 'TaskRecordReview',
+                    id: '38'
+                  }
+                ]
               }
             },
             links: {
@@ -58,6 +75,23 @@ export default [
                   type: 'TaskRecord',
                   id: '1'
                 }
+              },
+              checker: {
+                data: {
+                  type: 'User',
+                  id: '2'
+                }
+              },
+              collaborators: {
+                data: []
+              },
+              history: {
+                data: [
+                  {
+                    type: 'TaskRecordReview',
+                    id: '37'
+                  }
+                ]
               }
             },
             links: {
@@ -157,6 +191,22 @@ export default [
             },
             links: {
               self: 'http://localhost/api/v1/task-records/3/'
+            }
+          },
+          {
+            type: 'User',
+            id: 2,
+            attributes: {
+              url: 'http://localhost/api/v1/users/2/',
+              firstName: 'Django',
+              lastName: '',
+              username: 'django',
+              email: 'support@icij.org',
+              emailMd5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
+              isStaff: true
+            },
+            links: {
+              self: 'http://localhost/api/v1/users/2/'
             }
           }
         ],

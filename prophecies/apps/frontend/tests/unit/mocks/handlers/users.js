@@ -8,7 +8,7 @@ export default [
         data: [
           {
             type: 'User',
-            id: 2,
+            id: '2',
             attributes: {
               url: 'http://localhost/api/v1/users/2/',
               firstName: 'Django',
@@ -33,7 +33,7 @@ export default [
       ctx.json({
         data: {
           type: 'User',
-          id: 2,
+          id: '2',
           attributes: {
             url: 'http://localhost/api/v1/users/2/',
             firstName: 'Django',
