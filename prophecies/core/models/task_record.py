@@ -1,4 +1,5 @@
 from copy import deepcopy
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import signals
 from django.utils.translation import gettext_lazy as _
@@ -46,7 +47,10 @@ class TaskRecord(models.Model):
     rounds = models.PositiveIntegerField(default=0, help_text="Number of rounds this record was submitted to")
     priority = models.PositiveIntegerField(default=1, verbose_name="Priority")
     link = models.CharField(max_length=1000, null=True, blank=True, help_text="An optional link to the record")
-
+    locked = models.BooleanField(default=False, help_text="A user locked this task record")
+    locked_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, help_text="User who locked this task record", related_name="locked_task_records")
+    has_notes = models.BooleanField(default=False, help_text="One or more reviews have notes")
+    has_disagreements = models.BooleanField(default=False, help_text="Reviews are different")
 
     def __str__(self):
         return f'Record #{self.id} to be review in {self.task.name}'
@@ -94,5 +98,20 @@ class TaskRecord(models.Model):
         for task_record in TaskRecord.objects.all():
             task_record.update_rounds_and_status()
 
-# Disable temporarly
+    @staticmethod
+    def signal_update_has_notes(sender, instance=None, created=False, **kwargs):
+        if instance.task_record:
+            notes = [review.note for review in instance.task_record.reviews.all()]
+            instance.task_record.has_notes = any(notes)
+            instance.task_record.save(update_fields=['has_notes'])
+
+    @staticmethod
+    def signal_update_has_disagreements(sender, instance=None, created=False, **kwargs):
+        if instance.task_record:
+            choices = [review.choice_id for review in instance.task_record.reviews.all() if review.choice_id]
+            choices = list(set(choices))
+            instance.task_record.has_disagreements = len(choices) > 1
+            instance.task_record.save(update_fields=['has_disagreements'])
+
+# Disabled temporarly
 # signals.post_save.connect(TaskRecord.signal_update_all_rounds_and_status, sender=Task)

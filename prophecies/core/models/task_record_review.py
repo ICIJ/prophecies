@@ -117,5 +117,7 @@ class TaskRecordReview(models.Model):
 
 
 
+signals.post_save.connect(TaskRecord.signal_update_has_notes, sender=TaskRecordReview)
+signals.post_save.connect(TaskRecord.signal_update_has_disagreements, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecord.signal_update_rounds_and_status, sender=TaskRecordReview)
 signals.post_delete.connect(TaskRecord.signal_update_rounds_and_status, sender=TaskRecordReview)

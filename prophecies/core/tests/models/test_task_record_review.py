@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record_review import StatusType
 from prophecies.core.models.task import Task
 
@@ -8,6 +8,7 @@ class TestTaskRecordReview(TestCase):
     def setUp(self):
         project = Project.objects.create(name='Pencil Papers')
         task = Task.objects.create(name='Art', project=project, color='#fe6565', rounds=2)
+        self.choice_group = ChoiceGroup.objects.create(name='Is it correct?')
         self.olivia = User.objects.create(username='olivia')
         self.django = User.objects.create(username='django')
         self.record_foo = TaskRecord.objects.create(original_value='foo', task=task)
@@ -60,3 +61,91 @@ class TestTaskRecordReview(TestCase):
         progress = TaskRecordReview.objects.progress_by_round(checker=self.django)
         self.assertEqual(progress[1], 0)
         self.assertEqual(progress[2], 75)
+
+
+    def test_set_has_notes_in_task_record_to_true(self):
+        TaskRecordReview.objects.create(note='foo', task_record=self.record_foo)
+        TaskRecordReview.objects.create(note='bar', task_record=self.record_foo)
+        self.assertTrue(self.record_foo.has_notes)
+
+
+    def test_set_has_notes_in_task_record_to_false(self):
+        TaskRecordReview.objects.create(note='', task_record=self.record_foo)
+        TaskRecordReview.objects.create(note=None, task_record=self.record_foo)
+        self.assertFalse(self.record_foo.has_notes)
+
+
+    def test_change_has_notes_in_task_record_to_true(self):
+        self.record_foo.has_notes = False
+        self.record_foo.save()
+        TaskRecordReview.objects.create(note='foo', task_record=self.record_foo)
+        self.assertTrue(self.record_foo.has_notes)
+
+
+    def test_change_has_notes_in_task_record_to_false(self):
+        self.record_foo.has_notes = True
+        self.record_foo.save()
+        TaskRecordReview.objects.create(note='', task_record=self.record_foo)
+        self.assertFalse(self.record_foo.has_notes)
+
+
+    def test_change_has_notes_in_task_record_to_true_when_update_review(self):
+        review = TaskRecordReview.objects.create(note='', task_record=self.record_foo)
+        self.assertFalse(self.record_foo.has_notes)
+        review.note = 'foo'
+        review.save()
+        self.assertTrue(self.record_foo.has_notes)
+
+
+    def test_set_has_disagreements_in_task_record_to_true(self):
+        correct = Choice.objects.create(value='Correct', choice_group=self.choice_group)
+        incorrect = Choice.objects.create(value='Incorrect', choice_group=self.choice_group)
+        TaskRecordReview.objects.create(choice=correct, task_record=self.record_foo)
+        TaskRecordReview.objects.create(choice=incorrect, task_record=self.record_foo)
+        self.assertTrue(self.record_foo.has_disagreements)
+
+
+    def test_set_has_disagreements_in_task_record_to_false(self):
+        correct = Choice.objects.create(value='Correct', choice_group=self.choice_group)
+        TaskRecordReview.objects.create(choice=correct, task_record=self.record_foo)
+        TaskRecordReview.objects.create(choice=correct, task_record=self.record_foo)
+        self.assertFalse(self.record_foo.has_disagreements)
+
+
+    def test_set_has_disagreements_in_task_record_to_true_ignoring_empty(self):
+        correct = Choice.objects.create(value='Correct', choice_group=self.choice_group)
+        incorrect = Choice.objects.create(value='Incorrect', choice_group=self.choice_group)
+        TaskRecordReview.objects.create(choice=correct, task_record=self.record_foo)
+        TaskRecordReview.objects.create(choice=incorrect, task_record=self.record_foo)
+        TaskRecordReview.objects.create(choice=None, task_record=self.record_foo)
+        self.assertTrue(self.record_foo.has_disagreements)
+
+
+    def test_set_has_disagreements_in_task_record_to_false_ignoring_empty(self):
+        correct = Choice.objects.create(value='Correct', choice_group=self.choice_group)
+        TaskRecordReview.objects.create(choice=correct, task_record=self.record_foo)
+        TaskRecordReview.objects.create(choice=correct, task_record=self.record_foo)
+        TaskRecordReview.objects.create(choice=None, task_record=self.record_foo)
+        self.assertFalse(self.record_foo.has_disagreements)
+
+
+    def test_change_has_disagreements_in_task_record_to_true(self):
+        correct = Choice.objects.create(value='Correct', choice_group=self.choice_group)
+        incorrect = Choice.objects.create(value='Incorrect', choice_group=self.choice_group)
+        TaskRecordReview.objects.create(choice=correct, task_record=self.record_foo)
+        last_review = TaskRecordReview.objects.create(choice=correct, task_record=self.record_foo)
+        self.assertFalse(self.record_foo.has_disagreements)
+        last_review.choice = incorrect
+        last_review.save()
+        self.assertTrue(self.record_foo.has_disagreements)
+
+
+    def test_change_has_disagreements_in_task_record_to_false(self):
+        correct = Choice.objects.create(value='Correct', choice_group=self.choice_group)
+        incorrect = Choice.objects.create(value='Incorrect', choice_group=self.choice_group)
+        TaskRecordReview.objects.create(choice=correct, task_record=self.record_foo)
+        last_review = TaskRecordReview.objects.create(choice=incorrect, task_record=self.record_foo)
+        self.assertTrue(self.record_foo.has_disagreements)
+        last_review.choice = correct
+        last_review.save()
+        self.assertFalse(self.record_foo.has_disagreements)
