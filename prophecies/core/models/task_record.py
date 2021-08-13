@@ -44,6 +44,7 @@ class TaskRecord(models.Model):
     metadata = models.JSONField(blank=True, null=True, help_text="Optional metadata for this record (in JSON)")
     status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.PENDING, max_length=8, help_text="Status of the record. Set to done after it passes all task's rounds")
     rounds = models.PositiveIntegerField(default=0, help_text="Number of rounds this record was submitted to")
+    priority = models.PositiveIntegerField(default=1, verbose_name="Priority")
     link = models.CharField(max_length=1000, null=True, blank=True, help_text="An optional link to the record")
 
 

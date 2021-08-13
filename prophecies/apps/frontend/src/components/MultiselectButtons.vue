@@ -53,7 +53,7 @@
         if (index === -1) {
           return this.$emit('update', [...this.value, option])
         }
-        return this.$emit('update', this.value.slice(index, 1))
+        return this.$emit('update', this.value.filter((_, i) => i !== index))
       }
     }
   }
@@ -65,7 +65,7 @@
       all
     </b-btn>
     <span v-for="option in options" :key="option[trackBy]">
-      <b-btn :variant="optionVariant(option)" class="multiselect-buttons__item mr-3" @click="toggleOption(option)">
+      <b-btn :variant="optionVariant(option)" class="multiselect-buttons__item" @click="toggleOption(option)">
         {{ option[label] }}
       </b-btn>
     </span>
@@ -74,8 +74,18 @@
 
 <style lang="scss" scoped>
   .multiselect-buttons {
+
+    &__item {
+      margin-right: $spacer;
+
+      &:hover {
+        background-color: $warning;
+        color: text-contrast($warning);
+      }
+    }
+
     &__item.btn-outline-primary {
-      border-color: $border;
+      border-color: $border-color;
     }
 
     &__item.btn-primary {

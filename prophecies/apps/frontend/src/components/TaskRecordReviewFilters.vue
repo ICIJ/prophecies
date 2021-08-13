@@ -1,6 +1,7 @@
 <script>
   import { find, map, mapValues, trim, uniqueId } from 'lodash'
   import Multiselect from 'vue-multiselect'
+  import MultiselectButtons from '@/components/MultiselectButtons'
   import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
   import ChoiceGroup from '@/models/ChoiceGroup'
   import Task from '@/models/Task'
@@ -10,7 +11,8 @@
     name: 'TaskRecordReviewFilters',
     mixins: [taskRecordReviewFiltersMixin],
     components: {
-      Multiselect
+      Multiselect,
+      MultiselectButtons
     },
     props: {
       taskId: {
@@ -28,6 +30,8 @@
           assignedTo: [],
           reviewedBy: [],
           choices: [],
+          priorities: [],
+          rounds: []
         }
       }
     },
@@ -89,10 +93,10 @@
 
 <template>
   <form class="task-record-review-filters" @submit.prevent>
-    <div class="row">
+    <div class="row mb-3">
       <label class="col-3">
         {{ filters.predictedValues.name }}
-        <multiselect class="mt-3 mb-5"
+        <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
                      v-model="selected.predictedValues"
                      :label="filters.predictedValues.label"
@@ -106,7 +110,7 @@
       </label>
       <label class="col-3">
         {{ filters.assignedTo.name }}
-        <multiselect class="mt-3 mb-5"
+        <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
                      v-model="selected.assignedTo"
                      :label="filters.assignedTo.label"
@@ -117,7 +121,7 @@
       </label>
       <label class="col-3">
         {{ filters.reviewedBy.name }}
-        <multiselect class="mt-3 mb-5"
+        <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
                      v-model="selected.reviewedBy"
                      :label="filters.reviewedBy.label"
@@ -128,7 +132,7 @@
       </label>
       <label class="col-3">
         {{ filters.choices.name }}
-        <multiselect class="mt-3 mb-5"
+        <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
                      v-model="selected.choices"
                      :label="filters.choices.label"
@@ -137,6 +141,18 @@
                      hide-selected
                      :options="filters.choices.options" />
       </label>
+      <div class="col-2">
+        {{ filters.priorities.name }}
+        <multiselect-buttons class="mt-3 mb-3"
+                     v-model="selected.priorities"
+                     :options="filters.priorities.options" />
+      </div>
+      <div class="col-2">
+        {{ filters.rounds.name }}
+        <multiselect-buttons class="mt-3 mb-3"
+                     v-model="selected.rounds"
+                     :options="filters.rounds.options" />
+      </div>
     </div>
   </form>
 </template>

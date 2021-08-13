@@ -1,4 +1,4 @@
-import { find, isMatch, map, trim, uniqueId } from 'lodash'
+import { find, isMatch, map, range, trim, uniqueId } from 'lodash'
 
 export default {
   methods: {
@@ -31,6 +31,18 @@ export default {
           options: task.choiceGroup.choices,
           field: 'id',
           label: 'name'
+        },
+        priorities: {
+          name: 'Priority',
+          param: 'task_record__priority__in',
+          field: 'name',
+          options: range(1, 4).map(String).map(name => ({ name }))
+        },
+        rounds: {
+          name: 'Rounds',
+          param: 'task_record__rounds__in',
+          field: 'name',
+          options: range(1, task.rounds + 1).map(String).map(name => ({ name }))
         }
       }
     },
