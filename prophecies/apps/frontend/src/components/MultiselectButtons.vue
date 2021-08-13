@@ -20,6 +20,9 @@
         type: String,
         default: 'name'
       },
+      multiple: {
+        type: Boolean
+      },
       trackBy: {
         type: String,
         default: 'name'
@@ -47,13 +50,26 @@
       removeOptions () {
         return this.$emit('update', [])
       },
+      withOption (option) {
+        if (this.multiple) {
+          return [...this.value, option]
+        }
+        return [option]
+      },
+      withoutOption (option) {
+        if (this.multiple) {
+          const index = this.findOptionIndex(option)
+          return this.value.filter((_, i) => i !== index)
+        }
+        return []
+      },
       toggleOption (option) {
         const tracked = option[this.trackBy]
-        const index = findIndex(this.value, { [this.trackBy]: tracked })
-        if (index === -1) {
-          return this.$emit('update', [...this.value, option])
+        // The option already exist
+        if (this.findOptionIndex(option) === -1) {
+          return this.$emit('update', this.withOption(option))
         }
-        return this.$emit('update', this.value.filter((_, i) => i !== index))
+        return this.$emit('update', this.withoutOption(option))
       }
     }
   }
@@ -81,6 +97,7 @@
       &:hover {
         background-color: $warning;
         color: text-contrast($warning);
+        border-color: $warning;
       }
     }
 

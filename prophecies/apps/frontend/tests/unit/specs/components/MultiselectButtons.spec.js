@@ -13,7 +13,7 @@ describe('MultiselectButtons', () => {
         { id: 2, name: 'Incorrect' },
         { id: 3, name: 'Unknown' }
       ]
-      const propsData = { options, trackBy: 'id' }
+      const propsData = { multiple: false, options, trackBy: 'id' }
       localVue = createLocalVue()
       localVue.component('b-btn', BButton)
       wrapper = mount(MultiselectButtons, { localVue, propsData })
@@ -71,7 +71,7 @@ describe('MultiselectButtons', () => {
         { id: 4, name: 'Cookie' }
       ]
       const value = [{ id: 2, name: 'Croissant' }]
-      const propsData = { options, value }
+      const propsData = { multiple: true, options, value }
       localVue = createLocalVue()
       localVue.component('b-btn', BButton)
       wrapper = mount(MultiselectButtons, { localVue, propsData })
