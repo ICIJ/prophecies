@@ -35,14 +35,52 @@ export default {
         priorities: {
           name: 'Priority',
           param: 'task_record__priority__in',
-          field: 'name',
-          options: range(1, 4).map(String).map(name => ({ name }))
+          field: 'label',
+          label: 'name',
+          options: range(1, 4).map(String).map(label => {
+            const name = `Priority ${label}`
+            return { label, name }
+          })
         },
         rounds: {
           name: 'Rounds',
           param: 'task_record__rounds__in',
-          field: 'name',
-          options: range(1, task.rounds + 1).map(String).map(name => ({ name }))
+          field: 'label',
+          label: 'name',
+          options: range(1, task.rounds + 1).map(String).map(label => {
+            const name = `Round ${label}`
+            return { label, name }
+          })
+        },
+        hasDisagreements: {
+          name: 'Disagreements',
+          param: 'task_record__has_disagreements',
+          label: 'name',
+          field: 'value',
+          options: [
+            { value: '1', label: 'Yes', name: 'Disagree' },
+            { value: '0', label: 'No', name: 'Agree' }
+          ]
+        },
+        locked: {
+          name: 'Locked',
+          param: 'task_record__locked',
+          label: 'name',
+          field: 'value',
+          options: [
+            { value: '1', label: 'Yes', name: 'Locked' },
+            { value: '0', label: 'No', name: 'Not locked' }
+          ]
+        },
+        hasNotes: {
+          name: 'Notes',
+          param: 'task_record__has_notes',
+          label: 'name',
+          field: 'value',
+          options: [
+            { value: '1', label: 'Yes', name: 'With notes' },
+            { value: '0', label: 'No', name: 'Without notes' }
+          ]
         }
       }
     },

@@ -31,7 +31,10 @@
           reviewedBy: [],
           choices: [],
           priorities: [],
-          rounds: []
+          rounds: [],
+          hasDisagreements: [],
+          locked: [],
+          hasNotes: []
         }
       }
     },
@@ -92,8 +95,8 @@
 </script>
 
 <template>
-  <form class="task-record-review-filters" @submit.prevent>
-    <div class="row mb-3">
+  <form class="task-record-review-filters mb-3" @submit.prevent>
+    <div class="row">
       <label class="col-3">
         {{ filters.predictedValues.name }}
         <multiselect class="mt-3 mb-3"
@@ -141,17 +144,49 @@
                      hide-selected
                      :options="filters.choices.options" />
       </label>
-      <div class="col-2">
+    </div>
+    <div class="row">
+      <div class="col">
         {{ filters.priorities.name }}
         <multiselect-buttons class="mt-3 mb-3"
+                     multiple
                      v-model="selected.priorities"
+                     label="label"
+                     track-by="label"
                      :options="filters.priorities.options" />
       </div>
-      <div class="col-2">
+      <div class="col">
         {{ filters.rounds.name }}
         <multiselect-buttons class="mt-3 mb-3"
+                     multiple
                      v-model="selected.rounds"
+                     label="label"
+                     track-by="label"
                      :options="filters.rounds.options" />
+      </div>
+      <div class="col">
+        {{ filters.hasDisagreements.name }}
+        <multiselect-buttons class="mt-3 mb-3"
+                     v-model="selected.hasDisagreements"
+                     label="label"
+                     track-by="label"
+                     :options="filters.hasDisagreements.options" />
+      </div>
+      <div class="col">
+        {{ filters.locked.name }}
+        <multiselect-buttons class="mt-3 mb-3"
+                    v-model="selected.locked"
+                    label="label"
+                    track-by="label"
+                    :options="filters.locked.options" />
+      </div>
+      <div class="col-auto">
+        {{ filters.hasNotes.name }}
+        <multiselect-buttons class="mt-3 mb-3"
+                    v-model="selected.hasNotes"
+                    label="label"
+                    track-by="label"
+                    :options="filters.hasNotes.options" />
       </div>
     </div>
   </form>

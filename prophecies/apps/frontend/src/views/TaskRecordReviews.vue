@@ -20,13 +20,14 @@
                 </span>
               </b-btn>
             </div>
-            <custom-pagination
-              @input="goToPage"
-              class="col"
-              compact
-              :value="Number(page)"
-              :total-rows="pagination.count"
-              :per-page="10" />
+            <div class="col">
+              <custom-pagination
+                compact
+                @input="goToPage"
+                :value="Number(page)"
+                :total-rows="pagination.count"
+                :per-page="10" />
+            </div>
             <div class="col-auto">
               <b-btn :variant="filtersTogglerVariant" class="border font-weight-bold" @click="toggleFilters">
                 <filter-icon size="1x" class="mr-1" />
@@ -54,13 +55,13 @@
                 :selected="isTaskRecordReviewSelected(id)"  />
             </div>
             <custom-pagination
-            v-if="pagination"
-            @input="goToPage"
-            class="mx-auto"
-            compact
-            :value="Number(page)"
-            :total-rows="pagination.count"
-            :per-page="10" />
+              v-if="pagination"
+              @input="goToPage"
+              class="mx-auto"
+              compact
+              :value="Number(page)"
+              :total-rows="pagination.count"
+              :per-page="10" />
           </app-waiter>
         </app-waiter>
       </div>

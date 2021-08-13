@@ -59,10 +59,27 @@
   <div class="task-record-review-applied-filters mb-5">
     <template v-for="filter of filters">
       <template v-for="option in filter.selected">
-        <b-btn variant="primary" class="mr-3 px-3" :title="filter.name"  v-b-tooltip.hover @click="deleteFilterOption(filter, option)">
+        <b-btn variant="primary" class="task-record-review-applied-filters__item" :title="filter.name"  v-b-tooltip.hover @click="deleteFilterOption(filter, option)">
           {{ option[filter.label || 'name'] }}<x-icon class="ml-3" size="1x" />
         </b-btn>
       </template>
     </template>
   </div>
 </template>
+
+<style lang="scss" scoped>
+  .task-record-review-applied-filters {
+    &__item {
+      font-weight: bold;
+      padding-left: $spacer;
+      padding-right: $spacer;
+      margin-right: $spacer;
+    }
+
+    & /deep/ &__item.btn:hover {
+      background-color: $warning;
+      border-color: $warning;
+      color: text-contrast($warning);
+    }
+  }
+</style>
