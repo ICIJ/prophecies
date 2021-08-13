@@ -1,5 +1,5 @@
 <script>
-  import { find, map, mapValues, trim, uniqueId } from 'lodash'
+  import { find, keys, map, mapValues, trim, uniqueId } from 'lodash'
   import Multiselect from 'vue-multiselect'
   import MultiselectButtons from '@/components/MultiselectButtons'
   import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
@@ -67,6 +67,8 @@
         this.selected.predictedValues.push(option)
       },
       readRouteFilters () {
+        // Clear all keys
+        keys(this.selected).forEach(key => this.$set(this.selected, key, []))
         // Method from the mixins
         const options = this.mapRouteQueryToFilterOptions(this.routeFilters, this.task)
         // Apply the selected options to each filter

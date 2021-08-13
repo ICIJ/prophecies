@@ -9,7 +9,7 @@
     <div class="task-record-reviews__container">
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
-          <div class="row mb-5" v-if="pagination">
+          <div class="row mb-4" v-if="pagination">
             <div class="col-auto">
               <b-btn variant="outline-dark" class="border" tag="label">
                 <span class="custom-control custom-checkbox">
@@ -40,6 +40,16 @@
               :route-filters.sync="routeFilters"
               :task-id="taskId" />
           </b-collapse>
+          <ul class="list-inline d-flex align-items-center" v-if="pagination">
+            <li class="list-inline-item font-weight-bold">
+              {{ pagination.count }} results
+            </li>
+            <li class="list-inline-item">
+              <b-btn variant="link" @click="clearFilters()" :disabled="!hasFilters">
+                Clear filters
+              </b-btn>
+            </li>
+          </ul>
           <b-collapse :visible="!showFilters">
             <task-record-review-applied-filters
               :route-filters.sync="routeFilters"
@@ -132,6 +142,9 @@ export default {
     page () {
       return this.$route.query.page || 1
     },
+    hasFilters () {
+      return !!keys(this.routeFilters).length
+    },
     routeFiltersQueryParams () {
       return Object.entries(this.$route.query).reduce((all, [key, value]) => {
         if (key.startsWith('filter[')) {
@@ -200,6 +213,9 @@ export default {
     },
     applyFilters (query) {
       return this.$router.push({ path: this.$route.path, query }, () => {})
+    },
+    clearFilters () {
+      this.$set(this, 'routeFilters', {})
     },
     fetchTask () {
       return Task.api().find(this.taskId)
