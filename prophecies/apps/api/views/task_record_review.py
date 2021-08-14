@@ -1,6 +1,6 @@
 from functools import lru_cache
 from django.db.models import Prefetch
-from rest_framework import viewsets, permissions, serializers
+from rest_framework import exceptions, viewsets, permissions, serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api.relations import ResourceRelatedField, SerializerMethodResourceRelatedField
 from prophecies.core.models import Choice, TaskRecord, TaskRecordReview

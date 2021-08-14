@@ -63,11 +63,12 @@ class TaskRecord(models.Model):
 
 
     def can_lock(self, user):
-        return not self.locked and user in self.checkers
+        checkers_ids = [checker.id for checker in self.checkers ]
+        return not self.locked and user.id in checkers_ids
 
 
     def can_unlock(self, user):
-        return self.locked and user is self.locked_by
+        return self.locked and user.id is self.locked_by.id
 
 
     def computed_status(self):
