@@ -20,7 +20,7 @@
                 </span>
               </b-btn>
             </div>
-            <div class="col">
+            <div class="col" v-if="pagination">
               <custom-pagination
                 compact
                 @input="goToPage"
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { get, find, keys, uniqueId } from 'lodash'
+import { get, find, isEqual, keys, uniqueId } from 'lodash'
 
 import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
@@ -118,11 +118,15 @@ export default {
     }
   },
   watch: {
-    page () {
-      return this.waitFor(this.fetchAllLoader, this.fetchTaskRecordReviews)
+    page (value) {
+      if (this.pagination?.page !== value) {
+        return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
+      }
     },
-    routeFilters () {
-      return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
+    routeFilters (value, previousValue) {
+      if (!isEqual(value, previousValue)) {
+        return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
+      }
     }
   },
   created () {
@@ -140,7 +144,7 @@ export default {
       }
     },
     page () {
-      return this.$route.query.page || 1
+      return Number(this.$route.query.page) || 1
     },
     hasFilters () {
       return !!keys(this.routeFilters).length
@@ -162,7 +166,9 @@ export default {
         }, {})
       },
       set (query) {
-        return this.$router.push({ path: this.$route.path, query }, () => {})
+        if (!isEqual(query, this.routeFiltersQueryParams)) {
+          return this.$router.push({ path: this.$route.path, query }, () => {})
+        }
       }
     },
     task () {
