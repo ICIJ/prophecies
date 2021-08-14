@@ -99,7 +99,7 @@
 <template>
   <form class="task-record-review-filters mb-3" @submit.prevent>
     <div class="row">
-      <label class="col-3">
+      <label class="col-12 col-sm-6 col-lg-3">
         {{ filters.predictedValues.name }}
         <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
@@ -113,7 +113,7 @@
                      @tag="addArbitraryPredictedValue"
                      :options="filters.predictedValues.options" />
       </label>
-      <label class="col-3">
+      <label class="col-12 col-sm-6 col-lg-3">
         {{ filters.assignedTo.name }}
         <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
@@ -124,10 +124,11 @@
                      hide-selected
                      :options="filters.assignedTo.options" />
       </label>
-      <label class="col-3">
+      <label class="col-12 col-sm-6 col-lg-3">
         {{ filters.reviewedBy.name }}
         <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
+                     disabled
                      v-model="selected.reviewedBy"
                      :label="filters.reviewedBy.label"
                      track-by="id"
@@ -135,7 +136,7 @@
                      hide-selected
                      :options="filters.reviewedBy.options" />
       </label>
-      <label class="col-3">
+      <label class="col-12 col-sm-6 col-lg-3">
         {{ filters.choices.name }}
         <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
@@ -148,43 +149,43 @@
       </label>
     </div>
     <div class="row">
-      <div class="col">
+      <div class="col-12 col-md-6 col-lg">
         {{ filters.priorities.name }}
-        <multiselect-buttons class="mt-3 mb-3"
+        <multiselect-buttons class="mt-3 mb-3 text-nowrap"
                      multiple
                      v-model="selected.priorities"
                      label="label"
                      track-by="label"
                      :options="filters.priorities.options" />
       </div>
-      <div class="col">
+      <div class="col-12 col-md-6 col-lg">
         {{ filters.rounds.name }}
-        <multiselect-buttons class="mt-3 mb-3"
+        <multiselect-buttons class="mt-3 mb-3 text-nowrap"
                      multiple
                      v-model="selected.rounds"
                      label="label"
                      track-by="label"
                      :options="filters.rounds.options" />
       </div>
-      <div class="col">
+      <div class="col-12 col-md-6 col-lg">
         {{ filters.hasDisagreements.name }}
-        <multiselect-buttons class="mt-3 mb-3"
+        <multiselect-buttons class="mt-3 mb-3 text-nowrap"
                      v-model="selected.hasDisagreements"
                      label="label"
                      track-by="label"
                      :options="filters.hasDisagreements.options" />
       </div>
-      <div class="col">
+      <div class="col-12 col-md-6 col-lg">
         {{ filters.locked.name }}
-        <multiselect-buttons class="mt-3 mb-3"
+        <multiselect-buttons class="mt-3 mb-3 text-nowrap"
                     v-model="selected.locked"
                     label="label"
                     track-by="label"
                     :options="filters.locked.options" />
       </div>
-      <div class="col-auto">
+      <div class="col-12 col-md-6 col-lg">
         {{ filters.hasNotes.name }}
-        <multiselect-buttons class="mt-3 mb-3"
+        <multiselect-buttons class="mt-3 mb-3 text-nowrap"
                     v-model="selected.hasNotes"
                     label="label"
                     track-by="label"

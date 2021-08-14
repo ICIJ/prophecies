@@ -6,6 +6,11 @@
     font-size: 1rem;
   }
 
+  &--disabled.multiselect &__current,
+  &--disabled.multiselect &__select {
+    background: transparent;
+  }
+
   &--active .multiselect__tags {
     background-color: $input-focus-bg;
     border: 1px solid $input-focus-border-color;
