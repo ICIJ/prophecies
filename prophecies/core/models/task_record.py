@@ -2,6 +2,7 @@ from copy import deepcopy
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import signals
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from types import SimpleNamespace
 from prophecies.core.contrib.namespace import ExtendedNamespace
@@ -56,6 +57,19 @@ class TaskRecord(models.Model):
         return f'Record #{self.id} to be review in {self.task.name}'
 
 
+    @cached_property
+    def checkers(self):
+        return [ review.checker for review in self.reviews.all() ]
+
+
+    def can_lock(self, user):
+        return not self.locked and user in self.checkers
+
+
+    def can_unlock(self, user):
+        return self.locked and user is self.locked_by
+
+
     def computed_status(self):
         if self.reviews.count() == 0:
             return StatusType.PENDING
@@ -63,6 +77,7 @@ class TaskRecord(models.Model):
             return StatusType.DONE
         else:
             return StatusType.ASSIGNED
+
 
     def computed_rounds(self):
         return self.reviews.latest_round(self)

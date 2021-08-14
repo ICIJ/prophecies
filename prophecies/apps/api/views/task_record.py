@@ -25,3 +25,7 @@ class TaskRecordViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TaskRecord.objects.all()
     serializer_class = TaskRecordSerializer
     ordering = ['-id']
+
+    def check_object_permissions(self, request, obj):
+        if request.user in obj.checkers:
+            raise exceptions.PermissionDenied(detail='You do not have permission to update this resource.')
