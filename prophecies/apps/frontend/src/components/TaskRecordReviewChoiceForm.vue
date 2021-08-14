@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     choiceIsSelected (choice) {
-      return choice.id === this.taskRecordReview.choice_id
+      return choice.id === this.taskRecordReview.choiceId
     },
     choiceClassList (choice) {
       return {
@@ -91,7 +91,7 @@ export default {
         .query()
         .with('choices')
         .with('alternativeValues')
-        .find(this.taskRecordReview.taskRecord.task.choiceGroup_id)
+        .find(this.taskRecordReview.taskRecord.task.choiceGroupId)
     },
     classList () {
       return {
@@ -103,7 +103,7 @@ export default {
       return get(this, 'taskRecordReview.alternativeValue', false)
     },
     hasChoice () {
-      return !!get(this, 'taskRecordReview.choice_id', false)
+      return !!get(this, 'taskRecordReview.choiceId', false)
     }
   }
 }

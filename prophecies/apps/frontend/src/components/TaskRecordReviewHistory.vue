@@ -50,7 +50,7 @@ export default {
         .find(this.taskRecordReviewId)
     },
     taskRecordId () {
-      return this.taskRecordReview.taskRecord_id
+      return this.taskRecordReview.taskRecordId
     },
     history () {
       return [this.taskRecordReview, ...this.taskRecordReview.history]

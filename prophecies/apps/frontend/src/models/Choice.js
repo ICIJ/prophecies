@@ -11,8 +11,8 @@ export default class Choice extends Model {
       value: this.string(),
       requireAlternativeValue: this.boolean(),
       shortkeys: this.string(null).nullable(),
-      choiceGroup_id: this.attr(null),
-      choiceGroup: this.belongsTo(ChoiceGroup, 'choiceGroup_id')
+      choiceGroupId: this.attr(null),
+      choiceGroup: this.belongsTo(ChoiceGroup, 'choiceGroupId')
     }
   }
 }

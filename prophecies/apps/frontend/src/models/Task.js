@@ -26,11 +26,11 @@ export default class Task extends Model {
       userProgress: this.number(0),
       progress: this.number(0),
       progressByRound: this.attr(),
-      project_id: this.attr(null),
-      project: this.belongsTo(Project, 'project_id'),
+      projectId: this.attr(null),
+      project: this.belongsTo(Project, 'projectId'),
       rounds: this.number(1),
-      choiceGroup_id: this.attr(null),
-      choiceGroup: this.belongsTo(ChoiceGroup, 'choiceGroup_id')
+      choiceGroupId: this.attr(null),
+      choiceGroup: this.belongsTo(ChoiceGroup, 'choiceGroupId')
     }
   }
 

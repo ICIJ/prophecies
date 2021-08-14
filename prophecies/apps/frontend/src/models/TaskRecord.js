@@ -16,8 +16,8 @@ export default class TaskRecord extends Model {
       metadata: this.attr(null),
       rounds: this.number(),
       status: this.string(),
-      task_id: this.attr(null),
-      task: this.belongsTo(Task, 'task_id')
+      taskId: this.attr(null),
+      task: this.belongsTo(Task, 'taskId')
     }
   }
 

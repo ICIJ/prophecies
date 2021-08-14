@@ -180,7 +180,7 @@ export default {
     taskRecordReviews () {
       return TaskRecordReview
         .query()
-        .where('checker_id', User.me().id)
+        .where('checkerId', User.me().id)
         .all()
     },
     taskRecordReviewsParams () {
@@ -227,7 +227,7 @@ export default {
       return Task.api().find(this.taskId)
     },
     fetchChoiceGroup () {
-      return ChoiceGroup.api().find(this.task.choiceGroup_id)
+      return ChoiceGroup.api().find(this.task.choiceGroupId)
     },
     async fetchTaskRecordReviews () {
       TaskRecordReview.deleteAll()

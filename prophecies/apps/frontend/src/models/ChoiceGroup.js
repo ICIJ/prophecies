@@ -11,8 +11,8 @@ export default class ChoiceGroup extends Model {
     return {
       id: this.attr(null),
       name: this.string(),
-      alternativeValues: this.hasMany(AlternativeValue, 'choiceGroup_id'),
-      choices: this.hasMany(Choice, 'choiceGroup_id')
+      alternativeValues: this.hasMany(AlternativeValue, 'choiceGroupId'),
+      choices: this.hasMany(Choice, 'choiceGroupId')
     }
   }
 

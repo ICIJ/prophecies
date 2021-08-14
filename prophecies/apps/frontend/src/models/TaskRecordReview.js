@@ -15,13 +15,13 @@ export default class TaskRecordReview extends Model {
       status: this.string(),
       note: this.string(),
       alternativeValue: this.string(null).nullable(),
-      choice_id: this.attr(null),
-      choice: this.belongsTo(Choice, 'choice_id'),
-      taskRecord_id: this.attr(null),
-      taskRecord: this.belongsTo(TaskRecord, 'taskRecord_id'),
-      checker_id: this.attr(null),
-      checker: this.belongsTo(User, 'checker_id'),
-      history: this.hasMany(TaskRecordReview, 'taskRecord_id'),
+      choiceId: this.attr(null),
+      choice: this.belongsTo(Choice, 'choiceId'),
+      taskRecordId: this.attr(null),
+      taskRecord: this.belongsTo(TaskRecord, 'taskRecordId'),
+      checkerId: this.attr(null),
+      checker: this.belongsTo(User, 'checkerId'),
+      history: this.hasMany(TaskRecordReview, 'taskRecordId'),
       selected: this.boolean(false)
     }
   }

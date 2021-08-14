@@ -9,8 +9,8 @@ export default class AlternativeValue extends Model {
       id: this.attr(null),
       name: this.string(),
       value: this.string(),
-      choiceGroup_id: this.attr(null),
-      choiceGroup: this.belongsTo(ChoiceGroup, 'choiceGroup_id')
+      choiceGroupId: this.attr(null),
+      choiceGroup: this.belongsTo(ChoiceGroup, 'choiceGroupId')
     }
   }
 }
