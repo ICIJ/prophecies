@@ -50,7 +50,7 @@
               </b-btn>
             </li>
           </ul>
-          <b-collapse :visible="!showFilters">
+          <b-collapse :visible="!showFilters && hasFilters">
             <task-record-review-applied-filters
               :route-filters.sync="routeFilters"
               :task-id="taskId" />

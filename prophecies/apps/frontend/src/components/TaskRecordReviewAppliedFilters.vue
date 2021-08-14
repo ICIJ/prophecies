@@ -56,7 +56,7 @@
 </script>
 
 <template>
-  <div class="task-record-review-applied-filters mb-5">
+  <div class="task-record-review-applied-filters mb-4">
     <template v-for="filter of filters">
       <template v-for="option in filter.selected">
         <b-btn variant="primary" class="task-record-review-applied-filters__item" :title="filter.name"  v-b-tooltip.hover @click="deleteFilterOption(filter, option)">
