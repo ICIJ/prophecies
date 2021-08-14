@@ -26,24 +26,22 @@ class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
 class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     checker = ResourceRelatedField(many=False, read_only=True)
-    collaborators = SerializerMethodResourceRelatedField(many=True, model=UserSerializer, read_only=True)
     choice = ResourceRelatedField(many=False, queryset=Choice.objects, required=False)
     task_record = ResourceRelatedField(many=False, read_only=True)
     history = SerializerMethodResourceRelatedField(many=True, model=TaskRecordReview, read_only=True)
     included_serializers = {
         'checker': UserSerializer,
-        'collaborators': UserSerializer,
         'choice': ChoiceSerializer,
         'task_record': TaskRecordSerializer,
         'history': FlatTaskRecordReviewSerializer
     }
 
     class JSONAPIMeta:
-        included_resources = ['checker', 'collaborators', 'choice', 'task_record', 'history']
+        included_resources = ['checker', 'choice', 'task_record', 'history']
 
     class Meta:
         model = TaskRecordReview
-        fields = ['id', 'url', 'checker', 'collaborators', 'choice', 'status', 'note', 'alternative_value', 'task_record', 'history']
+        fields = ['id', 'url', 'checker', 'choice', 'status', 'note', 'alternative_value', 'task_record', 'history']
         read_only_fields = ['status',]
 
     def __init__(self, *args, **kwargs):
@@ -105,8 +103,10 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
         """
         return TaskRecordReview.objects \
             .filter(checker=self.request.user) \
-            .prefetch_related('task_record', 'task_record__task',
-                'task_record__task__project', 'task_record__reviews', 'checker')
+            .select_related('checker') \
+            .select_related('task_record') \
+            .select_related('task_record__task') \
+            .select_related('task_record__task__project')
 
 
     def check_object_permissions(self, request, obj):
