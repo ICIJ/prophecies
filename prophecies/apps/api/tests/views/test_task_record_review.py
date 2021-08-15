@@ -206,3 +206,21 @@ class TestTaskRecordReview(TestCase):
         data = request.json().get('data')
         self.assertTrue(data.get('relationships').get('choice') is not None)
         self.assertEqual(data.get('attributes').get('status'), 'DONE')
+
+
+    def test_it_cannot_review_a_locked_record(self):
+        self.task_record_foo.locked = True
+        self.task_record_foo.save()
+        attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django)
+        self.client.login(username='django', password='django')
+        payload = {
+            'data': {
+                'type': 'TaskRecordReview',
+                'id': attribution.id,
+                'attributes': {
+                    'note': 'Foo!'
+                }
+            }
+        }
+        request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload, content_type='application/vnd.api+json')
+        self.assertEqual(request.status_code, 403)
