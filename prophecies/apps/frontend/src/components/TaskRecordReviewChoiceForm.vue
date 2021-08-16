@@ -1,5 +1,6 @@
 <script>
-import { find, get } from 'lodash'
+import { find, get, uniqueId } from 'lodash'
+import Multiselect from 'vue-multiselect'
 import { toVariant } from '@/utils/variant'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -17,6 +18,7 @@ export default {
     }
   },
   components: {
+    Multiselect,
     ShortkeyBadge
   },
   filters: {
@@ -50,11 +52,17 @@ export default {
       }
       return choice.shortkeys.split(',')
     },
+    focusOnAlternativeValueInput () {
+      const input = this.$refs.alternativeValueInput.$el.querySelector('input')
+      if (input) {        
+        input.focus()
+      }
+    },
     async selectChoice (choice) {
       if (choice.requireAlternativeValue && !this.alternativeValue) {
-        return this.$refs.alternativeValueInput.focus()
+        return this.focusOnAlternativeValueInput()
       }
-      const alternativeValue = choice.requireAlternativeValue ? this.alternativeValue : null
+      const alternativeValue = choice.requireAlternativeValue ? this.alternativeValue.value : null
       const data = { alternativeValue, choice }
       /**
        * Fired when the form is submitted
@@ -66,8 +74,24 @@ export default {
     async selectAlternativeValue () {
       await this.selectChoice(this.alternativeValueChoice)
     },
+    async addArbitraryAlternativeValue (value) {
+      this.alternativeValue = this.toSerializableOption(value)
+      await this.selectAlternativeValue()
+    },
+    findAlternativeValue (predicate) {
+      return find(this.alternativeValues, predicate)
+    },
     setInitialValues () {
-      this.alternativeValue = get(this, 'taskRecordReview.alternativeValue', null) || null
+      const value = get(this, 'taskRecordReview.alternativeValue', null)
+      if (value) {
+        const alternativeValue = this.findAlternativeValue({ value })
+        this.alternativeValue = alternativeValue || this.toSerializableOption(value)
+      }
+    },
+    toSerializableOption (value) {
+      const id = uniqueId('arbitrary-')
+      const name = value
+      return { id, name, value }
     }
   },
   computed: {
@@ -137,14 +161,17 @@ export default {
       </li>
     </ul>
     <div class="task-record-review-choice-form__alternative-value" v-if="alternativeValueChoice">
-      <b-form-select v-model="alternativeValue" @change="selectAlternativeValue"  ref="alternativeValueInput">
-        <b-form-select-option :value="null">
-          Select the correct value
-        </b-form-select-option>
-        <b-form-select-option v-for="{ id, value, name } in alternativeValues" :value="value" :key="id">
-          {{ name }}
-        </b-form-select-option>
-      </b-form-select>
+      <multiselect ref="alternativeValueInput"
+         placeholder="Select the correct value"
+         v-model="alternativeValue"
+         label="name"
+         track-by="value"
+         taggable
+         tag-placeholder="Use this exact value"
+         tag-position="bottom"
+         @input="selectAlternativeValue()"
+         @tag="addArbitraryAlternativeValue"
+         :options="alternativeValues" />
     </div>
   </fieldset>
 </template>
@@ -176,11 +203,11 @@ export default {
       }
     }
 
-    &__alternative-value select {
+    &__alternative-value .multiselect {
       transition: $transition-fade;
     }
 
-    &--has-choice:not(:hover):not(&--has-alternative-value) &__alternative-value select:not(:focus) {
+    &--has-choice:not(:hover):not(&--has-alternative-value) &__alternative-value .multiselect:not(.multiselect--active) {
       opacity: 0.25;
     }
   }

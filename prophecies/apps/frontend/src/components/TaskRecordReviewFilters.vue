@@ -109,6 +109,7 @@
                      multiple
                      taggable
                      tag-placeholder="Search for this exact value"
+                     tag-position="bottom"
                      @tag="addArbitraryPredictedValue"
                      :options="filters.predictedValues.options" />
       </label>
