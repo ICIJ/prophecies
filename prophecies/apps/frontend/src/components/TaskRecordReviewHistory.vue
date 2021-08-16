@@ -85,7 +85,7 @@ export default {
         </b-badge>
       </div>
       <div class="task-record-review-history__checker__alternative-value flex-grow-1">
-        <template v-if="!isMe(checker)">
+        <template v-if="isMe(checker)">
           <span class="text-truncate text-dark px-2">
             {{ alternativeValue | alternativeValueName }}
           </span>
