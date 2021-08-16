@@ -101,6 +101,8 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
         """
         All the task record attribution for the currently authenticated user.
         """
+        if not self.request.user.is_authenticated:
+            return TaskRecordReview.objects.none()
         return TaskRecordReview.objects \
             .filter(checker=self.request.user) \
             .select_related('checker') \
