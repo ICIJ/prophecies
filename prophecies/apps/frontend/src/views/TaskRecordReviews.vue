@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { get, find, isEqual, keys, uniqueId } from 'lodash'
+import { compact, get, find, isEqual, keys, uniqueId, values } from 'lodash'
 
 import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
@@ -140,7 +140,8 @@ export default {
         })
       },
       get () {
-        return keys(this.selectedIds).length === this.tasks.length
+        const selectedIds = values(this.selectedIds)
+        return compact(selectedIds).length === this.taskRecordReviews.length
       }
     },
     page () {
