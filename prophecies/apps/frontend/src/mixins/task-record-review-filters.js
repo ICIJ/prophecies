@@ -1,4 +1,4 @@
-import { find, isMatch, map, range, trim, uniqueId } from 'lodash'
+import { find, get, isMatch, map, range, trim, uniqueId } from 'lodash'
 
 export default {
   methods: {
@@ -92,7 +92,7 @@ export default {
     },
     getSelectedFiltersAsRouteFilters (filters, selected = {}) {
       return Object.entries(filters).reduce((params, [filter, { field, param }]) => {
-        const filterSelection = selected[filter] || []
+        const filterSelection = this.cleanNullValue(selected[filter] || [], field)
         if (filterSelection.length) {
           if (param.endsWith('__iregex') || param.endsWith('__regex')) {
             const values = map(filterSelection, field).join('|')
@@ -126,16 +126,22 @@ export default {
         if (this.useNullParam(filter, value)) {
           const nullValue = filter.nullValue === undefined ? '-1' : filter.nullValue
           all[this.toQueryParam(filter.nullParam)] = nullValue
-          all[this.toQueryParam(filter.param)] = this.withoutNullValue(filter, value)
-        } else {
-          all[this.toQueryParam(filter.param)] = value
         }
+        all[this.toQueryParam(filter.param)] = this.withoutNullValue(filter, value)
         return all
       }, {})
     },
+    cleanNullValue (values, field) {
+      // Null value is the last selected, so we only keep that one
+      if (get(values, [values.length - 1, field]) === '-1') {
+        return values.slice(-1)
+      }
+      // Or we just remove the null value from the list
+      return values.filter(value => value[field] !== '-1')
+    },
     useNullParam (filter, value) {
       const values = this.toValuesList(filter.param, value)
-      return values.includes('-1') && filter.nullParam
+      return values.pop() === '-1' && filter.nullParam
     },
     withoutNullValue (filter, value) {
       const values = this.toValuesList(filter.param, value).filter(v => v !== '-1')

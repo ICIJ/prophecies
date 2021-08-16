@@ -84,7 +84,7 @@
       },
       selected: {
         deep: true,
-        handler () {
+        handler (u) {
           /**
            * @event update:routeFilters
            * @param routes query params after updating filters
