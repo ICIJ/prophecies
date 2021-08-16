@@ -85,17 +85,19 @@ export default {
         </b-badge>
       </div>
       <div class="task-record-review-history__checker__alternative-value flex-grow-1">
-        <template v-if="isMe(checker)">
-          <span class="text-truncate text-dark px-2">
-            {{ alternativeValue | alternativeValueName }}
-          </span>
-        </template>
-        <template v-else>
-          <b-btn variant="link" class="p-0" @click="selectSameChoice({ alternativeValue, choice })" title="Use the same value" v-b-tooltip.hover>
+        <template v-if="alternativeValue">
+          <template v-if="isMe(checker)">
             <span class="text-truncate text-dark px-2">
               {{ alternativeValue | alternativeValueName }}
             </span>
-          </b-btn>
+          </template>
+          <template v-else>
+            <b-btn variant="link" class="p-0" @click="selectSameChoice({ alternativeValue, choice })" title="Use the same value" v-b-tooltip.hover>
+              <span class="text-truncate text-dark px-2">
+                {{ alternativeValue | alternativeValueName }}
+              </span>
+            </b-btn>
+          </template>
         </template>
       </div>
       <b-btn variant="link" size="sm" class="task-record-review-history__checker__note" @click="emitToggleNotes">
