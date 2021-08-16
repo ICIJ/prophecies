@@ -26,7 +26,11 @@ export default {
       return TaskRecordReview
         .query()
         .with('taskRecord')
+        .with('taskRecord.lockedBy')
         .find(this.taskRecordReviewId)
+    },
+    taskRecord () {
+      return this.taskRecordReview.taskRecord
     },
     link () {
       return get(this, 'taskRecordReview.taskRecord.link')
@@ -40,12 +44,19 @@ export default {
        */
       this.$emit('copy', this.taskRecordReview)
     },
-    emitToggleLock () {
+    emitLock () {
       /**
-       * @event toggle-lock
+       * @event lock
        * @param TaskRecordReview
        */
-      this.$emit('toggle-lock', this.taskRecordReview)
+      this.$emit('lock', this.taskRecordReview)
+    },
+    emitUnlock () {
+      /**
+       * @event unlock
+       * @param TaskRecordReview
+       */
+      this.$emit('unlock', this.taskRecordReview)
     },
     emitHistory () {
       /**
@@ -69,7 +80,15 @@ export default {
         <copy-icon size="1.5x" />
         <span class="sr-only">Copy</span>
       </b-btn>
-      <b-btn variant="link" class="text-dark" title="Lock" v-b-tooltip.left @click="emitToggleLock">
+      <b-btn variant="link" v-if="taskRecord.lockedByMe" class="text-dark" title="Unlock this record" v-b-tooltip.left @click="emitUnlock">
+        <lock-icon size="1.5x" />
+        <span class="sr-only">Unlock</span>
+      </b-btn>
+      <b-btn variant="link" v-if="taskRecord.lockedByOther" class="text-danger" :title="`${taskRecord.lockedBy.displayName} must unlock this record to let you review it`" v-b-tooltip.left>
+        <lock-icon size="1.5x" />
+        <span class="sr-only">Unlock</span>
+      </b-btn>
+      <b-btn variant="link" v-if="!taskRecord.locked" class="text-dark" title="Lock this record (nobody will be able to review it until you unlock it)" v-b-tooltip.left @click="emitLock">
         <unlock-icon size="1.5x" />
         <span class="sr-only">Lock</span>
       </b-btn>

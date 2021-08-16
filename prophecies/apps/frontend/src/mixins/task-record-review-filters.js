@@ -26,7 +26,7 @@ export default {
           label: 'displayName'
         },
         choices: {
-          name: 'Choices',
+          name: 'Classification',
           param: 'choice__in',
           options: task.choiceGroup.choices,
           field: 'id',

@@ -1,5 +1,5 @@
 <script>
-import { find, get, uniqueId } from 'lodash'
+import { find, get } from 'lodash'
 import { toVariant } from '@/utils/variant'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -71,6 +71,9 @@ export default {
     }
   },
   computed: {
+    taskRecord () {
+      return this.taskRecordReview.taskRecord
+    },
     taskRecordReview () {
       return TaskRecordReview
         .query()
@@ -96,7 +99,8 @@ export default {
     classList () {
       return {
         'task-record-review-choice-form--has-choice': this.hasChoice,
-        'task-record-review-choice-form--has-alternative-value': this.hasAlternativeValue
+        'task-record-review-choice-form--has-alternative-value': this.hasAlternativeValue,
+        'task-record-review-choice-form--is-locked': this.isLocked
       }
     },
     hasAlternativeValue () {
@@ -104,13 +108,16 @@ export default {
     },
     hasChoice () {
       return !!get(this, 'taskRecordReview.choiceId', false)
+    },
+    isLocked () {
+      return this.taskRecord.locked
     }
   }
 }
 </script>
 
 <template>
-  <fieldset class="task-record-review-choice-form py-1" :class="classList">
+  <fieldset class="task-record-review-choice-form py-1" :class="classList" :disabled="isLocked">
     <ul class="task-record-review-choice-form__choices list-unstyled row">
       <li v-for="choice in choiceGroup.choices"
           class="col pb-3 task-record-review-choice-form__choices__item"

@@ -4,6 +4,7 @@ import TaskRecordReviewActions from '@/components/TaskRecordReviewActions'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
 import TaskRecordReviewHistory from '@/components/TaskRecordReviewHistory'
 import TaskRecordReviewNotes from '@/components/TaskRecordReviewNotes'
+import TaskRecord from '@/models/TaskRecord'
 import TaskRecordReview from '@/models/TaskRecordReview'
 
 export default {
@@ -42,15 +43,38 @@ export default {
       await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, data)
       // Hide node to avoid using unecessary space
       this.showNotes = false
-      /**
-       * Fired when the task record review is updated
-       * @event update
-       * @param The updated attributes and relationships
-       */
-      this.$emit('update', data)
+      // Let parent component know about the update
+      this.emitUpdate()
+    },
+    async lock () {
+      await TaskRecord.api().lock(this.taskRecord.id)
+      // Let parent component know about the update
+      this.emitUpdate()
+    },
+    async lockWithLoader () {
+      this.$wait.start(this.updateLoader)
+      await this.lock()
+      this.$wait.end(this.updateLoader)
+    },
+    async unlock () {
+      await TaskRecord.api().unlock(this.taskRecord.id)
+      // Let parent component know about the update
+      this.emitUpdate()
+    },
+    async unlockWithLoader () {
+      this.$wait.start(this.updateLoader)
+      await this.unlock()
+      this.$wait.end(this.updateLoader)
     },
     toggleNotes () {
       this.showNotes = !this.showNotes
+    },
+    emitUpdate () {
+      /**
+       * Fired when the task record review is updated
+       * @event update
+       */
+      this.$emit('update')
     }
   },
   computed: {
@@ -67,6 +91,9 @@ export default {
         .query()
         .with('taskRecord')
         .find(this.taskRecordReviewId)
+    },
+    taskRecord () {
+      return this.taskRecordReview.taskRecord
     },
     isDone () {
       return get(this, 'taskRecordReview.status') === 'DONE'
@@ -122,7 +149,9 @@ export default {
           </div>
         </div>
         <div class="task-record-review-card__actions col-auto">
-          <task-record-review-actions :task-record-review-id="taskRecordReviewId" />
+          <task-record-review-actions :task-record-review-id="taskRecordReviewId"
+            @lock="lockWithLoader"
+            @unlock="unlockWithLoader" />
         </div>
       </div>
       <b-collapse :visible="showNotes">

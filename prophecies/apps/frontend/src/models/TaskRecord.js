@@ -1,7 +1,8 @@
 import { Model } from '@vuex-orm/core'
-import { responseNormalizer } from '@/utils/jsonapi'
+import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import Task from '@/models/Task'
+import User from '@/models/User'
 
 export default class TaskRecord extends Model {
   static entity = 'task-records'
@@ -13,6 +14,9 @@ export default class TaskRecord extends Model {
       originalValue: this.string(),
       predictedValue: this.string(),
       link: this.string(),
+      locked: this.boolean(),
+      lockedById: this.attr(null),
+      lockedBy: this.belongsTo(User, 'lockedById'),
       metadata: this.attr(null),
       rounds: this.number(),
       status: this.string(),
@@ -23,6 +27,29 @@ export default class TaskRecord extends Model {
 
   static apiConfig = {
     baseURL: `${settings.apiUrl}/task-records/`,
-    dataTransformer: responseNormalizer
+    dataTransformer: responseNormalizer,
+    actions: {
+      save (id, { attributes = { }, relationships = { } } = { }) {
+        const type = 'TaskRecord'
+        const data = { type, id, attributes, relationships }
+        return this.put(`${id}/`, { data }, { headers: defaultHeaders() })
+      },
+      lock (id) {
+        const attributes = { locked: true }
+        return this.save(id, { attributes })
+      },
+      unlock (id) {
+        const attributes = { locked: false }
+        return this.save(id, { attributes })
+      }
+    }
+  }
+
+  get lockedByMe () {
+    return this.locked && this.lockedById === User.me().id
+  }
+
+  get lockedByOther () {
+    return this.locked && this.lockedById !== User.me().id
   }
 }

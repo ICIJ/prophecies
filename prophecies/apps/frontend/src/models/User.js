@@ -48,5 +48,4 @@ export default class User extends Model {
     }
     return this.username
   }
-
 }
