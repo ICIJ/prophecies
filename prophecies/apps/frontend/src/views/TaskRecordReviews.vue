@@ -165,8 +165,7 @@ export default {
       get () {
         return Object.entries(this.$route.query).reduce((all, [key, value]) => {
           if (this.isFiltersParam(this.filters, { key })) {
-            const param = this.toFilterParam(key)
-            all[param] = value
+            all[key] = value
           }
           return all
         }, {})
@@ -245,11 +244,13 @@ export default {
       return ChoiceGroup.api().find(this.task.choiceGroupId)
     },
     async fetchTaskRecordReviews () {
-      TaskRecordReview.deleteAll()
       const params = this.taskRecordReviewsParams
-      const result = await TaskRecordReview.api().get('', { params })
+      const result = await TaskRecordReview.api().get('', { params, save: false })
       const pagination = get(result, 'response.data.meta.pagination', null)
       this.$set(this, 'pagination', pagination)
+      // Finally, delete all existing reviews and save the result
+      TaskRecordReview.deleteAll()
+      result.save()
     },
     async goToPage (page) {
       const query = { ...this.$route.query, page }

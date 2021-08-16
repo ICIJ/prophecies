@@ -44,7 +44,7 @@
           }
           return selected
         })
-        const routeFilters = this.getSelectedFiltersAsQueryParams(this.filters, selected)
+        const routeFilters = this.getSelectedFiltersAsRouteFilters(this.filters, selected)
         /**
          * @event update:routeFilters
          * @param routes query params after deleting an option

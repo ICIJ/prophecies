@@ -3,7 +3,7 @@ import { find, isMatch, map, range, trim, uniqueId } from 'lodash'
 export default {
   methods: {
     getTaskFilters (task) {
-      return {
+      return !task ? {} : {
         predictedValues: {
           allowArbitraryOptions: true,
           name: 'Predicted value',
@@ -33,7 +33,7 @@ export default {
           nullValue: true,
           options: [
             ...task.choiceGroup.choices,
-            { id: '-1', name: 'Unclassified' }
+            { id: '-1', name: 'Not classified yet' }
           ],
           field: 'id',
           label: 'name'
@@ -90,7 +90,7 @@ export default {
         }
       }
     },
-    getSelectedFiltersAsQueryParams (filters, selected = {}) {
+    getSelectedFiltersAsRouteFilters (filters, selected = {}) {
       return Object.entries(filters).reduce((params, [filter, { field, param }]) => {
         const filterSelection = selected[filter] || []
         if (filterSelection.length) {
@@ -106,7 +106,8 @@ export default {
     },
     mapRouteQueryToFilterOptions (queryParams, task) {
       const filters = this.getTaskFilters(task)
-      return Object.entries(queryParams).map(([param, value]) => {
+      return Object.entries(queryParams).map(([queryParam, value]) => {
+        const param = this.toFilterParam(queryParam)
         const [key, filter] = this.findFilterEntry(filters, { param })
         const { allowArbitraryOptions } = filter
         // This will look for existing options in the filters
@@ -119,7 +120,8 @@ export default {
     },
     mapRouteFiltersToAppliedQueryParams (routeFilters, task) {
       const filters = this.getTaskFilters(task)
-      return Object.entries(routeFilters).reduce((all, [param, value]) => {
+      return Object.entries(routeFilters).reduce((all, [queryParam, value]) => {
+        const param = this.toFilterParam(queryParam)
         const [, filter] = this.findFilterEntry(filters, { param })
         if (this.useNullParam(filter, value)) {
           const nullValue = filter.nullValue === undefined ? '-1' : filter.nullValue
