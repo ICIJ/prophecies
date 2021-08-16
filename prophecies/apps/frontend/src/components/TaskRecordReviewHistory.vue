@@ -32,10 +32,19 @@ export default {
     },
     emitToggleNotes () {
       /**
+       * Fired when the user toggles the notes
        * @event toggle-notes
        * @param TaskRecordReview
        */
       this.$emit('toggle-notes', this.taskRecordReview)
+    },
+    selectSameChoice ({ alternativeValue = null, choice } = {}) {
+      /**
+       * Fired when user select the same alternative value
+       * @event submit
+       * @param The changed attributes and relationships
+       */
+      this.$emit('same', { alternativeValue, choice })
     }
   },
   computed: {
@@ -76,9 +85,18 @@ export default {
         </b-badge>
       </div>
       <div class="task-record-review-history__checker__alternative-value flex-grow-1">
-        <span class="text-truncate">
-          {{ alternativeValue | alternativeValueName }}
-        </span>
+        <template v-if="!isMe(checker)">
+          <span class="text-truncate text-dark px-2">
+            {{ alternativeValue | alternativeValueName }}
+          </span>
+        </template>
+        <template v-else>
+          <b-btn variant="link" class="p-0" @click="selectSameChoice({ alternativeValue, choice })" title="Use the same value" v-b-tooltip.hover>
+            <span class="text-truncate text-dark px-2">
+              {{ alternativeValue | alternativeValueName }}
+            </span>
+          </b-btn>
+        </template>
       </div>
       <b-btn variant="link" size="sm" class="task-record-review-history__checker__note" @click="emitToggleNotes">
         <template v-if="!!note">

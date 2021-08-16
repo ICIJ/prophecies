@@ -54,7 +54,7 @@ export default {
     },
     focusOnAlternativeValueInput () {
       const input = this.$refs.alternativeValueInput.$el.querySelector('input')
-      if (input) {        
+      if (input) {
         input.focus()
       }
     },
@@ -62,7 +62,8 @@ export default {
       if (choice.requireAlternativeValue && !this.alternativeValue) {
         return this.focusOnAlternativeValueInput()
       }
-      const alternativeValue = choice.requireAlternativeValue ? this.alternativeValue.value : null
+      this.alternativeValue = choice.requireAlternativeValue ? this.alternativeValue.value : null
+      const alternativeValue = this.alternativeValue
       const data = { alternativeValue, choice }
       /**
        * Fired when the form is submitted

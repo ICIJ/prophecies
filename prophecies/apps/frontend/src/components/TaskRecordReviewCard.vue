@@ -141,10 +141,16 @@ export default {
         <div class="task-record-review-card__choice col">
           <div class="row align-items-center">
             <div class="task-record-review-card__choice__form col-xl-6">
-              <task-record-review-choice-form @submit="selectChoiceWithLoader" :task-record-review-id="taskRecordReviewId" :activate-shortkeys="active" />
+              <task-record-review-choice-form
+                @submit="selectChoiceWithLoader"
+                :task-record-review-id="taskRecordReviewId"
+                :activate-shortkeys="active" />
             </div>
             <div class="task-record-review-card__choice_history col-xl-6">
-              <task-record-review-history :task-record-review-id="taskRecordReviewId" @toggle-notes="toggleNotes" />
+              <task-record-review-history
+                @toggle-notes="toggleNotes"
+                @same="selectChoiceWithLoader"
+                :task-record-review-id="taskRecordReviewId" />
             </div>
           </div>
         </div>
