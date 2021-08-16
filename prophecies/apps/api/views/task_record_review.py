@@ -82,7 +82,7 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
     ordering_fields = ['task_record__original_value', 'task_record__predicted_value',
                        'task_record__id']
     filterset_fields = {
-       'choice': ('exact', 'in'),
+       'choice': ('exact', 'in', 'isnull'),
        'task_record__priority': ('exact', 'in'),
        'task_record__rounds': ('exact', 'in'),
        'task_record__task': ('exact', 'in'),

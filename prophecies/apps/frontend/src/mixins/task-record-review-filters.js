@@ -5,6 +5,7 @@ export default {
     getTaskFilters (task) {
       return {
         predictedValues: {
+          allowArbitraryOptions: true,
           name: 'Predicted value',
           param: 'task_record__predicted_value__iregex',
           options: task.choiceGroup.alternativeValues,
@@ -28,7 +29,12 @@ export default {
         choices: {
           name: 'Classification',
           param: 'choice__in',
-          options: task.choiceGroup.choices,
+          nullParam: 'choice__isnull',
+          nullValue: true,
+          options: [
+            ...task.choiceGroup.choices,
+            { id: '-1', name: 'Unclassified' }
+          ],
           field: 'id',
           label: 'name'
         },
@@ -102,20 +108,43 @@ export default {
       const filters = this.getTaskFilters(task)
       return Object.entries(queryParams).map(([param, value]) => {
         const [key, filter] = this.findFilterEntry(filters, { param })
+        const { allowArbitraryOptions } = filter
         // This will look for existing options in the filters
         const options = this.toValuesList(param, value).map(value => {
           const option = find(filter.options, { [filter.field]: value })
-          return option || this.toSerializableOption(value)
+          return option || this.toSerializableOption(value, allowArbitraryOptions)
         })
         return [key, options]
       })
+    },
+    mapRouteFiltersToAppliedQueryParams (routeFilters, task) {
+      const filters = this.getTaskFilters(task)
+      return Object.entries(routeFilters).reduce((all, [param, value]) => {
+        const [, filter] = this.findFilterEntry(filters, { param })
+        if (this.useNullParam(filter, value)) {
+          const nullValue = filter.nullValue === undefined ? '-1' : filter.nullValue
+          all[this.toQueryParam(filter.nullParam)] = nullValue
+          all[this.toQueryParam(filter.param)] = this.withoutNullValue(filter, value)
+        } else {
+          all[this.toQueryParam(filter.param)] = value
+        }
+        return all
+      }, {})
+    },
+    useNullParam (filter, value) {
+      const values = this.toValuesList(filter.param, value)
+      return values.includes('-1') && filter.nullParam
+    },
+    withoutNullValue (filter, value) {
+      const values = this.toValuesList(filter.param, value).filter(v => v !== '-1')
+      return values.length ? this.toValuesParam(filter.param, values) : null
     },
     findFilterEntry (filters, source) {
       const entries = Object.entries(filters)
       return find(entries, ([key, f]) => isMatch(f, source)) || [null, null]
     },
-    toSerializableOption (value) {
-      const id = uniqueId('arbitrary-')
+    toSerializableOption (value, allowArbitraryOptions = false) {
+      const id = allowArbitraryOptions ? uniqueId('arbitrary-') : -1
       const name = value
       return { id, name, value }
     },
@@ -124,6 +153,24 @@ export default {
         return trim(value, '()').split('|')
       }
       return value.split(',')
+    },
+    toValuesParam (param, values) {
+      if (param.endsWith('__iregex') || param.endsWith('__regex')) {
+        return `(${values.join('|')})`
+      }
+      return values.join(',')
+    },
+    toFilterParam (key) {
+      return key.split('filter[').pop().split(']').shift()
+    },
+    toQueryParam (param) {
+      param = this.toFilterParam(param)
+      return `filter[${param}]`
+    },
+    isFiltersParam (filters, { key }) {
+      const param = this.toFilterParam(key)
+      const entry = this.findFilterEntry(filters, { param })
+      return !!entry[0]
     }
   }
 }

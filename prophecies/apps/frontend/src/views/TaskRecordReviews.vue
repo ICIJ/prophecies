@@ -149,9 +149,13 @@ export default {
     hasFilters () {
       return !!keys(this.routeFilters).length
     },
+    filters () {
+      // Method from the mixins
+      return this.getTaskFilters(this.task)
+    },
     routeFiltersQueryParams () {
       return Object.entries(this.$route.query).reduce((all, [key, value]) => {
-        if (key.startsWith('filter[')) {
+        if (this.isFiltersParam(this.filters, { key })) {
           all[key] = value
         }
         return all
@@ -159,9 +163,11 @@ export default {
     },
     routeFilters: {
       get () {
-        return Object.entries(this.routeFiltersQueryParams).reduce((all, [key, value]) => {
-          const param = key.split('filter[').pop().split(']').shift()
-          all[param] = value
+        return Object.entries(this.$route.query).reduce((all, [key, value]) => {
+          if (this.isFiltersParam(this.filters, { key })) {
+            const param = this.toFilterParam(key)
+            all[param] = value
+          }
           return all
         }, {})
       },
@@ -171,8 +177,17 @@ export default {
         }
       }
     },
+    appliedRouteFiltersQueryParams () {
+      return this.mapRouteFiltersToAppliedQueryParams(this.routeFilters, this.task)
+    },
     task () {
-      return Task.find(this.taskId)
+      return Task
+        .query()
+        .with('checkers')
+        .with('choiceGroup')
+        .with('choiceGroup.alternativeValues')
+        .with('choiceGroup.choices')
+        .find(this.taskId)
     },
     tasks () {
       return Task.all()
@@ -185,7 +200,7 @@ export default {
     },
     taskRecordReviewsParams () {
       return {
-        ...this.routeFiltersQueryParams,
+        ...this.appliedRouteFiltersQueryParams,
         'filter[taskRecord.task]': this.taskId,
         'page[number]': this.page
       }

@@ -65,7 +65,7 @@ describe('TaskRecordReviewFilters', () => {
     it('should have an object describing filters, including choices', () => {
       expect(wrapper.vm.filters.choices).toBeDefined()
       expect(wrapper.vm.filters.choices.param).toBe('choice__in')
-      expect(wrapper.vm.filters.choices.options).toHaveLength(3)
+      expect(wrapper.vm.filters.choices.options).toHaveLength(4)
     })
 
     it('should have add an arbitrary value to the `predictedValues` filter', () => {
