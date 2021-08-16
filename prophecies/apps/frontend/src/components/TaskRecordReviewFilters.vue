@@ -106,8 +106,7 @@
                      v-model="selected.predictedValues"
                      :label="filters.predictedValues.label"
                      track-by="id"
-                     multiple
-                     hide-selected
+                     multiple                     
                      taggable
                      tag-placeholder="Search for this exact value"
                      @tag="addArbitraryPredictedValue"
@@ -120,8 +119,7 @@
                      v-model="selected.assignedTo"
                      :label="filters.assignedTo.label"
                      track-by="id"
-                     multiple
-                     hide-selected
+                     multiple                     
                      :options="filters.assignedTo.options" />
       </label>
       <label class="col-12 col-sm-6 col-lg-3">
@@ -132,8 +130,7 @@
                      v-model="selected.reviewedBy"
                      :label="filters.reviewedBy.label"
                      track-by="id"
-                     multiple
-                     hide-selected
+                     multiple                     
                      :options="filters.reviewedBy.options" />
       </label>
       <label class="col-12 col-sm-6 col-lg-3">
@@ -143,8 +140,7 @@
                      v-model="selected.choices"
                      :label="filters.choices.label"
                      track-by="id"
-                     multiple
-                     hide-selected
+                     multiple                     
                      :options="filters.choices.options" />
       </label>
     </div>
