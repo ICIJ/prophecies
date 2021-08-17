@@ -30,6 +30,7 @@ services:
     depends_on:
       - db
       - migration
+      - collectstatic
     expose:
       - "8008"
 
@@ -43,6 +44,13 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@db/prophecies
     depends_on:
       - db
+
+  collectstatic:
+    build: .
+    image: prophecies
+    command: sh -c "/usr/bin/wait && pipenv run python manage.py collectstatic --noinput"
+    volumes:
+      - shared_static:/code/prophecies/run/static
 
   db:
     image: "postgres:10.4"
