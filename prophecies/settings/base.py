@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'actstream',
     'debug_toolbar',
     'social_django',
     'rest_framework',
@@ -244,6 +245,14 @@ SOCIAL_AUTH_PIPELINE = (
     # Map Provider Groups to Django Groups using their names
     'prophecies.core.oauth2_provider.map_provider_groups',
 )
+
+# Activity Stream settings
+# https://django-activity-stream.readthedocs.io/en/latest/configuration.html
+
+ACTSTREAM_SETTINGS = {
+    'FETCH_RELATIONS': True,
+    'USE_JSONFIELD': False
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

@@ -1,9 +1,11 @@
+from actstream import action
 from rest_framework import exceptions, viewsets, serializers
 from rest_framework_json_api.relations import ResourceRelatedField
 from rest_framework.permissions import IsAuthenticated
 from prophecies.core.models import Task, TaskRecord
 from prophecies.apps.api.views.task import TaskSerializer
 from prophecies.apps.api.views.user import UserSerializer
+
 
 class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
     task = ResourceRelatedField(many=False, read_only=True)
@@ -26,12 +28,15 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
         return task_record.computed_link()
 
     def update(self, instance, validated_data):
+        user = self.context.get('request').user
         if validated_data.get('locked') is True:
             instance.locked = True
-            instance.locked_by = self.context.get('request').user
+            instance.locked_by = user
+            action.send(user, verb='locked', target=instance)
         elif validated_data.get('locked') is False:
             instance.locked = False
             instance.locked_by = None
+            action.send(user, verb='unlocked', target=instance)
         instance.save()
         return instance
 
