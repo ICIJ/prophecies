@@ -15,7 +15,7 @@ export default {
   <div class="app-sidebar d-flex flex-column">
     <router-link class="app-sidebar__brand" :to="{ name: 'dashboard' }">
       <h1 class="app-sidebar__brand__app-name mb-0 font-weight-bold">
-        {{ $config.get('appName') }}
+        <img class="app-sidebar__brand__app-name__logo" src="@/assets/images/name-and-logo.svg" :alt="$config.get('appName')" />
       </h1>
       <div class="app-sidebar__brand__org-name">
         {{ $config.get('orgName') }}
