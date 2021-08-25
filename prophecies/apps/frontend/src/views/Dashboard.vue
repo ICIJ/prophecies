@@ -6,30 +6,33 @@
       <div class="container-fluid p-5">
         <div class="row justify-content-between">
           <div class="col-4">
-            <div class="d-flex align-items-center">
-              <b-form-group>
-                <b-form-radio-group
-                  v-model="teamTaskStats"
-                  buttons
-                  button-variant="outline-primary"
-                  :options="taskStatsOptions" />
-              </b-form-group>
-              <!--b-dropdown right no-caret variant="link" class="ml-auto">
-                <template #button-content>
-                  Sort by
-                  <chevron-down-icon class="mr-2" />
-                </template>
-              </b-dropdown-->
-            </div>
             <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-              <task-stats-card :team="teamTaskStats" :task-id="task.id" v-for="task in tasks" :key="task.id" class="my-5" />
+              <template v-if="tasks.length">
+                <div class="d-flex align-items-center">
+                  <b-form-group>
+                    <b-form-radio-group
+                      v-model="teamTaskStats"
+                      buttons
+                      button-variant="outline-primary"
+                      :options="taskStatsOptions" />
+                  </b-form-group>
+                </div>
+                <task-stats-card class="my-5"
+                                 v-for="task in tasks"
+                                 :key="task.id"
+                                 :team="teamTaskStats"
+                                 :task-id="task.id" />
+              </template>
+              <div v-else class="card card-body shadow-sm text-center text-muted text-small">
+                No tasks yet.
+              </div>
             </app-waiter>
           </div>
           <div class="col-4">
             <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-              <progress-card class="mb-5" />
+              <progress-card class="mb-5" v-if="tasks.length" />
+              <latest-tips-card />
             </app-waiter>
-            <latest-tips-card />
           </div>
         </div>
       </div>

@@ -9,70 +9,76 @@
     <div class="task-record-reviews__container">
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
-          <div class="row mb-4" v-if="pagination">
-            <div class="col-auto">
-              <b-btn variant="outline-dark" class="border" tag="label">
-                <span class="custom-control custom-checkbox">
-                  <input class="custom-control-input" v-model="selectAll" type="checkbox" id="select-all-input" />
-                  <div class="custom-control-label" for="select-all-input">
-                    Select all {{ taskRecordReviews.length }} items
-                  </div>
-                </span>
-              </b-btn>
+          <div v-if="task.taskRecordsCount">
+            <div class="row mb-4" v-if="pagination">
+              <div class="col">
+                <b-btn variant="outline-dark" class="border" tag="label">
+                  <span class="custom-control custom-checkbox">
+                    <input class="custom-control-input" v-model="selectAll" type="checkbox" id="select-all-input" />
+                    <div class="custom-control-label" for="select-all-input">
+                      Select all {{ taskRecordReviews.length }} items
+                    </div>
+                  </span>
+                </b-btn>
+              </div>
+              <div class="col-6" v-if="pagination">
+                <custom-pagination
+                  compact
+                  @input="goToPage"
+                  :value="Number(page)"
+                  :total-rows="pagination.count"
+                  :per-page="10" />
+              </div>
+              <div class="col d-flex">
+                <div class="ml-auto">
+                  <b-btn :variant="filtersTogglerVariant" class="border font-weight-bold" @click="toggleFilters">
+                    <filter-icon size="1x" class="mr-1" />
+                    Filters
+                  </b-btn>
+                </div>
+              </div>
             </div>
-            <div class="col" v-if="pagination">
+            <b-collapse :visible="showFilters">
+              <task-record-review-filters
+                :route-filters.sync="routeFilters"
+                :task-id="taskId" />
+            </b-collapse>
+            <ul class="list-inline d-flex align-items-center" v-if="pagination">
+              <li class="list-inline-item font-weight-bold">
+                {{ pagination.count }} results
+              </li>
+              <li class="list-inline-item">
+                <b-btn variant="link" @click="clearFilters()" :disabled="!hasFilters">
+                  Clear filters
+                </b-btn>
+              </li>
+            </ul>
+            <b-collapse :visible="!showFilters && hasFilters">
+              <task-record-review-applied-filters
+                :route-filters.sync="routeFilters"
+                :task-id="taskId" />
+            </b-collapse>
+            <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
+              <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
+                <task-record-review-card
+                  @update="scrollToActiveTaskRecordReviewCard({ id })"
+                  @update:selected="selectTaskRecordReview(id, $event)"
+                  :task-record-review-id="id"
+                  :active="isTaskRecordReviewActive(id)"
+                  :selected="isTaskRecordReviewSelected(id)"  />
+              </div>
               <custom-pagination
                 compact
+                v-if="pagination"
                 @input="goToPage"
                 :value="Number(page)"
                 :total-rows="pagination.count"
                 :per-page="10" />
-            </div>
-            <div class="col-auto">
-              <b-btn :variant="filtersTogglerVariant" class="border font-weight-bold" @click="toggleFilters">
-                <filter-icon size="1x" class="mr-1" />
-                Filters
-              </b-btn>
-            </div>
+            </app-waiter>
           </div>
-          <b-collapse :visible="showFilters">
-            <task-record-review-filters
-              :route-filters.sync="routeFilters"
-              :task-id="taskId" />
-          </b-collapse>
-          <ul class="list-inline d-flex align-items-center" v-if="pagination">
-            <li class="list-inline-item font-weight-bold">
-              {{ pagination.count }} results
-            </li>
-            <li class="list-inline-item">
-              <b-btn variant="link" @click="clearFilters()" :disabled="!hasFilters">
-                Clear filters
-              </b-btn>
-            </li>
-          </ul>
-          <b-collapse :visible="!showFilters && hasFilters">
-            <task-record-review-applied-filters
-              :route-filters.sync="routeFilters"
-              :task-id="taskId" />
-          </b-collapse>
-          <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
-            <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
-              <task-record-review-card
-                @update="scrollToActiveTaskRecordReviewCard({ id })"
-                @update:selected="selectTaskRecordReview(id, $event)"
-                :task-record-review-id="id"
-                :active="isTaskRecordReviewActive(id)"
-                :selected="isTaskRecordReviewSelected(id)"  />
-            </div>
-            <custom-pagination
-              v-if="pagination"
-              @input="goToPage"
-              class="mx-auto"
-              compact
-              :value="Number(page)"
-              :total-rows="pagination.count"
-              :per-page="10" />
-          </app-waiter>
+          <div v-else class="text-center text-muted text-small mx-auto">
+            No records assigned yet.
+          </div>
         </app-waiter>
       </div>
     </div>

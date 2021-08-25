@@ -71,6 +71,9 @@ export default {
       return Task.all()
     },
     meanProgress () {
+      if (!this.tasks.length) {
+        return 0
+      }
       return mean(this.tasks.map(this.taskProgress))
     },
     progressOptions () {
