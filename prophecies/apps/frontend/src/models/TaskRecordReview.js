@@ -13,7 +13,7 @@ export default class TaskRecordReview extends Model {
       id: this.attr(null),
       url: this.string(),
       status: this.string(),
-      note: this.string(),
+      note: this.string(null).nullable(),
       alternativeValue: this.string(null).nullable(),
       choiceId: this.attr(null),
       choice: this.belongsTo(Choice, 'choiceId'),
