@@ -90,7 +90,7 @@ export default {
       </div>
       <div class="task-record-review-notes__item__note">
         <template v-if="isMe(checker)">
-            <form class="task-record-review-notes__item__note__form" @submit.prevent="saveInputNote">
+            <form class="task-record-review-notes__item__note__form" @submit.prevent="saveInputNoteWithLoader">
               <fieldset :disabled="$wait.is(saveNoteLoader)">
                 <b-overlay :show="$wait.is(saveNoteLoader)" variant="transparent">
                   <b-spinner variant="light" slot="overlay" />
