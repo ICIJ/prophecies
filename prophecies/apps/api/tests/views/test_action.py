@@ -38,3 +38,23 @@ class TestAction(TestCase):
         self.assertEqual(request.status_code, 200)
         firstAction = request.json().get('data')[0]
         self.assertIn('actor', firstAction.get('relationships', {}))
+
+
+    def test_list_returns_actions_with_target_relationship(self):
+        action.send(self.olivia, verb='added', target=self.django)
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/actions/')
+        self.assertEqual(request.status_code, 200)
+        firstAction = request.json().get('data')[0]
+        self.assertIn('target', firstAction.get('relationships', {}))
+
+
+    def test_list_returns_actions_including_actor_relationship(self):
+        action.send(self.olivia, verb='added', target=self.django)
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/actions/')
+        self.assertEqual(request.status_code, 200)
+        firstIncluded = request.json().get('included')[0]
+        self.assertEqual(firstIncluded.get('type'), 'User')
+        self.assertEqual(firstIncluded.get('id'), '1')
+        self.assertEqual(firstIncluded.get('attributes').get('username'), 'olivia')

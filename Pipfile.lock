@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "bba8065de2575a19eb0242b3954fd160335277a9719439b42271f6c77ae21243"
+            "sha256": "550f3844fe5e1e08a2974324b79c39d0b941eada52078f5855f3f285938562c5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -218,6 +218,13 @@
             ],
             "version": "==3.0.1"
         },
+        "django-polymorphic": {
+            "hashes": [
+                "sha256:73b75eb44ea302bd32820f8661e469509d245ce7f7ff09cd2ad149e5c42034ff",
+                "sha256:9d886f19f031d26bb1391c055ed9be06fb226a04a4cec1842b372c58873b3caa"
+            ],
+            "version": "==3.0.0"
+        },
         "django-webpack-loader": {
             "hashes": [
                 "sha256:8a428355de2f88418209d84ad38bf33ad175fc370d3f778ffec8ea26041e589d",
@@ -236,7 +243,7 @@
         },
         "djangorestframework-jsonapi": {
             "extras": [
-                "django-filter"
+                "django-polymorphic"
             ],
             "hashes": [
                 "sha256:0463d4bd74233a9e64813571abb8c55fa38ced1dc0ea7875e98861eeb5a857ad",
