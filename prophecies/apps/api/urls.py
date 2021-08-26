@@ -23,5 +23,5 @@ router.register(r'users', UserViewSet)
 urlpatterns = [
     path('', RedirectView.as_view(url='v1/')),
     path('v1/', include(router.urls)),
-    path('v1/users/<pk>/relationships/actions/', view=UserViewSet.as_view({ 'get': 'retrieve_actions' }), name='user-actions'),
+    path('v1/users/<pk>/relationships/actions/', view=UserViewSet.as_view({ 'get': 'actions' }), name='user-actions'),
 ]

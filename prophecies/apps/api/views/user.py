@@ -45,7 +45,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             raise exceptions.NotFound()
 
     @action(methods=['get'], detail=True)
-    def retrieve_actions(self, request, pk=None, **kwargs):
+    def actions(self, request, pk=None, **kwargs):
         queryset = self.get_user(pk).actor_actions.all()
         page = self.paginate_queryset(queryset)
         if page is not None:
