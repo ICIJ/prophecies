@@ -49,9 +49,9 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = self.get_user(pk).actor_actions.all()
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = ActionSerializer(page, many=True)
+            serializer = ActionSerializer(page, many=True, context={'request': request})
             return self.get_paginated_response(serializer.data)
-        serializer = ActionSerializer(page, many=True)
+        serializer = ActionSerializer(page, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(methods=['get'], detail=False)

@@ -1,29 +1,28 @@
 from actstream.models import Action
 from rest_framework import viewsets
 from rest_framework_json_api import serializers
+from rest_framework_json_api.relations import ResourceRelatedField
 
 
 class ActionSerializer(serializers.HyperlinkedModelSerializer):
-    actor = serializers.SerializerMethodField()
-    action_object = serializers.SerializerMethodField()
-    target = serializers.SerializerMethodField()
+    actor = ResourceRelatedField(many=False, read_only=True)
+    action_object = ResourceRelatedField(many=False, read_only=True)
+    target = ResourceRelatedField(many=False, read_only=True)
 
-    def get_actor(self, action):
-        return action.actor_object_id
-
-    def get_target(self, action):
-        return action.target_object_id
-
-    def get_action_object(self, action):
-        return action.action_object_object_id
+    included_serializers = {
+        'actor': 'prophecies.apps.api.views.user.UserSerializer',
+    }
 
     class Meta:
         model = Action
         fields = ['id', 'verb', 'actor', 'action_object', 'target', 'public',
                     'description', 'timestamp']
 
+    class JSONAPIMeta:
+        included_resources = ['actor']
+
 
 class ActionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
-    ordering = ['-id']
+    ordering = ['-timestamp']
