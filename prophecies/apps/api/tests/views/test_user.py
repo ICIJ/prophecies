@@ -49,3 +49,5 @@ class TestSetting(TestCase):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/users/1/relationships/actions/')
         self.assertEqual(len(request.json().get('data')), 2)
+        self.assertEqual(request.json().get('data')[0].get('attributes').get('verb'), 'unlocked')
+        self.assertEqual(request.json().get('data')[1].get('attributes').get('verb'), 'locked')
