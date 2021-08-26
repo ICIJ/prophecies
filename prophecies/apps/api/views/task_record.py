@@ -1,9 +1,11 @@
 from actstream import action
 from rest_framework import exceptions, viewsets
+from rest_framework import decorators
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField
 from rest_framework.permissions import IsAuthenticated
 from prophecies.core.models import Task, TaskRecord
+from prophecies.apps.api.views.action import ActionSerializer
 from prophecies.apps.api.views.task import TaskSerializer
 from prophecies.apps.api.views.user import UserSerializer
 
@@ -58,6 +60,25 @@ class TaskRecordViewSet(viewsets.ModelViewSet):
     serializer_class = TaskRecordSerializer
     ordering = ['-id']
     permission_classes = [IsAuthenticated]
+
+    def get_task_record(self, pk):
+        try:
+            return TaskRecord.objects.get(pk=pk)
+        except TaskRecord.DoesNotExist:
+            raise exceptions.NotFound()
+
+    @decorators.action(methods=['get'], detail=True)
+    def actions(self, request, pk=None, **kwargs):
+        """
+        List of actions performed over this task record.
+        """
+        queryset = self.get_task_record(pk).actions.all()
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = ActionSerializer(page, many=True, context={'request': request})
+            return self.get_paginated_response(serializer.data)
+        serializer = ActionSerializer(page, many=True, context={'request': request})
+        return Response(serializer.data)
 
     def check_object_permissions(self, request, obj):
         if not request.user in obj.checkers:

@@ -46,6 +46,9 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(methods=['get'], detail=True)
     def actions(self, request, pk=None, **kwargs):
+        """
+        List of actions performed by the user.
+        """
         queryset = self.get_user(pk).actor_actions.all()
         page = self.paginate_queryset(queryset)
         if page is not None:
