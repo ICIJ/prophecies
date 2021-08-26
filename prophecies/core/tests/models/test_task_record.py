@@ -93,6 +93,7 @@ class TestTaskRecord(TestCase):
         task_record = TaskRecord.objects.create(task=task)
         self.assertEqual(task_record.computed_link(), 'https://www.openstreetmap.org/search?query=')
 
+
     def test_it_should_have_a_list_of_checkers(self):
         task_record = TaskRecord.objects.create(task=self.transactions_task)
         olivia = User.objects.create(username='olivia')
@@ -111,6 +112,7 @@ class TestTaskRecord(TestCase):
         self.assertTrue(task_record.can_lock(olivia))
         self.assertTrue(task_record.can_lock(django))
 
+
     def test_it_should_only_allow_olivia_to_unlock(self):
         task_record = TaskRecord.objects.create(task=self.transactions_task)
         olivia = User.objects.create(username='olivia')
@@ -124,12 +126,14 @@ class TestTaskRecord(TestCase):
         self.assertFalse(task_record.can_unlock(django))
         self.assertFalse(task_record.can_unlock(pierre))
 
+
     def test_it_should_list_all_actions_related_to_a_record(self):
         olivia = User.objects.create(username='olivia')
         task_record = TaskRecord.objects.create(task=self.transactions_task)
         action.send(olivia, verb='locked', target=task_record)
         action.send(olivia, verb='unlocked', target=task_record)
         self.assertEqual(len(task_record.actions), 2)
+
 
     def test_it_should_list_all_actions_related_to_a_record_reviews(self):
         olivia = User.objects.create(username='olivia')
