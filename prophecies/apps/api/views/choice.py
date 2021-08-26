@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework_json_api import serializers
 from prophecies.core.models import Choice
 
 class ChoiceSerializer(serializers.ModelSerializer):

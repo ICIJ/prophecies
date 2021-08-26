@@ -1,4 +1,5 @@
-from rest_framework import serializers, viewsets
+from rest_framework import viewsets
+from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField
 from prophecies.core.models import Choice, ChoiceGroup
 from prophecies.apps.api.views.choice import ChoiceSerializer

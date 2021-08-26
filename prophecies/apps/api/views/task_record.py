@@ -1,5 +1,6 @@
 from actstream import action
-from rest_framework import exceptions, viewsets, serializers
+from rest_framework import exceptions, viewsets
+from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField
 from rest_framework.permissions import IsAuthenticated
 from prophecies.core.models import Task, TaskRecord
