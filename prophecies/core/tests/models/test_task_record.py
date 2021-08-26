@@ -141,3 +141,12 @@ class TestTaskRecord(TestCase):
         review = TaskRecordReview.objects.create(task_record=task_record, checker=olivia)
         action.send(olivia, verb='commented', target=review)
         self.assertEqual(len(task_record.actions), 1)
+
+
+    def test_it_should_list_all_actions_related_to_a_record_and_reviews(self):
+        olivia = User.objects.create(username='olivia')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        review = TaskRecordReview.objects.create(task_record=task_record, checker=olivia)
+        action.send(olivia, verb='locked', target=task_record)
+        action.send(olivia, verb='commented', target=review)
+        self.assertEqual(len(task_record.actions), 2)
