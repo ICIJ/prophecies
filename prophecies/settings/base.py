@@ -251,7 +251,7 @@ SOCIAL_AUTH_PIPELINE = (
 
 ACTSTREAM_SETTINGS = {
     'FETCH_RELATIONS': True,
-    'USE_JSONFIELD': False
+    'USE_JSONFIELD': True
 }
 
 # Internationalization

@@ -1,7 +1,7 @@
 from pydoc import locate
 from actstream.models import Action
 from django.contrib.auth.models import User
-from prophecies.core.models import TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, TaskRecord, TaskRecordReview
 from rest_framework import viewsets
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField, PolymorphicResourceRelatedField
@@ -10,6 +10,7 @@ from rest_framework_json_api.relations import ResourceRelatedField, PolymorphicR
 class GenericModelSerializer(serializers.ModelSerializer):
     model_serializer_mapping = {
         User: 'prophecies.apps.api.views.user.UserSerializer',
+        Choice: 'prophecies.apps.api.views.choice.ChoiceSerializer',
         TaskRecord: 'prophecies.apps.api.views.task_record.TaskRecordSerializer',
         TaskRecordReview: 'prophecies.apps.api.views.task_record_review.TaskRecordReviewSerializer'
     }
@@ -47,7 +48,7 @@ class ActionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Action
         fields = ['id', 'url', 'verb', 'actor', 'action_object', 'target',
-                    'public', 'description', 'timestamp']
+                    'data', 'public', 'description', 'timestamp']
 
     class JSONAPIMeta:
         included_resources = ['actor', 'action_object', 'target']

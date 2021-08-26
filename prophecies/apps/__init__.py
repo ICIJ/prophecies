@@ -7,5 +7,6 @@ class PropheciesConfig(AppConfig):
         from actstream import registry
         from django.contrib.auth.models import User
         registry.register(User)
+        registry.register(self.get_model('Choice'))
         registry.register(self.get_model('TaskRecord'))
         registry.register(self.get_model('TaskRecordReview'))

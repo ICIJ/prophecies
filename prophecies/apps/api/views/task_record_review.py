@@ -1,3 +1,4 @@
+from actstream import action
 from functools import lru_cache
 from django.db.models import Prefetch
 from rest_framework import exceptions, viewsets, permissions
@@ -72,6 +73,16 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
         exclusions = super(TaskRecordReviewSerializer, self).get_validation_exclusions()
         return exclusions + ['choice',]
 
+    def save(self):
+        user = self.context.get('request').user
+        if 'choice' in self.validated_data:
+            action.send(user, verb='reviewed', target=self.instance, action_object=self.instance.choice)
+        if self.validated_data.get('alternative_value', None):
+            action.send(user, verb='selected', target=self.instance, alternative_value=self.instance.alternative_value)
+        if 'note' in self.validated_data:
+            action.send(user, verb='commented', target=self.instance, note=self.instance.note)
+        return super(TaskRecordReviewSerializer, self).save()
+
 
 class TaskRecordReviewViewSet(viewsets.ModelViewSet):
     serializer_class = TaskRecordReviewSerializer
@@ -110,7 +121,6 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
             .select_related('task_record') \
             .select_related('task_record__task') \
             .select_related('task_record__task__project')
-
 
     def check_object_permissions(self, request, obj):
         if obj.checker != request.user:
