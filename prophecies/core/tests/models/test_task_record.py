@@ -1,3 +1,4 @@
+from actstream import action
 from django.contrib.auth.models import User
 from django.test import TestCase
 from prophecies.core.models import Project, Task, TaskRecord, TaskRecordReview
@@ -122,3 +123,17 @@ class TestTaskRecord(TestCase):
         self.assertTrue(task_record.can_unlock(olivia))
         self.assertFalse(task_record.can_unlock(django))
         self.assertFalse(task_record.can_unlock(pierre))
+
+    def test_it_should_list_all_actions_related_to_a_record(self):
+        olivia = User.objects.create(username='olivia')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        action.send(olivia, verb='locked', target=task_record)
+        action.send(olivia, verb='unlocked', target=task_record)
+        self.assertEqual(len(task_record.actions), 2)
+
+    def test_it_should_list_all_actions_related_to_a_record_reviews(self):
+        olivia = User.objects.create(username='olivia')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        review = TaskRecordReview.objects.create(task_record=task_record, checker=olivia)
+        action.send(olivia, verb='commented', target=review)
+        self.assertEqual(len(task_record.actions), 1)

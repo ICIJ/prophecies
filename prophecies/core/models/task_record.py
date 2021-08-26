@@ -1,7 +1,9 @@
+from actstream.models import Action, any_stream
 from copy import deepcopy
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models import signals
+from django.db.models import signals, Q
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from types import SimpleNamespace
@@ -60,6 +62,33 @@ class TaskRecord(models.Model):
     @cached_property
     def checkers(self):
         return [ review.checker for review in self.reviews.all() ]
+
+
+    @cached_property
+    def reviews_actions_query(self):
+        ctype = ContentType.objects.get_for_model(self.reviews.model)
+        review_ids = list(self.reviews.values_list('id', flat=True))
+        query = Q()
+        for id in review_ids:
+            query |= Q(target_content_type=ctype, target_object_id=id)
+            query |= Q(action_object_content_type=ctype, action_object_object_id=id)
+        return query
+
+
+    @cached_property
+    def actions_query(self):
+        ctype = ContentType.objects.get_for_model(self)
+        id = self.pk
+        return Q(
+            Q(target_content_type=ctype, target_object_id=id) |
+            Q(action_object_content_type=ctype, action_object_object_id=id)
+        )
+        return query
+
+
+    @cached_property
+    def actions(self):
+        return Action.objects.public(self.actions_query | self.reviews_actions_query)
 
 
     def can_lock(self, user):
