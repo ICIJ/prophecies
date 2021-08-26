@@ -1,9 +1,13 @@
+from actstream.models import Action
 from hashlib import md5
 from django.contrib.auth.models import User
 from django.template.context_processors import csrf
-from rest_framework import viewsets, serializers
+from prophecies.apps.api.views.action import ActionSerializer
+from rest_framework import exceptions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework_json_api import serializers
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     email_md5 = serializers.SerializerMethodField()
@@ -20,11 +24,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'url', 'first_name', 'last_name', 'username',
-            'email_md5', 'is_staff', 'csrf_token']
+                    'email_md5', 'is_staff', 'csrf_token']
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects
     serializer_class = UserSerializer
     search_fields = ['first_name', 'last_name', 'username']
     ordering = ['-id']
@@ -33,6 +37,18 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
        'username': ('icontains', 'exact', 'iexact', 'contains', 'in'),
        'is_staff': ('exact',),
     }
+
+    def get_user(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise exceptions.NotFound()
+
+    @action(methods=['get'], detail=True)
+    def retrieve_actions(self, request, pk=None, **kwargs):
+        actions = self.get_user(pk).actor_actions.all()
+        serializer = ActionSerializer(actions, context={'request': request}, many=True)
+        return Response(serializer.data)
 
     @action(methods=['get'], detail=False)
     def me(self, request, **kwargs):

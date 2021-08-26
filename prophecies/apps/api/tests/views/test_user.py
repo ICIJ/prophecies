@@ -1,3 +1,4 @@
+from actstream import action
 from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
@@ -40,3 +41,11 @@ class TestSetting(TestCase):
         email_md5 = '628e9a99d87799e9d434b63d2c3744ca'
         self.assertEqual(request.json().get('data').get('attributes').get('email'), None)
         self.assertEqual(request.json().get('data').get('attributes').get('emailMd5'), email_md5)
+
+    def test_get_user_actions(self):
+        olivia = User.objects.get(pk=1)
+        action.send(olivia, verb='locked')
+        action.send(olivia, verb='unlocked')
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/users/1/relationships/actions/')
+        self.assertEqual(len(request.json().get('data')), 2)
