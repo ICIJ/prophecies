@@ -58,12 +58,12 @@ export default {
        */
       this.$emit('unlock', this.taskRecordReview)
     },
-    emitHistory () {
+    emitToggleChanges () {
       /**
-       * @event history
+       * @event emitToggleChanges
        * @param TaskRecordReview
        */
-      this.$emit('history', this.taskRecordReview)
+      this.$emit('toggle-changes', this.taskRecordReview)
     }
   }
 }
@@ -92,9 +92,9 @@ export default {
         <unlock-icon size="1.5x" />
         <span class="sr-only">Lock</span>
       </b-btn>
-      <b-btn variant="link" class="text-dark" title="See history" v-b-tooltip.left @click="emitHistory">
+      <b-btn variant="link" class="text-dark" title="See history" v-b-tooltip.left @click="emitToggleChanges">
         <clock-icon size="1.5x" />
-        <span class="sr-only">See history</span>
+        <span class="sr-only">See changes history</span>
       </b-btn>
     </b-btn-group>
   </div>
