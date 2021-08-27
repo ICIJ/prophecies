@@ -154,11 +154,14 @@ export default {
       margin-left: $spacer;
       background: #F5F5F5;
 
-
       @media (max-width: 860px) {
         position: static;
         margin: 0;
         margin-left: auto;
+      }
+      
+      &:hover {
+        text-decoration: none;
       }
     }
 
