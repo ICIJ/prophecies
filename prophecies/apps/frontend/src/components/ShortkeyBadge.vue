@@ -26,7 +26,7 @@ export default {
 </script>
 
 <template>
-  <span class="shortkey-badge badge font-weight-normal">
+  <span class="shortkey-badge badge font-weight-normal" v-show="keys.length">
     {{ keysAsString }}
   </span>
 </template>

@@ -61,4 +61,11 @@ describe('ShortkeyBadge', () => {
     await wrapper.setProps({ value: 'meta' })
     expect(wrapper.text()).toBe('Ctrl')
   })
+
+  it('should hide the badge when no keys', async () => {
+    await wrapper.setProps({ value: [] })
+    expect(wrapper.isVisible()).toBeFalsy()
+    await wrapper.setProps({ value: ['l'] })
+    expect(wrapper.isVisible()).toBeTruthy()
+  })
 })
