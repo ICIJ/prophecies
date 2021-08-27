@@ -128,7 +128,6 @@ export default {
         max-width: 120px;
         min-width: 120px;
 
-
         &:after {
           content: ":"
         }
