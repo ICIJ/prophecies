@@ -23,15 +23,15 @@ describe('AppSidebar', () => {
   })
 
   it('should display the backend value of `appName` as app name', () => {
-    const brandName = wrapper.find('.app-sidebar__brand__app-name')
-    expect(brandName.text()).toBe('Data Fact Check')
+    const brandName = wrapper.find('.app-sidebar__brand__app-name__logo')
+    expect(brandName.attributes('alt')).toBe('Data Fact Check')
   })
 
   it('should display the config value of `appName` as app name', async () => {
     config.set('appName', 'Prophecies')
     await wrapper.vm.$nextTick()
-    const brandName = wrapper.find('.app-sidebar__brand__app-name')
-    expect(brandName.text()).toBe('Prophecies')
+    const brandName = wrapper.find('.app-sidebar__brand__app-name__logo')
+    expect(brandName.attributes('alt')).toBe('Prophecies')
   })
 
   it('should display the backend value of `orgName` as org name', () => {
