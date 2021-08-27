@@ -76,11 +76,11 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     def save(self):
         user = self.context.get('request').user
         if 'choice' in self.validated_data:
-            action.send(user, verb='reviewed', target=self.instance, action_object=self.instance.choice)
+            action.send(user, verb='reviewed', target=self.instance, action_object=self.validated_data.get('choice'))
         if self.validated_data.get('alternative_value', None):
-            action.send(user, verb='selected', target=self.instance, alternative_value=self.instance.alternative_value)
+            action.send(user, verb='selected', target=self.instance, alternative_value=self.validated_data.get('alternative_value'))
         if 'note' in self.validated_data:
-            action.send(user, verb='commented', target=self.instance, note=self.instance.note)
+            action.send(user, verb='commented', target=self.instance, note=self.validated_data.get('note'))
         return super(TaskRecordReviewSerializer, self).save()
 
 

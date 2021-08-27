@@ -78,7 +78,7 @@ class TaskRecordViewSet(viewsets.ModelViewSet):
         # the serialized data is correct (the render uses this view property
         # to find the current type).
         self.resource_name = 'Action'
-        queryset = self.get_task_record(pk).actions.all()
+        queryset = self.get_task_record(pk).actions.order_by('-timestamp').all()
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = ActionSerializer(page, many=True, context={'request': request})
