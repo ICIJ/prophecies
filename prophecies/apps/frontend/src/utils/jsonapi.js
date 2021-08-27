@@ -1,6 +1,8 @@
 import { isArray, find, mapValues } from 'lodash'
 import User from '@/models/User'
 
+const MAX_RELATIONSHIP_DEPTH = 4
+
 export function defaultHeaders () {
   return {
     'content-type': 'application/vnd.api+json',
@@ -25,25 +27,25 @@ class ResponseNormalizer {
     return this.recordNormalizer(this.data)
   }
 
-  recordNormalizer ({ id, type, attributes = {}, relationships }, depth = 4) {
+  recordNormalizer ({ id, type, attributes = {}, relationships }, depth = MAX_RELATIONSHIP_DEPTH) {
     const included = this.findIncluded({ type, id })
     return {
       id,
       type,
       ...attributes,
-      ...this.relationshipsNormalizer(relationships || included?.relationships),
+      ...this.relationshipsNormalizer(relationships || included?.relationships, depth - 1),
       ...included?.attributes
     }
   }
 
-  relationshipsNormalizer (relationships = {}, depth = 4) {
+  relationshipsNormalizer (relationships = {}, depth = MAX_RELATIONSHIP_DEPTH) {
     if (depth < 1) {
       return {}
     }
-    return mapValues(relationships, r => this.relationshipNormalizer(r, depth))
+    return mapValues(relationships, r => this.relationshipNormalizer(r, depth - 1))
   }
 
-  relationshipNormalizer ({ data }, depth = 4) {
+  relationshipNormalizer ({ data }, depth = MAX_RELATIONSHIP_DEPTH) {
     if (isArray(data)) {
       return data.map(relatedRecord => this.recordNormalizer(relatedRecord, depth - 1))
     } else if (data !== null) {
