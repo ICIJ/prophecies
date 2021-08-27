@@ -9,7 +9,7 @@
     <div class="task-record-reviews__container">
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
-          <div v-if="task.taskRecordsCount">
+          <div v-if="task && task.taskRecordsCount">
             <div class="row mb-4" v-if="pagination">
               <div class="col">
                 <b-btn variant="outline-dark" class="border" tag="label">

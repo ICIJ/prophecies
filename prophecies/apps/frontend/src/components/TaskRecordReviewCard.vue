@@ -1,15 +1,18 @@
 <script>
-import { get, uniqueId } from 'lodash'
+import { get, map, uniqueId } from 'lodash'
+import TaskRecordChanges from '@/components/TaskRecordChanges'
 import TaskRecordReviewActions from '@/components/TaskRecordReviewActions'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
 import TaskRecordReviewHistory from '@/components/TaskRecordReviewHistory'
 import TaskRecordReviewNotes from '@/components/TaskRecordReviewNotes'
+import Action from '@/models/Action'
 import TaskRecord from '@/models/TaskRecord'
 import TaskRecordReview from '@/models/TaskRecordReview'
 
 export default {
   name: 'TaskRecordReviewCard',
   components: {
+    TaskRecordChanges,
     TaskRecordReviewActions,
     TaskRecordReviewChoiceForm,
     TaskRecordReviewHistory,
@@ -17,7 +20,9 @@ export default {
   },
   data () {
     return {
-      showNotes: false
+      showChanges: false,
+      showNotes: false,
+      actionIds: []
     }
   },
   props: {
@@ -31,11 +36,17 @@ export default {
       type: Boolean
     }
   },
+  watch: {
+    isLoading () {
+      this.showChanges = false
+      this.showNotes = false
+    }
+  },
   methods: {
     async selectChoiceWithLoader (data) {
-      this.$wait.start(this.updateLoader)
+      this.$wait.start(this.loader)
       await this.selectChoice(data)
-      this.$wait.end(this.updateLoader)
+      this.$wait.end(this.loader)
     },
     async selectChoice (data) {
       // We use a dedicated method that will format the data for the JSONAPI spec
@@ -52,9 +63,9 @@ export default {
       this.emitUpdate()
     },
     async lockWithLoader () {
-      this.$wait.start(this.updateLoader)
+      this.$wait.start(this.loader)
       await this.lock()
-      this.$wait.end(this.updateLoader)
+      this.$wait.end(this.loader)
     },
     async unlock () {
       await TaskRecord.api().unlock(this.taskRecord.id)
@@ -62,12 +73,31 @@ export default {
       this.emitUpdate()
     },
     async unlockWithLoader () {
-      this.$wait.start(this.updateLoader)
+      this.$wait.start(this.loader)
       await this.unlock()
-      this.$wait.end(this.updateLoader)
+      this.$wait.end(this.loader)
     },
-    toggleNotes () {
-      this.showNotes = !this.showNotes
+    async fetchTaskRecordActions () {
+      const taskRecordId = this.taskRecordReview.taskRecordId
+      const { entities } = await Action.api().forTaskRecord(taskRecordId)
+      this.actionIds = map(entities.Action, 'id')
+    },
+    async fetchTaskRecordActionsWithLoader () {
+      this.$wait.start(this.loader)
+      await this.fetchTaskRecordActions()
+      this.$wait.end(this.loader)
+    },
+    async toggleChanges (toggler = null) {
+      if (!this.showChanges || toggler) {
+        await this.fetchTaskRecordActionsWithLoader()
+      }
+      this.showChanges = toggler !== null ? toggler : !this.showChanges
+    },
+    toggleNotes (toggler = null) {
+      if (!this.showNotes || toggler) {
+        this.showChanges = false
+      }
+      this.showNotes = toggler !== null ? toggler : !this.showNotes
     },
     emitUpdate () {
       /**
@@ -78,6 +108,9 @@ export default {
     }
   },
   computed: {
+    isLoading () {
+      return this.$wait.is(this.loader)
+    },
     selectedInput: {
       get () {
         return this.selected
@@ -109,8 +142,8 @@ export default {
         'task-record-review-card--pending': this.isPending,
       }
     },
-    updateLoader () {
-      return uniqueId('update-task-record-review-')
+    loader () {
+      return uniqueId('loader-task-record-review-')
     },
     overlayVariant () {
       if (this.taskRecordReview.status === 'DONE') {
@@ -123,7 +156,7 @@ export default {
 </script>
 
 <template>
-  <b-overlay :show="$wait.is(updateLoader)" :variant="overlayVariant" rounded="lg">
+  <b-overlay :show="$wait.is(loader)" :variant="overlayVariant" rounded="lg">
     <b-spinner variant="light" slot="overlay" />
     <div class="task-record-review-card card card-body p-4" :class="classList">
       <div class="row align-items-center">
@@ -142,26 +175,38 @@ export default {
           <div class="row align-items-center">
             <div class="task-record-review-card__choice__form col-xl-6">
               <task-record-review-choice-form
-                @submit="selectChoiceWithLoader"
                 :task-record-review-id="taskRecordReviewId"
-                :activate-shortkeys="active" />
+                :activate-shortkeys="active"
+                @submit="selectChoiceWithLoader" />
             </div>
             <div class="task-record-review-card__choice_history col-xl-6">
               <task-record-review-history
+                :task-record-review-id="taskRecordReviewId"
                 @toggle-notes="toggleNotes"
-                @same="selectChoiceWithLoader"
-                :task-record-review-id="taskRecordReviewId" />
+                @same="selectChoiceWithLoader" />
             </div>
           </div>
         </div>
         <div class="task-record-review-card__actions col-auto">
-          <task-record-review-actions :task-record-review-id="taskRecordReviewId"
+          <task-record-review-actions
+            :task-record-review-id="taskRecordReviewId"
             @lock="lockWithLoader"
-            @unlock="unlockWithLoader" />
+            @unlock="unlockWithLoader"
+            @toggle-changes="toggleChanges" />
         </div>
       </div>
+      <b-collapse :visible="showChanges">
+        <task-record-changes
+          :action-ids="actionIds"
+          :activate-shortkeys="active"
+          @close="toggleChanges(false)" />
+      </b-collapse>
       <b-collapse :visible="showNotes">
-        <task-record-review-notes :task-record-review-id="taskRecordReviewId" :autofocus="showNotes" @close="toggleNotes" />
+        <task-record-review-notes
+          :task-record-review-id="taskRecordReviewId"
+          :activate-shortkeys="active"
+          :autofocus="showNotes"
+          @close="toggleNotes(false)" />
       </b-collapse>
     </div>
   </b-overlay>

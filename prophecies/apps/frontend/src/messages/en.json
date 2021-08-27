@@ -1,4 +1,31 @@
 {
+  "actions": {
+    "reviewed": {
+      "taskRecordReview": {
+        "choice": "{actor} classified the record as <strong>\"{actionObject}\"</strong>"
+      }
+    },
+    "locked": {
+      "taskRecord": {
+        "*": "{actor} <strong>locked</strong> the record"
+      }
+    },
+    "unlocked": {
+      "taskRecord": {
+        "*": "{actor} <strong>unlocked</strong> the record"
+      }
+    },
+    "commented": {
+      "taskRecordReview": {
+        "*": "{actor} wrote a note"
+      }
+    },
+    "selected": {
+      "taskRecordReview": {
+        "*": "{actor} selected \"{alternative_value}\""
+      }
+    }
+  },
   "appHeader": {
     "api": "API",
     "admin": "Admin",
