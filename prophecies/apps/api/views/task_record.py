@@ -4,6 +4,7 @@ from rest_framework import decorators
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from prophecies.core.models import Task, TaskRecord
 from prophecies.apps.api.views.action import ActionSerializer
 from prophecies.apps.api.views.task import TaskSerializer
@@ -24,6 +25,7 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TaskRecord
+        resource_name = 'TaskRecord'
         fields = ['id', 'url', 'task', 'original_value', 'predicted_value', 'link', 'locked', 'locked_by', 'metadata', 'rounds', 'status']
         read_only_fields = ['url',  'original_value', 'predicted_value', 'link', 'metadata', 'rounds', 'status']
 
@@ -72,12 +74,16 @@ class TaskRecordViewSet(viewsets.ModelViewSet):
         """
         List of actions performed over this task record.
         """
+        # Change the resource name for the current view to ensure the "type" of
+        # the serialized data is correct (the render uses this view property
+        # to find the current type).
+        self.resource_name = 'Action'
         queryset = self.get_task_record(pk).actions.all()
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = ActionSerializer(page, many=True, context={'request': request})
             return self.get_paginated_response(serializer.data)
-        serializer = ActionSerializer(page, many=True, context={'request': request})
+        serializer = ActionSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     def check_object_permissions(self, request, obj):

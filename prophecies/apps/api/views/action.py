@@ -47,6 +47,7 @@ class ActionSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Action
+        resource_name = 'Action'
         fields = ['id', 'url', 'verb', 'actor', 'action_object', 'target',
                     'data', 'public', 'description', 'timestamp']
 

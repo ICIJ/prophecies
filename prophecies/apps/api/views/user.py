@@ -49,6 +49,10 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         """
         List of actions performed by the user.
         """
+        # Change the resource name for the current view to ensure the "type" of
+        # the serialized data is correct (the render uses this view property
+        # to find the current type).
+        self.resource_name = 'Action'
         queryset = self.get_user(pk).actor_actions.all()
         page = self.paginate_queryset(queryset)
         if page is not None:
