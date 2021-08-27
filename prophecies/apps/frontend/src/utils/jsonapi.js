@@ -1,7 +1,7 @@
-import { isArray, find, mapValues } from 'lodash'
+import { isArray, isPlainObject, find, mapValues, reduce } from 'lodash'
 import User from '@/models/User'
 
-const MAX_RELATIONSHIP_DEPTH = 4
+const MAX_RELATIONSHIP_DEPTH = 10
 
 export function defaultHeaders () {
   return {
@@ -42,7 +42,18 @@ class ResponseNormalizer {
     if (depth < 1) {
       return {}
     }
-    return mapValues(relationships, r => this.relationshipNormalizer(r, depth - 1))
+    const normalized = mapValues(relationships, r => this.relationshipNormalizer(r, depth - 1))
+    return this.spreadRelationships(normalized)
+  }
+
+  spreadRelationships (normalizedRelationships) {
+    return reduce(normalizedRelationships, (normalized, rel, field) => {
+      if (isPlainObject(rel)) {
+        normalized[`${field}Id`] = normalized[`${field}Id`] || rel.id
+        normalized[`${field}Type`] = normalized[`${field}Type`] || rel.type
+      }
+      return normalized
+    }, normalizedRelationships)
   }
 
   relationshipNormalizer ({ data }, depth = MAX_RELATIONSHIP_DEPTH) {
