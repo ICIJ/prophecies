@@ -5,7 +5,7 @@ import AlternativeValue from '@/models/AlternativeValue'
 import Choice from '@/models/Choice'
 
 export default class ChoiceGroup extends Model {
-  static entity = 'choiceGroups'
+  static entity = 'ChoiceGroup'
 
   static fields () {
     return {

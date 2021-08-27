@@ -2,7 +2,7 @@ import { Model } from '@vuex-orm/core'
 import ChoiceGroup from '@/models/ChoiceGroup'
 
 export default class AlternativeValue extends Model {
-  static entity = 'alternative-values'
+  static entity = 'AlternativeValue'
 
   static fields () {
     return {

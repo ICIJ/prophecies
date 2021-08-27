@@ -3,7 +3,7 @@ import { responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 
 export default class Project extends Model {
-  static entity = 'projects'
+  static entity = 'Project'
 
   static fields () {
     return {

@@ -3,7 +3,7 @@ import Task from '@/models/Task'
 import User from '@/models/User'
 
 export default class TaskChecker extends Model {
-  static entity = 'task-checkers'
+  static entity = 'TaskChecker'
   static primaryKey = ['checkerId', 'taskId']
 
   static fields () {

@@ -6,7 +6,7 @@ import TaskRecord from '@/models/TaskRecord'
 import User from '@/models/User'
 
 export default class TaskRecordReview extends Model {
-  static entity = 'task-record-reviews'
+  static entity = 'TaskRecordReview'
 
   static fields () {
     return {

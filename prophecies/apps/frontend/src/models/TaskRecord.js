@@ -1,11 +1,11 @@
 import { Model } from '@vuex-orm/core'
 import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
-import Task from '@/models/Task'
 import User from '@/models/User'
+import Task from '@/models/Task'
 
 export default class TaskRecord extends Model {
-  static entity = 'task-records'
+  static entity = 'TaskRecord'
 
   static fields () {
     return {
