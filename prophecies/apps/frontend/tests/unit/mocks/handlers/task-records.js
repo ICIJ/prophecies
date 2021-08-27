@@ -141,5 +141,129 @@ export default [
         }
       })
     )
+  }),
+  rest.get('/api/v1/task-records/3/relationships/actions', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        links: {
+          first: 'http://localhost/api/v1/task-records/7/relationships/actions/?page%5Bnumber%5D=1',
+          last: 'http://localhost/api/v1/task-records/7/relationships/actions/?page%5Bnumber%5D=1',
+          next: null,
+          prev: null
+        },
+        data: [
+          {
+            type: 'Action',
+            id: '13',
+            attributes: {
+              verb: 'reviewed',
+              data: null,
+              public: true,
+              description: null,
+              timestamp: '2021-08-26T19:41:05.657206Z'
+            },
+            relationships: {
+              actor: {
+                data: {
+                  type: 'User',
+                  id: '2'
+                }
+              },
+              actionObject: {
+                data: {
+                  type: 'Choice',
+                  id: '1'
+                }
+              },
+              target: {
+                data: {
+                  type: 'TaskRecordReview',
+                  id: '388'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/actions/13/'
+            }
+          }
+        ],
+        included: [
+          {
+            type: 'Choice',
+            id: '1',
+            attributes: {
+              name: 'Correct',
+              value: 'correct',
+              shortkeys: 'c',
+              requireAlternativeValue: false
+            }
+          },
+          {
+            type: 'TaskRecordReview',
+            id: '388',
+            attributes: {
+              status: 'DONE',
+              note: ';)',
+              alternativeValue: null
+            },
+            relationships: {
+              checker: {
+                data: {
+                  type: 'User',
+                  id: '9'
+                }
+              },
+              choice: {
+                data: {
+                  type: 'Choice',
+                  id: '3'
+                }
+              },
+              taskRecord: {
+                data: {
+                  type: 'TaskRecord',
+                  id: '7'
+                }
+              },
+              history: {
+                data: [
+                  {
+                    type: 'TaskRecordReview',
+                    id: '388'
+                  }
+                ]
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/task-record-reviews/388/'
+            }
+          },
+          {
+            type: 'User',
+            id: '2',
+            attributes: {
+              url: 'http://localhost/api/v1/users/2/',
+              firstName: 'Django',
+              lastName: '',
+              username: 'django',
+              email: 'support@icij.org',
+              emailMd5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
+              isStaff: true
+            },
+            links: {
+              self: 'http://localhost/api/v1/users/2/'
+            }
+          }
+        ],
+        meta: {
+          pagination: {
+            page: 1,
+            pages: 1,
+            count: 1
+          }
+        }
+      })
+    )
   })
 ]
