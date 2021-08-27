@@ -15,6 +15,9 @@ export default {
     },
     autofocus: {
       type: Boolean
+    },
+    activateShortkeys: {
+      type: Boolean
     }
   },
   watch: {
@@ -51,6 +54,12 @@ export default {
     },
     saveNoteLoader () {
       return uniqueId('task-record-review-save-note')
+    },
+    closeShortkey () {
+      if (this.activateShortkeys) {
+        return ['esc']
+      }
+      return []
     }
   },
   methods: {
@@ -78,8 +87,15 @@ export default {
 
 <template>
   <div class="task-record-review-notes">
-    <b-btn class="task-record-review-notes__close text-muted" variant="link" squared size="sm" @click="$emit('close')">
+    <b-btn class="task-record-review-notes__close text-muted d-flex align-items-center"
+           variant="link" s
+           quared
+           size="sm"
+           v-shortkey.propagate="closeShortkey"
+           @shortkey="$emit('close')"
+           @click="$emit('close')">
       <x-icon />
+      <shortkey-badge :value="closeShortkey" />
       <span class="sr-only">Close</span>
     </b-btn>
     <div v-for="{ id, checker, note } in history" :key="id" class="task-record-review-notes__item">
