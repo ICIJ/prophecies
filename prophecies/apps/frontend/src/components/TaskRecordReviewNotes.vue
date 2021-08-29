@@ -115,6 +115,7 @@ export default {
                     placeholder="Type your note here..."
                     rows="2"
                     max-rows="10"
+                    @keyup.esc="$emit('close')"
                     @keyup.enter="handleInputNoteEnter" />
                 </b-overlay>
                 <b-collapse :visible="inputNote !== note">
@@ -159,7 +160,7 @@ export default {
         margin: 0;
         margin-left: auto;
       }
-      
+
       &:hover {
         text-decoration: none;
       }
