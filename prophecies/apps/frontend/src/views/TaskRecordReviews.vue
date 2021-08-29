@@ -25,9 +25,9 @@
                 <custom-pagination
                   compact
                   @input="goToPage"
-                  :value="Number(page)"
+                  :value="Number(pageNumber)"
                   :total-rows="pagination.count"
-                  :per-page="10" />
+                  :per-page="pageSize" />
               </div>
               <div class="col d-flex">
                 <div class="ml-auto">
@@ -71,9 +71,9 @@
                 compact
                 v-if="pagination"
                 @input="goToPage"
-                :value="Number(page)"
+                :value="Number(pageNumber)"
                 :total-rows="pagination.count"
-                :per-page="10" />
+                :per-page="pageSize" />
             </app-waiter>
           </div>
           <div v-else class="text-center text-muted text-small mx-auto">
@@ -120,14 +120,17 @@ export default {
     return {
       pagination: null,
       selectedIds: {},
-      showFilters: false
+      showFilters: false,
     }
   },
   watch: {
-    page (value) {
+    pageNumber (value) {
       if (this.pagination?.page !== value) {
         return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
       }
+    },
+    pageSize (value) {
+      return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
     },
     routeFilters (value, previousValue) {
       if (!isEqual(value, previousValue)) {
@@ -150,8 +153,14 @@ export default {
         return compact(selectedIds).length === this.taskRecordReviews.length
       }
     },
-    page () {
-      return Number(this.$route.query.page) || 1
+    pageNumber () {
+      return Number(this.$route.query['page[number]']) || 1
+    },
+    pageSize () {
+      return Number(this.$route.query['page[size]']) || 10
+    },
+    sort () {
+      return this.$route.query.sort || '-task_record__id'
     },
     hasFilters () {
       return !!keys(this.routeFilters).length
@@ -208,7 +217,9 @@ export default {
       return {
         ...this.appliedRouteFiltersQueryParams,
         'filter[taskRecord.task]': this.taskId,
-        'page[number]': this.page
+        'page[number]': this.pageNumber,
+        'page[size]': this.pageSize,
+        'sort': this.sort
       }
     },
     trailingTaskRecordReview () {
@@ -259,12 +270,12 @@ export default {
       TaskRecordReview.deleteAll()
       result.save()
     },
-    async goToPage (page) {
-      const query = { ...this.$route.query, page }
+    async goToPage (pageNumber) {
+      const query = { ...this.$route.query, 'page[number]': pageNumber }
       await this.$router.push({ path: this.$route.path, query }, () => {})
     },
     async goToNextPage () {
-      const currentPage = parseInt(this.page)
+      const currentPage = parseInt(this.pageNumber)
       // Don't go to a page if it doesn't exist
       if (currentPage < parseInt(this.pagination.pages)) {
         return this.goToPage(currentPage + 1)
