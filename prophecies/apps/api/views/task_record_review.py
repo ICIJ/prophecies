@@ -47,7 +47,10 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ['status',]
 
     def __init__(self, *args, **kwargs):
-        self.filter_choice_queryset(self.fields['choice'], *args, **kwargs)
+        try:
+            self.filter_choice_queryset(self.fields['choice'], *args, **kwargs)
+        except AttributeError:
+            self.fields['choice'].queryset = Choice.objects.none()
         super().__init__(*args, **kwargs)
 
     def filter_choice_queryset(self, f, instance=None, data=serializers.empty, request=None, **kwargs):
