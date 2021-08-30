@@ -22,6 +22,7 @@ export default {
     return {
       showChanges: false,
       showNotes: false,
+      highlightedReviewId: null,
       actionIds: []
     }
   },
@@ -93,9 +94,10 @@ export default {
       }
       this.showChanges = toggler !== null ? toggler : !this.showChanges
     },
-    toggleNotes (toggler = null) {
+    toggleNotes (toggler = null, highlightedReviewId) {
       if (!this.showNotes || toggler) {
         this.showChanges = false
+        this.highlightedReviewId = highlightedReviewId
       }
       this.showNotes = toggler !== null ? toggler : !this.showNotes
     },
@@ -182,7 +184,7 @@ export default {
             <div class="task-record-review-card__choice_history col-xl-6">
               <task-record-review-history
                 :task-record-review-id="taskRecordReviewId"
-                @toggle-notes="toggleNotes"
+                @toggle-notes="toggleNotes(true, $event)"
                 @same="selectChoiceWithLoader" />
             </div>
           </div>
@@ -205,7 +207,7 @@ export default {
         <task-record-review-notes
           :task-record-review-id="taskRecordReviewId"
           :activate-shortkeys="active"
-          :autofocus="showNotes"
+          :highlighted-review-id="highlightedReviewId"
           @close="toggleNotes(false)" />
       </b-collapse>
     </div>

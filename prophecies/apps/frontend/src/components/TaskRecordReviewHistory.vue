@@ -30,13 +30,13 @@ export default {
     isMe ({ id = null } = {}) {
       return id === User.me().id
     },
-    emitToggleNotes () {
+    emitToggleNotes (reviewId) {
       /**
        * Fired when the user toggles the notes
        * @event toggle-notes
-       * @param TaskRecordReview
+       * @param String
        */
-      this.$emit('toggle-notes', this.taskRecordReview)
+      this.$emit('toggle-notes', reviewId)
     },
     selectSameChoice ({ alternativeValue = null, choice } = {}) {
       /**
@@ -100,11 +100,11 @@ export default {
           </template>
         </template>
       </div>
-      <b-btn variant="link" size="sm" class="task-record-review-history__checker__note" @click="emitToggleNotes">
+      <b-btn variant="link" size="sm" class="task-record-review-history__checker__note" @click="emitToggleNotes(id)">
         <template v-if="!!note">
           <message-square-icon size="1x" class="mr-1" />1 note
         </template>
-        <template v-else>
+        <template v-else-if="isMe(checker)">
           <edit-3-icon size="1x" class="mr-1" />Comment
         </template>
       </b-btn>

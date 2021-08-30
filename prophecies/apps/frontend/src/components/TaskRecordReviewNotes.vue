@@ -1,5 +1,5 @@
 <script>
-import { filter, uniqueId } from 'lodash'
+import { get, find, filter, uniqueId } from 'lodash'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import User from '@/models/User'
@@ -13,8 +13,8 @@ export default {
     taskRecordReviewId: {
       type: [String, Number]
     },
-    autofocus: {
-      type: Boolean
+    highlightedReviewId: {
+      type: [String, Number]
     },
     activateShortkeys: {
       type: Boolean
@@ -39,6 +39,14 @@ export default {
     this.inputNote = this.taskRecordReview.note
   },
   computed: {
+    autofocus () {
+      const checkerId = get(this, 'highlightedReview.checker.id', null)
+      return checkerId === User.me().id
+    },
+    highlightedReview () {
+      const id = this.highlightedReviewId
+      return find(this.history, { id })
+    },
     taskRecordReview () {
       return TaskRecordReview
         .query()
@@ -98,7 +106,7 @@ export default {
       <shortkey-badge :value="closeShortkey" />
       <span class="sr-only">Close</span>
     </b-btn>
-    <div v-for="{ id, checker, note } in history" :key="id" class="task-record-review-notes__item">
+    <div v-for="{ id, checker, note } in history" :key="id" class="task-record-review-notes__item"  :class="{ 'task-record-review-notes__item--highlighted': id === highlightedReviewId }">
       <div class="task-record-review-notes__item__checker">
         <span class="text-truncate">
           {{ checker.firstName || checker.username }}
@@ -140,6 +148,15 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+  @keyframes highlightNote {
+    from {
+      background: #fcf3c4;
+    }
+    to {
+      background: #F5F5F5;
+    }
+  }
+
   .task-record-review-notes {
     max-width: 630px;
     margin: auto;
@@ -176,6 +193,10 @@ export default {
 
       &:last-of-type {
         margin-bottom: 0;
+      }
+
+      &--highlighted {
+        animation: highlightNote 4s;
       }
 
       &__checker {
