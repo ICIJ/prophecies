@@ -6,7 +6,7 @@ from prophecies.core.contrib.display import display_task_addon
 @admin.register(Tip)
 class TipAdmin(admin.ModelAdmin):
     exclude = ['creator']
-
+    fields = ['name', 'project', 'task', 'description']
     list_filter = ['creator', 'project', 'task']
     search_fields = ['name', 'description']
     list_display = ['name', 'creator', 'project', 'task_with_addon']
