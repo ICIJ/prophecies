@@ -30,7 +30,7 @@ class TaskRecordAdmin(admin.ModelAdmin):
     exclude = ['metadata', 'rounds', 'link', 'status']
     readonly_fields = ['round_count', 'status_badge', 'computed_link', 'metadata_json']
     list_display = ['__str__', 'task_with_addon', 'round_count', 'status_badge']
-    list_filter = ['rounds', 'task', 'task__project', 'status']
+    list_filter = ['rounds', 'task', 'task__project', 'status', 'priority']
     inlines = [TaskRecordReviewInline,]
     actions = ['assign_action']
     search_fields = ['original_value', 'predicted_value', 'metadata', 'link']
