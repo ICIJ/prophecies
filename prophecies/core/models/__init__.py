@@ -1,6 +1,7 @@
 from .alternative_value import AlternativeValue
 from .choice import Choice
 from .choice_group import ChoiceGroup
+from .notification import Notification
 from .project import Project
 from .setting import Setting
 from .task import Task
