@@ -11,3 +11,9 @@ class Tip(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def mentions(self):
+        """
+        Returns a list of unique mentions, with their corresponding User. 
+        """
