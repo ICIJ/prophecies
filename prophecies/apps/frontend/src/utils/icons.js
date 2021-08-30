@@ -16,6 +16,7 @@ export {
   LogOutIcon,
   LockIcon,
   MessageSquareIcon,
+  SettingsIcon,
   SearchIcon,
   ShieldIcon,
   SmileIcon,

@@ -21,13 +21,24 @@
                   </span>
                 </b-btn>
               </div>
-              <div class="col-6" v-if="pagination">
-                <custom-pagination
-                  compact
-                  @input="goToPage"
-                  :value="Number(pageNumber)"
-                  :total-rows="pagination.count"
-                  :per-page="pageSize" />
+              <div class="col-6 text-center" v-if="pagination">
+                <div class="task-record-reviews__container__pagination">
+                  <custom-pagination
+                    compact
+                    @input="goToPage"
+                    :value="Number(pageNumber)"
+                    :total-rows="pagination.count"
+                    :per-page="Number(pageSize)" />
+                  <settings-icon
+                    @click="togglePageParams"
+                    class="mr-3 text-secondary task-record-reviews__container__pagination__toggler"
+                    size="1.5x" />
+                  <task-record-review-page-params
+                    v-if="showPageParams"
+                    class="task-record-reviews__container__pagination__params"
+                    :page-size.sync="pageSize"
+                    :sort.sync="sort" />
+                </div>
               </div>
               <div class="col d-flex">
                 <div class="ml-auto">
@@ -73,7 +84,7 @@
                 @input="goToPage"
                 :value="Number(pageNumber)"
                 :total-rows="pagination.count"
-                :per-page="pageSize" />
+                :per-page="Number(pageSize)" />
             </app-waiter>
           </div>
           <div v-else class="text-center text-muted text-small mx-auto">
@@ -94,6 +105,7 @@ import AppWaiter from '@/components/AppWaiter'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import TaskRecordReviewAppliedFilters from '@/components/TaskRecordReviewAppliedFilters'
 import TaskRecordReviewFilters from '@/components/TaskRecordReviewFilters'
+import TaskRecordReviewPageParams from '@/components/TaskRecordReviewPageParams'
 import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Task from '@/models/Task'
@@ -109,7 +121,8 @@ export default {
     AppWaiter,
     TaskRecordReviewCard,
     TaskRecordReviewAppliedFilters,
-    TaskRecordReviewFilters
+    TaskRecordReviewFilters,
+    TaskRecordReviewPageParams
   },
   props: {
     taskId: {
@@ -121,6 +134,7 @@ export default {
       pagination: null,
       selectedIds: {},
       showFilters: false,
+      showPageParams: false
     }
   },
   watch: {
@@ -129,7 +143,10 @@ export default {
         return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
       }
     },
-    pageSize (value) {
+    pageSize () {
+      return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
+    },
+    sort () {
       return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
     },
     routeFilters (value, previousValue) {
@@ -156,11 +173,23 @@ export default {
     pageNumber () {
       return Number(this.$route.query['page[number]']) || 1
     },
-    pageSize () {
-      return Number(this.$route.query['page[size]']) || 10
+    pageSize: {
+      get () {
+        return String(this.$route.query['page[size]'] || '10')
+      },
+      set (pageSize) {
+        const query = { ...this.$route.query, 'page[size]': pageSize }
+        this.$router.push({ path: this.$route.path, query }, () => {})
+      }
     },
-    sort () {
-      return this.$route.query.sort || '-task_record__id'
+    sort: {
+      get () {
+        return this.$route.query.sort || 'task_record__id'
+      },
+      set (sort) {
+        const query = { ...this.$route.query, sort }
+        this.$router.push({ path: this.$route.path, query }, () => {})
+      }
     },
     hasFilters () {
       return !!keys(this.routeFilters).length
@@ -313,7 +342,35 @@ export default {
     },
     toggleFilters () {
       this.showFilters = !this.showFilters
+    },
+    togglePageParams () {
+      this.showPageParams = !this.showPageParams
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .task-record-reviews {
+    &__container {
+
+      &__pagination {
+        display: inline-flex;
+        align-items: center;
+        position: relative;
+
+        &__toggler {
+          cursor: pointer;
+        }
+
+        &__params {
+          z-index: $zindex-dropdown;
+          position: absolute;
+          left: 100%;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
+</style>
