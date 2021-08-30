@@ -65,7 +65,7 @@ describe('TaskRecordReviewHistory', () => {
     const noteBtn = wrapper.find('.task-record-review-history__checker__note')
     noteBtn.trigger('click')
     expect(wrapper.emitted()['toggle-notes']).toBeTruthy()
-    expect(wrapper.emitted()['toggle-notes'][0][0]).toBe(wrapper.vm.taskRecordReview)
+    expect(wrapper.emitted()['toggle-notes'][0][0]).toBe(wrapper.vm.taskRecordReview.id)
   })
 
   it('should find the name of the alternative value', () => {
