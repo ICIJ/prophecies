@@ -98,6 +98,7 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
                        'task_record__id']
     filterset_fields = {
        'choice': ('exact', 'in', 'isnull'),
+       'alternative_value': ('icontains', 'exact', 'iexact', 'contains', 'in', 'iregex'),
        'task_record__priority': ('exact', 'in'),
        'task_record__rounds': ('exact', 'in'),
        'task_record__task': ('exact', 'in'),
