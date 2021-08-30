@@ -19,12 +19,13 @@ export default {
           field: 'id',
           label: 'displayName'
         },
-        reviewedBy: {
-          name: 'Reviewed by',
-          param: '',
-          options: task.checkers,
-          field: 'id',
-          label: 'displayName'
+        alternativeValues: {
+          allowArbitraryOptions: true,
+          name: 'Alternative value to replace predicted value',
+          param: 'alternative_value__icontains',
+          options: task.choiceGroup.alternativeValues,
+          field: 'value',
+          label: 'name'
         },
         choices: {
           name: 'Classification',

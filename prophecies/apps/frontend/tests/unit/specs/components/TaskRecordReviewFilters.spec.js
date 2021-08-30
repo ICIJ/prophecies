@@ -57,9 +57,10 @@ describe('TaskRecordReviewFilters', () => {
       expect(wrapper.vm.filters.assignedTo.options).toHaveLength(1)
     })
 
-    it('should have an object describing filters, including reviewedBy', () => {
-      expect(wrapper.vm.filters.reviewedBy).toBeDefined()
-      expect(wrapper.vm.filters.reviewedBy.options).toHaveLength(1)
+    it('should have an object describing filters, including alternativeValues', () => {
+      expect(wrapper.vm.filters.alternativeValues).toBeDefined()
+      expect(wrapper.vm.filters.alternativeValues.param).toBe('alternative_value__icontains')
+      expect(wrapper.vm.filters.alternativeValues.options).toHaveLength(2)
     })
 
     it('should have an object describing filters, including choices', () => {
@@ -102,7 +103,7 @@ describe('TaskRecordReviewFilters', () => {
   describe('with route filters', () => {
     beforeEach(() => {
       const localVue = createLocalVue()
-      const routeFilters = { choice__in: '1,2', task_record__predicted_value__iregex: '(FRA|DZA)' }
+      const routeFilters = { choice__in: '1,2', task_record__predicted_value__iregex: '(FRA|DZA)', alternative_value__icontains: '(ALA|ALB)' }
       const propsData = { taskId: '1', routeFilters }
       // Configure the local vue with plugins
       const { store, wait } = Core.init(localVue).useAll()
@@ -113,6 +114,12 @@ describe('TaskRecordReviewFilters', () => {
       const queryParams = wrapper.vm.filtersAsQueryParams
       expect(queryParams['filter[task_record__predicted_value__iregex]']).toBeDefined()
       expect(queryParams['filter[task_record__predicted_value__iregex]']).toBe('(FRA|DZA)')
+    })
+
+    it('should return filters as query params for the `alternativeValues` filter', () => {
+      const queryParams = wrapper.vm.filtersAsQueryParams
+      expect(queryParams['filter[alternative_value__icontains]']).toBeDefined()
+      expect(queryParams['filter[alternative_value__icontains]']).toBe('(ALA|ALB)')
     })
 
     it('should return filters as query params for the `choices` filter', () => {

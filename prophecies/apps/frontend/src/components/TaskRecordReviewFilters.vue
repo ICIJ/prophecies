@@ -28,7 +28,7 @@
         selected: {
           predictedValues: [],
           assignedTo: [],
-          reviewedBy: [],
+          alternativeValues: [],
           choices: [],
           priorities: [],
           rounds: [],
@@ -124,15 +124,14 @@
                      :options="filters.assignedTo.options" />
       </label>
       <label class="col-12 col-sm-6 col-lg-3">
-        {{ filters.reviewedBy.name }}
+        {{ filters.alternativeValues.name }}
         <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
-                     disabled
-                     v-model="selected.reviewedBy"
-                     :label="filters.reviewedBy.label"
+                     v-model="selected.alternativeValues"
+                     :label="filters.alternativeValues.label"
                      track-by="id"
                      multiple
-                     :options="filters.reviewedBy.options" />
+                     :options="filters.alternativeValues.options" />
       </label>
       <label class="col-12 col-sm-6 col-lg-3">
         {{ filters.choices.name }}
