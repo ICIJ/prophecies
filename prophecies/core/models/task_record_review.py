@@ -89,7 +89,7 @@ class TaskRecordReview(models.Model):
     @cached_property
     def history(self):
         try:
-            return self.task_record.reviews.exclude(choice__isnull=True).all()
+            return self.task_record.reviews.all()
         except AttributeError:
             return TaskRecordReview.objects.none()
 
