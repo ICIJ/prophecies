@@ -66,6 +66,11 @@
         const option = this.toSerializableOption(value)
         this.selected.predictedValues.push(option)
       },
+      addAlternativeValues (value) {
+        // Method from the mixins
+        const option = this.toSerializableOption(value)
+        this.selected.alternativeValues.push(option)
+      },
       readRouteFilters () {
         // Clear all keys
         keys(this.selected).forEach(key => this.$set(this.selected, key, []))
@@ -131,6 +136,10 @@
                      :label="filters.alternativeValues.label"
                      track-by="id"
                      multiple
+                     taggable
+                     tag-placeholder="Search for this exact value"
+                     tag-position="bottom"
+                     @tag="addAlternativeValues"
                      :options="filters.alternativeValues.options" />
       </label>
       <label class="col-12 col-sm-6 col-lg-3">

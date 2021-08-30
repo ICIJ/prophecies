@@ -21,8 +21,8 @@ export default {
         },
         alternativeValues: {
           allowArbitraryOptions: true,
-          name: 'Alternative value to replace predicted value',
-          param: 'alternative_value__icontains',
+          name: 'Classified value',
+          param: 'alternative_value__iregex',
           options: task.choiceGroup.alternativeValues,
           field: 'value',
           label: 'name'
