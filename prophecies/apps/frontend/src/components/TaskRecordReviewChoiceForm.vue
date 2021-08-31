@@ -97,7 +97,7 @@ export default {
   },
   computed: {
     taskRecord () {
-      return this.taskRecordReview.taskRecord
+      return get(this, 'taskRecordReview.taskRecord')
     },
     taskRecordReview () {
       return TaskRecordReview
@@ -119,7 +119,7 @@ export default {
         .query()
         .with('choices')
         .with('alternativeValues')
-        .find(this.taskRecordReview.taskRecord.task.choiceGroupId)
+        .find(this.taskRecord.task.choiceGroupId)
     },
     classList () {
       return {

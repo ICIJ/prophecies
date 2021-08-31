@@ -30,7 +30,7 @@ export default {
         .find(this.taskRecordReviewId)
     },
     taskRecord () {
-      return this.taskRecordReview.taskRecord
+      return get(this, 'taskRecordReview.taskRecord')
     },
     link () {
       return get(this, 'taskRecordReview.taskRecord.link')
