@@ -1,8 +1,7 @@
-import re
-import logging
 from django.db import models
 from django.contrib.auth.models import User
 from prophecies.core.models import Project, Task
+from prophecies.core.contrib.mentions import list_mentions
 
 class Tip(models.Model):
     name = models.CharField(max_length=100, verbose_name="Tip name", null=True, blank=True)
@@ -21,12 +20,4 @@ class Tip(models.Model):
         """
         Returns a list of unique mentions, with their corresponding User.
         """
-        usernames = re.findall("@([a-zA-Z0-9]{1,15})", self.description)
-        if len(usernames) > 1:
-            # Create a list of unique usernames
-            usernames = list(dict.fromkeys(usernames))
-        mentions = []
-        for username in usernames:
-            user = User.objects.filter(username=username).first()
-            mentions.append({ 'mention': username, 'user': user })
-        return mentions
+        return list_mentions(self.description)
