@@ -44,13 +44,19 @@ createsuperuser:
 		pipenv run python manage.py createsuperuser
 
 minor:
-		pipenv run bumpversion --commit --tag --current-version ${CURRENT_VERSION} minor prophecies/__init__.py
+		pipenv run bumpversion minor
 
 major:
-		pipenv run bumpversion --commit --tag --current-version ${CURRENT_VERSION} major prophecies/__init__.py
+		pipenv run bumpversion major
 
 patch:
-		pipenv run bumpversion --commit --tag --current-version ${CURRENT_VERSION} patch prophecies/__init__.py
+		pipenv run bumpversion patch
+
+release:
+		pipenv run bumpversion release
+
+build:
+		pipenv run bumpversion build
 
 docker-build:
 		docker build -t $(DOCKER_NAME) .
