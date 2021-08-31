@@ -21,17 +21,12 @@ class Tip(models.Model):
         """
         Returns a list of unique mentions, with their corresponding User.
         """
-        results = re.findall("@([a-zA-Z0-9]{1,15})", self.description)
-        if len(results) > 1:
-            results = list(dict.fromkeys(results))
-        objects = []
-        for result in results:
-            class Mention:
-                mention = result
-                try:
-                    user = User.objects.get(username=result)
-                except User.DoesNotExist:
-                    user = None
-            mention = Mention()
-            objects.append(mention)
-        return objects
+        usernames = re.findall("@([a-zA-Z0-9]{1,15})", self.description)
+        if len(usernames) > 1:
+            # Create a list of unique usernames
+            usernames = list(dict.fromkeys(usernames))
+        mentions = []
+        for username in usernames:
+            user = User.objects.filter(username=username).first()
+            mentions.append({ 'mention': username, 'user': user })
+        return mentions
