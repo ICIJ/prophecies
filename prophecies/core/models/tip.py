@@ -1,3 +1,5 @@
+import re
+import logging
 from django.db import models
 from django.contrib.auth.models import User
 from prophecies.core.models import Project, Task
@@ -17,5 +19,19 @@ class Tip(models.Model):
     @property
     def mentions(self):
         """
-        Returns a list of unique mentions, with their corresponding User. 
+        Returns a list of unique mentions, with their corresponding User.
         """
+        results = re.findall("@([a-zA-Z0-9]{1,15})", self.description)
+        if len(results) > 1:
+            results = list(dict.fromkeys(results))
+        objects = []
+        for result in results:
+            class Mention:
+                mention = result
+                try:
+                    user = User.objects.get(username=result)
+                except User.DoesNotExist:
+                    user = None
+            mention = Mention()
+            objects.append(mention)
+        return objects
