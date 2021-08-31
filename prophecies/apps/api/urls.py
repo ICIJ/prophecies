@@ -10,6 +10,7 @@ from prophecies.apps.api.views.task_record import TaskRecordViewSet
 from prophecies.apps.api.views.task_record_review import TaskRecordReviewViewSet
 from prophecies.apps.api.views.task import TaskViewSet
 from prophecies.apps.api.views.user import UserViewSet
+from prophecies.apps.api.views.tip import TipViewSet
 
 router = routers.DefaultRouter()
 router.register(r'actions', ActionViewSet)
@@ -21,6 +22,7 @@ router.register(r'tasks', TaskViewSet)
 router.register(r'task-records', TaskRecordViewSet)
 router.register(r'task-record-reviews', TaskRecordReviewViewSet)
 router.register(r'users', UserViewSet)
+router.register(r'tips', TipViewSet)
 
 urlpatterns = [
     path('', RedirectView.as_view(url='v1/')),
