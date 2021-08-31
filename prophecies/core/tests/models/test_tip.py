@@ -40,5 +40,5 @@ class TestTip(TestCase):
     def test_it_should_only_return_one_mention_once(self):
         tip = Tip(description="Hi @olivia, it's @olivia right?")
         self.assertEqual(len(tip.mentions), 1)
-        self.assertEqual(getattr(tip.mentions[1], 'mention'), 'olivia')
-        self.assertEqual(getattr(tip.mentions[1], 'user'), self.olivia)
+        self.assertEqual(getattr(tip.mentions[0], 'mention'), 'olivia')
+        self.assertEqual(getattr(tip.mentions[0], 'user'), self.olivia)
