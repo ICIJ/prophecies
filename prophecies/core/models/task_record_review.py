@@ -4,8 +4,8 @@ from django.db.models import Max, signals
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
-from prophecies.core.models.choice import Choice
-from prophecies.core.models.task_record import TaskRecord
+from prophecies.core.models import Choice, Notification, TaskRecord
+from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action
 
 class StatusType(models.TextChoices):
     PENDING = 'PENDING', _('Pending')
@@ -93,6 +93,13 @@ class TaskRecordReview(models.Model):
         except AttributeError:
             return TaskRecordReview.objects.none()
 
+    @property
+    def mentions(self):
+        """
+        Returns a list of unique mentions, with their corresponding User.
+        """
+        return list_mentions(self.note)
+
 
     def save(self, *args, **kwargs):
         if not self.choice is None:
@@ -119,7 +126,17 @@ class TaskRecordReview(models.Model):
                 raise ValidationError(f'Task record #{self.task_record.id} cannot get more than {max_round} reviews')
 
 
+    @staticmethod
+    def signal_notify_mentioned_users(sender, instance, **kwargs):
+        for mention in instance.mentions:
+            user = mention.get('user')
+            if user is not None:
+                action, created = get_or_create_mention_action(instance.checker, user, instance)
+                if created:
+                    Notification.objects.create(recipient=user, action=action)
 
+
+signals.post_save.connect(TaskRecordReview.signal_notify_mentioned_users, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecord.signal_update_has_notes, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecord.signal_update_has_disagreements, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecord.signal_update_rounds_and_status, sender=TaskRecordReview)

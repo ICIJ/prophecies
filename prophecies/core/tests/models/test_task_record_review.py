@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Choice, ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, ChoiceGroup, Notification, Project, Task, TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record_review import StatusType
-from prophecies.core.models.task import Task
 
 class TestTaskRecordReview(TestCase):
     def setUp(self):
@@ -149,3 +148,103 @@ class TestTaskRecordReview(TestCase):
         last_review.choice = correct
         last_review.save()
         self.assertFalse(self.record_foo.has_disagreements)
+
+
+    def test_it_should_returns_no_mentions(self):
+        review = TaskRecordReview(note="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+        self.assertEqual(len(review.mentions), 0)
+
+
+    def test_it_should_returns_one_mention_with_user(self):
+        review = TaskRecordReview(note="Hi @django, lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+        self.assertEqual(len(review.mentions), 1)
+        self.assertEqual(review.mentions[0].get('mention'), 'django')
+        self.assertEqual(review.mentions[0].get('user'), self.django)
+
+
+    def test_it_should_returns_one_mention_with_user_and_one_without_user(self):
+        review = TaskRecordReview(note="Hi @django, lorem @ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+        self.assertEqual(len(review.mentions), 2)
+        #  First mention "@django"
+        self.assertEqual(review.mentions[0].get('mention'), 'django')
+        self.assertEqual(review.mentions[0].get('user'), self.django)
+        #  Second mention "@ipsum" (match with no existing user)
+        self.assertEqual(review.mentions[1].get('mention'), 'ipsum')
+        self.assertEqual(review.mentions[1].get('user'), None)
+
+
+    def test_it_should_returns_two_mentions(self):
+        review = TaskRecordReview(note="Hi @django, it's @olivia lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.")
+        self.assertEqual(len(review.mentions), 2)
+        #  First mention "@django"
+        self.assertEqual(review.mentions[0].get('mention'), 'django')
+        self.assertEqual(review.mentions[0].get('user'), self.django)
+        #  Second mention "@olivia"
+        self.assertEqual(review.mentions[1].get('mention'), 'olivia')
+        self.assertEqual(review.mentions[1].get('user'), self.olivia)
+
+
+    def test_it_should_only_return_one_mention_once(self):
+        review = TaskRecordReview(note="Hi @olivia, it's @olivia right?")
+        self.assertEqual(len(review.mentions), 1)
+        self.assertEqual(review.mentions[0].get('mention'), 'olivia')
+        self.assertEqual(review.mentions[0].get('user'), self.olivia)
+
+
+    def test_it_notifies_user_when_mentioned(self):
+        TaskRecordReview.objects.create(note="Hi @olivia!", checker=self.django)
+        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+
+
+    def test_it_notifies_user_once_even_if_mentioned_twice(self):
+        TaskRecordReview.objects.create(note="Hi @olivia, it's @olivia right?", checker=self.django)
+        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+
+
+    def test_it_notifies_two_users_when_mentioned(self):
+        TaskRecordReview.objects.create(note="Hi @olivia and @django!", checker=self.django)
+        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(Notification.objects.count(), 2)
+
+
+    def test_it_notifies_two_users_once_when_mentioned(self):
+        TaskRecordReview.objects.create(note="Hi @olivia, @olivia and @django!", checker=self.django)
+        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(Notification.objects.count(), 2)
+
+
+    def test_it_notifies_two_users_once_when_mentioned_even_after_edits(self):
+        review = TaskRecordReview.objects.create(note="Hi @olivia, @olivia and @django!", checker=self.django)
+        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(Notification.objects.count(), 2)
+        review.description = "Hi @olivia and @django!"
+        review.save()
+        self.assertEqual(Notification.objects.count(), 2)
+
+
+    def test_it_doesnt_notify_unkown_user(self):
+        TaskRecordReview.objects.create(note="Hi @caroline!", checker=self.django)
+        self.assertEqual(Notification.objects.count(), 0)
+
+
+    def test_it_doesnt_notify_unkown_user_and_only_known_user(self):
+        TaskRecordReview.objects.create(note="Hi @caroline and @django!", checker=self.django)
+        self.assertEqual(Notification.objects.count(), 1)
+        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
+
+
+    def test_it_doesnt_notify_unkown_users_and_only_known_user(self):
+        TaskRecordReview.objects.create(note="Hi @caroline, @django and @olivia!", checker=self.django)
+        self.assertEqual(Notification.objects.count(), 2)
+        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+
+
+    def test_it_notifies_user_twice(self):
+        TaskRecordReview.objects.create(note="Hi @olivia and @django!", checker=self.django)
+        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        TaskRecordReview.objects.create(note="Hi again @olivia and @django!", checker=self.django)
+        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 2)

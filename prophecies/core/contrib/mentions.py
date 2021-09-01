@@ -7,7 +7,7 @@ def list_mentions(content):
     """
     Returns a list of unique mentions, with their corresponding User.
     """
-    usernames = re.findall("@([a-zA-Z0-9]{1,15})", content)
+    usernames = re.findall("@([a-zA-Z0-9]{1,15})", str(content))
     if len(usernames) > 1:
         # Create a list of unique usernames
         usernames = list(dict.fromkeys(usernames))
