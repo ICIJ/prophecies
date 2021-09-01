@@ -31,7 +31,8 @@ export default class Action extends Model {
     actions: {
       forTaskRecord (id) {
         const { apiConfig } = TaskRecord
-        return this.get(`${id}/relationships/actions/`, { ...apiConfig })
+        const params = { 'page[size]': 50 }
+        return this.get(`${id}/relationships/actions/`, { ...apiConfig, params })
       }
     }
   }
