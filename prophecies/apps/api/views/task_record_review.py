@@ -16,6 +16,7 @@ class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     choice = ResourceRelatedField(many=False, read_only=True)
     included_serializers = {
         'checker': UserSerializer,
+        'choice': ChoiceSerializer,
     }
 
     class JSONAPIMeta:
