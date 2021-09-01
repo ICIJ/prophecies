@@ -155,7 +155,7 @@ class TestTaskRecord(TestCase):
         self.assertEqual(len(task_record.actions), 2)
 
 
-    def test_has_disagrement_with_two_different_choices(self):
+    def test_has_disagreements_with_two_different_choices(self):
         olivia = User.objects.create(username='olivia')
         django = User.objects.create(username='django')
         task_record = TaskRecord.objects.create(task=self.transactions_task)
@@ -164,7 +164,7 @@ class TestTaskRecord(TestCase):
         self.assertTrue(task_record.has_disagreements)
 
 
-    def test_hasnt_disagrement_with_two_same_choices(self):
+    def test_hasnt_disagreements_with_two_same_choices(self):
         olivia = User.objects.create(username='olivia')
         django = User.objects.create(username='django')
         task_record = TaskRecord.objects.create(task=self.transactions_task)
@@ -173,14 +173,14 @@ class TestTaskRecord(TestCase):
         self.assertFalse(task_record.has_disagreements)
 
 
-    def test_hasnt_disagrement_with_one_choice(self):
+    def test_hasnt_disagreements_with_one_choice(self):
         olivia = User.objects.create(username='olivia')
         task_record = TaskRecord.objects.create(task=self.transactions_task)
         TaskRecordReview.objects.create(task_record=task_record, checker=olivia, choice=self.agree)
         self.assertFalse(task_record.has_disagreements)
 
 
-    def test_hasnt_disagrement_with_one_choice_and_one_empty_choice(self):
+    def test_hasnt_disagreements_with_one_choice_and_one_empty_choice(self):
         olivia = User.objects.create(username='olivia')
         django = User.objects.create(username='django')
         task_record = TaskRecord.objects.create(task=self.transactions_task)
