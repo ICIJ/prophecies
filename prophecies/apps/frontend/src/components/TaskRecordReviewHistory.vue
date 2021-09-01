@@ -1,5 +1,5 @@
 <script>
-import { get } from 'lodash'
+import { get, orderBy } from 'lodash'
 
 import User from '@/models/User'
 import { toVariant } from '@/utils/variant'
@@ -62,7 +62,8 @@ export default {
       return this.taskRecordReview.taskRecordId
     },
     history () {
-      return [this.taskRecordReview, ...this.taskRecordReview.history]
+      const history = [this.taskRecordReview, ...this.taskRecordReview.history]
+      return orderBy(history, ({ id }) => -Number(id))
     }
   }
 }
