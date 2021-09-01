@@ -1,4 +1,4 @@
-from actstream.models import Action, any_stream
+from actstream.models import Action
 from copy import deepcopy
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType

@@ -10,3 +10,4 @@ class PropheciesConfig(AppConfig):
         registry.register(self.get_model('Choice'))
         registry.register(self.get_model('TaskRecord'))
         registry.register(self.get_model('TaskRecordReview'))
+        registry.register(self.get_model('Tip'))
