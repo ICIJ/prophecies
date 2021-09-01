@@ -92,14 +92,14 @@ export default {
       if (!this.showChanges || toggler) {
         await this.fetchTaskRecordActionsWithLoader()
       }
-      this.showChanges = toggler !== null ? toggler : !this.showChanges
+      this.showChanges = toggler !== null ? !!toggler : !this.showChanges
     },
     toggleNotes (toggler = null, highlightedReviewId) {
       if (!this.showNotes || toggler) {
         this.showChanges = false
         this.highlightedReviewId = highlightedReviewId
       }
-      this.showNotes = toggler !== null ? toggler : !this.showNotes
+      this.showNotes = toggler !== null ? !!toggler : !this.showNotes
     },
     emitUpdate () {
       /**
@@ -164,14 +164,14 @@ export default {
       <div class="row align-items-center">
         <div class="task-record-review-card__id col-1 col-lg-auto font-weight-bold text-nowrap">
           <b-form-checkbox class="task-record-review-card__id__checkbox" v-model="selectedInput">
-            {{ taskRecordReview.taskRecord.id }}
+            {{ taskRecord.id }}
           </b-form-checkbox>
         </div>
         <div class="task-record-review-card__original-value col-8 col-lg-3 font-weight-bold py-3 text-center text-lg-left">
-          {{ taskRecordReview.taskRecord.originalValue }}
+          {{ taskRecord.originalValue }}
         </div>
         <div class="task-record-review-card__original-value col-3 col-lg-1 font-weight-bold py-3 text-center text-lg-left">
-          {{ taskRecordReview.taskRecord.predictedValue }}
+          {{ taskRecord.predictedValue }}
         </div>
         <div class="task-record-review-card__choice col">
           <div class="row align-items-center">
@@ -194,7 +194,7 @@ export default {
             :task-record-review-id="taskRecordReviewId"
             @lock="lockWithLoader"
             @unlock="unlockWithLoader"
-            @toggle-changes="toggleChanges" />
+            @toggle-changes="toggleChanges()" />
         </div>
       </div>
       <b-collapse :visible="showChanges">
