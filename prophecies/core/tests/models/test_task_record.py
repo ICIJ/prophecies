@@ -180,7 +180,7 @@ class TestTaskRecord(TestCase):
         self.assertFalse(task_record.has_disagreements)
 
 
-    def test_has_disagrement_with_one_choice_and_one_empty_choice(self):
+    def test_hasnt_disagrement_with_one_choice_and_one_empty_choice(self):
         olivia = User.objects.create(username='olivia')
         django = User.objects.create(username='django')
         task_record = TaskRecord.objects.create(task=self.transactions_task)
