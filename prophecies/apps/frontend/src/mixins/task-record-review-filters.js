@@ -65,8 +65,8 @@ export default {
           label: 'name',
           field: 'value',
           options: [
-            { value: '1', label: 'Yes', name: 'Disagree' },
-            { value: '0', label: 'No', name: 'Agree' }
+            { value: '1', label: 'yes', name: 'Disagree' },
+            { value: '0', label: 'no', name: 'Agree' }
           ]
         },
         locked: {
@@ -75,8 +75,8 @@ export default {
           label: 'name',
           field: 'value',
           options: [
-            { value: '1', label: 'Yes', name: 'Locked' },
-            { value: '0', label: 'No', name: 'Not locked' }
+            { value: '1', label: 'yes', name: 'Locked' },
+            { value: '0', label: 'no', name: 'Not locked' }
           ]
         },
         hasNotes: {
@@ -85,8 +85,8 @@ export default {
           label: 'name',
           field: 'value',
           options: [
-            { value: '1', label: 'Yes', name: 'With notes' },
-            { value: '0', label: 'No', name: 'Without notes' }
+            { value: '1', label: 'yes', name: 'With notes' },
+            { value: '0', label: 'no', name: 'Without notes' }
           ]
         }
       }
