@@ -80,7 +80,7 @@ export default {
         </span>
       </div>
       <div class="task-record-review-history__checker__choice">
-        <b-badge class="task-record-review-history__checker__choice__badge" :variant="choice.value | toVariant" v-if="choice">
+        <b-badge class="task-record-review-history__checker__choice__badge" :variant="choice.value | toVariant" v-if="choice" :title="choice.name" v-b-tooltip.right>
           {{ choice.name | firstLetter }}<span class="sr-only">{{ choice.name | skipFirstLetter }}</span>
         </b-badge>
       </div>
