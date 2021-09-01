@@ -1,22 +1,22 @@
-from actstream.models import Action
-from django.contrib.auth.models import User
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from prophecies.apps.api.views.action import ActionSerializer
 from prophecies.apps.api.views.user import UserSerializer
 from prophecies.core.models import Notification
 
 
 class NotificationSerializer(serializers.HyperlinkedModelSerializer):
-    recipient = ResourceRelatedField(many=False, queryset=User.objects)
-    action = ResourceRelatedField(many=False, queryset=Action.objects)
+    recipient = ResourceRelatedField(many=False, read_only=True)
+    action = ResourceRelatedField(many=False, read_only=True)
 
     class Meta:
         model = Notification
         fields = ['id', 'url', 'recipient', 'action', 'read', 'read_at']
+        read_only_fields = ['recipient', 'action', 'read_at']
 
     included_serializers = {
         'recipient': UserSerializer,
@@ -27,9 +27,10 @@ class NotificationSerializer(serializers.HyperlinkedModelSerializer):
         included_resources = ['recipient', 'action']
 
 
-class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
+class NotificationViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
     search_fields = []
     ordering = ['-created_at']
     ordering_fields = ['created_at']
@@ -43,3 +44,8 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
         if not self.request.user.is_authenticated:
             return Notification.objects.none()
         return Notification.objects.filter(recipient=self.request.user)
+
+
+    def check_object_permissions(self, request, obj):
+        if obj.recipient != request.user:
+            raise exceptions.PermissionDenied(detail='You do not have permission to update this resource.')

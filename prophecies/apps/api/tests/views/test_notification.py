@@ -16,9 +16,9 @@ class TestNotification(TestCase):
         followed = Action.objects.create(actor=django, verb='followed', target=olivia)
         followed_back = Action.objects.create(actor=olivia, verb='followed', target=django)
         mentioned = Action.objects.create(actor=django, verb='mentioned', target=olivia)
-        Notification.objects.create(action=followed, recipient=olivia, read=False)
-        Notification.objects.create(action=followed_back, recipient=django, read=False)
-        Notification.objects.create(action=mentioned, recipient=olivia, read=False)
+        self.followed = Notification.objects.create(action=followed, recipient=olivia, read=False)
+        self.followed_back = Notification.objects.create(action=followed_back, recipient=django, read=False)
+        self.mentioned = Notification.objects.create(action=mentioned, recipient=olivia, read=False)
 
 
     def test_list_returns_olvias_notifications(self):
@@ -77,7 +77,6 @@ class TestNotification(TestCase):
             next(i for i in included if i['type'] == 'Action' and i['attributes']['verb'] == 'mentioned')
 
 
-
     def test_list_returns_mentioned_action_in_included_objects_for_olivia(self):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/notifications/')
@@ -98,3 +97,102 @@ class TestNotification(TestCase):
             next(i for i in included if i['type'] == 'Action' and i['attributes']['verb'] == 'followed')
         except StopIteration:
             self.fail('API did not returns "followed" Action in included objects')
+
+
+    def test_list_reject_unauthenticated_request(self):
+        self.client.logout()
+        request = self.client.get('/api/v1/notifications/')
+        self.assertEqual(request.status_code, 403)
+
+
+    def test_it_cannot_mark_followed_notification_as_read_with_django_user(self):
+        self.client.login(username='django', password='django')
+        payload = {
+            'data': {
+                'type': 'Notification',
+                'id': self.followed.id,
+                'attributes': {
+                    'read': True
+                }
+            }
+        }
+        request = self.client.put('/api/v1/notifications/%s/' % self.followed.id, payload, content_type='application/vnd.api+json')
+        self.assertEqual(request.status_code, 404)
+
+
+    def test_it_can_mark_followed_notification_as_read_with_olivia_user(self):
+        self.client.login(username='olivia', password='olivia')
+        payload = {
+            'data': {
+                'type': 'Notification',
+                'id': self.followed.id,
+                'attributes': {
+                    'read': True
+                }
+            }
+        }
+        request = self.client.put('/api/v1/notifications/%s/' % self.followed.id, payload, content_type='application/vnd.api+json')
+        self.assertEqual(request.status_code, 200)
+
+
+    def test_it_cannot_mark_followed_back_notification_as_read_with_olivia_user(self):
+        self.client.login(username='olivia', password='olivia')
+        payload = {
+            'data': {
+                'type': 'Notification',
+                'id': self.followed_back.id,
+                'attributes': {
+                    'read': True
+                }
+            }
+        }
+        request = self.client.put('/api/v1/notifications/%s/' % self.followed_back.id, payload, content_type='application/vnd.api+json')
+        self.assertEqual(request.status_code, 404)
+
+
+    def test_it_can_mark_followed_back_notification_as_read_with_django_user(self):
+        self.client.login(username='django', password='django')
+        payload = {
+            'data': {
+                'type': 'Notification',
+                'id': self.followed_back.id,
+                'attributes': {
+                    'read': True
+                }
+            }
+        }
+        request = self.client.put('/api/v1/notifications/%s/' % self.followed_back.id, payload, content_type='application/vnd.api+json')
+        self.assertEqual(request.status_code, 200)
+
+
+    def test_it_mark_notification_as_read_correctly(self):
+        self.client.login(username='olivia', password='olivia')
+        payload = {
+            'data': {
+                'type': 'Notification',
+                'id': self.followed.id,
+                'attributes': {
+                    'read': True
+                }
+            }
+        }
+        request = self.client.put('/api/v1/notifications/%s/' % self.followed.id, payload, content_type='application/vnd.api+json')
+        self.followed.refresh_from_db()
+        self.assertTrue(self.followed.read)
+        self.assertTrue(self.followed.read_at is not None)
+
+
+    def test_it_cannot_set_read_at_attribute(self):
+        self.client.login(username='olivia', password='olivia')
+        payload = {
+            'data': {
+                'type': 'Notification',
+                'id': self.followed.id,
+                'attributes': {
+                    'readAt': '2021-09-01'
+                }
+            }
+        }
+        request = self.client.put('/api/v1/notifications/%s/' % self.followed.id, payload, content_type='application/vnd.api+json')
+        self.followed.refresh_from_db()
+        self.assertTrue(self.followed.read_at is None)
