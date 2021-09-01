@@ -1,11 +1,14 @@
 from actstream import action
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview
 from prophecies.core.models.task import Task
 
 class TestTaskRecord(TestCase):
     def setUp(self):
+        self.do_you_agree = ChoiceGroup.objects.create(name='Do you agree?')
+        self.agree = Choice.objects.create(name="agree", choice_group=self.do_you_agree)
+        self.disagree = Choice.objects.create(name="disagree", choice_group=self.do_you_agree)
         self.project = Project.objects.create(name='FinCEN Files')
         self.transactions_task = Task.objects.create(name='Transactions', project=self.project)
 
@@ -150,3 +153,37 @@ class TestTaskRecord(TestCase):
         action.send(olivia, verb='locked', target=task_record)
         action.send(olivia, verb='commented', target=review)
         self.assertEqual(len(task_record.actions), 2)
+
+
+    def test_has_disagrement_with_two_different_choices(self):
+        olivia = User.objects.create(username='olivia')
+        django = User.objects.create(username='django')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=olivia, choice=self.agree)
+        TaskRecordReview.objects.create(task_record=task_record, checker=django, choice=self.disagree)
+        self.assertTrue(task_record.has_disagreements)
+
+
+    def test_hasnt_disagrement_with_two_same_choices(self):
+        olivia = User.objects.create(username='olivia')
+        django = User.objects.create(username='django')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=olivia, choice=self.agree)
+        TaskRecordReview.objects.create(task_record=task_record, checker=django, choice=self.agree)
+        self.assertFalse(task_record.has_disagreements)
+
+
+    def test_hasnt_disagrement_with_one_choice(self):
+        olivia = User.objects.create(username='olivia')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=olivia, choice=self.agree)
+        self.assertFalse(task_record.has_disagreements)
+
+
+    def test_has_disagrement_with_one_choice_and_one_empty_choice(self):
+        olivia = User.objects.create(username='olivia')
+        django = User.objects.create(username='django')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=olivia, choice=self.agree)
+        TaskRecordReview.objects.create(task_record=task_record, checker=django, choice=None)
+        self.assertFalse(task_record.has_disagreements)
