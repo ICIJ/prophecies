@@ -76,9 +76,9 @@ export default {
         <link-icon size="1.5x" />
         <span class="sr-only">Link</span>
       </b-btn>
-      <b-btn variant="link" class="text-dark" title="Copy" v-b-tooltip.left @click="emitCopy">
+      <b-btn variant="link" class="text-dark" title="Duplicate record" v-b-tooltip.left @click="emitCopy">
         <copy-icon size="1.5x" />
-        <span class="sr-only">Copy</span>
+        <span class="sr-only">Duplicate record</span>
       </b-btn>
       <b-btn variant="link" v-if="taskRecord.lockedByMe" class="text-dark" title="Unlock this record" v-b-tooltip.left @click="emitUnlock">
         <lock-icon size="1.5x" />
