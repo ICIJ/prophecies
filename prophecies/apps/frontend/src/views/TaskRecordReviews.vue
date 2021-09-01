@@ -134,7 +134,8 @@ export default {
       pagination: null,
       selectedIds: {},
       showFilters: false,
-      showPageParams: false
+      showPageParams: false,
+      taskRecordReviewIds: []
     }
   },
   watch: {
@@ -239,8 +240,8 @@ export default {
     taskRecordReviews () {
       return TaskRecordReview
         .query()
-        .where('checkerId', User.me().id)
-        .all()
+        .whereIdIn(this.taskRecordReviewIds)
+        .get()
     },
     taskRecordReviewsParams () {
       return {
@@ -292,12 +293,11 @@ export default {
     },
     async fetchTaskRecordReviews () {
       const params = this.taskRecordReviewsParams
-      const result = await TaskRecordReview.api().get('', { params, save: false })
-      const pagination = get(result, 'response.data.meta.pagination', null)
+      const { response } = await TaskRecordReview.api().get('', { params })
+      const pagination = get(response, 'data.meta.pagination', null)
+      const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)
       this.$set(this, 'pagination', pagination)
-      // Finally, delete all existing reviews and save the result
-      TaskRecordReview.deleteAll()
-      result.save()
+      this.$set(this, 'taskRecordReviewIds', taskRecordReviewIds)
     },
     async goToPage (pageNumber) {
       const query = { ...this.$route.query, 'page[number]': pageNumber }

@@ -80,8 +80,8 @@ export default {
     },
     async fetchTaskRecordActions () {
       const taskRecordId = this.taskRecordReview.taskRecordId
-      const { entities } = await Action.api().forTaskRecord(taskRecordId)
-      this.actionIds = map(entities.Action, 'id')
+      const { response } = await Action.api().forTaskRecord(taskRecordId)
+      this.actionIds = get(response, 'data.data', []).map(a => a.id)
     },
     async fetchTaskRecordActionsWithLoader () {
       this.$wait.start(this.loader)
