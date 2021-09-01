@@ -37,5 +37,8 @@ export default {
     border: 1px solid currentColor;
     background: transparent;
     min-width: calc(1em + #{$badge-padding-x * 2});
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>

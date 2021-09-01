@@ -141,8 +141,10 @@ export default {
         & /deep/ .badge {
           padding: 0;
           width: 1.6em;
-          height: 1.6em;
-          line-height: 1.6em;
+          height: 1.6em;          
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
         }
       }
 
