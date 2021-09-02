@@ -1,5 +1,6 @@
 <script>
   import { template } from 'lodash'
+  import Notification from '@/models/Notification'
   import NotificationsDropdownMenu from '@/components/NotificationsDropdownMenu'
   import ShortkeyBadge from '@/components/ShortkeyBadge'
 
@@ -29,6 +30,12 @@
         const avatarUrlTemplate = this.$config.get('avatarUrlTemplate')
         const compiled = template(avatarUrlTemplate, { interpolate })
         return compiled(this.user)
+      },
+      hasUnreadNotifications () {
+        return this.unreadNotifications > 0
+      },
+      unreadNotifications () {
+        return Notification.query().where('read', false ).count()
       }
     }
   }
@@ -67,10 +74,14 @@
             right
             no-caret
             class="app-header__nav-right__notifications"
+            :class="{ 'app-header__nav-right__notifications--unread': hasUnreadNotifications }"
             toggle-class="app-header__nav-right__notifications__toggler"
             menu-class="app-header__nav-right__notifications__menu">
             <template #button-content>
               <bell-icon />
+              <b-badge variant="danger" v-if="hasUnreadNotifications" pill class="app-header__nav-right__notifications__toggler__count">
+                {{ unreadNotifications }}
+              </b-badge>
             </template>
             <notifications-dropdown-menu />
           </b-nav-item-dropdown>
@@ -123,6 +134,20 @@
 
     & /deep/ &__nav-right__notifications__menu {
       width: 360px;
+    }
+
+    & /deep/ &__nav-right__notifications__toggler {
+      position: relative;
+    }
+
+    & /deep/ &__nav-right__notifications--unread &__nav-right__notifications__toggler {
+      color: $danger;
+    }
+
+    & /deep/ &__nav-right__notifications__toggler__count {
+      position: absolute;
+      top: 0;
+      right: $spacer;
     }
   }
 </style>

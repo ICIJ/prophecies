@@ -87,7 +87,7 @@
   .notifications-dropdown-menu {
     &__item {
       &--read &__link {
-        color: secondary;
+        opacity: $btn-disabled-opacity;
       }
 
       & &__link {

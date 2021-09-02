@@ -29,10 +29,11 @@ describe('AppHeader', () => {
       }))
       // Configure the local vue
       const core = Core.init(localVue).useAll()
-      const stubs = ['router-link']
+      const { i18n, store, wait } = core
+      const stubs = ['router-link', 'app-waiter']
       await core.configure()
       // Finally, instanciate the component
-      wrapper = mount(AppHeader, { i18n: core.i18n, localVue, stubs })
+      wrapper = mount(AppHeader, { i18n, localVue, stubs, store, wait })
     })
 
     afterEach(async () => {
@@ -78,10 +79,11 @@ describe('AppHeader', () => {
       }))
       // Configure the local vue
       const core = Core.init(localVue).useAll()
-      const stubs = ['router-link']
+      const { i18n, store, wait } = core
+      const stubs = ['router-link', 'app-waiter']
       await core.configure()
       // Finally, instanciate the component
-      wrapper = mount(AppHeader, { i18n: core.i18n, localVue, stubs })
+      wrapper = mount(AppHeader, { i18n, localVue, stubs, store, wait })
     })
 
     afterEach(() => {
