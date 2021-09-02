@@ -4,6 +4,8 @@ import '@/store'
 import Core from '@/core'
 import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
 
+jest.useFakeTimers()
+
 describe('UserNotificationsDropdownMenu', () => {
   describe('with two notifications', () => {
     let wrapper
@@ -58,6 +60,42 @@ describe('UserNotificationsDropdownMenu', () => {
     it('should show the no notifications message', () => {
       const message = wrapper.find('.user-notifications-dropdown-menu__empty')
       expect(message.exists()).toBeTruthy()
+    })
+  })
+
+  describe('reload notification periodicaly', () => {
+    let spyFetchNotifications
+    let wrapper
+
+    beforeEach(async () => {
+      const localVue = createLocalVue()
+      const stubs = ['b-dropdown-item', 'b-dropdown-text', 'app-waiter']
+      // Configure the local vue with plugins
+      const { i18n, store, wait } = Core.init(localVue).useAll()
+      wrapper = mount(UserNotificationsDropdownMenu, { localVue, i18n, store, stubs, wait })
+      spyFetchNotifications = jest.spyOn(wrapper.vm, 'fetchNotifications')
+      await wrapper.vm.fetchNotifications()
+    })
+
+    afterEach(() => {
+      spyFetchNotifications.mockRestore()
+    })
+
+    it('should reload planFetchNotifications after 10s', async () => {
+      expect(spyFetchNotifications).toHaveBeenCalledTimes(1)
+      jest.advanceTimersByTime(10000)
+      expect(spyFetchNotifications).toHaveBeenCalledTimes(2)
+      jest.advanceTimersByTime(10000)
+      expect(spyFetchNotifications).toHaveBeenCalledTimes(3)
+    })
+
+    it('should stop reloading notifications after the component is destroyed', async () => {
+      expect(spyFetchNotifications).toHaveBeenCalledTimes(1)
+      jest.advanceTimersByTime(10000)
+      expect(spyFetchNotifications).toHaveBeenCalledTimes(2)
+      wrapper.destroy()
+      jest.advanceTimersByTime(10000)
+      expect(spyFetchNotifications).toHaveBeenCalledTimes(2)
     })
   })
 })

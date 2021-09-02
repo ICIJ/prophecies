@@ -9,6 +9,11 @@
     components: {
       AppWaiter
     },
+    data () {
+      return {
+        planFetchNotificationsId: null
+      }
+    },
     filters: {
       formatDateLong (d) {
         return moment(d).format('MMM Do YYYY - hh:mm')
@@ -17,8 +22,12 @@
         return moment(d).fromNow()
       }
     },
-    created () {
-      return this.fetchNotificationsWithLoader()
+    async created () {
+      await this.fetchNotificationsWithLoader()
+      this.planFetchNotifications()
+    },
+    beforeDestroy () {
+      clearInterval(this.planFetchNotificationsId)
     },
     computed: {
       loader () {
@@ -43,6 +52,9 @@
       },
       fetchNotifications () {
         return UserNotification.api().get()
+      },
+      planFetchNotifications () {
+        this.planFetchNotificationsId = setInterval(this.fetchNotifications, 1e4)
       },
       markAsRead (notification) {
         return UserNotification.api().markAsRead(notification.id)
