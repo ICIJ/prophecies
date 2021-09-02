@@ -5,7 +5,7 @@
   import UserNotification from '@/models/UserNotification'
 
   export default {
-    name: 'NotificationsDropdownMenu',
+    name: 'UserNotificationsDropdownMenu',
     components: {
       AppWaiter
     },
@@ -22,7 +22,7 @@
     },
     computed: {
       loader () {
-        return uniqueId('notifications-dropdown-menu-')
+        return uniqueId('user-notifications-dropdown-menu-')
       },
       notifications () {
         return UserNotification
@@ -52,7 +52,7 @@
 </script>
 
 <template>
-  <div class="notifications-dropdown-menu">
+  <div class="user-notifications-dropdown-menu">
     <app-waiter :loader="loader" waiter-class="my-5 mx-auto d-block">
       <template v-if="notifications.length">
         <b-dropdown-text>
@@ -60,18 +60,18 @@
         </b-dropdown-text>
         <div
           v-for="notification in notifications"
-          class="notifications-dropdown-menu__item"
-          :class="{ 'notifications-dropdown-menu__item--read': notification.read }"
+          class="user-notifications-dropdown-menu__item"
+          :class="{ 'user-notifications-dropdown-menu__item--read': notification.read }"
           :key="notification.id">
-          <b-dropdown-item link-class="notifications-dropdown-menu__item__link" @click="markAsRead(notification)">
-            <div class="notifications-dropdown-menu__item__link__description" v-html="$t(notification.i18n, notification.action)"></div>
-            <div class="notifications-dropdown-menu__item__link__created-at text-primary small">
+          <b-dropdown-item link-class="user-notifications-dropdown-menu__item__link" @click="markAsRead(notification)">
+            <div class="user-notifications-dropdown-menu__item__link__description" v-html="$t(notification.i18n, notification.action)"></div>
+            <div class="user-notifications-dropdown-menu__item__link__created-at text-primary small">
               {{ notification.createdAt | formatDateFromNow }}
             </div>
           </b-dropdown-item>
         </div>
       </template>
-      <b-dropdown-text v-else class="notifications-dropdown-menu__empty text-muted text-center">
+      <b-dropdown-text v-else class="user-notifications-dropdown-menu__empty text-muted text-center">
         <div class="text-center p-3 text-muted">
           <bell-icon size="3x" />
         </div>
@@ -84,7 +84,7 @@
 </template>
 
 <style lang="scss">
-  .notifications-dropdown-menu {
+  .user-notifications-dropdown-menu {
     &__item {
       &--read &__link {
         opacity: $btn-disabled-opacity;

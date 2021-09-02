@@ -1,13 +1,13 @@
 <script>
   import { template } from 'lodash'
   import UserNotification from '@/models/UserNotification'
-  import NotificationsDropdownMenu from '@/components/NotificationsDropdownMenu'
+  import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
   import ShortkeyBadge from '@/components/ShortkeyBadge'
 
   export default {
     name: 'AppHeader',
     components: {
-      NotificationsDropdownMenu,
+      UserNotificationsDropdownMenu,
       ShortkeyBadge
     },
     props: {
@@ -83,7 +83,7 @@
                 {{ unreadNotifications }}
               </b-badge>
             </template>
-            <notifications-dropdown-menu />
+            <user-notifications-dropdown-menu />
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right no-caret class="app-header__nav-right__user" toggle-class="pl-1">
             <!-- Using 'button-content' slot -->
