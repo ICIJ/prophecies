@@ -36,6 +36,10 @@ html {
   }
 }
 
+.badge {
+  font-family: $badge-font-family;
+}
+
 .custom-pagination--compact {
   .custom-pagination__form input {
     border-radius: 0 $input-border-radius $input-border-radius 0;
