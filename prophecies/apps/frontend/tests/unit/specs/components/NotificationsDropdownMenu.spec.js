@@ -1,13 +1,10 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+import { server, rest } from '../../mocks/server'
 import '@/store'
 import Core from '@/core'
 import NotificationsDropdownMenu from '@/components/NotificationsDropdownMenu'
 
 describe('NotificationsDropdownMenu', () => {
-  function flushPromises () {
-    return new Promise(resolve => setTimeout(resolve, 0))
-  }
-
   describe('with two notifications', () => {
     let wrapper
 
@@ -45,14 +42,17 @@ describe('NotificationsDropdownMenu', () => {
     let wrapper
 
     beforeEach(async () => {
+      // Mock notifications endpoint to return nothing
+      server.use(rest.get('/api/v1/notifications', (req, res, ctx) => {
+        return res.once(ctx.json({ data: [] }))
+      }))
+
       const localVue = createLocalVue()
       const stubs = ['b-dropdown-item', 'b-dropdown-text', 'app-waiter']
       // Configure the local vue with plugins
       const { i18n, store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(NotificationsDropdownMenu, { localVue, i18n, store, stubs, wait })
-      await wrapper.vm.fetchNotifications()
-      // Delete all notifications (and other entities)
       store.dispatch('entities/deleteAll')
+      wrapper = mount(NotificationsDropdownMenu, { localVue, i18n, store, stubs, wait })
     })
 
     it('should show the no notifications message', () => {
