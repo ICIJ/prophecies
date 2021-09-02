@@ -251,7 +251,8 @@ SOCIAL_AUTH_PIPELINE = (
 
 ACTSTREAM_SETTINGS = {
     'FETCH_RELATIONS': True,
-    'USE_JSONFIELD': True
+    'USE_JSONFIELD': True,
+    'MANAGER': 'prophecies.core.managers.ExtendedActionManager'
 }
 
 # Internationalization
