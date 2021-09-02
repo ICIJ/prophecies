@@ -2,7 +2,7 @@
   import moment from 'moment'
   import { uniqueId } from 'lodash'
   import AppWaiter from '@/components/AppWaiter'
-  import Notification from '@/models/Notification'
+  import UserNotification from '@/models/UserNotification'
 
   export default {
     name: 'NotificationsDropdownMenu',
@@ -25,7 +25,7 @@
         return uniqueId('notifications-dropdown-menu-')
       },
       notifications () {
-        return Notification
+        return UserNotification
           .query()
           .with('action')
           .with('action.actor')
@@ -42,10 +42,10 @@
         this.$wait.end(this.loader)
       },
       fetchNotifications () {
-        return Notification.api().get()
+        return UserNotification.api().get()
       },
       markAsRead (notification) {
-        return Notification.api().markAsRead(notification.id)
+        return UserNotification.api().markAsRead(notification.id)
       }
     }
   }

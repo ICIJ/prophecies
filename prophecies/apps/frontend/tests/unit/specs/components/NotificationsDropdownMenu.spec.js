@@ -43,7 +43,7 @@ describe('NotificationsDropdownMenu', () => {
 
     beforeEach(async () => {
       // Mock notifications endpoint to return nothing
-      server.use(rest.get('/api/v1/notifications', (req, res, ctx) => {
+      server.use(rest.get('/api/v1/user-notifications', (req, res, ctx) => {
         return res.once(ctx.json({ data: [] }))
       }))
 

@@ -1,6 +1,6 @@
 <script>
   import { template } from 'lodash'
-  import Notification from '@/models/Notification'
+  import UserNotification from '@/models/UserNotification'
   import NotificationsDropdownMenu from '@/components/NotificationsDropdownMenu'
   import ShortkeyBadge from '@/components/ShortkeyBadge'
 
@@ -35,7 +35,7 @@
         return this.unreadNotifications > 0
       },
       unreadNotifications () {
-        return Notification.query().where('read', false ).count()
+        return UserNotification.query().where('read', false ).count()
       }
     }
   }

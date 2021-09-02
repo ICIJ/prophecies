@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import signals
-from prophecies.core.models import Notification, Project, Task
+from prophecies.core.models import Project, Task, UserNotification
 from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action
 
 class Tip(models.Model):
@@ -30,7 +30,7 @@ class Tip(models.Model):
             if user is not None:
                 action, created = get_or_create_mention_action(instance.creator, user, instance)
                 if created:
-                    Notification.objects.create(recipient=user, action=action)
+                    UserNotification.objects.create(recipient=user, action=action)
 
 
 signals.post_save.connect(Tip.signal_notify_mentioned_users, sender=Tip)

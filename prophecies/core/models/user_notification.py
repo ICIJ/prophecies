@@ -11,7 +11,7 @@ class LevelType(models.TextChoices):
     WARNING = 'WARNING', _('Warning')
 
 
-class NotificationManager(models.Manager):
+class UserNotificationManager(models.Manager):
 
     def read(self):
         """
@@ -32,8 +32,8 @@ class NotificationManager(models.Manager):
         return self.unread().update(read=True)
 
 
-class Notification(models.Model):
-    objects = NotificationManager()
+class UserNotification(models.Model):
+    objects = UserNotificationManager()
 
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
     action = models.ForeignKey(Action, on_delete=models.CASCADE)

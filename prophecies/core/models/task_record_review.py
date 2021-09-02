@@ -4,7 +4,7 @@ from django.db.models import Max, signals
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
-from prophecies.core.models import Choice, Notification, TaskRecord
+from prophecies.core.models import Choice, TaskRecord, UserNotification
 from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action
 
 class StatusType(models.TextChoices):
@@ -133,7 +133,7 @@ class TaskRecordReview(models.Model):
             if user is not None:
                 action, created = get_or_create_mention_action(instance.checker, user, instance)
                 if created:
-                    Notification.objects.create(recipient=user, action=action)
+                    UserNotification.objects.create(recipient=user, action=action)
 
 
 signals.post_save.connect(TaskRecordReview.signal_notify_mentioned_users, sender=TaskRecordReview)

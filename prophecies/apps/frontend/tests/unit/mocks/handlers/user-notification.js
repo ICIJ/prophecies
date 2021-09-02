@@ -1,13 +1,13 @@
 import { rest } from 'msw'
 
 export default [
-  rest.get('/api/v1/notifications', (req, res, ctx) => {
+  rest.get('/api/v1/user-notifications', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
         links: {
-          first: 'http://localhost/api/v1/notifications/?page%5Bnumber%5D=1',
-          last: 'http://localhost/api/v1/notifications/?page%5Bnumber%5D=1',
+          first: 'http://localhost/api/v1/user-notifications/?page%5Bnumber%5D=1',
+          last: 'http://localhost/api/v1/user-notifications/?page%5Bnumber%5D=1',
           next: null,
           prev: null
         },
@@ -34,7 +34,7 @@ export default [
               }
             },
             links: {
-              self: 'http://localhost/api/v1/notifications/4/'
+              self: 'http://localhost/api/v1/user-notifications/4/'
             }
           },
           {
@@ -59,7 +59,7 @@ export default [
               }
             },
             links: {
-              self: 'http://localhost/api/v1/notifications/1/'
+              self: 'http://localhost/api/v1/user-notifications/1/'
             }
           }
         ],

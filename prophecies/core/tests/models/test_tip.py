@@ -1,7 +1,7 @@
 from actstream.models import Action
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Notification, Tip
+from prophecies.core.models import UserNotification, Tip
 
 class TestTip(TestCase):
     def setUp(self):
@@ -46,50 +46,50 @@ class TestTip(TestCase):
 
     def test_it_notifies_user_when_mentioned(self):
         Tip.objects.create(description="Hi @olivia!", creator=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
 
     def test_it_notifies_user_once_even_if_mentioned_twice(self):
         Tip.objects.create(description="Hi @olivia, it's @olivia right?", creator=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
 
     def test_it_notifies_two_users_when_mentioned(self):
         Tip.objects.create(description="Hi @olivia and @django!", creator=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
-        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
-        self.assertEqual(Notification.objects.count(), 2)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.count(), 2)
 
     def test_it_notifies_two_users_once_when_mentioned(self):
         Tip.objects.create(description="Hi @olivia, @olivia and @django!", creator=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
-        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
-        self.assertEqual(Notification.objects.count(), 2)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.count(), 2)
 
     def test_it_notifies_two_users_once_when_mentioned_even_after_edits(self):
         tip = Tip.objects.create(description="Hi @olivia, @olivia and @django!", creator=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
-        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
-        self.assertEqual(Notification.objects.count(), 2)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.count(), 2)
         tip.description = "Hi @olivia and @django!"
         tip.save()
-        self.assertEqual(Notification.objects.count(), 2)
+        self.assertEqual(UserNotification.objects.count(), 2)
 
     def test_it_doesnt_notify_unkown_user(self):
         Tip.objects.create(description="Hi @caroline!", creator=self.django)
-        self.assertEqual(Notification.objects.count(), 0)
+        self.assertEqual(UserNotification.objects.count(), 0)
 
     def test_it_doesnt_notify_unkown_user_and_only_known_user(self):
         Tip.objects.create(description="Hi @caroline and @django!", creator=self.django)
-        self.assertEqual(Notification.objects.count(), 1)
-        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
 
     def test_it_doesnt_notify_unkown_users_and_only_known_user(self):
         Tip.objects.create(description="Hi @caroline, @django and @olivia!", creator=self.django)
-        self.assertEqual(Notification.objects.count(), 2)
-        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.count(), 2)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
 
     def test_it_notifies_user_twice(self):
         Tip.objects.create(description="Hi @olivia and @django!", creator=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
         Tip.objects.create(description="Hi again @olivia and @django!", creator=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 2)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 2)

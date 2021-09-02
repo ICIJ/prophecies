@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Choice, ChoiceGroup, Notification, Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, ChoiceGroup, UserNotification, Project, Task, TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record_review import StatusType
 
 class TestTaskRecordReview(TestCase):
@@ -193,58 +193,58 @@ class TestTaskRecordReview(TestCase):
 
     def test_it_notifies_user_when_mentioned(self):
         TaskRecordReview.objects.create(note="Hi @olivia!", checker=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
 
 
     def test_it_notifies_user_once_even_if_mentioned_twice(self):
         TaskRecordReview.objects.create(note="Hi @olivia, it's @olivia right?", checker=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
 
 
     def test_it_notifies_two_users_when_mentioned(self):
         TaskRecordReview.objects.create(note="Hi @olivia and @django!", checker=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
-        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
-        self.assertEqual(Notification.objects.count(), 2)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.count(), 2)
 
 
     def test_it_notifies_two_users_once_when_mentioned(self):
         TaskRecordReview.objects.create(note="Hi @olivia, @olivia and @django!", checker=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
-        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
-        self.assertEqual(Notification.objects.count(), 2)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.count(), 2)
 
 
     def test_it_notifies_two_users_once_when_mentioned_even_after_edits(self):
         review = TaskRecordReview.objects.create(note="Hi @olivia, @olivia and @django!", checker=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
-        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
-        self.assertEqual(Notification.objects.count(), 2)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.count(), 2)
         review.description = "Hi @olivia and @django!"
         review.save()
-        self.assertEqual(Notification.objects.count(), 2)
+        self.assertEqual(UserNotification.objects.count(), 2)
 
 
     def test_it_doesnt_notify_unkown_user(self):
         TaskRecordReview.objects.create(note="Hi @caroline!", checker=self.django)
-        self.assertEqual(Notification.objects.count(), 0)
+        self.assertEqual(UserNotification.objects.count(), 0)
 
 
     def test_it_doesnt_notify_unkown_user_and_only_known_user(self):
         TaskRecordReview.objects.create(note="Hi @caroline and @django!", checker=self.django)
-        self.assertEqual(Notification.objects.count(), 1)
-        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
 
 
     def test_it_doesnt_notify_unkown_users_and_only_known_user(self):
         TaskRecordReview.objects.create(note="Hi @caroline, @django and @olivia!", checker=self.django)
-        self.assertEqual(Notification.objects.count(), 2)
-        self.assertEqual(Notification.objects.filter(recipient=self.django).count(), 1)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.count(), 2)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
 
 
     def test_it_notifies_user_twice(self):
         TaskRecordReview.objects.create(note="Hi @olivia and @django!", checker=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
         TaskRecordReview.objects.create(note="Hi again @olivia and @django!", checker=self.django)
-        self.assertEqual(Notification.objects.filter(recipient=self.olivia).count(), 2)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 2)

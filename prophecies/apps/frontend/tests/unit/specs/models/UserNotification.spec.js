@@ -1,41 +1,41 @@
 import '@/store'
-import Notification from '@/models/Notification'
+import UserNotification from '@/models/UserNotification'
 
-describe('Notification', () => {
+describe('UserNotification', () => {
   beforeAll(async () => {
-    await Notification.api().get()
+    await UserNotification.api().get()
   })
 
   afterAll(() => {
-    Notification.deleteAll()
+    UserNotification.deleteAll()
   })
 
   it('should have created 2 notification', async () => {
-    expect(Notification.all()).toHaveLength(2)
+    expect(UserNotification.all()).toHaveLength(2)
   })
 
   it('should have one read notification', async () => {
-    expect(Notification.find('4').read).toBeTruthy()
+    expect(UserNotification.find('4').read).toBeTruthy()
   })
 
   it('should have one unread notification', async () => {
-    expect(Notification.find('1').read).toBeFalsy()
+    expect(UserNotification.find('1').read).toBeFalsy()
   })
 
   it('should have one user object as recipient', async () => {
-    const { recipient } = Notification.query().with('recipient').find('1')
+    const { recipient } = UserNotification.query().with('recipient').find('1')
     expect(recipient.id).toBe('2')
     expect(recipient.username).toBe('django')
   })
 
   it('should have one action object', async () => {
-    const { action } = Notification.query().with('action').find('1')
+    const { action } = UserNotification.query().with('action').find('1')
     expect(action.id).toBe('86')
     expect(action.verb).toBe('mentioned')
   })
 
   it('should have one action object and its nested actionObject', async () => {
-    const { action: { actionObject } } = Notification.query()
+    const { action: { actionObject } } = UserNotification.query()
       .with('action')
       .with('action.actionObject')
       .find('4')

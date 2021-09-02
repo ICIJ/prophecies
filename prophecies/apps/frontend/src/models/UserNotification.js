@@ -5,7 +5,7 @@ import Action from '@/models/Action'
 import User from '@/models/User'
 import settings from '@/settings'
 
-export default class Notification extends Model {
+export default class UserNotification extends Model {
   static entity = 'UserNotification'
 
   static fields () {
@@ -24,12 +24,12 @@ export default class Notification extends Model {
   }
 
   static apiConfig = {
-    baseURL: `${settings.apiUrl}/notifications/`,
+    baseURL: `${settings.apiUrl}/user-notifications/`,
     dataTransformer: responseNormalizer,
     actions: {
       markAsRead (id) {
         const attributes = { read: true }
-        const type = 'Notification'
+        const type = 'UserNotification'
         const data = { attributes, id, type }
         return this.put(`${id}/`, { data }, { headers: defaultHeaders() })
       }

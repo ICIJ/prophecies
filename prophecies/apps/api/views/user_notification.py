@@ -6,15 +6,15 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from prophecies.apps.api.views.action import ActionSerializer
 from prophecies.apps.api.views.user import UserSerializer
-from prophecies.core.models import Notification
+from prophecies.core.models import UserNotification
 
 
-class NotificationSerializer(serializers.HyperlinkedModelSerializer):
+class UserNotificationSerializer(serializers.HyperlinkedModelSerializer):
     recipient = ResourceRelatedField(many=False, read_only=True)
     action = ResourceRelatedField(many=False, read_only=True)
 
     class Meta:
-        model = Notification
+        model = UserNotification
         fields = ['id', 'url', 'recipient', 'action', 'read', 'read_at', 'created_at']
         read_only_fields = ['recipient', 'action', 'read_at', 'created_at']
 
@@ -27,9 +27,9 @@ class NotificationSerializer(serializers.HyperlinkedModelSerializer):
         included_resources = ['recipient', 'action']
 
 
-class NotificationViewSet(viewsets.ModelViewSet):
-    queryset = Notification.objects.all()
-    serializer_class = NotificationSerializer
+class UserNotificationViewSet(viewsets.ModelViewSet):
+    queryset = UserNotification.objects.all()
+    serializer_class = UserNotificationSerializer
     http_method_names = ['get', 'put', 'head']
     permission_classes = [IsAuthenticated]
     search_fields = []
@@ -43,8 +43,8 @@ class NotificationViewSet(viewsets.ModelViewSet):
         All notifications for the currently authenticated user.
         """
         if not self.request.user.is_authenticated:
-            return Notification.objects.none()
-        return Notification.objects.filter(recipient=self.request.user)
+            return UserNotification.objects.none()
+        return UserNotification.objects.filter(recipient=self.request.user)
 
 
     def check_object_permissions(self, request, obj):
