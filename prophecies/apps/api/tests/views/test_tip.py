@@ -34,14 +34,6 @@ class TestTip(TestCase):
         data = request.json().get('data')
         self.assertEqual(data['attributes']['name'], 'top')
 
-    def test_details_returns_tip_mentions(self):
-        self.client.login(username='olivia', password='olivia')
-        id = self.tip_top.id
-        request = self.client.get('/api/v1/tips/%s/' % id)
-        self.assertEqual(request.status_code, 200)
-        data = request.json().get('data')
-        self.assertEqual(data['attributes']['mentions'][0].get('mention'), 'user')
-
     def test_list_reject_unauthenticated_request(self):
         self.client.logout()
         request = self.client.get('/api/v1/tips/')
