@@ -13,6 +13,7 @@ import Task from '@/models/Task'
 import TaskChecker from '@/models/TaskChecker'
 import TaskRecord from '@/models/TaskRecord'
 import TaskRecordReview from '@/models/TaskRecordReview'
+import Tip from '@/models/Tip'
 import User from '@/models/User'
 
 import settings from '@/settings'
@@ -35,4 +36,5 @@ database.register(Task)
 database.register(TaskChecker)
 database.register(TaskRecord)
 database.register(TaskRecordReview)
+database.register(Tip)
 database.register(User)

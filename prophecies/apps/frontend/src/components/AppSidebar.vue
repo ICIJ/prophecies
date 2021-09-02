@@ -27,7 +27,7 @@ export default {
           <grid-icon class="mr-2" />
           Dashboard
         </b-nav-item>
-        <b-nav-item>
+        <b-nav-item :to="{ name: 'tips' }">
           <smile-icon class="mr-2" />
           Tips
           <shortkey-badge :value="['meta', 't']" class="ml-2" />
