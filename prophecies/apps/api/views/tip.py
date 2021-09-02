@@ -22,7 +22,7 @@ class TipSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Tip
-        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'mentions', 'project', 'creator', 'task']
+        fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'project', 'creator', 'task']
 
 class TipViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tip.objects.all() \
