@@ -20,6 +20,11 @@
         "*": "{actor} wrote a note"
       }
     },
+    "mentioned": {
+      "user": {
+        "taskRecordReview": "{actor} mentioned <strong>{target}</strong> in a note"
+      }
+    },
     "selected": {
       "taskRecordReview": {
         "*": "{actor} selected \"{alternative_value}\""
