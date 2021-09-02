@@ -30,6 +30,7 @@ class NotificationSerializer(serializers.HyperlinkedModelSerializer):
 class NotificationViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+    http_method_names = ['get', 'put', 'head']
     permission_classes = [IsAuthenticated]
     search_fields = []
     ordering = ['-created_at']
