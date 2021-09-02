@@ -275,7 +275,7 @@ export default {
         await this.waitFor(this.fetchAllLoader, this.fetchAll)
         this.$core.setPageTitle(this.task.name)
       } catch (error) {
-        const title = 'Unable to found this task'
+        const title = 'Unable to find this task'
         this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
