@@ -10,6 +10,12 @@ import TaskRecordReviewHistory from '@/components/TaskRecordReviewHistory'
 describe('TaskRecordReviewHistory', () => {
   let wrapper
 
+  function createContainer () {
+    const div = document.createElement('div')
+    document.body.appendChild(div)
+    return div
+  }
+
   beforeAll(async () => {
     await ChoiceGroup.api().get()
     await Task.api().get()
@@ -18,11 +24,12 @@ describe('TaskRecordReviewHistory', () => {
   })
 
   beforeEach(() => {
+    const attachTo = createContainer()
     const localVue = createLocalVue()
     const propsData = { taskRecordReviewId: '38' }
     // Configure the local vue with plugins
     const { store, wait } = Core.init(localVue).useAll()
-    wrapper = mount(TaskRecordReviewHistory, { localVue, propsData, store, wait })
+    wrapper = mount(TaskRecordReviewHistory, { attachTo, localVue, propsData, store, wait })
   })
 
   it('should find the right task record review', () => {

@@ -50,9 +50,6 @@
           <template v-if="!reduced">
             <b-nav-item href="#">
               <smile-icon class="app-header__nav-right__tips mr-2" />
-              <router-link :to="{ name: 'tips' }">
-                {{ $t('appHeader.tips') }}
-              </router-link>
               <shortkey-badge :value="['meta', 't']" class="ml-2" />
             </b-nav-item>
             <b-nav-item href="#">
