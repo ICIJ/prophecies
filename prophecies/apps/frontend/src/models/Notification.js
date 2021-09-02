@@ -1,11 +1,12 @@
+import { camelCase } from 'lodash'
 import { Model } from '@vuex-orm/core'
-import { responseNormalizer } from '@/utils/jsonapi'
+import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import Action from '@/models/Action'
 import User from '@/models/User'
 import settings from '@/settings'
 
 export default class Notification extends Model {
-  static entity = 'Notification'
+  static entity = 'UserNotification'
 
   static fields () {
     return {
@@ -17,13 +18,27 @@ export default class Notification extends Model {
       level: this.string(null),
       description: this.string(null),
       read: this.boolean(false),
-      read_at: this.attr(null),
-      created_at: this.attr(null)
+      readAt: this.attr(null),
+      createdAt: this.attr(null)
     }
   }
 
   static apiConfig = {
     baseURL: `${settings.apiUrl}/notifications/`,
-    dataTransformer: responseNormalizer
+    dataTransformer: responseNormalizer,
+    actions: {
+      markAsRead (id) {
+        const attributes = { read: true }
+        const type = 'Notification'
+        const data = { attributes, id, type }
+        return this.put(`${id}/`, { data }, { headers: defaultHeaders() })
+      }
+    }
+  }
+
+  get i18n () {
+    const { verb, targetType, actionObjectType } = this.action
+    const path = ['notification', 'actions', verb, targetType, actionObjectType]
+    return path.map(p => p ? camelCase(p) : '*').join('.')
   }
 }

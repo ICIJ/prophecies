@@ -1,10 +1,12 @@
 <script>
   import { template } from 'lodash'
+  import NotificationsDropdownMenu from '@/components/NotificationsDropdownMenu'
   import ShortkeyBadge from '@/components/ShortkeyBadge'
 
   export default {
     name: 'AppHeader',
     components: {
+      NotificationsDropdownMenu,
       ShortkeyBadge
     },
     props: {
@@ -61,10 +63,20 @@
               <shortkey-badge :value="['meta', 'k']" class="ml-2" />
             </b-nav-item>
           </template>
-          <b-nav-item-dropdown right no-caret class="app-header__nav-right__user">
+          <b-nav-item-dropdown
+            right
+            no-caret
+            class="app-header__nav-right__notifications"
+            toggle-class="app-header__nav-right__notifications__toggler"
+            menu-class="app-header__nav-right__notifications__menu">
+            <template #button-content>
+              <bell-icon />
+            </template>
+            <notifications-dropdown-menu />
+          </b-nav-item-dropdown>
+          <b-nav-item-dropdown right no-caret class="app-header__nav-right__user" toggle-class="pl-1">
             <!-- Using 'button-content' slot -->
             <template #button-content>
-              <bell-icon class="mr-2" />
               <span class="app-header__nav-right__user__display-name">
                 {{ userDisplayName }}
               </span>
@@ -107,6 +119,10 @@
     & /deep/ .nav-item .dropdown-toggle {
       display: flex;
       align-items: center;
+    }
+
+    & /deep/ &__nav-right__notifications__menu {
+      width: 360px;
     }
   }
 </style>

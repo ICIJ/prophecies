@@ -57,5 +57,15 @@
     "askHelp": "Ask for help",
     "logout": "You have been logged out from Datashare.",
     "login": "Login to continue"
+  },
+  "notification": {
+    "actions": {
+      "mentioned": {
+        "user": {
+          "tip": "<strong>{actor}</strong> mentioned you in a tip",
+          "taskRecordReview": "<strong>{actor}</strong> mentioned you in a note"
+        }
+      }
+    }
   }
 }
