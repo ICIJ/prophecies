@@ -51,7 +51,8 @@
         this.$wait.end(this.loader)
       },
       fetchNotifications () {
-        return UserNotification.api().get()
+        const params = { 'page[size]': 50 }
+        return UserNotification.api().get('', { params })
       },
       planFetchNotifications () {
         this.planFetchNotificationsId = setInterval(this.fetchNotifications, 1e4)
