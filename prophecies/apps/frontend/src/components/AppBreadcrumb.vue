@@ -11,9 +11,11 @@
         <home-icon size="1.5x" />
       </router-link>
     </li>
-    <li class="list-inline-item app-breadcrumb__item">
-      <slot />
-    </li>
+    <slot name="items">
+      <li class="list-inline-item app-breadcrumb__item">
+        <slot />
+      </li>
+    </slot>
   </ul>
 </template>
 
