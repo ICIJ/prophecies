@@ -1,5 +1,5 @@
 <script>
-import { get, groupBy, uniqueId, split } from 'lodash'
+import { get, groupBy, split, uniqueId } from 'lodash'
 import moment from 'moment'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
@@ -13,15 +13,13 @@ export default {
     AppHeader,
     AppWaiter
   },
-  props: {
-
-  },
-  data () {
-    return {
-    }
-  },
   created() {
     return this.setup()
+  },
+  filters: {
+    formatDate (d) {
+      return moment(d).format('MMM Do YYYY - hh:mm')
+    }
   },
   computed: {
     fetchTipsLoader () {
@@ -57,9 +55,6 @@ export default {
       return groupBy(tips, (tip) => {
         return tip.task.name
       })
-    },
-    formatDate (date) {
-      return moment(date).format('MMM Do YYYY - hh:mm')
     }
   }
 }
@@ -86,7 +81,7 @@ export default {
                   </p>
                   <div class="mt-3">
                     <b-row align-h="end">
-                      <b-col cols="auto" class="p-3">Last modified: {{ tip.creator.username }}, {{ formatDate(tip.updatedAt) }}</b-col>
+                      <b-col cols="auto" class="p-3">Last modified: {{ tip.creator.username }}, {{ tip.updatedAt | formatDate }}</b-col>
                       <b-col cols="auto" class="p-3"> <a href="#">Edit</a> </b-col>
                     </b-row>
                   </div>
