@@ -1,9 +1,9 @@
 <script>
 import { get, groupBy, split, uniqueId } from 'lodash'
-import moment from 'moment'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
+import TipCard from '@/components/TipCard'
 import Tip from '@/models/Tip'
 
 export default {
@@ -11,15 +11,11 @@ export default {
   components: {
     AppSidebar,
     AppHeader,
-    AppWaiter
+    AppWaiter,
+    TipCard
   },
   created() {
     return this.setup()
-  },
-  filters: {
-    formatDate (d) {
-      return moment(d).format('MMM Do YYYY - hh:mm')
-    }
   },
   computed: {
     fetchTipsLoader () {
@@ -73,17 +69,7 @@ export default {
               <div v-for="(taskValue, name) in tipsGroupedByTask(projectValue)" class="mb-4">
                 <h2 class="mb-4 ml-4 mt-4">{{ name }}</h2>
                 <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" >
-                  <div class="d-flex w-100 justify-content-between mt-3">
-                    <h2> {{tip.name}} </h2>
-                  </div>
-                  <p class="mb-1 mt-3">
-                    {{ tip.description }}
-                  </p>
-                  <div class="mt-3">
-                    <b-row align-h="end">
-                      <b-col cols="auto" class="p-3">Last modified: {{ tip.creator.username }}, {{ tip.updatedAt | formatDate }}</b-col>
-                    </b-row>
-                  </div>
+                  <tip-card :tip="tip" />
                 </b-list-group-item>
               </div>
             </div>
