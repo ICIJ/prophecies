@@ -17,6 +17,7 @@
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
     "lodash": "^4.17.21",
+    "marked": "^3.0.2",
     "moment": "^2.29.1",
     "mutationobserver-shim": "^0.3.7",
     "vue": "^2.6.11",

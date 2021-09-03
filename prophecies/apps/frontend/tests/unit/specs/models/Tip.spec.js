@@ -1,4 +1,5 @@
 import '@/store'
+import User from '@/models/User'
 import Tip from '@/models/Tip'
 
 describe('Tip', () => {
@@ -37,5 +38,24 @@ describe('Tip', () => {
       .with('task.choiceGroup')
       .find('4')
     expect(choiceGroup.id).toBe('1')
+  })
+
+  it('should have an accessor with parsed version of the description', () => {
+    const data = { id: 1000, description: 'Lorem **ipsum** dolor sit _amet_.' }
+    Tip.create({ data })
+    expect(Tip.find(1000).descriptionHTML).toContain('<p>Lorem <strong>ipsum</strong> dolor sit <em>amet</em>.</p>')
+  })
+
+  it('should have an accessor with parsed version of the description, including mention', () => {
+    const data = { id: 1000, description: 'Hi @pirhoo, read **this**!' }
+    Tip.create({ data })
+    expect(Tip.find(1000).descriptionHTML).toContain('<p>Hi <strong class="mention">@pirhoo</strong>, read <strong>this</strong>!</p>')
+  })
+
+  it('should have an accessor with parsed version of the description, including mention to the current user', async () => {
+    await User.api().me()
+    const data = { id: 1000, description: 'Hi @django, read **this**!' }
+    Tip.create({ data })
+    expect(Tip.find(1000).descriptionHTML).toContain('<p>Hi <strong class="mention mention--is-me">@django</strong>, read <strong>this</strong>!</p>')
   })
 })

@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core'
+import marked from 'marked'
 import { responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import Project from '@/models/Project'
@@ -27,5 +28,18 @@ export default class Tip extends Model {
   static apiConfig = {
     baseURL: `${settings.apiUrl}/tips/`,
     dataTransformer: responseNormalizer
+  }
+
+  get descriptionWithMentions () {
+    return this.description.replace(User.usernamePattern, (match, p1) => {
+      if (User.me() && p1 === User.me().username) {
+        return `<strong class="mention mention--is-me">${match}</strong>`
+      }
+      return `<strong class="mention">${match}</strong>`
+    })
+  }
+
+  get descriptionHTML () {
+    return marked(this.descriptionWithMentions)
   }
 }
