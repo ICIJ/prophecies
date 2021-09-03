@@ -59,7 +59,7 @@
           <template v-if="!reduced">
             <b-nav-item href="#">
               <smile-icon class="app-header__nav-right__tips mr-2" />
-              <router-link :to="{ name: 'tips' }">
+              <router-link :to="{ name: 'tip-list' }">
                 {{ $t('appHeader.tips') }}
               </router-link>
               <shortkey-badge :value="['meta', 't']" class="ml-2" />

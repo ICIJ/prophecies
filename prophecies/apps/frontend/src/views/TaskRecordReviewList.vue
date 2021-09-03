@@ -1,12 +1,12 @@
 <template>
-  <div class="task-record-reviews">
+  <div class="task-record-review-list">
     <div class="d-flex align-items-center">
       <app-breadcrumb v-if="task">
         {{ task.name }}
       </app-breadcrumb>
       <app-header class="flex-grow-1" />
     </div>
-    <div class="task-record-reviews__container">
+    <div class="task-record-review-list__container">
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
           <div v-if="task && task.taskRecordsCount">
@@ -22,7 +22,7 @@
                 </b-btn>
               </div>
               <div class="col-6 text-center" v-if="pagination">
-                <div class="task-record-reviews__container__pagination">
+                <div class="task-record-review-list__container__pagination">
                   <custom-pagination
                     compact
                     @input="goToPage"
@@ -31,11 +31,11 @@
                     :per-page="Number(pageSize)" />
                   <settings-icon
                     @click="togglePageParams"
-                    class="mr-3 text-secondary task-record-reviews__container__pagination__toggler"
+                    class="mr-3 text-secondary task-record-review-list__container__pagination__toggler"
                     size="1.5x" />
                   <task-record-review-page-params
                     v-if="showPageParams"
-                    class="task-record-reviews__container__pagination__params"
+                    class="task-record-review-list__container__pagination__params"
                     :page-size.sync="pageSize"
                     :sort.sync="sort" />
                 </div>
@@ -113,7 +113,7 @@ import TaskRecordReview from '@/models/TaskRecordReview'
 import User from '@/models/User'
 
 export default {
-  name: 'TaskRecordReviews',
+  name: 'TaskRecordReviewList',
   mixins: [taskRecordReviewFiltersMixin],
   components: {
     AppBreadcrumb,
@@ -351,7 +351,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .task-record-reviews {
+  .task-record-review-list {
     &__container {
 
       &__pagination {

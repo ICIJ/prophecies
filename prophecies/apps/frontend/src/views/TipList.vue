@@ -1,7 +1,7 @@
 <template>
-  <div class="tips d-flex align-items-start">
+  <div class="tip-list d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top" />
-    <div class="tips__container flex-grow-1">
+    <div class="tip-list__container flex-grow-1">
       <app-header reduced />
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchTipsLoader" waiter-class="my-5 mx-auto d-block">
@@ -99,6 +99,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

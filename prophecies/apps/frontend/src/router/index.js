@@ -1,8 +1,8 @@
 import Dashboard from '@/views/Dashboard.vue'
 import Error from '@/views/Error.vue'
 import Login from '@/views/Login.vue'
-import TaskRecordReviews from '@/views/TaskRecordReviews.vue'
-import Tips from '@/views/Tips.vue'
+import TaskRecordReviewList from '@/views/TaskRecordReviewList.vue'
+import TipList from '@/views/TipList.vue'
 
 export const router = {
   routes: [
@@ -23,15 +23,15 @@ export const router = {
       }
     },
     {
-      name: 'task-record-reviews',
+      name: 'task-record-review-list',
       path: '/task-record-reviews/:taskId',
-      component: TaskRecordReviews,
+      component: TaskRecordReviewList,
       props: true
     },
     {
-      name: 'tips',
+      name: 'tip-list',
       path: '/tips',
-      component: Tips,
+      component: TipList,
       props: true
     },
     {
