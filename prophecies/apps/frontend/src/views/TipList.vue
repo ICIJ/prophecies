@@ -68,7 +68,7 @@ export default {
               <h1 class="mb-3 mt-4">{{ name }}</h1>
               <div v-for="(taskValue, name) in tipsGroupedByTask(projectValue)" class="mb-4">
                 <h2 class="mb-4 ml-4 mt-4">{{ name }}</h2>
-                <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" >
+                <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
                   <tip-card :tip="tip" />
                 </b-list-group-item>
               </div>

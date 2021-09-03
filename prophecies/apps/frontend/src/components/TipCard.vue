@@ -3,9 +3,7 @@
     <div class="d-flex w-100 justify-content-between mt-3">
       <h2> {{tip.name}} </h2>
     </div>
-    <p class="mb-1 mt-3">
-      {{ tip.description }}
-    </p>
+    <div class="mb-1 mt-3" v-html="tip.descriptionHTML"></div>
     <div class="mt-3">
       <b-row align-h="end">
         <b-col cols="auto" class="p-3">Last modified: {{ tip.creator.username }}, {{ tip.updatedAt | formatDate }}</b-col>
