@@ -45,7 +45,7 @@ jobs:
             - ./prophecies/apps/frontend/node_modules/
       - run:
           name: Run unit tests
-          command: yarn test:unit
+          command: yarn test:unit --maxWorkers 30%
 
   test-backend:
     docker:
