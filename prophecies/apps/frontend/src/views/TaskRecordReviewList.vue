@@ -184,10 +184,12 @@ export default {
     clearFilters () {
       this.$set(this, 'routeFilters', {})
     },
-    fetchTask () {
-      return Task.api().find(this.taskId)
+    async fetchTaskOnce () {
+      if (!Task.find(this.taskId)) {
+        return Task.api().find(this.taskId)
+      }
     },
-    fetchChoiceGroup () {
+    async fetchChoiceGroup () {
       return ChoiceGroup.api().find(this.task.choiceGroupId)
     },
     async fetchTaskRecordReviews () {
@@ -230,7 +232,7 @@ export default {
       this.$set(this.selectedIds, id, toggler)
     },
     async fetchAll () {
-      await this.fetchTask()
+      await this.fetchTaskOnce()
       await this.fetchChoiceGroup()
       await this.fetchTaskRecordReviews()
     },
