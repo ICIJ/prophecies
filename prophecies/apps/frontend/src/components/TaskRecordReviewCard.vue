@@ -18,14 +18,6 @@ export default {
     TaskRecordReviewHistory,
     TaskRecordReviewNotes
   },
-  data () {
-    return {
-      showChanges: false,
-      showNotes: false,
-      highlightedReviewId: null,
-      actionIds: []
-    }
-  },
   props: {
     taskRecordReviewId: {
       type: [String, Number]
@@ -35,6 +27,14 @@ export default {
     },
     selected: {
       type: Boolean
+    }
+  },
+  data () {
+    return {
+      showChanges: false,
+      showNotes: false,
+      highlightedReviewId: null,
+      actionIds: []
     }
   },
   watch: {
