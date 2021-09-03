@@ -1,4 +1,3 @@
-import { camelCase } from 'lodash'
 import { Model } from '@vuex-orm/core'
 import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import Action from '@/models/Action'
@@ -37,8 +36,10 @@ export default class UserNotification extends Model {
   }
 
   get i18n () {
-    const { verb, targetType, actionObjectType } = this.action
-    const path = ['notification', 'actions', verb, targetType, actionObjectType]
-    return path.map(p => p ? camelCase(p) : '*').join('.')
+    return this.action ? ['notification', this.action.i18n].join('.') : null
+  }
+
+  get link () {
+    return this.action ? this.action.link : null
   }
 }

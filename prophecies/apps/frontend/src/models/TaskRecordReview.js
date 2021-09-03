@@ -2,6 +2,7 @@ import { Model } from '@vuex-orm/core'
 import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import Choice from '@/models/Choice'
+import Task from '@/models/Task'
 import TaskRecord from '@/models/TaskRecord'
 import User from '@/models/User'
 
@@ -17,6 +18,8 @@ export default class TaskRecordReview extends Model {
       alternativeValue: this.string(null).nullable(),
       choiceId: this.attr(null),
       choice: this.belongsTo(Choice, 'choiceId'),
+      taskId: this.attr(null),
+      task: this.belongsTo(Task, 'taskId'),
       taskRecordId: this.attr(null),
       taskRecord: this.belongsTo(TaskRecord, 'taskRecordId'),
       checkerId: this.attr(null),

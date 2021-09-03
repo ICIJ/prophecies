@@ -12,7 +12,7 @@ class GenericModelSerializer(serializers.ModelSerializer):
         User: 'prophecies.apps.api.views.user.UserSerializer',
         Choice: 'prophecies.apps.api.views.choice.ChoiceSerializer',
         TaskRecord: 'prophecies.apps.api.views.task_record.TaskRecordSerializer',
-        TaskRecordReview: 'prophecies.apps.api.views.task_record_review.FlatTaskRecordReviewSerializer'
+        TaskRecordReview: 'prophecies.apps.api.views.task_record_review.TaskRecordReviewSerializer'
     }
 
     def get_instance_serializer(instance):

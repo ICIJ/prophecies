@@ -24,7 +24,8 @@ class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TaskRecordReview
-        fields = ['id', 'url', 'checker', 'choice', 'status', 'note', 'alternative_value']
+        fields = ['id', 'url', 'checker', 'choice', 'status', 'note',
+                    'alternative_value']
 
 
 class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
@@ -44,7 +45,8 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TaskRecordReview
-        fields = ['id', 'url', 'checker', 'choice', 'status', 'note', 'alternative_value', 'task_record', 'history']
+        fields = ['id', 'url', 'checker', 'choice', 'status', 'note',
+                    'alternative_value', 'task_record', 'task_id', 'history']
         read_only_fields = ['status',]
 
     def __init__(self, *args, **kwargs):
@@ -80,11 +82,11 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     def save(self):
         user = self.context.get('request').user
         if 'choice' in self.validated_data:
-            action.send(user, verb='reviewed', target=self.instance, action_object=self.validated_data.get('choice'))
+            action.send(user, verb='reviewed', target=self.instance, action_object=self.validated_data.get('choice'), task_id=self.instance.task_record.task_id)
         if self.validated_data.get('alternative_value', None):
-            action.send(user, verb='selected', target=self.instance, alternative_value=self.validated_data.get('alternative_value'))
+            action.send(user, verb='selected', target=self.instance, alternative_value=self.validated_data.get('alternative_value'), task_id=self.instance.task_record.task_id)
         if 'note' in self.validated_data:
-            action.send(user, verb='commented', target=self.instance, note=self.validated_data.get('note'))
+            action.send(user, verb='commented', target=self.instance, note=self.validated_data.get('note'), task_id=self.instance.task_record.task_id)
         return super(TaskRecordReviewSerializer, self).save()
 
 

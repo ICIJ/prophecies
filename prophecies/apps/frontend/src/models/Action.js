@@ -1,4 +1,4 @@
-import { camelCase } from 'lodash'
+import { camelCase, get, template } from 'lodash'
 import { Model } from '@vuex-orm/core'
 import { responseNormalizer } from '@/utils/jsonapi'
 import TaskRecord from '@/models/TaskRecord'
@@ -7,6 +7,14 @@ import settings from '@/settings'
 
 export default class Action extends Model {
   static entity = 'Action'
+  static links = {
+    mentioned: {
+      user: {
+        tip: '#/tips',
+        taskRecordReview: '#/task-record-reviews/{{ actionObject.taskId }}/{{ actionObject.id }}'
+      }
+    }
+  }
 
   static fields () {
     return {
@@ -40,5 +48,17 @@ export default class Action extends Model {
   get i18n () {
     const path = ['actions', this.verb, this.targetType, this.actionObjectType]
     return path.map(p => p ? camelCase(p) : '*').join('.')
+  }
+
+  get link () {
+    const interpolate = settings.templateInterpolate
+    const compiled = template(this.linkTemplate, { interpolate })
+    return compiled(this)
+  }
+
+  get linkTemplate () {
+    const path = [this.verb, this.targetType, this.actionObjectType]
+    const key = path.map(p => p ? camelCase(p) : '*').join('.')
+    return get(Action.links, key, null)
   }
 }

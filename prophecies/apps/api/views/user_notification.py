@@ -28,7 +28,7 @@ class UserNotificationSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserNotificationViewSet(viewsets.ModelViewSet):
-    queryset = UserNotification.objects.all()
+    queryset = UserNotification.objects.none()
     serializer_class = UserNotificationSerializer
     http_method_names = ['get', 'put', 'head']
     permission_classes = [IsAuthenticated]
@@ -44,7 +44,10 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
         """
         if not self.request.user.is_authenticated:
             return UserNotification.objects.none()
-        return UserNotification.objects.filter(recipient=self.request.user)
+        return UserNotification.objects \
+            .filter(recipient=self.request.user) \
+            .select_related('action') \
+            .select_related('recipient')
 
 
     def check_object_permissions(self, request, obj):

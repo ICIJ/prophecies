@@ -37,9 +37,9 @@
         return UserNotification
           .query()
           .with('action')
-          .with('action.actor')
-          .with('action.target')
-          .with('action.actionObject')
+          .with('action.*')
+          .with('action.target.*')
+          .with('action.actionObject.*')
           .orderBy('createdAt', 'desc')
           .get()
       }
@@ -51,7 +51,9 @@
         this.$wait.end(this.loader)
       },
       fetchNotifications () {
-        const params = { 'page[size]': 50 }
+        const pageSize = 50
+        const include = 'action.actionObject'
+        const params = { 'page[size]': pageSize, include }
         return UserNotification.api().get('', { params })
       },
       planFetchNotifications () {
@@ -76,7 +78,7 @@
           class="user-notifications-dropdown-menu__item"
           :class="{ 'user-notifications-dropdown-menu__item--read': notification.read }"
           :key="notification.id">
-          <b-dropdown-item link-class="user-notifications-dropdown-menu__item__link" @click="markAsRead(notification)">
+          <b-dropdown-item link-class="user-notifications-dropdown-menu__item__link" @click="markAsRead(notification)" :href="notification.link">
             <div class="user-notifications-dropdown-menu__item__link__description" v-html="$t(notification.i18n, notification.action)"></div>
             <div class="user-notifications-dropdown-menu__item__link__created-at text-primary small">
               {{ notification.createdAt | formatDateFromNow }}

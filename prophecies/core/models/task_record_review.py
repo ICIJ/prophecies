@@ -86,6 +86,13 @@ class TaskRecordReview(models.Model):
     def __str__(self):
         return f'Task record #{self.task_record.id} on round {self.round}'
 
+    @property
+    def task_id(self):
+        try:
+            return self.task_record.task_id
+        except AttributeError:
+            return None
+
     @cached_property
     def history(self):
         try:

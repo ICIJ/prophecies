@@ -112,7 +112,12 @@
     <div class="task-record-review-retreive__container">
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
-          <task-record-review-card :task-record-review-id="resolvedTaskRecordReviewId" active />
+          <template v-if="resolvedTaskRecordReviewId">
+            <task-record-review-card :task-record-review-id="resolvedTaskRecordReviewId" active />
+          </template>
+          <div v-else class="text-center text-muted text-small mx-auto">
+            Unable to find this resource.
+          </div>
         </app-waiter>
       </div>
     </div>
