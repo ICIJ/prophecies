@@ -2,6 +2,7 @@ import Dashboard from '@/views/Dashboard.vue'
 import Error from '@/views/Error.vue'
 import Login from '@/views/Login.vue'
 import TaskRecordReviewList from '@/views/TaskRecordReviewList.vue'
+import TaskRecordReviewRetreive from '@/views/TaskRecordReviewRetreive.vue'
 import TipList from '@/views/TipList.vue'
 
 export const router = {
@@ -26,6 +27,12 @@ export const router = {
       name: 'task-record-review-list',
       path: '/task-record-reviews/:taskId',
       component: TaskRecordReviewList,
+      props: true
+    },
+    {
+      name: 'task-record-review-retreive',
+      path: '/task-record-reviews/:taskId/:taskRecordReviewId',
+      component: TaskRecordReviewRetreive,
       props: true
     },
     {
