@@ -110,6 +110,7 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
        'task_record__original_value': ('icontains', 'exact', 'iexact', 'contains', 'in'),
        'task_record__reviews__checker': ('exact', 'in'),
        'task_record__reviews__choice': ('exact', 'in'),
+       'task_record__reviews__id': ('exact', 'in'),
     }
     # Queryset is overridden within the `get_queryset` method
     queryset = TaskRecordReview.objects.none()
