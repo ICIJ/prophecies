@@ -10,27 +10,27 @@ describe('Tip', () => {
     Tip.deleteAll()
   })
 
-  it('should retrieve 2 tips', async () => {
+  it('should retrieve 2 tips', () => {
     expect(Tip.all()).toHaveLength(2)
   })
 
-  it('should have one user object as creator', async () => {
+  it('should have one user object as creator', () => {
     const { creator } = Tip.query().with('creator').find('4')
     expect(creator.id).toBe('1')
     expect(creator.username).toBe('django')
   })
 
-  it('should have one task object', async () => {
+  it('should have one task object', () => {
     const { task } = Tip.query().with('task').find('4')
     expect(task.id).toBe('2')
   })
 
-  it('should have one project object', async () => {
+  it('should have one project object', () => {
     const { project } = Tip.query().with('project').find('4')
     expect(project.id).toBe('1')
   })
 
-  it('should have one task object with its nested relationships', async () => {
+  it('should have one task object with its nested relationships', () => {
     const { task: { choiceGroup } } =
     Tip.query()
       .with('task')
