@@ -126,8 +126,8 @@ export default {
 
       &__name {
         width: 100%;
-        max-width: 120px;
-        min-width: 120px;
+        max-width: 100px;
+        min-width: 100px;
 
         &:after {
           content: ":"
@@ -136,12 +136,12 @@ export default {
 
       &__choice {
         width: 100%;
-        max-width: 30px;
+        max-width: 2rem;
 
         & /deep/ .badge {
           padding: 0;
           width: 1.6em;
-          height: 1.6em;          
+          height: 1.6em;
           display: inline-flex;
           align-items: center;
           justify-content: center;

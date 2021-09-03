@@ -61,37 +61,55 @@ export default {
       <app-header reduced />
       <div class="container-fluid p-5">
         <div class="row justify-content-between">
-          <div class="col-4">
-            <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-              <template v-if="tasks.length">
-                <div class="d-flex align-items-center">
-                  <b-form-group>
-                    <b-form-radio-group
-                      v-model="teamTaskStats"
-                      buttons
-                      button-variant="outline-primary"
-                      :options="taskStatsOptions" />
-                  </b-form-group>
+          <div class="col-12 col-xl-6">
+            <div class="dashboard__container__left-panel">
+              <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
+                <template v-if="tasks.length">
+                  <div class="d-flex align-items-center">
+                    <b-form-group>
+                      <b-form-radio-group
+                        v-model="teamTaskStats"
+                        buttons
+                        button-variant="outline-primary"
+                        :options="taskStatsOptions" />
+                    </b-form-group>
+                  </div>
+                  <task-stats-card class="my-5"
+                                   v-for="task in tasks"
+                                   :key="task.id"
+                                   :team="teamTaskStats"
+                                   :task-id="task.id" />
+                </template>
+                <div v-else class="card card-body shadow-sm text-center text-muted text-small">
+                  No tasks yet.
                 </div>
-                <task-stats-card class="my-5"
-                                 v-for="task in tasks"
-                                 :key="task.id"
-                                 :team="teamTaskStats"
-                                 :task-id="task.id" />
-              </template>
-              <div v-else class="card card-body shadow-sm text-center text-muted text-small">
-                No tasks yet.
-              </div>
-            </app-waiter>
+              </app-waiter>
+            </div>
           </div>
-          <div class="col-4">
-            <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-              <progress-card class="mb-5" v-if="tasks.length" />
-              <latest-tips-card />
-            </app-waiter>
+          <div class="col-12 col-xl-6">
+            <div class="dashboard__container__right-panel ml-auto">
+              <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
+                <progress-card class="mb-5" v-if="tasks.length" />
+                <latest-tips-card />
+              </app-waiter>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+  .dashboard {
+    &__container {
+        &__left-panel {
+          max-width: 460px;
+        }
+
+        &__right-panel {
+          max-width: 460px;
+        }
+    }
+  }
+</style>

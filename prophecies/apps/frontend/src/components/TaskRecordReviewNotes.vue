@@ -158,7 +158,6 @@ export default {
   }
 
   .task-record-review-notes {
-    max-width: 630px;
     margin: auto;
     position: relative;
     padding: $spacer-xs 0 0;
@@ -171,8 +170,8 @@ export default {
       left: 100%;
       margin-left: $spacer;
       background: #F5F5F5;
-
-      @media (max-width: 860px) {
+      
+      @include media-breakpoint-down(xl) {
         position: static;
         margin: 0;
         margin-left: auto;

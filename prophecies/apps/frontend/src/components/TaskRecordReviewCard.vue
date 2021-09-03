@@ -167,56 +167,71 @@ export default {
 <template>
   <b-overlay :show="$wait.is(loader)" :variant="overlayVariant" rounded="lg">
     <b-spinner variant="light" slot="overlay" />
-    <div class="task-record-review-card card card-body p-4" :class="classList">
-      <div class="row align-items-center">
-        <div class="task-record-review-card__id col-1 col-lg-auto font-weight-bold text-nowrap">
-          <b-form-checkbox class="task-record-review-card__id__checkbox" v-model="selectedInput">
-            {{ taskRecord.id }}
-          </b-form-checkbox>
-        </div>
-        <div class="task-record-review-card__original-value col-8 col-lg-3 font-weight-bold py-3 text-center text-lg-left">
-          {{ taskRecord.originalValue }}
-        </div>
-        <div class="task-record-review-card__original-value col-3 col-lg-1 font-weight-bold py-3 text-center text-lg-left">
-          {{ taskRecord.predictedValue }}
-        </div>
-        <div class="task-record-review-card__choice col">
-          <div class="row align-items-center">
-            <div class="task-record-review-card__choice__form col-xl-6">
-              <task-record-review-choice-form
-                :task-record-review-id="taskRecordReviewId"
-                :activate-shortkeys="active"
-                @submit="selectChoiceWithLoader" />
+    <div class="task-record-review-card card card-body p-4 container-fluid" :class="classList">
+      <div class="row no-gutters">
+        <div class="col flex-grow-1">
+          <div class="row no-gutters">
+            <div class="col-lg-4">
+              <div class="row no-gutters">
+                <div class="task-record-review-card__id col-2 font-weight-bold text-nowrap">
+                  <b-form-checkbox class="task-record-review-card__id__checkbox" v-model="selectedInput">
+                    {{ taskRecord.id }}
+                  </b-form-checkbox>
+                </div>
+                <div class="task-record-review-card__original-value col font-weight-bold py-3 text-center text-lg-left">
+                  {{ taskRecord.originalValue }}
+                </div>
+                <div class="task-record-review-card__original-value col-3 font-weight-bold py-3 text-center">
+                  {{ taskRecord.predictedValue }}
+                </div>
+              </div>
             </div>
-            <div class="task-record-review-card__choice_history col-xl-6">
-              <task-record-review-history
-                :task-record-review-id="taskRecordReviewId"
-                @toggle-notes="toggleNotes(true, $event)"
-                @same="selectChoiceWithLoader" />
+            <div class="col-lg-8">
+              <div class="row">
+                <div class="col-12 col-xxl-6 pr-xxl-0">
+                  <task-record-review-choice-form
+                    class="task-record-review-card__choice"
+                    :task-record-review-id="taskRecordReviewId"
+                    :activate-shortkeys="active"
+                    @submit="selectChoiceWithLoader" />
+                </div>
+                <div class="col-12 col-xxl-6">
+                  <task-record-review-history
+                    class="task-record-review-card__history"
+                    :task-record-review-id="taskRecordReviewId"
+                    @toggle-notes="toggleNotes(true, $event)"
+                    @same="selectChoiceWithLoader" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row no-gutters">
+            <div class="offset-4 col-8 col-xxl-4">
+              <b-collapse :visible="showChanges">
+                <task-record-changes
+                  :action-ids="actionIds"
+                  :activate-shortkeys="active"
+                  @close="toggleChanges(false)" />
+              </b-collapse>
+              <b-collapse :visible="showNotes">
+                <task-record-review-notes
+                  :task-record-review-id="taskRecordReviewId"
+                  :activate-shortkeys="active"
+                  :highlighted-review-id="highlightedReviewId"
+                  @close="toggleNotes(false)" />
+              </b-collapse>
             </div>
           </div>
         </div>
-        <div class="task-record-review-card__actions col-auto">
+        <div class="col-auto ml-3">
           <task-record-review-actions
+            class="task-record-review-card__actions"
             :task-record-review-id="taskRecordReviewId"
             @lock="lockWithLoader"
             @unlock="unlockWithLoader"
             @toggle-changes="toggleChanges()" />
         </div>
       </div>
-      <b-collapse :visible="showChanges">
-        <task-record-changes
-          :action-ids="actionIds"
-          :activate-shortkeys="active"
-          @close="toggleChanges(false)" />
-      </b-collapse>
-      <b-collapse :visible="showNotes">
-        <task-record-review-notes
-          :task-record-review-id="taskRecordReviewId"
-          :activate-shortkeys="active"
-          :highlighted-review-id="highlightedReviewId"
-          @close="toggleNotes(false)" />
-      </b-collapse>
     </div>
   </b-overlay>
 </template>
@@ -274,6 +289,12 @@ export default {
         &:after, &:before {
           display: none;
         }
+      }
+    }
+
+    @include media-breakpoint-down(xxl) {
+      &__choice {
+        margin-bottom: $spacer;
       }
     }
 

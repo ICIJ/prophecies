@@ -77,7 +77,6 @@ export default {
 
 <style lang="scss" scoped>
   .task-record-review-changes {
-    max-width: 630px;
     margin: auto;
     position: relative;
     padding: $spacer-xs 0 0;
@@ -95,7 +94,7 @@ export default {
         text-decoration: none;
       }
 
-      @media (max-width: 860px) {
+      @include media-breakpoint-down(xl) {
         position: static;
         margin: 0;
         margin-left: auto;
