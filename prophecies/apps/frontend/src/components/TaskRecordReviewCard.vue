@@ -41,6 +41,7 @@ export default {
     isLoading () {
       this.showChanges = false
       this.showNotes = false
+      this.$root.$emit('bv::hide::tooltip')
     }
   },
   methods: {
