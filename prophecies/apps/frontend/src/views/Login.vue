@@ -1,3 +1,31 @@
+<script>
+export default {
+  name: 'Login',
+  computed: {
+    loginUrl () {
+      return this.$core.config.get('loginUrl')
+    },
+    helpLink () {
+      return this.$core.config.get('helpLink')
+    }
+  },
+  async mounted () {
+    if (await this.hasUser()) {
+      return this.$router.push('/')
+    }
+  },
+  methods: {
+    async hasUser () {
+      try {
+        return !!await this.$core.getUser()
+      } catch (_) {
+        return false
+      }
+    }
+  }
+}
+</script>
+
 <template>
   <div class="login">
     <div class="login__card card text-center">
@@ -28,34 +56,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'Login',
-  computed: {
-    loginUrl () {
-      return this.$core.config.get('loginUrl')
-    },
-    helpLink () {
-      return this.$core.config.get('helpLink')
-    }
-  },
-  async mounted () {
-    if (await this.hasUser()) {
-      return this.$router.push('/')
-    }
-  },
-  methods: {
-    async hasUser () {
-      try {
-        return !!await this.$core.getUser()
-      } catch (_) {
-        return false
-      }
-    }
-  }
-}
-</script>
 
 <style lang="scss" scoped>
   .login {
