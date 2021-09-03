@@ -32,6 +32,6 @@ class TipViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TipSerializer
     search_fields = ['name', 'description']
     ordering_fields = ['name']
-    filterset_fields = ['name']
+    filterset_fields = ['name', 'project', 'task', 'creator']
     pagination_class = None
     ordering = ['-id']
