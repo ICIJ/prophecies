@@ -82,7 +82,6 @@ export default {
                   <div class="mt-3">
                     <b-row align-h="end">
                       <b-col cols="auto" class="p-3">Last modified: {{ tip.creator.username }}, {{ tip.updatedAt | formatDate }}</b-col>
-                      <b-col cols="auto" class="p-3"> <a href="#">Edit</a> </b-col>
                     </b-row>
                   </div>
                 </b-list-group-item>
