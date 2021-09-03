@@ -136,9 +136,6 @@ export default {
         .with('choiceGroup.choices')
         .find(this.taskId)
     },
-    tasks () {
-      return Task.all()
-    },
     taskRecordReviews () {
       return TaskRecordReview
         .query()
