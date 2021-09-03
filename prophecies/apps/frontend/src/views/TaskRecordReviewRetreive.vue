@@ -1,5 +1,5 @@
 <script>
-  import { uniqueId } from 'lodash'
+  import { get, uniqueId } from 'lodash'
 
   import AppBreadcrumb from '@/components/AppBreadcrumb'
   import AppHeader from '@/components/AppHeader'
@@ -25,6 +25,11 @@
         type: [Number, String]
       },
     },
+    data () {
+      return {
+        resolvedTaskRecordReviewId: null
+      }
+    },
     computed: {
       fetchAllLoader () {
         return uniqueId('load-task-record-review-retreive-')
@@ -41,6 +46,14 @@
     },
     created () {
       return this.setup()
+    },
+    watch: {
+      taskId () {
+        return this.setup()
+      },
+      taskRecordReviewId () {
+        return this.setup()
+      }
     },
     methods: {
       async setup () {
@@ -63,8 +76,12 @@
       fetchChoiceGroup () {
         return ChoiceGroup.api().find(this.task.choiceGroupId)
       },
-      fetchTaskRecordReview () {
-        return TaskRecordReview.api().find(this.taskRecordReviewId)
+      async fetchTaskRecordReview () {
+        // User might try to access a TaskRecordReview assigned to another user.
+        // We need to find the id of the review assigned to the current user.
+        const params = { 'filter[task_record__reviews__id]': this.taskRecordReviewId }
+        const { response } = await TaskRecordReview.api().get('', { params })
+        this.resolvedTaskRecordReviewId = get(response, 'data.data[0].id', null)
       },
       async waitFor (loader, fn) {
         this.$wait.start(loader)
@@ -79,14 +96,23 @@
   <div class="task-record-review-retreive">
     <div class="d-flex align-items-center">
       <app-breadcrumb v-if="task">
-        {{ task.name }}
+        <template #items>
+          <li class="list-inline-item app-breadcrumb__item">
+            <router-link :to="{ name: 'task-record-review-list', params: { taskId: task.id } }">
+              {{ task.name }}
+            </router-link>
+          </li>
+          <li class="list-inline-item app-breadcrumb__item">
+            {{ taskRecordReviewId }}
+          </li>
+        </template>
       </app-breadcrumb>
       <app-header class="flex-grow-1" />
     </div>
     <div class="task-record-review-retreive__container">
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
-          <task-record-review-card :task-record-review-id="taskRecordReviewId" active />
+          <task-record-review-card :task-record-review-id="resolvedTaskRecordReviewId" active />
         </app-waiter>
       </div>
     </div>
