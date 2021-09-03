@@ -23,7 +23,7 @@ export default {
   watch: {
     async autofocus (autofocus) {
       if (autofocus) {
-        // The component must be munted
+        // The component must be mounted
         await this.$nextTick()
         const selector = '.task-record-review-notes__item__note__form__input'
         this.$el.querySelector(selector).focus()
