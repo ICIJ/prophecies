@@ -68,9 +68,9 @@ export default {
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchTipsLoader" waiter-class="my-5 mx-auto d-block">
           <div v-if="tips">
-            <b-list-group v-for="(projectValue, name) in tipsGroupedByProject" class="mt-4 mb-4 border-bottom">
+            <div v-for="(projectValue, name) in tipsGroupedByProject" class="mt-4 mb-4 border-bottom">
               <h1 class="mb-3 mt-4">{{ name }}</h1>
-              <b-list-group v-for="(taskValue, name) in tipsGroupedByTask(projectValue)" class="mb-4">
+              <div v-for="(taskValue, name) in tipsGroupedByTask(projectValue)" class="mb-4">
                 <h2 class="mb-4 ml-4 mt-4">{{ name }}</h2>
                 <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" >
                   <div class="d-flex w-100 justify-content-between mt-3">
@@ -86,8 +86,8 @@ export default {
                     </b-row>
                   </div>
                 </b-list-group-item>
-              </b-list-group>
-            </b-list-group>
+              </div>
+            </div>
           </div>
         </app-waiter>
       </div>
