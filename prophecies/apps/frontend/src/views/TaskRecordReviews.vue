@@ -364,7 +364,7 @@ export default {
         }
 
         &__params {
-          z-index: $zindex-dropdown;
+          z-index: $zindex-dropdown - 10;
           position: absolute;
           left: 100%;
           top: 50%;

@@ -77,7 +77,6 @@
 <style lang="scss" scoped>
   .task-record-review-page-params {
 
-
     /deep/ .multiselect {
       min-height: 0;
 
