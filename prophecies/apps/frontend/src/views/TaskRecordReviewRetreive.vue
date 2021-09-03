@@ -30,20 +30,6 @@
         resolvedTaskRecordReviewId: null
       }
     },
-    computed: {
-      fetchAllLoader () {
-        return uniqueId('load-task-record-review-retreive-')
-      },
-      task () {
-        return Task
-          .query()
-          .with('checkers')
-          .with('choiceGroup')
-          .with('choiceGroup.alternativeValues')
-          .with('choiceGroup.choices')
-          .find(this.taskId)
-      }
-    },
     created () {
       return this.setup()
     },
@@ -53,6 +39,23 @@
       },
       taskRecordReviewId () {
         return this.setup()
+      }
+    },
+    computed: {
+      fetchAllLoader () {
+        return uniqueId('load-task-record-review-retreive-')
+      },
+      highlightNote () {
+        return String(this.$route.query.highlightNote).toLowerCase() === 'true'
+      },
+      task () {
+        return Task
+          .query()
+          .with('checkers')
+          .with('choiceGroup')
+          .with('choiceGroup.alternativeValues')
+          .with('choiceGroup.choices')
+          .find(this.taskId)
       }
     },
     methods: {
@@ -113,7 +116,10 @@
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
           <template v-if="resolvedTaskRecordReviewId">
-            <task-record-review-card :task-record-review-id="resolvedTaskRecordReviewId" active />
+            <task-record-review-card
+              active
+              :highlight-note="highlightNote"
+              :task-record-review-id="resolvedTaskRecordReviewId" />
           </template>
           <div v-else class="text-center text-muted text-small mx-auto">
             Unable to find this resource.

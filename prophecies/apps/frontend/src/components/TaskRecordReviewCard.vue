@@ -27,6 +27,9 @@ export default {
     },
     selected: {
       type: Boolean
+    },
+    highlightNote: {
+      type: Boolean
     }
   },
   data () {
@@ -43,6 +46,9 @@ export default {
       this.showNotes = false
       this.$root.$emit('bv::hide::tooltip')
     }
+  },
+  created () {
+    this.toggleNotes(!!this.highlightNote, this.taskRecordReviewId)
   },
   methods: {
     async selectChoiceWithLoader (data) {

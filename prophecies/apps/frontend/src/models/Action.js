@@ -11,7 +11,7 @@ export default class Action extends Model {
     mentioned: {
       user: {
         tip: '#/tips',
-        taskRecordReview: '#/task-record-reviews/{{ actionObject.taskId }}/{{ actionObject.id }}'
+        taskRecordReview: '#/task-record-reviews/{{ actionObject.taskId }}/{{ actionObject.id }}?highlightNote=true'
       }
     }
   }
