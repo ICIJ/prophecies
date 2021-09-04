@@ -36,7 +36,6 @@ export default {
       pagination: null,
       selectedIds: {},
       showFilters: false,
-      showPageParams: false,
       taskRecordReviewIds: []
     }
   },
@@ -181,6 +180,11 @@ export default {
     applyFilters (query) {
       return this.$router.push({ path: this.$route.path, query }, () => {})
     },
+    applyPageParams ({ pageSize, sort }) {
+      this.$bvModal.hide('modal-page-params')
+      const query = { ...this.$route.query, 'page[size]': pageSize, sort }
+      return this.$router.push({ path: this.$route.path, query }, () => {})
+    },
     clearFilters () {
       this.$set(this, 'routeFilters', {})
     },
@@ -218,7 +222,7 @@ export default {
       const selector = '.task-record-review-card--active'
       const element = this.$el.querySelector(selector)
       const options = { behavior: 'smooth', block: 'center' }
-      if (element) {        
+      if (element) {
         element.scrollIntoView(options)
       }
     },
@@ -246,9 +250,6 @@ export default {
     },
     toggleFilters () {
       this.showFilters = !this.showFilters
-    },
-    togglePageParams () {
-      this.showPageParams = !this.showPageParams
     }
   }
 }
@@ -285,15 +286,17 @@ export default {
                     :value="Number(pageNumber)"
                     :total-rows="pagination.count"
                     :per-page="Number(pageSize)" />
-                  <settings-icon
-                    @click="togglePageParams"
-                    class="mr-3 text-secondary task-record-review-list__container__pagination__toggler"
-                    size="1.5x" />
-                  <task-record-review-page-params
-                    v-if="showPageParams"
-                    class="task-record-review-list__container__pagination__params"
-                    :page-size.sync="pageSize"
-                    :sort.sync="sort" />
+                  <b-button v-b-modal.modal-page-params variant="link" class="task-record-review-list__container__pagination__toggler text-secondary px-2">
+                    <settings-icon size="1.5x" />
+                  </b-button>
+                  <b-modal id="modal-page-params" hide-header hide-footer>
+                    <task-record-review-page-params
+                      class="task-record-review-list__container__pagination__params"
+                      :page-size="pageSize"
+                      :sort="sort"
+                      @submit="applyPageParams"
+                      @cancel="$bvModal.hide('modal-page-params')" />
+                  </b-modal>
                 </div>
               </div>
               <div class="col d-flex">
@@ -359,19 +362,6 @@ export default {
       &__pagination {
         display: inline-flex;
         align-items: center;
-        position: relative;
-
-        &__toggler {
-          cursor: pointer;
-        }
-
-        &__params {
-          z-index: $zindex-dropdown - 10;
-          position: absolute;
-          left: 100%;
-          top: 50%;
-          transform: translateY(-50%);
-        }
       }
     }
   }

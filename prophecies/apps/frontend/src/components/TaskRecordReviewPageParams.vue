@@ -17,6 +17,20 @@
         default: 'task_record__id'
       }
     },
+    data () {
+      return {
+        intermediaryPageSize: this.pageSize,
+        intermediarySort: this.sort
+      }
+    },
+    watch: {
+      pageSize (value) {
+        this.intermediaryPageSize = value
+      },
+      sort (value) {
+        this.intermediarySort = value
+      }
+    },
     computed: {
       pageSizeOptions () {
         return [
@@ -37,73 +51,74 @@
         ]
       },
       selectedPageSizeOption () {
-        return find(this.pageSizeOptions, { value: this.pageSize })
+        return find(this.pageSizeOptions, { value: this.intermediaryPageSize })
       },
       selectedSortOption () {
-        return find(this.sortOptions, { value: this.sort })
+        return find(this.sortOptions, { value: this.intermediarySort })
       },
       isDefaultSortOption () {
-        return this.sort === this.$options.props.sort.default
+        return this.intermediarySort === this.$options.props.sort.default
+      }
+    },
+    methods: {
+      submit () {
+        const pageSize = this.intermediaryPageSize
+        const sort = this.intermediarySort
+        this.$emit('submit', { pageSize, sort })
       }
     }
   }
 </script>
 
 <template>
-  <div class="task-record-review-page-params d-inline-flex">
-    <div class="task-record-review-page-params__size pr-3">
+  <form class="task-record-review-page-params" @submit.prevent="submit">
+    <div class="task-record-review-page-params__size task-record-review-page-params__form-group">
+      <label class="task-record-review-page-params__form-group__label">
+        Page size
+      </label>
       <multiselect :allow-empty="false"
                    :show-labels="false"
                    :searchable="false"
                    :options="pageSizeOptions"
                    :value="selectedPageSizeOption"
-                   @input="$emit('update:pageSize', $event.value)"
+                   @input="intermediaryPageSize = $event.value"
                    label="label"
                    track-by="value" />
     </div>
-    <div class="task-record-review-page-params__sort" :class="{ 'task-record-review-page-params__sort--default': isDefaultSortOption }">
+    <div class="task-record-review-page-params__sort task-record-review-page-params__form-group" :class="{ 'task-record-review-page-params__sort--default': isDefaultSortOption }">
+      <label class="task-record-review-page-params__form-group__label">
+        Sort by
+      </label>
       <multiselect :allow-empty="false"
                    :show-labels="false"
                    :searchable="false"
                    :options="sortOptions"
                    :value="selectedSortOption"
-                   @input="$emit('update:sort', $event.value)"
+                   @input="intermediarySort = $event.value"
                    label="label"
                    track-by="value" />
     </div>
-  </div>
+    <div class="d-flex pt-2">
+      <b-button @click="$emit('cancel')" variant="secondary">
+        Cancel
+      </b-button>
+      <b-button variant="primary" class="ml-auto font-weight-bold" type="submit">
+        Apply
+      </b-button>
+    </div>
+  </form>
 </template>
 
 <style lang="scss" scoped>
   .task-record-review-page-params {
 
-    /deep/ .multiselect {
-      min-height: 0;
+    &__form-group {
+      display: block;
+      margin-bottom: $spacer;
 
-      &__tags {
-        font-size: 1rem;
-        min-height: 0;
-        padding-top: 7px;
+      &__label {
+        font-weight: bold;
       }
-
-      &__single, &__placeholder {
-        padding-top: 0;
-        margin: 0;
-        font-size: 1rem;
-        min-height: 25px;
-      }
-
-      &__select {
-        height: 33px;
-      }
-    }
-
-    &__size {
-      min-width: 200px;
-    }
-
-    &__sort {
-      min-width: 250px;
     }
   }
 </style>

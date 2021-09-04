@@ -2,6 +2,28 @@
 
 .multiselect {
 
+  &.multiselect--md {
+    min-height: 0;
+
+    .multiselect__tags {
+      font-size: 1rem;
+      min-height: 0;
+      padding-top: 7px;
+    }
+
+    .multiselect__single,
+    .multiselect__placeholder {
+      padding-top: 0;
+      margin: 0;
+      font-size: 1rem;
+      min-height: 25px;
+    }
+
+    .multiselect__select {
+      height: 33px;
+    }
+  }
+
   &, &__input, &__single, &__input::placeholder {
     font-size: 1rem;
   }
