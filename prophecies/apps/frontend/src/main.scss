@@ -40,6 +40,14 @@ html {
   font-family: $badge-font-family;
 }
 
+.mention {
+  font-weight: bold;
+
+  &--is-me {
+    color: $danger;
+  }
+}
+
 .custom-pagination--compact {
   .custom-pagination__form input {
     border-radius: 0 $input-border-radius $input-border-radius 0;
