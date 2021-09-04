@@ -4,6 +4,7 @@ import Login from '@/views/Login.vue'
 import TaskRecordReviewList from '@/views/TaskRecordReviewList.vue'
 import TaskRecordReviewRetreive from '@/views/TaskRecordReviewRetreive.vue'
 import TipList from '@/views/TipList.vue'
+import TipRetreive from '@/views/TipRetreive.vue'
 
 export const router = {
   routes: [
@@ -39,6 +40,12 @@ export const router = {
       name: 'tip-list',
       path: '/tips',
       component: TipList,
+      props: true
+    },
+    {
+      name: 'tip-retreive',
+      path: '/tips/:tipId',
+      component: TipRetreive,
       props: true
     },
     {

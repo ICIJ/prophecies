@@ -10,7 +10,7 @@ export default class Action extends Model {
   static links = {
     mentioned: {
       user: {
-        tip: '#/tips',
+        tip: '#/tips/{{ actionObjectId }}',
         taskRecordReview: '#/task-record-reviews/{{ actionObject.taskId }}/{{ actionObject.id }}?highlightNote=true'
       }
     }
