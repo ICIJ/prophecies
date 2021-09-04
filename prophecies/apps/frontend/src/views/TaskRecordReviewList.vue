@@ -268,7 +268,7 @@ export default {
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
           <div v-if="task && task.taskRecordsCount">
             <div class="row mb-4" v-if="pagination">
-              <div class="col">
+              <div class="d-none d-lg-block col-lg-3">
                 <b-btn variant="outline-dark" class="border" tag="label">
                   <span class="custom-control custom-checkbox">
                     <input class="custom-control-input" v-model="selectAll" type="checkbox" id="select-all-input" />
@@ -278,10 +278,11 @@ export default {
                   </span>
                 </b-btn>
               </div>
-              <div class="col-6 text-center" v-if="pagination">
+              <div class="col-8 col-lg-6 text-lg-center" v-if="pagination">
                 <div class="task-record-review-list__container__pagination">
                   <custom-pagination
                     compact
+                    class="pl-0"
                     @input="goToPage"
                     :value="Number(pageNumber)"
                     :total-rows="pagination.count"
@@ -299,7 +300,7 @@ export default {
                   </b-modal>
                 </div>
               </div>
-              <div class="col d-flex">
+              <div class="col-4 col-lg-3 d-flex">
                 <div class="ml-auto">
                   <b-btn :variant="filtersTogglerVariant" class="border font-weight-bold" @click="toggleFilters">
                     <filter-icon size="1x" class="mr-1" />
