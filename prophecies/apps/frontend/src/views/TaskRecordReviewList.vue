@@ -42,7 +42,7 @@ export default {
   },
   watch: {
     pageNumber (value) {
-      if (this.pagination?.page !== value) {
+      if (this.pagination && this.pagination.page !== value) {
         return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
       }
     },
@@ -216,8 +216,11 @@ export default {
         return this.goToNextPage()
       }
       const selector = '.task-record-review-card--active'
+      const element = this.$el.querySelector(selector)
       const options = { behavior: 'smooth', block: 'center' }
-      this.$el.querySelector(selector)?.scrollIntoView(options)
+      if (element) {        
+        element.scrollIntoView(options)
+      }
     },
     isTaskRecordReviewActive (id) {
       return get(this, 'firstPendingTaskRecordReview.id') === id
