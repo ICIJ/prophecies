@@ -87,7 +87,7 @@ export default {
             </div>
           </div>
           <div class="col-12 col-xl-6">
-            <div class="dashboard__container__right-panel ml-auto">
+            <div class="dashboard__container__right-panel ml-xl-auto">
               <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
                 <progress-card class="mb-5" v-if="tasks.length" />
                 <latest-tips-card />
