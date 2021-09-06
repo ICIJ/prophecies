@@ -5,6 +5,7 @@ import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
 import TipCard from '@/components/TipCard'
 import Tip from '@/models/Tip'
+import TipListPageParams from '@/components/TipListPageParams'
 
 export default {
   name: 'Tips',
@@ -12,7 +13,27 @@ export default {
     AppSidebar,
     AppHeader,
     AppWaiter,
-    TipCard
+    TipCard,
+    TipListPageParams
+  },
+  data () {
+    return {
+      projectFilter: '',
+      taskFilter: '',
+      creatorFilter: '',
+      tipIds: []
+    }
+  },
+  watch: {
+    projectFilter () {
+      return this.waitFor(this.fetchTipsLoader, this.fetchTipsFilteredByProject)
+    },
+    taskFilter () {
+      return this.waitFor(this.fetchTipsLoader, this.fetchTipsFilteredByProject)
+    },
+    creatorFilter () {
+      return this.waitFor(this.fetchTipsLoader, this.fetchTipsFilteredByProject)
+    }
   },
   created() {
     return this.setup()
@@ -22,12 +43,29 @@ export default {
       return uniqueId('load-tips-')
     },
     tips () {
-      return Tip.query().with('project').with('creator').with('task').with('task.project').all()
+      return this.tipIds.length ? Tip.query().with('project').with('creator').with('task').with('task.project').whereIdIn(this.tipIds).get() : Tip.query().with('project').with('creator').with('task').with('task.project').all()
     },
     tipsGroupedByProject () {
       return groupBy(this.tips, (tip) => {
         return tip.project.name
       })
+    },
+    tipParams () {
+      let params = {}
+
+      if (this.projectFilter) {
+        params['filter[project]'] = this.projectFilter
+      }
+
+      if (this.taskFilter) {
+        params['filter[task]'] = this.taskFilter
+      }
+
+      if (this.creatorFilter) {
+        params['filter[creator]'] = this.creatorFilter
+      }
+
+      return params
     }
   },
   methods: {
@@ -51,6 +89,21 @@ export default {
       return groupBy(tips, (tip) => {
         return tip.task.name
       })
+    },
+    setProjectFilter (value) {
+      this.$set(this, 'projectFilter', value)
+    },
+    setTaskFilter (value) {
+      this.$set(this, 'taskFilter', value)
+    },
+    setCreatorFilter (value) {
+      this.$set(this, 'creatorFilter', value)
+    },
+    async fetchTipsFilteredByProject () {
+      const params = this.tipParams
+      const { response } = await Tip.api().get('', { params })
+      const tipIds = get(response, 'data.data', []).map(t => t.id)
+      this.$set(this, 'tipIds', tipIds)
     }
   }
 }
@@ -61,6 +114,7 @@ export default {
     <app-sidebar class="w-100 sticky-top" />
     <div class="tip-list__container flex-grow-1">
       <app-header reduced />
+      <tip-list-page-params v-on:applyProjectFilter="setProjectFilter" v-on:applyTaskFilter="setTaskFilter" v-on:applyCreatorFilter="setCreatorFilter" />
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchTipsLoader" waiter-class="my-5 mx-auto d-block">
           <div v-if="tips">
