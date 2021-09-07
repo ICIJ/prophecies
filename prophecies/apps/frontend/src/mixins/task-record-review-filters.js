@@ -28,7 +28,7 @@ export default {
           label: 'name'
         },
         choices: {
-          name: 'Classification',
+          name: 'My classifications',
           param: 'choice__in',
           nullParam: 'choice__isnull',
           nullValue: true,
