@@ -118,6 +118,12 @@ export default {
   },
   computed: {
     initialHighlightedReviewId () {
+      // No note, no initial highlighted review!
+      if (!this.showNotes) {
+        return null
+      }
+      // If the `highlightNote` is a boolean, we highlight
+      // the current task record review by default
       if (isBoolean(this.highlightNote)) {
         return this.taskRecordReviewId
       }
