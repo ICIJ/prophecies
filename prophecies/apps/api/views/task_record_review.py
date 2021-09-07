@@ -24,8 +24,9 @@ class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TaskRecordReview
-        fields = ['id', 'url', 'checker', 'choice', 'status', 'note', 'task_id',
-                    'alternative_value']
+        fields = ['id', 'url', 'checker', 'choice', 'status',
+                    'note', 'note_created_at', 'note_updated_at',
+                    'task_id', 'alternative_value']
 
 
 class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
@@ -45,7 +46,8 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TaskRecordReview
-        fields = ['id', 'url', 'checker', 'choice', 'status', 'note',
+        fields = ['id', 'url', 'checker', 'choice', 'status',
+                    'note', 'note_created_at', 'note_updated_at',
                     'alternative_value', 'task_record', 'task_id', 'history']
         read_only_fields = ['status',]
 

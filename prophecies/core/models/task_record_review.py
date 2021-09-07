@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max, signals
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
 from prophecies.core.models import Choice, TaskRecord, UserNotification
@@ -72,6 +73,8 @@ class TaskRecordReview(models.Model):
     status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.PENDING, max_length=7)
     choice = models.ForeignKey(Choice, null=True, blank=True, on_delete=models.SET_NULL)
     note = models.CharField(max_length=100, null=True, blank=True, verbose_name="Checker note")
+    note_created_at = models.DateTimeField(null=True, blank=True)
+    note_updated_at = models.DateTimeField(null=True, blank=True)
     alternative_value = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -132,6 +135,17 @@ class TaskRecordReview(models.Model):
             if self.task_record.reviews.count() >= max_round:
                 raise ValidationError(f'Task record #{self.task_record.id} cannot get more than {max_round} reviews')
 
+    @property
+    def already_has_note(self):
+        return self.note is not None and self.note_created_at is not None
+
+    @property
+    def note_changed(self):
+        if self.pk is not None:
+            instance = TaskRecordReview.objects.get(pk=self.pk)
+            return self.note != instance.note
+        return False
+
 
     @staticmethod
     def signal_notify_mentioned_users(sender, instance, **kwargs):
@@ -143,7 +157,22 @@ class TaskRecordReview(models.Model):
                     UserNotification.objects.create(recipient=user, action=action)
 
 
+    @staticmethod
+    def signal_fill_note_created_at(sender, instance, **kwargs):
+        if instance.note and not instance.already_has_note:
+            instance.note_created_at = timezone.now()
+
+
+    @staticmethod
+    def signal_fill_note_updated_at(sender, instance, **kwargs):
+        if instance.already_has_note and instance.note_changed:
+            instance.note_updated_at = timezone.now()
+
+
 signals.post_save.connect(TaskRecordReview.signal_notify_mentioned_users, sender=TaskRecordReview)
+signals.pre_save.connect(TaskRecordReview.signal_fill_note_created_at, sender=TaskRecordReview)
+signals.pre_save.connect(TaskRecordReview.signal_fill_note_updated_at, sender=TaskRecordReview)
+# Send signals to the TaskRecord model
 signals.post_save.connect(TaskRecord.signal_update_has_notes, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecord.signal_update_has_disagreements, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecord.signal_update_rounds_and_status, sender=TaskRecordReview)

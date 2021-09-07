@@ -248,3 +248,28 @@ class TestTaskRecordReview(TestCase):
         self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
         TaskRecordReview.objects.create(note="Hi again @olivia and @django!", checker=self.django)
         self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 2)
+
+    def test_it_fills_note_timestamps(self):
+        review = TaskRecordReview.objects.create(note="Foo")
+        self.assertTrue(review.note_created_at is not None)
+        self.assertTrue(review.note_updated_at is None)
+
+    def test_it_fills_note_timestamps_after_save(self):
+        review = TaskRecordReview(note="Foo")
+        self.assertTrue(review.note_created_at is None)
+        review.save()
+        self.assertTrue(review.note_created_at is not None)
+
+    def test_it_fills_note_updated_at_on_edits(self):
+        review = TaskRecordReview.objects.create(note="Foo")
+        self.assertTrue(review.note_updated_at is None)
+        review.note = "Bar"
+        review.save()
+        self.assertTrue(review.note_updated_at is not None)
+
+    def test_it_doesnt_fills_note_updated_without_edits(self):
+        review = TaskRecordReview.objects.create(note="Foo")
+        self.assertTrue(review.note_updated_at is None)
+        review.note = "Foo"
+        review.save()
+        self.assertTrue(review.note_updated_at is None)
