@@ -1,13 +1,16 @@
 <script>
 import { get, find, filter, uniqueId } from 'lodash'
+import moment from 'moment'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
+import TaskRecordReviewNoteTimestamp from '@/components/TaskRecordReviewNoteTimestamp'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import User from '@/models/User'
 
 export default {
   name: 'TaskRecordReviewNote',
   components: {
-    ShortkeyBadge
+    ShortkeyBadge,
+    TaskRecordReviewNoteTimestamp
   },
   props: {
     taskRecordReviewId: {
@@ -106,14 +109,14 @@ export default {
       <shortkey-badge :value="closeShortkey" />
       <span class="sr-only">Close</span>
     </b-btn>
-    <div v-for="{ id, checker, note, noteWithMentions } in history" :key="id" class="task-record-review-notes__item"  :class="{ 'task-record-review-notes__item--highlighted': id === highlightedReviewId }">
+    <div v-for="review in history" :key="review.id" class="task-record-review-notes__item"  :class="{ 'task-record-review-notes__item--highlighted': review.id === highlightedReviewId }">
       <div class="task-record-review-notes__item__checker">
         <span class="text-truncate">
-          {{ checker.firstName || checker.username }}
+          {{ review.checker.firstName || review.checker.username }}
         </span>
       </div>
       <div class="task-record-review-notes__item__note">
-        <template v-if="isMe(checker)">
+        <template v-if="isMe(review.checker)">
             <form class="task-record-review-notes__item__note__form" @submit.prevent="saveInputNoteWithLoader">
               <fieldset :disabled="$wait.is(saveNoteLoader)">
                 <b-overlay :show="$wait.is(saveNoteLoader)" variant="transparent">
@@ -126,19 +129,24 @@ export default {
                     @keyup.esc="$emit('close')"
                     @keyup.enter="handleInputNoteEnter" />
                 </b-overlay>
-                <b-collapse :visible="inputNote !== note">
-                  <div class="mt-1 d-flex align-items-center">
-                    <b-btn variant="link" size="sm" type="submit" class="text-muted ml-auto">
-                      Save
-                    </b-btn>
-                    <shortkey-badge :value="['Meta', 'Enter']" class="ml-2" />
-                  </div>
-                </b-collapse>
+                <div v-if="inputNote !== review.note" class="mt-1 d-flex align-items-center">
+                  <b-btn variant="link" size="sm" type="submit" class="text-muted ml-auto">
+                    Save
+                  </b-btn>
+                  <shortkey-badge :value="['Meta', 'Enter']" class="ml-2" />
+                </div>
+                <task-record-review-note-timestamp
+                  v-else
+                  class="task-record-review-notes__item__note__form__timestamp mt-1"
+                  :task-record-review-id="review.id" />
               </fieldset>
             </form>
         </template>
         <template v-else>
-          <div class="task-record-review-notes__item__note__wrapper" v-html="noteWithMentions"></div>
+          <div class="task-record-review-notes__item__note__wrapper" v-html="review.noteWithMentions"></div>
+          <task-record-review-note-timestamp
+            class="task-record-review-notes__item__note__timestamp"
+            :task-record-review-id="review.id" />
         </template>
       </div>
     </div>
@@ -194,6 +202,13 @@ export default {
 
       &--highlighted {
         animation: highlightNote 4s;
+      }
+
+      &__note__form__timestamp, &__note__timestamp {
+        color: $secondary;
+        font-size: $font-size-sm;
+        padding: $input-padding-y 0;
+        float: right;
       }
 
       &__checker {

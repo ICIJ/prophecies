@@ -15,6 +15,8 @@ export default class TaskRecordReview extends Model {
       url: this.string(),
       status: this.string(),
       note: this.string(null).nullable(),
+      noteCreatedAt: this.attr(null).nullable(),
+      noteUpdatedAt: this.attr(null).nullable(),
       alternativeValue: this.string(null).nullable(),
       choiceId: this.attr(null),
       choice: this.belongsTo(Choice, 'choiceId'),
