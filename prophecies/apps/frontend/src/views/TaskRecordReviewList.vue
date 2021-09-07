@@ -100,6 +100,14 @@ export default {
       // Method from the mixins
       return this.getTaskFilters(this.task)
     },
+    otherQueryParams () {
+      return Object.entries(this.$route.query).reduce((all, [key, value]) => {
+        if (!this.isFiltersParam(this.filters, { key })) {
+          all[key] = value
+        }
+        return all
+      }, {})
+    },
     routeFiltersQueryParams () {
       return Object.entries(this.$route.query).reduce((all, [key, value]) => {
         if (this.isFiltersParam(this.filters, { key })) {
@@ -117,8 +125,10 @@ export default {
           return all
         }, {})
       },
-      set (query) {
-        if (!isEqual(query, this.routeFiltersQueryParams)) {
+      set (routeFiltersQueryParams) {
+        if (!isEqual(routeFiltersQueryParams, this.routeFiltersQueryParams)) {
+          const otherQueryParams = this.otherQueryParams
+          const query = { ...otherQueryParams, ...routeFiltersQueryParams }
           return this.$router.push({ path: this.$route.path, query }, () => {})
         }
       }
@@ -145,8 +155,8 @@ export default {
       return {
         ...this.appliedRouteFiltersQueryParams,
         'filter[taskRecord.task]': this.taskId,
-        'page[number]': this.pageNumber,
         'page[size]': this.pageSize,
+        'page[number]': this.pageNumber,
         'sort': this.sort
       }
     },
