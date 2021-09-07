@@ -24,7 +24,7 @@ class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TaskRecordReview
-        fields = ['id', 'url', 'checker', 'choice', 'status', 'note',
+        fields = ['id', 'url', 'checker', 'choice', 'status', 'note', 'task_id',
                     'alternative_value']
 
 
