@@ -18,7 +18,8 @@ export default {
     },
     alternativeValueName (value) {
       const alternativeValue = AlternativeValue.query().where('value', value).first()
-      return get(alternativeValue, 'name', value)
+      const valueBetweenQuotes = `"${value}"`
+      return get(alternativeValue, 'name', valueBetweenQuotes)
     }
   },
   props: {
