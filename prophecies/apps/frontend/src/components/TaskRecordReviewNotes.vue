@@ -197,6 +197,7 @@ export default {
       }
 
       &__checker {
+        width: 80px;
         display: flex;
         align-items: center;
         margin-top: $input-border-width;
