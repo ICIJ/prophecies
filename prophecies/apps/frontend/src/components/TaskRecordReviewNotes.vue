@@ -106,7 +106,7 @@ export default {
       <shortkey-badge :value="closeShortkey" />
       <span class="sr-only">Close</span>
     </b-btn>
-    <div v-for="{ id, checker, note } in history" :key="id" class="task-record-review-notes__item"  :class="{ 'task-record-review-notes__item--highlighted': id === highlightedReviewId }">
+    <div v-for="{ id, checker, note, noteWithMentions } in history" :key="id" class="task-record-review-notes__item"  :class="{ 'task-record-review-notes__item--highlighted': id === highlightedReviewId }">
       <div class="task-record-review-notes__item__checker">
         <span class="text-truncate">
           {{ checker.firstName || checker.username }}
@@ -138,9 +138,7 @@ export default {
             </form>
         </template>
         <template v-else>
-          <div class="task-record-review-notes__item__note__wrapper">
-            {{ note }}
-          </div>
+          <div class="task-record-review-notes__item__note__wrapper" v-html="noteWithMentions"></div>
         </template>
       </div>
     </div>
@@ -170,7 +168,7 @@ export default {
       left: 100%;
       margin-left: $spacer;
       background: #F5F5F5;
-      
+
       @include media-breakpoint-down(xl) {
         position: static;
         margin: 0;

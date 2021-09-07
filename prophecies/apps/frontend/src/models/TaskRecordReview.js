@@ -56,4 +56,13 @@ export default class TaskRecordReview extends Model {
       }
     }
   }
+
+  get noteWithMentions () {
+    return String(this.note).replace(User.usernamePattern, (match, p1) => {
+      if (User.me() && p1 === User.me().username) {
+        return `<span class="mention mention--is-me">${match}</span>`
+      }
+      return `<span class="mention">${match}</span>`
+    })
+  }
 }
