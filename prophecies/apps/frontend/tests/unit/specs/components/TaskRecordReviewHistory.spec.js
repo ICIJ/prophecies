@@ -82,6 +82,6 @@ describe('TaskRecordReviewHistory', () => {
 
   it('should not find the name of the alternative value and return the value instead', () => {
     const { alternativeValueName } = wrapper.vm.$options.filters
-    expect(alternativeValueName('FRA')).toBe('FRA')
+    expect(alternativeValueName('FRA')).toBe('"FRA"')
   })
 })
