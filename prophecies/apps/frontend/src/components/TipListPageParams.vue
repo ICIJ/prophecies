@@ -1,34 +1,40 @@
 <template>
-  <div class="tip-list-page-params d-inline-flex">
-    <div class="tip-list-page-params__project pr-3">
-      <multiselect :allow-empty ="true"
-                   :show-labels="false"
-                   :searchable="false"
-                   :options="projectOptions"
-                   @input="$emit('applyProjectFilter', $event.value)"
-                   label="label"
-                   track-by="value" />
+  <div class="tip-list-page-params container-fluid">
+    <div class="row">
+      <label class="tip-list-page-params__project col-lg-4 col-xl-3">
+        <div class="mb-3">Project</div>
+        <multiselect :allow-empty ="true"
+                     :show-labels="false"
+                     :options="projectOptions"
+                     :value="selectedProjectOption"
+                     @input="$emit('update:projectId', idOrNull($event))"
+                     placeholder="Select a project"
+                     label="name"
+                     track-by="id" />
+      </label>
+      <label class="tip-list-page-params__task col-lg-4 col-xl-3">
+        <div class="mb-3">Task</div>
+        <multiselect :allow-empty ="true"
+                     :show-labels="false"
+                     :options="taskOptions"
+                     :value="selectedTaskOption"
+                     @input="$emit('update:taskId', idOrNull($event))"
+                     placeholder="Select a task"
+                     label="name"
+                     track-by="id" />
+      </label>
+      <label class="tip-list-page-params__creator col-lg-4 col-xl-3">
+        <div class="mb-3">Author</div>
+        <multiselect :allow-empty ="true"
+                     :show-labels="false"
+                     :options="creatorOptions"
+                     :value="selectedCreatorOption"
+                     @input="$emit('update:creatorId', idOrNull($event))"
+                     placeholder="Select an author"
+                     label="displayName"
+                     track-by="id" />
+      </label>
     </div>
-    <div class="tip-list-page-params__task pr-3">
-      <multiselect :allow-empty ="true"
-                   :show-labels="false"
-                   :searchable="false"
-                   :options="taskOptions"
-                   @input="$emit('applyTaskFilter', $event.value)"
-                   label="label"
-                   track-by="value" />
-    </div>
-    <div class="tip-list-page-params__creator pr-3">
-      <multiselect :allow-empty ="true"
-                   :show-labels="false"
-                   :searchable="false"
-                   :options="creatorOptions"
-                   @input="$emit('applyCreatorFilter', $event.value)"
-                   label="label"
-                   track-by="value" />
-    </div>
-
-
   </div>
 </template>
 
@@ -46,15 +52,15 @@
       Multiselect
     },
     props: {
-      project: {
+      projectId: {
         type: String,
         default: ''
       },
-      task: {
+      taskId: {
         type: String,
         default: ''
       },
-      creator: {
+      creatorId: {
         type: String,
         default: ''
       }
@@ -64,33 +70,32 @@
     },
     computed: {
       projectOptions () {
-        const projects = Project.all()
-        return map(projects, (project) => {
-          return { value: project.id, label: project.name }
-        })
+        return Project.all()
       },
       taskOptions () {
-        const tasks = Task.all()
-        return map(tasks, (task) => {
-          return { value: task.id, label: task.name }
-        })
+        return Task.all()
       },
       creatorOptions () {
-        const users = User.all()
-        return map(users, (user) => {
-          return { value: user.id, label: user.username }
-        })
+        return User.all()
+      },
+      selectedProjectOption () {
+        return find(this.projectOptions, { id: this.projectId })
+      },
+      selectedTaskOption () {
+        return find(this.taskOptions, { id: this.taskId })
+      },
+      selectedCreatorOption () {
+        return find(this.creatorOptions, { id: this.creatorId })
       }
     },
     methods: {
       setup () {
-        try {
-          this.fetchTaskOptions()
-          this.fetchProjectOptions()
-          this.fetchCreatorOptions()
-        } catch(error) {
-          console.log(error);
-        }
+        this.fetchTaskOptions()
+        this.fetchProjectOptions()
+        this.fetchCreatorOptions()
+      },
+      idOrNull (obj = null) {
+        return obj && 'id' in obj ? obj.id : null
       },
       fetchProjectOptions () {
         return Project.api().get()
@@ -104,6 +109,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-</style>
