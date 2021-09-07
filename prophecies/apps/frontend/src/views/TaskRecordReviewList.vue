@@ -273,7 +273,7 @@ export default {
                   <span class="custom-control custom-checkbox">
                     <input class="custom-control-input" v-model="selectAll" type="checkbox" id="select-all-input" />
                     <div class="custom-control-label" for="select-all-input">
-                      Select all {{ taskRecordReviews.length }} items
+                      Select all {{ taskRecordReviews.length }} records
                     </div>
                   </span>
                 </b-btn>
