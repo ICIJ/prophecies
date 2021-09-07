@@ -23,7 +23,7 @@ export default {
     </router-link>
     <div class="app-sidebar__container flex-grow-1">
       <b-nav vertical>
-        <b-nav-item :to="{ name: 'dashboard' }">
+        <b-nav-item :to="{ name: 'dashboard' }" exact>
           <grid-icon class="mr-2" />
           Dashboard
         </b-nav-item>
