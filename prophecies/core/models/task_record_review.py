@@ -158,20 +158,15 @@ class TaskRecordReview(models.Model):
 
 
     @staticmethod
-    def signal_fill_note_created_at(sender, instance, **kwargs):
+    def signal_fill_note_created_at_and_updated_at(sender, instance, **kwargs):
+        if instance.already_has_note and instance.note_changed:
+            instance.note_updated_at = timezone.now()
         if instance.note and not instance.already_has_note:
             instance.note_created_at = timezone.now()
 
 
-    @staticmethod
-    def signal_fill_note_updated_at(sender, instance, **kwargs):
-        if instance.already_has_note and instance.note_changed:
-            instance.note_updated_at = timezone.now()
-
-
 signals.post_save.connect(TaskRecordReview.signal_notify_mentioned_users, sender=TaskRecordReview)
-signals.pre_save.connect(TaskRecordReview.signal_fill_note_created_at, sender=TaskRecordReview)
-signals.pre_save.connect(TaskRecordReview.signal_fill_note_updated_at, sender=TaskRecordReview)
+signals.pre_save.connect(TaskRecordReview.signal_fill_note_created_at_and_updated_at, sender=TaskRecordReview)
 # Send signals to the TaskRecord model
 signals.post_save.connect(TaskRecord.signal_update_has_notes, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecord.signal_update_has_disagreements, sender=TaskRecordReview)
