@@ -4,7 +4,7 @@
     <div>
       <div class="d-flex align-items-center mb-3 task-stats-card__heading">
         <h3 class="m-0">
-          <router-link :to="{ name: 'task-record-review-list', params: { taskId: task.id } }">
+          <router-link :to="{ name: 'task-record-review-list', params: { taskId: task.id } }" class="d-inline-block">
             {{ task.name }}
           </router-link>
           <b-badge class="task-stats-card__heading__project bg-transparent font-weight-normal text-muted">
