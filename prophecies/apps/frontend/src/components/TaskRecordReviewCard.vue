@@ -1,5 +1,5 @@
 <script>
-import { get, map, uniqueId } from 'lodash'
+import { get, isBoolean, map, uniqueId } from 'lodash'
 import TaskRecordChanges from '@/components/TaskRecordChanges'
 import TaskRecordReviewActions from '@/components/TaskRecordReviewActions'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
@@ -29,7 +29,7 @@ export default {
       type: Boolean
     },
     highlightNote: {
-      type: Boolean
+      type: [Boolean, String]
     }
   },
   data () {
@@ -48,7 +48,7 @@ export default {
     }
   },
   created () {
-    this.toggleNotes(!!this.highlightNote, this.taskRecordReviewId)
+    this.toggleNotes(!!this.highlightNote, this.initialHighlightedReviewId)
   },
   methods: {
     async selectChoiceWithLoader (data) {
@@ -117,6 +117,12 @@ export default {
     }
   },
   computed: {
+    initialHighlightedReviewId () {
+      if (isBoolean(this.highlightNote)) {
+        return this.taskRecordReviewId
+      }
+      return this.highlightNote
+    },
     isLoading () {
       return this.$wait.is(this.loader)
     },

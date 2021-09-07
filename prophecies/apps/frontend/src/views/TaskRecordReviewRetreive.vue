@@ -46,7 +46,10 @@
         return uniqueId('load-task-record-review-retreive-')
       },
       highlightNote () {
-        return String(this.$route.query.highlightNote).toLowerCase() === 'true'
+        if (String(this.$route.query.highlightNote).toLowerCase() === 'true') {
+          return this.taskRecordReviewId
+        }
+        return false
       },
       task () {
         return Task
