@@ -1,13 +1,11 @@
 <template>
   <div class="tip-card">
-    <div class="d-flex w-100 justify-content-between mt-3">
-      <h2>
-        {{ tip.name }}
-      </h2>
-    </div>
+    <h2 class="mb-5">
+      {{ tip.name }}
+    </h2>
     <div class="my-3" v-html="tip.descriptionHTML"></div>
     <div class="text-right text-secondary">
-      Last modified: <strong>{{ tip.creator.username }}</strong>,
+      Last modified: <strong>{{ tip.creator.displayName }}</strong>,
       <router-link
         :to="{ name: 'tip-retreive', params: { tipId } }"
         :title="tip.updatedAt | formatDateLong"
@@ -21,17 +19,21 @@
 
 <script>
 import moment from 'moment'
+import Tip from '@/models/Tip'
 
 export default {
   name: 'TipsCard',
   props: {
-    tip: {
-      type: Object
+    tipId: {
+      type: String
     }
   },
   computed: {
-    tipId () {
-      return this.tip.id
+    tip () {
+      return Tip
+        .query()
+        .with('creator')
+        .find(this.tipId)
     }
   },
   filters: {

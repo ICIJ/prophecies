@@ -45,9 +45,7 @@ export default {
     tips () {
       return Tip.query()
         .with('project')
-        .with('creator')
         .with('task')
-        .with('task.project')
         .whereIdIn(this.tipIds)
         .get()
     },
@@ -110,7 +108,7 @@ export default {
               <div v-for="(taskValue, name) in tipsGroupedByTask(projectValue)" class="mb-4">
                 <h2 class="mb-4 ml-4 mt-4">{{ name }}</h2>
                 <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
-                  <tip-card :tip="tip" />
+                  <tip-card :tip-id="tip.id" />
                 </b-list-group-item>
               </div>
             </div>
