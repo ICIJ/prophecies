@@ -7,10 +7,6 @@
     props: {
       sort: {
         type: String
-      },
-      hasSorting: {
-        type: Boolean,
-        default: false
       }
     },
     computed: {
@@ -27,6 +23,12 @@
       },
       selectedSortOption () {
         return find(this.sortOptions, { value: this.sort })
+      },
+      defaultSortOption () {
+        return find(this.sortOptions, { $isDefault: true })
+      },
+      hasSorting () {
+        return  this.sort !== this.defaultSortOption.value
       }
     },
     methods: {

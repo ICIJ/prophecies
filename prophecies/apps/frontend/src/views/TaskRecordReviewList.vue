@@ -341,14 +341,13 @@ export default {
                 </b-btn>
               </li>
             </ul>
-            <b-collapse :visible="!showFilters && hasFilters || hasSorting">
+            <b-collapse :visible="!showFilters && hasFilters">
               <task-record-review-applied-filters
                 :route-filters.sync="routeFilters"
                 :task-id="taskId" />
-              <task-record-review-applied-sorting
-                :sort.sync="sort"
-                :has-sorting="hasSorting" />
             </b-collapse>
+            <task-record-review-applied-sorting
+              :sort.sync="sort" />
             <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
               <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
                 <task-record-review-card
