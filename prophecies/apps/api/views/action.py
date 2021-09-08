@@ -8,7 +8,7 @@ from rest_framework_json_api.relations import ResourceRelatedField, PolymorphicR
 
 
 class GenericModelSerializer(serializers.ModelSerializer):
-    model_serializer_mapping = {
+    MODEL_SERIALIZERS_MAPPING = {
         User: 'prophecies.apps.api.views.user.UserSerializer',
         Choice: 'prophecies.apps.api.views.choice.ChoiceSerializer',
         TaskRecord: 'prophecies.apps.api.views.task_record.TaskRecordSerializer',
@@ -17,16 +17,17 @@ class GenericModelSerializer(serializers.ModelSerializer):
 
     def get_instance_serializer(instance):
         instanceType = type(instance)
-        serializer = GenericModelSerializer.model_serializer_mapping.get(instanceType, None)
+        serializer = GenericModelSerializer.MODEL_SERIALIZERS_MAPPING.get(instanceType, None)
         if type(serializer) == str:
             return locate(serializer)
         return serializer
 
-    def __new__(self, instance, *args, **kwargs):
-        serializer = self.get_instance_serializer(instance)
-        if serializer is not None:
-            return serializer(instance, *args, **kwargs)
-        self.Meta.model = type(instance)
+    def __new__(self, instance = None, *args, **kwargs):
+        if instance is not None:
+            serializer = self.get_instance_serializer(instance)
+            if serializer is not None:
+                return serializer(instance, *args, **kwargs)
+            self.Meta.model = type(instance)
         return super().__new__(self, instance, *args, **kwargs)
 
     class Meta:

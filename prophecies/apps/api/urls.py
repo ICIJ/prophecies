@@ -6,6 +6,7 @@ from prophecies.apps.api.views.choice_group import ChoiceGroupViewSet
 from prophecies.apps.api.views.user_notification import UserNotificationViewSet
 from prophecies.apps.api.views.project import ProjectViewSet
 from prophecies.apps.api.views.setting import SettingViewSet
+from prophecies.apps.api.views.operation import OperationViewSet
 from prophecies.apps.api.views.task_record import TaskRecordViewSet
 from prophecies.apps.api.views.task_record_review import TaskRecordReviewViewSet
 from prophecies.apps.api.views.task import TaskViewSet
@@ -17,6 +18,7 @@ router.register(r'actions', ActionViewSet)
 router.register(r'choice-groups', ChoiceGroupViewSet)
 router.register(r'projects', ProjectViewSet)
 router.register(r'settings', SettingViewSet)
+router.register(r'operations', OperationViewSet, basename='operations')
 router.register(r'tasks', TaskViewSet)
 router.register(r'task-records', TaskRecordViewSet)
 router.register(r'task-record-reviews', TaskRecordReviewViewSet)

@@ -93,6 +93,7 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TaskRecordReviewViewSet(viewsets.ModelViewSet):
+    resource_name = 'TaskRecordReview'
     serializer_class = TaskRecordReviewSerializer
     http_method_names = ['get', 'put', 'head']
     permission_classes = [IsAuthenticated]
