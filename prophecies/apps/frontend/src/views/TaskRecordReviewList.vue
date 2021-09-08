@@ -6,6 +6,7 @@ import AppHeader from '@/components/AppHeader'
 import AppWaiter from '@/components/AppWaiter'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import TaskRecordReviewAppliedFilters from '@/components/TaskRecordReviewAppliedFilters'
+import TaskRecordReviewAppliedSorting from '@/components/TaskRecordReviewAppliedSorting'
 import TaskRecordReviewFilters from '@/components/TaskRecordReviewFilters'
 import TaskRecordReviewPageParams from '@/components/TaskRecordReviewPageParams'
 import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
@@ -23,6 +24,7 @@ export default {
     AppWaiter,
     TaskRecordReviewCard,
     TaskRecordReviewAppliedFilters,
+    TaskRecordReviewAppliedSorting,
     TaskRecordReviewFilters,
     TaskRecordReviewPageParams
   },
@@ -89,9 +91,14 @@ export default {
         return this.$route.query.sort || 'task_record__id'
       },
       set (sort) {
-        const query = { ...this.$route.query, sort }
-        this.$router.push({ path: this.$route.path, query }, () => {})
+        if (isEqual({ ...this.$route.query, sort }, this.$route.query)) {
+          const query = { ...this.routeFiltersQueryParams }
+          this.$router.push({ path: this.$route.path, query }, () => {})
+        }
       }
+    },
+    hasSorting () {
+      return this.sort != 'task_record__id'
     },
     hasFilters () {
       return !!keys(this.routeFilters).length
@@ -334,10 +341,13 @@ export default {
                 </b-btn>
               </li>
             </ul>
-            <b-collapse :visible="!showFilters && hasFilters">
+            <b-collapse :visible="!showFilters && hasFilters || hasSorting">
               <task-record-review-applied-filters
                 :route-filters.sync="routeFilters"
                 :task-id="taskId" />
+              <task-record-review-applied-sorting
+                :sort.sync="sort"
+                :has-sorting="hasSorting" />
             </b-collapse>
             <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
               <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
