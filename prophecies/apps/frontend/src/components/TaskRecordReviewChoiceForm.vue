@@ -105,7 +105,7 @@ export default {
 <template>
   <fieldset class="task-record-review-choice-form py-1" :class="classList" :disabled="isLocked">
     <choice-group-buttons
-      class="task-record-review-choice-form__choices list-unstyled row"
+      class="task-record-review-choice-form__choices"
       v-model="choiceId"
       :activate-shortkeys="activateShortkeys"
       :choice-group-id="choiceGroupId" />
