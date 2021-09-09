@@ -21,7 +21,7 @@ class PayloadValueFieldSerializer(serializers.Serializer):
             raise serializers.ValidationError("Payload data must define a `type`")
         if value['type'] not in MODEL_VIEWS_MAPPING:
             types = ', '.join(MODEL_VIEWS_MAPPING.keys())
-            raise serializers.ValidationError("Payload type must one of: %s" % types)
+            raise serializers.ValidationError("Payload type must be one of: %s" % types)
         return value
 
 
@@ -125,7 +125,7 @@ class OperationViewSet(viewsets.ViewSet):
     resource_name = 'Operation'
     http_method_names = ['post', 'head']
     permission_classes = [IsAuthenticated]
-    
+
 
     def create(self, request):
         serializer = OperationSerializer(data=request.data, many=False, context={'request': request})
