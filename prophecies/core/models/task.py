@@ -22,6 +22,7 @@ class Task(models.Model):
     color = ColorField(default='#31807D')
     recordLinkTemplate = models.CharField(max_length=1000, null=True, blank=True, verbose_name="Record link template", help_text="A link template to build a link for each task record. Task record can override this value with their own link")
 
+    
     def __str__(self):
         return self.name
 

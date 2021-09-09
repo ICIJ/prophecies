@@ -25,7 +25,7 @@ describe('TaskRecordReviewChoiceForm', () => {
     })
 
     it('should show 3 choices items', () => {
-      const elements = wrapper.findAll('.task-record-review-choice-form__choices__item')
+      const elements = wrapper.findAll('.choice-group-buttons__item')
       expect(elements).toHaveLength(3)
     })
 

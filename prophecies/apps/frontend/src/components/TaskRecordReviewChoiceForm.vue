@@ -1,11 +1,10 @@
 <script>
-import { find, get, uniqueId } from 'lodash'
-import Multiselect from 'vue-multiselect'
-import { toVariant } from '@/utils/variant'
+import { find, get } from 'lodash'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
+import AlternativeValueSelect from '@/components/AlternativeValueSelect'
+import ChoiceGroupButtons from '@/components/ChoiceGroupButtons'
 import TaskRecordReview from '@/models/TaskRecordReview'
-import ShortkeyBadge from '@/components/ShortkeyBadge'
 
 export default {
   name: 'TaskRecordReviewChoiceForm',
@@ -18,84 +17,56 @@ export default {
     }
   },
   components: {
-    Multiselect,
-    ShortkeyBadge
-  },
-  filters: {
-    toVariant
-  },
-  data () {
-    return {
-      alternativeValue: null
-    }
-  },
-  created () {
-    this.setInitialValues()
-  },
-  watch: {
-    taskRecordReview () {
-      this.setInitialValues()
-    }
+    AlternativeValueSelect,
+    ChoiceGroupButtons
   },
   methods: {
-    choiceIsSelected (choice) {
-      return choice.id === get(this, 'taskRecordReview.choiceId', null)
-    },
-    choiceClassList (choice) {
-      return {
-        'task-record-review-choice-form__choices__item--selected': this.choiceIsSelected(choice)
-      }
-    },
-    choiceShortkeys (choice) {
-      if (!this.activateShortkeys || !choice.shortkeys) {
-        return null
-      }
-      return choice.shortkeys.split(',')
-    },
     focusOnAlternativeValueInput () {
       const input = this.$refs.alternativeValueInput.$el.querySelector('input')
       if (input) {
         input.focus()
       }
     },
-    async selectChoice (choice) {
-      if (choice.requireAlternativeValue && !this.alternativeValue) {
+    selectChoice (choice, alternativeValue = null) {
+      if (choice.requireAlternativeValue && !alternativeValue) {
         return this.focusOnAlternativeValueInput()
       }
-      this.alternativeValue = choice.requireAlternativeValue ? this.alternativeValue.value : null
-      const alternativeValue = this.alternativeValue
-      const data = { alternativeValue, choice }
+      alternativeValue = choice.requireAlternativeValue ? alternativeValue : null
       /**
        * Fired when the form is submitted
        * @event submit
        * @param The changed attributes and relationships
        */
-      this.$emit('submit', data)
-    },
-    async selectAlternativeValue () {
-      await this.selectChoice(this.alternativeValueChoice)
-    },
-    async addArbitraryAlternativeValue (value) {
-      this.alternativeValue = this.toSerializableOption(value)
-      await this.selectAlternativeValue()
-    },
-    findAlternativeValue (predicate) {
-      return find(this.alternativeValues, predicate)
-    },
-    setInitialValues () {
-      const value = get(this, 'taskRecordReview.alternativeValue', null)
-      if (value) {
-        const alternativeValue = this.findAlternativeValue({ value })
-        this.alternativeValue = alternativeValue || this.toSerializableOption(value)
-      }
-    },
-    toSerializableOption (value) {
-      const id = uniqueId('arbitrary-')
-      const name = value
-      return { id, name, value }
+      this.$emit('submit', { alternativeValue, choice })
     }
   },
   computed: {
+    alternativeValue: {
+      get () {
+        return get(this, 'taskRecordReview.alternativeValue', null)
+      },
+      set (alternativeValue) {
+        return this.selectChoice(this.alternativeValueChoice, alternativeValue)
+      }
+    },
+    choiceId: {
+      get () {
+        return get(this, 'taskRecordReview.choiceId', null)
+      },
+      set (choiceId) {
+        const choice = Choice.find(choiceId)
+        return this.selectChoice(choice)
+      }
+    },
+    choiceGroupId () {
+      return get(this, 'choiceGroup.id', null)
+    },
+    choiceGroup () {
+      return ChoiceGroup
+        .query()
+        .with('choices')
+        .find(this.taskRecord.task.choiceGroupId)
+    },
     taskRecord () {
       return get(this, 'taskRecordReview.taskRecord')
     },
@@ -111,16 +82,6 @@ export default {
       const choices = get(this, 'choiceGroup.choices', [])
       return find(choices, { requireAlternativeValue: true })
     },
-    alternativeValues () {
-      return get(this, 'choiceGroup.alternativeValues', [])
-    },
-    choiceGroup () {
-      return ChoiceGroup
-        .query()
-        .with('choices')
-        .with('alternativeValues')
-        .find(this.taskRecord.task.choiceGroupId)
-    },
     classList () {
       return {
         'task-record-review-choice-form--has-choice': this.hasChoice,
@@ -132,7 +93,7 @@ export default {
       return get(this, 'taskRecordReview.alternativeValue', false)
     },
     hasChoice () {
-      return !!get(this, 'taskRecordReview.choiceId', false)
+      return this.choiceId !== null
     },
     isLocked () {
       return this.taskRecord.locked
@@ -143,72 +104,28 @@ export default {
 
 <template>
   <fieldset class="task-record-review-choice-form py-1" :class="classList" :disabled="isLocked">
-    <ul class="task-record-review-choice-form__choices list-unstyled row">
-      <li v-for="choice in choiceGroup.choices"
-          class="col pb-3 task-record-review-choice-form__choices__item"
-          :class="choiceClassList(choice)"
-          :key="choice.id">
-        <b-btn @click="selectChoice(choice)"
-               @shortkey="selectChoice(choice)"
-               v-shortkey="choiceShortkeys(choice)"
-               block
-               class="task-record-review-choice-form__choices__item__button text-nowrap"
-               :variant="choice.value | toVariant">
-          {{ choice.name }}
-          <template v-if="choiceShortkeys(choice)">
-            <shortkey-badge class="ml-1" :value="choice.shortkeys" />
-          </template>
-        </b-btn>
-      </li>
-    </ul>
-    <div class="task-record-review-choice-form__alternative-value" v-if="alternativeValueChoice">
-      <multiselect ref="alternativeValueInput"
-         placeholder="Select the correct value"
-         v-model="alternativeValue"
-         label="name"
-         track-by="value"
-         taggable
-         tag-placeholder="Use this exact value"
-         tag-position="bottom"
-         @input="selectAlternativeValue()"
-         @tag="addArbitraryAlternativeValue"
-         :options="alternativeValues" />
-    </div>
+    <choice-group-buttons
+      class="task-record-review-choice-form__choices list-unstyled row"
+      v-model="choiceId"
+      :activate-shortkeys="activateShortkeys"
+      :choice-group-id="choiceGroupId" />
+    <alternative-value-select
+      class="task-record-review-choice-form__alternative-value"
+      ref="alternativeValueInput"
+      v-if="alternativeValueChoice"
+      v-model="alternativeValue"
+      :choice-group-id="choiceGroupId" />
   </fieldset>
 </template>
 
 <style lang="scss" scoped>
   .task-record-review-choice-form {
 
-    &__choices {
-      margin: 0 -$spacer-xs;
-      margin-bottom: 0;
-
-      &__item {
-        font-weight: normal;
-        padding: 0 $spacer-xs;
-        transition: $transition-fade;
-
-        &__button /deep/ .shortkey-badge {
-          color: inherit;
-        }
-      }
-
-      .task-record-review-choice-form--has-choice:not(:hover) &__item {
-        opacity: 0.25;
-      }
-
-      .task-record-review-choice-form--has-choice & &__item--selected {
-        opacity: 1;
-        font-weight: bold;
-      }
-    }
-
-    &__alternative-value .multiselect {
+    &__alternative-value /deep/ .multiselect {
       transition: $transition-fade;
     }
 
-    &--has-choice:not(:hover):not(&--has-alternative-value) &__alternative-value .multiselect:not(.multiselect--active) {
+    &--has-choice:not(:hover):not(&--has-alternative-value) &__alternative-value /deep/ .multiselect:not(.multiselect--active) {
       opacity: 0.25;
     }
   }
