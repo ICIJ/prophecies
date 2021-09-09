@@ -93,6 +93,36 @@ class TestOperation(TestCase):
         self.assertEqual(request.status_code, 404)
 
 
+    def test_it_cannot_bulk_update_unknown_record(self):
+        payload = {
+            "data": {
+                "type": "Operation",
+                "attributes": {
+                    "operations": [
+                        { "id": "1000", "method": "update", "payload": "10" }
+                    ],
+                    "payloads": [
+                        {
+                            "id": "10",
+                            "value": {
+                                "data": {
+                                    "type": "TaskRecordReview",
+                                    "attributes": {
+                                        "note": "same!"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+        self.client.login(username='django', password='django')
+        content_type = 'application/vnd.api+json; ext=bulk'
+        request = self.client.post('/api/v1/operations/', payload, content_type=content_type)
+        self.assertEqual(request.status_code, 404)
+
+
     def test_it_cannot_bulk_update_notes_with_wrong_type(self):
         foo_review = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django)
         payload = {
