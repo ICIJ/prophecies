@@ -7,6 +7,7 @@ import AppWaiter from '@/components/AppWaiter'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import TaskRecordReviewAppliedFilters from '@/components/TaskRecordReviewAppliedFilters'
 import TaskRecordReviewAppliedSorting from '@/components/TaskRecordReviewAppliedSorting'
+import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
 import TaskRecordReviewFilters from '@/components/TaskRecordReviewFilters'
 import TaskRecordReviewPageParams from '@/components/TaskRecordReviewPageParams'
 import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
@@ -25,6 +26,7 @@ export default {
     TaskRecordReviewCard,
     TaskRecordReviewAppliedFilters,
     TaskRecordReviewAppliedSorting,
+    TaskRecordReviewChoiceForm,
     TaskRecordReviewFilters,
     TaskRecordReviewPageParams
   },
@@ -102,6 +104,20 @@ export default {
     },
     hasFilters () {
       return !!keys(this.routeFilters).length
+    },
+    hasSelectedRecords () {
+      return this.selectedIdsCount > 0
+    },
+    selectedIdsCount () {
+      return this.selectedIdsList.length
+    },
+    selectedIdsList () {
+      return Object.entries(this.selectedIds).reduce((list, [id, selected]) => {
+        if (selected) {
+          list.push(id)
+        }
+        return list
+      }, [])
     },
     filters () {
       // Method from the mixins
@@ -340,14 +356,19 @@ export default {
                   Clear filters
                 </b-btn>
               </li>
+              <li class="list-inline-item font-weight-bold" v-if="hasSelectedRecords">
+                {{ selectedIdsCount }} results selected
+              </li>
             </ul>
-            <b-collapse :visible="!showFilters && hasFilters">
+            <b-collapse :visible="!showFilters && (hasFilters || hasSorting)">
               <task-record-review-applied-filters
                 :route-filters.sync="routeFilters"
-                :task-id="taskId" />
+                :task-id="taskId"
+                class="d-inline-block" />
+              <task-record-review-applied-sorting
+                :sort.sync="sort"
+                class="d-inline-block" />
             </b-collapse>
-            <task-record-review-applied-sorting
-              :sort.sync="sort" />
             <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
               <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
                 <task-record-review-card

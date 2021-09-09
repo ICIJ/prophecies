@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     choiceIsSelected (choice) {
-      return choice.id === this.taskRecordReview.choiceId
+      return choice.id === get(this, 'taskRecordReview.choiceId', null)
     },
     choiceClassList (choice) {
       return {
