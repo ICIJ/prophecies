@@ -21,7 +21,7 @@ export default {
         },
         alternativeValues: {
           allowArbitraryOptions: true,
-          name: 'Classified value',
+          name: 'My checked values',
           param: 'alternative_value__iregex',
           options: task.choiceGroup.alternativeValues,
           field: 'value',
@@ -50,7 +50,7 @@ export default {
           })
         },
         rounds: {
-          name: 'Rounds',
+          name: 'Anticipated number of rounds',
           param: 'task_record__rounds__in',
           field: 'label',
           label: 'name',
