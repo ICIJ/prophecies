@@ -6,6 +6,7 @@ import Action from '@/models/Action'
 import AlternativeValue from '@/models/AlternativeValue'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
+import Operation from '@/models/Operation'
 import Project from '@/models/Project'
 import Setting from '@/models/Setting'
 import Task from '@/models/Task'
@@ -30,6 +31,7 @@ database.register(AlternativeValue)
 database.register(Choice)
 database.register(ChoiceGroup)
 database.register(UserNotification)
+database.register(Operation)
 database.register(Project)
 database.register(Setting)
 database.register(Task)
