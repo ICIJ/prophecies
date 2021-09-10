@@ -211,9 +211,6 @@ class TestTaskRecordReview(TestCase):
     def test_it_cannot_make_changes_to_locked_record_except_note(self):
         self.task_record_foo.locked = True
         self.task_record_foo.save()
-        choice_group = ChoiceGroup.objects.create(name='Is it correct?')
-        choice_yes = Choice.objects.create(name='Yes', choice_group=choice_group)
-        choice_no = Choice.objects.create(name='No', choice_group=choice_group)
         attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django)
         self.client.login(username='django', password='django')
         payload = {
@@ -221,9 +218,13 @@ class TestTaskRecordReview(TestCase):
                 'type': 'TaskRecordReview',
                 'id': attribution.id,
                 'attributes': {
-                    'data': {
-                        'type': 'Choice',
-                        'id': choice_no.id
+                },
+                'relationships': {
+                    'choice': {
+                        'data': {
+                            'type': 'Choice',
+                            'id': self.task.choice_group.choices.first().id
+                        }
                     }
                 }
             }
@@ -263,11 +264,15 @@ class TestTaskRecordReview(TestCase):
                 'type': 'TaskRecordReview',
                 'id': attribution.id,
                 'attributes': {
-                    'data': {
-                        'type': 'Choice',
-                        'id': choice_yes.id
-                    },
                     'note': 'this is an edited note'
+                },
+                'relationships': {
+                    'choice': {
+                        'data': {
+                            'type': 'Choice',
+                            'id': self.task.choice_group.choices.first().id
+                        }
+                    }
                 }
             }
         }
