@@ -104,6 +104,8 @@ export default {
     &__actions {
       padding: $spacer-sm $spacer-xl 0;
       background: #F5F5F5;
+      max-height: calc(10vh + 200px);
+      overflow: auto;
 
       &__item {
         margin-bottom: $spacer-sm;
