@@ -2,15 +2,18 @@
 import { find, get } from 'lodash'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
+import Task from '@/models/Task'
 import AlternativeValueSelect from '@/components/AlternativeValueSelect'
 import ChoiceGroupButtons from '@/components/ChoiceGroupButtons'
-import TaskRecordReview from '@/models/TaskRecordReview'
 
 export default {
-  name: 'TaskRecordReviewChoiceForm',
+  name: 'TaskRecordReviewBulkChoiceForm',
   props: {
-    taskRecordReviewId: {
+    taskId: {
       type: [String, Number]
+    },
+    disabled: {
+      type: Boolean
     },
     activateShortkeys: {
       type: Boolean
@@ -69,53 +72,30 @@ export default {
       return ChoiceGroup
         .query()
         .with('choices')
-        .find(this.taskRecord.task.choiceGroupId)
+        .find(this.task.choiceGroupId)
     },
-    taskRecord () {
-      return get(this, 'taskRecordReview.taskRecord')
-    },
-    taskRecordReview () {
-      return TaskRecordReview
-        .query()
-        .with('choice')
-        .with('taskRecord')
-        .with('taskRecord.task')
-        .find(this.taskRecordReviewId)
+    task () {
+      return Task.find(this.taskId)
     },
     alternativeValueChoice () {
       const choices = get(this, 'choiceGroup.choices', [])
       return find(choices, { requireAlternativeValue: true })
-    },
-    classList () {
-      return {
-        'task-record-review-choice-form--has-choice': this.hasChoice,
-        'task-record-review-choice-form--has-alternative-value': this.hasAlternativeValue,
-        'task-record-review-choice-form--is-locked': this.isLocked
-      }
-    },
-    hasAlternativeValue () {
-      return get(this, 'taskRecordReview.alternativeValue', false)
-    },
-    hasChoice () {
-      return this.choiceId !== null
-    },
-    isLocked () {
-      return this.taskRecord.locked
     }
   }
 }
 </script>
 
 <template>
-  <fieldset class="task-record-review-choice-form py-1" :class="classList" :disabled="isLocked">
+  <fieldset :disabled="disabled" class="task-record-review-bulk-choice-form">
     <choice-group-buttons
-      class="task-record-review-choice-form__choices"
+      class="task-record-review-bulk-choice-form__choices"
       v-model="choiceId"
       :activate-shortkeys="activateShortkeys"
       :choice-group-id="choiceGroupId" />
     <alternative-value-select
-      class="task-record-review-choice-form__alternative-value"
+      class="task-record-review-bulk-choice-form__alternative-value"
       ref="alternativeValueInput"
+      small
       v-if="alternativeValueChoice"
       v-model="alternativeValue"
       :choice-group-id="choiceGroupId" />
@@ -123,14 +103,24 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .task-record-review-choice-form {
+  .task-record-review-bulk-choice-form {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
 
-    &__alternative-value /deep/ .multiselect {
-      transition: $transition-fade;
+    &__choices, &__alternative-value {
+      margin-top: 0;
+      margin-bottom: 0;
     }
 
-    &--has-choice:not(:hover):not(&--has-alternative-value) &__alternative-value /deep/ .multiselect:not(.multiselect--active) {
-      opacity: 0.25;
+    &__choices {
+      margin-right: $spacer-xs;
+    }
+
+    &__alternative-value {
+      max-width: 400px;
+      width: 100%;
     }
   }
 </style>

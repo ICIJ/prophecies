@@ -1,12 +1,13 @@
 <script>
-import { compact, get, find, isEqual, keys, uniqueId, values } from 'lodash'
+import { compact, get, filter, find, isEqual, keys, uniqueId, values } from 'lodash'
 
 import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
 import AppWaiter from '@/components/AppWaiter'
-import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import TaskRecordReviewAppliedFilters from '@/components/TaskRecordReviewAppliedFilters'
 import TaskRecordReviewAppliedSorting from '@/components/TaskRecordReviewAppliedSorting'
+import TaskRecordReviewBulkChoiceForm from '@/components/TaskRecordReviewBulkChoiceForm'
+import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
 import TaskRecordReviewFilters from '@/components/TaskRecordReviewFilters'
 import TaskRecordReviewPageParams from '@/components/TaskRecordReviewPageParams'
@@ -23,6 +24,7 @@ export default {
     AppBreadcrumb,
     AppHeader,
     AppWaiter,
+    TaskRecordReviewBulkChoiceForm,
     TaskRecordReviewCard,
     TaskRecordReviewAppliedFilters,
     TaskRecordReviewAppliedSorting,
@@ -59,6 +61,16 @@ export default {
       if (!isEqual(value, previousValue)) {
         return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
       }
+    },
+    taskRecordReviewIds (value) {
+      // Maintain a clean list of selected ids
+      Object.entries(this.selectedIds).forEach(([id]) => {
+        // The task record review is not present on the page anymore...
+        // It needs to be deleted from the list of selected id!
+        if (!value.includes(id)) {
+          this.$delete(this.selectedIds, id)
+        }
+      })
     }
   },
   created () {
@@ -108,6 +120,12 @@ export default {
     hasSelectedRecords () {
       return this.selectedIdsCount > 0
     },
+    showAppliedFilters () {
+      return !this.showFilters && (this.hasFilters || this.hasSorting)
+    },
+    isBulkSelectChoiceFormDisabled () {
+      return !this.hasSelectedRecords || this.$wait.is(this.bulkSelectChoiceLoader)
+    },
     selectedIdsCount () {
       return this.selectedIdsList.length
     },
@@ -118,6 +136,11 @@ export default {
         }
         return list
       }, [])
+    },
+    selectedAndUnlockedIdsList () {
+      return filter(this.selectedIdsList, id => {
+        return !this.isTaskRecordReviewLocked(id)
+      })
     },
     filters () {
       // Method from the mixins
@@ -192,6 +215,9 @@ export default {
     fetchTaskRecordReviewsLoader () {
       return uniqueId('load-task-record-review-')
     },
+    bulkSelectChoiceLoader () {
+      return uniqueId('bulk-select-choice-')
+    },
     firstPendingTaskRecordReview () {
       const all = TaskRecordReview.all()
       return find(all, { status: 'PENDING' })
@@ -260,7 +286,8 @@ export default {
       }
     },
     isTaskRecordReviewActive (id) {
-      return get(this, 'firstPendingTaskRecordReview.id') === id
+      const isSelected = this.isTaskRecordReviewSelected(id)
+      return !isSelected && get(this, 'firstPendingTaskRecordReview.id') === id
     },
     isTrailingTaskRecordReview (id) {
       return this.trailingTaskRecordReview.id === id
@@ -268,8 +295,35 @@ export default {
     isTaskRecordReviewSelected (id) {
       return !!this.selectedIds[id]
     },
+    isTaskRecordReviewLocked (id) {
+      const review = TaskRecordReview.query().with('taskRecord').find(id)
+      // When task record is not found, we assume the review is not locked
+      return get(review, 'taskRecord.locked', false)
+    },
+    isTaskRecordReviewFrozen (id) {
+      const isLoading = this.$wait.is(this.bulkSelectChoiceLoader)
+      return isLoading && this.isTaskRecordReviewSelected(id)
+    },
     selectTaskRecordReview (id, toggler) {
       this.$set(this.selectedIds, id, toggler)
+    },
+    async bulkSelectChoiceWithLoader (data) {
+      this.$wait.start(this.bulkSelectChoiceLoader)
+      await this.bulkSelectChoice(data)
+      this.$wait.end(this.bulkSelectChoiceLoader)
+    },
+    async bulkSelectChoice (data) {
+      // Avoid trying to update locked reviews
+      const ids = this.selectedAndUnlockedIdsList
+      // We use a dedicated method that will format the data for the JSONAPI spec
+      // and return the updated object (the store shall be updated as well).
+      //
+      // This is done from the TaskRecordReview model, which under the hood uses
+      // the Operation model for bulk operations.
+      await TaskRecordReview.api().bulkSelectChoice(ids, data)
+      // Operation endpoint does not return updated record,
+      // so we need to fetch them ourselves
+      await this.fetchTaskRecordReviews()
     },
     async fetchAll () {
       await this.fetchTaskOnce()
@@ -360,7 +414,7 @@ export default {
                 {{ selectedIdsCount }} results selected
               </li>
             </ul>
-            <b-collapse :visible="!showFilters && (hasFilters || hasSorting)">
+            <b-collapse :visible="showAppliedFilters">
               <task-record-review-applied-filters
                 :route-filters.sync="routeFilters"
                 :task-id="taskId"
@@ -369,6 +423,14 @@ export default {
                 :sort.sync="sort"
                 class="d-inline-block" />
             </b-collapse>
+            <b-collapse :visible="hasSelectedRecords">
+              <task-record-review-bulk-choice-form
+                class="pb-4 pt-3"
+                :disabled="isBulkSelectChoiceFormDisabled"
+                :task-id="taskId"
+                activate-shortkeys
+                @submit="bulkSelectChoiceWithLoader" />
+            </b-collapse>
             <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
               <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
                 <task-record-review-card
@@ -376,7 +438,8 @@ export default {
                   @update:selected="selectTaskRecordReview(id, $event)"
                   :task-record-review-id="id"
                   :active="isTaskRecordReviewActive(id)"
-                  :selected="isTaskRecordReviewSelected(id)"  />
+                  :selected="isTaskRecordReviewSelected(id)"
+                  :frozen="isTaskRecordReviewFrozen(id)" />
               </div>
               <custom-pagination
                 compact
@@ -398,6 +461,7 @@ export default {
 
 <style lang="scss" scoped>
   .task-record-review-list {
+
     &__container {
 
       &__pagination {

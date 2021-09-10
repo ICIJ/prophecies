@@ -28,6 +28,9 @@ export default {
     selected: {
       type: Boolean
     },
+    frozen: {
+      type: Boolean
+    },
     highlightNote: {
       type: [Boolean, String]
     }
@@ -130,7 +133,7 @@ export default {
       return this.highlightNote
     },
     isLoading () {
-      return this.$wait.is(this.loader)
+      return this.frozen || this.$wait.is(this.loader) 
     },
     selectedInput: {
       get () {
@@ -177,7 +180,7 @@ export default {
 </script>
 
 <template>
-  <b-overlay :show="$wait.is(loader)" :variant="overlayVariant" rounded="lg">
+  <b-overlay :show="isLoading" :variant="overlayVariant" rounded="lg">
     <b-spinner variant="light" slot="overlay" />
     <div class="task-record-review-card card card-body p-4 container-fluid" :class="classList">
       <div class="row no-gutters">

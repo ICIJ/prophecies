@@ -22,6 +22,11 @@
     .multiselect__select {
       height: 33px;
     }
+
+    .multiselect__input {
+      margin-top: 0px;
+      margin-bottom: 5px;
+    }
   }
 
   &, &__input, &__single, &__input::placeholder {

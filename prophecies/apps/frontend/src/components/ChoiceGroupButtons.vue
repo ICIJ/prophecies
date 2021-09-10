@@ -69,7 +69,7 @@
   <ul class="choice-group-buttons list-unstyled row"
      :class="{ 'choice-group-buttons--has-choice': this.hasChoice }">
     <li v-for="choice in choiceGroup.choices"
-        class="col pb-3 choice-group-buttons__item"
+        class="col choice-group-buttons__item pb-3"
         :class="choiceClassList(choice)"
         :key="choice.id">
       <b-btn @click="selectChoice(choice)"

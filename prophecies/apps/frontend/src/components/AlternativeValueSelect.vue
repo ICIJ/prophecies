@@ -71,8 +71,9 @@
 </script>
 
 <template>
-  <div class="alternative-value-select">
+  <div class="alternative-value-select pb-3">
     <multiselect
+      class="multiselect--md"
       placeholder="Select the correct value"
       v-model="alternativeValueOption"
       label="name"

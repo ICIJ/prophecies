@@ -2,6 +2,7 @@ import { Model } from '@vuex-orm/core'
 import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import Choice from '@/models/Choice'
+import Operation from '@/models/Operation'
 import Task from '@/models/Task'
 import TaskRecord from '@/models/TaskRecord'
 import User from '@/models/User'
@@ -42,6 +43,31 @@ export default class TaskRecordReview extends Model {
         const type = 'TaskRecordReview'
         const data = { type, id, attributes, relationships }
         return this.put(`${id}/`, { data }, { headers: defaultHeaders() })
+      },
+      bulkSelectChoice (ids, { choice, ...attributes }) {
+        const headers = defaultHeaders()
+        const operations = ids.map(id => ({ id, method: 'update', payload: '1' }))
+        const payloads = [
+          {
+            id: '1',
+            value: {
+              data: {
+                type: 'TaskRecordReview',
+                attributes,
+                relationships: {
+                  choice: {
+                    data: { type: 'Choice', id: choice.id }
+                  }
+                }
+              }
+            }
+          }
+        ]
+        const data = {
+          type: 'Operation',
+          attributes: { operations, payloads }
+        }
+        return Operation.api().post('', { data }, { headers })
       },
       selectChoice (id, { choice, ...attributes }) {
         return this.save(id, {
