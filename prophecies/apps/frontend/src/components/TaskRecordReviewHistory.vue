@@ -118,6 +118,7 @@ export default {
   .task-record-review-history {
 
     &__checker {
+      min-height: 2.2em;
 
       &__name, &__choice, &__alternative-value, &__note {
         display: flex;
@@ -155,6 +156,8 @@ export default {
       }
 
       &__note {
+        padding-bottom: 0;
+        padding-top: 0;
         white-space: nowrap;
       }
     }
