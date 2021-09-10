@@ -111,6 +111,12 @@ export default {
       }
       this.showNotes = toggler !== null ? !!toggler : !this.showNotes
     },
+    highlightAndToggleNotes (highlightedReviewId) {
+      if (this.highlightedReviewId !== highlightedReviewId) {
+        return this.toggleNotes(true, highlightedReviewId)
+      }
+      return this.toggleNotes(!this.showNotes, highlightedReviewId)
+    },
     emitUpdate () {
       /**
        * Fired when the task record review is updated
@@ -121,19 +127,15 @@ export default {
   },
   computed: {
     initialHighlightedReviewId () {
-      // No note, no initial highlighted review!
-      if (!this.showNotes) {
-        return null
-      }
       // If the `highlightNote` is a boolean, we highlight
       // the current task record review by default
       if (isBoolean(this.highlightNote)) {
-        return this.taskRecordReviewId
+        return this.highlightNote ? this.taskRecordReviewId : null
       }
       return this.highlightNote
     },
     isLoading () {
-      return this.frozen || this.$wait.is(this.loader) 
+      return this.frozen || this.$wait.is(this.loader)
     },
     selectedInput: {
       get () {
@@ -214,7 +216,7 @@ export default {
                   <task-record-review-history
                     class="task-record-review-card__history"
                     :task-record-review-id="taskRecordReviewId"
-                    @toggle-notes="toggleNotes(true, $event)"
+                    @toggle-notes="highlightAndToggleNotes($event)"
                     @same="selectChoiceWithLoader" />
                 </div>
               </div>
