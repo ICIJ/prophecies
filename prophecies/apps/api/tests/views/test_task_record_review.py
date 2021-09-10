@@ -221,7 +221,10 @@ class TestTaskRecordReview(TestCase):
                 'type': 'TaskRecordReview',
                 'id': attribution.id,
                 'attributes': {
-                    'choice': choice_yes.id
+                    'data': {
+                        'type': 'Choice',
+                        'id': choice_no.id
+                    }
                 }
             }
         }
@@ -245,3 +248,28 @@ class TestTaskRecordReview(TestCase):
         }
         request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload, content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)
+
+    def test_it_can_only_make_changes_to_note_on_locked_record(self):
+        task_record_with_note = TaskRecord.objects.create(original_value="foo", task=self.task)
+        task_record_with_note.locked = True
+        task_record_with_note.save()
+        choice_group = ChoiceGroup.objects.create(name='Is it correct?')
+        choice_yes = Choice.objects.create(name='Yes', choice_group=choice_group)
+        choice_no = Choice.objects.create(name='No', choice_group=choice_group)
+        attribution = TaskRecordReview.objects.create(task_record=task_record_with_note, checker=self.django, note='this is a note')
+        self.client.login(username='django', password='django')
+        payload = {
+            'data': {
+                'type': 'TaskRecordReview',
+                'id': attribution.id,
+                'attributes': {
+                    'data': {
+                        'type': 'Choice',
+                        'id': choice_yes.id
+                    },
+                    'note': 'this is an edited note'
+                }
+            }
+        }
+        request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload, content_type='application/vnd.api+json')
+        self.assertEqual(request.status_code, 403)
