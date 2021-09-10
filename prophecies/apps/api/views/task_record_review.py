@@ -134,8 +134,6 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
             .select_related('task_record__task__project')
 
     def check_object_permissions(self, request, obj):
-        if obj.task_record.locked:
-            import pdb; pdb.set_trace()
         if obj.checker != request.user:
             raise exceptions.PermissionDenied(detail='You do not have permission to update this resource.')
         if obj.task_record.locked and not [*request.data] == ['id', 'note']:
