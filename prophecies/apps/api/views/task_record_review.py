@@ -136,5 +136,5 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
     def check_object_permissions(self, request, obj):
         if obj.checker != request.user:
             raise exceptions.PermissionDenied(detail='You do not have permission to update this resource.')
-        if obj.task_record.locked and not [*request.data] == ['id', 'note']:
+        if 'choice' in request.data and obj.task_record.locked:
             raise exceptions.PermissionDenied(detail='This resource was locked by a user.')
