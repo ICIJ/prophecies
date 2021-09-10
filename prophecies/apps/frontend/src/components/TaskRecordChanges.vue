@@ -64,10 +64,10 @@ export default {
         No changes on this record yet.
       </div>
       <div v-for="action in actions" :key="action.id" class="task-record-review-changes__actions__item d-flex">
-        <div class="task-record-review-changes__actions__item__content flex-grow-1">
-          <span class="text-truncate" v-html="$t(action.i18n, { ...action.data, ...action })"></span>
+        <div class="task-record-review-changes__actions__item__content flex-grow-1 text-truncate mr-1">
+          <span v-html="$t(action.i18n, { ...action.data, ...action })"></span>
         </div>
-        <div class="task-record-review-changes__actions__item__timestamp text-secondary" :title="action.timestamp | formatDateLong" v-b-tooltip.hover>
+        <div class="task-record-review-changes__actions__item__timestamp text-secondary text-nowrap" :title="action.timestamp | formatDateLong" v-b-tooltip.hover>
           {{ action.timestamp | formatDateFromNow }}
         </div>
       </div>
