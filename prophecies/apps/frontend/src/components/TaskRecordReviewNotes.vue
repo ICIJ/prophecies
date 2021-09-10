@@ -71,6 +71,9 @@ export default {
         return ['esc']
       }
       return []
+    },
+    noteChanged () {
+      return this.inputNote !== this.taskRecordReview.note
     }
   },
   methods: {
@@ -87,7 +90,7 @@ export default {
       await TaskRecordReview.api().save(this.taskRecordReviewId, { attributes })
     },
     async handleInputNoteEnter ($event) {
-      if (($event.metaKey || $event.ctrlKey) && $event.keyCode === 13) {
+      if (this.noteChanged) {
         $event.target.blur()
         await this.saveInputNoteWithLoader()
       }
@@ -127,9 +130,9 @@ export default {
                     rows="2"
                     max-rows="10"
                     @keyup.esc="$emit('close')"
-                    @keyup.enter="handleInputNoteEnter" />
+                    @keyup.ctrl.enter="handleInputNoteEnter" />
                 </b-overlay>
-                <div v-if="inputNote !== review.note" class="mt-1 d-flex align-items-center">
+                <div v-if="noteChanged" class="mt-1 d-flex align-items-center">
                   <b-btn variant="link" size="sm" type="submit" class="text-muted ml-auto">
                     Save
                   </b-btn>
