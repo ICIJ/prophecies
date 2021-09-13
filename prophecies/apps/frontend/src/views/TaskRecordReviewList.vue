@@ -106,7 +106,7 @@ export default {
       },
       set (sort) {
         if (isEqual({ ...this.$route.query, sort }, this.$route.query)) {
-          const query = { ...this.routeFiltersQueryParams }
+          const query = { 'page[size]': this.pageSize, ...this.routeFiltersQueryParams }
           this.$router.push({ path: this.$route.path, query }, () => {})
         }
       }
