@@ -136,7 +136,7 @@ export default {
                   <b-btn variant="link" size="sm" type="submit" class="text-muted ml-auto">
                     Save
                   </b-btn>
-                  <shortkey-badge :value="['Meta', 'Enter']" class="ml-2" />
+                  <shortkey-badge :value="['Ctrl', 'Enter']" class="ml-2" />
                 </div>
                 <task-record-review-note-timestamp
                   v-else
