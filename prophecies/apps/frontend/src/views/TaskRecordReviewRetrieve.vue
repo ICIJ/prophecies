@@ -10,7 +10,7 @@
   import TaskRecordReview from '@/models/TaskRecordReview'
 
   export default {
-    name: 'TaskRecordReviewRetreive',
+    name: 'TaskRecordReviewRetrieve',
     components: {
       AppBreadcrumb,
       AppHeader,

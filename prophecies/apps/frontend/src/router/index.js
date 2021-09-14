@@ -2,9 +2,9 @@ import Dashboard from '@/views/Dashboard.vue'
 import Error from '@/views/Error.vue'
 import Login from '@/views/Login.vue'
 import TaskRecordReviewList from '@/views/TaskRecordReviewList.vue'
-import TaskRecordReviewRetreive from '@/views/TaskRecordReviewRetreive.vue'
+import TaskRecordReviewRetrieve from '@/views/TaskRecordReviewRetrieve.vue'
 import TipList from '@/views/TipList.vue'
-import TipRetreive from '@/views/TipRetreive.vue'
+import TipRetrieve from '@/views/TipRetrieve.vue'
 
 export const router = {
   routes: [
@@ -33,7 +33,7 @@ export const router = {
     {
       name: 'task-record-review-retreive',
       path: '/task-record-reviews/:taskId/:taskRecordReviewId',
-      component: TaskRecordReviewRetreive,
+      component: TaskRecordReviewRetrieve,
       props: true
     },
     {
@@ -45,7 +45,7 @@ export const router = {
     {
       name: 'tip-retreive',
       path: '/tips/:tipId',
-      component: TipRetreive,
+      component: TipRetrieve,
       props: true
     },
     {
