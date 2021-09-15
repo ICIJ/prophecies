@@ -1,12 +1,12 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Choice, ChoiceGroup, UserNotification, Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, ChoiceGroup, UserNotification, Project, Task, TaskChecker, TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record_review import StatusType
 
 class TestTaskRecordReview(TestCase):
     def setUp(self):
-        project = Project.objects.create(name='Pencil Papers')
-        task = Task.objects.create(name='Art', project=project, color='#fe6565', rounds=2)
+        self.project = Project.objects.create(name='Pencil Papers')
+        task = Task.objects.create(name='Art', project=self.project, color='#fe6565', rounds=2)
         self.choice_group = ChoiceGroup.objects.create(name='Is it correct?')
         self.olivia = User.objects.create(username='olivia')
         self.django = User.objects.create(username='django')
@@ -284,3 +284,30 @@ class TestTaskRecordReview(TestCase):
         review.note = "Foo"
         review.save()
         self.assertTrue(review.note_updated_at is None)
+
+
+    def test_it_returns_a_project_if_note_mentions_project(self):
+        review = TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @project!")
+        self.assertTrue(review.project.name == 'Pencil Papers')
+
+
+    def test_it_returns_none_if_note_does_not_mention_project(self):
+        review = TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi!")
+        self.assertTrue(review.project is None)
+
+
+    def test_it_notifies_all_project_members_not_just_specific_task_checkers(self):
+        TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
+        task_science = Task.objects.create(name='Science', project=self.project, color='#fe6565', rounds=2)
+        record_buz = TaskRecord.objects.create(original_value='foo', task=task_science)
+        TaskChecker.objects.create(task=record_buz.task, checker=self.olivia)
+        TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @project!", checker=self.django)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
+
+
+    def test_it_does_not_notify_users_who_are_not_project_members(self):
+        TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
+        TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @project!", checker=self.django)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 0)
