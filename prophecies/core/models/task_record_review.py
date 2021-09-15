@@ -1,3 +1,4 @@
+import re
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max, signals
@@ -5,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
-from prophecies.core.models import Choice, TaskRecord, UserNotification
+from prophecies.core.models import Choice, TaskChecker, TaskRecord, Task, Project, UserNotification
 from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action
 
 class StatusType(models.TextChoices):
@@ -89,6 +90,17 @@ class TaskRecordReview(models.Model):
     def __str__(self):
         return f'Task record #{self.task_record.id} on round {self.round}'
 
+
+    @property
+    def project(self):
+        try:
+            project = re.findall("(?i)@project", str(self.note))
+            if len(project) > 0:
+                return self.task_record.task.project
+        except AttributeError:
+            return None
+
+
     @property
     def task_id(self):
         try:
@@ -165,6 +177,17 @@ class TaskRecordReview(models.Model):
             instance.note_created_at = timezone.now()
 
 
+    @staticmethod
+    def signal_notify_members_in_mentioned_project(sender, instance, **kwargs):
+        project = instance.project
+        if project is not None:
+            for user in project.members:
+                action, created = get_or_create_mention_action(instance.checker, user, instance)
+                if created:
+                    UserNotification.objects.create(recipient=user, action=action)
+
+
+signals.post_save.connect(TaskRecordReview.signal_notify_members_in_mentioned_project, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_notify_mentioned_users, sender=TaskRecordReview)
 signals.pre_save.connect(TaskRecordReview.signal_fill_note_created_at_and_updated_at, sender=TaskRecordReview)
 # Send signals to the TaskRecord model
