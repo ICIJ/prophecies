@@ -186,9 +186,10 @@ class TaskRecordReview(models.Model):
         project = instance.mentioned_project
         if project is not None:
             for user in project.members:
-                action, created = get_or_create_mention_action(instance.checker, user, instance)
-                if created:
-                    UserNotification.objects.create(recipient=user, action=action)
+                if instance.checker != user:
+                    action, created = get_or_create_mention_action(instance.checker, user, instance)
+                    if created:
+                        UserNotification.objects.create(recipient=user, action=action)
 
 
 signals.post_save.connect(TaskRecordReview.signal_notify_members_in_mentioned_project, sender=TaskRecordReview)
