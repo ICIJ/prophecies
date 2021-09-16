@@ -297,18 +297,21 @@ class TestTaskRecordReview(TestCase):
         self.assertTrue(review.mentioned_project is None)
 
 
-    def test_it_notifies_all_project_members_not_just_specific_task_checkers(self):
+    def test_it_notifies_all_project_members_except_for_note_author_not_just_specific_task_checkers(self):
         TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
         task_science = Task.objects.create(name='Science', project=self.project, color='#fe6565', rounds=2)
         record_buz = TaskRecord.objects.create(original_value='foo', task=task_science)
         TaskChecker.objects.create(task=record_buz.task, checker=self.olivia)
         TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @project!", checker=self.django)
-        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 0)
         self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
 
 
     def test_it_does_not_notify_users_who_are_not_project_members(self):
         TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
+        ruby = User.objects.create(username='ruby')
+        TaskChecker.objects.create(task=self.record_foo.task, checker=ruby)
         TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @project!", checker=self.django)
-        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 0)
+        self.assertEqual(UserNotification.objects.filter(recipient=ruby).count(), 1)
         self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 0)
