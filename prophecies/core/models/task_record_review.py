@@ -106,6 +106,16 @@ class TaskRecordReview(models.Model):
 
 
     @property
+    def mentioned_task(self):
+        task = re.findall("(?i)@task", str(self.note))
+        if len(task) > 0:
+            try:
+                return self.task_record.task
+            except AttributeError:
+                return None
+
+
+    @property
     def task_id(self):
         try:
             return self.task_record.task_id
@@ -191,7 +201,18 @@ class TaskRecordReview(models.Model):
                     if created:
                         UserNotification.objects.create(recipient=user, action=action)
 
+    @staticmethod
+    def signal_notify_task_checkers_in_mentioned_task(sender, instance, **kwargs):
+        task = instance.mentioned_task
+        if task is not None:
+            for user in task.checkers.all():
+                if instance.checker != user:
+                    action, created = get_or_create_mention_action(instance.checker, user, instance)
+                    if created:
+                        UserNotification.objects.create(recipient=user, action=action)
 
+
+signals.post_save.connect(TaskRecordReview.signal_notify_task_checkers_in_mentioned_task, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_notify_members_in_mentioned_project, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_notify_mentioned_users, sender=TaskRecordReview)
 signals.pre_save.connect(TaskRecordReview.signal_fill_note_created_at_and_updated_at, sender=TaskRecordReview)
