@@ -288,12 +288,13 @@ class TestTaskRecordReview(TestCase):
 
     def test_it_returns_a_project_if_note_mentions_project(self):
         review = TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @project!")
-        self.assertTrue(review.project.name == 'Pencil Papers')
+        self.assertTrue(review.mentioned_project is not None)
+        self.assertTrue(review.mentioned_project.name == 'Pencil Papers')
 
 
     def test_it_returns_none_if_note_does_not_mention_project(self):
         review = TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi!")
-        self.assertTrue(review.project is None)
+        self.assertTrue(review.mentioned_project is None)
 
 
     def test_it_notifies_all_project_members_not_just_specific_task_checkers(self):

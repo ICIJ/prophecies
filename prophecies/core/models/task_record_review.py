@@ -92,11 +92,15 @@ class TaskRecordReview(models.Model):
 
 
     @property
+    def mentioned_project(self):
+        project = re.findall("(?i)@project", str(self.note))
+        if len(project) > 0:
+            return self.project
+
+    @property
     def project(self):
         try:
-            project = re.findall("(?i)@project", str(self.note))
-            if len(project) > 0:
-                return self.task_record.task.project
+            return self.task_record.task.project
         except AttributeError:
             return None
 
@@ -179,7 +183,7 @@ class TaskRecordReview(models.Model):
 
     @staticmethod
     def signal_notify_members_in_mentioned_project(sender, instance, **kwargs):
-        project = instance.project
+        project = instance.mentioned_project
         if project is not None:
             for user in project.members:
                 action, created = get_or_create_mention_action(instance.checker, user, instance)
