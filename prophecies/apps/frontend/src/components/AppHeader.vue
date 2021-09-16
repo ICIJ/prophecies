@@ -1,12 +1,14 @@
 <script>
   import { template } from 'lodash'
   import UserNotification from '@/models/UserNotification'
+  import AppSearchForm from '@/components/AppSearchForm'
   import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
   import ShortkeyBadge from '@/components/ShortkeyBadge'
 
   export default {
     name: 'AppHeader',
     components: {
+      AppSearchForm,
       UserNotificationsDropdownMenu,
       ShortkeyBadge
     },
@@ -45,13 +47,9 @@
   <b-navbar toggleable="lg" class="app-header py-3">
     <b-navbar-toggle target="nav-collapse" class="ml-auto" />
     <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav class="app-header__nav-left">
+      <b-navbar-nav class="app-header__nav-left flex-grow-1">
         <slot name="nav-left" />
-        <b-nav-item href="#">
-          <search-icon class="mr-2" />
-          {{ $t('appHeader.search') }}
-          <shortkey-badge :value="['meta', 'f']" class="ml-2" />
-        </b-nav-item>
+        <app-search-form is-nav class="app-header__nav-left__search-form" />
       </b-navbar-nav>
       <div class="ml-auto">
         <b-navbar-nav class="app-header__nav-right">
@@ -119,7 +117,16 @@
 <style lang="scss" scoped>
   .app-header {
 
+    &__nav-left {
+      width: 100%;
+
+      & /deep/ &__search-form {
+        width: 100%;
+      }
+    }
+
     & /deep/ .nav-item .nav-link .feather,
+    & /deep/ .navbar-text .feather,
     & /deep/ .dropdown-item .feather {
       height: 20px;
       width: 20px

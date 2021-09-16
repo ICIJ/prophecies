@@ -14,6 +14,7 @@ from prophecies.apps.api.views.user import UserSerializer
 class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     checker = ResourceRelatedField(many=False, read_only=True)
     choice = ResourceRelatedField(many=False, read_only=True)
+    task_id = serializers.CharField()
     included_serializers = {
         'checker': UserSerializer,
         'choice': ChoiceSerializer,
@@ -33,6 +34,7 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     checker = ResourceRelatedField(many=False, read_only=True)
     choice = ResourceRelatedField(many=False, queryset=Choice.objects, required=False)
     task_record = ResourceRelatedField(many=False, read_only=True)
+    task_id = serializers.CharField()
     history = SerializerMethodResourceRelatedField(many=True, model=TaskRecordReview, read_only=True)
     included_serializers = {
         'checker': UserSerializer,
