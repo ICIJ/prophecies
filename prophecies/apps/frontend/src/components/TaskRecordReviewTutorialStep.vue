@@ -18,10 +18,10 @@ export default {
 <template>
 <div class="d-flex flex-column align-items-center" :class="step.class">
   <div class="row">
-    <b-badge class="step-progression " variant="warning">
+    <b-badge class="step-progression" variant="warning">
       <div class="d-block" style="line-height:24px;">
-        <div class="float-left pr-1">{{index}}/{{nbSteps}}</div>
-        <div class="progress-positionning">
+        <div class="float-left pr-1 step-progression__numbers">{{index}}/{{nbSteps}}</div>
+        <div class="step-progression__bar-position">
           <b-progress :value="index" :max="nbSteps"></b-progress>
         </div>
       </div>
@@ -53,12 +53,13 @@ export default {
     font-size: $font-size-lg;
     width: 70px;
 
+    &__bar-position {
+        line-height: 24px;
+        padding-top: 5px;
+    }
 }
 
-.progress-positionning {
-    line-height: 24px;
-    padding-top: 5px;
-}
+
 
 .step-text-content {
     text-align: center;

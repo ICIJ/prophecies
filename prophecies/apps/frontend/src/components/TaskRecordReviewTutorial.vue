@@ -9,7 +9,7 @@ export default {
   },
   data() {
     return {
-      showTutorial:undefined,
+      showTutorial: undefined,
       stepIndex: 1,
       steps: [{
           text: "Read the content to be checked",
@@ -18,7 +18,7 @@ export default {
         },
         {
           text: "Check if the predicted value is correct",
-          class: "ml-auto col-3 ",
+          class: "ml-auto col-3",
           width: "180px",
         },
         {
@@ -41,13 +41,16 @@ export default {
       ]
     }
   },
-  created(){
+  created() {
     let showTutorial = Cookies.get('showTutorial')
-    if(showTutorial==undefined || showTutorial=="true"){
-      showTutorial=true
-      Cookies.set('showTutorial',showTutorial,{ expires: 365 , sameSite: 'lax' })
-    }else{
-      showTutorial=false
+    if (showTutorial == undefined || showTutorial == "true") {
+      showTutorial = true
+      Cookies.set('showTutorial', showTutorial, {
+        expires: 365,
+        sameSite: 'lax'
+      })
+    } else {
+      showTutorial = false
     }
     this.showTutorial = showTutorial;
   },
@@ -68,7 +71,10 @@ export default {
     },
     closeTutorial() {
       this.showTutorial = false
-      Cookies.set('showTutorial',this.showTutorial,{ expires: 365 , sameSite: 'lax' })
+      Cookies.set('showTutorial', this.showTutorial, {
+        expires: 365,
+        sameSite: 'lax'
+      })
     },
   }
 }
@@ -84,17 +90,38 @@ export default {
         <h2 class=" pl-3 pt-1 first-time-question ">First time here?</h2>
       </div>
 
-      <div class="col-auto">
-        <b-btn variant="link" class="mr-3" size="sm" @click="closeTutorial()" v-if="!isLastStep">Skip tutorial</b-btn>
-        <b-btn variant="outline-primary" class="mr-3" v-if="!isFirstStep" @click="previousTutorialStep()">
+      <div class="col-auto task-record-review-tutorial-card__buttons">
+        <b-btn
+        @click="closeTutorial()"
+        class="mr-3 task-record-review-tutorial-card__buttons__skip"
+        size="sm"
+        v-if="!isLastStep"
+        variant="link"
+        >Skip tutorial</b-btn>
+        <b-btn
+          @click="previousTutorialStep()"
+          class="mr-3 task-record-review-tutorial-card__buttons__previous"
+          v-if="!isFirstStep"
+          variant="outline-primary"
+        >
           <arrow-left-icon size="1x" class="mr-1" /> Previous
         </b-btn>
-        <b-btn class="font-weight-bold" variant="warning" v-if="!isLastStep" @click="nextTutorialStep()">
+        <b-btn
+          @click="nextTutorialStep()"
+          class="task-record-review-tutorial-card__buttons__next font-weight-bold"
+          v-if="!isLastStep"
+          variant="warning"
+        >
           <span class="right-button-width">Next
             <arrow-right-icon size="1x" />
           </span>
         </b-btn>
-        <b-btn v-else class="font-weight-bold" variant="warning" @click="closeTutorial()">
+        <b-btn
+          @click="closeTutorial()"
+          class="task-record-review-tutorial-card__buttons__close font-weight-bold"
+          v-else
+          variant="warning"
+        >
           <span class="right-button-width">Close
             <XIcon size="1x" />
           </span>
@@ -128,19 +155,19 @@ export default {
 <style lang="scss" scoped>
 .task-record-review-tutorial-card {
     background: $light;
-}
-.first-time-question {
-    &:after {
-        content: "\00a0\00a0";
+    .first-time-question {
+        &:after {
+            content: "\00a0\00a0";
+        }
+        text-decoration: underline;
+        text-decoration-color: $warning;
+        text-decoration-thickness: 5px;
+        text-underline-offset: 5px;
+        line-height: 24px;
     }
-    text-decoration: underline;
-    text-decoration-color: $warning;
-    text-decoration-thickness: 5px;
-    text-underline-offset: 5px;
-    line-height: 24px;
-}
-.right-button-width {
-    display: inline-block;
-    width: 57px;
+    .right-button-width {
+        display: inline-block;
+        width: 57px;
+    }
 }
 </style>
