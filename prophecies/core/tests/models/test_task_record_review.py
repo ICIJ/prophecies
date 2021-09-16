@@ -286,6 +286,17 @@ class TestTaskRecordReview(TestCase):
         self.assertTrue(review.note_updated_at is None)
 
 
+    def test_it_returns_a_task_if_note_mentions_task(self):
+        review = TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @task!")
+        self.assertTrue(review.mentioned_task is not None)
+        self.assertTrue(review.mentioned_task.name == 'Art')
+
+
+    def test_it_returns_none_if_note_does_not_mention_task(self):
+        review = TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi!")
+        self.assertTrue(review.mentioned_task is None)
+
+
     def test_it_returns_a_project_if_note_mentions_project(self):
         review = TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @project!")
         self.assertTrue(review.mentioned_project is not None)
@@ -315,3 +326,30 @@ class TestTaskRecordReview(TestCase):
         self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 0)
         self.assertEqual(UserNotification.objects.filter(recipient=ruby).count(), 1)
         self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 0)
+
+
+    def test_it_notifies_users_who_are_task_checkers(self):
+        TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
+        TaskChecker.objects.create(task=self.record_foo.task, checker=self.olivia)
+        ruby = User.objects.create(username='ruby')
+        TaskChecker.objects.create(task=self.record_foo.task, checker=ruby)
+        TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @task!", checker=ruby)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
+
+
+    def test_it_does_not_notify_checker_on_the_instance_when_task_is_mentioned(self):
+        TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
+        TaskChecker.objects.create(task=self.record_foo.task, checker=self.olivia)
+        ruby = User.objects.create(username='ruby')
+        TaskChecker.objects.create(task=self.record_foo.task, checker=ruby)
+        TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @task!", checker=ruby)
+        self.assertEqual(UserNotification.objects.filter(recipient=ruby).count(), 0)
+
+
+    def test_it_does_not_notify_users_who_are_not_task_checkers(self):
+        TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
+        TaskChecker.objects.create(task=self.record_foo.task, checker=self.olivia)
+        ruby = User.objects.create(username='ruby')
+        TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @task!", checker=self.django)
+        self.assertEqual(UserNotification.objects.filter(recipient=ruby).count(), 0)
