@@ -1,8 +1,11 @@
 export {
   ArrowRightIcon,
+  ArrowLeftIcon,
+  ArrowDownIcon,
   BellIcon,
   ChevronDownIcon,
   CodeIcon,
+  CoffeeIcon,
   ClockIcon,
   CommandIcon,
   CopyIcon,

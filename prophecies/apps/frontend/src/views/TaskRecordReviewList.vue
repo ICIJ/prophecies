@@ -11,6 +11,7 @@ import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
 import TaskRecordReviewFilters from '@/components/TaskRecordReviewFilters'
 import TaskRecordReviewPageParams from '@/components/TaskRecordReviewPageParams'
+import TaskRecordReviewTutorial from '@/components/TaskRecordReviewTutorial'
 import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Task from '@/models/Task'
@@ -30,7 +31,8 @@ export default {
     TaskRecordReviewAppliedSorting,
     TaskRecordReviewChoiceForm,
     TaskRecordReviewFilters,
-    TaskRecordReviewPageParams
+    TaskRecordReviewPageParams,
+    TaskRecordReviewTutorial
   },
   props: {
     taskId: {
@@ -42,7 +44,8 @@ export default {
       pagination: null,
       selectedIds: {},
       showFilters: false,
-      taskRecordReviewIds: []
+      taskRecordReviewIds: [],
+      showTutorial:true
     }
   },
   watch: {
@@ -430,6 +433,9 @@ export default {
                 :task-id="taskId"
                 activate-shortkeys
                 @submit="bulkSelectChoiceWithLoader" />
+            </b-collapse>
+            <b-collapse :visible="showTutorial">
+              <TaskRecordReviewTutorial :visible.sync="showTutorial">hello world</TaskRecordReviewTutorial>
             </b-collapse>
             <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
               <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">

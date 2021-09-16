@@ -1,0 +1,156 @@
+<script>
+import TaskRecordReviewTutorialStep from '@/components/TaskRecordReviewTutorialStep'
+
+export default {
+  name: 'TaskRecordReviewTutorial',
+  components: {
+    TaskRecordReviewTutorialStep
+  },
+  props:{
+    visible: {
+      type: Boolean
+    }
+  },
+  data () {
+    return {
+      stepIndex:1,
+      steps:[
+        {
+          text:"Read the content to be checked",
+          class:"offset-2 col-8 ",
+          width:"250px",
+        },
+        {
+          text:"Check if the predicted value is correct",
+          class:"ml-auto col-3 ",
+          width:"180px",
+        },
+        {
+          text:"Select (or type) your choice",
+          class:"col-xxl-6 ",
+          width:"200px",
+        },
+        {
+          text:"Read others' choice (click one's choice to quickly select the same!)",
+          class:"col-lg-6 col-xxl-6 ",
+          iconAlign:"float-left",
+          width:"350px"
+        },
+        {
+          text:"Comment (you can mention someone with @username or everyone with @project)",
+          class:"offset-lg-6 col-lg-5 offset-xxl-6 col-xxl-5 p-0",
+          iconAlign:"float-right ",
+          width:"350px"
+        },
+      ]
+    }
+  },
+  computed : {
+    isFirstStep(){
+      return this.stepIndex==1
+    },
+    isLastStep(){
+      return this.stepIndex==this.steps.length
+    }
+  },
+  methods : {
+    previousTutorialStep(){
+      this.stepIndex--
+    },
+    nextTutorialStep(){
+      this.stepIndex++
+    },
+    closeTutorial(){
+      this.emitVisible()
+    },
+    emitVisible () {
+      /**
+       * Fired when the tutorial is closed
+       * @event visible
+       */
+      this.$emit('update:visible',false)
+    }
+  }
+}
+</script>
+<template>
+  <b-collapse :visible="visible">
+    <div class="task-record-review-tutorial-card card card-body p-4 container-fluid mb-5">
+      <div class="row mb-3">
+        <div class="col d-flex">
+          <div ><coffee-icon/></div>
+          <h2 class=" pl-3 pt-1 first-time-question ">First time here?</h2>
+        </div>
+
+        <div class="col-auto">
+          <b-btn
+            variant="link"
+            class="mr-3"
+            size="sm"
+            @click="closeTutorial()"
+            v-if="!isLastStep"
+            >Skip tutorial</b-btn>
+          <b-btn variant="outline-primary" class="mr-3" v-if="!isFirstStep" @click="previousTutorialStep()">
+            <arrow-left-icon size="1x" class="mr-1"/> Previous
+          </b-btn>
+          <b-btn class="font-weight-bold" variant="warning" v-if="!isLastStep" @click="nextTutorialStep()">
+            <span class="right-button-width">Next <arrow-right-icon size="1x" /></span>
+          </b-btn>
+          <b-btn v-else class="font-weight-bold"  variant="warning" @click="closeTutorial()">
+            <span class="right-button-width">Close <XIcon size="1x" /></span>
+          </b-btn>
+        </div>
+      </div>
+      <div class="row no-gutters ">
+          <div class="col flex-grow-1">
+            <div class="row no-gutters">
+              <div v-if="stepIndex==1 || stepIndex == 2" class="col-lg-4">
+                <TaskRecordReviewTutorialStep
+                  :index="stepIndex"
+                  :step=steps[stepIndex-1]
+                  :nb-steps="steps.length"/>
+              </div>
+              <div v-else class="offset-lg-4 col-lg-8">
+                <div class="row">
+                  <div v-if="stepIndex==3" class="col-xxl-6 d-flex justify-content-center ">
+                    <TaskRecordReviewTutorialStep
+                      :index="stepIndex"
+                      :step=steps[stepIndex-1]
+                      :nb-steps="steps.length"/>
+                  </div>
+                  <div v-else class="offset-xxl-6 col-xxl-6">
+                    <TaskRecordReviewTutorialStep
+                      :index="stepIndex"
+                      :step=steps[stepIndex-1]
+                      :nb-steps="steps.length"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </b-collapse>
+</template>
+
+<style lang="scss" scoped>
+  .task-record-review-tutorial-card{
+      background: $light;
+  }
+  .first-time-question{
+    &:after {
+      content: "\00a0\00a0";
+    }
+    text-decoration: underline;
+    text-decoration-color: $warning;
+    text-decoration-thickness: 5px;
+    text-underline-offset:5px;
+    line-height: 24px;
+  }
+  .right-button-width{
+    display: inline-block;
+    width: 57px
+  }
+
+</style>
