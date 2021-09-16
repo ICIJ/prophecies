@@ -2,35 +2,40 @@
 export default {
   name: 'TaskRecordReviewTutorialStep',
   props: {
-    index: {
+    number: {
       type: Number
     },
     step: {
       type: Object,
       default: () => ({})
     },
-    nbSteps: {
+    stepCount: {
       type: Number
+    }
+  },
+  computed : {
+    isOthersChoiceBlock() {
+      return this.number < 4
     }
   }
 }
 </script>
 <template>
-<div class="d-flex flex-column align-items-center" :class="step.class">
+<div class="task-record-review-tutorial-step d-flex flex-column align-items-center" :class="step.class">
   <div class="row">
-    <b-badge class="step-progression" variant="warning">
+    <b-badge class="task-record-review-tutorial-step__progression" variant="warning">
       <div class="d-block" style="line-height:24px;">
-        <div class="float-left pr-1 step-progression__numbers">{{index}}/{{nbSteps}}</div>
-        <div class="step-progression__bar-position">
-          <b-progress :value="index" :max="nbSteps"></b-progress>
+        <div class="float-left pr-1 task-record-review-tutorial-step__progression__numbers">{{ number }}/{{ stepCount }}</div>
+        <div class="task-record-review-tutorial-step__progression__bar-position">
+          <b-progress :value="number" :max="stepCount" />
         </div>
       </div>
     </b-badge>
   </div>
-  <div class="step-text-content font-weight-bold step-text-content" :style="'width:'+step.width">
-    {{step.text}}
+  <div class="task-record-review-tutorial-step__text-content font-weight-bold step-text-content" :style="'width:' + step.width">
+    {{ step.text }}
   </div>
-  <div v-if="index<4" class="text-align-center">
+  <div v-if="isOthersChoiceBlock" class="text-align-center">
     <arrow-down-icon />
   </div>
   <template v-else>
@@ -45,23 +50,30 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-.step-header {
-    display: block;
-    width: 60px;
+
+.task-record-review-tutorial-step {
+
+  &__header {
+      display: block;
+      width: 60px;
+  }
+
+  &__progression {
+      font-size: $font-size-lg;
+      width: 70px;
+
+      &__bar-position {
+          line-height: 24px;
+          padding-top: 5px;
+      }
+  }
+
+  &__text-content {
+      text-align: center;
+  }
 }
-.step-progression {
-    font-size: $font-size-lg;
-    width: 70px;
-
-    &__bar-position {
-        line-height: 24px;
-        padding-top: 5px;
-    }
-}
 
 
 
-.step-text-content {
-    text-align: center;
-}
+
 </style>

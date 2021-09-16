@@ -27,15 +27,15 @@ describe('TaskRecordReviewTutorial', () => {
 
   it('should show the tutorial', () => {
     expect(wrapper.vm.showTutorial).toBe(true)
-    expect(wrapper.vm.stepIndex).toBe(1)
-    const tutorialCard = wrapper.find('.task-record-review-tutorial-card')
+    expect(wrapper.vm.stepNumber).toBe(1)
+    const tutorialCard = wrapper.find('.task-record-review-tutorial')
     expect(tutorialCard.exists()).toBe(true)
     expect(tutorialCard.isVisible()).toBe(true)
   })
 
   it('should hide the tutorial', async () => {
     await wrapper.setData({ showTutorial: false })
-    const tutorialCard = wrapper.find('.task-record-review-tutorial-card')
+    const tutorialCard = wrapper.find('.task-record-review-tutorial')
     expect(tutorialCard.exists()).toBe(true)
     expect(tutorialCard.isVisible()).toBe(false)
   })
@@ -43,7 +43,7 @@ describe('TaskRecordReviewTutorial', () => {
   it('should not show "previous" button on first step', async () => {
     let previousStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__previous')
     expect(previousStepExists.exists()).toBe(false)
-    await wrapper.setData({ stepIndex: 2 })
+    await wrapper.setData({ stepNumber: 2 })
     previousStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__previous')
     expect(previousStepExists.exists()).toBe(true)
   })
@@ -55,30 +55,12 @@ describe('TaskRecordReviewTutorial', () => {
     expect(nextStepExists.exists()).toBe(true)
     let skipTutorialExists = wrapper.find('.task-record-review-tutorial-card__buttons__skip')
     expect(skipTutorialExists.exists()).toBe(true)
-    await wrapper.setData({ stepIndex: 5 })
-
-    closeStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__previous')
+    await wrapper.setData({ stepNumber: 5 })
+    closeStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__close')
     expect(closeStepExists.exists()).toBe(true)
-    skipTutorialExists = wrapper.find('.task-record-review-tutorial-card__buttons__skip')
-    expect(skipTutorialExists.exists()).toBe(false)
     nextStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__next')
     expect(nextStepExists.exists()).toBe(false)
-  })
-
-  it('should show skip and next except on last step where "close" button replaces next button', async () => {
-    let closeStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__close')
-    expect(closeStepExists.exists()).toBe(false)
-    let nextStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__next')
-    expect(nextStepExists.exists()).toBe(true)
-    let skipTutorialExists = wrapper.find('.task-record-review-tutorial-card__buttons__skip')
-    expect(skipTutorialExists.exists()).toBe(true)
-    await wrapper.setData({ stepIndex: 5 })
-
-    closeStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__previous')
-    expect(closeStepExists.exists()).toBe(true)
     skipTutorialExists = wrapper.find('.task-record-review-tutorial-card__buttons__skip')
     expect(skipTutorialExists.exists()).toBe(false)
-    nextStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__next')
-    expect(nextStepExists.exists()).toBe(false)
   })
 })

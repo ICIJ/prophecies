@@ -10,7 +10,7 @@ export default {
   data() {
     return {
       showTutorial: undefined,
-      stepIndex: 1,
+      stepNumber: 1,
       steps: [{
           text: "Read the content to be checked",
           class: "offset-2 col-8 ",
@@ -43,7 +43,7 @@ export default {
   },
   created() {
     let showTutorial = Cookies.get('showTutorial')
-    if (showTutorial == undefined || showTutorial == "true") {
+    if (showTutorial === undefined || showTutorial === "true") {
       showTutorial = true
       Cookies.set('showTutorial', showTutorial, {
         expires: 365,
@@ -56,18 +56,24 @@ export default {
   },
   computed: {
     isFirstStep() {
-      return this.stepIndex == 1
+      return this.stepNumber === 1
     },
     isLastStep() {
-      return this.stepIndex == this.steps.length
+      return this.stepNumber === this.steps.length
+    },
+    isLeftBlock(){
+      return this.stepNumber === 1 || this.stepNumber === 2
+    },
+    isChoiceBlock(){
+      return this.stepNumber === 3
     }
   },
   methods: {
     previousTutorialStep() {
-      this.stepIndex--
+      this.stepNumber--
     },
     nextTutorialStep() {
-      this.stepIndex++
+      this.stepNumber++
     },
     closeTutorial() {
       this.showTutorial = false
@@ -79,15 +85,16 @@ export default {
   }
 }
 </script>
+
 <template>
 <b-collapse :visible="showTutorial">
-  <div class="task-record-review-tutorial-card card card-body p-4 container-fluid mb-5">
+  <div class="task-record-review-tutorial card card-body p-4 container-fluid mb-5">
     <div class="row mb-3">
       <div class="col d-flex">
         <div>
           <coffee-icon />
         </div>
-        <h2 class=" pl-3 pt-1 first-time-question ">First time here?</h2>
+        <h2 class=" pl-3 pt-1 task-record-review-tutorial__first-time-question ">First time here?</h2>
       </div>
 
       <div class="col-auto task-record-review-tutorial-card__buttons">
@@ -112,7 +119,7 @@ export default {
           v-if="!isLastStep"
           variant="warning"
         >
-          <span class="right-button-width">Next
+          <span class="task-record-review-tutorial__right-button-width">Next
             <arrow-right-icon size="1x" />
           </span>
         </b-btn>
@@ -131,16 +138,16 @@ export default {
     <div class="row no-gutters ">
       <div class="col flex-grow-1">
         <div class="row no-gutters">
-          <div v-if="stepIndex==1 || stepIndex == 2" class="col-lg-4">
-            <TaskRecordReviewTutorialStep :index="stepIndex" :step=steps[stepIndex-1] :nb-steps="steps.length" />
+          <div v-if="isLeftBlock" class="col-lg-4">
+            <task-record-review-tutorial-step :number="stepNumber" :step="steps[stepNumber-1]" :step-count="steps.length" />
           </div>
           <div v-else class="offset-lg-4 col-lg-8">
             <div class="row">
-              <div v-if="stepIndex==3" class="col-xxl-6 d-flex justify-content-center ">
-                <TaskRecordReviewTutorialStep :index="stepIndex" :step=steps[stepIndex-1] :nb-steps="steps.length" />
+              <div v-if="isChoiceBlock" class="col-xxl-6 d-flex justify-content-center ">
+                <task-record-review-tutorial-step :number="stepNumber" :step="steps[stepNumber-1]" :step-count="steps.length" />
               </div>
               <div v-else class="offset-xxl-6 col-xxl-6">
-                <TaskRecordReviewTutorialStep :index="stepIndex" :step=steps[stepIndex-1] :nb-steps="steps.length" />
+                <task-record-review-tutorial-step :number="stepNumber" :step="steps[stepNumber-1]" :step-count="steps.length" />
               </div>
             </div>
           </div>
@@ -153,19 +160,22 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-.task-record-review-tutorial-card {
+.task-record-review-tutorial {
     background: $light;
-    .first-time-question {
-        &:after {
-            content: "\00a0\00a0";
-        }
+
+    &__first-time-question {
         text-decoration: underline;
         text-decoration-color: $warning;
         text-decoration-thickness: 5px;
         text-underline-offset: 5px;
         line-height: 24px;
+
+        &:after {
+            content: "\00a0\00a0";
+        }
     }
-    .right-button-width {
+
+    &__right-button-width {
         display: inline-block;
         width: 57px;
     }
