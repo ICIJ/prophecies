@@ -435,7 +435,7 @@ export default {
                 @submit="bulkSelectChoiceWithLoader" />
             </b-collapse>
             <b-collapse :visible="showTutorial">
-              <TaskRecordReviewTutorial :visible.sync="showTutorial">hello world</TaskRecordReviewTutorial>
+              <TaskRecordReviewTutorial />
             </b-collapse>
             <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
               <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
