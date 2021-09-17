@@ -155,7 +155,6 @@ export default {
       </div>
     </div>
   </div>
-  </div>
 </b-collapse>
 </template>
 

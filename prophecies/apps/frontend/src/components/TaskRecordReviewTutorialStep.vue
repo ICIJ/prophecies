@@ -66,7 +66,7 @@ export default {
           line-height: 24px;
           padding-top: 10px;
           .progress{
-            height: 3px;
+            height: 4px;
             &::after{
               top:25%;
             }
