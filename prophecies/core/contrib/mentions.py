@@ -2,6 +2,7 @@ import re
 from actstream.models import Action
 from django.contrib.auth.models import User
 from django.db.models import Q
+from prophecies.core.models import UserNotification
 
 def list_mentions(content):
     """
@@ -17,6 +18,7 @@ def list_mentions(content):
         mentions.append({ 'mention': username, 'user': user })
     return mentions
 
+
 def get_or_create_mention_action(actor, target, action_object, data = {}):
     """
     Get or create the action matching with the given target's mention
@@ -27,3 +29,15 @@ def get_or_create_mention_action(actor, target, action_object, data = {}):
     verb_params = { 'verb': 'mentioned', 'data': data }
     params = { **verb_params, **actor_params, **target_params, **action_object_params }
     return Action.objects.get_or_create(**params)
+
+
+def mentioned(text, object_type):
+    return re.findall(f'(?i)@{object_type}', str(text))
+
+
+def notify_mentioned_users(author, users, action_object):
+    for user in users:
+        if author != user:
+            action, created = get_or_create_mention_action(author, user, action_object)
+            if created:
+                UserNotification.objects.create(recipient=user, action=action)
