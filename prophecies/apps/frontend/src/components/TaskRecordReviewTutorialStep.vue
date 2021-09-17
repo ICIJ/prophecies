@@ -25,8 +25,8 @@ export default {
   <div class="row">
     <b-badge class="task-record-review-tutorial-step__progression" variant="warning">
       <div class="d-block" style="line-height:24px;">
-        <div class="float-left pr-1 task-record-review-tutorial-step__progression__numbers">{{ number }}/{{ stepCount }}</div>
-        <div class="task-record-review-tutorial-step__progression__bar-position">
+        <div class="float-left ml-2 pr-2 task-record-review-tutorial-step__progression__numbers">{{ number }}/{{ stepCount }}</div>
+        <div class="task-record-review-tutorial-step__progression__bar-position px-1">
           <b-progress :value="number" :max="stepCount" />
         </div>
       </div>
@@ -60,11 +60,17 @@ export default {
 
   &__progression {
       font-size: $font-size-lg;
-      width: 70px;
+      width: 86px;
 
       &__bar-position {
           line-height: 24px;
-          padding-top: 5px;
+          padding-top: 10px;
+          .progress{
+            height: 3px;
+            &::after{
+              top:25%;
+            }
+          }
       }
   }
 
