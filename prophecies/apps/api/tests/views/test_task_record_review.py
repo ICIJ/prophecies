@@ -116,6 +116,18 @@ class TestTaskRecordReview(TestCase):
         self.assertEqual(request.status_code, 404)
 
 
+    def test_it_returns_number_of_task_record_reviews_for_olivia_by_task(self):
+        TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.olivia)
+        TaskRecordReview.objects.create(task_record=self.task_record_bar, checker=self.olivia)
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/task-record-reviews/')
+        self.assertEqual(request.status_code, 200)
+        countBy = request.json().get('meta').get('countBy')
+        self.assertEqual(len(countBy), 1)
+        self.assertEqual(countBy[0]['taskId'], 1)
+        self.assertEqual(countBy[0]['count'], 2)
+
+
     def test_it_cannot_set_task_record_choice_with_normal_user(self):
         attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo)
         self.client.login(username='django', password='django')

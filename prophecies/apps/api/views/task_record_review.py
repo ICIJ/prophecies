@@ -52,6 +52,7 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
                     'note', 'note_created_at', 'note_updated_at',
                     'alternative_value', 'task_record', 'task_id', 'history']
         read_only_fields = ['status',]
+        meta_fields = ['stats']
 
     def __init__(self, *args, **kwargs):
         try:
@@ -94,6 +95,17 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
         return super(TaskRecordReviewSerializer, self).save()
 
 
+    def get_root_meta(self, resource, many):
+        if many:
+            view = self.context['view']
+            queryset = view.filter_queryset(view.get_queryset())
+            return {
+                'countBy': queryset.count_by_task(task_field='taskId')
+            }
+        return { }
+
+
+
 class TaskRecordReviewViewSet(viewsets.ModelViewSet):
     resource_name = 'TaskRecordReview'
     serializer_class = TaskRecordReviewSerializer
@@ -134,6 +146,7 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
             .select_related('task_record') \
             .select_related('task_record__task') \
             .select_related('task_record__task__project')
+
 
     def check_object_permissions(self, request, obj):
         if obj.checker != request.user:
