@@ -44,9 +44,7 @@ export default {
       pagination: null,
       selectedIds: {},
       showFilters: false,
-      taskRecordReviewIds: [],
-      showTutorial:true
-    }
+      taskRecordReviewIds: []    }
   },
   watch: {
     pageNumber (value) {
@@ -120,6 +118,9 @@ export default {
     hasFilters () {
       return !!keys(this.routeFilters).length
     },
+    hasSelectedAndLockedRecords () {
+      return this.selectedAndLockedIdsCount > 0
+    },
     hasSelectedRecords () {
       return this.selectedIdsCount > 0
     },
@@ -132,6 +133,9 @@ export default {
     selectedIdsCount () {
       return this.selectedIdsList.length
     },
+    selectedAndLockedIdsCount () {
+      return this.selectedAndLockedIdsList.length
+    },
     selectedIdsList () {
       return Object.entries(this.selectedIds).reduce((list, [id, selected]) => {
         if (selected) {
@@ -139,6 +143,11 @@ export default {
         }
         return list
       }, [])
+    },
+    selectedAndLockedIdsList () {
+      return filter(this.selectedIdsList, id => {
+        return this.isTaskRecordReviewLocked(id)
+      })
     },
     selectedAndUnlockedIdsList () {
       return filter(this.selectedIdsList, id => {
@@ -413,8 +422,11 @@ export default {
                   Clear filters
                 </b-btn>
               </li>
-              <li class="list-inline-item font-weight-bold" v-if="hasSelectedRecords">
-                {{ selectedIdsCount }} results selected
+              <li class="task-record-review-list__container__selected-results list-inline-item font-weight-bold" v-if="hasSelectedRecords">
+                {{ $tc('taskRecordReviewList.selectedResults',  selectedIdsCount ) }}
+                <template v-if="hasSelectedAndLockedRecords">
+                  ({{ $tc('taskRecordReviewList.lockedResults',  selectedAndLockedIdsCount ) }})
+                </template>
               </li>
             </ul>
             <b-collapse :visible="showAppliedFilters">
@@ -434,9 +446,7 @@ export default {
                 activate-shortkeys
                 @submit="bulkSelectChoiceWithLoader" />
             </b-collapse>
-            <b-collapse :visible="showTutorial">
-              <TaskRecordReviewTutorial />
-            </b-collapse>
+            <task-record-review-tutorial />
             <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
               <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
                 <task-record-review-card
@@ -474,6 +484,11 @@ export default {
         display: inline-flex;
         align-items: center;
       }
+
+      &__selected-results {
+        text-decoration: underline;
+      }
+
     }
   }
 </style>

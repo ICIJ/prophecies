@@ -72,5 +72,9 @@
         }
       }
     }
+  },
+  "taskRecordReviewList":{
+    "selectedResults":"{n} result selected | {n} results selected",
+    "lockedResults":"{n} of which is locked | {n} of which are locked"
   }
 }
