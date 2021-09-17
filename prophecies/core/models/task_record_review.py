@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
 from prophecies.core.models import Choice, TaskChecker, TaskRecord, Task, Project, UserNotification
-from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action
+from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action, mentioned, notify_mentioned_users
 
 class StatusType(models.TextChoices):
     PENDING = 'PENDING', _('Pending')
@@ -91,11 +91,6 @@ class TaskRecordReview(models.Model):
         return f'Task record #{self.task_record.id} on round {self.round}'
 
 
-    @property
-    def mentioned_project(self):
-        project = re.findall("(?i)@project", str(self.note))
-        if len(project) > 0:
-            return self.project
 
     @property
     def project(self):
@@ -106,13 +101,11 @@ class TaskRecordReview(models.Model):
 
 
     @property
-    def mentioned_task(self):
-        task = re.findall("(?i)@task", str(self.note))
-        if len(task) > 0:
-            try:
-                return self.task_record.task
-            except AttributeError:
-                return None
+    def task(self):
+        try:
+            return self.task_record.task
+        except AttributeError:
+            return None
 
 
     @property
@@ -191,27 +184,36 @@ class TaskRecordReview(models.Model):
             instance.note_created_at = timezone.now()
 
 
+    @property
+    def mentioned_project(self):
+        if mentioned(self.note, 'project'):
+            return self.project
+
+
+    @property
+    def mentioned_task(self):
+        if mentioned(self.note, 'task'):
+            try:
+                return self.task_record.task
+            except AttributeError:
+                return None
+
+
     @staticmethod
     def signal_notify_members_in_mentioned_project(sender, instance, **kwargs):
         project = instance.mentioned_project
         if project is not None:
-            for user in project.members:
-                if instance.checker != user:
-                    action, created = get_or_create_mention_action(instance.checker, user, instance)
-                    if created:
-                        UserNotification.objects.create(recipient=user, action=action)
+            notify_mentioned_users(instance.checker, project.members, instance)
+
 
     @staticmethod
     def signal_notify_task_checkers_in_mentioned_task(sender, instance, **kwargs):
         task = instance.mentioned_task
         if task is not None:
-            for user in task.checkers.all():
-                if instance.checker != user:
-                    action, created = get_or_create_mention_action(instance.checker, user, instance)
-                    if created:
-                        UserNotification.objects.create(recipient=user, action=action)
+            notify_mentioned_users(instance.checker, task.checkers.all(), instance)
 
 
+signals.post_save.connect(TaskRecordReview.signal_notify_members_in_mentioned_project, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_notify_task_checkers_in_mentioned_task, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_notify_members_in_mentioned_project, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_notify_mentioned_users, sender=TaskRecordReview)
