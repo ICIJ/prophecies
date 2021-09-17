@@ -6,15 +6,18 @@ from prophecies.core.models.task_record_review import StatusType
 class TestTaskRecordReview(TestCase):
     def setUp(self):
         self.project = Project.objects.create(name='Pencil Papers')
-        task = Task.objects.create(name='Art', project=self.project, color='#fe6565', rounds=2)
+        art_task = Task.objects.create(name='Art', project=self.project, color='#fe6565', rounds=2)
+        diet_task = Task.objects.create(name='Diet', project=self.project, rounds=1)
         self.choice_group = ChoiceGroup.objects.create(name='Is it correct?')
         self.olivia = User.objects.create(username='olivia')
         self.django = User.objects.create(username='django')
-        self.record_foo = TaskRecord.objects.create(original_value='foo', task=task)
-        self.record_bar = TaskRecord.objects.create(original_value='bar', task=task)
-        self.record_baz = TaskRecord.objects.create(original_value='baz', task=task)
-        self.record_qux = TaskRecord.objects.create(original_value='quz', task=task)
-        self.record_qud = TaskRecord.objects.create(original_value='qud', task=task)
+        self.record_foo = TaskRecord.objects.create(original_value='foo', task=art_task)
+        self.record_bar = TaskRecord.objects.create(original_value='bar', task=art_task)
+        self.record_baz = TaskRecord.objects.create(original_value='baz', task=art_task)
+        self.record_qux = TaskRecord.objects.create(original_value='quz', task=art_task)
+        self.record_qud = TaskRecord.objects.create(original_value='qud', task=art_task)
+        self.record_fux = TaskRecord.objects.create(original_value='fux', task=diet_task)
+        self.record_fax = TaskRecord.objects.create(original_value='fax', task=diet_task)
 
 
     def test_progress_by_round_for_all(self):
@@ -148,6 +151,36 @@ class TestTaskRecordReview(TestCase):
         last_review.choice = correct
         last_review.save()
         self.assertFalse(self.record_foo.has_disagreements)
+
+
+    def test_it_count_reviews_by_tasks(self):
+        # Two reviews for the Art task
+        self.record_foo.reviews.add(TaskRecordReview.objects.create())
+        self.record_bar.reviews.add(TaskRecordReview.objects.create())
+        # And one for the Diet task
+        self.record_fax.reviews.add(TaskRecordReview.objects.create())
+        count_by = TaskRecordReview.objects.all().count_by_task()
+        self.assertEqual(len(count_by), 2)
+        self.assertEqual(count_by[0]['task_id'], 1)
+        self.assertEqual(count_by[0]['count'], 2)
+        self.assertEqual(count_by[1]['task_id'], 2)
+        self.assertEqual(count_by[1]['count'], 1)
+
+
+    def test_it_count_reviews_by_tasks_with_custom_task_field(self):
+        # Two reviews for the Art task
+        self.record_foo.reviews.add(TaskRecordReview.objects.create())
+        self.record_bar.reviews.add(TaskRecordReview.objects.create())
+        count_by = TaskRecordReview.objects.all().count_by_task(task_field='taskId')
+        self.assertEqual(count_by[0]['taskId'], 1)
+
+
+    def test_it_count_reviews_by_tasks_with_custom_count_field(self):
+        # Two reviews for the Art task
+        self.record_foo.reviews.add(TaskRecordReview.objects.create())
+        self.record_bar.reviews.add(TaskRecordReview.objects.create())
+        count_by = TaskRecordReview.objects.all().count_by_task(count_field='total')
+        self.assertEqual(count_by[0]['total'], 2)
 
 
     def test_it_should_returns_no_mentions(self):

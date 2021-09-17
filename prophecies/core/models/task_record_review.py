@@ -1,7 +1,7 @@
 import re
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Max, signals
+from django.db.models import Count, F, Max, signals
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -14,7 +14,24 @@ class StatusType(models.TextChoices):
     DONE = 'DONE', _('Done')
 
 
+class TaskRecordReviewQuerySet(models.QuerySet):
+
+    def count_by_task(self, task_field='task_id', count_field='count'):
+        count = Count('pk', distinct=True)
+        annotate = { task_field: F('task_record__task_id'), count_field: count }
+        return self.exclude(task_record=None) \
+            .values('task_record__task_id') \
+            .annotate(**annotate) \
+            .values(task_field, count_field) \
+            .order_by()
+
+
 class TaskRecordReviewManager(models.Manager):
+
+    def get_queryset(self) -> TaskRecordReviewQuerySet:
+        return TaskRecordReviewQuerySet(model=self.model,
+            using=self._db, hints=self._hints)
+
 
     def latest_round(self, task_record):
         if self.filter(task_record=task_record).exists():
@@ -56,7 +73,6 @@ class TaskRecordReviewManager(models.Manager):
         progress = lambda round, total: done.get(round, 0) / total * 100
         # Return a dictionnary combinings both aggregations dict
         return { round: progress(round, count) for (round, count) in all.items() }
-
 
 
 class TaskRecordReview(models.Model):
