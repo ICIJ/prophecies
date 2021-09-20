@@ -422,6 +422,11 @@ export default {
                   Clear filters
                 </b-btn>
               </li>
+              <li class="list-inline-item">
+                <task-record-review-applied-sorting
+                  :sort.sync="sort"
+                  class="d-inline-block" />
+              </li>
               <li class="task-record-review-list__container__selected-results list-inline-item font-weight-bold" v-if="hasSelectedRecords">
                 {{ $tc('taskRecordReviewList.selectedResults',  selectedIdsCount ) }}
                 <template v-if="hasSelectedAndLockedRecords">
@@ -433,9 +438,6 @@ export default {
               <task-record-review-applied-filters
                 :route-filters.sync="routeFilters"
                 :task-id="taskId"
-                class="d-inline-block" />
-              <task-record-review-applied-sorting
-                :sort.sync="sort"
                 class="d-inline-block" />
             </b-collapse>
             <b-collapse :visible="hasSelectedRecords">
