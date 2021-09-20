@@ -12,12 +12,12 @@ export default {
       showTutorial: undefined,
       stepNumber: 1,
       steps: [{
-          text: "Read the content to be checked",
+          text: "Read the content",
           class: "offset-2 col-8 ",
           width: "130px",
         },
         {
-          text: "Check if the predicted value is correct",
+          text: "Check whether the predicted value is correct",
           class: "ml-auto col-3",
           width: "180px",
         },
@@ -27,13 +27,13 @@ export default {
           width: "130px",
         },
         {
-          text: "Read others' choice (click one's choice to quickly select the same!)",
+          text: "Read others' choices (click another user's choice to select the same!)",
           class: "col-lg-6 col-xxl-6 ",
           iconAlign: "float-left",
           width: "250px"
         },
         {
-          text: "Comment (you can mention someone with @username or everyone with @project)",
+          text: "Comment (you can mention other checkers with @username, or everyone with @project)",
           class: "offset-lg-6 col-lg-5 offset-xxl-6 col-xxl-5 p-0",
           iconAlign: "float-right ",
           width: "350px"
