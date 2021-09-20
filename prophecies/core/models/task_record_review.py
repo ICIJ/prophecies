@@ -209,10 +209,7 @@ class TaskRecordReview(models.Model):
     @property
     def mentioned_task(self):
         if mentioned(self.note, 'task'):
-            try:
-                return self.task_record.task
-            except AttributeError:
-                return None
+            return self.task
 
 
     @staticmethod
