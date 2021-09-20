@@ -39,9 +39,9 @@ export default class TaskRecordReview extends Model {
       find (id) {
         return this.get(`${id}/`)
       },
-      search (query) {
-        const params = { 'filter[search]': query }
-        return this.get('', { params })
+      search (query, config = {}) {
+        const params = { ...config.params, 'filter[search]': query }
+        return this.get('', { ...config, params })
       },
       save (id, { attributes = { }, relationships = { } } = { }) {
         const type = 'TaskRecordReview'

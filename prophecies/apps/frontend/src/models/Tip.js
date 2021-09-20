@@ -27,7 +27,13 @@ export default class Tip extends Model {
 
   static apiConfig = {
     baseURL: `${settings.apiUrl}/tips/`,
-    dataTransformer: responseNormalizer
+    dataTransformer: responseNormalizer,
+    actions: {
+      search (query, config = {}) {
+        const params = { ...config.params, 'filter[search]': query }
+        return this.get('', { ...config, params })
+      }
+    }
   }
 
   get descriptionWithMentions () {
