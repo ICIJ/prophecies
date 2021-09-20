@@ -69,7 +69,7 @@ export default {
       <app-header reduced />
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchTipLoader" waiter-class="my-5 mx-auto d-block">
-          <tip-card class="card card-body shadow" :tip="tip" />
+          <tip-card class="card card-body shadow" :tip-id="tipId" v-if="tip" />
         </app-waiter>
       </div>
     </div>
