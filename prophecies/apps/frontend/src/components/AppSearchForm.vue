@@ -1,5 +1,7 @@
 <script>
-import { flatten, get, throttle, uniqueId } from 'lodash'
+import { filter, flatten, get, maxBy, throttle, uniqueId } from 'lodash'
+import { directive as onClickaway } from 'vue-clickaway'
+
 import AppSearchResults from '@/components/AppSearchResults'
 import AppWaiter from '@/components/AppWaiter'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
@@ -11,7 +13,14 @@ export default {
   props: {
     isNav: {
       type: Boolean
+    },
+    searchInputSelector: {
+      type: String,
+      default: '.app-search-form__field__input'
     }
+  },
+  directives: {
+    onClickaway
   },
   components: {
     AppSearchResults,
@@ -22,7 +31,9 @@ export default {
     return {
       counts: [],
       query: '',
-      queryset: []
+      queryset: [],
+      activeItem: -1,
+      activeQuerysetId: null
     }
   },
   computed: {
@@ -34,10 +45,14 @@ export default {
     },
     classList () {
       return {
+        'app-search-form--has-active-item': this.hasActiveItem,
         'app-search-form--has-query': this.hasQuery,
         'app-search-form--has-queryset': this.hasQueryset,
         'app-search-form--is-loading': this.isLoading,
       }
+    },
+    hasActiveItem () {
+      return this.activeItem > -1 && this.activeQuerysetId
     },
     hasQuery () {
       return this.query !== ''
@@ -55,9 +70,38 @@ export default {
           return this.searchTaskRecordReview(query, querysetId, taskId)
         }
       })
+    },
+    defaultQuerysetId () {
+      const maxCount = maxBy(this.counts, 'count')
+      return get(maxCount, 'querysetId', null)
+    },
+    activeQueryset () {
+      return filter(this.queryset, { querysetId: this.activeQuerysetId })
+    },
+    maxActiveItem () {
+      return this.activeQueryset.length - 1
     }
   },
   methods: {
+    close () {
+      this.activeItem = -1
+      this.$el.querySelector(this.searchInputSelector).blur()
+    },
+    mapShortkeys ({ srcKey: method }) {
+      if (method in this.$options.methods) {
+        this[method]()
+      }
+    },
+    activatePreviousItem () {
+      this.activeItem = Math.max(-1, this.activeItem - 1)
+      // Move back to the search input
+      if (this.activeItem === -1) {
+        this.$el.querySelector(this.searchInputSelector).focus()
+      }
+    },
+    activateNextItem () {
+      this.activeItem = Math.min(this.maxActiveItem, this.activeItem + 1)
+    },
     collectEntitiesIdAndType ({ response }, querysetId) {
       const data = get(response, 'data.data', [])
       return data.map(({ id, type }) => ({ id, type, querysetId }))
@@ -73,6 +117,13 @@ export default {
     },
     isQueryValid (query) {
       return String(query).length > 1
+    },
+    callSearchMethods (query) {
+      return this.searchMethods.map(method => {
+        // Each method creates a unique id
+        const querysetId = uniqueId('qs-')
+        return method(query, querysetId)
+      })
     },
     async searchTaskRecordReview (query, querysetId, taskId) {
       const params = { 'filter[taskRecord.task]': taskId }
@@ -92,16 +143,18 @@ export default {
         return this.emptyResultsAndCounts()
       }
       this.$wait.start(`app-search-form-load-${query}`)
-      // We can search the query through several methods
-      const querysetId = uniqueId('queryset-')
-      const promises = this.searchMethods.map(method => method(query, querysetId))
       try {
+        // We can search the query through several methods
+        const promises = this.callSearchMethods(query)
+        // Wait for all promises to be resolved
         const all = await Promise.all(promises)
         // Avoid updating component's data if the query is not current anymore
         if (this.query === query) {
           // Merge values at once
           this.counts = all.map(qs => qs.count)
           this.queryset = flatten(all.map(qs => qs.entitiesIdAndType))
+          this.activeQuerysetId = this.defaultQuerysetId
+          this.activeItem = -1
         }
       } finally {
         this.$wait.end(`app-search-form-load-${query}`)
@@ -115,8 +168,20 @@ export default {
 </script>
 
 <template>
-  <component :is="is" class="app-search-form" :class="classList" @submit.prevent>
-    <label class="app-search-form__field d-flex align-items-center justify-content-start w-100">
+  <component
+    class="app-search-form"
+    :is="is"
+    :class="classList"
+    v-on-clickaway="close"
+    @submit.prevent>
+    <label
+      class="app-search-form__field d-flex align-items-center justify-content-start w-100"
+      v-shortkey="{
+        'activatePreviousItem': ['arrowup'],
+        'activateNextItem': ['arrowdown'],
+        'close': ['esc']
+      }"
+      @shortkey="mapShortkeys">
       <app-waiter
         :loader="`app-search-form-load-${query}`"
         :transition="null"
@@ -127,12 +192,15 @@ export default {
         <search-icon class="app-search-form__field__waiter__icon" />
       </app-waiter>
       <b-form-input
-        v-model="query"
         @input="searchWithThrottle(query)"
-        v-shortkey.focus="['ctrl', 'f']"
-        type="search"
+        @keyup.up="activatePreviousItem"
+        @keyup.down="activateNextItem"
+        @keyup.esc="close"
+        class="app-search-form__field__input flex-grow-1"
         placeholder="Type your search"
-        class="app-search-form__field__input flex-grow-1" />
+        type="search"
+        v-model="query"
+        v-shortkey.focus="['ctrl', 'f']" />
       <span class="app-search-form__field__placeholder">
         {{ $t('appHeader.search') }}
         <shortkey-badge
@@ -143,6 +211,8 @@ export default {
       <app-search-results
         class="app-search-form__field__results"
         v-if="hasQueryset && !isLoading"
+        :active-item.sync="activeItem"
+        :active-queryset-id.sync="activeQuerysetId"
         :counts="counts"
         :query="query"
         :queryset="queryset" />
@@ -191,17 +261,20 @@ export default {
       }
 
       .app-search-form--has-query &__placeholder,
+      .app-search-form--has-active-item &__placeholder,
       &__input:focus ~ &__placeholder {
         display: none;
       }
 
 
       .app-search-form--has-query &__separator,
+      .app-search-form--has-active-item &__separator,
       &__input:focus ~ &__separator {
         display: block;
       }
 
       .app-search-form--has-queryset &__input:focus ~ &__results,
+      .app-search-form--has-active-item &__results,
       .app-search-form--has-queryset &__results:hover {
         display: block;
       }

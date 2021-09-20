@@ -1,4 +1,5 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
+import { find } from 'lodash'
+import { createLocalVue, mount } from '@vue/test-utils'
 import AppSearchForm from '@/components/AppSearchForm'
 import Core from '@/core'
 import Task from '@/models/Task'
@@ -7,18 +8,25 @@ describe('AppSearchForm', () => {
   describe('with 2 tasks', () => {
     let wrapper
 
+    function createContainer () {
+      const div = document.createElement('div')
+      document.body.appendChild(div)
+      return div
+    }
+
     beforeAll(async () => {
       await Task.api().get()
     })
 
     beforeEach(async () => {
+      const attachTo = createContainer()
       const localVue = createLocalVue()
       const core = Core.init(localVue).useAll()
       const { i18n, store, wait } = core
       const stubs = ['router-link', 'app-waiter']
       await core.configure()
       // Finally, instantiate the component
-      wrapper = shallowMount(AppSearchForm, { i18n, localVue, stubs, store, wait })
+      wrapper = mount(AppSearchForm, { attachTo, i18n, localVue, stubs, store, wait })
     })
 
     afterEach(async () => {
@@ -68,6 +76,61 @@ describe('AppSearchForm', () => {
       )
     })
 
+    it('should deactivate item after a search', async () => {
+      await wrapper.setData({ activeItem: 1 })
+      await wrapper.setData({ query: 'buz' })
+      await wrapper.vm.search('buz')
+      expect(wrapper.vm.activeItem).toBe(-1)
+    })
+
+    it('should not be able to activate item bellow -1', async () => {
+      await wrapper.setData({ activeItem: -1 })
+      wrapper.vm.activatePreviousItem()
+      expect(wrapper.vm.activeItem).toBe(-1)
+    })
+
+    it('should not be able to activate item above the current queryset size', async () => {
+      await wrapper.setData({ query: 'buz' })
+      await wrapper.vm.search('buz')
+      await wrapper.setData({ activeItem: 2 })
+      wrapper.vm.activateNextItem()
+      expect(wrapper.vm.activeItem).toBe(2)
+    })
+
+    it('should not be able to activate previous item when no queryset', async () => {
+      wrapper.vm.activatePreviousItem()
+      expect(wrapper.vm.activeItem).toBe(-1)
+    })
+
+    it('should not be able to activate next item when no queryset', async () => {
+      wrapper.vm.activateNextItem()
+      expect(wrapper.vm.activeItem).toBe(-1)
+    })
+
+    it('should have no active queryset before search', async () => {
+      expect(wrapper.vm.activeQuerysetId).toBeNull()
+      expect(wrapper.vm.activeQueryset).toHaveLength(0)
+    })
+
+    it('should focus on the search input when reaching item -1', async () => {
+      await wrapper.setData({ query: 'buz' })
+      await wrapper.vm.search('buz')
+      wrapper.vm.activateNextItem()
+      wrapper.vm.activatePreviousItem()
+      await wrapper.vm.$nextTick()
+      const input = wrapper.find(wrapper.vm.searchInputSelector)
+      expect(input.element).toBe(document.activeElement)
+    })
+
+    it('should activate the queryset with more results by default', async () => {
+      await wrapper.setData({ query: 'buz' })
+      await wrapper.vm.search('buz')
+      const querysetId = wrapper.vm.activeQuerysetId
+      const firstQuerysetMatch = find(wrapper.vm.queryset, { querysetId })
+      expect(firstQuerysetMatch.type).toBe('TaskRecordReview')
+      expect(wrapper.vm.activeQueryset).toHaveLength(3)
+    })
+
     it('should count tips 2 tips and 3 reviews for each tasks', async () => {
       await wrapper.setData({ query: 'buz' })
       await wrapper.vm.search('buz')
@@ -92,7 +155,7 @@ describe('AppSearchForm', () => {
       const stubs = ['router-link', 'app-waiter']
       await core.configure()
       // Finally, instantiate the component
-      wrapper = shallowMount(AppSearchForm, { i18n, localVue, stubs, store, wait })
+      wrapper = mount(AppSearchForm, { i18n, localVue, stubs, store, wait })
     })
 
     afterEach(async () => {
