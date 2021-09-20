@@ -24,7 +24,6 @@ class Tip(models.Model):
         return list_mentions(self.description)
 
 
-
     @property
     def mentioned_project(self):
         if mentioned(self.description, 'project'):
