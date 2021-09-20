@@ -22,7 +22,7 @@ export default {
 </script>
 <template>
 <div class="task-record-review-tutorial-step d-flex flex-column align-items-center" :class="step.class">
-  <div class="row">
+  <div class="row mb-2">
     <b-badge class="task-record-review-tutorial-step__progression" variant="warning">
       <div class="d-block" style="line-height:24px;">
         <div class="float-left ml-2 pr-2 task-record-review-tutorial-step__progression__numbers">{{ number }}/{{ stepCount }}</div>
