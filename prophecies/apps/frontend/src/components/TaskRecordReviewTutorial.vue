@@ -90,7 +90,7 @@ export default {
 <b-collapse :visible="showTutorial">
   <div class="task-record-review-tutorial card card-body p-4 container-fluid mb-5">
     <div class="row mb-3">
-      <div class="col d-flex">
+      <div class="col d-flex task-record-review-tutorial__header">
         <div>
           <coffee-icon />
         </div>
@@ -160,7 +160,11 @@ export default {
 
 <style lang="scss" scoped>
 .task-record-review-tutorial {
-    background: $light;
+    background: rgba($primary, .1);
+
+    &__header{
+      color:$primary;
+    }
 
     &__first-time-question {
         text-decoration: underline;
