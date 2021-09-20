@@ -1,6 +1,6 @@
 <template>
   <div class="tip-list-page-params container-fluid">
-    <div class="row">
+    <div class="row pl-2">
       <label class="tip-list-page-params__project col-lg-4 col-xl-3">
         <div class="mb-3">Project</div>
         <multiselect :allow-empty ="true"
