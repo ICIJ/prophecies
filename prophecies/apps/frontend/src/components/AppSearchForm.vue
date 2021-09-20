@@ -1,8 +1,11 @@
 <script>
-import { get, throttle } from 'lodash'
+import { flatten, get, throttle, uniqueId } from 'lodash'
 import AppSearchResults from '@/components/AppSearchResults'
+import AppWaiter from '@/components/AppWaiter'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
+import Task from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
+import Tip from '@/models/Tip'
 
 export default {
   props: {
@@ -12,47 +15,97 @@ export default {
   },
   components: {
     AppSearchResults,
+    AppWaiter,
     ShortkeyBadge
   },
   data () {
     return {
+      counts: [],
       query: '',
-      results: []
-    }
-  },
-  watch: {
-    query () {
-      return this.searchWithThrottle(this.query)
+      queryset: []
     }
   },
   computed: {
     is () {
       return this.isNav ? 'b-nav-form' : 'form'
     },
+    isLoading () {
+      return this.$wait.is(`app-search-form-load-${this.query}`)
+    },
     classList () {
       return {
         'app-search-form--has-query': this.hasQuery,
-        'app-search-form--has-results': this.hasResults,
+        'app-search-form--has-queryset': this.hasQueryset,
+        'app-search-form--is-loading': this.isLoading,
       }
     },
     hasQuery () {
       return this.query !== ''
     },
-    hasResults () {
-      return !!this.results.length
+    hasQueryset () {
+      return !!this.queryset.length
+    },
+    searchMethods () {
+      return [ this.searchTips, ...this.searchTaskRecordReviewMethodsByTask ]
+    },
+    searchTaskRecordReviewMethodsByTask () {
+      // Create one method for each task
+      return Task.all().map(({ id: taskId }) => {
+        return (query, querysetId) => {
+          return this.searchTaskRecordReview(query, querysetId, taskId)
+        }
+      })
     }
   },
   methods: {
-    collectEntitiesIdAndType (results = []) {
-      const data = get(results, 'response.data.data', [])
-      return data.map(({ id, type }) => ({ id, type }))
+    collectEntitiesIdAndType ({ response }, querysetId) {
+      const data = get(response, 'data.data', [])
+      return data.map(({ id, type }) => ({ id, type, querysetId }))
     },
-    async searchTaskRecordReview (query) {
-      const results = await TaskRecordReview.api().search(query)
-      return this.collectEntitiesIdAndType(results)
+    collectCount ({ response }, querysetId) {
+      const cannocialCount = get(response, 'data.data.length', 0)
+      const count = get(response, 'data.meta.pagination.count', cannocialCount)
+      return { count, querysetId }
+    },
+    emptyResultsAndCounts () {
+      this.counts = []
+      this.queryset = []
+    },
+    isQueryValid (query) {
+      return String(query).length > 1
+    },
+    async searchTaskRecordReview (query, querysetId, taskId) {
+      const params = { 'filter[taskRecord.task]': taskId }
+      const results = await TaskRecordReview.api().search(query, { params })
+      const entitiesIdAndType = this.collectEntitiesIdAndType(results, querysetId)
+      const count = this.collectCount(results, querysetId)
+      return { entitiesIdAndType, count }
+    },
+    async searchTips (query, querysetId) {
+      const results = await Tip.api().search(query)
+      const entitiesIdAndType = this.collectEntitiesIdAndType(results, querysetId)
+      const count = this.collectCount(results, querysetId)
+      return { entitiesIdAndType, count }
     },
     async search (query) {
-      this.results = !query ? [] : [ ...await this.searchTaskRecordReview(query) ]
+      if (!this.isQueryValid(query)) {
+        return this.emptyResultsAndCounts()
+      }
+      this.$wait.start(`app-search-form-load-${query}`)
+      // We can search the query through several methods
+      const querysetId = uniqueId('queryset-')
+      const promises = this.searchMethods.map(method => method(query, querysetId))
+      try {
+        const all = await Promise.all(promises)
+        // Avoid updating component's data if the query is not current anymore
+        if (this.query === query) {
+          // Merge values at once
+          this.counts = all.map(qs => qs.count)
+          this.queryset = flatten(all.map(qs => qs.entitiesIdAndType))
+        }
+      } finally {
+        this.$wait.end(`app-search-form-load-${query}`)
+      }
     },
     searchWithThrottle: throttle(function (query) {
       return this.search(query)
@@ -64,9 +117,18 @@ export default {
 <template>
   <component :is="is" class="app-search-form" :class="classList" @submit.prevent>
     <label class="app-search-form__field d-flex align-items-center justify-content-start w-100">
-      <search-icon class="mr-2 app-search-form__field__icon" />
+      <app-waiter
+        :loader="`app-search-form-load-${query}`"
+        :transition="null"
+        :waiter-class="null"
+        class="app-search-form__field__waiter mr-2"
+        small
+        variant="primary">
+        <search-icon class="app-search-form__field__waiter__icon" />
+      </app-waiter>
       <b-form-input
         v-model="query"
+        @input="searchWithThrottle(query)"
         v-shortkey.focus="['ctrl', 'f']"
         type="search"
         placeholder="Type your search"
@@ -79,9 +141,11 @@ export default {
       </span>
       <span class="app-search-form__field__separator"></span>
       <app-search-results
+        class="app-search-form__field__results"
+        v-if="hasQueryset && !isLoading"
+        :counts="counts"
         :query="query"
-        :results="results"
-        class="app-search-form__field__results" />
+        :queryset="queryset" />
     </label>
   </component>
 </template>
@@ -98,9 +162,15 @@ export default {
     &__field {
       padding: $spacer-xs;
 
-      &__icon {
+      &__waiter {
         height: 20px;
-        width: 20px
+        width: 20px;
+        overflow: hidden;
+
+        &__icon {
+          height: 20px;
+          width: 20px
+        }
       }
 
       & &__input {
@@ -131,8 +201,8 @@ export default {
         display: block;
       }
 
-      .app-search-form--has-results &__input:focus ~ &__results,
-      .app-search-form--has-results &__results:hover {
+      .app-search-form--has-queryset &__input:focus ~ &__results,
+      .app-search-form--has-queryset &__results:hover {
         display: block;
       }
 
