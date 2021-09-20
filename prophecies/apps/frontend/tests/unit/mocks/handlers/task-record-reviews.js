@@ -18,7 +18,8 @@ export default [
             attributes: {
               status: 'DONE',
               note: "I really don't know",
-              alternativeValue: '??'
+              alternativeValue: '??',
+              taskId: '1'
             },
             relationships: {
               choice: {
@@ -61,7 +62,8 @@ export default [
             attributes: {
               status: 'DONE',
               note: 'This is bad',
-              alternativeValue: 'FRA'
+              alternativeValue: 'FRA',
+              taskId: '1'
             },
             relationships: {
               choice: {
@@ -104,7 +106,8 @@ export default [
             attributes: {
               status: 'PENDING',
               note: '',
-              alternativeValue: ''
+              alternativeValue: '',
+              taskId: '1'
             },
             relationships: {
               choice: {
@@ -214,7 +217,7 @@ export default [
           pagination: {
             page: 1,
             pages: 1,
-            count: 2
+            count: 3
           }
         }
       })
