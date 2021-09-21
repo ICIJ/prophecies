@@ -31,7 +31,7 @@ export const router = {
       props: true
     },
     {
-      name: 'task-record-review-retreive',
+      name: 'task-record-review-retrieve',
       path: '/task-record-reviews/:taskId/:taskRecordReviewId',
       component: TaskRecordReviewRetrieve,
       props: true

@@ -15,7 +15,7 @@ export default {
     },
     route () {
       return {
-        name: 'task-record-review-retreive',
+        name: 'task-record-review-retrieve',
         params: {
           taskId: this.taskRecordReview.taskId,
           taskRecordReviewId: this.taskRecordReviewId

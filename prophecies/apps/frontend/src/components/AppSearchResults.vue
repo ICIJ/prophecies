@@ -156,7 +156,7 @@ export default {
             v-for="(review, index) in querysetTaskRecordReviews(task.id)"
             :class="{ 'app-search-results__tabs__content__link--active': isActive(index) }"
             :key="review.id"
-            :to="{ name: 'task-record-review-retreive', params: { taskId: task.id, taskRecordReviewId: review.id } }">
+            :to="{ name: 'task-record-review-retrieve', params: { taskId: task.id, taskRecordReviewId: review.id } }">
             <span v-html="highlight(review.taskRecord.originalValue)"></span>
           </router-link>
         </b-card-text>

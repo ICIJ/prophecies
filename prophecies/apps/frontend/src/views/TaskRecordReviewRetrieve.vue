@@ -43,7 +43,7 @@
     },
     computed: {
       fetchAllLoader () {
-        return uniqueId('load-task-record-review-retreive-')
+        return uniqueId('load-task-record-review-retrieve-')
       },
       highlightNote () {
         if (String(this.$route.query.highlightNote).toLowerCase() === 'true') {
@@ -101,7 +101,7 @@
 </script>
 
 <template>
-  <div class="task-record-review-retreive">
+  <div class="task-record-review-retrieve">
     <div class="d-flex align-items-center">
       <app-breadcrumb v-if="task">
         <template #items>
@@ -117,7 +117,7 @@
       </app-breadcrumb>
       <app-header class="flex-grow-1" />
     </div>
-    <div class="task-record-review-retreive__container">
+    <div class="task-record-review-retrieve__container">
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
           <template v-if="resolvedTaskRecordReviewId">
