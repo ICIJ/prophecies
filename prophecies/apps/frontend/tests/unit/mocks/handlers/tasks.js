@@ -223,7 +223,7 @@ export default [
       })
     )
   }),
-  rest.get('/api/v1/tasks/1/', (req, res, ctx) => {
+  rest.get('/api/v1/tasks/1', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({

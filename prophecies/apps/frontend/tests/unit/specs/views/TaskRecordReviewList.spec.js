@@ -3,12 +3,8 @@ import {
   shallowMount
 } from '@vue/test-utils'
 import Core from '@/core'
-import ChoiceGroup from '@/models/ChoiceGroup'
-import Task from '@/models/Task'
-import TaskRecordReview from '@/models/TaskRecordReview'
-import TaskRecord from '@/models/TaskRecord'
-import User from '@/models/User'
 import TaskRecordReviewList from '@/views/TaskRecordReviewList'
+
 describe('TaskRecordReviewList', () => {
   let wrapper
 
@@ -17,14 +13,6 @@ describe('TaskRecordReviewList', () => {
     document.body.appendChild(div)
     return div
   }
-
-  beforeAll(async () => {
-    await ChoiceGroup.api().get()
-    await Task.api().get()
-    await TaskRecordReview.api().get('')
-    await TaskRecord.api().get()
-    await User.api().me()
-  })
 
   beforeEach(async () => {
     const attachTo = createContainer()
@@ -55,7 +43,7 @@ describe('TaskRecordReviewList', () => {
       store,
       wait
     })
-    await new Promise(resolve => setTimeout(resolve))
+    await wrapper.vm.setup()
   })
 
   afterEach(async () => {
@@ -70,12 +58,12 @@ describe('TaskRecordReviewList', () => {
       pagination: {
         count: 0
       },
-      selectedIds: {
-      }
+      selectedIds: { }
     })
     const selectedIdsCounter = await wrapper.find('.task-record-review-list__container__selected-results')
     expect(selectedIdsCounter.exists()).toBe(false)
   })
+
   it('should show 1 selected result', async () => {
     await wrapper.setData({
       pagination: {
@@ -89,7 +77,7 @@ describe('TaskRecordReviewList', () => {
     expect(selectedIdsCounter.exists()).toBe(true)
     expect(selectedIdsCounter.text()).toBe('1 result selected')
   })
-  //
+
   it('should show 2 selected results', async () => {
     await wrapper.setData({
       pagination: {
@@ -106,7 +94,7 @@ describe('TaskRecordReviewList', () => {
   })
 
   it('should show 2 selected results (1 of which is locked)', async () => {
-    const response = await wrapper.vm.fetchTaskRecordReviews()
+    await wrapper.vm.fetchTaskRecordReviews()
     await wrapper.vm.selectTaskRecordReview('38', true)
 
     expect(wrapper.vm.isTaskRecordReviewLocked('38')).toBe(true)
