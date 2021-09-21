@@ -8,7 +8,6 @@ import TaskRecordReviewAppliedFilters from '@/components/TaskRecordReviewApplied
 import TaskRecordReviewAppliedSorting from '@/components/TaskRecordReviewAppliedSorting'
 import TaskRecordReviewBulkChoiceForm from '@/components/TaskRecordReviewBulkChoiceForm'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
-import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
 import TaskRecordReviewFilters from '@/components/TaskRecordReviewFilters'
 import TaskRecordReviewPageParams from '@/components/TaskRecordReviewPageParams'
 import TaskRecordReviewTutorial from '@/components/TaskRecordReviewTutorial'
@@ -16,7 +15,6 @@ import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Task from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
-import User from '@/models/User'
 
 export default {
   name: 'TaskRecordReviewList',
@@ -29,7 +27,6 @@ export default {
     TaskRecordReviewCard,
     TaskRecordReviewAppliedFilters,
     TaskRecordReviewAppliedSorting,
-    TaskRecordReviewChoiceForm,
     TaskRecordReviewFilters,
     TaskRecordReviewPageParams,
     TaskRecordReviewTutorial
@@ -37,14 +34,15 @@ export default {
   props: {
     taskId: {
       type: [Number, String]
-    },
+    }
   },
   data () {
     return {
       pagination: null,
       selectedIds: {},
       showFilters: false,
-      taskRecordReviewIds: []    }
+      taskRecordReviewIds: []
+    }
   },
   watch: {
     pageNumber (value) {
@@ -113,7 +111,7 @@ export default {
       }
     },
     hasSorting () {
-      return this.sort != 'task_record__id'
+      return this.sort !== 'task_record__id'
     },
     hasFilters () {
       return !!keys(this.routeFilters).length
@@ -215,7 +213,7 @@ export default {
         'filter[taskRecord.task]': this.taskId,
         'page[size]': this.pageSize,
         'page[number]': this.pageNumber,
-        'sort': this.sort
+        sort: this.sort
       }
     },
     trailingTaskRecordReview () {
