@@ -37,13 +37,6 @@ describe('TaskRecordReviewList', () => {
     await wrapper.vm.setup()
   })
 
-  afterEach(async () => {
-    // Prevent a Vue warning in the next tick when the parentNode doesnt exist:
-    // > TypeError: Cannot read property 'createElement' of null
-    // @see https://stackoverflow.com/a/62262333
-    wrapper.destroy()
-  })
-
   it('should not display text when no item is selected', async () => {
     await wrapper.setData({
       pagination: {
@@ -65,7 +58,7 @@ describe('TaskRecordReviewList', () => {
       }
     })
     const selectedIdsCounter = await wrapper.find('.task-record-review-list__container__selected-results')
-    expect(selectedIdsCounter.exists()).toBe(true)
+    expect(selectedIdsCounter.exists()).toBeTruthy()
     expect(selectedIdsCounter.text()).toBe('1 result selected')
   })
 
@@ -80,19 +73,18 @@ describe('TaskRecordReviewList', () => {
       }
     })
     const selectedIdsCounter = await wrapper.find('.task-record-review-list__container__selected-results')
-    expect(selectedIdsCounter.exists()).toBe(true)
+    expect(selectedIdsCounter.exists()).toBeTruthy()
     expect(selectedIdsCounter.text()).toBe('2 results selected')
   })
 
   it('should show 2 selected results (1 of which is locked)', async () => {
-    await wrapper.vm.fetchTaskRecordReviews()
     await wrapper.vm.selectTaskRecordReview('38', true)
 
-    expect(wrapper.vm.isTaskRecordReviewLocked('38')).toBe(true)
-    expect(wrapper.vm.hasSelectedRecords).toBe(true)
+    expect(wrapper.vm.isTaskRecordReviewLocked('38')).toBeTruthy()
+    expect(wrapper.vm.hasSelectedRecords).toBeTruthy()
 
     const selectedIdsCounter = await wrapper.find('.task-record-review-list__container__selected-results')
-    expect(selectedIdsCounter.exists()).toBe(true)
+    expect(selectedIdsCounter.exists()).toBeTruthy()
     expect(selectedIdsCounter.text()).toBe('1 result selected (1 of which is locked)')
   })
 })
