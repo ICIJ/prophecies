@@ -12,7 +12,7 @@ import TaskRecordReviewList from '@/views/TaskRecordReviewList'
 describe('TaskRecordReviewList', () => {
   let wrapper
 
-  function createContainer() {
+  function createContainer () {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -63,7 +63,6 @@ describe('TaskRecordReviewList', () => {
     // > TypeError: Cannot read property 'createElement' of null
     // @see https://stackoverflow.com/a/62262333
     wrapper.destroy()
-
   })
 
   it('should not display text when no item is selected', async () => {
@@ -72,7 +71,7 @@ describe('TaskRecordReviewList', () => {
         count: 0
       },
       selectedIds: {
-      },
+      }
     })
     const selectedIdsCounter = await wrapper.find('.task-record-review-list__container__selected-results')
     expect(selectedIdsCounter.exists()).toBe(false)
@@ -108,7 +107,7 @@ describe('TaskRecordReviewList', () => {
 
   it('should show 2 selected results (1 of which is locked)', async () => {
     const response = await wrapper.vm.fetchTaskRecordReviews()
-    await wrapper.vm.selectTaskRecordReview ('38', true)
+    await wrapper.vm.selectTaskRecordReview('38', true)
 
     expect(wrapper.vm.isTaskRecordReviewLocked('38')).toBe(true)
     expect(wrapper.vm.hasSelectedRecords).toBe(true)
