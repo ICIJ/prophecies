@@ -13,8 +13,8 @@ export default {
       type: Number
     }
   },
-  computed : {
-    isOthersChoiceBlock() {
+  computed: {
+    isOthersChoiceBlock () {
       return this.number < 4
     }
   }
@@ -79,8 +79,4 @@ export default {
       text-align: center;
   }
 }
-
-
-
-
 </style>

@@ -7,43 +7,43 @@ export default {
   components: {
     TaskRecordReviewTutorialStep
   },
-  data() {
+  data () {
     return {
       showTutorial: undefined,
       stepNumber: 1,
       steps: [{
-          text: "Read the content",
-          class: "offset-2 col-8 ",
-          width: "130px",
-        },
-        {
-          text: "Check whether the predicted value is correct",
-          class: "ml-auto col-3",
-          width: "180px",
-        },
-        {
-          text: "Select (or type) your choice",
-          class: "col-xxl-6 ",
-          width: "130px",
-        },
-        {
-          text: "Read others' choices (click another user's choice to select the same!)",
-          class: "col-lg-6 col-xxl-6 ",
-          iconAlign: "float-left",
-          width: "250px"
-        },
-        {
-          text: "Comment (you can mention other checkers with @username, or everyone with @project)",
-          class: "offset-lg-6 col-lg-5 offset-xxl-6 col-xxl-5 p-0",
-          iconAlign: "float-right ",
-          width: "350px"
-        },
+        text: 'Read the content',
+        class: 'offset-2 col-8 ',
+        width: '130px'
+      },
+      {
+        text: 'Check whether the predicted value is correct',
+        class: 'ml-auto col-3',
+        width: '180px'
+      },
+      {
+        text: 'Select (or type) your choice',
+        class: 'col-xxl-6 ',
+        width: '130px'
+      },
+      {
+        text: "Read others' choices (click another user's choice to select the same!)",
+        class: 'col-lg-6 col-xxl-6 ',
+        iconAlign: 'float-left',
+        width: '250px'
+      },
+      {
+        text: 'Comment (you can mention other checkers with @username, or everyone with @project)',
+        class: 'offset-lg-6 col-lg-5 offset-xxl-6 col-xxl-5 p-0',
+        iconAlign: 'float-right ',
+        width: '350px'
+      }
       ]
     }
   },
-  created() {
+  created () {
     let showTutorial = Cookies.get('showTutorial')
-    if (showTutorial === undefined || showTutorial === "true") {
+    if (showTutorial === undefined || showTutorial === 'true') {
       showTutorial = true
       Cookies.set('showTutorial', showTutorial, {
         expires: 365,
@@ -52,36 +52,36 @@ export default {
     } else {
       showTutorial = false
     }
-    this.showTutorial = showTutorial;
+    this.showTutorial = showTutorial
   },
   computed: {
-    isFirstStep() {
+    isFirstStep () {
       return this.stepNumber === 1
     },
-    isLastStep() {
+    isLastStep () {
       return this.stepNumber === this.steps.length
     },
-    isLeftBlock(){
+    isLeftBlock () {
       return this.stepNumber === 1 || this.stepNumber === 2
     },
-    isChoiceBlock(){
+    isChoiceBlock () {
       return this.stepNumber === 3
     }
   },
   methods: {
-    previousTutorialStep() {
+    previousTutorialStep () {
       this.stepNumber--
     },
-    nextTutorialStep() {
+    nextTutorialStep () {
       this.stepNumber++
     },
-    closeTutorial() {
+    closeTutorial () {
       this.showTutorial = false
       Cookies.set('showTutorial', this.showTutorial, {
         expires: 365,
         sameSite: 'lax'
       })
-    },
+    }
   }
 }
 </script>
