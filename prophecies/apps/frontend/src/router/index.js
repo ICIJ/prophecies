@@ -1,6 +1,7 @@
 import Dashboard from '@/views/Dashboard.vue'
 import Error from '@/views/Error.vue'
 import Login from '@/views/Login.vue'
+import HistoryList from '@/views/HistoryList.vue'
 import TaskRecordReviewList from '@/views/TaskRecordReviewList.vue'
 import TaskRecordReviewRetrieve from '@/views/TaskRecordReviewRetrieve.vue'
 import TipList from '@/views/TipList.vue'
@@ -23,6 +24,12 @@ export const router = {
       meta: {
         title: ({ i18n }) => i18n.t('login.title')
       }
+    },
+    {
+      name: 'history-list',
+      path: '/history',
+      component: HistoryList,
+      props: true
     },
     {
       name: 'task-record-review-list',
