@@ -428,10 +428,7 @@ export default {
                   class="d-inline-block" />
               </li>
               <li class="task-record-review-list__container__selected-results list-inline-item font-weight-bold" v-if="hasSelectedRecords">
-                {{ $tc('taskRecordReviewList.selectedResults',  selectedIdsCount ) }}
-                <template v-if="hasSelectedAndLockedRecords">
-                  ({{ $tc('taskRecordReviewList.lockedResults',  selectedAndLockedIdsCount ) }})
-                </template>
+                {{ $tc('taskRecordReviewList.selectedResults',  selectedIdsCount ) }} <template v-if="hasSelectedAndLockedRecords">({{ $tc('taskRecordReviewList.lockedResults',  selectedAndLockedIdsCount ) }})</template>
               </li>
             </ul>
             <b-collapse :visible="showAppliedFilters">

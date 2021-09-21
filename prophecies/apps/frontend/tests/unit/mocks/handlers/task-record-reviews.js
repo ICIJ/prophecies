@@ -179,6 +179,7 @@ export default [
             attributes: {
               originalValue: 'La France',
               predictedValue: 'FRA',
+              locked:true,
               link: 'https://www.openstreetmap.org/search?query=La%20France',
               metadata: null,
               rounds: 3,
