@@ -1,3 +1,4 @@
+from actstream.models import Action
 from django.contrib.auth.models import User
 from django.test import TestCase
 from prophecies.core.models import Task, TaskRecord, TaskRecordReview, Project
@@ -119,3 +120,27 @@ class TestTask(TestCase):
         task = Task.objects.create(name='Foo', status='CLOSED', project=self.project)
         task.open()
         self.assertTrue(task.is_open)
+
+    def test_it_log_action_when_task_is_locked(self):
+        task = Task.objects.create(name='Foo', project=self.project, creator=self.olivia)
+        task.lock()
+        action = Action.objects.filter_actor(actor=self.olivia).first()
+        self.assertTrue(action is not None)
+        self.assertEqual(action.verb, 'locked')
+        self.assertEqual(action.target, task)
+
+    def test_it_log_action_when_task_is_closed(self):
+        task = Task.objects.create(name='Foo', project=self.project, creator=self.olivia)
+        task.close()
+        action = Action.objects.filter_actor(actor=self.olivia).first()
+        self.assertTrue(action is not None)
+        self.assertEqual(action.verb, 'closed')
+        self.assertEqual(action.target, task)
+
+    def test_it_log_action_when_task_is_open(self):
+        task = Task.objects.create(name='Foo', project=self.project, creator=self.olivia, status='CLOSE')
+        task.open()
+        action = Action.objects.filter_actor(actor=self.olivia).first()
+        self.assertTrue(action is not None)
+        self.assertEqual(action.verb, 'open')
+        self.assertEqual(action.target, task)

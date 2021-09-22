@@ -1,6 +1,8 @@
+from actstream import action
 from colorfield.fields import ColorField
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import signals
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from prophecies.core.models.project import Project
@@ -57,15 +59,36 @@ class Task(models.Model):
 
     @property
     def is_open(self):
-        return self.status == StatusType.OPEN        
+        return self.status == StatusType.OPEN
+
+    @property
+    def is_open_changed(self):
+        if self.pk is not None:
+            instance = Task.objects.get(pk=self.pk)
+            return self.is_open != instance.is_open
+        return False
 
     @property
     def is_closed(self):
         return self.status == StatusType.CLOSED
 
     @property
+    def is_closed_changed(self):
+        if self.pk is not None:
+            instance = Task.objects.get(pk=self.pk)
+            return self.is_closed != instance.is_closed
+        return False
+
+    @property
     def is_locked(self):
         return self.status == StatusType.LOCKED
+
+    @property
+    def is_locked_changed(self):
+        if self.pk is not None:
+            instance = Task.objects.get(pk=self.pk)
+            return self.is_locked != instance.is_locked
+        return False
 
 
     @cached_property
@@ -81,3 +104,26 @@ class Task(models.Model):
         """
         scales = [0.75, 1.0, 1.25]
         return tuple(hex_scale_brightness(self.color, s) for s in scales)
+
+    @staticmethod
+    def signal_log_task_locked(sender, instance, **kwargs):
+        if instance.is_locked_changed and instance.is_locked:
+            if instance.creator:
+                action.send(instance.creator, verb='locked', target=instance)
+
+    @staticmethod
+    def signal_log_task_closed(sender, instance, **kwargs):
+        if instance.is_closed_changed and instance.is_closed:
+            if instance.creator:
+                action.send(instance.creator, verb='closed', target=instance)
+
+    @staticmethod
+    def signal_log_task_open(sender, instance, **kwargs):
+        if instance.is_open_changed and instance.is_open:
+            if instance.creator:
+                action.send(instance.creator, verb='open', target=instance)
+
+
+signals.pre_save.connect(Task.signal_log_task_locked, sender=Task)
+signals.pre_save.connect(Task.signal_log_task_closed, sender=Task)
+signals.pre_save.connect(Task.signal_log_task_open, sender=Task)
