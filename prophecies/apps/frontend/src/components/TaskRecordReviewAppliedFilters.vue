@@ -58,8 +58,8 @@
 <template>
   <div class="task-record-review-applied-filters mb-4">
     <template v-for="filter of filters">
-      <template v-for="option in filter.selected">
-        <b-btn variant="primary" class="task-record-review-applied-filters__item" :title="filter.name"  v-b-tooltip.hover @click="deleteFilterOption(filter, option)">
+      <template v-for="(option, i) in filter.selected">
+        <b-btn variant="primary" class="task-record-review-applied-filters__item" :key="i" :title="filter.name"  v-b-tooltip.hover @click="deleteFilterOption(filter, option)">
           {{ option[filter.label || 'name'] }}<x-icon class="ml-3" size="1x" />
         </b-btn>
       </template>
