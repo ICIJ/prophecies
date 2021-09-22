@@ -43,6 +43,31 @@ class Task(models.Model):
         rounds = range(1, self.rounds + 1)
         return { round: progress.get(round, 0) for round in rounds }
 
+    def open(self):
+        self.status = StatusType.OPEN
+        self.save()
+
+    def close(self):
+        self.status = StatusType.CLOSED
+        self.save()
+
+    def lock(self):
+        self.status = StatusType.LOCKED
+        self.save()
+
+    @property
+    def is_open(self):
+        return self.status == StatusType.OPEN        
+
+    @property
+    def is_closed(self):
+        return self.status == StatusType.CLOSED
+
+    @property
+    def is_locked(self):
+        return self.status == StatusType.LOCKED
+
+
     @cached_property
     def progress(self):
         all = self.task_records.count()

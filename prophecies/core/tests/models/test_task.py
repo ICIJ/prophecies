@@ -86,3 +86,36 @@ class TestTask(TestCase):
         TaskRecord.objects.create(task=self.art, status=StatusType.DONE)
         TaskRecord.objects.create(task=self.shop, status=StatusType.PENDING)
         self.assertEqual(self.art.progress, 100)
+
+    def test_it_locks_the_task(self):
+        task = Task.objects.create(name='Foo', project=self.project)
+        self.assertEqual(task.status, 'OPEN')
+        task.lock()
+        self.assertEqual(task.status, 'LOCKED')
+
+    def test_it_closes_the_task(self):
+        task = Task.objects.create(name='Foo', project=self.project)
+        self.assertEqual(task.status, 'OPEN')
+        task.close()
+        self.assertEqual(task.status, 'CLOSED')
+
+    def test_it_opens_the_task(self):
+        task = Task.objects.create(name='Foo', status='CLOSED', project=self.project)
+        self.assertEqual(task.status, 'CLOSED')
+        task.open()
+        self.assertEqual(task.status, 'OPEN')
+
+    def test_task_is_locked(self):
+        task = Task.objects.create(name='Foo', project=self.project)
+        task.lock()
+        self.assertTrue(task.is_locked)
+
+    def test_task_is_closed(self):
+        task = Task.objects.create(name='Foo', project=self.project)
+        task.close()
+        self.assertTrue(task.is_closed)
+
+    def test_task_is_open(self):
+        task = Task.objects.create(name='Foo', status='CLOSED', project=self.project)
+        task.open()
+        self.assertTrue(task.is_open)
