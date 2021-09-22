@@ -290,3 +290,26 @@ class TestTaskRecordReview(TestCase):
         }
         request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload, content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 403)
+
+
+    def test_it_cannot_make_changes_to_a_record_from_locked_task(self):
+        self.task.status = 'LOCKED'
+        self.task.save()
+        attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django)
+        self.client.login(username='django', password='django')
+        payload = {
+            'data': {
+                'type': 'TaskRecordReview',
+                'id': attribution.id,
+                'relationships': {
+                    'choice': {
+                        'data': {
+                            'type': 'Choice',
+                            'id': self.task.choice_group.choices.first().id
+                        }
+                    }
+                }
+            }
+        }
+        request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload, content_type='application/vnd.api+json')
+        self.assertEqual(request.status_code, 403)
