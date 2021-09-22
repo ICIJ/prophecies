@@ -293,8 +293,7 @@ class TestTaskRecordReview(TestCase):
 
 
     def test_it_cannot_make_changes_to_a_record_from_locked_task(self):
-        self.task.status = 'LOCKED'
-        self.task.save()
+        self.task.lock()
         attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django)
         self.client.login(username='django', password='django')
         payload = {
