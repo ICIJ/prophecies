@@ -29,6 +29,14 @@ export default {
         .with('taskRecord.lockedBy')
         .find(this.taskRecordReviewId)
     },
+    taskIsOpen () {
+      return this.taskStatus === 'OPEN' 
+    },
+    taskStatus () {
+      return TaskRecordReview
+      .query('task')
+      .find(this.taskRecordReviewId).status 
+    },
     taskRecord () {
       return get(this, 'taskRecordReview.taskRecord')
     },
@@ -80,18 +88,24 @@ export default {
         <copy-icon size="1.5x" />
         <span class="sr-only">Duplicate record</span>
       </b-btn>
-      <b-btn variant="link" v-if="taskRecord.lockedByMe" class="text-dark" title="Unlock record" v-b-tooltip.left @click="emitUnlock">
+      <b-btn variant="link" v-if="!taskIsOpen" class="text-danger" :title="`The admin must open the task to let you review this record`" v-b-tooltip.left>
         <lock-icon size="1.5x" />
         <span class="sr-only">Unlock</span>
       </b-btn>
-      <b-btn variant="link" v-if="taskRecord.lockedByOther" class="text-danger" :title="`${taskRecord.lockedBy.displayName} must unlock this record to let you review it`" v-b-tooltip.left>
-        <lock-icon size="1.5x" />
-        <span class="sr-only">Unlock</span>
-      </b-btn>
-      <b-btn variant="link" v-if="!taskRecord.locked" class="text-dark" title="Lock record (nobody will be able to review it until you unlock it)" v-b-tooltip.left @click="emitLock">
-        <unlock-icon size="1.5x" />
-        <span class="sr-only">Lock</span>
-      </b-btn>
+      <template v-else>
+        <b-btn variant="link" v-if="taskRecord.lockedByMe" class="text-dark" title="Unlock record" v-b-tooltip.left @click="emitUnlock">
+          <lock-icon size="1.5x" />
+          <span class="sr-only">Unlock</span>
+        </b-btn>
+        <b-btn variant="link" v-if="taskRecord.lockedByOther" class="text-danger" :title="`${taskRecord.lockedBy.displayName} must unlock this record to let you review it`" v-b-tooltip.left>
+          <lock-icon size="1.5x" />
+          <span class="sr-only">Unlock</span>
+        </b-btn>
+        <b-btn variant="link" v-if="!taskRecord.locked" class="text-dark" title="Lock record (nobody will be able to review it until you unlock it)" v-b-tooltip.left @click="emitLock">
+          <unlock-icon size="1.5x" />
+          <span class="sr-only">Lock</span>
+        </b-btn>
+      </template>
       <b-btn variant="link" class="text-dark" title="See history" v-b-tooltip.left @click="emitToggleChanges">
         <clock-icon size="1.5x" />
         <span class="sr-only">See changes history</span>

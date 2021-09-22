@@ -15,12 +15,17 @@
           Priority {{ task.priority }}
         </span>
       </div>
-      <p>
-        Fully checked items:
-        <span class="text-danger font-weight-bold ml-2 task-stats-card__checked">
-          {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
-        </span>
-      </p>
+      <div class="d-flex align-items-center">
+        <p>
+          Fully checked items:
+          <span class="text-danger font-weight-bold ml-2 task-stats-card__checked">
+            {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
+          </span>
+        </p>
+         <p class="ml-auto d-flex text-danger" v-if="taskIsLocked">
+         <lock-icon size="1.5x" /><span class="sr-only">Unlock</span> <span class='ml-2'>Locked</span> 
+        </p>
+      </div>
       <div class="d-flex align-items-center">
         <ul class="task-stats-card__progress-by-round list-inline m-0">
           <li class="task-stats-card__progress-by-round__item list-inline-item" v-for="round in task.rounds" :key="round">
@@ -77,6 +82,9 @@ export default {
         return this.task.taskRecordsDoneCount
       }
       return this.task.userTaskRecordsDoneCount
+    },
+    taskIsLocked () {
+      return this.task.status === 'LOCKED'
     },
     progress () {
       if (this.team) {

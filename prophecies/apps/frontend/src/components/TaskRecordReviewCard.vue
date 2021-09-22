@@ -69,9 +69,14 @@ export default {
       this.emitUpdate()
     },
     async lock () {
-      await TaskRecord.api().lock(this.taskRecord.id)
-      // Let parent component know about the update
-      this.emitUpdate()
+      try {
+        await TaskRecord.api().lock(this.taskRecord.id)
+        // Let parent component know about the update
+        this.emitUpdate()
+      } catch (error) {
+        const message = error.response.data.errors[0].detail
+        this.makeToast('warning',`⛔ Task record #${this.taskRecord.id}`, message)
+      }
     },
     async lockWithLoader () {
       this.$wait.start(this.loader)
@@ -79,9 +84,14 @@ export default {
       this.$wait.end(this.loader)
     },
     async unlock () {
-      await TaskRecord.api().unlock(this.taskRecord.id)
-      // Let parent component know about the update
-      this.emitUpdate()
+      try {
+        await TaskRecord.api().unlock(this.taskRecord.id)
+        // Let parent component know about the update
+        this.emitUpdate()
+      } catch (error) {
+        const message = error.response.data.errors[0].detail
+        this.makeToast('warning',`⛔ Task record #${this.taskRecord.id}`, message)
+      }
     },
     async unlockWithLoader () {
       this.$wait.start(this.loader)
@@ -116,6 +126,15 @@ export default {
         return this.toggleNotes(true, highlightedReviewId)
       }
       return this.toggleNotes(!this.showNotes, highlightedReviewId)
+    },
+    makeToast(variant = null, title, text) {
+      this.$bvToast.toast(text, {
+        title: title,
+        autoHideDelay: 5000,
+        variant: variant,
+        toaster:'b-toaster-bottom-right',
+        appendToast: true
+      })
     },
     emitUpdate () {
       /**
