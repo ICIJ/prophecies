@@ -37,7 +37,7 @@ export default {
           Shortcuts
           <shortkey-badge :value="['meta', 'k']" class="ml-2" />
         </b-nav-item>
-        <b-nav-item :to="{ name: 'history-list' }">
+        <b-nav-item>
           <clock-icon class="mr-2" />
           History
           <shortkey-badge :value="['meta', 'h']" class="ml-2" />
