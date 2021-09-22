@@ -1,10 +1,20 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import signals
-from prophecies.core.models import Project, Task, UserNotification
+from prophecies.core.models import Project, Task, UserNotification, TaskChecker
 from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action, mentioned, notify_mentioned_users
 
+class TipManager(models.Manager):
+    def general(self):
+        return self.filter(task_id__isnull=True, project_id__isnull=True).distinct().all()
+
+    def user_scope(self, user):
+        return self.filter(task__checkers=user).distinct().all() | self.general()
+
+
 class Tip(models.Model):
+    objects = TipManager()
+
     name = models.CharField(max_length=100, verbose_name="Tip name", null=True, blank=True)
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -13,8 +23,12 @@ class Tip(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
+
     def __str__(self):
+        if not self.name:
+            return 'untitled tip'
         return self.name
+
 
     @property
     def mentions(self):

@@ -167,3 +167,14 @@ class TestTip(TestCase):
         ruby = User.objects.create(username='ruby')
         Tip.objects.create(task=self.record_foo.task, project=self.project, description="Hi @task!", creator=self.django)
         self.assertEqual(UserNotification.objects.filter(recipient=ruby).count(), 0)
+
+
+    def test_it_should_filter_tips_based_on_user_access(self):
+        TaskChecker.objects.create(task=self.record_foo.task, checker=self.olivia)
+        Tip.objects.create(description="Hi, you should be able to see this", creator=self.django, project=self.project, task=self.record_foo.task)
+        Tip.objects.create(description="Hi, you also should be able to see this", creator=self.django)
+        project = Project.objects.create(name='Chronos')
+        task = Task.objects.create(name='Jewels', project=project, color='#fe6565', rounds=2)
+        Tip.objects.create(description="Hi, you should not be able to see this", creator=self.django, project=project, task=task)
+        user_scoped_tips = Tip.objects.user_scope(self.olivia)
+        self.assertEqual(len(user_scoped_tips), 2)
