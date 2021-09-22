@@ -141,3 +141,21 @@ class TestTaskRecord(TestCase):
         }
         request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload, content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 400)
+
+
+    def test_he_cannot_lock_record_from_locked_task(self):
+        task_record = TaskRecord.objects.create(task=self.task)
+        self.task.lock()
+        review = TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
+        self.client.login(username='django', password='django')
+        payload = {
+            'data': {
+                'type': 'TaskRecord',
+                'id': task_record.id,
+                'attributes': {
+                    'locked': True
+                }
+            }
+        }
+        request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload, content_type='application/vnd.api+json')
+        self.assertEqual(request.status_code, 403)
