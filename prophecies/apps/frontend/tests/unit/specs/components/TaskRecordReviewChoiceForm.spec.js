@@ -1,4 +1,4 @@
-import { createLocalVue, mount } from '@vue/test-utils'
+import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
@@ -9,7 +9,7 @@ import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
 describe('TaskRecordReviewChoiceForm', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -79,18 +79,34 @@ describe('TaskRecordReviewChoiceForm', () => {
     })
   })
 
-  describe('with a task not opened', () => {
+  describe('with a task status', () => {
     beforeEach(() => {
       const localVue = createLocalVue()
       const propsData = { taskRecordReviewId: '25' }
       // Configure the local vue with plugins
       const { store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(TaskRecordReviewChoiceForm, { localVue, propsData, store, wait })
+      wrapper = shallowMount(TaskRecordReviewChoiceForm, { localVue, propsData, store, wait })
     })
 
-    it('should be in disabled state', async () => {
+    it('should be in enabled state when record is not locked and task is open ', () => {
+      const element = wrapper.find('.task-record-review-choice-form')
+      expect(element.classes('task-record-review-choice-form--is-locked')).toBeFalsy()
+    })
+
+    it('should be in disabled state when record is locked and task is open ', async () => {
+      const propsData = { taskRecordReviewId: '24' }
+      await wrapper.setProps(propsData)
+      const element = wrapper.find('.task-record-review-choice-form')
+      expect(element.classes('task-record-review-choice-form--is-locked')).toBeTruthy()
+    })
+
+    it('should be in disabled state when task is not open', async () => {
+      const propsData = { taskRecordReviewId: '38' }
+      await wrapper.setProps(propsData)
+
       const element = wrapper.find('.task-record-review-choice-form')
       expect(element.classes('task-record-review-choice-form--is-locked')).toBeTruthy()
     })
   })
+
 })

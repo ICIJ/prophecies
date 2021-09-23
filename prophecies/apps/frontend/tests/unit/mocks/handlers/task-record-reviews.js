@@ -143,7 +143,7 @@ export default [
               taskRecord: {
                 data: {
                   type: 'TaskRecord',
-                  id: '3'
+                  id: '5'
                 }
               },
               checker: {
@@ -166,6 +166,47 @@ export default [
             },
             links: {
               self: 'http://localhost/api/v1/task-record-reviews/25/'
+            }
+          },
+          {
+            type: 'TaskRecordReview',
+            id: '24',
+            attributes: {
+              status: 'PENDING',
+              note: "I really don't know",
+              alternativeValue: '??',
+              taskId: '2'
+            },
+            relationships: {
+              choice: {
+                data: null
+              },
+              taskRecord: {
+                data: {
+                  type: 'TaskRecord',
+                  id: '4'
+                }
+              },
+              checker: {
+                data: {
+                  type: 'User',
+                  id: '2'
+                }
+              },
+              collaborators: {
+                data: []
+              },
+              history: {
+                data: [
+                  {
+                    type: 'TaskRecordReview',
+                    id: '24'
+                  }
+                ]
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/task-record-reviews/24/'
             }
           }
         ],
@@ -242,6 +283,57 @@ export default [
             },
             links: {
               self: 'http://localhost/api/v1/task-records/3/'
+            }
+          },
+          {
+            type: 'TaskRecord',
+            id: '4',
+            attributes: {
+              originalValue: 'La France',
+              predictedValue: 'FRA',
+              locked: true,
+              link: 'https://www.openstreetmap.org/search?query=La%20France',
+              metadata: null,
+              rounds: 3,
+              status: 'ASSIGNED'
+            },
+            relationships: {
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '2'
+                }
+              },
+              lockedBy: {
+                data: '2'
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/task-records/4/'
+            }
+          },          
+          {
+            type: 'TaskRecord',
+            id: '5',
+            attributes: {
+              originalValue: 'La France',
+              predictedValue: 'FRA',
+              locked: false,
+              link: 'https://www.openstreetmap.org/search?query=La%20France',
+              metadata: null,
+              rounds: 3,
+              status: 'ASSIGNED'
+            },
+            relationships: {
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '2'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/task-records/5/'
             }
           },
           {

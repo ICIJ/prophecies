@@ -61,10 +61,10 @@ describe('AppSearchForm', () => {
       expect(spy).toBeCalledWith('foo', expect.anything(), '2')
     })
 
-    it('should return a queryset of 2 tips and 8 reviews', async () => {
+    it('should return a queryset of 2 tips and 10 reviews', async () => {
       await wrapper.setData({ query: 'buz' })
       await wrapper.vm.search('buz')
-      expect(wrapper.vm.queryset).toHaveLength(10)
+      expect(wrapper.vm.queryset).toHaveLength(12)
       expect(wrapper.vm.queryset).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ id: '3', type: 'Tip' }),
@@ -72,7 +72,8 @@ describe('AppSearchForm', () => {
           expect.objectContaining({ id: '36', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '37', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '38', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '25', type: 'TaskRecordReview' })
+          expect.objectContaining({ id: '25', type: 'TaskRecordReview' }),
+          expect.objectContaining({ id: '24', type: 'TaskRecordReview' })
         ])
       )
     })
@@ -93,9 +94,9 @@ describe('AppSearchForm', () => {
     it('should not be able to activate item above the current queryset size', async () => {
       await wrapper.setData({ query: 'buz' })
       await wrapper.vm.search('buz')
-      await wrapper.setData({ activeItem: 3 })
+      await wrapper.setData({ activeItem: 4 })
       wrapper.vm.activateNextItem()
-      expect(wrapper.vm.activeItem).toBe(3)
+      expect(wrapper.vm.activeItem).toBe(4)
     })
 
     it('should not be able to activate previous item when no queryset', async () => {
@@ -129,7 +130,7 @@ describe('AppSearchForm', () => {
       const querysetId = wrapper.vm.activeQuerysetId
       const firstQuerysetMatch = find(wrapper.vm.queryset, { querysetId })
       expect(firstQuerysetMatch.type).toBe('TaskRecordReview')
-      expect(wrapper.vm.activeQueryset).toHaveLength(4)
+      expect(wrapper.vm.activeQueryset).toHaveLength(5)
     })
 
     it('should count tips 2 tips and 3 reviews for each tasks', async () => {
