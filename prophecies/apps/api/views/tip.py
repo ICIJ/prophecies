@@ -24,11 +24,18 @@ class TipSerializer(serializers.HyperlinkedModelSerializer):
         model = Tip
         fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'project', 'creator', 'task']
 
+
 class TipViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Tip.objects.all() \
-        .prefetch_related('project') \
-        .prefetch_related('creator') \
-        .prefetch_related('task')
+    queryset = Tip.objects.none()
+
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Tip.objects.none()
+        return Tip.objects.user_scope(self.request.user) \
+            .prefetch_related('project') \
+            .prefetch_related('creator') \
+            .prefetch_related('task')
+
     serializer_class = TipSerializer
     search_fields = ['name', 'description']
     ordering_fields = ['name']
