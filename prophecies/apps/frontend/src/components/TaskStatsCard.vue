@@ -35,6 +35,9 @@ export default {
     taskIsLocked() {
       return this.task.status === "LOCKED";
     },
+    taskIsClosed() {
+      return this.task.status === "CLOSED";
+    },
     progress() {
       if (this.team) {
         return this.task.progress;
@@ -77,16 +80,10 @@ export default {
             {{ task.project.name }}
           </b-badge>
         </h3>
-        <span
-          class="
-            bg-warning
-            rounded
-            py-1
-            px-2
-            ml-auto
-            task-stats-card__heading__priority
-          "
-        >
+        <span v-if="taskIsClosed" class="ml-auto task-stats-card__heading--closed" >
+          Closed!
+        </span>
+        <span v-else class=" bg-warning rounded  py-1 px-2  task-stats-card__heading__priority">
           Priority {{ task.priority }}
         </span>
       </div>
@@ -99,7 +96,10 @@ export default {
             {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
           </span>
         </p>
-        <p class="ml-auto d-flex text-danger" v-if="taskIsLocked">
+        <p class="ml-auto d-flex" v-if="taskIsClosed">
+          <span class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">Closed</span>
+        </p>
+        <p class="ml-auto d-flex text-danger" v-else-if="taskIsLocked">
           <lock-icon size="1.5x" /><span class="sr-only">Unlock</span>
           <span class="task-stats-card__status--locked ml-2">Locked</span>
         </p>
@@ -144,3 +144,16 @@ export default {
     </div>
   </div>
 </template>
+
+
+<style lang="scss" scoped>
+  .task-stats-card {
+
+    &__heading{
+     
+      &--closed  {
+        color: $secondary;
+      }
+    }
+  }
+</style>

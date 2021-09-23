@@ -125,6 +125,126 @@ export default [
             links: {
               self: 'http://localhost/api/v1/tasks/2/'
             }
+          },
+          {
+            type: 'Task',
+            id: '3',
+            attributes: {
+              colors: [
+                '#9e5e00',
+                '#d37d00',
+                '#ff9b09'
+              ],
+              description: 'A list of shop to check',
+              name: 'Shops',
+              priority: 1,
+              rounds: 3,
+              taskRecordsCount: 1000,
+              taskRecordsDoneCount: 500,
+              userTaskRecordsCount: 300,
+              userTaskRecordsDoneCount: 100,
+              userProgressByRound: {
+                1: 100,
+                2: 25,
+                3: 25
+              },
+              userProgress: 45,
+              status:'CLOSED',
+              progress: 60,
+              progressByRound: {
+                1: 50,
+                2: 25,
+                3: 25
+              }
+            },
+            relationships: {
+              choiceGroup: {
+                data: {
+                  type: 'ChoiceGroup',
+                  id: '1'
+                }
+              },
+              project: {
+                data: {
+                  type: 'Project',
+                  id: '1'
+                }
+              },
+              checkers: {
+                meta: {
+                  count: 1
+                },
+                data: [
+                  {
+                    type: 'User',
+                    id: '2'
+                  }
+                ]
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/tasks/3/'
+            }
+          },
+          {
+            type: 'Task',
+            id: '4',
+            attributes: {
+              colors: [
+                '#9e5e00',
+                '#d37d00',
+                '#ff9b09'
+              ],
+              description: 'A list of shop to check',
+              name: 'Shops',
+              priority: 1,
+              rounds: 3,
+              taskRecordsCount: 1000,
+              taskRecordsDoneCount: 500,
+              userTaskRecordsCount: 300,
+              userTaskRecordsDoneCount: 100,
+              userProgressByRound: {
+                1: 100,
+                2: 25,
+                3: 25
+              },
+              userProgress: 45,
+              status:'OPEN',
+              progress: 60,
+              progressByRound: {
+                1: 50,
+                2: 25,
+                3: 25
+              }
+            },
+            relationships: {
+              choiceGroup: {
+                data: {
+                  type: 'ChoiceGroup',
+                  id: '1'
+                }
+              },
+              project: {
+                data: {
+                  type: 'Project',
+                  id: '1'
+                }
+              },
+              checkers: {
+                meta: {
+                  count: 1
+                },
+                data: [
+                  {
+                    type: 'User',
+                    id: '2'
+                  }
+                ]
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/tasks/4/'
+            }
           }
         ],
         included: [

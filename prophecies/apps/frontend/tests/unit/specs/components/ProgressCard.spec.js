@@ -18,9 +18,9 @@ describe('ProgressCard', () => {
     wrapper = mount(ProgressCard, { localVue })
   })
 
-  it('should show 3 progress items', () => {
+  it('should show 5 progress items', () => {
     const elements = wrapper.findAll('.progress-card__items__item')
-    expect(elements).toHaveLength(3)
+    expect(elements).toHaveLength(5)
   })
 
   it('should show the overall progress', () => {
@@ -53,7 +53,7 @@ describe('ProgressCard', () => {
   it('should show the average progess for the user', async () => {
     await wrapper.setData({ team: false })
     const element = wrapper.findAll('.progress-card__items__item__value').at(0)
-    expect(element.text()).toBe('48%')
+    expect(element.text()).toBe('46%')
   })
 
   it('should show a 40% progess for the team on task "Adresses"', () => {
@@ -68,6 +68,6 @@ describe('ProgressCard', () => {
 
   it('should show the average progess for the team', () => {
     const element = wrapper.findAll('.progress-card__items__item__value').at(0)
-    expect(element.text()).toBe('50%')
+    expect(element.text()).toBe('55%')
   })
 })

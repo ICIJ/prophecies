@@ -29,7 +29,15 @@ export default {
   },
   computed: {
     tasks () {
-      return Task.all()
+      return Task.all().sort((a,b)=>{
+
+        if(a.status === "CLOSED"){
+          return 1
+        }else if(b.status === "CLOSED"){
+          return -1
+        }
+        return 0
+      })
     },
     fetchTaskLoader () {
       return uniqueId('load-dashboard-task-')

@@ -53,24 +53,29 @@ describe('AppSearchForm', () => {
       expect(spy).toHaveBeenCalledTimes(1)
     })
 
-    it('should search reviews for tasks 1 and 2', async () => {
+    it('should search reviews for tasks 1, 2, 3 and 4', async () => {
       const spy = jest.spyOn(wrapper.vm, 'searchTaskRecordReview')
       await wrapper.vm.search('foo')
-      expect(spy).toHaveBeenCalledTimes(2)
+      expect(spy).toHaveBeenCalledTimes(4)
       expect(spy).toBeCalledWith('foo', expect.anything(), '1')
       expect(spy).toBeCalledWith('foo', expect.anything(), '2')
+      expect(spy).toBeCalledWith('foo', expect.anything(), '3')
+      expect(spy).toBeCalledWith('foo', expect.anything(), '4')
     })
 
-    it('should return a queryset of 2 tips and 10 reviews', async () => {
+    it('should return a queryset of 2 tips and 20 reviews', async () => {
       await wrapper.setData({ query: 'buz' })
       await wrapper.vm.search('buz')
-      expect(wrapper.vm.queryset).toHaveLength(12)
+      expect(wrapper.vm.queryset).toHaveLength(22)
       expect(wrapper.vm.queryset).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ id: '3', type: 'Tip' }),
           expect.objectContaining({ id: '4', type: 'Tip' }),
           expect.objectContaining({ id: '36', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '37', type: 'TaskRecordReview' }),
+          expect.objectContaining({ id: '38', type: 'TaskRecordReview' }),
+          expect.objectContaining({ id: '25', type: 'TaskRecordReview' }),
+          expect.objectContaining({ id: '24', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '38', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '25', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '24', type: 'TaskRecordReview' })
@@ -136,10 +141,13 @@ describe('AppSearchForm', () => {
     it('should count tips 2 tips and 3 reviews for each tasks', async () => {
       await wrapper.setData({ query: 'buz' })
       await wrapper.vm.search('buz')
-      expect(wrapper.vm.counts).toHaveLength(3)
+      expect(wrapper.vm.counts).toHaveLength(5)
       expect(wrapper.vm.counts).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ count: 2, querysetId: expect.anything() }),
+          expect.objectContaining({ count: 3, querysetId: expect.anything() }),
+          expect.objectContaining({ count: 3, querysetId: expect.anything() }),
+          expect.objectContaining({ count: 3, querysetId: expect.anything() }),
           expect.objectContaining({ count: 3, querysetId: expect.anything() })
         ])
       )

@@ -39,8 +39,8 @@ describe('AppSearchResults', () => {
       wrapper = shallowMount(AppSearchResults, { i18n, localVue, propsData, stubs, store, wait })
     })
 
-    it('should have 3 tabs', () => {
-      expect(wrapper.findAllComponents(BTab)).toHaveLength(3)
+    it('should have 5 tabs', () => {
+      expect(wrapper.findAllComponents(BTab)).toHaveLength(5)
     })
 
     it('should have 3 items for task 1', () => {
