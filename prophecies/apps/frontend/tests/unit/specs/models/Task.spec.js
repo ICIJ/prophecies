@@ -11,7 +11,7 @@ describe('Task', () => {
   })
 
   it('should return a list of task record', () => {
-    expect(Task.all()).toHaveLength(2)
+    expect(Task.all()).toHaveLength(4)
   })
 
   it('should return a name and a description', () => {
