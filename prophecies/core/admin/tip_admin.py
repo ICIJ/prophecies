@@ -12,7 +12,8 @@ class TipAdmin(admin.ModelAdmin):
     list_display = ['name', 'creator', 'project', 'task_with_addon']
 
     def task_with_addon(self, task_record):
-        return display_task_addon(task_record.task)
+        if task_record.task:
+            return display_task_addon(task_record.task)
 
     task_with_addon.short_description = "Task"
 
