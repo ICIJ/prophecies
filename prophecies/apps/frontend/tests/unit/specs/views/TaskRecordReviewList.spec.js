@@ -37,6 +37,28 @@ describe('TaskRecordReviewList', () => {
     await wrapper.vm.setup()
   })
 
+  it('should display "Select all records" or "Select 1 record" according to the number of records', async () => {
+    await wrapper.setData({
+      pagination: {
+        count: 0
+      },
+      selectedIds: { },
+      taskRecordReviewIds: ['38']
+    })
+    let selectAllTextContainer = await wrapper.find('.task-record-review-list__container__select-all')
+    expect(selectAllTextContainer.text()).toBe("Select 1 record")
+    await wrapper.setData({
+      pagination: {
+        count: 0
+      },
+      selectedIds: { },
+      taskRecordReviewIds: ['38','37']
+    })
+    selectAllTextContainer = await wrapper.find('.task-record-review-list__container__select-all')
+    expect(selectAllTextContainer.text()).toBe("Select 2 records")
+  })
+
+
   it('should not display text when no item is selected', async () => {
     await wrapper.setData({
       pagination: {

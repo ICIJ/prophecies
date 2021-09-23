@@ -369,8 +369,8 @@ export default {
                 <b-btn variant="outline-dark" class="border" tag="label">
                   <span class="custom-control custom-checkbox">
                     <input class="custom-control-input" v-model="selectAll" type="checkbox" id="select-all-input" />
-                    <div class="custom-control-label" for="select-all-input">
-                      Select all {{ taskRecordReviews.length }} records
+                    <div class="task-record-review-list__container__select-all custom-control-label" for="select-all-input">
+                      Select {{ $tc('taskRecordReviewList.selectAll',  taskRecordReviews.length ) }}
                     </div>
                   </span>
                 </b-btn>
