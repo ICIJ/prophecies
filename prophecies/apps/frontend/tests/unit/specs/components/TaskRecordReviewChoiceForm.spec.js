@@ -64,7 +64,7 @@ describe('TaskRecordReviewChoiceForm', () => {
     })
   })
 
-  describe('with a pending task record review', () => {
+  describe('with a done task record review', () => {
     beforeEach(() => {
       const localVue = createLocalVue()
       const propsData = { taskRecordReviewId: '37' }
@@ -76,6 +76,21 @@ describe('TaskRecordReviewChoiceForm', () => {
     it('should be in selected state', async () => {
       const element = wrapper.find('.task-record-review-choice-form')
       expect(element.classes('task-record-review-choice-form--has-choice')).toBeTruthy()
+    })
+  })
+
+  describe('with a task not opened', () => {
+    beforeEach(() => {
+      const localVue = createLocalVue()
+      const propsData = { taskRecordReviewId: '25' }
+      // Configure the local vue with plugins
+      const { store, wait } = Core.init(localVue).useAll()
+      wrapper = mount(TaskRecordReviewChoiceForm, { localVue, propsData, store, wait })
+    })
+
+    it('should be in disabled state', async () => {
+      const element = wrapper.find('.task-record-review-choice-form')
+      expect(element.classes('task-record-review-choice-form--is-locked')).toBeTruthy()
     })
   })
 })

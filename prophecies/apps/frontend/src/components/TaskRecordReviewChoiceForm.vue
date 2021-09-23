@@ -100,10 +100,13 @@ export default {
       return this.choiceId !== null
     },
     isLocked () {
-      return this.taskRecord.locked
+      return this.taskRecord.locked || this.taskIsNotOpen
+    },
+    taskIsNotOpen () {
+      return this.taskRecord.task.status !== 'OPEN'
     }
   }
-}
+} 
 </script>
 
 <template>
