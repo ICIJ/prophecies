@@ -29,6 +29,7 @@ export default [
                 3: 25
               },
               userProgress: 50,
+              status:'LOCKED',
               progress: 40,
               progressByRound: {
                 1: 50,
@@ -88,6 +89,7 @@ export default [
                 3: 25
               },
               userProgress: 45,
+              status:'OPEN',
               progress: 60,
               progressByRound: {
                 1: 50,
@@ -222,70 +224,71 @@ export default [
         ]
       })
     )
-  }),
-  rest.get('/api/v1/tasks/1', (req, res, ctx) => {
+  }),  
+  rest.get('/api/v1/tasks/1/', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
         data: {
-          type: 'Task',
-          id: '1',
-          attributes: {
-            colors: [
-              '#60245c',
-              '#80307b',
-              '#a03c9a'
-            ],
-            description: 'A collection of adresses to fact check.',
-            name: 'Addresses',
-            priority: 1,
-            rounds: 3,
-            taskRecordsCount: 1000,
-            taskRecordsDoneCount: 500,
-            userTaskRecordsCount: 300,
-            userTaskRecordsDoneCount: 100,
-            userProgressByRound: {
-              1: 100,
-              2: 25,
-              3: 25
-            },
-            userProgress: 50,
-            progress: 40,
-            progressByRound: {
-              1: 50,
-              2: 25,
-              3: 30
-            }
-          },
-          relationships: {
-            choiceGroup: {
-              data: {
-                type: 'ChoiceGroup',
-                id: '1'
-              }
-            },
-            project: {
-              data: {
-                type: 'Project',
-                id: '1'
-              }
-            },
-            checkers: {
-              meta: {
-                count: 1
+            type: 'Task',
+            id: '1',
+            attributes: {
+              colors: [
+                '#60245c',
+                '#80307b',
+                '#a03c9a'
+              ],
+              description: 'A collection of adresses to fact check.',
+              name: 'Addresses',
+              priority: 1,
+              rounds: 3,
+              taskRecordsCount: 1000,
+              taskRecordsDoneCount: 500,
+              userTaskRecordsCount: 300,
+              userTaskRecordsDoneCount: 100,
+              userProgressByRound: {
+                1: 100,
+                2: 25,
+                3: 25
               },
-              data: [
-                {
-                  type: 'User',
-                  id: '2'
+              userProgress: 50,
+              status:'LOCKED',
+              progress: 40,
+              progressByRound: {
+                1: 50,
+                2: 25,
+                3: 30
+              }
+            },
+            relationships: {
+              choiceGroup: {
+                data: {
+                  type: 'ChoiceGroup',
+                  id: '1'
                 }
-              ]
+              },
+              project: {
+                data: {
+                  type: 'Project',
+                  id: '1'
+                }
+              },
+              checkers: {
+                meta: {
+                  count: 1
+                },
+                data: [
+                  {
+                    type: 'User',
+                    id: '2'
+                  }
+                ]
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/tasks/1/'
             }
           },
-          links: {
-            self: 'http://localhost/api/v1/tasks/1/'
-          }
-        },
         included: [
           {
             type: 'ChoiceGroup',

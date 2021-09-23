@@ -123,6 +123,50 @@ export default [
             links: {
               self: 'http://localhost/api/v1/task-record-reviews/285/'
             }
+          },
+          {
+            type: 'TaskRecordReview',
+            id: '25',
+            attributes: {
+              status: 'DONE',
+              note: "I really don't know",
+              alternativeValue: '??',
+              taskId: '2'
+            },
+            relationships: {
+              choice: {
+                data: {
+                  type: 'Choice',
+                  id: '3'
+                }
+              },
+              taskRecord: {
+                data: {
+                  type: 'TaskRecord',
+                  id: '3'
+                }
+              },
+              checker: {
+                data: {
+                  type: 'User',
+                  id: '2'
+                }
+              },
+              collaborators: {
+                data: []
+              },
+              history: {
+                data: [
+                  {
+                    type: 'TaskRecordReview',
+                    id: '25'
+                  }
+                ]
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/task-record-reviews/25/'
+            }
           }
         ],
         included: [
@@ -191,6 +235,9 @@ export default [
                   type: 'Task',
                   id: '1'
                 }
+              },
+              lockedBy: {
+                data: '2'
               }
             },
             links: {

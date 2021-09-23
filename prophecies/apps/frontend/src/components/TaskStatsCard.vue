@@ -22,8 +22,8 @@
             {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
           </span>
         </p>
-         <p class="ml-auto d-flex text-danger" v-if="taskIsLocked">
-         <lock-icon size="1.5x" /><span class="sr-only">Unlock</span> <span class='ml-2'>Locked</span> 
+        <p class="ml-auto d-flex text-danger" v-if="taskIsLocked">
+          <lock-icon size="1.5x" /><span class="sr-only">Unlock</span> <span class='task-stats-card__status--locked ml-2'>Locked</span> 
         </p>
       </div>
       <div class="d-flex align-items-center">

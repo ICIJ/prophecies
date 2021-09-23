@@ -68,4 +68,8 @@ describe('TaskStatsCard', () => {
     const element = wrapper.findAll('.task-stats-card__progress-by-round__item__value').at(2)
     expect(element.text()).toBe('30%')
   })
+  it('should show the task locked', async () => {
+    const element = wrapper.find('.task-stats-card__status--locked')
+    expect(element.exists()).toBe(true)
+  })
 })

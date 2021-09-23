@@ -25,6 +25,7 @@ export default {
     taskRecordReview () {
       return TaskRecordReview
         .query()
+        .with('task')
         .with('taskRecord')
         .with('taskRecord.lockedBy')
         .find(this.taskRecordReviewId)
@@ -32,10 +33,8 @@ export default {
     taskIsOpen () {
       return this.taskStatus === 'OPEN' 
     },
-    taskStatus () {
-      return TaskRecordReview
-      .query('task')
-      .find(this.taskRecordReviewId).status 
+    taskStatus(){
+      return this.taskRecordReview.task.status
     },
     taskRecord () {
       return get(this, 'taskRecordReview.taskRecord')
@@ -80,7 +79,7 @@ export default {
 <template>
   <div class="task-record-review-actions" :class="classList">
     <b-btn-group vertical size="sm">
-      <b-btn variant="link" class="text-dark" :href="link" target="_blank" v-if="link" title="Link" v-b-tooltip.left>
+      <b-btn variant="link" class="text-dark" :href="link"  v-if="link" title="Link" v-b-tooltip.left>
         <link-icon size="1.5x" />
         <span class="sr-only">Link</span>
       </b-btn>
@@ -88,7 +87,7 @@ export default {
         <copy-icon size="1.5x" />
         <span class="sr-only">Duplicate record</span>
       </b-btn>
-      <b-btn variant="link" v-if="!taskIsOpen" class="text-danger" :title="`The admin must open the task to let you review this record`" v-b-tooltip.left>
+      <b-btn variant="link" v-if="!taskIsOpen" class="text-danger task-record-review-actions__task_not_open" :title="`The admin must open the task to let you review this record`" v-b-tooltip.left>
         <lock-icon size="1.5x" />
         <span class="sr-only">Unlock</span>
       </b-btn>

@@ -11,7 +11,7 @@ describe('TaskRecordReview', () => {
   })
 
   it('should return a list of task record', () => {
-    expect(TaskRecordReview.all()).toHaveLength(3)
+    expect(TaskRecordReview.all()).toHaveLength(4)
     expect(TaskRecordReview.find(37)).not.toBeNull()
   })
 
