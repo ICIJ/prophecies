@@ -51,7 +51,7 @@ export default {
     },
     tipsGroupedByProject () {
       return groupBy(this.tips, (tip) => {
-        return tip.project.name
+        return tip.project ? tip.project.name : 'General'
       })
     },
     tipParams () {
@@ -84,7 +84,7 @@ export default {
     },
     tipsGroupedByTask (tips) {
       return groupBy(tips, (tip) => {
-        return tip.task.name
+        return tip.task ? tip.task.name : ''
       })
     }
   }
