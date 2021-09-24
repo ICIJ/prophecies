@@ -1,6 +1,6 @@
 export const state = () => ({
   redirectAfterLogin: null,
-  showTutorial: null
+  showTutorial: true
 })
 
 export const mutations = {
