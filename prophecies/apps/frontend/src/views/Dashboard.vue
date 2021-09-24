@@ -8,6 +8,7 @@ import LatestTipsCard from '@/components/LatestTipsCard'
 import ProgressCard from '@/components/ProgressCard'
 import TaskStatsCard from '@/components/TaskStatsCard'
 import Task from '@/models/Task'
+import Tip from '@/models/Tip'
 
 export default {
   name: 'Dashboard',
@@ -25,7 +26,7 @@ export default {
     }
   },
   async created () {
-    await this.waitFor(this.fetchTaskLoader, this.fetchTask)
+    await this.waitFor(this.fetchTaskLoader, this.fetchTask, this.fetchTips)
   },
   computed: {
     tasks () {
@@ -38,6 +39,9 @@ export default {
         }
         return 0
       })
+    },
+    tips () {
+      return Tip.all()
     },
     fetchTaskLoader () {
       return uniqueId('load-dashboard-task-')
@@ -52,6 +56,10 @@ export default {
   methods: {
     fetchTask () {
       return Task.api().get()
+    },
+    fetchTips () {
+      console.log(Tip.api().get());
+      return Tip.api().get('', {})
     },
     async waitFor (loader, fn) {
       this.$wait.start(loader)
@@ -98,7 +106,7 @@ export default {
             <div class="dashboard__container__right-panel ml-xl-auto">
               <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
                 <progress-card class="mb-5" v-if="tasks.length" />
-                <latest-tips-card />
+                <latest-tips-card :tips="tips"/>
               </app-waiter>
             </div>
           </div>

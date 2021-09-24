@@ -3,8 +3,9 @@ import { get, groupBy, split, uniqueId } from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
-import TipCard from '@/components/TipCard'
+import LatestTipsCard from '@/components/LatestTipsCard'
 import Tip from '@/models/Tip'
+import TipCard from '@/components/TipCard'
 import TipListPageParams from '@/components/TipListPageParams'
 
 export default {
@@ -13,6 +14,7 @@ export default {
     AppSidebar,
     AppHeader,
     AppWaiter,
+    LatestTipsCard,
     TipCard,
     TipListPageParams
   },
@@ -96,6 +98,9 @@ export default {
     <app-sidebar class="w-100 sticky-top" />
     <div class="tip-list__container flex-grow-1">
       <app-header reduced />
+      <div class="pb-5 w-75">
+        <latest-tips-card :tips="tips" />
+      </div>
       <tip-list-page-params
         :project-id.sync="projectFilter"
         :task-id.sync="taskFilter"
