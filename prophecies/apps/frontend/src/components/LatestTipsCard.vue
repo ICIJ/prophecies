@@ -24,9 +24,7 @@
               </small>
             </div>
           </div>
-          <div class="col">
-              {{ tip.description }}
-          </div>
+          <div class="col" v-html="tip.descriptionHTML"></div>
         </div>
       </li>
     </ul>
