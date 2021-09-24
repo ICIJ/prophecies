@@ -1,5 +1,5 @@
 <script>
-import Cookies from 'js-cookie'
+import store from '@/store'
 import TaskRecordReviewTutorialStep from '@/components/TaskRecordReviewTutorialStep'
 
 export default {
@@ -9,7 +9,6 @@ export default {
   },
   data () {
     return {
-      showTutorial: undefined,
       stepNumber: 1,
       steps: [{
         text: 'Read the content',
@@ -41,19 +40,6 @@ export default {
       ]
     }
   },
-  created () {
-    let showTutorial = Cookies.get('showTutorial')
-    if (showTutorial === undefined || showTutorial === 'true') {
-      showTutorial = true
-      Cookies.set('showTutorial', showTutorial, {
-        expires: 365,
-        sameSite: 'lax'
-      })
-    } else {
-      showTutorial = false
-    }
-    this.showTutorial = showTutorial
-  },
   computed: {
     isFirstStep () {
       return this.stepNumber === 1
@@ -66,6 +52,14 @@ export default {
     },
     isChoiceBlock () {
       return this.stepNumber === 3
+    },
+    showTutorial :{
+      get(){
+        return store.state.app.showTutorial
+      },
+      set(isVisible){
+        store.dispatch("app/showTutorial", isVisible)
+      }
     }
   },
   methods: {
@@ -77,10 +71,6 @@ export default {
     },
     closeTutorial () {
       this.showTutorial = false
-      Cookies.set('showTutorial', this.showTutorial, {
-        expires: 365,
-        sameSite: 'lax'
-      })
     }
   }
 }

@@ -1,5 +1,6 @@
 <script>
   import { template } from 'lodash'
+  import store from '@/store'
   import UserNotification from '@/models/UserNotification'
   import AppSearchForm from '@/components/AppSearchForm'
   import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
@@ -15,6 +16,17 @@
     props: {
       reduced: {
         type: Boolean
+      }
+    },
+    created () {
+      let showTutorial = this.showTutorial !== false ? true : false;
+      if(showTutorial !== this.showTutorial) {
+        store.dispatch("app/showTutorial",showTutorial)
+      }
+    },
+    methods:{
+      toggleTutorial () {
+        this.showTutorial = !this.showTutorial
       }
     },
     computed: {
@@ -38,6 +50,14 @@
       },
       unreadNotifications () {
         return UserNotification.query().where('read', false ).count()
+      },
+      showTutorial :{
+        get(){
+          return store.state.app.showTutorial
+        },
+        set(isVisible){
+          store.dispatch("app/showTutorial", isVisible)
+        }
       }
     }
   }
@@ -66,6 +86,12 @@
               <command-icon class="app-header__nav-right__shortcuts mr-2" />
               {{ $t('appHeader.shortcuts') }}
               <shortkey-badge :value="['meta', 'k']" class="ml-2" />
+            </b-nav-item>
+            <b-nav-item href="#" 
+            :class="{ 'font-weight-bold app-header__nav-right__tutorial--show': showTutorial }" @click="toggleTutorial"
+            >
+              <help-circle-icon class="app-header__nav-right__shortcuts mr-2" />
+              {{ $t('appHeader.tutorial') }}
             </b-nav-item>
           </template>
           <b-nav-item-dropdown
@@ -108,7 +134,6 @@
             </b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
-        </slot>
       </div>
     </b-collapse>
   </b-navbar>
@@ -155,6 +180,12 @@
       position: absolute;
       top: 0;
       right: $spacer;
+    }
+    & /deep/ &__nav-right__tutorial  {
+      &--show.nav-item .nav-link {
+        color: $primary;
+        margin-left: -3px; /* hack to prevent layout shift when the fond is bold */
+      }
     }
   }
 </style>
