@@ -3,6 +3,7 @@ import some from 'lodash/some'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexORM from '@vuex-orm/core'
+import Cookies from 'js-cookie'
 
 import createPersistedState from 'vuex-persistedstate'
 
@@ -30,6 +31,20 @@ export default new Vuex.Store({
       filter (mutation) {
         // Only for some mutations
         return some(['app/'], k => mutation.type.indexOf(k) === 0)
+      }
+    }),
+    createPersistedState({
+      storage: {
+        getItem: key => Cookies.get(key),
+        setItem: (key, value) => Cookies.set(key, value, { expires: 365, sameSite: 'lax' }),
+        removeItem: key => Cookies.remove(key)
+      },
+      paths: [
+        'app.showTutorial'
+      ],
+      filter (mutation) {
+        // Only for some mutations
+        return some(['app'], k => mutation.type.indexOf(k) === 0)
       }
     })
   ]
