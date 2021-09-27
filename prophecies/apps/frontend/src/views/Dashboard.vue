@@ -58,7 +58,6 @@ export default {
       return Task.api().get()
     },
     fetchTips () {
-      console.log(Tip.api().get());
       return Tip.api().get('', {})
     },
     async waitFor (loader, fn) {
@@ -106,7 +105,24 @@ export default {
             <div class="dashboard__container__right-panel ml-xl-auto">
               <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
                 <progress-card class="mb-5" v-if="tasks.length" />
-                <latest-tips-card :tips="tips"/>
+                <latest-tips-card :tips="tips">
+                  <template v-slot:title>
+                    <h2 class="latest-tips-card__title text-primary mb-0 font-weight-bold">
+                      Latest tips
+                    </h2>
+                  </template>
+                  <template v-slot:footer>
+                    <div class="mx-auto">
+                      <router-link
+                        :to="{ name: 'tip-list', params: {} }"
+                        title="All tips"
+                        v-b-tooltip.hover
+                        class="text-secondary">
+                        More nice tips
+                      </router-link>
+                    </div>
+                  </template>
+                </latest-tips-card>
               </app-waiter>
             </div>
           </div>

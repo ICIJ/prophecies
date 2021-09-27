@@ -1,10 +1,11 @@
 <template>
-  <div class="latest-tips-card card card-body py-4 px-5 shadow">
+  <div class="latest-tips-card card card-body py-4 px-5 shadow" v-if="show">
+    <div class="mt-2" v-if="showClose">
+      <a href="#" title="Close latest tips" @click="show = !show"><x-icon class="latest-tips-card__close text-secondary float-right" /></a>
+    </div>
     <div class="d-flex align-items-center mt-3 mb-5">
       <smile-icon class="text-primary mr-4" />
-      <h1 class="latest-tips-card__title text-primary mb-0 font-weight-bold">
-        Latest tips
-      </h1>
+      <slot name="title"></slot>
     </div>
     <ul class="list-unstyled latest-tips-card__tips" v-if="latestTips && latestTips.length">
       <li class="latest-tips-card__tips__item" v-for="tip in latestTips">
@@ -28,6 +29,7 @@
         </div>
       </li>
     </ul>
+    <slot name="footer"></slot>
   </div>
 </template>
 
@@ -39,6 +41,15 @@ export default {
   props: {
     tips: {
       type: Array
+    },
+    showClose: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      show: true
     }
   },
   computed: {
@@ -59,7 +70,6 @@ export default {
 
 <style lang="scss" scoped>
   .latest-tips-card {
-
     &__title {
       position: relative;
       padding-bottom: $spacer;

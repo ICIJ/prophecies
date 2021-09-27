@@ -99,7 +99,13 @@ export default {
     <div class="tip-list__container flex-grow-1">
       <app-header reduced />
       <div class="pb-5 w-75">
-        <latest-tips-card :tips="tips" />
+        <latest-tips-card :tips="tips" :showClose="true">
+          <template v-slot:title>
+            <h1 class="latest-tips-card__title text-primary mb-0 font-weight-bold">
+              Latest tips
+            </h1>
+          </template>
+        </latest-tips-card>
       </div>
       <tip-list-page-params
         :project-id.sync="projectFilter"
