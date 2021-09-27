@@ -126,7 +126,7 @@ export default {
       return !this.showFilters && (this.hasFilters || this.hasSorting)
     },
     isBulkSelectChoiceFormDisabled () {
-      return !this.hasSelectedRecords || this.$wait.is(this.bulkSelectChoiceLoader)
+      return !this.isTaskOpen || !this.hasSelectedRecords || this.$wait.is(this.bulkSelectChoiceLoader)
     },
     selectedIdsCount () {
       return this.selectedIdsList.length
@@ -215,6 +215,9 @@ export default {
         'page[number]': this.pageNumber,
         sort: this.sort
       }
+    },
+    isTaskOpen(){
+      return this.task.status === "OPEN"
     },
     trailingTaskRecordReview () {
       return this.taskRecordReviews[this.taskRecordReviews.length - 1]
