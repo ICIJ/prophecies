@@ -217,7 +217,7 @@ export default {
       }
     },
     isTaskOpen(){
-      return this.task.status === "OPEN"
+        return this.task && this.task.status === "OPEN"
     },
     trailingTaskRecordReview () {
       return this.taskRecordReviews[this.taskRecordReviews.length - 1]
