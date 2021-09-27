@@ -83,7 +83,7 @@ export default {
         <span v-if="taskIsClosed" class="ml-auto task-stats-card__heading--closed" >
           Closed!
         </span>
-        <span v-else class=" bg-warning rounded  py-1 px-2  task-stats-card__heading__priority">
+        <span v-else class=" bg-warning rounded ml-auto py-1 px-2  task-stats-card__heading__priority">
           Priority {{ task.priority }}
         </span>
       </div>
