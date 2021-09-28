@@ -82,7 +82,7 @@
   "taskStatsCard":{
     "closed":"Closed!",
     "locked":"Locked",
-    "fullyCheckedItems":"Fully checked item | Fully checked items",
+    "fullyCheckedItems":"Fully checked record | Fully checked records",
     "priority":"Priority",
     "round":"Round"
   }
