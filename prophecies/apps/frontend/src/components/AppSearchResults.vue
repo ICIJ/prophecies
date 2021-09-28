@@ -54,7 +54,7 @@ export default {
       return filter(this.queryset, { type }).map(({ id }) => id)
     },
     tasks () {
-      return Task.all()
+      return Task.query().where('taskRecordsCount', (value) => value > 0).get()
     }
   },
   methods: {

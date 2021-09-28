@@ -30,14 +30,17 @@ export default {
   },
   computed: {
     tasks () {
-      return Task.all().sort((a,b)=>{
-
-        if(a.status === "CLOSED"){
-          return 1
-        }else if(b.status === "CLOSED"){
-          return -1
-        }
-        return 0
+      return Task
+        .query()
+        .where('taskRecordsCount', (value) => value > 0)
+        .get()
+        .sort((a,b)=>{
+          if(a.status === "CLOSED"){
+            return 1
+          }else if(b.status === "CLOSED"){
+            return -1
+          }
+          return 0
       })
     },
     tips () {

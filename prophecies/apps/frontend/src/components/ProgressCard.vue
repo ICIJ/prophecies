@@ -68,7 +68,8 @@ export default {
   },
   computed: {
     tasks () {
-      return Task.all()
+      // make stats on tasks with at least one record
+      return Task.query().where('taskRecordsCount', (value) => value > 0).get()
     },
     meanProgress () {
       if (!this.tasks.length) {

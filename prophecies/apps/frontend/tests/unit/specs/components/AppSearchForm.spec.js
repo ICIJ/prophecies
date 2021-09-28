@@ -53,20 +53,19 @@ describe('AppSearchForm', () => {
       expect(spy).toHaveBeenCalledTimes(1)
     })
 
-    it('should search reviews for tasks 1, 2, 3 and 4', async () => {
+    it('should search reviews for tasks (with at least one record) 1, 3 and 4', async () => {
       const spy = jest.spyOn(wrapper.vm, 'searchTaskRecordReview')
       await wrapper.vm.search('foo')
-      expect(spy).toHaveBeenCalledTimes(4)
+      expect(spy).toHaveBeenCalledTimes(3)
       expect(spy).toBeCalledWith('foo', expect.anything(), '1')
-      expect(spy).toBeCalledWith('foo', expect.anything(), '2')
       expect(spy).toBeCalledWith('foo', expect.anything(), '3')
       expect(spy).toBeCalledWith('foo', expect.anything(), '4')
     })
 
-    it('should return a queryset of 2 tips and 20 reviews', async () => {
+    it('should return a queryset of 2 tips and 15 reviews', async () => {
       await wrapper.setData({ query: 'buz' })
       await wrapper.vm.search('buz')
-      expect(wrapper.vm.queryset).toHaveLength(22)
+      expect(wrapper.vm.queryset).toHaveLength(17)
       expect(wrapper.vm.queryset).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ id: '3', type: 'Tip' }),
@@ -76,9 +75,11 @@ describe('AppSearchForm', () => {
           expect.objectContaining({ id: '38', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '25', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '24', type: 'TaskRecordReview' }),
+          expect.objectContaining({ id: '36', type: 'TaskRecordReview' }),
+          expect.objectContaining({ id: '37', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '38', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '25', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '24', type: 'TaskRecordReview' })
+          expect.objectContaining({ id: '24', type: 'TaskRecordReview' }),
         ])
       )
     })
@@ -138,14 +139,13 @@ describe('AppSearchForm', () => {
       expect(wrapper.vm.activeQueryset).toHaveLength(5)
     })
 
-    it('should count tips 2 tips and 3 reviews for each tasks', async () => {
+    it('should count tips 2 tips and 3 reviews for each tasks having at least one record', async () => {
       await wrapper.setData({ query: 'buz' })
       await wrapper.vm.search('buz')
-      expect(wrapper.vm.counts).toHaveLength(5)
+      expect(wrapper.vm.counts).toHaveLength(4)
       expect(wrapper.vm.counts).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ count: 2, querysetId: expect.anything() }),
-          expect.objectContaining({ count: 3, querysetId: expect.anything() }),
           expect.objectContaining({ count: 3, querysetId: expect.anything() }),
           expect.objectContaining({ count: 3, querysetId: expect.anything() }),
           expect.objectContaining({ count: 3, querysetId: expect.anything() })

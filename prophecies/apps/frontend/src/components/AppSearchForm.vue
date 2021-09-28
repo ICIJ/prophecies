@@ -64,8 +64,11 @@ export default {
       return [ this.searchTips, ...this.searchTaskRecordReviewMethodsByTask ]
     },
     searchTaskRecordReviewMethodsByTask () {
-      // Create one method for each task
-      return Task.all().map(({ id: taskId }) => {
+      // Create one method for each task with at least 1 record
+      return Task.query()
+        .where('taskRecordsCount', (value) => value > 0)
+        .get()
+        .map(({ id: taskId }) => {
         return (query, querysetId) => {
           return this.searchTaskRecordReview(query, querysetId, taskId)
         }

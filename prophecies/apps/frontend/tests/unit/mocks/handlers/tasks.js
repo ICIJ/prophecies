@@ -135,8 +135,8 @@ export default [
                 '#d37d00',
                 '#ff9b09'
               ],
-              description: 'A list of shop to check',
-              name: 'Shops',
+              description: 'A list of immatriculations to check',
+              name: 'Immatriculations',
               priority: 1,
               rounds: 3,
               taskRecordsCount: 1000,
@@ -195,8 +195,8 @@ export default [
                 '#d37d00',
                 '#ff9b09'
               ],
-              description: 'A list of shop to check',
-              name: 'Shops',
+              description: 'A list of phone numbers to check',
+              name: 'Phones',
               priority: 1,
               rounds: 3,
               taskRecordsCount: 1000,
@@ -215,6 +215,66 @@ export default [
                 1: 50,
                 2: 25,
                 3: 25
+              }
+            },
+            relationships: {
+              choiceGroup: {
+                data: {
+                  type: 'ChoiceGroup',
+                  id: '1'
+                }
+              },
+              project: {
+                data: {
+                  type: 'Project',
+                  id: '1'
+                }
+              },
+              checkers: {
+                meta: {
+                  count: 1
+                },
+                data: [
+                  {
+                    type: 'User',
+                    id: '2'
+                  }
+                ]
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/tasks/4/'
+            }
+          },
+          {
+            type: 'Task',
+            id: '5',
+            attributes: {
+              colors: [
+                '#9e5e00',
+                '#d37d00',
+                '#ff9b09'
+              ],
+              description: 'A list of cat names to check',
+              name: 'Cats',
+              priority: 1,
+              rounds: 3,
+              taskRecordsCount:0,
+              taskRecordsDoneCount:0,
+              userTaskRecordsCount:0,
+              userTaskRecordsDoneCount:0,
+              userProgressByRound: {
+                1:0,
+                2:0,
+                3:0
+              },
+              userProgress:0,
+              status:'OPEN',
+              progress:0,
+              progressByRound: {
+                1:0,
+                2:0,
+                3:0
               }
             },
             relationships: {
