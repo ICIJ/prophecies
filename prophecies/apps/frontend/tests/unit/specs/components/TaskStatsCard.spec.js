@@ -15,9 +15,9 @@ describe('TaskStatsCard', () => {
   beforeEach(() => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
-    Core.init(localVue).useAll()
+    const { i18n } = Core.init(localVue).useAll()
     const propsData = { taskId: '1', team: false }
-    wrapper = shallowMount(TaskStatsCard, { localVue, propsData })
+    wrapper = shallowMount(TaskStatsCard, { localVue, propsData, i18n })
   })
 
   it('should show the user progress', () => {

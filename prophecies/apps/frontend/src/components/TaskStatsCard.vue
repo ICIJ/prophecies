@@ -38,6 +38,9 @@ export default {
     taskIsClosed() {
       return this.task.status === "CLOSED";
     },
+    taskIsDone() {
+      return this.taskRecordsCount !== 0 ? (this.taskRecordsDoneCount/this.taskRecordsCount) === 1 : false
+    },
     progress() {
       if (this.team) {
         return this.task.progress;
@@ -81,27 +84,27 @@ export default {
           </b-badge>
         </h3>
         <span v-if="taskIsClosed" class="ml-auto task-stats-card__heading--closed" >
-          Closed!
+          {{ $t('taskStatsCard.closed') }}
         </span>
         <span v-else class=" bg-warning rounded ml-auto py-1 px-2  task-stats-card__heading__priority">
-          Priority {{ task.priority }}
+          {{ $t('taskStatsCard.priority') }} {{ task.priority }}
         </span>
       </div>
       <div class="d-flex align-items-center">
         <p>
-          Fully checked items:
+          {{ $tc('taskStatsCard.fullyCheckedItems', taskRecordsCount) }}:
           <span
             class="text-danger font-weight-bold ml-2 task-stats-card__checked"
           >
             {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
           </span>
         </p>
-        <p class="ml-auto d-flex" v-if="taskIsClosed">
-          <span class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">Closed</span>
-        </p>
-        <p class="ml-auto d-flex text-danger" v-else-if="taskIsLocked">
+        <p class="ml-auto d-flex text-danger" v-if="taskIsLocked">
           <lock-icon size="1.5x" /><span class="sr-only">Unlock</span>
-          <span class="task-stats-card__status--locked ml-2">Locked</span>
+          <span class="task-stats-card__status--locked ml-2"> {{ $t('taskStatsCard.locked') }}</span>
+        </p>
+        <p class="ml-auto d-flex" v-else-if="taskIsDone || taskIsClosed">
+          <span class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">Closed</span>
         </p>
       </div>
       <div class="d-flex align-items-center">
@@ -111,7 +114,7 @@ export default {
             v-for="round in task.rounds"
             :key="round"
           >
-            Round {{ round }}
+            {{ $t('taskStatsCard.round') }} {{ round }}
             <span
               class="
                 task-stats-card__progress-by-round__item__value

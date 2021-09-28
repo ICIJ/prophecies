@@ -78,5 +78,12 @@
     "selectAll":"Select {n} record | Select {n} records",
     "selectedResults":"{n} result selected | {n} results selected",
     "lockedResults":"{n} of which is locked | {n} of which are locked"
+  },
+  "taskStatsCard":{
+    "closed":"Closed!",
+    "locked":"Locked",
+    "fullyCheckedItems":"Fully checked item | Fully checked items",
+    "priority":"Priority",
+    "round":"Round"
   }
 }
