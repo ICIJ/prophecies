@@ -98,7 +98,7 @@ export default {
     <app-sidebar class="w-100 sticky-top" />
     <div class="tip-list__container flex-grow-1">
       <app-header reduced />
-      <div class="pb-5 w-75">
+      <div class="pl-4 pb-5 w-75">
         <latest-tips-card :tips="tips" :showClose="true">
           <template v-slot:title>
             <h1 class="latest-tips-card__title text-primary mb-0 font-weight-bold">
@@ -111,7 +111,7 @@ export default {
         :project-id.sync="projectFilter"
         :task-id.sync="taskFilter"
         :creator-id.sync="creatorFilter" />
-      <div class="container-fluid p-5">
+      <div class="container-fluid pl-4 pt-5">
         <app-waiter :loader="fetchTipsLoader" waiter-class="my-5 mx-auto d-block">
           <div v-if="tips">
             <div v-for="(projectValue, name) in tipsGroupedByProject" class="mt-4 mb-4 border-bottom">
