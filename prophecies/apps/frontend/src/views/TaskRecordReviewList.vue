@@ -419,7 +419,7 @@ export default {
                 {{ pagination.count }} results
               </li>
               <li class="list-inline-item">
-                <b-btn variant="link" @click="clearFilters()" :disabled="!hasFilters">
+                <b-btn variant="link" @click="clearFilters()" v-if="hasFilters">
                   Clear filters
                 </b-btn>
               </li>
