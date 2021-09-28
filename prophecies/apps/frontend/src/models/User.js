@@ -5,7 +5,7 @@ import settings from '@/settings'
 export default class User extends Model {
   // This is the name used as module name of the Vuex Store.
   static entity = 'User'
-  static usernamePattern = /@([a-zA-Z0-9]{1,15})/g
+  static usernamePattern = /@([a-zA-Z0-9]{1,15}|project|task)/g
 
   static fields () {
     return {
