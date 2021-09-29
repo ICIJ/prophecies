@@ -11,8 +11,8 @@ describe('Tip', () => {
     Tip.deleteAll()
   })
 
-  it('should retrieve 2 tips', () => {
-    expect(Tip.all()).toHaveLength(2)
+  it('should retrieve 4 tips', () => {
+    expect(Tip.all()).toHaveLength(4)
   })
 
   it('should have one user object as creator', () => {

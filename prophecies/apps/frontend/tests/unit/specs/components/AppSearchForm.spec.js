@@ -1,10 +1,145 @@
 import { find } from 'lodash'
 import { createLocalVue, mount } from '@vue/test-utils'
+import { server, rest } from '../../mocks/server'
+
 import AppSearchForm from '@/components/AppSearchForm'
 import Core from '@/core'
 import Task from '@/models/Task'
 
 describe('AppSearchForm', () => {
+  beforeEach(() => {
+    server.use(rest.get('/api/v1/tips/', (req, res, ctx) => {
+      // const query = req.url.searchParams
+      // const filterId__in = query.get('filter[id__in]')
+      // const filterSearch = query.get('filter[search]')
+      return res.once(ctx.json({
+        data:
+          [
+            {
+              type: 'Tip',
+              id: '4',
+              attributes: {
+                name: 'tip for test 4',
+                description: 'test description 4',
+                createdAt: '2021-09-02T12:58:16.113007Z',
+                updatedAt: '2021-09-02T12:58:16.113038Z'
+              },
+              relationships: {
+                project: {
+                  data: {
+                    type: 'Project',
+                    id: '1'
+                  }
+                },
+                creator: {
+                  data: {
+                    type: 'User',
+                    id: '1'
+                  }
+                },
+                task: {
+                  data: {
+                    type: 'Task',
+                    id: '2'
+                  }
+                }
+              }
+            },
+            {
+              type: 'Tip',
+              id: '3',
+              attributes: {
+                name: 'tip for test 3',
+                description: 'test description 3',
+                createdAt: '2021-09-02T12:58:16.113007Z',
+                updatedAt: '2021-09-02T12:58:16.113038Z'
+              },
+              relationships: {
+                project: {
+                  data: {
+                    type: 'Project',
+                    id: '1'
+                  }
+                },
+                creator: {
+                  data: {
+                    type: 'User',
+                    id: '1'
+                  }
+                },
+                task: {
+                  data: {
+                    type: 'Task',
+                    id: '2'
+                  }
+                }
+              }
+            }, {
+              type: 'Tip',
+              id: '2',
+              attributes: {
+                name: 'tip for test 2',
+                description: 'test description 2',
+                createdAt: '2021-09-02T12:58:16.113007Z',
+                updatedAt: '2021-09-02T12:58:16.113038Z'
+              },
+              relationships: {
+                project: {
+                  data: {
+                    type: 'Project',
+                    id: '1'
+                  }
+                },
+                creator: {
+                  data: {
+                    type: 'User',
+                    id: '1'
+                  }
+                },
+                task: {
+                  data: null
+                }
+              }
+            }
+          ],
+        included: [
+          {
+            type: 'Task',
+            id: '2',
+            attributes: {
+              colors: [
+                '#25605e',
+                '#31807d',
+                '#3da09c'
+              ],
+              description: 'Checking more stuff',
+              name: 'Another Task',
+              priority: 1,
+              rounds: 3,
+              taskRecordsCount: 1000,
+              taskRecordsDoneCount: 500,
+              userTaskRecordsCount: 300,
+              userTaskRecordsDoneCount: 100,
+              userProgressByRound: {
+                1: 100,
+                2: 25,
+                3: 25
+              },
+              userProgress: 45,
+              status: 'OPEN',
+              progress: 60,
+              progressByRound: {
+                1: 50,
+                2: 25,
+                3: 25
+              }
+            }
+          }
+        ]
+      }))
+    }))
+  })
+
   describe('with 2 tasks', () => {
     let wrapper
 
@@ -56,8 +191,9 @@ describe('AppSearchForm', () => {
     it('should search reviews for tasks (with at least one record) 1, 3 and 4', async () => {
       const spy = jest.spyOn(wrapper.vm, 'searchTaskRecordReview')
       await wrapper.vm.search('foo')
-      expect(spy).toHaveBeenCalledTimes(3)
+      expect(spy).toHaveBeenCalledTimes(4)
       expect(spy).toBeCalledWith('foo', expect.anything(), '1')
+      expect(spy).toBeCalledWith('foo', expect.anything(), '2')
       expect(spy).toBeCalledWith('foo', expect.anything(), '3')
       expect(spy).toBeCalledWith('foo', expect.anything(), '4')
     })
@@ -65,21 +201,18 @@ describe('AppSearchForm', () => {
     it('should return a queryset of 2 tips and 15 reviews', async () => {
       await wrapper.setData({ query: 'buz' })
       await wrapper.vm.search('buz')
-      expect(wrapper.vm.queryset).toHaveLength(17)
+      expect(wrapper.vm.queryset).toHaveLength(23)
+
       expect(wrapper.vm.queryset).toEqual(
         expect.arrayContaining([
+          expect.objectContaining({ id: '2', type: 'Tip' }),
           expect.objectContaining({ id: '3', type: 'Tip' }),
           expect.objectContaining({ id: '4', type: 'Tip' }),
           expect.objectContaining({ id: '36', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '37', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '38', type: 'TaskRecordReview' }),
           expect.objectContaining({ id: '25', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '24', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '36', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '37', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '38', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '25', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '24', type: 'TaskRecordReview' }),
+          expect.objectContaining({ id: '24', type: 'TaskRecordReview' })
         ])
       )
     })
@@ -100,9 +233,9 @@ describe('AppSearchForm', () => {
     it('should not be able to activate item above the current queryset size', async () => {
       await wrapper.setData({ query: 'buz' })
       await wrapper.vm.search('buz')
-      await wrapper.setData({ activeItem: 4 })
+      await wrapper.setData({ activeItem: 2 })
       wrapper.vm.activateNextItem()
-      expect(wrapper.vm.activeItem).toBe(4)
+      expect(wrapper.vm.activeItem).toBe(2)
     })
 
     it('should not be able to activate previous item when no queryset', async () => {
@@ -135,17 +268,18 @@ describe('AppSearchForm', () => {
       await wrapper.vm.search('buz')
       const querysetId = wrapper.vm.activeQuerysetId
       const firstQuerysetMatch = find(wrapper.vm.queryset, { querysetId })
-      expect(firstQuerysetMatch.type).toBe('TaskRecordReview')
-      expect(wrapper.vm.activeQueryset).toHaveLength(5)
+      expect(firstQuerysetMatch.type).toBe('Tip')
+      expect(wrapper.vm.activeQueryset).toHaveLength(3)
     })
 
-    it('should count tips 2 tips and 3 reviews for each tasks having at least one record', async () => {
+    it('should count tips 3 tips and 3 reviews for each tasks having at least one record', async () => {
       await wrapper.setData({ query: 'buz' })
       await wrapper.vm.search('buz')
-      expect(wrapper.vm.counts).toHaveLength(4)
+      expect(wrapper.vm.counts).toHaveLength(5)
       expect(wrapper.vm.counts).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ count: 2, querysetId: expect.anything() }),
+          expect.objectContaining({ count: 3, querysetId: expect.anything() }),
+          expect.objectContaining({ count: 3, querysetId: expect.anything() }),
           expect.objectContaining({ count: 3, querysetId: expect.anything() }),
           expect.objectContaining({ count: 3, querysetId: expect.anything() }),
           expect.objectContaining({ count: 3, querysetId: expect.anything() })
@@ -181,16 +315,23 @@ describe('AppSearchForm', () => {
       expect(spy).toHaveBeenCalledTimes(0)
     })
 
-    it('should return a queryset of 2 tips', async () => {
+    it('should return a queryset of 3 tips', async () => {
       await wrapper.setData({ query: 'foo' })
       await wrapper.vm.search('foo')
-      expect(wrapper.vm.queryset).toHaveLength(2)
+      expect(wrapper.vm.queryset).toHaveLength(3)
       expect(wrapper.vm.queryset).toEqual(
         expect.arrayContaining([
+          expect.objectContaining({ id: '2', type: 'Tip' }),
           expect.objectContaining({ id: '3', type: 'Tip' }),
           expect.objectContaining({ id: '4', type: 'Tip' })
         ])
       )
+    })
+    it('should only search for tips with no task or with task containing records ', async () => {
+      await wrapper.setData({ query: 'foo' })
+      await wrapper.vm.search('foo')
+      expect(wrapper.vm.tipsToSearch).toEqual(['2', '3', '4'])
+      expect(wrapper.vm.queryset).toHaveLength(3)
     })
   })
 })

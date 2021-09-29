@@ -48,7 +48,7 @@ export default {
         'app-search-form--has-active-item': this.hasActiveItem,
         'app-search-form--has-query': this.hasQuery,
         'app-search-form--has-queryset': this.hasQueryset,
-        'app-search-form--is-loading': this.isLoading,
+        'app-search-form--is-loading': this.isLoading
       }
     },
     hasActiveItem () {
@@ -61,18 +61,29 @@ export default {
       return !!this.queryset.length
     },
     searchMethods () {
-      return [ this.searchTips, ...this.searchTaskRecordReviewMethodsByTask ]
+      return [this.searchTips, ...this.searchTaskRecordReviewMethodsByTask]
     },
     searchTaskRecordReviewMethodsByTask () {
       // Create one method for each task with at least 1 record
       return Task.query()
-        .where('taskRecordsCount', (value) => value > 0)
+        .where('taskRecordsCount', (value) => { return value > 0 })
         .get()
         .map(({ id: taskId }) => {
-        return (query, querysetId) => {
-          return this.searchTaskRecordReview(query, querysetId, taskId)
-        }
-      })
+          return (query, querysetId) => {
+            return this.searchTaskRecordReview(query, querysetId, taskId)
+          }
+        })
+    },
+    tipsToSearch () {
+      // Create tips : general tips (no task associated) and tips
+      // associated to a task that has at least 1 taskRecordsCount
+      const tips = Tip.query()
+        .with('task', q => { q.where('taskRecordsCount', (val) => val > 0) })
+        .get()
+        .filter(elem => elem.taskId === null || elem.task !== null)
+
+      const tipIds = tips.map(({ id: tipId }) => tipId)
+      return tipIds
     },
     defaultQuerysetId () {
       const maxCount = maxBy(this.counts, 'count')
@@ -136,7 +147,11 @@ export default {
       return { entitiesIdAndType, count }
     },
     async searchTips (query, querysetId) {
-      const results = await Tip.api().search(query)
+      let params = {}
+      if (this.tipsToSearch.length) {
+        params = { 'filter[id__in]': this.tipsToSearch.join(',') }
+      }
+      const results = await Tip.api().search(query, { params })
       const entitiesIdAndType = this.collectEntitiesIdAndType(results, querysetId)
       const count = this.collectCount(results, querysetId)
       return { entitiesIdAndType, count }
@@ -223,7 +238,6 @@ export default {
   </component>
 </template>
 
-
 <style lang="scss" scoped>
   .app-search-form {
     position: relative;
@@ -268,7 +282,6 @@ export default {
       &__input:focus ~ &__placeholder {
         display: none;
       }
-
 
       .app-search-form--has-query &__separator,
       .app-search-form--has-active-item &__separator,

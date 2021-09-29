@@ -1,5 +1,5 @@
 <script>
-import { get, isBoolean, map, uniqueId } from 'lodash'
+import { get, isBoolean, uniqueId } from 'lodash'
 import TaskRecordChanges from '@/components/TaskRecordChanges'
 import TaskRecordReviewActions from '@/components/TaskRecordReviewActions'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
@@ -75,7 +75,7 @@ export default {
         this.emitUpdate()
       } catch (error) {
         const message = error.response.data.errors[0].detail
-        this.makeToast('warning',`⛔ Task record #${this.taskRecord.id}`, message)
+        this.makeToast('warning', `⛔ Task record #${this.taskRecord.id}`, message)
       }
     },
     async lockWithLoader () {
@@ -90,7 +90,7 @@ export default {
         this.emitUpdate()
       } catch (error) {
         const message = error.response.data.errors[0].detail
-        this.makeToast('warning',`⛔ Task record #${this.taskRecord.id}`, message)
+        this.makeToast('warning', `⛔ Task record #${this.taskRecord.id}`, message)
       }
     },
     async unlockWithLoader () {
@@ -127,12 +127,12 @@ export default {
       }
       return this.toggleNotes(!this.showNotes, highlightedReviewId)
     },
-    makeToast(variant = null, title, text) {
+    makeToast (variant = null, title, text) {
       this.$bvToast.toast(text, {
         title: title,
         autoHideDelay: 5000,
         variant: variant,
-        toaster:'b-toaster-bottom-right',
+        toaster: 'b-toaster-bottom-right',
         appendToast: true
       })
     },
@@ -184,7 +184,7 @@ export default {
         'task-record-review-card--active': this.active,
         'task-record-review-card--selected': this.selected,
         'task-record-review-card--done': this.isDone,
-        'task-record-review-card--pending': this.isPending,
+        'task-record-review-card--pending': this.isPending
       }
     },
     loader () {
