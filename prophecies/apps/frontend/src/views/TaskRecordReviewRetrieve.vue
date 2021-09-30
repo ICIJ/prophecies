@@ -1,5 +1,5 @@
 <script>
-  import { get, uniqueId } from 'lodash'
+  import { find, get, uniqueId } from 'lodash'
 
   import AppBreadcrumb from '@/components/AppBreadcrumb'
   import AppHeader from '@/components/AppHeader'
@@ -89,7 +89,12 @@
         // We need to find the id of the review assigned to the current user.
         const params = { 'filter[task_record__reviews__id]': this.taskRecordReviewId }
         const { response } = await TaskRecordReview.api().get('', { params })
-        this.resolvedTaskRecordReviewId = get(response, 'data.data[0].id', null)
+        const reviews = get(response, 'data.data', [])
+        const userReviewId = find(reviews, ({ id }) => TaskRecordReview.find(id)?.editable)?.id || null
+        // In case we didn't a task record review a user can edit, 
+        // we just use the first one from the list
+        const firstReviewId = reviews[0]?.id || null
+        this.resolvedTaskRecordReviewId = userReviewId || firstReviewId
       },
       async waitFor (loader, fn) {
         this.$wait.start(loader)
