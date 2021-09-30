@@ -16,7 +16,7 @@
             </div>
             <div class="row px-3 py-4" v-for="shortCut in choiceGroups">
               <div class="col font-weight-bold">
-                name tbd
+                {{ generateName(shortCut.value) }}
               </div>
               <div class="col-10 text-primary font-weight-bold text-capitalize">
                 {{ shortCut.shortkeys }}
@@ -86,6 +86,9 @@ export default {
     },
     fetchChoiceGroups () {
       return ChoiceGroup.api().get()
+    },
+    generateName (value) {
+      return `Mark as ${value}`
     }
   }
 
