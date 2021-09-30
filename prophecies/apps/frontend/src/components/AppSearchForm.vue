@@ -77,13 +77,14 @@ export default {
     tipsToSearch () {
       // Create tips : general tips (no task associated) and tips
       // associated to a task that has at least 1 taskRecordsCount
-      const tips = Tip.query()
-        .with('task', q => { q.where('taskRecordsCount', (val) => val > 0) })
+      return Tip.query()
+        .with('task')
         .get()
-        .filter(elem => elem.taskId === null || elem.task !== null)
-
-      const tipIds = tips.map(({ id: tipId }) => tipId)
-      return tipIds
+        .filter(elem => elem.taskId === null || elem.task?.taskRecordsCount > 0)
+        .map(({ id: tipId }) => tipId)
+    },
+    tipSearchParams () {
+      return this.tipsToSearch.length ? { 'filter[id__in]': this.tipsToSearch.join(',') } : {}
     },
     defaultQuerysetId () {
       const maxCount = maxBy(this.counts, 'count')
@@ -147,11 +148,7 @@ export default {
       return { entitiesIdAndType, count }
     },
     async searchTips (query, querysetId) {
-      let params = {}
-      if (this.tipsToSearch.length) {
-        params = { 'filter[id__in]': this.tipsToSearch.join(',') }
-      }
-      const results = await Tip.api().search(query, { params })
+      const results = await Tip.api().search(query, { params: this.tipSearchParams })
       const entitiesIdAndType = this.collectEntitiesIdAndType(results, querysetId)
       const count = this.collectCount(results, querysetId)
       return { entitiesIdAndType, count }
