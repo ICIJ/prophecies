@@ -46,14 +46,15 @@ export default {
     showClose: {
       type: Boolean,
       default: false
+    },
+    limit: {
+      type: Number,
+      default: 3
     }
   },
   computed: {
     latestTips () {
-      if (this.tips.length) {
-        return this.tips.length > 3 ? this.tips.slice(0, 2) : this.tips
-      }
-      return []
+      return this.tips.slice(0, this.limit - 1)
     },
     hasLatestTips () {
       return this.latestTips.length > 0
