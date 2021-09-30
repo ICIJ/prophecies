@@ -1,5 +1,5 @@
 <script>
-import { escapeRegExp, first, find, filter, get } from 'lodash'
+import { escapeRegExp, find, filter, get } from 'lodash'
 import Task from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import Tip from '@/models/Tip'
@@ -54,7 +54,10 @@ export default {
       return filter(this.queryset, { type }).map(({ id }) => id)
     },
     tasks () {
-      return Task.query().where('taskRecordsCount', (value) => value > 0).get()
+      // retrieve tasks that are not closed and with at least one record
+      return Task.query()
+        .where('status', (value) => value !== 'CLOSED')
+        .where('taskRecordsCount', (value) => value > 0).get()
     }
   },
   methods: {
@@ -74,7 +77,7 @@ export default {
       this.$emit('update:active-item', -1)
     },
     highlight (text) {
-      const regex = new RegExp("(" + escapeRegExp(this.query) + ")", "gi")
+      const regex = new RegExp('(' + escapeRegExp(this.query) + ')', 'gi')
       return text.replace(regex, '<mark class="p-0">$1</mark>')
     },
     tipQuerysetId () {
@@ -110,7 +113,7 @@ export default {
       const querysetId = this.taskQuerysetId(taskId)
       return this.querysetCount(querysetId)
     },
-    querysetTaskRecordReviews(taskId) {
+    querysetTaskRecordReviews (taskId) {
       return TaskRecordReview
         .query()
         .where('taskId', taskId)

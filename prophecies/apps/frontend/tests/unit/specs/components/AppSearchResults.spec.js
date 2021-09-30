@@ -7,7 +7,7 @@ import TaskRecordReview from '@/models/TaskRecordReview'
 import Tip from '@/models/Tip'
 
 describe('AppSearchResults', () => {
-  describe('with 2 tasks', () => {
+  describe('with 2 tasks (not closed)', () => {
     let wrapper
 
     beforeAll(async () => {
@@ -39,8 +39,8 @@ describe('AppSearchResults', () => {
       wrapper = shallowMount(AppSearchResults, { i18n, localVue, propsData, stubs, store, wait })
     })
 
-    it('should have 5 tabs', () => {
-      expect(wrapper.findAllComponents(BTab)).toHaveLength(5)
+    it('should have 4 tabs', () => {
+      expect(wrapper.findAllComponents(BTab)).toHaveLength(4)
     })
 
     it('should have 3 items for task 1', () => {
