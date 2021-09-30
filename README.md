@@ -64,10 +64,21 @@ Then visit [http://0.0.0.0:9009](http://0.0.0.0:9009)
 
 ## Publishing a new Docker image
 
-Run **one** of these commands while ICIJ internal VPN is running:
+Run **one** of these commands depending on the kind of version you need to publish:
 
 ```
-make patch docker-publish
-make minor docker-publish
-make major docker-publish
+pipenv run bumpversion build
+pipenv run bumpversion alpha
+pipenv run bumpversion beta
+pipenv run bumpversion rc
+pipenv run bumpversion patch
+pipenv run bumpversion minor
+pipenv run bumpversion major
 ```
+
+Then build and push the Docker image while ICIJ internal VPN is running:
+
+```
+make docker-publish
+```
+
