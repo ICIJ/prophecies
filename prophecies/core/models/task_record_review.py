@@ -32,6 +32,9 @@ class TaskRecordReviewManager(models.Manager):
         return TaskRecordReviewQuerySet(model=self.model,
             using=self._db, hints=self._hints)
 
+    def from_checker_task(self, user):
+        return self.filter(task_record__task__in=user.task.all())
+
 
     def latest_round(self, task_record):
         if self.filter(task_record=task_record).exists():

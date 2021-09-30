@@ -1,16 +1,21 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Choice, ChoiceGroup, UserNotification, Project, Task, TaskChecker, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, ChoiceGroup, UserNotification, Project, Task, TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record_review import StatusType
 
 class TestTaskRecordReview(TestCase):
     def setUp(self):
-        self.project = Project.objects.create(name='Pencil Papers')
-        art_task = Task.objects.create(name='Art', project=self.project, color='#fe6565', rounds=2)
-        diet_task = Task.objects.create(name='Diet', project=self.project, rounds=1)
-        self.choice_group = ChoiceGroup.objects.create(name='Is it correct?')
         self.olivia = User.objects.create(username='olivia')
         self.django = User.objects.create(username='django')
+        self.project = Project.objects.create(name='Pencil Papers')
+        checkers = [self.olivia, self.django]
+        art_task = Task.objects.create(name='Art', project=self.project, color='#fe6565', rounds=2)
+        art_task.checkers.set(checkers)
+        art_task.save()
+        diet_task = Task.objects.create(name='Diet', project=self.project, rounds=1)
+        diet_task.checkers.set(checkers)
+        diet_task.save()
+        self.choice_group = ChoiceGroup.objects.create(name='Is it correct?')
         self.record_foo = TaskRecord.objects.create(original_value='foo', task=art_task)
         self.record_bar = TaskRecord.objects.create(original_value='bar', task=art_task)
         self.record_baz = TaskRecord.objects.create(original_value='baz', task=art_task)
@@ -342,47 +347,36 @@ class TestTaskRecordReview(TestCase):
 
 
     def test_it_notifies_all_project_members_except_for_note_author_not_just_specific_task_checkers(self):
-        TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
         task_science = Task.objects.create(name='Science', project=self.project, color='#fe6565', rounds=2)
         record_buz = TaskRecord.objects.create(original_value='foo', task=task_science)
-        TaskChecker.objects.create(task=record_buz.task, checker=self.olivia)
         TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @project!", checker=self.django)
         self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 0)
         self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
 
 
     def test_it_does_not_notify_users_who_are_not_project_members(self):
-        TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
         ruby = User.objects.create(username='ruby')
-        TaskChecker.objects.create(task=self.record_foo.task, checker=ruby)
         TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @project!", checker=self.django)
-        self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 0)
-        self.assertEqual(UserNotification.objects.filter(recipient=ruby).count(), 1)
-        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 0)
+        self.assertEqual(UserNotification.objects.filter(recipient=ruby).count(), 0)
+        self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
 
 
     def test_it_notifies_users_who_are_task_checkers(self):
-        TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
-        TaskChecker.objects.create(task=self.record_foo.task, checker=self.olivia)
         ruby = User.objects.create(username='ruby')
-        TaskChecker.objects.create(task=self.record_foo.task, checker=ruby)
+        self.record_foo.task.checkers.add(ruby)
         TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @task!", checker=ruby)
         self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 1)
         self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)
 
 
     def test_it_does_not_notify_checker_on_the_instance_when_task_is_mentioned(self):
-        TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
-        TaskChecker.objects.create(task=self.record_foo.task, checker=self.olivia)
         ruby = User.objects.create(username='ruby')
-        TaskChecker.objects.create(task=self.record_foo.task, checker=ruby)
+        self.record_foo.task.checkers.add(ruby)
         TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @task!", checker=ruby)
         self.assertEqual(UserNotification.objects.filter(recipient=ruby).count(), 0)
 
 
     def test_it_does_not_notify_users_who_are_not_task_checkers(self):
-        TaskChecker.objects.create(task=self.record_foo.task, checker=self.django)
-        TaskChecker.objects.create(task=self.record_foo.task, checker=self.olivia)
         ruby = User.objects.create(username='ruby')
         TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @task!", checker=self.django)
         self.assertEqual(UserNotification.objects.filter(recipient=ruby).count(), 0)

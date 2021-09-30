@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
 
-class TestSetting(TestCase):
+class TestUser(TestCase):
     client = APIClient()
     fixtures = ['users.json']
 
@@ -11,7 +11,7 @@ class TestSetting(TestCase):
     def test_list_returns_all_users(self):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/users/')
-        self.assertEqual(len(request.json().get('data')), 2)
+        self.assertEqual(len(request.json().get('data')), 3)
 
 
     def test_me_returns_current_user(self):

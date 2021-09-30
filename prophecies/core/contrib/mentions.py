@@ -23,6 +23,8 @@ def get_or_create_mention_action(actor, target, action_object, data = {}):
     """
     Get or create the action matching with the given target's mention
     """
+    if not actor or not target:
+        return [None, False]
     actor_params = Action.objects.filter_actor_params(actor)
     target_params = Action.objects.filter_target_params(target)
     action_object_params = Action.objects.filter_action_object_params(action_object)

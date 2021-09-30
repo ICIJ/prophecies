@@ -34,5 +34,23 @@
       "groups": [],
       "user_permissions": []
     }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$hBZl5ogredz9mF2USKBzUk$Qk8e333fVyIzdIpuQbIuh7j88DAGel3o5d9eC2rZubc=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "ruby",
+      "first_name": "Ruby",
+      "last_name": "Reinhardt",
+      "email": "tech@icij.org",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2021-09-30T12:10:36.041Z",
+      "groups": [],
+      "user_permissions": []
+    }
   }
 ]

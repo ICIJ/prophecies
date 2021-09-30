@@ -14,15 +14,17 @@ class TestOperation(TestCase):
         choice_group = ChoiceGroup.objects.create(name='Is it correct?')
         Choice.objects.create(name='Yes', choice_group=choice_group)
         Choice.objects.create(name='No', choice_group=choice_group)
+        # Get our two users (from the fixtures)
+        self.olivia = User.objects.get(username='olivia')
+        self.django = User.objects.get(username='django')
         # Create project and task
         project = Project.objects.create(name='foo')
         self.task = Task.objects.create(name="paintings", project=project, choice_group=choice_group)
+        self.task.checkers.add(self.olivia)
+        self.task.checkers.add(self.django)
         # Add a series of records
         self.task_record_foo = TaskRecord.objects.create(original_value="foo", task=self.task)
         self.task_record_bar = TaskRecord.objects.create(original_value="bar", task=self.task)
-        # And finally get our two users (from the fixtures)
-        self.olivia = User.objects.get(username='olivia')
-        self.django = User.objects.get(username='django')
 
 
     def test_it_bulk_update_notes(self):
