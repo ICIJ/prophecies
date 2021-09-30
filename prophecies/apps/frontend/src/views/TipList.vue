@@ -1,5 +1,5 @@
 <script>
-import { get, groupBy, split, uniqueId } from 'lodash'
+import { get, groupBy, uniqueId } from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
@@ -37,7 +37,7 @@ export default {
       return this.waitFor(this.fetchTipsLoader, this.fetchTips)
     }
   },
-  created() {
+  created () {
     return this.setup()
   },
   computed: {
@@ -114,9 +114,9 @@ export default {
       <div class="container-fluid pl-4 pt-5">
         <app-waiter :loader="fetchTipsLoader" waiter-class="my-5 mx-auto d-block">
           <div v-if="tips">
-            <div v-for="(projectValue, name) in tipsGroupedByProject" class="mt-4 mb-4 border-bottom">
+            <div v-for="(projectValue, name) in tipsGroupedByProject" class="mt-4 mb-4 border-bottom" :key="projectValue">
               <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
-              <div v-for="(taskValue, name) in tipsGroupedByTask(projectValue)" class="mb-4">
+              <div v-for="(taskValue, name) in tipsGroupedByTask(projectValue)" class="mb-4" :key="taskValue">
                 <h2 class="mb-4 ml-4 mt-4">{{ name }}</h2>
                 <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
                   <tip-card :tip-id="tip.id" />
