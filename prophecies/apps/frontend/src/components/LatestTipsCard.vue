@@ -1,13 +1,17 @@
 <template>
   <div class="latest-tips-card card card-body py-4 px-5 shadow" v-if="show">
-    <div class="mt-2" v-if="showClose">
-      <a href="#" title="Close latest tips" @click="show = !show"><x-icon class="latest-tips-card__close text-secondary float-right" /></a>
+    <div class="d-flex">
+      <div class="mt-2 order-2" v-if="showClose">
+        <a href="#" title="Close latest tips" @click="show = !show">
+          <x-icon class="latest-tips-card__close text-secondary" />
+        </a>
+      </div>
+      <div class="d-flex flex-grow-1 align-items-center mt-3 mb-5">
+        <smile-icon class="text-primary mr-4" />
+        <slot name="title"></slot>
+      </div>
     </div>
-    <div class="d-flex align-items-center mt-3 mb-5">
-      <smile-icon class="text-primary mr-4" />
-      <slot name="title"></slot>
-    </div>
-    <ul class="list-unstyled latest-tips-card__tips" v-if="latestTips && latestTips.length">
+    <ul class="list-unstyled latest-tips-card__tips" v-if="hasLatestTips">
       <li class="latest-tips-card__tips__item" v-for="tip in latestTips" :key="tip.id">
         <div class="row">
           <div class="col">
@@ -56,6 +60,10 @@ export default {
       if (this.tips.length) {
         return this.tips.length > 3 ? slice(this.tips, 0, 2) : this.tips
       }
+      return []
+    },
+    hasLatestTips () {
+      return this.latestTips.length > 0
     }
   },
   methods: {
