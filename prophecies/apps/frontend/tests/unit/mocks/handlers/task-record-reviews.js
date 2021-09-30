@@ -311,7 +311,7 @@ export default [
             links: {
               self: 'http://localhost/api/v1/task-records/4/'
             }
-          },          
+          },
           {
             type: 'TaskRecord',
             id: '5',
