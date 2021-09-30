@@ -1,8 +1,8 @@
 <template>
-  <div class="latest-tips-card card card-body py-4 px-5 shadow" v-if="show">
+  <div class="latest-tips-card card card-body py-4 px-5 shadow">
     <div class="d-flex">
       <div class="mt-2 order-2" v-if="showClose">
-        <a href="#" title="Close latest tips" @click="show = !show">
+        <a href="#" title="Close latest tips" @click="close">
           <x-icon class="latest-tips-card__close text-secondary" />
         </a>
       </div>
@@ -50,11 +50,6 @@ export default {
       default: false
     }
   },
-  data () {
-    return {
-      show: true
-    }
-  },
   computed: {
     latestTips () {
       if (this.tips.length) {
@@ -69,6 +64,13 @@ export default {
   methods: {
     tipLink (tip) {
       return `#/tips/${tip.id}`
+    },
+    close () {
+      /**
+       * Emitted when the user clicked on the "close" button
+       * @event close
+       */
+      this.$emit('close')
     }
   }
 }

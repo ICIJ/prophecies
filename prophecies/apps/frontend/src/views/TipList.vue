@@ -20,6 +20,7 @@ export default {
   },
   data () {
     return {
+      showLatestTips: true,
       projectFilter: null,
       taskFilter: null,
       creatorFilter: null,
@@ -98,15 +99,15 @@ export default {
     <app-sidebar class="w-100 sticky-top" />
     <div class="tip-list__container flex-grow-1">
       <app-header reduced />
-      <div class="pl-4 pb-5 w-75">
-        <latest-tips-card :tips="tips" :showClose="true">
+      <b-collapse :visible="showLatestTips">
+        <latest-tips-card :tips="tips" :show-close="true" @close="showLatestTips = false" class="mx-4 mb-5">
           <template v-slot:title>
             <h1 class="latest-tips-card__title text-primary mb-0 font-weight-bold">
               Latest tips
             </h1>
           </template>
         </latest-tips-card>
-      </div>
+      </b-collapse>
       <tip-list-page-params
         :project-id.sync="projectFilter"
         :task-id.sync="taskFilter"
