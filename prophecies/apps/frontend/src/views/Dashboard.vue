@@ -117,7 +117,7 @@ export default {
                   <template v-slot:footer>
                     <div class="mx-auto">
                       <router-link
-                        :to="{ name: 'tip-list', params: {} }"
+                        :to="{ name: 'tip-list' }"
                         title="All tips"
                         v-b-tooltip.hover
                         class="text-secondary">
