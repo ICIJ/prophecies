@@ -37,8 +37,6 @@
 </template>
 
 <script>
-import { slice } from 'lodash'
-
 export default {
   name: 'LatestTipsCard',
   props: {
@@ -53,7 +51,7 @@ export default {
   computed: {
     latestTips () {
       if (this.tips.length) {
-        return this.tips.length > 3 ? slice(this.tips, 0, 2) : this.tips
+        return this.tips.length > 3 ? this.tips.slice(0, 2) : this.tips
       }
       return []
     },
