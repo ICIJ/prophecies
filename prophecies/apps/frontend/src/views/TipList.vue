@@ -45,6 +45,13 @@ export default {
     fetchTipsLoader () {
       return uniqueId('load-tips-')
     },
+    latestTips () {
+      return Tip.query()
+        .with('project')
+        .with('task')
+        .orderBy('createdAt', 'desc')
+        .get()
+    },
     tips () {
       return Tip.query()
         .with('project')
@@ -102,7 +109,7 @@ export default {
       <div class="container-fluid px-4">
         <app-waiter :loader="fetchTipsLoader" waiter-class="my-5 mx-auto d-block">
           <b-collapse :visible="showLatestTips">
-            <latest-tips-card :tips="tips" :show-close="true" @close="showLatestTips = false" class="mb-5">
+            <latest-tips-card :tips="latestTips" :show-close="true" @close="showLatestTips = false" class="mb-5">
               <template v-slot:title>
                 <h1 class="latest-tips-card__title text-primary mb-0 font-weight-bold">
                   Latest tips
