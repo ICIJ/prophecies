@@ -15,11 +15,11 @@
       <li class="latest-tips-card__tips__item" v-for="tip in latestTips" :key="tip.id">
         <div class="row">
           <div class="col">
-            <a :href="tipLink(tip)">
+            <router-link :to="{ name: 'tip-retreive', params: { tipId: tip.id } }">
               <h2 class="latest-tips-card__tips__item__title font-weight-bold">
                 {{ tip.name }}
               </h2>
-            </a>
+            </router-link>
             <div class="negative-margin text-black-50">
               <small v-if="tip.task">
                 in {{ tip.task.name }} | {{ tip.project.name }}
@@ -62,9 +62,6 @@ export default {
     }
   },
   methods: {
-    tipLink (tip) {
-      return `#/tips/${tip.id}`
-    },
     close () {
       /**
        * Emitted when the user clicked on the "close" button
