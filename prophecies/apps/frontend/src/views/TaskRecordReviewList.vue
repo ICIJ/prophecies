@@ -85,7 +85,7 @@ export default {
       },
       get () {
         const selectedIds = values(this.selectedIds)
-        return compact(selectedIds).length === this.taskRecordReviews.length
+        return this.taskRecordReviews.length > 0 && compact(selectedIds).length === this.taskRecordReviews.length
       }
     },
     pageNumber () {
@@ -218,8 +218,8 @@ export default {
         sort: this.sort
       }
     },
-    isTaskOpen(){
-        return this.task && this.task.status === "OPEN"
+    isTaskOpen () {
+      return this.task && this.task.status === 'OPEN'
     },
     trailingTaskRecordReview () {
       return this.taskRecordReviews[this.taskRecordReviews.length - 1]
