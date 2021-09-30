@@ -26,7 +26,7 @@ export default {
     }
   },
   async created () {
-    await this.waitFor(this.fetchTaskLoader, this.fetchTask, this.fetchTips)
+    await this.waitFor(this.fetchTaskLoader, [this.fetchTask, this.fetchTips])
   },
   computed: {
     tasks () {
@@ -61,11 +61,11 @@ export default {
       return Task.api().get()
     },
     fetchTips () {
-      return Tip.api().get('', {})
+      return Tip.api().get()
     },
-    async waitFor (loader, fn) {
+    async waitFor (loader, fns = []) {
       this.$wait.start(loader)
-      await fn()
+      await Promise.all(fns.map(fn => fn()))
       this.$wait.end(loader)
     }
   }
