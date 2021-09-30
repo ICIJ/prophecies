@@ -99,30 +99,28 @@ export default {
     <app-sidebar class="w-100 sticky-top" />
     <div class="tip-list__container flex-grow-1">
       <app-header reduced />
-      <b-collapse :visible="showLatestTips">
-        <latest-tips-card :tips="tips" :show-close="true" @close="showLatestTips = false" class="mx-4 mb-5">
-          <template v-slot:title>
-            <h1 class="latest-tips-card__title text-primary mb-0 font-weight-bold">
-              Latest tips
-            </h1>
-          </template>
-        </latest-tips-card>
-      </b-collapse>
-      <tip-list-page-params
-        :project-id.sync="projectFilter"
-        :task-id.sync="taskFilter"
-        :creator-id.sync="creatorFilter" />
-      <div class="container-fluid pl-4 pt-5">
+      <div class="container-fluid px-4">
         <app-waiter :loader="fetchTipsLoader" waiter-class="my-5 mx-auto d-block">
-          <div v-if="tips">
-            <div v-for="(projectValue, name) in tipsGroupedByProject" class="mt-4 mb-4 border-bottom" :key="projectValue">
-              <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
-              <div v-for="(taskValue, name) in tipsGroupedByTask(projectValue)" class="mb-4" :key="taskValue">
-                <h2 class="mb-4 ml-4 mt-4">{{ name }}</h2>
-                <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
-                  <tip-card :tip-id="tip.id" />
-                </b-list-group-item>
-              </div>
+          <b-collapse :visible="showLatestTips">
+            <latest-tips-card :tips="tips" :show-close="true" @close="showLatestTips = false" class="mb-5">
+              <template v-slot:title>
+                <h1 class="latest-tips-card__title text-primary mb-0 font-weight-bold">
+                  Latest tips
+                </h1>
+              </template>
+            </latest-tips-card>
+          </b-collapse>
+          <tip-list-page-params
+            :project-id.sync="projectFilter"
+            :task-id.sync="taskFilter"
+            :creator-id.sync="creatorFilter" />
+          <div v-for="(projectValue, name) in tipsGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
+            <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
+            <div v-for="(taskValue, taskName) in tipsGroupedByTask(projectValue)" :key="taskName" class="mb-4">
+              <h2 class="mb-4 ml-4 mt-4">{{ taskName }}</h2>
+              <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
+                <tip-card :tip-id="tip.id" />
+              </b-list-group-item>
             </div>
           </div>
         </app-waiter>
