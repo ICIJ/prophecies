@@ -3,7 +3,6 @@ import some from 'lodash/some'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexORM from '@vuex-orm/core'
-import Cookies from 'js-cookie'
 
 import createPersistedState from 'vuex-persistedstate'
 
@@ -26,25 +25,12 @@ export default new Vuex.Store({
     // Select which store module should be persisted with local storage
     createPersistedState({
       paths: [
-        'app.redirectAfterLogin'
-      ],
-      filter (mutation) {
-        // Only for some mutations
-        return some(['app/'], k => mutation.type.indexOf(k) === 0)
-      }
-    }),
-    createPersistedState({
-      storage: {
-        getItem: key => Cookies.get(key),
-        setItem: (key, value) => Cookies.set(key, value, { expires: 365, sameSite: 'lax' }),
-        removeItem: key => Cookies.remove(key)
-      },
-      paths: [
+        'app.redirectAfterLogin',
         'app.showTutorial'
       ],
       filter (mutation) {
         // Only for some mutations
-        return some(['app'], k => mutation.type.indexOf(k) === 0)
+        return some(['app/'], k => mutation.type.indexOf(k) === 0)
       }
     })
   ]
