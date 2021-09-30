@@ -117,6 +117,7 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
     ordering_fields = ['task_record__original_value', 'task_record__predicted_value',
                        'task_record__id']
     filterset_fields = {
+       'checker': ('exact', 'in', 'isnull'),
        'choice': ('exact', 'in', 'isnull'),
        'alternative_value': ('icontains', 'exact', 'iexact', 'contains', 'in', 'iregex'),
        'task_record__priority': ('exact', 'in'),
@@ -141,7 +142,6 @@ class TaskRecordReviewViewSet(viewsets.ModelViewSet):
         if not self.request.user.is_authenticated:
             return TaskRecordReview.objects.none()
         return TaskRecordReview.objects \
-            .filter(checker=self.request.user) \
             .select_related('checker') \
             .select_related('task_record') \
             .select_related('task_record__task') \

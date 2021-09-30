@@ -60,13 +60,19 @@ export default {
       this.$wait.end(this.loader)
     },
     async selectChoice (data) {
-      // We use a dedicated method that will format the data for the JSONAPI spec
-      // and return the updated object (the store shall be updated as well).
-      await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, data)
-      // Hide node to avoid using unecessary space
-      this.showNotes = false
-      // Let parent component know about the update
-      this.emitUpdate()
+      try {
+        // We use a dedicated method that will format the data for the JSONAPI spec
+        // and return the updated object (the store shall be updated as well).
+        await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, data)
+        // Hide node to avoid using unecessary space
+        this.showNotes = false
+        // Let parent component know about the update
+        this.emitUpdate()
+      } catch (_) {
+        const variant = 'danger'
+        const title = 'Something went wrong'
+        this.$bvToast.toast('Unable to update your review.', { variant, title })
+      }
     },
     async lock () {
       try {

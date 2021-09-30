@@ -46,17 +46,17 @@ class TestTaskRecordReview(TestCase):
         self.assertEqual(len(data), 1)
 
 
-    def test_it_returns_one_task_record_review_for_each_user(self):
+    def test_it_returns_all_task_record_reviews_for_each_user(self):
         TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django)
         TaskRecordReview.objects.create(task_record=self.task_record_bar, checker=self.olivia)
         self.client.login(username='django', password='django')
         request = self.client.get('/api/v1/task-record-reviews/')
         data = request.json().get('data')
-        self.assertEqual(len(data), 1)
+        self.assertEqual(len(data), 2)
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/task-record-reviews/')
         data = request.json().get('data')
-        self.assertEqual(len(data), 1)
+        self.assertEqual(len(data), 2)
 
 
     def test_list_reject_unauthenticated_request(self):
@@ -113,7 +113,7 @@ class TestTaskRecordReview(TestCase):
         attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo)
         self.client.login(username='django', password='django')
         request = self.client.get('/api/v1/task-record-reviews/%s/' % attribution.id)
-        self.assertEqual(request.status_code, 404)
+        self.assertEqual(request.status_code, 403)
 
 
     def test_it_returns_number_of_task_record_reviews_for_olivia_by_task(self):
@@ -146,7 +146,7 @@ class TestTaskRecordReview(TestCase):
             }
         }
         request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload, content_type='application/vnd.api+json')
-        self.assertEqual(request.status_code, 404)
+        self.assertEqual(request.status_code, 403)
 
 
     def test_it_cannot_set_task_record_choice_with_superuser(self):
@@ -167,7 +167,7 @@ class TestTaskRecordReview(TestCase):
             }
         }
         request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload, content_type='application/vnd.api+json')
-        self.assertEqual(request.status_code, 404)
+        self.assertEqual(request.status_code, 403)
 
 
     def test_it_sets_task_record_choice_with_checker_as_superuser(self):

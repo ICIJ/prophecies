@@ -99,6 +99,9 @@ export default {
     hasChoice () {
       return this.choiceId !== null
     },
+    disable () {
+      return this.isLocked || !this.taskRecordReview.editable
+    },
     isLocked () {
       return this.taskRecord.locked || this.taskIsNotOpen
     },
@@ -110,7 +113,7 @@ export default {
 </script>
 
 <template>
-  <fieldset class="task-record-review-choice-form py-1" :class="classList" :disabled="isLocked">
+  <fieldset class="task-record-review-choice-form py-1" :class="classList" :disabled="disable">
     <choice-group-buttons
       class="task-record-review-choice-form__choices"
       v-model="choiceId"

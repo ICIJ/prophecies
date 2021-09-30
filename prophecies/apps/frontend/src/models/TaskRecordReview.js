@@ -97,4 +97,8 @@ export default class TaskRecordReview extends Model {
       return `<span class="mention">${match}</span>`
     })
   }
+
+  get editable () {
+    return this.checkerId === User.me()?.id
+  }
 }

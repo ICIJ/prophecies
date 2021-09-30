@@ -90,7 +90,7 @@ class TestOperation(TestCase):
         self.client.login(username='olivia', password='olivia')
         content_type = 'application/vnd.api+json; ext=bulk'
         request = self.client.post('/api/v1/operations/', payload, content_type=content_type)
-        self.assertEqual(request.status_code, 404)
+        self.assertEqual(request.status_code, 403)
 
 
     def test_it_cannot_bulk_update_unknown_record(self):

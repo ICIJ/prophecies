@@ -15,6 +15,7 @@ import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Task from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
+import User from '@/models/User'
 
 export default {
   name: 'TaskRecordReviewList',
@@ -210,7 +211,8 @@ export default {
     taskRecordReviewsParams () {
       return {
         ...this.appliedRouteFiltersQueryParams,
-        'filter[taskRecord.task]': this.taskId,
+        'filter[task_record__task]': this.taskId,
+        'filter[checker]': User.me().id,
         'page[size]': this.pageSize,
         'page[number]': this.pageNumber,
         sort: this.sort
