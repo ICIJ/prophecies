@@ -8,7 +8,7 @@
       <slot name="title"></slot>
     </div>
     <ul class="list-unstyled latest-tips-card__tips" v-if="latestTips && latestTips.length">
-      <li class="latest-tips-card__tips__item" v-for="tip in latestTips">
+      <li class="latest-tips-card__tips__item" v-for="tip in latestTips" :key="tip.id">
         <div class="row">
           <div class="col">
             <a :href="tipLink(tip)">
