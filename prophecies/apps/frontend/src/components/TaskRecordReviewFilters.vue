@@ -1,104 +1,102 @@
 <script>
-  import { find, keys, map, mapValues, trim, uniqueId } from 'lodash'
-  import Multiselect from 'vue-multiselect'
-  import MultiselectButtons from '@/components/MultiselectButtons'
-  import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
-  import ChoiceGroup from '@/models/ChoiceGroup'
-  import Task from '@/models/Task'
-  import TaskRecordReview from '@/models/TaskRecordReview'
+import { keys } from 'lodash'
+import Multiselect from 'vue-multiselect'
+import MultiselectButtons from '@/components/MultiselectButtons'
+import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
+import Task from '@/models/Task'
 
-  export default {
-    name: 'TaskRecordReviewFilters',
-    mixins: [taskRecordReviewFiltersMixin],
-    components: {
-      Multiselect,
-      MultiselectButtons
+export default {
+  name: 'TaskRecordReviewFilters',
+  mixins: [taskRecordReviewFiltersMixin],
+  components: {
+    Multiselect,
+    MultiselectButtons
+  },
+  props: {
+    taskId: {
+      type: [Number, String]
     },
-    props: {
-      taskId: {
-        type: [Number, String]
-      },
-      routeFilters: {
-        type: Object,
-        default: () => ({})
-      }
-    },
-    data () {
-      return {
-        selected: {
-          predictedValues: [],
-          assignedTo: [],
-          alternativeValues: [],
-          choices: [],
-          priorities: [],
-          rounds: [],
-          hasDisagreements: [],
-          locked: [],
-          hasNotes: []
-        }
-      }
-    },
-    created () {
-      this.readRouteFilters()
-    },
-    computed: {
-      filters () {
-        // Method from the mixins
-        return this.getTaskFilters(this.task)
-      },
-      task () {
-        return Task
-          .query()
-          .with('checkers')
-          .with('choiceGroup')
-          .with('choiceGroup.alternativeValues')
-          .with('choiceGroup.choices')
-          .find(this.taskId)
-      },
-      filtersAsQueryParams () {
-        // Method from the mixins
-        return this.getSelectedFiltersAsRouteFilters(this.filters, this.selected)
-      }
-    },
-    methods: {
-      addArbitraryPredictedValue (value) {
-        // Method from the mixins
-        const option = this.toSerializableOption(value)
-        this.selected.predictedValues.push(option)
-      },
-      addAlternativeValues (value) {
-        // Method from the mixins
-        const option = this.toSerializableOption(value)
-        this.selected.alternativeValues.push(option)
-      },
-      readRouteFilters () {
-        // Clear all keys
-        keys(this.selected).forEach(key => this.$set(this.selected, key, []))
-        // Method from the mixins
-        const options = this.mapRouteQueryToFilterOptions(this.routeFilters, this.task)
-        // Apply the selected options to each filter
-        options.forEach(([key, option]) => this.$set(this.selected, key, option))
-      }
-    },
-    watch: {
-      routeFilters: {
-        deep: true,
-        handler () {
-          this.readRouteFilters()
-        }
-      },
+    routeFilters: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  data () {
+    return {
       selected: {
-        deep: true,
-        handler (u) {
-          /**
+        predictedValues: [],
+        assignedTo: [],
+        alternativeValues: [],
+        choices: [],
+        priorities: [],
+        rounds: [],
+        hasDisagreements: [],
+        locked: [],
+        hasNotes: []
+      }
+    }
+  },
+  created () {
+    this.readRouteFilters()
+  },
+  computed: {
+    filters () {
+      // Method from the mixins
+      return this.getTaskFilters(this.task)
+    },
+    task () {
+      return Task
+        .query()
+        .with('checkers')
+        .with('choiceGroup')
+        .with('choiceGroup.alternativeValues')
+        .with('choiceGroup.choices')
+        .find(this.taskId)
+    },
+    filtersAsQueryParams () {
+      // Method from the mixins
+      return this.getSelectedFiltersAsRouteFilters(this.filters, this.selected)
+    }
+  },
+  methods: {
+    addArbitraryPredictedValue (value) {
+      // Method from the mixins
+      const option = this.toSerializableOption(value)
+      this.selected.predictedValues.push(option)
+    },
+    addAlternativeValues (value) {
+      // Method from the mixins
+      const option = this.toSerializableOption(value)
+      this.selected.alternativeValues.push(option)
+    },
+    readRouteFilters () {
+      // Clear all keys
+      keys(this.selected).forEach(key => this.$set(this.selected, key, []))
+      // Method from the mixins
+      const options = this.mapRouteQueryToFilterOptions(this.routeFilters, this.task)
+      // Apply the selected options to each filter
+      options.forEach(([key, option]) => this.$set(this.selected, key, option))
+    }
+  },
+  watch: {
+    routeFilters: {
+      deep: true,
+      handler () {
+        this.readRouteFilters()
+      }
+    },
+    selected: {
+      deep: true,
+      handler (u) {
+        /**
            * @event update:routeFilters
            * @param routes query params after updating filters
            */
-          this.$emit('update:routeFilters', this.filtersAsQueryParams)
-        }
+        this.$emit('update:routeFilters', this.filtersAsQueryParams)
       }
     }
   }
+}
 </script>
 
 <template>
