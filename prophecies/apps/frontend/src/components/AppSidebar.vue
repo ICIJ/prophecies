@@ -32,7 +32,7 @@ export default {
           Tips
           <shortkey-badge :value="['meta', 't']" class="ml-2" />
         </b-nav-item>
-        <b-nav-item>
+        <b-nav-item :to="{ name: 'shortcut-list' }">
           <command-icon class="mr-2" />
           Shortcuts
           <shortkey-badge :value="['meta', 'k']" class="ml-2" />
