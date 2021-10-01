@@ -13,7 +13,7 @@ class TestSetting(TestCase):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/settings/')
         attributes = [ entity.get('attributes') for entity in request.json().get('data') ]
-        self.assertIn({ 'key': 'defaultLocale', 'value': 'en' }, attributes)
+        self.assertIn({ 'key': 'defaultLocale', 'value': 'en', 'public': False }, attributes)
 
 
     @mock.patch.dict(os.environ, {"PROPHECIES_APP_FOO": "bar"})
@@ -21,7 +21,7 @@ class TestSetting(TestCase):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/settings/')
         attributes = [ entity.get('attributes') for entity in request.json().get('data') ]
-        self.assertIn({ 'key': 'foo', 'value': 'bar' }, attributes)
+        self.assertIn({ 'key': 'foo', 'value': 'bar', 'public': False }, attributes)
 
 
     @mock.patch.dict(os.environ, {"PROPHECIES_APP_FOO_BAZ": "bar"})
@@ -29,7 +29,7 @@ class TestSetting(TestCase):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/settings/')
         attributes = [ entity.get('attributes') for entity in request.json().get('data') ]
-        self.assertIn({ 'key': 'fooBaz', 'value': 'bar' }, attributes)
+        self.assertIn({ 'key': 'fooBaz', 'value': 'bar', 'public': False }, attributes)
 
 
     @mock.patch.dict(os.environ, {"PROPHECIES_APP_DEFAULT_LOCALE": "fr"})
@@ -37,8 +37,8 @@ class TestSetting(TestCase):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/settings/')
         attributes = [ entity.get('attributes') for entity in request.json().get('data') ]
-        self.assertIn({ 'key': 'defaultLocale', 'value': 'en' }, attributes)
-        self.assertNotIn({ 'key': 'defaultLocale', 'value': 'fr' }, attributes)
+        self.assertIn({ 'key': 'defaultLocale', 'value': 'en', 'public': False }, attributes)
+        self.assertNotIn({ 'key': 'defaultLocale', 'value': 'fr', 'public': False }, attributes)
 
     @mock.patch.dict(os.environ, {"PROPHECIES_APP_DEFAULT_LOCALE": "fr"})
     def test_it_returns_single_setting_from_env_without_overriding_db_values(self):
