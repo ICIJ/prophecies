@@ -2,6 +2,7 @@ from prophecies.apps.api.contrib.strings import to_camel_case
 from constance.backends.database.models import Constance
 from django.conf import settings
 from django.db import models
+from django.db.models import signals
 import os
 
 
@@ -35,7 +36,47 @@ class SettingManager(models.Manager):
 
 
 class Setting(Constance):
-    objects = SettingManager()
+    objects = SettingManager()    
 
     class Meta:
         proxy = True
+
+    @property
+    def public(self):
+        if hasattr(self, 'visibility'):
+            return self.visibility.public
+        return False
+    
+    @public.setter
+    def public(self, value):        
+        self.visibility, created = SettingVisibility.objects.get_or_create(setting=self)
+        self.visibility.public = value
+        
+
+    @property
+    def private(self):
+        return not self.public
+
+    def publish(self):        
+        self.visibility, created = SettingVisibility.objects.get_or_create(setting=self)
+        self.visibility.public = True
+        self.visibility.save()
+
+    def unpublish(self):        
+        self.visibility, created = SettingVisibility.objects.get_or_create(setting=self)
+        self.visibility.public = False
+        self.visibility.save()
+
+
+    @staticmethod
+    def signal_save_visibility(sender, instance, **kwargs):
+        if hasattr(instance, 'visibility'):
+            instance.visibility.save()
+
+
+signals.post_save.connect(Setting.signal_save_visibility, sender=Setting)
+
+
+class SettingVisibility(models.Model):
+    setting = models.OneToOneField(Setting, on_delete=models.CASCADE, related_name='visibility')
+    public = models.BooleanField(default=False, verbose_name='Make a setting public (visible without authentication)')
