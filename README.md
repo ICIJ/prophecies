@@ -2,6 +2,11 @@
 
 An ICIJ app to conduct data validation and cleaning.
 
+| | Status |
+| ---: | --- |
+| **CI checks** | [![Circle CI](https://circleci.com/gh/ICIJ/prophecies.png?style=shield)](https://circleci.com/gh/ICIJ/prophecies) |
+| **Code Climate** | _Pending_ |
+
 ## Installation
 
 Required:
@@ -67,7 +72,6 @@ Then visit [http://0.0.0.0:9009](http://0.0.0.0:9009)
 Run **one** of these commands depending on the kind of version you need to publish:
 
 ```
-pipenv run bumpversion build
 pipenv run bumpversion alpha
 pipenv run bumpversion beta
 pipenv run bumpversion rc
@@ -81,4 +85,3 @@ Then build and push the Docker image while ICIJ internal VPN is running:
 ```
 make docker-publish
 ```
-
