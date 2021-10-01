@@ -20,19 +20,28 @@ class SettingSerializer(serializers.ModelSerializer):
 
 
 class SettingViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Setting.objects.all()
+    queryset = Setting.objects.none()
     serializer_class = SettingSerializer
     pagination_class = None
+    permission_classes = []
+
+
+    def get_queryset(self):        
+        if not self.request.user.is_authenticated:
+            return Setting.objects.public()
+        else:
+            return Setting.objects.all_with_env()
+        
 
     def list(self, request, **kwargs):
-        with_env = Setting.objects.with_env()
-        serializer = SettingSerializer(with_env, context={'request': request}, many=True)
+        settings = self.get_queryset()
+        serializer = SettingSerializer(settings, context={'request': request}, many=True)
         return Response(serializer.data)
+
 
     def retrieve(self, request, pk=None, **kargs):
         try:
-            with_env = Setting.objects.with_env()
-            setting = next(s for s in with_env if s.key == pk)
+            setting = next(s for s in self.get_queryset() if s.key == pk)
         except StopIteration:
             raise NotFound()
         serializer = SettingSerializer(setting, context={'request': request}, many=False)

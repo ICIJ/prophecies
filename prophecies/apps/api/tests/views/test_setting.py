@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+from prophecies.core.models.setting import Setting
 from rest_framework.test import APIClient
 from unittest import mock
 import os
@@ -48,7 +49,30 @@ class TestSetting(TestCase):
         self.assertEqual(request.json().get('data').get('attributes').get('value'), 'en')
 
 
-    def test_it_reject_unauthenticated_request(self):
+    def test_it_return_no_public_settings_for_unauthenticated_request(self):
         self.client.logout()
         request = self.client.get('/api/v1/settings/')
-        self.assertEqual(request.status_code, 403)
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(len(request.json().get('data')), 0)
+
+
+    def test_it_return_two_public_settings_for_unauthenticated_request(self):
+        Setting.objects.get(key='defaultLocale').publish()
+        Setting.objects.get(key='loginUrl').publish()
+        self.client.logout()
+        request = self.client.get('/api/v1/settings/')
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(len(request.json().get('data')), 2)
+
+
+    def test_it_return_cannot_retreive_a_public_setting_for_unauthenticated_request(self):
+        self.client.logout()
+        request = self.client.get('/api/v1/settings/defaultLocale/')
+        self.assertEqual(request.status_code, 404)
+
+
+    def test_it_return_can_retreive_a_public_setting_for_unauthenticated_request(self):
+        Setting.objects.get(key='defaultLocale').publish()
+        self.client.logout()
+        request = self.client.get('/api/v1/settings/defaultLocale/')
+        self.assertEqual(request.status_code, 200)

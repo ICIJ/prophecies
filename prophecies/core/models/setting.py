@@ -30,9 +30,12 @@ class SettingManager(models.Manager):
         existing_keys = self.values_list('key', flat=True)
         return key in existing_keys
 
-    def with_env(self):
+    def all_with_env(self):
         all_as_list = list(self.all())
         return all_as_list + self.from_env()
+
+    def public(self):
+        return self.filter(visibility__public=True)
 
 
 class Setting(Constance):
