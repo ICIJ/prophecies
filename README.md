@@ -4,7 +4,7 @@ An ICIJ app to conduct data validation and cleaning.
 
 | | Status |
 | ---: | --- |
-| **CI checks** | [![Circle CI](https://circleci.com/gh/ICIJ/prophecies.png?style=shield)](https://circleci.com/gh/ICIJ/prophecies) |
+| **CI checks** | [![CircleCI](https://circleci.com/gh/ICIJ/prophecies/tree/main.svg?style=svg&circle-token=db6cce793b346e91b82e04bd38fac2af48fc3164)](https://circleci.com/gh/ICIJ/prophecies/tree/main) |
 | **Code Climate** | _Pending_ |
 
 ## Installation
