@@ -234,8 +234,10 @@ export default {
       return uniqueId('bulk-select-choice-')
     },
     firstPendingTaskRecordReview () {
-      const all = TaskRecordReview.all()
-      return find(all, { status: 'PENDING' })
+      return TaskRecordReview.query()
+              .whereIdIn(this.taskRecordReviewIds)
+              .where('status', 'PENDING')
+              .first()
     },
     filtersTogglerVariant () {
       return this.showFilters ? 'primary' : 'outline-primary'
