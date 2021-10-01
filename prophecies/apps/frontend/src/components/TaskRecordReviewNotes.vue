@@ -54,14 +54,17 @@ export default {
       return TaskRecordReview
         .query()
         .with('checker')
-        .with('history')
-        .with('history.checker')
-        .with('history.choice')
         .find(this.taskRecordReviewId)
     },
     history () {
-      const historyWithNotes = filter(this.taskRecordReview.history, ({ note }) => !!note)
-      return [this.taskRecordReview, ...historyWithNotes]
+      const history = TaskRecordReview.query()
+        .with('checker')
+        .where('taskRecordId', this.taskRecordReview.taskRecordId)
+        .where(({ note }) => !!note)
+        .where(({ id }) => id !== this.taskRecordReview.id)
+        .orderBy('noteCreatedAt', 'desc')
+        .get()
+      return [this.taskRecordReview, ...history]
     },
     saveNoteLoader () {
       return uniqueId('task-record-review-save-note')

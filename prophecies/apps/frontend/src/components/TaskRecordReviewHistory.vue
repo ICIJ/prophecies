@@ -54,17 +54,20 @@ export default {
         .query()
         .with('checker')
         .with('choice')
-        .with('history')
-        .with('history.checker')
-        .with('history.choice')
         .find(this.taskRecordReviewId)
     },
     taskRecordId () {
       return this.taskRecordReview.taskRecordId
     },
     history () {
-      const history = [this.taskRecordReview, ...this.taskRecordReview.history]
-      return orderBy(history, ({ id }) => -Number(id))
+      const history = TaskRecordReview.query()
+        .with('checker')
+        .with('choice')
+        .where('taskRecordId', this.taskRecordReview.taskRecordId)
+        .where(({ id }) => id !== this.taskRecordReview.id)
+        .orderBy(({ id }) => -Number(id))
+        .get()
+      return [this.taskRecordReview, ...history]
     }
   }
 }
