@@ -80,7 +80,7 @@ export default {
         // Let parent component know about the update
         this.emitUpdate()
       } catch (error) {
-        const message = error.response.data.errors[0].detail
+        const message = get(error, 'response.data.errors[0].detail')
         this.makeToast('warning', `⛔ Task record #${this.taskRecord.id}`, message)
       }
     },
@@ -95,7 +95,7 @@ export default {
         // Let parent component know about the update
         this.emitUpdate()
       } catch (error) {
-        const message = error.response.data.errors[0].detail
+        const message = get(error, 'response.data.errors[0].detail')
         this.makeToast('warning', `⛔ Task record #${this.taskRecord.id}`, message)
       }
     },
@@ -134,13 +134,7 @@ export default {
       return this.toggleNotes(!this.showNotes, highlightedReviewId)
     },
     makeToast (variant = null, title, text) {
-      this.$bvToast.toast(text, {
-        title: title,
-        autoHideDelay: 5000,
-        variant: variant,
-        toaster: 'b-toaster-bottom-right',
-        appendToast: true
-      })
+      this.$bvToast.toast(text, { title, variant, appendToast: true })
     },
     emitUpdate () {
       /**
