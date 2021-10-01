@@ -289,7 +289,9 @@ CONSTANCE_CONFIG = {
     'orgName': ('ICIJ', 'Name of the organization deploying this app')
 }
 
+# Etheir or not we should activate Django Admin native login
+DJANGO_ADMIN_LOGIN = DEBUG
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
