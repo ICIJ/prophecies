@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'admin_auto_filters',
     'actstream',
     'debug_toolbar',
     'social_django',
@@ -56,7 +57,7 @@ INSTALLED_APPS = [
     'constance',
     'constance.backends.database',
     'prophecies.apps.api',
-    'prophecies.core',
+    'prophecies.core'
 ]
 
 MIDDLEWARE = [

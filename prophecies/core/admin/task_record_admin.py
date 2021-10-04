@@ -3,9 +3,13 @@ from django.contrib.admin.helpers import AdminForm
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import redirect, render
 from django.urls import path
+from admin_auto_filters.filters import AutocompleteFilterFactory
+
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon, display_task_record_link
 from prophecies.core.forms import TaskRecordAssignForm, TaskRecordUploadForm
 from prophecies.core.models import TaskRecord, TaskRecordReview
+from prophecies.core.admin.filters import DistinctValuesDropdownFilter
+
 
 class TaskRecordReviewInline(admin.TabularInline):
     model = TaskRecordReview
@@ -30,7 +34,17 @@ class TaskRecordAdmin(admin.ModelAdmin):
     exclude = ['metadata', 'rounds', 'link', 'status']
     readonly_fields = ['round_count', 'status_badge', 'computed_link', 'metadata_json']
     list_display = ['__str__', 'task_with_addon', 'round_count', 'status_badge']
-    list_filter = ['rounds', 'task', 'task__project', 'status', 'priority']
+    list_filter = [
+        AutocompleteFilterFactory('task', 'task'),
+        AutocompleteFilterFactory('project', 'task__project'),
+        AutocompleteFilterFactory('checkers', 'reviews__checker'),
+        'status',
+        'rounds',
+        'priority',
+        'has_notes',
+        'has_disagreements',
+        ('predicted_value', DistinctValuesDropdownFilter),
+    ]
     inlines = [TaskRecordReviewInline,]
     actions = ['assign_action']
     search_fields = ['original_value', 'predicted_value', 'metadata', 'link']

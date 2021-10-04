@@ -23,6 +23,7 @@ djangorestframework-jsonapi = {extras = ["django-polymorphic"], version = "*"}
 django-activity-stream = "*"
 django-jsonfield = "*"
 markdown = "*"
+django-admin-autocomplete-filter = "*"
 
 [dev-packages]
 

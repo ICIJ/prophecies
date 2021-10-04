@@ -1,0 +1,13 @@
+{% load i18n %}
+<h3>By {{ title }}</h3>
+<ul class="admin-filter-{{ title|cut:' ' }}">
+  <li>
+    <select class="admin-select2 admin-select-autosubmit" style="width: 100%">
+      {% for choice in choices %}
+        <option{% if choice.selected %} selected="selected"{% endif %} value="{{ choice.query_string|iriencode }}">
+          {{ choice.display }}
+        </option>
+      {% endfor %}
+    </select>
+  </li>
+</ul>

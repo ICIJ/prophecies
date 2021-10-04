@@ -14,6 +14,7 @@ class TaskAdminForm(forms.ModelForm):
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     exclude = ['creator']
+    search_fields = ['name']
     list_display = ('task_with_addon', 'description', 'task_actions',)
     form = TaskAdminForm
 
