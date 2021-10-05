@@ -44,7 +44,11 @@ export default {
       })
     },
     tips () {
-      return Tip.all()
+      return Tip.query()
+        .with('project')
+        .with('task')
+        .orderBy('createdAt', 'desc')
+        .get()
     },
     fetchTaskLoader () {
       return uniqueId('load-dashboard-task-')
