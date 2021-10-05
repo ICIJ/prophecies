@@ -4,6 +4,7 @@
   import UserNotification from '@/models/UserNotification'
   import AppSearchForm from '@/components/AppSearchForm'
   import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
+  import ShortcutListCard from '@/components/ShortcutListCard'
   import ShortkeyBadge from '@/components/ShortkeyBadge'
 
   export default {
@@ -11,7 +12,8 @@
     components: {
       AppSearchForm,
       UserNotificationsDropdownMenu,
-      ShortkeyBadge
+      ShortkeyBadge,
+      ShortcutListCard
     },
     props: {
       reduced: {
@@ -82,12 +84,15 @@
               </router-link>
               <shortkey-badge :value="['meta', 't']" class="ml-2" />
             </b-nav-item>
-            <b-nav-item href="#">
+            <b-nav-item href="#" v-b-modal.modal-shortcuts >
               <command-icon class="app-header__nav-right__shortcuts mr-2" />
               {{ $t('appHeader.shortcuts') }}
               <shortkey-badge :value="['meta', 'k']" class="ml-2" />
             </b-nav-item>
-            <b-nav-item href="#" 
+            <b-modal id="modal-shortcuts" content-class="app-header__nav-right___modal-shortcuts" body-bg-variant="primary" hide-footer >
+              <shortcut-list-card />
+            </b-modal>
+            <b-nav-item href="#"
             :class="{ 'font-weight-bold app-header__nav-right__tutorial--show': showTutorial }" @click="toggleTutorial"
             >
               <help-circle-icon class="app-header__nav-right__shortcuts mr-2" />
@@ -181,6 +186,7 @@
       top: 0;
       right: $spacer;
     }
+
     & /deep/ &__nav-right__tutorial  {
       &--show.nav-item .nav-link {
         color: $primary;
