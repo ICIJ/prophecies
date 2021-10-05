@@ -16,9 +16,11 @@
         <div class="row">
           <div class="col">
             <router-link :to="{ name: 'tip-retreive', params: { tipId: tip.id } }">
-              <h2 class="latest-tips-card__tips__item__title font-weight-bold">
-                {{ tip.name }}
-              </h2>
+              <slot name="itemTitle" :tip="tip">
+                <h2 class="latest-tips-card__tips__item__title-tips font-weight-bold">
+                  {{ tip.name }}
+                </h2>
+              </slot>
             </router-link>
             <div class="negative-margin text-black-50">
               <small v-if="tip.task">
@@ -50,6 +52,9 @@ export default {
     limit: {
       type: Number,
       default: 3
+    },
+    itemTitleSize: {
+      type: String
     }
   },
   computed: {
@@ -75,23 +80,6 @@ export default {
 
 <style lang="scss" scoped>
   .latest-tips-card {
-    &__title-dashboard {
-      position: relative;
-      padding-bottom: $spacer;
-
-      &:after {
-        content: "";
-        width: 170%;
-        max-width: 115px;
-        position: absolute;
-        bottom: 0%;
-        left: 0;
-        height: 7px;
-        background: $warning;
-        font-weight: 600;
-      }
-    }
-
     &__title-tips {
       position: relative;
       padding-bottom: $spacer;
@@ -109,14 +97,13 @@ export default {
       }
     }
 
-
     &__tips {
 
       &__item {
         margin-bottom: $spacer-lg;
 
-        &__title {
-          font-weight: 600;
+        &__title-tips {
+          color: $body-color;
           margin-bottom: $spacer-lg;
         }
 

@@ -114,9 +114,14 @@ export default {
                 <progress-card class="mb-5" v-if="tasks.length" />
                 <latest-tips-card :tips="tips">
                   <template v-slot:title>
-                    <h2 class="latest-tips-card__title-dashboard text-primary mb-0 font-weight-bold">
+                    <h2 class="title-dashboard mb-0 font-weight-bold">
                       Latest tips
                     </h2>
+                  </template>
+                  <template v-slot:itemTitle="slotProps">
+                    <p class="tip-item-title-dashboard font-weight-bold">
+                      {{ slotProps.tip.name }}
+                    </p>
                   </template>
                   <template v-slot:footer>
                     <div class="mx-auto">
@@ -142,13 +147,38 @@ export default {
 <style lang="scss" scoped>
   .dashboard {
     &__container {
-        &__left-panel {
-          max-width: 460px;
-        }
+      &__left-panel {
+        max-width: 460px;
+      }
 
-        &__right-panel {
-          max-width: 460px;
+      &__right-panel {
+        max-width: 460px;
+      }
+
+      .tip-item-title-dashboard {
+        line-height: 16.94px;
+        font-size: 14px;
+        color: $body-color;
+        margin-bottom: $spacer-lg;
+      }
+
+      .title-dashboard {
+        position: relative;
+        padding-bottom: $spacer;
+        color: $primary;
+
+        &:after {
+          content: "";
+          width: 170%;
+          max-width: 115px;
+          position: absolute;
+          bottom: 0%;
+          left: 0;
+          height: 7px;
+          background: $warning;
+          font-weight: 600;
         }
+      }
     }
   }
 </style>
