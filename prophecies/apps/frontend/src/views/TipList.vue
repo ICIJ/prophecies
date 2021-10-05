@@ -111,7 +111,7 @@ export default {
           <b-collapse :visible="showLatestTips">
             <latest-tips-card :tips="latestTips" :show-close="true" @close="showLatestTips = false" class="mb-5">
               <template v-slot:title>
-                <h1 class="latest-tips-card__title text-primary mb-0 font-weight-bold">
+                <h1 class="latest-tips-card__title-tips text-primary mb-0 font-weight-bold">
                   Latest tips
                 </h1>
               </template>

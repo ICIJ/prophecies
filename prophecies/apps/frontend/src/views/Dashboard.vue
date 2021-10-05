@@ -110,7 +110,7 @@ export default {
                 <progress-card class="mb-5" v-if="tasks.length" />
                 <latest-tips-card :tips="tips">
                   <template v-slot:title>
-                    <h2 class="latest-tips-card__title text-primary mb-0 font-weight-bold">
+                    <h2 class="latest-tips-card__title-dashboard text-primary mb-0 font-weight-bold">
                       Latest tips
                     </h2>
                   </template>

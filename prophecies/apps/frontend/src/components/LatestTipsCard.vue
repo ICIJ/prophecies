@@ -75,13 +75,30 @@ export default {
 
 <style lang="scss" scoped>
   .latest-tips-card {
-    &__title {
+    &__title-dashboard {
       position: relative;
       padding-bottom: $spacer;
 
       &:after {
         content: "";
-        width: 180%;
+        width: 170%;
+        max-width: 115px;
+        position: absolute;
+        bottom: 0%;
+        left: 0;
+        height: 7px;
+        background: $warning;
+        font-weight: 600;
+      }
+    }
+
+    &__title-tips {
+      position: relative;
+      padding-bottom: $spacer;
+
+      &:after {
+        content: "";
+        width: 170%;
         max-width: 210px;
         position: absolute;
         bottom: 0%;
@@ -91,6 +108,7 @@ export default {
         font-weight: 600;
       }
     }
+
 
     &__tips {
 
