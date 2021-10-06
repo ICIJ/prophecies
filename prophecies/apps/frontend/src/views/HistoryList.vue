@@ -122,11 +122,13 @@ export default {
       return itemText
     },
     itemCategory (item) {
-      if (item.type === itemTypes.tip && item.taskName === null) {
-        return 'General'
-      } else {
-        return `${item.taskName} | ${item.projectName}`
+      let category = 'General'
+      if (item.projectName) {
+        category = item.projectName
+        const taskName = item.taskName ?? 'General'
+        category = taskName + ' | ' + category
       }
+      return category
     },
     itemPrefix (item) {
       return itemTypesContent[item.type].prefix
