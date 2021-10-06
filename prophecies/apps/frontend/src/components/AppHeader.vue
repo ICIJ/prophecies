@@ -1,68 +1,68 @@
 <script>
-  import { template } from 'lodash'
-  import store from '@/store'
-  import UserNotification from '@/models/UserNotification'
-  import AppSearchForm from '@/components/AppSearchForm'
-  import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
-  import ShortcutListCard from '@/components/ShortcutListCard'
-  import ShortkeyBadge from '@/components/ShortkeyBadge'
+import { template } from 'lodash'
+import store from '@/store'
+import UserNotification from '@/models/UserNotification'
+import AppSearchForm from '@/components/AppSearchForm'
+import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
+import ShortcutListCard from '@/components/ShortcutListCard'
+import ShortkeyBadge from '@/components/ShortkeyBadge'
 
-  export default {
-    name: 'AppHeader',
-    components: {
-      AppSearchForm,
-      UserNotificationsDropdownMenu,
-      ShortkeyBadge,
-      ShortcutListCard
+export default {
+  name: 'AppHeader',
+  components: {
+    AppSearchForm,
+    UserNotificationsDropdownMenu,
+    ShortkeyBadge,
+    ShortcutListCard
+  },
+  props: {
+    reduced: {
+      type: Boolean
+    }
+  },
+  created () {
+    const showTutorial = this.showTutorial !== false
+    if (showTutorial !== this.showTutorial) {
+      store.dispatch('app/showTutorial', showTutorial)
+    }
+  },
+  methods: {
+    toggleTutorial () {
+      this.showTutorial = !this.showTutorial
+    }
+  },
+  computed: {
+    user () {
+      return this.$config.get('user')
     },
-    props: {
-      reduced: {
-        type: Boolean
+    userDisplayName () {
+      if (!this.user.firstName || !this.user.lastName) {
+        return this.user.username
       }
+      return `${this.user.firstName} ${this.user.lastName}`
     },
-    created () {
-      let showTutorial = this.showTutorial !== false ? true : false;
-      if(showTutorial !== this.showTutorial) {
-        store.dispatch("app/showTutorial",showTutorial)
-      }
+    userAvatarUrl () {
+      const interpolate = this.$config.get('templateInterpolate')
+      const avatarUrlTemplate = this.$config.get('avatarUrlTemplate')
+      const compiled = template(avatarUrlTemplate, { interpolate })
+      return compiled(this.user)
     },
-    methods:{
-      toggleTutorial () {
-        this.showTutorial = !this.showTutorial
-      }
+    hasUnreadNotifications () {
+      return this.unreadNotifications > 0
     },
-    computed: {
-      user () {
-        return this.$config.get('user')
+    unreadNotifications () {
+      return UserNotification.query().where('read', false).count()
+    },
+    showTutorial: {
+      get () {
+        return store.state.app.showTutorial
       },
-      userDisplayName () {
-        if (!this.user.firstName || !this.user.lastName) {
-          return this.user.username
-        }
-        return `${this.user.firstName} ${this.user.lastName}`
-      },
-      userAvatarUrl () {
-        const interpolate = this.$config.get('templateInterpolate')
-        const avatarUrlTemplate = this.$config.get('avatarUrlTemplate')
-        const compiled = template(avatarUrlTemplate, { interpolate })
-        return compiled(this.user)
-      },
-      hasUnreadNotifications () {
-        return this.unreadNotifications > 0
-      },
-      unreadNotifications () {
-        return UserNotification.query().where('read', false ).count()
-      },
-      showTutorial :{
-        get(){
-          return store.state.app.showTutorial
-        },
-        set(isVisible){
-          store.dispatch("app/showTutorial", isVisible)
-        }
+      set (isVisible) {
+        store.dispatch('app/showTutorial', isVisible)
       }
     }
   }
+}
 </script>
 
 <template>

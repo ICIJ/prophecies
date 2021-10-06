@@ -31,9 +31,9 @@ export default {
         .find(this.taskRecordReviewId)
     },
     taskIsOpen () {
-      return this.taskStatus === 'OPEN' 
+      return this.taskStatus === 'OPEN'
     },
-    taskStatus(){
+    taskStatus () {
       return this.taskRecordReview.task.status
     },
     taskRecord () {
