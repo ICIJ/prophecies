@@ -17,10 +17,10 @@ const itemTypes = {
 }
 
 const itemTypesContent = {
-  [itemTypes.tip]: { prefix: 'Tip', text: 'added a new tip' },
-  [itemTypes.checkedRecords]: { prefix: 'Checked', key: 'nbRecords', text: 'checked $nbRecords records' },
-  [itemTypes.closedTask]: { prefix: 'Closed', text: 'closed the task' },
-  [itemTypes.mentionedUser]: { prefix: 'Mentioned', key: 'who', text: 'mentioned $who in a note' }
+  [itemTypes.tip]: { prefix: '<span class="history-list__prefix history-list__prefix__tip"></span>', text: 'added a new tip' },
+  [itemTypes.checkedRecords]: { prefix: '<span class="history-list__prefix "></span>', key: 'nbRecords', text: 'checked $nbRecords records' },
+  [itemTypes.closedTask]: { prefix: '<span class="history-list__closed-task-prefix">🎉</span>', text: 'closed the task' },
+  [itemTypes.mentionedUser]: { prefix: '<span class="history-list__prefix history-list__prefix__mention"></span>', key: 'who', text: 'mentioned $who in a note' }
 }
 
 const pontus = { projectId: '1', projectName: 'Pontus', tasks: [{ taskId: '2', taskName: 'Passports' }] }
@@ -136,6 +136,9 @@ export default {
     formatItemDate (d) {
       return moment(d).format('ddd DD, MMM YYYY - h:MMa')
     },
+    getBoldDisplay (item) {
+      return item.type === itemTypes.checkedRecords ? '' : 'font-weight-bold'
+    },
     userDisplayName (user) {
       if (!user.firstName || !user.lastName) {
         return user.username
@@ -191,31 +194,40 @@ export default {
           }
         })
     },
-    tipsActions () {
+    tips () {
       return Tip
         .query()
         .with('task')
         .with('project')
         .with('creator')
         .get()
-    },
-    tips () {
-      return this.tipsActions.map(tip => {
-        return {
-          type: itemTypes.tip,
-          date: tip.createdAt,
-          user: this.userDisplayName(tip.creator),
-          content: tip.name,
-          projectName: tip.project?.name,
-          taskName: tip.task?.name
-        }
-      })
+        .map(tip => {
+          return {
+            type: itemTypes.tip,
+            date: tip.createdAt,
+            user: this.userDisplayName(tip.creator),
+            content: tip.name,
+            projectName: tip.project?.name,
+            taskName: tip.task?.name
+          }
+        })
     },
     aggregatedItems () {
       return this.historyItems.slice()
     },
     items () {
-      return [...this.mentions, ...this.closedTasks, ...this.tips].sort((a, b) => -a.date.localeCompare(b.date))
+      return [...this.mentions, ...this.closedTasks, ...this.tips, ...this.historyItems]
+        .sort((a, b) => -a.date.localeCompare(b.date))
+        .map(item => {
+          return {
+            prefix: this.itemPrefix(item),
+            user: item.user,
+            content: this.itemTypeContent(item),
+            category: this.itemCategory(item),
+            date: this.formatItemDate(item.date),
+            class: this.getBoldDisplay(item)
+          }
+        })
     }
   }
 }
@@ -227,16 +239,17 @@ export default {
     <div class="tip-list__container flex-grow-1">
       <app-header reduced />
       <div class="container-fluid p-5">
-        <h1 class="font-weight-bold title">What happened <span class="">lately</span></h1>
+        <h1 class="font-weight-bold mb-5 history-list__title">What happened <span class="history-list__title--lately">lately</span></h1>
         <app-waiter :loader="fetchHistoryLoader" waiter-class="my-5 mx-auto d-block">
           <div v-if="historyItems">
-            <ul class="list-unstyled row  ">
-              <li v-for="(item,i) in items" :key="i" class="row container">
-                <div class="col-1">{{itemPrefix(item)}}</div>
-                <div class="col-6 ">{{item.user}}
-                {{itemTypeContent(item)}}</div>
-                <div class="col-3 text-right">{{itemCategory(item)}}</div>
-                <div class="col-2 text-justify">{{formatItemDate(item.date)}}</div>
+            <ul class="list-unstyled ">
+              <li v-for="(item,i) in items" :key="i" class="row container-fluid py-3">
+                <div  class="history-list__prefix-column" v-html="item.prefix"></div>
+                <div class="col-12 row">
+                  <div class="col-xs-12 col-lg-6" :class="item.class">{{item.user}} {{item.content}}</div>
+                  <div class="col-xs-5 col-lg-3 text-right history-list__category-column">{{item.category}}</div>
+                  <div class="col-xs-7 col-lg-3 text-right history-list__date-column">{{item.date}}</div>
+                </div>
               </li>
             </ul>
           </div>
@@ -248,6 +261,33 @@ export default {
 
 <style lang="scss" scoped>
  .history-list {
-   color:"blue"
+    &__title{
+      color:$primary;
+      &--lately{
+        color:$danger;
+      }
+    }
+    &__prefix-column{
+      width:15px;
+      text-align: center;
+    }
+    &__category-column {
+      min-width: 220px;
+    }
+    &__date-column {
+      color: $secondary;
+      min-width: 220px;
+    }
+    & /deep/ &__prefix{
+      display:inline-block;
+      width:1em;
+      height:8px;
+      &__tip{
+        background-color: $warning;
+      }
+      &__mention{
+        background-color: $danger;
+      }
+    }
  }
 </style>
