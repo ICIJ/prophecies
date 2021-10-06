@@ -4,6 +4,9 @@ const { join } = require('path')
 const resolve = filepath => join(__dirname, filepath)
 
 module.exports = {
+  configureWebpack: {
+    devtool: 'source-map'
+  },
   lintOnSave: false,
   runtimeCompiler: process.env.NODE_ENV === 'test',
   // Temporary workarround for map file not being created
