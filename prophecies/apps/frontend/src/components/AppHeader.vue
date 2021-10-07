@@ -77,35 +77,16 @@ export default {
         <b-navbar-nav class="app-header__nav-right">
           <slot name="nav-right" />
           <template v-if="!reduced">
-            <b-nav-item href="#">
+            <b-nav-item :to="{ name: 'tip-list' }">
               <smile-icon class="app-header__nav-right__tips mr-2" />
-              <router-link :to="{ name: 'tip-list' }">
-                {{ $t('appHeader.tips') }}
-              </router-link>
+              {{ $t('appHeader.tips') }}
               <shortkey-badge :value="['meta', 't']" class="ml-2" />
             </b-nav-item>
-            <b-nav-item href="#" v-b-modal.modal-shortcuts >
+            <b-nav-item :to="{ name: 'shortcut-list' }">
               <command-icon class="app-header__nav-right__shortcuts mr-2" />
               {{ $t('appHeader.shortcuts') }}
               <shortkey-badge :value="['meta', 'k']" class="ml-2" />
             </b-nav-item>
-            <b-modal 
-              size="md"
-              content-class="bg-transparent shadow-none border-0" 
-              body-class="p-0"
-              id="modal-shortcuts" 
-              hide-footer 
-              hide-backdrop
-              hide-header>
-              <shortcut-list-card>
-                <template #header>
-                  <b-btn class="float-right px-2" variant="link" @click="$bvModal.hide('modal-shortcuts')">
-                    <x-icon />
-                    <span class="sr-only">Close</span>
-                  </b-btn>
-                </template>
-              </shortcut-list-card>
-            </b-modal>
             <b-nav-item 
               :class="{ 'font-weight-bold app-header__nav-right__tutorial--show': showTutorial }" 
               @click="toggleTutorial"

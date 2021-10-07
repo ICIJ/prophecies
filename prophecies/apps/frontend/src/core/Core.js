@@ -18,6 +18,7 @@ import store from '@/store'
 import messages from '@/messages/en'
 import settings from '@/settings'
 import * as icons from '@/utils/icons'
+import App from '@/views/App'
 
 /**
   @class
@@ -182,7 +183,7 @@ class Core {
    */
   mount (selector = '#app') {
     // Render function returns a router-view component by default
-    const render = h => h('router-view')
+    const render = h => h(App)
     // We do not necessarily use the default Vue so we can use this function
     // from our unit tests
     const vm = new this.LocalVue({
