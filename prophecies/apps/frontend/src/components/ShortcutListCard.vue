@@ -3,7 +3,7 @@
     <app-waiter :loader="fetchChoiceGroupsLoader" waiter-class="my-5 mx-auto d-block">
       <slot name="header" />
       <div :class="contentClass" class="shortcut-list-card__content p-5">
-        <div class="row shortcut-list-card__content__row" v-for="shortCut in defaultShortcuts">
+        <div class="row shortcut-list-card__content__row" v-for="(shortCut, i) in defaultShortcuts" :key="i">
           <div class="col shortcut-list-card__content__row__name font-weight-bold">
             {{ shortCut.name }}
           </div>
@@ -11,7 +11,7 @@
             {{ shortCut.value }}
           </div>
         </div>
-        <div class="row shortcut-list-card__content__row" v-for="shortCut in choiceGroups">
+        <div class="row shortcut-list-card__content__row" v-for="(shortCut, i) in choiceGroups" :key="i">
           <div class="col shortcut-list-card__content__row__name font-weight-bold">
             {{ generateName(shortCut.value) }}
           </div>
