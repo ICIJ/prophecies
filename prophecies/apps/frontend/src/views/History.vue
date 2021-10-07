@@ -17,10 +17,10 @@ const itemTypes = {
 }
 
 const itemTypesContent = {
-  [itemTypes.tip]: { prefix: '<span class="history-list__prefix history-list__prefix__tip"></span>', text: 'added a new tip' },
-  [itemTypes.checkedRecords]: { prefix: '<span class="history-list__prefix "></span>', key: 'nbRecords', text: 'checked $nbRecords records' },
-  [itemTypes.closedTask]: { prefix: '<span class="history-list__closed-task-prefix">🎉</span>', text: 'closed the task' },
-  [itemTypes.mentionedUser]: { prefix: '<span class="history-list__prefix history-list__prefix__mention"></span>', key: 'who', text: 'mentioned $who in a note' }
+  [itemTypes.tip]: { prefix: '<span class="history__prefix history__prefix__tip"></span>', text: 'added a new tip' },
+  [itemTypes.checkedRecords]: { prefix: '<span class="history__prefix "></span>', key: 'nbRecords', text: 'checked $nbRecords records' },
+  [itemTypes.closedTask]: { prefix: '<span class="history__closed-task-prefix">🎉</span>', text: 'closed the task' },
+  [itemTypes.mentionedUser]: { prefix: '<span class="history__prefix history__prefix__mention"></span>', key: 'who', text: 'mentioned $who in a note' }
 }
 
 const pontus = { projectId: '1', projectName: 'Pontus', tasks: [{ taskId: '2', taskName: 'Passports' }] }
@@ -216,7 +216,7 @@ export default {
       return this.historyItems.slice()
     },
     items () {
-      return [...this.mentions, ...this.closedTasks, ...this.tips, ...this.historyItems]
+      return [...this.mentions, ...this.closedTasks, ...this.tips, ...this.aggregatedItems]
         .sort((a, b) => -a.date.localeCompare(b.date))
         .map(item => {
           return {
@@ -234,21 +234,21 @@ export default {
 </script>
 
 <template>
-  <div class="history-list d-flex align-items-start">
+  <div class="history d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top" />
-    <div class="tip-list__container flex-grow-1">
+    <div class="history__container flex-grow-1">
       <app-header reduced />
       <div class="container-fluid p-5">
-        <h1 class="font-weight-bold mb-5 history-list__title">What happened <span class="history-list__title--lately">lately</span></h1>
+        <h1 class="font-weight-bold mb-5 history__title">What happened <span class="history__title--lately">lately</span></h1>
         <app-waiter :loader="fetchHistoryLoader" waiter-class="my-5 mx-auto d-block">
           <div v-if="historyItems">
             <ul class="list-unstyled ">
               <li v-for="(item,i) in items" :key="i" class="row container-fluid py-3">
-                <div  class="history-list__prefix-column" v-html="item.prefix"></div>
+                <div  class="history__prefix-column" v-html="item.prefix"></div>
                 <div class="col-12 row">
                   <div class="col-xs-12 col-lg-6" :class="item.class">{{item.user}} {{item.content}}</div>
-                  <div class="col-xs-5 col-lg-3 text-right history-list__category-column">{{item.category}}</div>
-                  <div class="col-xs-7 col-lg-3 text-right history-list__date-column">{{item.date}}</div>
+                  <div class="col-xs-5 col-lg-3 text-right history__category-column">{{item.category}}</div>
+                  <div class="col-xs-7 col-lg-3 text-right history__date-column">{{item.date}}</div>
                 </div>
               </li>
             </ul>
@@ -260,7 +260,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
- .history-list {
+ .history {
     &__title{
       color:$primary;
       &--lately{

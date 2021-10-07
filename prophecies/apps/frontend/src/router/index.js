@@ -1,7 +1,7 @@
 import Dashboard from '@/views/Dashboard.vue'
 import Error from '@/views/Error.vue'
 import Login from '@/views/Login.vue'
-import HistoryList from '@/views/HistoryList.vue'
+import History from '@/views/History.vue'
 import ShortcutList from '@/views/ShortcutList.vue'
 import TaskRecordReviewList from '@/views/TaskRecordReviewList.vue'
 import TaskRecordReviewRetrieve from '@/views/TaskRecordReviewRetrieve.vue'
@@ -27,9 +27,9 @@ export const router = {
       }
     },
     {
-      name: 'history-list',
+      name: 'history',
       path: '/history',
-      component: HistoryList,
+      component: History,
       props: true
     },
     {
