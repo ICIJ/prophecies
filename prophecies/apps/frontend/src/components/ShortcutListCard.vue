@@ -1,7 +1,7 @@
 <template>
   <div class="shortcut-list-card">
     <app-waiter :loader="fetchChoiceGroupsLoader" waiter-class="my-5 mx-auto d-block">
-      <div :class="width" class="shortcut-list-card__card p-5">
+      <div :class="contentClass" class="shortcut-list-card__content p-5">
         <div class="row px-3 py-4" v-for="shortCut in defaultShortcuts">
           <div class="col font-weight-bold">
             {{ shortCut.name }}
@@ -35,8 +35,8 @@ export default {
     AppWaiter
   },
   props: {
-    width: {
-      type: String,
+    contentClass: {
+      type: [String, Object, Array],
       default: 'w-100'
     },
     showClose: {
@@ -88,7 +88,7 @@ export default {
       return ChoiceGroup.api().get()
     },
     generateName (value) {
-      return `Mark as ${value}`
+      return `Mark as "${value}"`
     }
   }
 }
@@ -97,7 +97,7 @@ export default {
 <style lang="scss" scoped>
   .shortcut-list-card {
     &__card {
-      background-color: rgba($primary, .1);
+      background-color: $primary-10;
       border-radius: $card-border-radius;
     }
   }
