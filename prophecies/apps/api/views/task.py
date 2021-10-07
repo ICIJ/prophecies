@@ -25,7 +25,7 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     }
 
     class JSONAPIMeta:
-        included_resources = ['checkers', 'choice_group', 'project']
+        included_resources = ['project']
 
     class Meta:
         model = Task

@@ -264,13 +264,13 @@ export default {
     clearFilters () {
       this.$set(this, 'routeFilters', {})
     },
-    async fetchTaskOnce () {
-      if (!Task.find(this.taskId)) {
-        return Task.api().find(this.taskId)
-      }
+    async fetchTask () {
+      const params = { include: 'project,checkers' }
+      return Task.api().find(this.taskId, { params })
     },
     async fetchChoiceGroup () {
-      return ChoiceGroup.api().find(this.task.choiceGroupId)
+      const params = { include: 'alternative_values,choices' }
+      return ChoiceGroup.api().find(this.task.choiceGroupId, { params })
     },
     async fetchTaskRecordReviews () {
       const params = this.taskRecordReviewsParams
@@ -343,7 +343,7 @@ export default {
       await this.fetchTaskRecordReviews()
     },
     async fetchAll () {
-      await this.fetchTaskOnce()
+      await this.fetchTask()
       await this.fetchChoiceGroup()
       await this.fetchTaskRecordReviews()
     },

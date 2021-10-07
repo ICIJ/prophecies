@@ -17,7 +17,7 @@ class ChoiceGroupSerializer(serializers.ModelSerializer):
     }
 
     class JSONAPIMeta:
-        included_resources = ['choices', 'alternative_values']
+        included_resources = ['choices']
 
     class Meta:
         model = ChoiceGroup

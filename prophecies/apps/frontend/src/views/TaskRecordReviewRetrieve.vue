@@ -72,17 +72,17 @@
         }
       },
       async fetchAll () {
-        await this.fetchTaskOnce()
+        await this.fetchTask()
         await this.fetchChoiceGroup()
         await this.fetchTaskRecordReview()
       },
-      async fetchTaskOnce () {
-        if (!Task.find(this.taskId)) {
-          return Task.api().find(this.taskId)
-        }
+      async fetchTask () {
+        const params = { include: 'project,checkers' }
+        return Task.api().find(this.taskId, { params })
       },
       async fetchChoiceGroup () {
-        return ChoiceGroup.api().find(this.task.choiceGroupId)
+        const params = { include: 'alternative_values,choices' }
+        return ChoiceGroup.api().find(this.task.choiceGroupId, { params })
       },
       async fetchTaskRecordReview () {
         // User might try to access a TaskRecordReview assigned to another user.
