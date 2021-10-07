@@ -1,24 +1,26 @@
 <template>
-  <div class="shortcut-list-card">
+  <div class="shortcut-list-card p-3">
     <app-waiter :loader="fetchChoiceGroupsLoader" waiter-class="my-5 mx-auto d-block">
+      <slot name="header" />
       <div :class="contentClass" class="shortcut-list-card__content p-5">
-        <div class="row px-3 py-4" v-for="shortCut in defaultShortcuts">
-          <div class="col font-weight-bold">
+        <div class="row shortcut-list-card__content__row" v-for="shortCut in defaultShortcuts">
+          <div class="col shortcut-list-card__content__row__name font-weight-bold">
             {{ shortCut.name }}
           </div>
-          <div class="col-10 col-sm-8 text-primary font-weight-bold text-capitalize">
+          <div class="col text-primary font-weight-bold text-capitalize">
             {{ shortCut.value }}
           </div>
         </div>
-        <div class="row px-3 py-4" v-for="shortCut in choiceGroups">
-          <div class="col font-weight-bold">
+        <div class="row shortcut-list-card__content__row" v-for="shortCut in choiceGroups">
+          <div class="col shortcut-list-card__content__row__name font-weight-bold">
             {{ generateName(shortCut.value) }}
           </div>
-          <div class="col-sm-8 text-primary font-weight-bold text-capitalize">
+          <div class="col text-primary font-weight-bold text-capitalize">
             {{ shortCut.shortkeys }}
           </div>
         </div>
       </div>
+      <slot name="footer" />
     </app-waiter>
   </div>
 </template>
@@ -96,9 +98,20 @@ export default {
 
 <style lang="scss" scoped>
   .shortcut-list-card {
+    background-color: rgba($primary-10, .97);
+    border-radius: $card-border-radius;
+
     &__content {
-      background-color: $primary-10;
-      border-radius: $card-border-radius;
+      &__row {
+        &:not(:last-of-type) {
+          padding-bottom: $spacer-xl;
+        }
+
+        &__name {
+          max-width: 200px;
+          width: 100%;
+        }
+      }
     }
   }
 </style>

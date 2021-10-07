@@ -103,7 +103,6 @@ $badge-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helv
 $headings-font-family: $font-family-sans-serif;
 $headings-font-weight: 600;
 
-
 $btn-box-shadow: none;
 
 $mark-bg: map-get($theme-colors, 'warning');
@@ -143,6 +142,12 @@ $progress-box-shadow: none;
 $progress-bg: transparent;
 $progress-border-radius: 10rem;
 $progress-height: 0.8rem;
+
+$modal-backdrop-bg: $lighter;
+$modal-content-border-color: $border-color;
+$modal-content-box-shadow-xs: $box-shadow;
+$modal-content-box-shadow-sm-up: $box-shadow-lg;
+
 
 $grid-breakpoints: (
   xs: 0,
