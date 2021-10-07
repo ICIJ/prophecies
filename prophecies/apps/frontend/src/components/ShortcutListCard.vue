@@ -96,7 +96,7 @@ export default {
 
 <style lang="scss" scoped>
   .shortcut-list-card {
-    &__card {
+    &__content {
       background-color: $primary-10;
       border-radius: $card-border-radius;
     }
