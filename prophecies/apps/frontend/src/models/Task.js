@@ -39,8 +39,8 @@ export default class Task extends Model {
     baseURL: `${settings.apiUrl}/tasks/`,
     dataTransformer: responseNormalizer,
     actions: {
-      find (id) {
-        return this.get(`${id}/`)
+      find (id, config = {}) {
+        return this.get(`${id}/`, config)
       }
     }
   }

@@ -36,8 +36,8 @@ export default class TaskRecordReview extends Model {
     baseURL: `${settings.apiUrl}/task-record-reviews/`,
     dataTransformer: responseNormalizer,
     actions: {
-      find (id) {
-        return this.get(`${id}/`)
+      find (id, config = {}) {
+        return this.get(`${id}/`, config)
       },
       search (query, config = {}) {
         const params = { ...config.params, 'filter[search]': query }
