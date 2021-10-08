@@ -24,7 +24,7 @@ const itemTypesContent = {
 const pontus = { projectId: '1', projectName: 'Pontus', tasks: [{ taskId: '2', taskName: 'Passports' }] }
 const chronos = { projectId: '2', projectName: 'Chronos', tasks: [{ taskId: '1', taskName: 'Addresses' }] }
 
-const historyItems = [
+const checkedRecords = [
 
   {
     type: itemTypes.checkedRecords,
@@ -52,14 +52,20 @@ export default {
     AppWaiter
   },
   props: {
-    nbItems: {
+    limit: {
       type: Number,
       default: -1
+    },
+    fluid: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
     return {
-      historyItems: []
+      more: 5,
+      nbTimesMore: 0,
+      checkedRecords: []
     }
   },
   async created () {
@@ -80,7 +86,7 @@ export default {
       this.$wait.end(loader)
     },
     async fetchAll () {
-      this.historyItems = historyItems
+      this.checkedRecords = checkedRecords
       await Task.api().get()
       await Action.api().get()
       await Tip.api().get()
@@ -146,14 +152,14 @@ export default {
         return user.username
       }
       return `${user.firstName}`
+    },
+    loadMore () {
+      this.nbTimesMore++
     }
   },
   computed: {
     fetchHistoryLoader () {
       return uniqueId('load-history-item-')
-    },
-    fetchActionLoader () {
-      return uniqueId('load-actions-item-')
     },
     closedTasks () {
       return Action
@@ -215,13 +221,24 @@ export default {
         })
     },
     aggregatedItems () {
-      return this.historyItems.slice()
+      return this.checkedRecords.slice()
+    },
+    unorderedItems () {
+      return [...this.mentions, ...this.closedTasks, ...this.tips, ...this.aggregatedItems]
+        .sort((a, b) => -a.date.localeCompare(b.date))
+    },
+    nbVisibleItems () {
+      const limitAndMore = this.limit + this.more * this.nbTimesMore
+      return this.limit > 0 ? limitAndMore : this.unorderedItems.length
+    },
+    nbTotalItems () {
+      return this.unorderedItems.length
+    },
+    hasMoreToSee () {
+      return this.nbVisibleItems < this.nbTotalItems
     },
     items () {
-      const items = [...this.mentions, ...this.closedTasks, ...this.tips, ...this.aggregatedItems]
-        .sort((a, b) => -a.date.localeCompare(b.date))
-      const limit = this.nbItems > 0 ? this.nbItems : items.length
-      return items.slice(0, limit)
+      return this.unorderedItems.slice(0, this.nbVisibleItems)
         .map(item => {
           return {
             prefix: this.itemPrefix(item),
@@ -232,31 +249,39 @@ export default {
             class: this.getBoldDisplay(item)
           }
         })
+    },
+    isFluidClass () {
+      return this.fluid ? 'container-fluid' : 'container'
     }
   }
 }
 </script>
 
 <template>
-      <div class="container-fluid p-5">
-        <h1 class="font-weight-bold mb-5 history-list__title"><slot name="title">What happened <span class="history-list__title--lately">lately</span></slot></h1>
-        <app-waiter :loader="fetchHistoryLoader" waiter-class="my-5 mx-auto d-block">
-          <div v-if="historyItems">
-            <ul class="list-unstyled ">
-              <li v-for="(item,i) in items" :key="i" class="row container-fluid py-3">
-                <div  class="history-list__prefix-column" v-html="item.prefix"></div>
-                <div class="row container-fluid">
-                  <div class="d-flex flex-grow-1 px-3 history-list__content-column" :class="item.class">{{item.user}} {{item.content}}</div>
-                  <div class="d-flex ml-sm-0 ml-auto flex-md-grow-1 justify-content-md-right  flex-sm-column flex-md-row">
-                    <div class="px-3  text-md-left text-lg-right history-list__category-column">{{item.category}}</div>
-                    <div class="px-3 text-sm-left text-md-right  history-list__date-column">{{item.date}}</div>
-                  </div>
-                </div>
-              </li>
-            </ul>
+    <app-waiter :loader="fetchHistoryLoader" waiter-class="my-5 mx-auto d-block">
+    <h1 class="font-weight-bold mt-3 mb-5 history-list__title"><slot name="title">What happened <span class="text-danger">lately</span></slot></h1>
+      <div v-if="items.length" class="px-0" :class="isFluidClass">
+        <ul class="list-unstyled pb-3">
+          <li v-for="(item,i) in items" :key="i" class="row container-fluid py-3">
+            <div  class="history-list__prefix-column" v-html="item.prefix"></div>
+            <div class="row container-fluid">
+              <div class="d-flex flex-grow-1 px-3 history-list__content-column" :class="item.class">{{item.user}} {{item.content}}</div>
+              <div class="d-flex ml-sm-0 ml-auto  justify-content-md-right  flex-sm-column flex-md-row">
+                <div class="px-3  text-md-left text-lg-right history-list__category-column">{{item.category}}</div>
+                <div class="px-3 text-sm-left text-md-right  history-list__date-column">{{item.date}}</div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <slot name="footer">
+          <div class="d-flex justify-content-center pt-3" v-if="hasMoreToSee">
+            <button class="btn btn-primary border font-weight-bold text-white" @click='loadMore'>
+            See more ...
+            </button>
           </div>
-        </app-waiter>
+        </slot>
       </div>
+    </app-waiter>
 </template>
 
 <style lang="scss">
@@ -264,9 +289,7 @@ export default {
  .history-list {
     &__title{
       color:$primary;
-      &--lately{
-        color:$danger;
-      }
+        letter-spacing: -2px;
     }
 
     &__prefix {

@@ -9,6 +9,7 @@ import ProgressCard from '@/components/ProgressCard'
 import TaskStatsCard from '@/components/TaskStatsCard'
 import Task from '@/models/Task'
 import Tip from '@/models/Tip'
+import HistoryList from '@/components/HistoryList.vue'
 
 export default {
   name: 'Dashboard',
@@ -18,7 +19,8 @@ export default {
     AppWaiter,
     LatestTipsCard,
     ProgressCard,
-    TaskStatsCard
+    TaskStatsCard,
+    HistoryList
   },
   data () {
     return {
@@ -137,6 +139,30 @@ export default {
                 </latest-tips-card>
               </app-waiter>
             </div>
+          </div>
+        </div>
+
+        <div class="row mt-5 pt-5">
+
+          <div class="col-12">
+          <history-list :fluid="false" :limit=5>
+            <template v-slot:title>
+              <span class="text-danger">Lately</span> in prophecies
+            </template>
+            <template v-slot:footer>
+              <div class="d-flex justify-content-center pt-3">
+                <button class="btn btn-primary border font-weight-bold">
+                <router-link
+                  :to="{ name: 'history' }"
+                  title="All history"
+                  class="text-white"
+                  >
+                  Show me all history
+                </router-link>
+                </button>
+              </div>
+            </template>
+          </history-list>
           </div>
         </div>
       </div>
