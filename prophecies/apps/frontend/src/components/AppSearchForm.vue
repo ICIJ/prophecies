@@ -74,6 +74,14 @@ export default {
           }
         })
     },
+    shortkeys () {
+      return {
+        'activatePreviousItem': 'up',
+        'activateNextItem': 'down',
+        'close': 'esc',
+        'focus': 'ctrl+f'
+      }
+    },
     tipsToSearch () {
       // Create tips : general tips (no task associated) and tips
       // associated to a task that has at least 1 taskRecordsCount
@@ -102,7 +110,11 @@ export default {
       this.activeItem = -1
       this.$el.querySelector(this.searchInputSelector).blur()
     },
-    mapShortkeys ({ srcKey: method }) {
+    focus () {
+      console.log('focus')
+      this.$el.querySelector(this.searchInputSelector).focus()
+    },
+    mapShortkeys ({ detail: { srcKey: method } }) {
       if (method in this.$options.methods) {
         this[method]()
       }
@@ -185,18 +197,14 @@ export default {
 <template>
   <component
     class="app-search-form"
+    v-on-clickaway="close"
     :is="is"
     :class="classList"
-    v-on-clickaway="close"
     @submit.prevent>
-    <label
+    <label 
       class="app-search-form__field d-flex align-items-center justify-content-start w-100"
-      v-shortkey="{
-        'activatePreviousItem': ['arrowup'],
-        'activateNextItem': ['arrowdown'],
-        'close': ['esc']
-      }"
-      @shortkey="mapShortkeys">
+      v-shortkey="shortkeys"
+      @shortkey="mapShortkeys($event)">
       <app-waiter
         :loader="`app-search-form-load-${query}`"
         :transition="null"
@@ -214,8 +222,7 @@ export default {
         class="app-search-form__field__input flex-grow-1"
         placeholder="Type your search"
         type="search"
-        v-model="query"
-        v-shortkey.focus="['ctrl', 'f']" />
+        v-model="query" />
       <span class="app-search-form__field__placeholder">
         {{ $t('appHeader.search') }}
         <shortkey-badge

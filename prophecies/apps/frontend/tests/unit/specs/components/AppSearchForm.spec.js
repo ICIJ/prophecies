@@ -9,9 +9,6 @@ import Task from '@/models/Task'
 describe('AppSearchForm', () => {
   beforeEach(() => {
     server.use(rest.get('/api/v1/tips/', (req, res, ctx) => {
-      // const query = req.url.searchParams
-      // const filterId__in = query.get('filter[id__in]')
-      // const filterSearch = query.get('filter[search]')
       return res.once(ctx.json({
         data:
           [
@@ -168,7 +165,7 @@ describe('AppSearchForm', () => {
       // Prevent a Vue warning in the next tick when the parentNode doesnt exist:
       // > TypeError: Cannot read property 'createElement' of null
       // @see https://stackoverflow.com/a/62262333
-      wrapper.destroy()
+      // wrapper.destroy()
     })
 
     it('should search tips', async () => {
@@ -327,6 +324,7 @@ describe('AppSearchForm', () => {
         ])
       )
     })
+
     it('should only search for tips with no task or with task containing records ', async () => {
       await wrapper.setData({ query: 'foo' })
       await wrapper.vm.search('foo')

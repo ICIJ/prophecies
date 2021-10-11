@@ -65,7 +65,7 @@ describe('vShortkey', () => {
 
       beforeEach(() => {
         wrapperBar = mount(Component, { localVue, propsData: { shortkey: 'b' } })
-        wrapperFoo = mount(Component, { localVue, propsData: { shortkey: 'b' } })
+        wrapperFoo = mount(Component, { localVue, propsData: { shortkey: ['b'] } })
       })
 
       it('should call the `callback` function when pressing "b"', async () => {

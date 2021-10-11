@@ -7,7 +7,6 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import VueRouter from 'vue-router'
 import VueScrollTo from 'vue-scrollto'
-import VueShortkey from 'vue-shortkey'
 import VueWait from 'vue-wait'
 
 import Setting from '@/models/Setting'
@@ -19,6 +18,7 @@ import messages from '@/messages/en'
 import settings from '@/settings'
 import * as icons from '@/utils/icons'
 import App from '@/views/App'
+import vShortkey  from '@/directives/shortkey'
 
 /**
   @class
@@ -117,14 +117,14 @@ class Core {
   }
 
   /**
-   * Configure most common Vue plugins (Murmur, VueShortkey, VueScrollTo)
+   * Configure most common Vue plugins (Murmur, VueScrollTo)
    * @returns {Core} the current instance of Core
    */
   useCommons () {
     // Common plugins
     this.use(Murmur)
-    this.use(VueShortkey, { prevent: ['input', 'textarea'] })
     this.use(VueScrollTo)
+    this.LocalVue.directive('shortkey', vShortkey)
     return this
   }
 

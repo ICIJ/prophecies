@@ -1,9 +1,9 @@
 <template>
   <div class="shortcut-list-card p-3">
-    <app-waiter :loader="fetchChoiceGroupsLoader" waiter-class="my-5 mx-auto d-block">
+    <app-waiter :loader="fetchTasksLoader" waiter-class="my-5 mx-auto d-block">
       <slot name="header" />
-      <div :class="contentClass" class="shortcut-list-card__content p-5">
-        <div class="row shortcut-list-card__content__row" v-for="(shortCut, i) in defaultShortcuts" :key="i">
+      <div :class="contentClass" class="shortcut-list-card__content px-5 pt-5 pb-0">
+        <div class="row shortcut-list-card__content__row" v-for="(shortCut, i) in defaultShortcuts" :key="`general-shortcut-${i}`">
           <div class="col shortcut-list-card__content__row__name font-weight-bold">
             {{ shortCut.name }}
           </div>
@@ -11,12 +11,15 @@
             {{ shortCut.value }}
           </div>
         </div>
-        <div class="row shortcut-list-card__content__row" v-for="(shortCut, i) in choiceGroups" :key="i">
-          <div class="col shortcut-list-card__content__row__name font-weight-bold">
-            {{ generateName(shortCut.value) }}
-          </div>
-          <div class="col text-primary font-weight-bold text-capitalize">
-            {{ shortCut.shortkeys }}
+        <div v-for="task in tasks" :key="task.id">
+          <h3 class="text-primary mb-3">{{ task.name }}</h3>
+          <div class="row shortcut-list-card__content__row" v-for="choice in task.choiceGroup.choices" :key="`task-${task.id}-shortcut-${choice.id}`">
+            <div class="col shortcut-list-card__content__row__name font-weight-bold">
+              {{ generateName(choice.value) }}
+            </div>
+            <div class="col text-primary font-weight-bold text-capitalize">
+              {{ choice.shortkeys }}
+            </div>
           </div>
         </div>
       </div>
@@ -28,7 +31,7 @@
 <script>
 import { uniqueId, flatMap } from 'lodash'
 import AppWaiter from '@/components/AppWaiter'
-import ChoiceGroup from '@/models/ChoiceGroup'
+import Task from '@/models/Task'
 import ShortcutListCard from '@/components/ShortcutListCard'
 
 export default {
@@ -61,12 +64,14 @@ export default {
     }
   },
   computed: {
-    fetchChoiceGroupsLoader () {
-      return uniqueId('load-choice-groups-')
+    fetchTasksLoader () {
+      return uniqueId('load-tasks-')
     },
-    choiceGroups () {
-      const choiceGroups = ChoiceGroup.query().with('choices').get()
-      return flatMap(choiceGroups, 'choices')
+    tasks () {
+      return Task.query()
+        .with('choiceGroup')
+        .with('choiceGroup.choices')
+        .get()
     }
   },
   created() {
@@ -75,7 +80,7 @@ export default {
   methods: {
     async setup () {
       try {
-        await this.waitFor(this.fetchChoiceGroupsLoader, this.fetchChoiceGroups)
+        await this.waitFor(this.fetchTasksLoader, this.fetchTasks)
       } catch (error) {
         const title = 'Unable to retrieve shortcuts'
         this.$router.replace({ name: 'error', params: { title, error } })
@@ -86,8 +91,9 @@ export default {
       await fn()
       this.$wait.end(loader)
     },
-    fetchChoiceGroups () {
-      return ChoiceGroup.api().get()
+    fetchTasks () {
+      const params = { include: 'choiceGroup.choices' }
+      return Task.api().get('', { params })
     },
     generateName (value) {
       return `Mark as "${value}"`
@@ -98,14 +104,12 @@ export default {
 
 <style lang="scss" scoped>
   .shortcut-list-card {
-    background-color: rgba($primary-10, .97);
+    background-color: $primary-10;
     border-radius: $card-border-radius;
 
     &__content {
       &__row {
-        &:not(:last-of-type) {
-          padding-bottom: $spacer-xl;
-        }
+        padding-bottom: $spacer-xl;   
 
         &__name {
           max-width: 200px;

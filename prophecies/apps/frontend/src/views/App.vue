@@ -11,14 +11,13 @@ export default {
 
 <template>
   <div class="app">
-    <span v-shortkey="['k']" @shortkey="$refs['modal-shortcuts'].toggle()">
+    <span v-shortkey="['ctrl', 'k']" @shortkey="$refs['modal-shortcuts'].toggle()">
       <b-modal 
         size="md"
         content-class="bg-transparent shadow-none border-0" 
         body-class="p-0"
         ref="modal-shortcuts" 
         hide-footer 
-        hide-backdrop
         hide-header>
         <shortcut-list-card>
           <template #header>

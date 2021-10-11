@@ -12,6 +12,8 @@ const parseValue = value => {
       return { '': castArray(json).join('+') }
     }
     return json
+  } else if (isArray(value)) {
+    return { '': castArray(value).join('+') }
   }
   return value
 }
@@ -74,7 +76,10 @@ class VNodeHotkey {
   bind () {
     this.valueEntries.forEach(([srcKey, keysAsStr]) => {
       const callback = this.getOrBuildCallback(keysAsStr, srcKey)
-      hotkeys(keysAsStr, callback)
+      // Avoid binding hotkeys after the document is detroyed
+      if (document) {
+        hotkeys(keysAsStr, callback)
+      }
       // Save the callback to be able to unbind it later
       set(callbacks, [keysAsStr, this.uid], callback)
     })
