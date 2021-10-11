@@ -31,12 +31,16 @@ class VNodeHotkey {
     return Object.entries(this.value)
   }
 
+  get valueKeys () {
+    return Object.values(this.value)
+  }
+
   get oldValue () {
     return parseValue(this.binding.oldValue)
   }
 
-  get oldValueEntries () {
-    return Object.entries(this.oldValue)
+  get oldValueKeys () {
+    return Object.values(this.oldValue)
   }
 
   get propagate () {
@@ -61,7 +65,7 @@ class VNodeHotkey {
     return get(callbacks, [keysAsStr, this.uid], defaultValue)
   }
 
-  getOrBuildCallback(srcKey, keysAsStr) {
+  getOrBuildCallback(keysAsStr, srcKey) {
     const callback = this.getCallback(keysAsStr) || this.buildCallback({ srcKey })
     set(callbacks, [keysAsStr, this.uid], callback)
     return callback
@@ -69,7 +73,7 @@ class VNodeHotkey {
 
   bind () {
     this.valueEntries.forEach(([srcKey, keysAsStr]) => {
-      const callback = this.getOrBuildCallback(srcKey, keysAsStr)
+      const callback = this.getOrBuildCallback(keysAsStr, srcKey)
       hotkeys(keysAsStr, callback)
       // Save the callback to be able to unbind it later
       set(callbacks, [keysAsStr, this.uid], callback)
@@ -77,11 +81,11 @@ class VNodeHotkey {
   }
 
   unbind () {
-    this.valueEntries.forEach(([, keysAsStr]) => this.unbindKeys(keysAsStr))
+    this.valueKeys.forEach(this.unbindKeys.bind(this))
   }
-
+  
   unbindOldValue () {
-    this.oldValueEntries.forEach(([, keysAsStr]) => this.unbindKeys(keysAsStr))
+    this.oldValueKeys.forEach(this.unbindKeys.bind(this))
   }
 
   unbindKeys(keysAsStr) {
