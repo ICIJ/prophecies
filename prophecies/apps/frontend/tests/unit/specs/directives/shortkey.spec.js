@@ -41,6 +41,20 @@ describe('vShortkey', () => {
       document.dispatchEvent(event)
       expect(wrapper.vm.calls).toBe(0)
     })
+
+    it('should update the shortkey to "b" and not call the callback when pressing "a"', async () => {
+      await wrapper.setProps({ 'shortkey': 'b' })
+      const event = new window.KeyboardEvent('keydown', { keyCode: 65 })
+      document.dispatchEvent(event)
+      expect(wrapper.vm.calls).toBe(0)
+    })
+
+    it('should update the shortkey to "b" and call the callback when pressing "b"', async () => {
+      await wrapper.setProps({ 'shortkey': 'b' })
+      const event = new window.KeyboardEvent('keydown', { keyCode: 66 })
+      document.dispatchEvent(event)
+      expect(wrapper.vm.calls).toBe(1)
+    })
   })
 
 
