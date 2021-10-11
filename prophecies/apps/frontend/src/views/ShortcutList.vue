@@ -4,14 +4,13 @@
     <div class="shortcut-list__container flex-grow-1">
       <app-header reduced />
       <div class="container-fluid pl-4 pt-5">
-        <shortcut-list-card :width="width" />
+        <shortcut-list-card hide-title />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { uniqueId, flatMap } from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import ShortcutListCard from '@/components/ShortcutListCard'
@@ -22,11 +21,6 @@ export default {
     AppSidebar,
     AppHeader,
     ShortcutListCard
-  },
-  data () {
-    return {
-      width: 'w-75'
-    }
   }
 }
 

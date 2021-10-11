@@ -2,7 +2,13 @@
   <div class="shortcut-list-card p-3">
     <app-waiter :loader="fetchTasksLoader" waiter-class="my-5 mx-auto d-block">
       <slot name="header" />
-      <div :class="contentClass" class="shortcut-list-card__content px-5 pt-5 pb-0">
+      <div :class="contentClass" class="shortcut-list-card__content px-5 pt-4 pb-0">
+        <h2 class="shortcut-list-card__content__title" v-if="!hideTitle">
+          Shortcuts
+        </h2>
+        <h3 class="text-primary mb-4">
+          For all tasks
+        </h3>
         <div class="row shortcut-list-card__content__row" v-for="(shortCut, i) in defaultShortcuts" :key="`general-shortcut-${i}`">
           <div class="col shortcut-list-card__content__row__name font-weight-bold">
             {{ shortCut.name }}
@@ -12,7 +18,9 @@
           </div>
         </div>
         <div v-for="task in tasks" :key="task.id">
-          <h3 class="text-primary mb-3">{{ task.name }}</h3>
+          <h3 class="text-primary mb-4">
+            {{ task.name }}
+            </h3>
           <div class="row shortcut-list-card__content__row" v-for="choice in task.choiceGroup.choices" :key="`task-${task.id}-shortcut-${choice.id}`">
             <div class="col shortcut-list-card__content__row__name font-weight-bold">
               {{ generateName(choice.value) }}
@@ -29,13 +37,12 @@
 </template>
 
 <script>
-import { uniqueId, flatMap } from 'lodash'
+import { uniqueId } from 'lodash'
 import AppWaiter from '@/components/AppWaiter'
 import Task from '@/models/Task'
-import ShortcutListCard from '@/components/ShortcutListCard'
 
 export default {
-  name: 'ShortcutList',
+  name: 'ShortcutListCard',
   components: {
     AppWaiter
   },
@@ -47,6 +54,9 @@ export default {
     showClose: {
       type: Boolean,
       default: false
+    },
+    hideTitle: {
+      type: Boolean
     }
   },
   data () {
@@ -108,8 +118,27 @@ export default {
     border-radius: $card-border-radius;
 
     &__content {
+
+      &__title {
+        color: $tertiary;
+        margin-bottom: $spacer-xxl;
+        position: relative;
+        padding: 0 0 3px;
+
+        &:after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 95px;
+          height: 7px;
+          background: $warning;
+        }
+      }
+
       &__row {
-        padding-bottom: $spacer-xl;   
+        padding-bottom: $spacer-xl;
+        padding-left:  $spacer-xl;
 
         &__name {
           max-width: 200px;
