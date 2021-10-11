@@ -53,12 +53,12 @@ export default {
     isChoiceBlock () {
       return this.stepNumber === 3
     },
-    showTutorial :{
-      get(){
+    showTutorial: {
+      get () {
         return store.state.app.showTutorial
       },
-      set(isVisible){
-        store.dispatch("app/showTutorial", isVisible)
+      set (isVisible) {
+        store.dispatch('app/showTutorial', isVisible)
       }
     }
   },
@@ -97,31 +97,31 @@ export default {
         >Skip tutorial</b-btn>
         <b-btn
           @click="previousTutorialStep()"
-          class="mr-3 task-record-review-tutorial-card__buttons__previous"
+          class="mx-3 py-2 pr-3 task-record-review-tutorial-card__buttons__previous"
           v-if="!isFirstStep"
           variant="outline-primary"
         >
-          <arrow-left-icon size="1x" class="mr-1" /> Previous
+          <arrow-left-icon size="0.8x" class="mr-3 align-baseline text-right task-record-review-tutorial-card__buttons__arrow" /> Previous
         </b-btn>
         <b-btn
           @click="nextTutorialStep()"
-          class="task-record-review-tutorial-card__buttons__next font-weight-bold"
+          class="ml-3 py-2 pl-3 text-primary text-left  task-record-review-tutorial-card__buttons__next font-weight-bold"
           v-if="!isLastStep"
           variant="warning"
         >
           <span class="task-record-review-tutorial__right-button-width">Next
-            <arrow-right-icon size="1x" />
           </span>
+            <arrow-right-icon size="0.8x" class="ml-3 align-baseline task-record-review-tutorial__right-button-icon" />
         </b-btn>
         <b-btn
           @click="closeTutorial()"
-          class="task-record-review-tutorial-card__buttons__close font-weight-bold"
+          class="ml-3 py-2 pl-3 text-primary text-left task-record-review-tutorial-card__buttons__close font-weight-bold"
           v-else
           variant="warning"
         >
-          <span class="right-button-width">Close
-            <XIcon size="1x" />
+          <span class="task-record-review-tutorial__right-button-width">Close
           </span>
+            <XIcon size="1.2x" class="ml-3  task-record-review-tutorial__right-button-icon "/>
         </b-btn>
       </div>
     </div>
@@ -170,7 +170,11 @@ export default {
 
     &__right-button-width {
         display: inline-block;
-        width: 57px;
+        width: 43px;
+    }
+    &__right-button-icon {
+        stroke-width: 4;
+        width: 14px;
     }
 }
 </style>
