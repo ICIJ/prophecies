@@ -45,7 +45,7 @@ class TestTask(TestCase):
         self.task_paintings.save()
         self.client.login(username='olivia', password='olivia')
         id = self.task_paintings.id
-        request = self.client.get('/api/v1/tasks/%s/' % id)
+        request = self.client.get('/api/v1/tasks/%s/' % id, { 'include': 'choiceGroup.choices' })
         self.assertEqual(request.status_code, 200)
         included = request.json().get('included')
         choice_group_entity = next(entity for entity  in included if entity['type'] == 'ChoiceGroup')
