@@ -82,7 +82,21 @@ class Tip(models.Model):
         if task is not None:
             notify_mentioned_users(instance.creator, task.checkers.all(), instance)
 
+    
+    @staticmethod
+    def signal_fill_project_from_task(sender, instance, **kwargs):
+        if not instance.project and instance.task:
+            instance.project = instance.task.project
+    
+    @staticmethod
+    def signal_constraint_task_relationship_to_project(sender, instance, **kwargs):
+        if instance.project and instance.task and instance.project != instance.task.project:
+            instance.task = None
 
+
+
+signals.pre_save.connect(Tip.signal_fill_project_from_task, sender=Tip)
+signals.pre_save.connect(Tip.signal_constraint_task_relationship_to_project, sender=Tip)
 signals.post_save.connect(Tip.signal_notify_mentioned_users, sender=Tip)
 signals.post_save.connect(Tip.signal_notify_members_in_mentioned_project, sender=Tip)
 signals.post_save.connect(Tip.signal_notify_task_checkers_in_mentioned_task, sender=Tip)

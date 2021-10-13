@@ -6,10 +6,10 @@ from prophecies.core.models import UserNotification, Tip, Task, TaskRecordReview
 class TestTip(TestCase):
     def setUp(self):
         self.project = Project.objects.create(name='Pencil Papers')
-        task = Task.objects.create(name='Art', project=self.project, color='#fe6565', rounds=2)
+        self.art = Task.objects.create(name='Art', project=self.project, color='#fe6565', rounds=2)
         self.olivia = User.objects.create(username='olivia')
         self.django = User.objects.create(username='django')
-        self.record_foo = TaskRecord.objects.create(original_value='foo', task=task)
+        self.record_foo = TaskRecord.objects.create(original_value='foo', task=self.art)
 
 
     def test_it_should_returns_no_mentions(self):
@@ -178,3 +178,15 @@ class TestTip(TestCase):
         Tip.objects.create(description="Hi, you should not be able to see this", creator=self.django, project=project, task=task)
         user_scoped_tips = Tip.objects.user_scope(self.olivia)
         self.assertEqual(len(user_scoped_tips), 2)
+
+
+    def test_it_set_a_project_when_a_task_is_given(self):
+        tip = Tip.objects.create(description="Foo", creator=self.django, task=self.art)
+        self.assertEqual(tip.project, self.project)
+
+
+    def test_it_set_task_to_none_when_its_not_part_of_project(self):
+        fincen_files = Project.objects.create(name='FinCEN Files')
+        addresses = Task.objects.create(name='Addresses', project=fincen_files)
+        tip = Tip.objects.create(description="Foo", creator=self.django, project=self.project, task=addresses)
+        self.assertEqual(tip.task, None)
