@@ -72,9 +72,8 @@ Then visit [http://0.0.0.0:9009](http://0.0.0.0:9009)
 Run **one** of these commands depending on the kind of version you need to publish:
 
 ```
-pipenv run bumpversion alpha
-pipenv run bumpversion beta
-pipenv run bumpversion rc
+pipenv run bumpversion build # will increment the build number (x.y.z-build0 →  x.y.z-build1)
+pipenv run bumpversion release # will increment to the next release part (alpha →  beta →  rc)
 pipenv run bumpversion patch
 pipenv run bumpversion minor
 pipenv run bumpversion major
