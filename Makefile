@@ -58,15 +58,6 @@ release:
 build:
 		pipenv run bumpversion build
 
-alpha:
-		pipenv run bumpversion alpha
-
-beta:
-		pipenv run bumpversion beta
-
-rc:
-		pipenv run bumpversion rc
-
 docker-build:
 		docker build -t $(DOCKER_NAME) .
 
