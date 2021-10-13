@@ -1,0 +1,23 @@
+.text-justify  { text-align: justify !important; }
+.text-wrap     { white-space: normal !important; }
+.text-nowrap   { white-space: nowrap !important; }
+
+.text-lowercase  { text-transform: lowercase !important; }
+.text-uppercase  { text-transform: uppercase !important; }
+.text-capitalize { text-transform: capitalize !important; }
+
+.font-weight-light   { font-weight: 300 !important; }
+.font-weight-lighter { font-weight: lighter !important; }
+.font-weight-normal  { font-weight: 400 !important; }
+.font-weight-bold    { font-weight: 700 !important; }
+.font-weight-bolder  { font-weight: bolder !important; }
+.font-italic         { font-style: italic !important; }
+
+.text-primary { color: var(--primary) !important; }
+.text-secondary { color: var(--secondary) !important; }
+.text-quiet { color: var(--quiet) !important; }
+.text-info { color: var(--info) !important; }
+.text-danger { color: var(--danger) !important; }
+.text-success { color: var(--success) !important; }
+.text-warning { color: var(--warning) !important; }
+.text-accent { color: var(--accent) !important; }

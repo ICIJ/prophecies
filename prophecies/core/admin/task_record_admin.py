@@ -3,7 +3,9 @@ from django.contrib.admin.helpers import AdminForm
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import redirect, render
 from django.urls import path
+from django.utils.html import format_html
 from admin_auto_filters.filters import AutocompleteFilterFactory
+from textwrap import shorten
 
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon, display_task_record_link
 from prophecies.core.forms import TaskRecordAssignForm, TaskRecordUploadForm
@@ -33,7 +35,7 @@ class TaskRecordAdmin(admin.ModelAdmin):
     change_list_template = "admin/task_record_changelist.html"
     exclude = ['metadata', 'rounds', 'link', 'status']
     readonly_fields = ['round_count', 'status_badge', 'computed_link', 'metadata_json']
-    list_display = ['__str__', 'task_with_addon', 'round_count', 'status_badge']
+    list_display = ['task_record_excerpt', 'task_with_addon', 'round_count', 'status_badge']
     list_filter = [
         AutocompleteFilterFactory('task', 'task'),
         AutocompleteFilterFactory('project', 'task__project'),
@@ -48,6 +50,18 @@ class TaskRecordAdmin(admin.ModelAdmin):
     inlines = [TaskRecordReviewInline,]
     actions = ['assign_action']
     search_fields = ['original_value', 'predicted_value', 'metadata', 'link']
+
+    def task_record_excerpt(self, task_record):
+        record_title = str(task_record)
+        excerpt = shorten(task_record.original_value, width=140, placeholder='...')
+        context = dict(record_title=record_title, excerpt=excerpt)
+        template = """
+            <div>{record_title}</div>
+            <div class="font-weight-light text-quiet">{excerpt}</div>
+        """
+        return format_html(template, **context)
+
+    task_record_excerpt.short_description = "Record"
 
 
     def metadata_json(self, task_record):
