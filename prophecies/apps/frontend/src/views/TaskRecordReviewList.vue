@@ -237,6 +237,7 @@ export default {
       return TaskRecordReview.query()
               .whereIdIn(this.taskRecordReviewIds)
               .where('status', 'PENDING')
+              .where('locked', false)
               .first()
     },
     filtersTogglerVariant () {

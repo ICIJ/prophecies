@@ -44,4 +44,16 @@ export default class Task extends Model {
       }
     }
   }
+
+  get open () {
+    return this.status === 'OPEN'
+  }  
+  
+  get close () {
+    return this.status === 'CLOSE'
+  }
+
+  get locked () {
+    return this.status === 'LOCKED'
+  }
 }

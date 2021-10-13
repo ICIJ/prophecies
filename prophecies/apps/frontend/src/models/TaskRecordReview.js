@@ -101,4 +101,10 @@ export default class TaskRecordReview extends Model {
   get editable () {
     return this.checkerId === User.me()?.id
   }
+
+  get locked () {
+    const taskLocked = this.taskId && !Task.find(this.taskId)?.open
+    const taskRecordLocked = this.taskRecordId && TaskRecord.find(this.taskRecordId)?.locked
+    return !!(taskLocked || taskRecordLocked)
+  }
 }
