@@ -5,14 +5,10 @@ const callbacks = {}
 
 const parseValue = value => {
   if (!value) {
-    return []
+    return {}
   } else if (isString(value)) {
-    const json = JSON.parse(value.replace(/\'/gi, '"'))
-    if (isArray(json)) {
-      return { '': castArray(json).join('+') }
-    }
-    return json
-  } else if (isArray(value)) {
+    return parseValue(JSON.parse(value.replace(/\'/gi, '"')))
+  } else if (isArray(value) && value.length) {
     return { '': castArray(value).join('+') }
   }
   return value
@@ -53,6 +49,10 @@ class VNodeHotkey {
     return this.vnode.context._uid
   }
 
+  get uidKey () {
+    return `v-${this.uid}`
+  }
+
   buildCallback (detail = null) {
     return e => {
       if (!this.propagate) {
@@ -64,12 +64,12 @@ class VNodeHotkey {
   }
 
   getCallback(keysAsStr, defaultValue = null) {
-    return get(callbacks, [keysAsStr, this.uid], defaultValue)
+    return get(callbacks, [keysAsStr, this.uidKey], defaultValue)
   }
 
   getOrBuildCallback(keysAsStr, srcKey) {
     const callback = this.getCallback(keysAsStr) || this.buildCallback({ srcKey })
-    set(callbacks, [keysAsStr, this.uid], callback)
+    set(callbacks, [keysAsStr, this.uidKey], callback)
     return callback
   }
 
@@ -81,7 +81,7 @@ class VNodeHotkey {
         hotkeys(keysAsStr, callback)
       }
       // Save the callback to be able to unbind it later
-      set(callbacks, [keysAsStr, this.uid], callback)
+      set(callbacks, [keysAsStr, this.uidKey], callback)
     })
   }
 
@@ -92,13 +92,13 @@ class VNodeHotkey {
   unbindOldValue () {
     this.oldValueKeys.forEach(this.unbindKeys.bind(this))
   }
-
+  
   unbindKeys(keysAsStr) {
     const callback = this.getCallback(keysAsStr, noop)
     hotkeys.unbind(keysAsStr, callback)
-    unset(callbacks, [keysAsStr, this.uid])
+    unset(callbacks, [keysAsStr, this.uidKey])
   }
-
+  
   update () {
     this.unbindOldValue()
     this.bind()
