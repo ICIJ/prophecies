@@ -147,7 +147,7 @@ export default {
           <div class="col-12">
           <history-list :fluid="false" :limit=5>
             <template v-slot:title>
-              <span class="text-danger">Lately</span> in prophecies
+              <span class="text-danger">Lately</span> in Prophecies
             </template>
             <template v-slot:footer>
               <div class="d-flex justify-content-center pt-3">
