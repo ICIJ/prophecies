@@ -56,6 +56,16 @@ describe('vShortkey', () => {
         document.dispatchEvent(event)
         expect(wrapper.vm.calls).toBe(1)
       })
+
+      it('should deactivate the shortkey to "a" and activate it again', async () => {
+        await wrapper.setProps({ 'shortkey': '' })
+        const event = new window.KeyboardEvent('keydown', { keyCode: 65 })
+        document.dispatchEvent(event)
+        expect(wrapper.vm.calls).toBe(0)
+        await wrapper.setProps({ 'shortkey': 'a' })
+        document.dispatchEvent(event)
+        expect(wrapper.vm.calls).toBe(1)
+      })
     })
 
 
@@ -84,6 +94,7 @@ describe('vShortkey', () => {
       })
     })
   })
+
 
   describe('a component with an object of shortkey', () => {
     const data = () => ({ calls: [] })
