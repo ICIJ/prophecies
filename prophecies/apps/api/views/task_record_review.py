@@ -15,6 +15,7 @@ class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     checker = ResourceRelatedField(many=False, read_only=True)
     choice = ResourceRelatedField(many=False, read_only=True)
     task_id = serializers.CharField(read_only=True)
+    task_record_id = serializers.CharField(read_only=True)
     included_serializers = {
         'checker': UserSerializer,
         'choice': ChoiceSerializer,
@@ -27,7 +28,7 @@ class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
         model = TaskRecordReview
         fields = ['id', 'url', 'checker', 'choice', 'status',
                     'note', 'note_created_at', 'note_updated_at',
-                    'task_id', 'alternative_value']
+                    'task_id', 'task_record_id', 'alternative_value']
 
 
 class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
