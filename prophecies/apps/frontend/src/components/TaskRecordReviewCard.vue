@@ -173,6 +173,9 @@ export default {
     taskRecord () {
       return get(this, 'taskRecordReview.taskRecord')
     },
+    link () {
+      return get(this, 'taskRecordReview.taskRecord.link')
+    },
     isDone () {
       return get(this, 'taskRecordReview.status') === 'DONE'
     },
@@ -214,8 +217,13 @@ export default {
                     {{ taskRecord.id }}
                   </b-form-checkbox>
                 </div>
-                <div class="task-record-review-card__original-value col font-weight-bold py-3 text-center text-lg-left">
-                  {{ taskRecord.originalValue }}
+                <div class="col text-center px-0 pb-3 text-lg-left">
+                  <div class="task-record-review-card__original-value font-weight-bold pt-3 pb-1 px-2 ">
+                    {{ taskRecord.originalValue }}                  
+                  </div>
+                  <b-btn variant="link" class="text-muted px-2" :href="link" v-if="link" target="_blank">
+                    <link-icon size="1x" class="mr-1" /> Open link
+                  </b-btn>
                 </div>
                 <div class="task-record-review-card__original-value col-3 font-weight-bold py-3 text-center">
                   {{ taskRecord.predictedValue }}
