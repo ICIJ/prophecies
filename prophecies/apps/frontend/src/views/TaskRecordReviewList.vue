@@ -204,6 +204,9 @@ export default {
         .with('choiceGroup.choices')
         .find(this.taskId)
     },
+    taskIsNotOpened () {
+      return this.task.status !== 'OPEN'
+    },
     taskRecordReviews () {
       return TaskRecordReview
         .query()
@@ -237,10 +240,10 @@ export default {
     },
     firstPendingTaskRecordReview () {
       return TaskRecordReview.query()
-              .whereIdIn(this.taskRecordReviewIds)
-              .where('status', 'PENDING')
-              .where('locked', false)
-              .first()
+        .whereIdIn(this.taskRecordReviewIds)
+        .where('status', 'PENDING')
+        .where('locked', false)
+        .first()
     },
     filtersTogglerVariant () {
       return this.showFilters ? 'primary' : 'outline-primary'
@@ -444,7 +447,7 @@ export default {
                   class="d-inline-block" />
               </li>
               <li class="task-record-review-list__container__selected-results list-inline-item font-weight-bold" v-if="hasSelectedRecords">
-                {{ $tc('taskRecordReviewList.selectedResults',  selectedIdsCount ) }} <template v-if="hasSelectedAndLockedRecords">({{ $tc('taskRecordReviewList.lockedResults',  selectedAndLockedIdsCount ) }})</template>
+                {{ $tc('taskRecordReviewList.selectedResults',  selectedIdsCount ) }} <template v-if="taskIsNotOpened">({{ $tc('taskRecordReviewList.lockedResults',  selectedIdsCount ) }})</template><template v-else-if="hasSelectedAndLockedRecords">({{ $tc('taskRecordReviewList.lockedResults',  selectedAndLockedIdsCount ) }})</template>
               </li>
             </ul>
             <b-collapse :visible="showAppliedFilters">
