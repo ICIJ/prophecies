@@ -993,10 +993,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@icij/murmur@2.35.1":
-  version "2.35.1"
-  resolved "https://registry.yarnpkg.com/@icij/murmur/-/murmur-2.35.1.tgz#f19477f4e86547f74ef07231aa9ba4893deda0ac"
-  integrity sha512-f/JHTHfpqQ6g4NgU5YPiAQ34Ud4teeuMN0Dwx9p73j30LRvOEzLL8/vt7wUCsrJxzYauuRBVh5uv+rkLuv9Ieg==
+"@icij/murmur@2.35.2":
+  version "2.35.2"
+  resolved "https://registry.yarnpkg.com/@icij/murmur/-/murmur-2.35.2.tgz#fed6a1498668b67f1b68d965f12e8564b6a9d321"
+  integrity sha512-AnlhpuhzZPt8G8UG2I1Wpp4alf3liPJ8R0PJqKUlkmUcAl4/RpkFttW+MJdU8ms6Lt7JX0TpI6rfwLiAhi5O7g==
   dependencies:
     "@fortawesome/fontawesome" "^1.1.4"
     "@fortawesome/fontawesome-svg-core" "^1.2.36"
