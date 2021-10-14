@@ -1,12 +1,12 @@
 <template>
   <div class="progress-card card card-body py-4 px-5 shadow-sm">
-    <div class="card-flex align-items-center mt-3 mb-5">
-      <users-icon class="text-primary mr-4" />
+    <div class="card-flex d-flex align-items-center  justify-content-start mt-3 mb-5">
+      <users-icon size="1.5x" class="text-primary mr-4" />
       <b-form-radio-group
         v-model="team"
         buttons
         button-variant="outline-primary"
-        :options="progressOptions" />
+        :options="progressOptions" class="flex-grow-1"/>
     </div>
     <ul class="list-unstyled progress-card__items">
       <li class="font-weight-bold progress-card__items__item progress-card__items__item--mean">

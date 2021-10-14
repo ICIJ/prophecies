@@ -107,8 +107,8 @@ export default {
             type: ITEM_TYPES.TIP,
             date: tip.createdAt,
             user: this.userDisplayName(tip.creator, true),
-            objectId: tip.id,
             content: tip.name,
+            objectId: tip.id,
             projectName: tip.project?.name,
             taskName: tip.task?.name,
             link: `#/tips/${tip.id}`
@@ -145,7 +145,7 @@ export default {
 <template>
   <div v-if="items.length" class="px-0 history-list-group" :class="isFluidClass">
     <ul class="list-unstyled pb-3">
-        <history-list-item v-for="(item,i) in items" :key="i" class="row container-fluid py-3"
+        <history-list-item v-for="(item,i) in items" :key="i"
         :project-name="item.projectName"
         :id="item.objectId"
         :task-name="item.taskName"
@@ -156,6 +156,7 @@ export default {
         :value="item.content"
         />
     </ul>
+
     <slot name="footer">
       <div class="d-flex justify-content-center py-3" v-if="hasMoreToSee">
         <button class="btn btn-primary border font-weight-bold text-white" @click='loadMore'>
