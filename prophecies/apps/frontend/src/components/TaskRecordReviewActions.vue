@@ -89,7 +89,7 @@ export default {
         <external-link-icon size="1.5x" />
         <span class="sr-only">Link</span>
       </b-btn>
-      <b-btn variant="link" class="text-dark" title="Duplicate record" v-b-tooltip.left @click="emitCopy">
+      <b-btn variant="link" disabled class="text-dark" title="Duplicate record" v-b-tooltip.left @click="emitCopy">
         <copy-icon size="1.5x" />
         <span class="sr-only">Duplicate record</span>
       </b-btn>
