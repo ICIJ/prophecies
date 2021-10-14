@@ -111,8 +111,8 @@ export default {
       this.$el.querySelector(this.searchInputSelector).blur()
     },
     focus () {
-      console.log('focus')
       this.$el.querySelector(this.searchInputSelector).focus()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     },
     mapShortkeys ({ detail: { srcKey: method } }) {
       if (method in this.$options.methods) {
