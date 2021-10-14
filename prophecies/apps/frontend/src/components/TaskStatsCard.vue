@@ -1,60 +1,60 @@
 <script>
-import Task from "@/models/Task";
+import Task from '@/models/Task'
 
 export default {
-  name: "TaskStatsCard",
+  name: 'TaskStatsCard',
   props: {
     taskId: {
-      type: [Number, String],
+      type: [Number, String]
     },
     team: {
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
   filters: {
-    round(value) {
-      return Math.round(value);
-    },
+    round (value) {
+      return Math.round(value)
+    }
   },
   computed: {
-    task() {
-      return Task.query().with("project").find(this.taskId);
+    task () {
+      return Task.query().with('project').find(this.taskId)
     },
-    taskRecordsCount() {
+    taskRecordsCount () {
       if (this.team) {
-        return this.task.taskRecordsCount;
+        return this.task.taskRecordsCount
       }
-      return this.task.userTaskRecordsCount;
+      return this.task.userTaskRecordsCount
     },
-    taskRecordsDoneCount() {
+    taskRecordsDoneCount () {
       if (this.team) {
-        return this.task.taskRecordsDoneCount;
+        return this.task.taskRecordsDoneCount
       }
-      return this.task.userTaskRecordsDoneCount;
+      return this.task.userTaskRecordsDoneCount
     },
-    taskIsLocked() {
-      return this.task.status === "LOCKED";
+    taskIsLocked () {
+      return this.task.status === 'LOCKED'
     },
-    taskIsClosed() {
-      return this.task.status === "CLOSED";
+    taskIsClosed () {
+      return this.task.status === 'CLOSED'
     },
-    taskIsDone() {
-      return this.taskRecordsCount !== 0 ? (this.taskRecordsDoneCount/this.taskRecordsCount) === 1 : false
+    taskIsDone () {
+      return this.taskRecordsCount !== 0 ? (this.taskRecordsDoneCount / this.taskRecordsCount) === 1 : false
     },
-    progress() {
+    progress () {
       if (this.team) {
-        return this.task.progress;
+        return this.task.progress
       }
-      return this.task.userProgress;
+      return this.task.userProgress
     },
-    progressByRound() {
+    progressByRound () {
       if (this.team) {
-        return this.task.progressByRound;
+        return this.task.progressByRound
       }
-      return this.task.userProgressByRound;
-    },
-  },
-};
+      return this.task.userProgressByRound
+    }
+  }
+}
 </script>
 
 <template>
@@ -148,12 +148,11 @@ export default {
   </div>
 </template>
 
-
 <style lang="scss" scoped>
   .task-stats-card {
 
     &__heading{
-     
+
       &--closed  {
         color: $secondary;
       }
