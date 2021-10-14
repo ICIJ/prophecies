@@ -3,6 +3,7 @@ import { template } from 'lodash'
 import store from '@/store'
 import UserNotification from '@/models/UserNotification'
 import AppSearchForm from '@/components/AppSearchForm'
+import AppVersion from '@/components/AppVersion'
 import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
 import ShortcutListCard from '@/components/ShortcutListCard'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
@@ -11,6 +12,7 @@ export default {
   name: 'AppHeader',
   components: {
     AppSearchForm,
+    AppVersion,
     UserNotificationsDropdownMenu,
     ShortkeyBadge,
     ShortcutListCard
@@ -127,12 +129,16 @@ export default {
                 <trello-icon class="mr-2" />
                 {{ $t('appHeader.admin') }}
               </b-dropdown-item>
-              <b-dropdown-divider />
             </template>
+            <b-dropdown-divider />
             <b-dropdown-item :href="$config.get('logoutUrl')" class="app-header__nav-right__user__logout">
               <log-out-icon class="mr-2" />
               {{ $t('appHeader.logOut') }}
             </b-dropdown-item>
+            <b-dropdown-divider />
+            <b-dropdown-text class="small text-center p-0 text-muted">
+              <app-version />
+            </b-dropdown-text>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </div>
