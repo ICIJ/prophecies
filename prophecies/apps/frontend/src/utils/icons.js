@@ -10,6 +10,7 @@ export {
   CommandIcon,
   CopyIcon,
   Edit3Icon,
+  ExternalLinkIcon,
   FilterIcon,
   FrownIcon,
   GridIcon,

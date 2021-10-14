@@ -39,8 +39,14 @@ export default {
     taskRecord () {
       return get(this, 'taskRecordReview.taskRecord')
     },
-    link () {
-      return get(this, 'taskRecordReview.taskRecord.link')
+    taskRecordRoute () {
+      return {
+        name: 'task-record-review-retrieve',
+        params: {
+          taskId: this.taskRecordReview.taskId,
+          taskRecordReviewId: this.taskRecordReviewId
+        }
+      }
     }
   },
   methods: {
@@ -79,8 +85,8 @@ export default {
 <template>
   <div class="task-record-review-actions" :class="classList">
     <b-btn-group vertical size="sm">
-      <b-btn variant="link" class="text-dark" :href="link"  v-if="link" title="Link" v-b-tooltip.left>
-        <link-icon size="1.5x" />
+      <b-btn variant="link" class="text-dark" :to="taskRecordRoute" title="Open in a new window" v-b-tooltip.left target="_blank">
+        <external-link-icon size="1.5x" />
         <span class="sr-only">Link</span>
       </b-btn>
       <b-btn variant="link" class="text-dark" title="Duplicate record" v-b-tooltip.left @click="emitCopy">
