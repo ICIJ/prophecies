@@ -19,19 +19,19 @@ describe('AppVersion', () => {
     config = core.config
   })
 
-  it('should display the backend version using the `appVersion` config value', () => {
+  it('should display the backend version using the `version` config value', () => {
     wrapper = mount(AppVersion, { i18n, localVue })
     expect(wrapper.text()).toBe('Version 0.4.6')
   })
 
-  it('should display the version "CANARY" using the `appVersion` config value', () => {
-    config.set('appVersion', 'CANARY')
+  it('should display the version "CANARY" using the `version` config value', () => {
+    config.set('version', 'CANARY')
     wrapper = mount(AppVersion, { i18n, localVue })
     expect(wrapper.text()).toBe('Version CANARY')
   })
 
-  it('should display the version "0.0.1" using the `appVersion` config value', () => {
-    config.set('appVersion', '0.0.1')
+  it('should display the version "0.0.1" using the `version` config value', () => {
+    config.set('version', '0.0.1')
     wrapper = mount(AppVersion, { i18n, localVue })
     expect(wrapper.text()).toBe('Version 0.0.1')
   })

@@ -23,7 +23,7 @@ export default [
           {
             type: 'Setting',
             attributes: {
-              key: 'appVersion',
+              key: 'version',
               value: '0.4.6'
             }
           }
