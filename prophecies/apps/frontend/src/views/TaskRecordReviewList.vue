@@ -4,6 +4,7 @@ import { compact, get, filter, isEqual, keys, noop, uniqueId, values } from 'lod
 import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
 import AppWaiter from '@/components/AppWaiter'
+import ShortkeyBadge from '@/components/ShortkeyBadge'
 import TaskRecordReviewAppliedFilters from '@/components/TaskRecordReviewAppliedFilters'
 import TaskRecordReviewAppliedSorting from '@/components/TaskRecordReviewAppliedSorting'
 import TaskRecordReviewBulkChoiceForm from '@/components/TaskRecordReviewBulkChoiceForm'
@@ -24,6 +25,7 @@ export default {
     AppBreadcrumb,
     AppHeader,
     AppWaiter,
+    ShortkeyBadge,
     TaskRecordReviewBulkChoiceForm,
     TaskRecordReviewCard,
     TaskRecordReviewAppliedFilters,
@@ -355,6 +357,9 @@ export default {
     },
     toggleFilters () {
       this.showFilters = !this.showFilters
+    },
+    toggleSelectAll () {
+      this.selectAll = !this.selectAll
     }
   }
 }
@@ -379,6 +384,11 @@ export default {
                     <input class="custom-control-input" v-model="selectAll" type="checkbox" id="select-all-input" />
                     <div class="task-record-review-list__container__select-all custom-control-label" for="select-all-input">
                       {{ $tc('taskRecordReviewList.selectAll',  taskRecordReviews.length ) }}
+                      <shortkey-badge
+                        @shortkey.native="toggleSelectAll()"
+                        :value="['Ctrl', 'a']"
+                        class="ml-2"
+                        v-shortkey="['ctrl', 'a']" />
                     </div>
                   </span>
                 </b-btn>
