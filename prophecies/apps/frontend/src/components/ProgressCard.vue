@@ -8,8 +8,8 @@
         button-variant="outline-primary"
         :options="progressOptions" class="flex-grow-1"/>
     </div>
-    <ul class="list-unstyled progress-card__items">
-      <li class="font-weight-bold progress-card__items__item progress-card__items__item--mean">
+    <ul v-if="tasks.length" class="list-unstyled progress-card__items">
+        <li class="font-weight-bold progress-card__items__item progress-card__items__item--mean">
         <div class="d-flex align-items-start">
           <div class="mr-1 progress-card__items__item__value">
             {{ meanProgress | round }}%
@@ -36,6 +36,9 @@
         </div>
       </li>
     </ul>
+    <div v-else class="progress-card__no-items text-center text-secondary text-small">
+      Open a task to see your progress
+    </div>
   </div>
 </template>
 
@@ -69,7 +72,8 @@ export default {
   computed: {
     tasks () {
       // make stats on tasks with at least one record
-      return Task.query().where('taskRecordsCount', (value) => value > 0).get()
+      const ltasks = Task.query().where('status', (value) => value !== 'CLOSED').where('taskRecordsCount', (value) => value > 0).get()
+      return ltasks
     },
     meanProgress () {
       if (!this.tasks.length) {

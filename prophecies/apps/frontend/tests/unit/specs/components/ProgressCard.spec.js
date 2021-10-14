@@ -3,6 +3,7 @@ import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
 import ProgressCard from '@/components/ProgressCard'
+import { server, rest } from '../../mocks/server'
 
 describe('ProgressCard', () => {
   let wrapper
@@ -18,9 +19,9 @@ describe('ProgressCard', () => {
     wrapper = mount(ProgressCard, { localVue })
   })
 
-  it('should show 5 progress items', () => {
+  it('should show 4 progress items', () => {
     const elements = wrapper.findAll('.progress-card__items__item')
-    expect(elements).toHaveLength(5)
+    expect(elements).toHaveLength(4)
   })
 
   it('should show the overall progress', () => {
@@ -53,7 +54,7 @@ describe('ProgressCard', () => {
   it('should show the average progess for the user', async () => {
     await wrapper.setData({ team: false })
     const element = wrapper.findAll('.progress-card__items__item__value').at(0)
-    expect(element.text()).toBe('46%')
+    expect(element.text()).toBe('47%')
   })
 
   it('should show a 40% progess for the team on task "Adresses"', () => {
@@ -68,6 +69,65 @@ describe('ProgressCard', () => {
 
   it('should show the average progess for the team', () => {
     const element = wrapper.findAll('.progress-card__items__item__value').at(0)
-    expect(element.text()).toBe('55%')
+    expect(element.text()).toBe('53%')
+  })
+
+  describe('No task opened', () => {
+    beforeEach(async () => {
+      Task.deleteAll()
+      server.use(rest.get('/api/v1/tasks', (req, res, ctx) => {
+        return res.once(ctx.json({
+          data: [
+            {
+              type: 'Task',
+              id: '1',
+              attributes: {
+                status: 'CLOSED'
+              },
+              relationships: {
+                choiceGroup: {
+                  data: {
+                    type: 'ChoiceGroup',
+                    id: '1'
+                  }
+                },
+                project: {
+                  data: {
+                    type: 'Project',
+                    id: '1'
+                  }
+                },
+                checkers: {
+                  meta: {
+                    count: 1
+                  },
+                  data: [
+                    {
+                      type: 'User',
+                      id: '2'
+                    }
+                  ]
+                }
+              },
+              links: {
+                self: 'http://localhost/api/v1/tasks/1/'
+              }
+            }
+          ]
+        }))
+      }))
+
+      await Task.api().get()
+    })
+    afterEach(() => {
+      Task.deleteAll()
+      server.resetHandlers()
+    })
+    it('show the message "Open a task to see your progress"', () => {
+      const element = wrapper.find('.progress-card__no-items')
+      expect(wrapper.vm.tasks).toHaveLength(0)
+      expect(element.exists()).toBeTruthy()
+      expect(element.text()).toBe('Open a task to see your progress')
+    })
   })
 })
