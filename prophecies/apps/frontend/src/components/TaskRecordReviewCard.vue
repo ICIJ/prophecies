@@ -226,7 +226,6 @@ export default {
                 </div>
                 <div class="col text-center px-0 pb-3 text-lg-left">
                   <haptic-copy 
-                    @click.native="$root.$emit('bv::hide::tooltip')"
                     :text="taskRecord.originalValue" 
                     class="task-record-review-card__original-value font-weight-bold px-3 py-2"
                     tooltip-placement="right"
