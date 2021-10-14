@@ -138,6 +138,11 @@ export default {
     makeToast (variant = null, title, text) {
       this.$bvToast.toast(text, { title, variant, appendToast: true })
     },
+    mapShortkeys ({ detail: { srcKey: method } }) {
+      if (method in this.$options.methods) {
+        this[method]()
+      }
+    },
     emitUpdate () {
       /**
        * Fired when the task record review is updated
@@ -205,6 +210,11 @@ export default {
         return 'lighter'
       }
       return 'white'
+    },
+    shortkeys () {
+      return {
+        'openLink': this.active ? 'ctrl+l' : null
+      }
     }
   }
 }
@@ -213,7 +223,11 @@ export default {
 <template>
   <b-overlay :show="isLoading" :variant="overlayVariant" rounded="lg">
     <b-spinner variant="light" slot="overlay" />
-    <div class="task-record-review-card card card-body p-4 container-fluid" :class="classList">
+    <div 
+      @shortkey="mapShortkeys($event)"
+      :class="classList"      
+      class="task-record-review-card card card-body p-4 container-fluid"
+      v-shortkey="shortkeys">
       <div class="row no-gutters">
         <div class="col flex-grow-1">
           <div class="row no-gutters">
@@ -238,11 +252,7 @@ export default {
                   <b-btn variant="link" class="text-muted px-3" :href="link" v-if="link" target="_blank">
                     <link-icon size="1x" class="mr-1" /> Open link
                     <span v-if="active">
-                      <shortkey-badge 
-                        @shortkey.native="openLink()" 
-                        :value="['Ctrl', 'l']" 
-                        class="ml-2" 
-                        v-shortkey="['ctrl', 'l']" />
+                      <shortkey-badge  :value="['Ctrl', 'l']"  class="ml-2" />
                     </span>
                   </b-btn>
                 </div>
