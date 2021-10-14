@@ -20,7 +20,7 @@ export default {
       <app-header reduced />
   <div class="container-fluid p-5">
 
-      <history-list :limit='10'>
+      <history-list :limit='20'>
         <template v-slot:title>
         <h1 class="font-weight-bold mb-5 history__title">What happened <span class="history__title--lately">lately</span></h1>
         </template>
