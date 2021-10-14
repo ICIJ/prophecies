@@ -1,5 +1,5 @@
 <script>
-import { compact, get, filter, find, isEqual, keys, uniqueId, values } from 'lodash'
+import { compact, get, filter, isEqual, keys, noop, uniqueId, values } from 'lodash'
 
 import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
@@ -97,7 +97,7 @@ export default {
       },
       set (pageSize) {
         const query = { ...this.$route.query, 'page[size]': pageSize }
-        this.$router.push({ path: this.$route.path, query }, () => {})
+        this.$router.push({ path: this.$route.path, query }, noop)
       }
     },
     sort: {
@@ -107,7 +107,7 @@ export default {
       set (sort) {
         if (isEqual({ ...this.$route.query, sort }, this.$route.query)) {
           const query = { 'page[size]': this.pageSize, ...this.routeFiltersQueryParams }
-          this.$router.push({ path: this.$route.path, query }, () => {})
+          this.$router.push({ path: this.$route.path, query }, noop)
         }
       }
     },
@@ -185,8 +185,8 @@ export default {
       set (routeFiltersQueryParams) {
         if (!isEqual(routeFiltersQueryParams, this.routeFiltersQueryParams)) {
           const otherQueryParams = this.otherQueryParams
-          const query = { ...otherQueryParams, ...routeFiltersQueryParams }
-          return this.$router.push({ path: this.$route.path, query }, () => {})
+          const query = { ...otherQueryParams, ...routeFiltersQueryParams, 'page[number]': 1 }
+          return this.$router.push({ path: this.$route.path, query }, noop)
         }
       }
     },
@@ -255,12 +255,12 @@ export default {
       }
     },
     applyFilters (query) {
-      return this.$router.push({ path: this.$route.path, query }, () => {})
+      return this.$router.push({ path: this.$route.path, query }, noop)
     },
     applyPageParams ({ pageSize, sort }) {
       this.$bvModal.hide('modal-page-params')
       const query = { ...this.$route.query, 'page[size]': pageSize, sort }
-      return this.$router.push({ path: this.$route.path, query }, () => {})
+      return this.$router.push({ path: this.$route.path, query }, noop)
     },
     clearFilters () {
       this.$set(this, 'routeFilters', {})
@@ -283,7 +283,7 @@ export default {
     },
     async goToPage (pageNumber) {
       const query = { ...this.$route.query, 'page[number]': pageNumber }
-      await this.$router.push({ path: this.$route.path, query }, () => {})
+      await this.$router.push({ path: this.$route.path, query }, noop)
     },
     async goToNextPage () {
       const currentPage = parseInt(this.pageNumber)
