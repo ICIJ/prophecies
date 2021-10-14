@@ -49,7 +49,7 @@ export default {
       </b-nav>
     </div>
     <div class="app-sidebar__footer">
-      <app-version class="px-4 py-3 d-block text-center text-muted" />
+      <app-version class="px-4 py-3 d-block text-muted" />
     </div>
   </div>
 </template>
