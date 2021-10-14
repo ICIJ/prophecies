@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@icij/murmur": "2.29.0",
+    "@icij/murmur": "2.35.1",
     "@vuex-orm/core": "^0.36.4",
     "@vuex-orm/plugin-axios": "^0.9.4",
     "axios": "^0.21.1",

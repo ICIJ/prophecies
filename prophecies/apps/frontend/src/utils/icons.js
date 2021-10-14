@@ -4,6 +4,7 @@ export {
   ArrowRightIcon,
   BellIcon,
   ChevronDownIcon,
+  ClipboardIcon,
   ClockIcon,
   CodeIcon,
   CoffeeIcon,
