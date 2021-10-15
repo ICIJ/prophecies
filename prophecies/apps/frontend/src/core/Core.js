@@ -19,6 +19,7 @@ import settings from '@/settings'
 import * as icons from '@/utils/icons'
 import App from '@/views/App'
 import vShortkey  from '@/directives/shortkey'
+import Shortkey from '@/plugins/Shortkey'
 
 /**
   @class
@@ -124,6 +125,7 @@ class Core {
     // Common plugins
     this.use(Murmur)
     this.use(VueScrollTo)
+    this.use(Shortkey)
     this.LocalVue.directive('shortkey', vShortkey)
     return this
   }
