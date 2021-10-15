@@ -50,10 +50,16 @@ export default {
       this.showChanges = false
       this.showNotes = false
       this.$root.$emit('bv::hide::tooltip')
+    },
+    active () {
+      this.$shortkey.toggle(this.active)
     }
   },
   created () {
     this.toggleNotes(!!this.highlightNote, this.initialHighlightedReviewId)
+    this.$shortkey.bind('ctrl+l', () => this.openLink())
+    this.$shortkey.bind('ctrl+alt+n', () => this.toggleNotes())
+    this.$shortkey.toggle(this.active)
   },
   methods: {
     async selectChoiceWithLoader (data) {
@@ -238,11 +244,7 @@ export default {
                   <b-btn variant="link" class="text-muted px-3" :href="link" v-if="link" target="_blank">
                     <link-icon size="1x" class="mr-1" /> Open link
                     <span v-if="active">
-                      <shortkey-badge 
-                        @shortkey.native="openLink()" 
-                        :value="['Ctrl', 'l']" 
-                        class="ml-2" 
-                        v-shortkey="['ctrl', 'l']" />
+                      <shortkey-badge :value="['Ctrl', 'l']" class="ml-2" />
                     </span>
                   </b-btn>
                 </div>
