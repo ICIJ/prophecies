@@ -27,20 +27,20 @@ export default {
           <grid-icon class="mr-2" />
           Dashboard
         </b-nav-item>
-        <b-nav-item :to="{ name: 'tip-list' }">
-          <smile-icon class="mr-2" />
-          Tips
-          <shortkey-badge :value="['Ctrl', 't']" class="ml-2" />
-        </b-nav-item>
         <b-nav-item :to="{ name: 'shortcut-list' }">
           <command-icon class="mr-2" />
           Shortcuts
           <shortkey-badge :value="['Ctrl', 'k']" class="ml-2" />
         </b-nav-item>
+        <b-nav-item :to="{ name: 'tip-list' }">
+          <smile-icon class="mr-2" />
+          Tips
+          <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2" />
+        </b-nav-item>
         <b-nav-item :to="{ name: 'history' }">
           <clock-icon class="mr-2" />
           History
-          <shortkey-badge :value="['Ctrl', 'h']" class="ml-2" />
+          <shortkey-badge :value="['Ctrl', 'Shift', 'h']" class="ml-2" />
         </b-nav-item>
         <b-nav-item :href="$config.get('adminUrl')">
           <trello-icon class="mr-2" />

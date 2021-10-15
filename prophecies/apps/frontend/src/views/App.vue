@@ -5,13 +5,43 @@ export default {
   name: 'App',
   components: {
     ShortcutListCard
+  },
+  computed: {
+    shortkeys () {
+      return {
+        toggleShortcuts: 'ctrl+k',
+        goToTipList: 'ctrl+shift+t',
+        goToHistory: 'ctrl+shift+h'
+      }
+    }
+  },
+  methods: {
+    mapShortkeys ({ detail: { srcKey: method } }) {
+      if (method in this.$options.methods) {
+        this[method]()
+      }
+    },
+    goTo (name) {
+      if (this.$route.name !== name) {
+        this.$router.push({ name })
+      }
+    },
+    goToTipList () {
+      this.goTo('tip-list')
+    },
+    goToHistory () {
+      this.goTo('history')
+    },
+    toggleShortcuts () {
+      this.$refs['modal-shortcuts'].toggle()
+    }
   }
 }
 </script>
 
 <template>
   <div class="app">
-    <span v-shortkey="['ctrl', 'k']" @shortkey="$refs['modal-shortcuts'].toggle()">
+    <span v-shortkey="shortkeys" @shortkey="mapShortkeys($event)">
       <b-modal 
         size="md"
         content-class="bg-transparent shadow-none border-0" 

@@ -79,15 +79,15 @@ export default {
         <b-navbar-nav class="app-header__nav-right">
           <slot name="nav-right" />
           <template v-if="!reduced">
-            <b-nav-item :to="{ name: 'tip-list' }">
-              <smile-icon class="app-header__nav-right__tips mr-2" />
-              {{ $t('appHeader.tips') }}
-              <shortkey-badge :value="['Ctrl', 't']" class="ml-2" />
-            </b-nav-item>
             <b-nav-item :to="{ name: 'shortcut-list' }">
               <command-icon class="app-header__nav-right__shortcuts mr-2" />
               {{ $t('appHeader.shortcuts') }}
               <shortkey-badge :value="['Ctrl', 'k']" class="ml-2" />
+            </b-nav-item>
+            <b-nav-item :to="{ name: 'tip-list' }">
+              <smile-icon class="app-header__nav-right__tips mr-2" />
+              {{ $t('appHeader.tips') }}
+              <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2" />
             </b-nav-item>
             <b-nav-item 
               :class="{ 'font-weight-bold app-header__nav-right__tutorial--show': showTutorial }" 
