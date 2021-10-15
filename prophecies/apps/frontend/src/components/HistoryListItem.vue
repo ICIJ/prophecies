@@ -26,10 +26,6 @@ export default {
       type: String,
       required: true
     },
-    id: {
-      type: String,
-      default: null
-    },
     projectName: {
       type: String,
       default: null
@@ -42,8 +38,8 @@ export default {
       type: String,
       default: null
     },
-    who: {
-      type: String,
+    creator: {
+      type: Object,
       required: true
     },
     timestamp: {
@@ -51,7 +47,7 @@ export default {
       required: true
     },
     value: {
-      type: String,
+      type: [String, Object],
       default: null
     }
   },
@@ -75,6 +71,18 @@ export default {
       return User
         .query()
         .find(userId).get()
+    },
+    userDisplayName (user, capitalize = false) {
+      if (user.isMe) {
+        return capitalize ? 'You' : 'you'
+      }
+      if (!user.firstName || !user.lastName) {
+        return user.username
+      }
+      return `${user.firstName}`
+    },
+    mentionContent (user) {
+      return `${this.userDisplayName(user)} (@${user.username})`
     }
   },
   computed: {
@@ -87,10 +95,6 @@ export default {
     date () {
       return moment(this.timestamp).format('ddd DD, MMM YYYY - h:MMa')
     },
-    isMe ({ id = null } = {}) {
-      return id === User.me().id
-    },
-
     category () {
       let category = 'General'
       if (this.projectName) {
@@ -106,9 +110,13 @@ export default {
       let itemText = text
       switch (this.type) {
         case ITEM_TYPES.CHECKED_RECORDS:
-        case ITEM_TYPES.MENTIONED_USER:
         {
           itemText = text.replace('$value', this.value)
+          break
+        }
+        case ITEM_TYPES.MENTIONED_USER:
+        {
+          itemText = text.replace('$value', this.mentionContent(this.value))
           break
         }
         case ITEM_TYPES.TIP:
@@ -121,17 +129,20 @@ export default {
     },
     hasLink () {
       return this.type === ITEM_TYPES.MENTIONED_USER || this.type === ITEM_TYPES.TIP
+    },
+    who () {
+      return this.userDisplayName(this.creator, true)
     }
   }
 }
 </script>
 
 <template>
-  <li  class="row py-3 m-0">
+  <li class="history-list-item row py-3 m-0">
     <div  class="history-list-item__prefix-column" v-html="prefix"></div>
     <div class="row container-fluid justify-content-between flex-grow-1">
         <div class="d-flex flex-grow-lg-0 flex-grow-1 px-3 py-1 history-list-item__content-column col-12 col-lg-5" :class="className">
-        {{who }} <a v-if="hasLink" class="pl-1" :href='`${link}`'>  {{content}}</a> <template v-else>  {{content}} </template>
+        {{who }}<a v-if="hasLink" class="pl-1" :href='`${link}`'> {{content}} </a> <template v-else> {{content}} </template>
         </div>
         <div class="d-flex ml-auto flex-md-row flex-lg-grow-0 justify-content-md-right flex-sm-column flex-sm-grow-1 justify-content-sm-between">
           <div class="px-3 py-1 text-sm-left text-lg-right history-list-item__category-column">{{category}}</div>

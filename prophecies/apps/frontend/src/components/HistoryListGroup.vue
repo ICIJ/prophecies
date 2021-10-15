@@ -2,7 +2,6 @@
 import { uniqueId } from 'lodash'
 import Action from '@/models/Action'
 import Tip from '@/models/Tip'
-import User from '@/models/User'
 import HistoryListItem, { ITEM_TYPES } from '@/components/HistoryListItem.vue'
 
 export default {
@@ -28,23 +27,9 @@ export default {
     }
   },
   methods: {
-    isMe ({ id = null } = {}) {
-      return id === User.me().id
-    },
-    userDisplayName (user, capitalize = false) {
-      if (this.isMe(user)) {
-        return capitalize ? 'You' : 'you'
-      }
-      if (!user.firstName || !user.lastName) {
-        return user.username
-      }
-      return `${user.firstName}`
-    },
+
     loadMore () {
       this.nbTimesMore++
-    },
-    mentionContent (user) {
-      return `${this.userDisplayName(user)} (@${user.username})`
     }
 
   },
@@ -65,8 +50,8 @@ export default {
         .map(task => {
           return {
             type: ITEM_TYPES.CLOSED_TASK,
-            date: task.timestamp,
-            user: this.userDisplayName(task.actor, true),
+            timestamp: task.timestamp,
+            user: task.actor,
             projectName: task.target.project?.name,
             taskName: task.target.name
           }
@@ -85,10 +70,9 @@ export default {
         .map(mention => {
           return {
             type: ITEM_TYPES.MENTIONED_USER,
-            date: mention.timestamp,
-            user: this.userDisplayName(mention.actor, true),
-            content: this.mentionContent(mention.target),
-            objectId: mention.actionObject.id,
+            timestamp: mention.timestamp,
+            user: mention.actor,
+            content: mention.target,
             projectName: mention.actionObject.task?.project?.name,
             taskName: mention.actionObject.task?.name,
             link: mention.link
@@ -105,10 +89,9 @@ export default {
         .map(tip => {
           return {
             type: ITEM_TYPES.TIP,
-            date: tip.createdAt,
-            user: this.userDisplayName(tip.creator, true),
+            timestamp: tip.createdAt,
+            user: tip.creator,
             content: tip.name,
-            objectId: tip.id,
             projectName: tip.project?.name,
             taskName: tip.task?.name,
             link: `#/tips/${tip.id}`
@@ -118,22 +101,30 @@ export default {
     aggregatedItems () {
       return this.checkedRecords.slice()
     },
-    unorderedItems () {
-      return [...this.mentions, ...this.closedTasks, ...this.tips, ...this.aggregatedItems]
-        .sort((a, b) => -a.date.localeCompare(b.date))
+
+    items () {
+      let key = 0
+      return [...this.mentions,
+        ...this.closedTasks,
+        ...this.tips,
+        ...this.aggregatedItems]
+        .map((item, i) => { return { ...item, id: `history-item-${++key}` } })
+    },
+    sortedByTimestampItems () {
+      return this.items.slice().sort((a, b) => -a.timestamp.localeCompare(b.timestamp))
     },
     nbVisibleItems () {
       const limitAndMore = this.limit + this.more * this.nbTimesMore
-      return this.limit > 0 ? limitAndMore : this.unorderedItems.length
+      return this.limit > 0 ? limitAndMore : this.sortedByTimestampItems.length
     },
     nbTotalItems () {
-      return this.unorderedItems.length
+      return this.sortedByTimestampItems.length
     },
     hasMoreToSee () {
       return this.nbVisibleItems < this.nbTotalItems
     },
-    items () {
-      return this.unorderedItems.slice(0, this.nbVisibleItems)
+    visibleItems () {
+      return this.sortedByTimestampItems.slice(0, this.nbVisibleItems)
     },
     isFluidClass () {
       return this.fluid ? 'container-fluid' : 'container'
@@ -143,23 +134,22 @@ export default {
 </script>
 
 <template>
-  <div v-if="items.length" class="px-0 history-list-group" :class="isFluidClass">
-    <ul class="list-unstyled pb-3">
-        <history-list-item v-for="(item,i) in items" :key="i"
+  <div v-if="visibleItems.length" class="history-list-group px-0 history-list-group" :class="isFluidClass">
+    <ul class="history-list-group__list list-unstyled pb-3">
+        <history-list-item v-for="(item) in visibleItems" :key="item.id" :id="item.id"
         :project-name="item.projectName"
-        :id="item.objectId"
         :task-name="item.taskName"
         :link="item.link"
-        :timestamp="item.date"
+        :timestamp="item.timestamp"
         :type="item.type"
-        :who="item.user"
+        :creator="item.user"
         :value="item.content"
         />
     </ul>
 
     <slot name="footer">
-      <div class="d-flex justify-content-center py-3" v-if="hasMoreToSee">
-        <button class="btn btn-primary border font-weight-bold text-white" @click='loadMore'>
+      <div class="history-list-group__see-more d-flex justify-content-center py-3" v-if="hasMoreToSee">
+        <button class="history-list-group__see-more__button btn btn-primary border font-weight-bold text-white" @click='loadMore'>
         See more
         </button>
       </div>
