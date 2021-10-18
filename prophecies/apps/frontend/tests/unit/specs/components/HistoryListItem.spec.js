@@ -1,6 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
+
 import HistoryListItem, { ITEM_TYPES } from '@/components/HistoryListItem'
 
 describe('HistoryListItem', () => {
@@ -37,8 +38,9 @@ describe('HistoryListItem', () => {
       propsData
     })
   })
-  it('should the timestamp as iso date', () => {
-    expect(wrapper.vm.date).toBe('Thu 14, Oct 2021 - 3:10pm')
+  it('should display the timestamp as iso date', () => {
+    const dateColumn = wrapper.find('.history-list-item__date-column')
+    expect(dateColumn.text()).toBe('Thu 14, Oct 2021 - 3:10pm')
   })
   it('should display the category format  "Task | project"', async () => {
     expect(wrapper.vm.category).toBe('Addresses | Chronos')

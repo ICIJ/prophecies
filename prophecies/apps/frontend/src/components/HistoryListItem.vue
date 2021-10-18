@@ -51,6 +51,11 @@ export default {
       default: null
     }
   },
+  filters: {
+    formatDate (d) {
+      return moment(d).format('ddd DD, MMM YYYY - h:MMa')
+    }
+  },
   methods: {
     task (taskId) {
       return Task
@@ -91,9 +96,6 @@ export default {
     },
     className () {
       return this.type === ITEM_TYPES.CHECKED_RECORDS ? '' : 'font-weight-bold'
-    },
-    date () {
-      return moment(this.timestamp).format('ddd DD, MMM YYYY - h:MMa')
     },
     category () {
       let category = 'General'
@@ -147,7 +149,7 @@ export default {
         <div class="d-flex ml-auto flex-md-row flex-lg-grow-0 justify-content-md-right flex-sm-column flex-sm-grow-1 justify-content-sm-between">
           <div class="px-3 py-1 text-sm-left text-lg-right history-list-item__category-column">{{category}}</div>
 
-          <div class="ml-3  py-1 text-sm-left text-md-right  history-list-item__date-column">{{date}}</div>
+          <div class="ml-3  py-1 text-sm-left text-md-right  history-list-item__date-column">{{timestamp | formatDate}}</div>
         </div>
       </div>
   </li>
