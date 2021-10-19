@@ -5,7 +5,6 @@ import UserNotification from '@/models/UserNotification'
 import AppSearchForm from '@/components/AppSearchForm'
 import AppVersion from '@/components/AppVersion'
 import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
-import ShortcutListCard from '@/components/ShortcutListCard'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
 
 export default {
@@ -14,8 +13,7 @@ export default {
     AppSearchForm,
     AppVersion,
     UserNotificationsDropdownMenu,
-    ShortkeyBadge,
-    ShortcutListCard
+    ShortkeyBadge
   },
   props: {
     reduced: {
@@ -89,8 +87,8 @@ export default {
               {{ $t('appHeader.tips') }}
               <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2" />
             </b-nav-item>
-            <b-nav-item 
-              :class="{ 'font-weight-bold app-header__nav-right__tutorial--show': showTutorial }" 
+            <b-nav-item
+              :class="{ 'font-weight-bold app-header__nav-right__tutorial--show': showTutorial }"
               @click="toggleTutorial"
               href="#">
               <help-circle-icon class="app-header__nav-right__shortcuts mr-2" />

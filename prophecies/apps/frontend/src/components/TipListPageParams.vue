@@ -39,73 +39,73 @@
 </template>
 
 <script>
-  import { find, map } from 'lodash'
-  import Multiselect from 'vue-multiselect'
+import { find } from 'lodash'
+import Multiselect from 'vue-multiselect'
 
-  import Project from '@/models/Project'
-  import Task from '@/models/Task'
-  import User from '@/models/User'
+import Project from '@/models/Project'
+import Task from '@/models/Task'
+import User from '@/models/User'
 
-  export default {
-    name: 'TipListPageParams',
-    components: {
-      Multiselect
+export default {
+  name: 'TipListPageParams',
+  components: {
+    Multiselect
+  },
+  props: {
+    projectId: {
+      type: String,
+      default: ''
     },
-    props: {
-      projectId: {
-        type: String,
-        default: ''
-      },
-      taskId: {
-        type: String,
-        default: ''
-      },
-      creatorId: {
-        type: String,
-        default: ''
-      }
+    taskId: {
+      type: String,
+      default: ''
     },
-    created() {
-      return this.setup()
+    creatorId: {
+      type: String,
+      default: ''
+    }
+  },
+  created () {
+    return this.setup()
+  },
+  computed: {
+    projectOptions () {
+      return Project.all()
     },
-    computed: {
-      projectOptions () {
-        return Project.all()
-      },
-      taskOptions () {
-        return Task.all()
-      },
-      creatorOptions () {
-        return User.all()
-      },
-      selectedProjectOption () {
-        return find(this.projectOptions, { id: this.projectId })
-      },
-      selectedTaskOption () {
-        return find(this.taskOptions, { id: this.taskId })
-      },
-      selectedCreatorOption () {
-        return find(this.creatorOptions, { id: this.creatorId })
-      }
+    taskOptions () {
+      return Task.all()
     },
-    methods: {
-      setup () {
-        this.fetchTaskOptions()
-        this.fetchProjectOptions()
-        this.fetchCreatorOptions()
-      },
-      idOrNull (obj = null) {
-        return obj && 'id' in obj ? obj.id : null
-      },
-      fetchProjectOptions () {
-        return Project.api().get()
-      },
-      fetchTaskOptions () {
-        return Task.api().get()
-      },
-      fetchCreatorOptions () {
-        return User.api().get()
-      }
+    creatorOptions () {
+      return User.all()
+    },
+    selectedProjectOption () {
+      return find(this.projectOptions, { id: this.projectId })
+    },
+    selectedTaskOption () {
+      return find(this.taskOptions, { id: this.taskId })
+    },
+    selectedCreatorOption () {
+      return find(this.creatorOptions, { id: this.creatorId })
+    }
+  },
+  methods: {
+    setup () {
+      this.fetchTaskOptions()
+      this.fetchProjectOptions()
+      this.fetchCreatorOptions()
+    },
+    idOrNull (obj = null) {
+      return obj && 'id' in obj ? obj.id : null
+    },
+    fetchProjectOptions () {
+      return Project.api().get()
+    },
+    fetchTaskOptions () {
+      return Task.api().get()
+    },
+    fetchCreatorOptions () {
+      return User.api().get()
     }
   }
+}
 </script>
