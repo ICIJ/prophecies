@@ -1,69 +1,69 @@
 <script>
-  import moment from 'moment'
-  import { uniqueId } from 'lodash'
-  import AppWaiter from '@/components/AppWaiter'
-  import UserNotification from '@/models/UserNotification'
+import moment from 'moment'
+import { uniqueId } from 'lodash'
+import AppWaiter from '@/components/AppWaiter'
+import UserNotification from '@/models/UserNotification'
 
-  export default {
-    name: 'UserNotificationsDropdownMenu',
-    components: {
-      AppWaiter
+export default {
+  name: 'UserNotificationsDropdownMenu',
+  components: {
+    AppWaiter
+  },
+  data () {
+    return {
+      planFetchNotificationsId: null
+    }
+  },
+  filters: {
+    formatDateLong (d) {
+      return moment(d).format('MMM Do YYYY - hh:mm')
     },
-    data () {
-      return {
-        planFetchNotificationsId: null
-      }
+    formatDateFromNow (d) {
+      return moment(d).fromNow()
+    }
+  },
+  async created () {
+    await this.fetchNotificationsWithLoader()
+    this.planFetchNotifications()
+  },
+  beforeDestroy () {
+    clearInterval(this.planFetchNotificationsId)
+  },
+  computed: {
+    loader () {
+      return uniqueId('user-notifications-dropdown-menu-')
     },
-    filters: {
-      formatDateLong (d) {
-        return moment(d).format('MMM Do YYYY - hh:mm')
-      },
-      formatDateFromNow (d) {
-        return moment(d).fromNow()
-      }
+    notifications () {
+      return UserNotification
+        .query()
+        .with('action')
+        .with('action.*')
+        .with('action.target.*')
+        .with('action.actionObject.*')
+        .orderBy('createdAt', 'desc')
+        .get()
+    }
+  },
+  methods: {
+    async fetchNotificationsWithLoader () {
+      this.$wait.start(this.loader)
+      await this.fetchNotifications()
+      this.$wait.end(this.loader)
     },
-    async created () {
-      await this.fetchNotificationsWithLoader()
-      this.planFetchNotifications()
+    fetchNotifications () {
+      const pageSize = 50
+      const include = 'action.actionObject'
+      const params = { 'page[size]': pageSize, include }
+      return UserNotification.api().get('', { params })
     },
-    beforeDestroy () {
-      clearInterval(this.planFetchNotificationsId)
+    planFetchNotifications () {
+      this.planFetchNotificationsId = setInterval(this.fetchNotifications, 1e4)
     },
-    computed: {
-      loader () {
-        return uniqueId('user-notifications-dropdown-menu-')
-      },
-      notifications () {
-        return UserNotification
-          .query()
-          .with('action')
-          .with('action.*')
-          .with('action.target.*')
-          .with('action.actionObject.*')
-          .orderBy('createdAt', 'desc')
-          .get()
-      }
-    },
-    methods: {
-      async fetchNotificationsWithLoader () {
-        this.$wait.start(this.loader)
-        await this.fetchNotifications()
-        this.$wait.end(this.loader)
-      },
-      fetchNotifications () {
-        const pageSize = 50
-        const include = 'action.actionObject'
-        const params = { 'page[size]': pageSize, include }
-        return UserNotification.api().get('', { params })
-      },
-      planFetchNotifications () {
-        this.planFetchNotificationsId = setInterval(this.fetchNotifications, 1e4)
-      },
-      markAsRead (notification) {
-        return UserNotification.api().markAsRead(notification.id)
-      }
+    markAsRead (notification) {
+      return UserNotification.api().markAsRead(notification.id)
     }
   }
+}
 </script>
 
 <template>
@@ -80,7 +80,7 @@
           :key="notification.id">
           <b-dropdown-item link-class="user-notifications-dropdown-menu__item__link" @click="markAsRead(notification)" :href="notification.link">
             <div class="user-notifications-dropdown-menu__item__link__description" v-html="$t(notification.i18n, notification.action)"></div>
-            <div class="user-notifications-dropdown-menu__item__link__created-at text-primary small">
+            <div class="user-notifications-dropdown-menu__item__link__created-at text-primary small" :title="notification.createdAt | formatDateLong">
               {{ notification.createdAt | formatDateFromNow }}
             </div>
           </b-dropdown-item>
