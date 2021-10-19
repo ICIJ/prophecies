@@ -1,5 +1,5 @@
 <script>
-import { get, groupBy, uniqueId } from 'lodash'
+import { groupBy, uniqueId } from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
@@ -7,6 +7,12 @@ import LatestTipsCard from '@/components/LatestTipsCard'
 import Tip from '@/models/Tip'
 import TipCard from '@/components/TipCard'
 import TipListPageParams from '@/components/TipListPageParams'
+
+const FILTER_TYPES = {
+  PROJECT: 'filter[project]',
+  TASK: 'filter[task]',
+  CREATOR: 'filter[creator]'
+}
 
 export default {
   name: 'Tips',
@@ -18,32 +24,36 @@ export default {
     TipCard,
     TipListPageParams
   },
+  props: {
+    query: {
+      type: Object,
+      default: () => ({
+        [FILTER_TYPES.PROJECT]: null,
+        [FILTER_TYPES.TASK]: null,
+        [FILTER_TYPES.CREATOR]: null
+      })
+    }
+  },
   data () {
     return {
       showLatestTips: true,
-      projectFilter: null,
-      taskFilter: null,
-      creatorFilter: null,
+      FILTER_TYPES: FILTER_TYPES,
+      projectFilter: this.query[FILTER_TYPES.PROJECT],
+      taskFilter: this.query[FILTER_TYPES.TASK],
+      creatorFilter: this.query[FILTER_TYPES.CREATOR],
       tipIds: []
-    }
-  },
-  watch: {
-    projectFilter () {
-      return this.waitFor(this.fetchTipsLoader, this.fetchTips)
-    },
-    taskFilter () {
-      return this.waitFor(this.fetchTipsLoader, this.fetchTips)
-    },
-    creatorFilter () {
-      return this.waitFor(this.fetchTipsLoader, this.fetchTips)
     }
   },
   created () {
     return this.setup()
   },
+
   computed: {
     fetchTipsLoader () {
       return uniqueId('load-tips-')
+    },
+    fetchFilteredTipsLoader () {
+      return uniqueId('load-filtered-tips-')
     },
     latestTips () {
       return Tip.query()
@@ -56,20 +66,26 @@ export default {
       return Tip.query()
         .with('project')
         .with('task')
-        .whereIdIn(this.tipIds)
         .get()
     },
+    filteredTips () {
+      let tips = this.tips
+      if (this.query[FILTER_TYPES.PROJECT]) tips = tips.filter(t => t.projectId === this.query[FILTER_TYPES.PROJECT])
+      if (this.query[FILTER_TYPES.TASK]) tips = tips.filter(t => t.taskId === this.query[FILTER_TYPES.TASK])
+      if (this.query[FILTER_TYPES.CREATOR]) tips = tips.filter(t => t.creatorId === this.query[FILTER_TYPES.CREATOR])
+      return tips
+    },
     tipsGroupedByProject () {
-      return groupBy(this.tips, (tip) => {
+      return groupBy(this.filteredTips, (tip) => {
         return tip.project ? tip.project.name : 'General'
       })
     },
     tipParams () {
-      return {
-        'filter[project]': this.projectFilter,
-        'filter[task]': this.taskFilter,
-        'filter[creator]': this.creatorFilter
-      }
+      const filters = {}
+      if (this.projectFilter) filters[FILTER_TYPES.PROJECT] = this.projectFilter
+      if (this.taskFilter) filters[FILTER_TYPES.TASK] = this.taskFilter
+      if (this.creatorFilter) filters[FILTER_TYPES.CREATOR] = this.creatorFilter
+      return filters
     }
   },
   methods: {
@@ -86,16 +102,28 @@ export default {
       await fn()
       this.$wait.end(loader)
     },
-    async fetchTips () {
-      const params = this.tipParams
-      const { response } = await Tip.api().get('', { params })
-      const tipIds = get(response, 'data.data', []).map(t => t.id)
-      this.$set(this, 'tipIds', tipIds)
+    fetchTips () {
+      return Tip.api().get()
     },
     tipsGroupedByTask (tips) {
       return groupBy(tips, (tip) => {
         return tip.task ? tip.task.name : ''
       })
+    },
+    setProjectFilter (val) {
+      this.projectFilter = val
+      this.updateFilters()
+    },
+    setTaskFilter (val) {
+      this.taskFilter = val
+      this.updateFilters()
+    },
+    setCreatorFilter (val) {
+      this.creatorFilter = val
+      this.updateFilters()
+    },
+    updateFilters () {
+      return this.$router.push({ name: 'tip-list', query: this.tipParams })
     }
   }
 }
@@ -118,18 +146,21 @@ export default {
             </latest-tips-card>
           </b-collapse>
           <tip-list-page-params
-            :project-id.sync="projectFilter"
-            :task-id.sync="taskFilter"
-            :creator-id.sync="creatorFilter" />
-          <div v-for="(projectValue, name) in tipsGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
-            <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
-            <div v-for="(taskValue, taskName) in tipsGroupedByTask(projectValue)" :key="taskName" class="mb-4">
-              <h2 class="mb-4 ml-4 mt-4">{{ taskName }}</h2>
-              <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
-                <tip-card :tip-id="tip.id" />
-              </b-list-group-item>
+            :project-id="query[FILTER_TYPES.PROJECT]"
+            @update:projectId="setProjectFilter"
+            :task-id="query[FILTER_TYPES.TASK]"
+            @update:taskId="setTaskFilter"
+            :creator-id="query[FILTER_TYPES.CREATOR]"
+            @update:creatorId="setCreatorFilter"/>
+            <div v-for="(projectValue, name) in tipsGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
+              <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
+              <div v-for="(taskValue, taskName) in tipsGroupedByTask(projectValue)" :key="taskName" class="mb-4">
+                <h2 class="mb-4 ml-4 mt-4">{{ taskName }}</h2>
+                <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
+                  <tip-card :tip-id="tip.id" />
+                </b-list-group-item>
+              </div>
             </div>
-          </div>
         </app-waiter>
       </div>
     </div>

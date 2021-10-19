@@ -54,7 +54,7 @@ export const router = {
       name: 'tip-list',
       path: '/tips',
       component: TipList,
-      props: true
+      props: (route) => ({ query: route.query })
     },
     {
       name: 'tip-retreive',
