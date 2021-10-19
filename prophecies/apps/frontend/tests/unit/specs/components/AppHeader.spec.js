@@ -29,11 +29,11 @@ describe('AppHeader', () => {
       }))
       // Configure the local vue
       const core = Core.init(localVue).useAll()
-      const { i18n, store, wait } = core
+      const { i18n, store, wait, router } = core
       const stubs = ['router-link', 'app-waiter']
       await core.configure()
       // Finally, instanciate the component
-      wrapper = mount(AppHeader, { i18n, localVue, stubs, store, wait })
+      wrapper = mount(AppHeader, { i18n, localVue, stubs, store, wait, router })
     })
 
     afterEach(async () => {

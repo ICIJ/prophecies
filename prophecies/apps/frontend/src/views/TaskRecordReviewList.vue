@@ -247,6 +247,9 @@ export default {
     },
     filtersTogglerVariant () {
       return this.showFilters ? 'primary' : 'outline-primary'
+    },
+    tipQueryParams () {
+      return { 'filter[task]': this.task?.id, 'filter[project]': this.task?.projectId }
     }
   },
   methods: {
@@ -374,7 +377,7 @@ export default {
       <app-breadcrumb v-if="task">
         {{ task.name }}
       </app-breadcrumb>
-      <app-header class="flex-grow-1" />
+      <app-header class="flex-grow-1" :tip-query-params="tipQueryParams"/>
     </div>
     <div class="task-record-review-list__container">
       <div class="container-fluid p-5">

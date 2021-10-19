@@ -18,6 +18,10 @@ export default {
   props: {
     reduced: {
       type: Boolean
+    },
+    tipQueryParams: {
+      type: Object,
+      default: () => {}
     }
   },
   created () {
@@ -82,7 +86,7 @@ export default {
               {{ $t('appHeader.shortcuts') }}
               <shortkey-badge :value="['Ctrl', 'k']" class="ml-2" />
             </b-nav-item>
-            <b-nav-item :to="{ name: 'tip-list' }">
+            <b-nav-item :to="{ name: 'tip-list', query: tipQueryParams}">
               <smile-icon class="app-header__nav-right__tips mr-2" />
               {{ $t('appHeader.tips') }}
               <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2" />
