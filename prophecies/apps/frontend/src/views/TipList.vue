@@ -112,9 +112,16 @@ export default {
     },
     setProjectFilter (val) {
       this.projectFilter = val
+      const tipsOfProject = Tip.query().where('projectId', val).get()
+      const notContainingTask = tipsOfProject.filter(t => t.taskId === this.taskFilter).length === 0
+      if (notContainingTask) {
+        this.taskFilter = null
+      }
       this.updateFilters()
     },
     setTaskFilter (val) {
+      const tipsOfTask = Tip.query().where('taskId', val).get()
+      this.projectFilter = tipsOfTask[0].projectId
       this.taskFilter = val
       this.updateFilters()
     },
