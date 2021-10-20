@@ -8,15 +8,22 @@ import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdow
 jest.useFakeTimers()
 
 describe('UserNotificationsDropdownMenu', () => {
+  // eslint-disable-next-line space-before-function-paren
+  function createContainer() {
+    const div = document.createElement('div')
+    document.body.appendChild(div)
+    return div
+  }
   describe('with two notifications', () => {
     let wrapper
 
     beforeEach(async () => {
+      const attachTo = createContainer()
       const localVue = createLocalVue()
       const stubs = ['b-dropdown-item', 'b-dropdown-text', 'app-waiter']
       // Configure the local vue with plugins
       const { i18n, store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(UserNotificationsDropdownMenu, { localVue, i18n, store, stubs, wait })
+      wrapper = mount(UserNotificationsDropdownMenu, { attachTo, localVue, i18n, store, stubs, wait })
       await wrapper.vm.fetchNotifications()
     })
 
@@ -26,26 +33,26 @@ describe('UserNotificationsDropdownMenu', () => {
     })
 
     it('should show two notifications', () => {
-      const notifications = wrapper.findAll('.user-notifications-dropdown-menu__item')
+      const notifications = wrapper.findAll('.user-notifications-dropdown-menu__list__item')
       expect(notifications).toHaveLength(2)
     })
 
     it('should show the first notification with the right content', () => {
-      const first = wrapper.findAll('.user-notifications-dropdown-menu__item__link__description').at(0)
+      const first = wrapper.findAll('.user-notifications-dropdown-menu__list__item__link__description').at(0)
       expect(first.text()).toBe('Django mentioned you in a tip')
     })
 
     it('should show the second notification with the right content', () => {
-      const first = wrapper.findAll('.user-notifications-dropdown-menu__item__link__description').at(1)
+      const first = wrapper.findAll('.user-notifications-dropdown-menu__list__item__link__description').at(1)
       expect(first.text()).toBe('Django mentioned you in a note')
     })
 
     it('should show the "mark all as read button" button', () => {
-      const markAllButton = wrapper.find('.user-notifications-dropdown-read_all--mark_all')
+      const markAllButton = wrapper.find('.user-notifications-dropdown-menu__read_all--mark_all')
       expect(markAllButton.exists()).toBeTruthy()
     })
     it('should show the chip indicating the notification is unread', () => {
-      const unreadChip = wrapper.findAll('.user-notifications-dropdown-menu__item--unread')
+      const unreadChip = wrapper.findAll('.user-notifications-dropdown-menu__list__item--unread')
       expect(unreadChip).toHaveLength(1)
     })
   })
@@ -58,13 +65,14 @@ describe('UserNotificationsDropdownMenu', () => {
       server.use(rest.get('/api/v1/user-notifications', (req, res, ctx) => {
         return res.once(ctx.json({ data: [] }))
       }))
+      const attachTo = createContainer()
 
       const localVue = createLocalVue()
       const stubs = ['b-dropdown-item', 'b-dropdown-text', 'app-waiter']
       // Configure the local vue with plugins
       const { i18n, store, wait } = Core.init(localVue).useAll()
       store.dispatch('entities/deleteAll')
-      wrapper = mount(UserNotificationsDropdownMenu, { localVue, i18n, store, stubs, wait })
+      wrapper = mount(UserNotificationsDropdownMenu, { attachTo, localVue, i18n, store, stubs, wait })
     })
 
     it('should show the no notifications message', () => {
@@ -78,11 +86,13 @@ describe('UserNotificationsDropdownMenu', () => {
     let wrapper
 
     beforeEach(async () => {
+      const attachTo = createContainer()
+
       const localVue = createLocalVue()
       const stubs = ['b-dropdown-item', 'b-dropdown-text', 'app-waiter']
       // Configure the local vue with plugins
       const { i18n, store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(UserNotificationsDropdownMenu, { localVue, i18n, store, stubs, wait })
+      wrapper = mount(UserNotificationsDropdownMenu, { attachTo, localVue, i18n, store, stubs, wait })
       spyFetchNotifications = jest.spyOn(wrapper.vm, 'fetchNotifications')
       await wrapper.vm.fetchNotifications()
     })
@@ -112,11 +122,13 @@ describe('UserNotificationsDropdownMenu', () => {
   describe('All notifications are read', () => {
     let wrapper
     beforeEach(async () => {
+      const attachTo = createContainer()
+
       const localVue = createLocalVue()
       const stubs = ['b-dropdown-item', 'b-dropdown-text', 'app-waiter']
       // Configure the local vue with plugins
       const { i18n, store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(UserNotificationsDropdownMenu, { localVue, i18n, store, stubs, wait })
+      wrapper = mount(UserNotificationsDropdownMenu, { attachTo, localVue, i18n, store, stubs, wait })
       server.use(rest.get('/api/v1/user-notifications', (req, res, ctx) => {
         return res(
           ctx.status(200),
@@ -284,11 +296,11 @@ describe('UserNotificationsDropdownMenu', () => {
     })
 
     it('should mark all notification as read', async () => {
-      const markAllButton = wrapper.find('.user-notifications-dropdown-read_all--mark_all')
+      const markAllButton = wrapper.find('.user-notifications-dropdown-menu__read_all--mark_all')
       expect(markAllButton.exists()).toBeFalsy()
-      const allReadButton = wrapper.find('.user-notifications-dropdown-read_all--all_read')
+      const allReadButton = wrapper.find('.user-notifications-dropdown-menu__read_all--all_read')
       expect(allReadButton.exists()).toBeTruthy()
-      const unreadChip = wrapper.find('.user-notifications-dropdown-menu__item--unread')
+      const unreadChip = wrapper.find('.user-notifications-dropdown-menu__list__item--unread')
       expect(unreadChip.exists()).toBeFalsy()
     })
   })

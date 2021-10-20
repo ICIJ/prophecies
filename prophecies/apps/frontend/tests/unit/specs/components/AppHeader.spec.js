@@ -5,11 +5,18 @@ import Core from '@/core'
 import User from '@/models/User'
 
 describe('AppHeader', () => {
+  // eslint-disable-next-line space-before-function-paren
+  function createContainer() {
+    const div = document.createElement('div')
+    document.body.appendChild(div)
+    return div
+  }
   describe('for a staff user', () => {
     let localVue
     let wrapper
 
     beforeEach(async () => {
+      const attachTo = createContainer()
       localVue = createLocalVue()
       // Mock current user
       server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
@@ -33,7 +40,7 @@ describe('AppHeader', () => {
       const stubs = ['router-link', 'app-waiter']
       await core.configure()
       // Finally, instanciate the component
-      wrapper = mount(AppHeader, { i18n, localVue, stubs, store, wait, router })
+      wrapper = mount(AppHeader, { attachTo, i18n, localVue, stubs, store, wait, router })
     })
 
     afterEach(async () => {
@@ -60,6 +67,7 @@ describe('AppHeader', () => {
     let wrapper
 
     beforeEach(async () => {
+      const attachTo = createContainer()
       localVue = createLocalVue()
       // Mock current user
       server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
@@ -83,7 +91,7 @@ describe('AppHeader', () => {
       const stubs = ['router-link', 'app-waiter']
       await core.configure()
       // Finally, instanciate the component
-      wrapper = mount(AppHeader, { i18n, localVue, stubs, store, wait })
+      wrapper = mount(AppHeader, { attachTo, i18n, localVue, stubs, store, wait })
     })
 
     afterEach(() => {
