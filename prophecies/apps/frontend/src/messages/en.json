@@ -65,11 +65,13 @@
     "login": "Login to continue"
   },
   "notification": {
+    "markAll": "Mark all as read",
+    "allRead": "All read",
     "actions": {
       "mentioned": {
         "user": {
-          "tip": "<strong>{actor}</strong> mentioned you in a tip",
-          "taskRecordReview": "<strong>{actor}</strong> mentioned you in a note"
+          "tip": "{actor} mentioned you in a <strong>tip</strong>",
+          "taskRecordReview": "{actor} mentioned you in a <strong>note</strong>"
         }
       }
     }

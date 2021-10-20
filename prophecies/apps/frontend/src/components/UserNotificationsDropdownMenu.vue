@@ -42,6 +42,15 @@ export default {
         .with('action.actionObject.*')
         .orderBy('createdAt', 'desc')
         .get()
+    },
+    unreadNotifications () {
+      return this.notifications.filter(n => !n.read)
+    },
+    nbUnreadNotifications () {
+      return this.unreadNotifications.length
+    },
+    hasUnreadNotifications () {
+      return this.nbUnreadNotifications > 0
     }
   },
   methods: {
@@ -61,7 +70,12 @@ export default {
     },
     markAsRead (notification) {
       return UserNotification.api().markAsRead(notification.id)
+    },
+    markAllAsRead () {
+      const promises = this.unreadNotifications.map(n => this.markAsRead(n))
+      return Promise.all(promises)
     }
+
   }
 }
 </script>
@@ -73,14 +87,25 @@ export default {
         <b-dropdown-text>
           <h3>Notifications</h3>
         </b-dropdown-text>
+        <div class="px-3 float-right user-notifications-dropdown-read_all">
+          <b-btn  v-if="hasUnreadNotifications" variant="link" class="btn-sm user-notifications-dropdown-read_all--mark_all" @click="markAllAsRead">
+            <check-icon size="1.3x"/><span class="pl-1 align-middle">{{$t('notification.markAll')}} </span>
+          </b-btn>
+          <b-btn  v-else variant="link" class="btn-sm user-notifications-dropdown-read_all--all_read" disabled >{{$t('notification.allRead')}}</b-btn>
+        </div>
         <div
           v-for="notification in notifications"
           class="user-notifications-dropdown-menu__item"
           :class="{ 'user-notifications-dropdown-menu__item--read': notification.read }"
           :key="notification.id">
           <b-dropdown-item link-class="user-notifications-dropdown-menu__item__link" @click="markAsRead(notification)" :href="notification.link">
-            <div class="user-notifications-dropdown-menu__item__link__description" v-html="$t(notification.i18n, notification.action)"></div>
-            <div class="user-notifications-dropdown-menu__item__link__created-at text-primary small" :title="notification.createdAt | formatDateLong">
+            <div class="row">
+              <div class="col-10 user-notifications-dropdown-menu__item__link__description" v-html="$t(notification.i18n, notification.action)"></div>
+              <div v-if="!notification.read" class="d-flex flex-grow-1 align-items-center justify-content-center pr-3">
+                <span class="user-notifications-dropdown-menu__item--unread"></span>
+                </div>
+            </div>
+            <div class="user-notifications-dropdown-menu__item__link__created-at text-primary small" :title="notification.createdAt | formatDateLong" v-b-tooltip.left>
               {{ notification.createdAt | formatDateFromNow }}
             </div>
           </b-dropdown-item>
@@ -103,6 +128,14 @@ export default {
     &__item {
       &--read &__link {
         opacity: $btn-disabled-opacity;
+      }
+      &--unread {
+        display: inline-flex;
+        z-index: 2;
+        width: 14px;
+        height: 14px;
+        background-color: $danger;
+        border-radius: 50%;
       }
 
       & &__link {
