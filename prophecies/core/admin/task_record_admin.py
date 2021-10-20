@@ -10,7 +10,7 @@ from textwrap import shorten
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon, display_task_record_link
 from prophecies.core.forms import TaskRecordAssignForm, TaskRecordUploadForm
 from prophecies.core.models import TaskRecord, TaskRecordReview
-from prophecies.core.admin.filters import DistinctValuesDropdownFilter
+from prophecies.core.admin.filters import DistinctValuesDropdownFilter, TaskRecordReviewFilter
 
 
 class TaskRecordReviewInline(admin.TabularInline):
@@ -42,6 +42,7 @@ class TaskRecordAdmin(admin.ModelAdmin):
         AutocompleteFilterFactory('checkers', 'reviews__checker'),
         'status',
         'rounds',
+        TaskRecordReviewFilter,
         'priority',
         'has_notes',
         'has_disagreements',
