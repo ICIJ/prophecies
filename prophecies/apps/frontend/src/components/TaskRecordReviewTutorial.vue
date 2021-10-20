@@ -35,7 +35,7 @@ export default {
         text: 'Comment (you can mention other checkers with @username, or everyone with @project)',
         class: 'offset-lg-6 col-lg-5 offset-xxl-6 col-xxl-5 p-0',
         iconAlign: 'float-right ',
-        width: '350px'
+        width: '320px'
       }
       ]
     }
