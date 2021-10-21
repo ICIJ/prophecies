@@ -1,6 +1,7 @@
 import { Model } from '@vuex-orm/core'
 import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import Action from '@/models/Action'
+import Operation from '@/models/Operation'
 import User from '@/models/User'
 import settings from '@/settings'
 
@@ -31,6 +32,28 @@ export default class UserNotification extends Model {
         const type = 'UserNotification'
         const data = { attributes, id, type }
         return this.put(`${id}/`, { data }, { headers: defaultHeaders() })
+      },
+      bulkMarkAsRead(ids) {
+        const headers = defaultHeaders()
+        const operations = ids.map(id => ({ id, method: 'update', payload: '1' }))
+        const payloads = [
+          {
+            id: '1',
+            value: {
+              data: {
+                type: 'UserNotification',
+                attributes: {
+                  read: true
+                }
+              }
+            }
+          }
+        ]
+        const data = {
+          type: 'Operation',
+          attributes: { operations, payloads }
+        }
+        return Operation.api().post('', { data }, { headers })
       }
     }
   }

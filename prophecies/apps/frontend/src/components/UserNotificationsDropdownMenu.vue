@@ -71,9 +71,10 @@ export default {
     markAsRead (notification) {
       return UserNotification.api().markAsRead(notification.id)
     },
-    markAllAsRead () {
-      const promises = this.unreadNotifications.map(n => this.markAsRead(n))
-      return Promise.all(promises)
+    async markAllAsRead () {
+      const ids = this.unreadNotifications.map(n => n.id)
+      await UserNotification.api().bulkMarkAsRead(ids)
+      await this.fetchNotifications()
     }
 
   }
