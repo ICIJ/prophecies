@@ -187,3 +187,23 @@ class TestTaskRecord(TestCase):
         TaskRecordReview.objects.create(task_record=task_record, checker=olivia, choice=self.agree)
         TaskRecordReview.objects.create(task_record=task_record, checker=django, choice=None)
         self.assertFalse(task_record.has_disagreements)
+
+
+    def test_latest_round_is_correct(self):
+        olivia = User.objects.create(username='olivia')
+        django = User.objects.create(username='django')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=olivia, round=1)
+        TaskRecordReview.objects.create(task_record=task_record, checker=django, round=2)
+        latest_round = TaskRecordReview.objects.latest_round(task_record).round
+        self.assertEqual(latest_round, 2)
+
+
+    def test_latest_round_is_correct_even_with_different_round_order(self):
+        olivia = User.objects.create(username='olivia')
+        django = User.objects.create(username='django')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=olivia, round=2)
+        TaskRecordReview.objects.create(task_record=task_record, checker=django, round=1)
+        latest_round = TaskRecordReview.objects.latest_round(task_record).round
+        self.assertEqual(latest_round, 2)

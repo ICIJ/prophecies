@@ -38,7 +38,7 @@ class TaskRecordReviewManager(models.Manager):
 
     def latest_round(self, task_record):
         if self.filter(task_record=task_record).exists():
-            latest = self.filter(task_record=task_record).latest()
+            latest = self.filter(task_record=task_record).latest('round')
             return latest.round
         return 0
 
