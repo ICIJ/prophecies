@@ -47,10 +47,11 @@ describe('UserNotificationsDropdownMenu', () => {
       expect(first.text()).toBe('Django mentioned you in a note')
     })
 
-    it('should show the "mark all as read button" button', () => {
+    it('should enable the "mark all as read button" button', () => {
       const markAllButton = wrapper.find('.user-notifications-dropdown-menu__read_all--mark_all')
-      expect(markAllButton.exists()).toBeTruthy()
+      expect(markAllButton.attributes('disabled')).toBeFalsy()
     })
+
     it('should show the chip indicating the notification is unread', () => {
       const unreadChip = wrapper.findAll('.user-notifications-dropdown-menu__list__item--unread')
       expect(unreadChip).toHaveLength(1)
@@ -297,9 +298,7 @@ describe('UserNotificationsDropdownMenu', () => {
 
     it('should mark all notification as read', async () => {
       const markAllButton = wrapper.find('.user-notifications-dropdown-menu__read_all--mark_all')
-      expect(markAllButton.exists()).toBeFalsy()
-      const allReadButton = wrapper.find('.user-notifications-dropdown-menu__read_all--all_read')
-      expect(allReadButton.exists()).toBeTruthy()
+      expect(markAllButton.attributes('disabled')).toBeTruthy()
       const unreadChip = wrapper.find('.user-notifications-dropdown-menu__list__item--unread')
       expect(unreadChip.exists()).toBeFalsy()
     })

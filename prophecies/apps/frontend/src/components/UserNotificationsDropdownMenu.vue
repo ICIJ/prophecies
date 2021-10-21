@@ -46,11 +46,8 @@ export default {
     unreadNotifications () {
       return this.notifications.filter(n => !n.read)
     },
-    nbUnreadNotifications () {
-      return this.unreadNotifications.length
-    },
     hasUnreadNotifications () {
-      return this.nbUnreadNotifications > 0
+      return this.unreadNotifications.length > 0
     }
   },
   methods: {
@@ -89,10 +86,16 @@ export default {
           <h3>Notifications</h3>
         </b-dropdown-text>
         <div class="px-3 text-right user-notifications-dropdown-menu__read_all">
-          <b-btn  v-if="hasUnreadNotifications" variant="link" class="btn-sm user-notifications-dropdown-menu__read_all--mark_all" @click="markAllAsRead">
-            <check-icon size="1.3x"/><span class="pl-1 align-middle">{{$t('notification.markAll')}} </span>
+          <b-btn 
+            @click="markAllAsRead"
+            :disabled="!hasUnreadNotifications" 
+            class="btn-sm user-notifications-dropdown-menu__read_all--mark_all"
+            variant="link">
+            <check-icon size="1.3x"/>
+            <span class="pl-1 align-middle">
+              {{$t('notification.markAll')}}
+            </span>
           </b-btn>
-          <b-btn  v-else variant="link" class="btn-sm user-notifications-dropdown-menu__read_all--all_read" disabled >{{$t('notification.allRead')}}</b-btn>
         </div>
         <div class="user-notifications-dropdown-menu__list">
           <div
