@@ -36,6 +36,7 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
     ordering = ['-created_at']
     ordering_fields = ['created_at']
     filterset_fields = ['level']
+    resource_name = 'UserNotification'
 
 
     def get_queryset(self):

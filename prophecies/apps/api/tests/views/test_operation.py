@@ -1,7 +1,9 @@
+from actstream.models import Action
 from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
-from prophecies.core.models import Choice, ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, ChoiceGroup, UserNotification, \
+                                    Project, Task, TaskRecord, TaskRecordReview
 
 
 class TestOperation(TestCase):
@@ -250,3 +252,41 @@ class TestOperation(TestCase):
         content_type = 'application/vnd.api+json; ext=bulk'
         request = self.client.post('/api/v1/operations/', payload, content_type=content_type)
         self.assertEqual(request.status_code, 400)
+
+    def test_it_can_mark_notifications_a_read(self):
+        followed = Action.objects.create(actor=self.django, verb='followed', target=self.olivia)
+        mentioned = Action.objects.create(actor=self.django, verb='mentioned', target=self.olivia)
+        notif_followed = UserNotification.objects.create(action=followed, recipient=self.olivia, read=False)
+        notif_mentioned = UserNotification.objects.create(action=mentioned, recipient=self.olivia, read=False)
+        payload = {
+            "data": {
+                "type": "Operation",
+                "attributes": {
+                    "operations": [
+                        { "id": str(notif_followed.id), "method": "update", "payload": "1" },
+                        { "id": str(notif_mentioned.id), "method": "update", "payload": "1" }
+                    ],
+                    "payloads": [
+                        {
+                            "id": "1",
+                            "value": {
+                                "data": {
+                                    "type": "UserNotification",
+                                    "attributes": {
+                                        "read": True
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+        self.client.login(username='olivia', password='olivia')
+        content_type = 'application/vnd.api+json; ext=bulk'
+        request = self.client.post('/api/v1/operations/', payload, content_type=content_type)
+        self.assertEqual(request.status_code, 200)
+        notif_followed.refresh_from_db()
+        self.assertEqual(notif_followed.read, True)
+        notif_mentioned.refresh_from_db()
+        self.assertEqual(notif_mentioned.read, True)

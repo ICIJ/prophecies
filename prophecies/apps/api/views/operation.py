@@ -8,9 +8,11 @@ from rest_framework_json_api.parsers import JSONParser
 
 from prophecies.core.models import TaskRecordReview
 from prophecies.apps.api.views.task_record_review import TaskRecordReviewViewSet
+from prophecies.apps.api.views.user_notification import UserNotificationViewSet
 
 MODEL_VIEWS_MAPPING = {
-    'TaskRecordReview': TaskRecordReviewViewSet
+    'TaskRecordReview': TaskRecordReviewViewSet,
+    'UserNotification': UserNotificationViewSet
 }
 
 class PayloadValueFieldSerializer(serializers.Serializer):
