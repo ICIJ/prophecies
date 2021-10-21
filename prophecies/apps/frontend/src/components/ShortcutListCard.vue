@@ -68,7 +68,7 @@ export default {
         },
         {
           name: 'Leave a note',
-          value: 'N'
+          value: 'Ctrl + Alt + N'
         }
       ]
     }
