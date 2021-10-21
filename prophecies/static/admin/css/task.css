@@ -6,6 +6,7 @@ a.task-addon {
   border-radius: .25em;
   color: inherit;
   font-weight: bold;
+  white-space: nowrap;
 }
 
 a.task-addon:hover {
