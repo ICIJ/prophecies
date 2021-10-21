@@ -65,6 +65,20 @@ class TaskRecord(models.Model):
 
 
     @cached_property
+    def checkers_pretty(self):
+        # Extract only the usernames
+        usernames = [checker.username for checker in self.checkers]        
+        count = len(usernames)
+        # Create a lambda for each case
+        zero = lambda u: 'nobody'
+        one = lambda u: u[0]
+        two = lambda u: ' and '.join(u)
+        many = lambda u: ', '.join(u[0:-2]) + ', ' + ' and '.join(u[-2:])
+        # Use the correct lambda depending on the count or use `many`
+        return { 0: zero, 1: one, 2: two, }.get(count, many)(usernames)
+
+
+    @cached_property
     def reviews_actions_query(self):
         ctype = ContentType.objects.get_for_model(self.reviews.model)
         review_ids = list(self.reviews.values_list('id', flat=True))

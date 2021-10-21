@@ -52,13 +52,25 @@ class TaskRecordAdmin(admin.ModelAdmin):
     actions = ['assign_action']
     search_fields = ['original_value', 'predicted_value', 'metadata', 'link']
 
+
+    def get_queryset(self, request):
+        return super().get_queryset(request) \
+            .prefetch_related('task') \
+            .prefetch_related('task__project') \
+            .prefetch_related('reviews') \
+            .prefetch_related('reviews__checker')
+
     def task_record_excerpt(self, task_record):
         record_title = str(task_record)
         excerpt = shorten(task_record.original_value, width=140, placeholder='...')
-        context = dict(record_title=record_title, excerpt=excerpt)
+        checkers = task_record.checkers_pretty
+        context = dict(record_title=record_title, excerpt=excerpt, checkers=checkers)
         template = """
-            <div>{record_title}</div>
-            <div class="font-weight-light text-quiet">{excerpt}</div>
+            <div class="task-record-display">
+                <div>{record_title}</div>
+                <div class="font-weight-light text-quiet">{excerpt}</div>
+                <div class="task-record-display__checkers text-quiet">{checkers}</div>
+            </div>
         """
         return format_html(template, **context)
 

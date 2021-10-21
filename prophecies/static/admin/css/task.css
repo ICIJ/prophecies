@@ -31,3 +31,12 @@ a.task-addon:before {
   background: var(--task-addon-bg);
   margin-right: .25em;
 }
+
+.task-record-display__checkers:empty {
+  display: none;
+}
+
+.task-record-display__checkers:before {
+  content: "Assigned to ";
+  font-weight: 300;
+}

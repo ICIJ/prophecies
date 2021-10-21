@@ -195,7 +195,7 @@ class TestTaskRecord(TestCase):
         task_record = TaskRecord.objects.create(task=self.transactions_task)
         TaskRecordReview.objects.create(task_record=task_record, checker=olivia, round=1)
         TaskRecordReview.objects.create(task_record=task_record, checker=django, round=2)
-        latest_round = TaskRecordReview.objects.latest_round(task_record).round
+        latest_round = TaskRecordReview.objects.latest_round(task_record)
         self.assertEqual(latest_round, 2)
 
 
@@ -205,5 +205,37 @@ class TestTaskRecord(TestCase):
         task_record = TaskRecord.objects.create(task=self.transactions_task)
         TaskRecordReview.objects.create(task_record=task_record, checker=olivia, round=2)
         TaskRecordReview.objects.create(task_record=task_record, checker=django, round=1)
-        latest_round = TaskRecordReview.objects.latest_round(task_record).round
+        latest_round = TaskRecordReview.objects.latest_round(task_record)
         self.assertEqual(latest_round, 2)
+
+
+    def test_show_a_pretty_list_of_3_checkers(self):
+        ruby = User.objects.create(username='ruby')
+        olivia = User.objects.create(username='olivia')
+        django = User.objects.create(username='django')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=ruby, round=1)
+        TaskRecordReview.objects.create(task_record=task_record, checker=olivia, round=2)
+        TaskRecordReview.objects.create(task_record=task_record, checker=django, round=3)
+        self.assertEqual(task_record.checkers_pretty, 'ruby, olivia and django')
+
+
+    def test_show_a_pretty_list_of_2_checkers(self):
+        ruby = User.objects.create(username='ruby')
+        olivia = User.objects.create(username='olivia')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=ruby, round=1)
+        TaskRecordReview.objects.create(task_record=task_record, checker=olivia, round=2)
+        self.assertEqual(task_record.checkers_pretty, 'ruby and olivia')
+
+
+    def test_show_a_pretty_list_of_1_checker(self):
+        ruby = User.objects.create(username='ruby')
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=ruby, round=1)
+        self.assertEqual(task_record.checkers_pretty, 'ruby')
+
+
+    def test_show_a_pretty_list_of_no_checkers(self):
+        task_record = TaskRecord.objects.create(task=self.transactions_task)
+        self.assertEqual(task_record.checkers_pretty, 'nobody')
