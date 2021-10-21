@@ -6,7 +6,7 @@
         <h2 class="shortcut-list-card__content__title" v-if="!hideTitle">
           Shortcuts
         </h2>
-        <h3 class="text-primary mb-4">
+        <h3 class="text-primary mb-3">
           For all tasks
         </h3>
         <div class="row shortcut-list-card__content__row" v-for="(shortCut, i) in defaultShortcuts" :key="`general-shortcut-${i}`">
@@ -17,11 +17,14 @@
             {{ shortCut.value }}
           </div>
         </div>
-        <div v-for="task in tasks" :key="task.id">
-          <h3 class="text-primary mb-4">
+        <div v-for="task in tasks" :key="task.id" class="mt-4">
+          <h3 class="text-primary mb-3">
             {{ task.name }}
             </h3>
-          <div class="row shortcut-list-card__content__row" v-for="choice in task.choiceGroup.choices" :key="`task-${task.id}-shortcut-${choice.id}`">
+          <div :class="{ 'shortcut-list-card__content__row--highlighted': isActiveTask(task) }"
+               :key="`task-${task.id}-shortcut-${choice.id}`"
+               class="row shortcut-list-card__content__row" 
+               v-for="choice in task.choiceGroup.choices" > 
             <div class="col shortcut-list-card__content__row__name font-weight-bold">
               {{ generateName(choice.value) }}
             </div>
@@ -107,12 +110,24 @@ export default {
     },
     generateName (value) {
       return `Mark as "${value}"`
+    },
+    isActiveTask ({ id }) {
+      return id === this.$route.params.taskId
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  @keyframes highlightRow {
+    from {
+      background: #fcf3c4;
+    }
+    to {
+      background: $primary-10;
+    }
+  }
+
   .shortcut-list-card {
     background-color: $primary-10;
     border-radius: $card-border-radius;
@@ -137,8 +152,13 @@ export default {
       }
 
       &__row {
-        padding-bottom: $spacer-xl;
-        padding-left:  $spacer-xl;
+        padding: $spacer-xs $spacer;
+        margin: 0;
+        margin-bottom: $spacer-sm;
+
+        &--highlighted {
+          animation: highlightRow 6s;
+        }
 
         &__name {
           max-width: 200px;
