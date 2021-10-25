@@ -42,9 +42,7 @@
 import { find } from 'lodash'
 import Multiselect from 'vue-multiselect'
 
-import Project from '@/models/Project'
-import Task from '@/models/Task'
-import User from '@/models/User'
+import Tip from '@/models/Tip'
 
 export default {
   name: 'TipListPageParams',
@@ -69,15 +67,21 @@ export default {
     return this.setup()
   },
   computed: {
+    tips () {
+      return Tip.query()
+        .with('project')
+        .with('task')
+        .with('creator')
+        .get()
+    },
     projectOptions () {
-      return Project.all()
+      return this.retrieveUniqueAssociatedEntity('project', 'projectId', 'name')
     },
     taskOptions () {
-      let tasks = Task.all()
-      return tasks.filter(t => t.status !== 'CLOSED')
+      return this.retrieveUniqueAssociatedEntity('task', 'taskId', 'name')
     },
     creatorOptions () {
-      return User.all()
+      return this.retrieveUniqueAssociatedEntity('creator', 'creatorId', 'displayName')
     },
     selectedProjectOption () {
       return find(this.projectOptions, { id: this.projectId })
@@ -91,21 +95,22 @@ export default {
   },
   methods: {
     setup () {
-      this.fetchTaskOptions()
-      this.fetchProjectOptions()
-      this.fetchCreatorOptions()
+      this.fetchTips()
     },
     idOrNull (obj = null) {
       return obj && 'id' in obj ? obj.id : null
     },
-    fetchProjectOptions () {
-      return Project.api().get()
+    fetchTips () {
+      return Tip.api().get()
     },
-    fetchTaskOptions () {
-      return Task.api().get()
-    },
-    fetchCreatorOptions () {
-      return User.api().get()
+    retrieveUniqueAssociatedEntity (elType, elId, elValue) {
+      const elements = this.tips.reduce((options, tip) => {
+        const elementId = tip[elId]
+        const elementName = tip[elType]?.[elValue]
+        if (elementId && !options[elementId]) { options[elementId] = { id: elementId, [elValue]: elementName } }
+        return options
+      }, {})
+      return Object.values(elements)
     }
   }
 }

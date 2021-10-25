@@ -69,7 +69,7 @@ export default {
         .get()
     },
     filteredTips () {
-      let tips = this.tips
+      let tips = this.tips.slice()
       if (this.query[FILTER_TYPES.PROJECT]) tips = tips.filter(t => t.projectId === this.query[FILTER_TYPES.PROJECT])
       if (this.query[FILTER_TYPES.TASK]) tips = tips.filter(t => t.taskId === this.query[FILTER_TYPES.TASK])
       if (this.query[FILTER_TYPES.CREATOR]) tips = tips.filter(t => t.creatorId === this.query[FILTER_TYPES.CREATOR])
@@ -121,11 +121,10 @@ export default {
     },
     setTaskFilter (val) {
       const tipsOfTask = Tip.query().where('taskId', val).get()
-      if (tipsOfTask?.length) {
-        this.projectFilter = tipsOfTask[0].projectId
-        this.taskFilter = val
-        this.updateFilters()
-      }
+      // tipsOfTask can't be empty because it only uses taskId with at least a tip.
+      this.projectFilter = tipsOfTask[0].projectId
+      this.taskFilter = val
+      this.updateFilters()
     },
     setCreatorFilter (val) {
       this.creatorFilter = val
