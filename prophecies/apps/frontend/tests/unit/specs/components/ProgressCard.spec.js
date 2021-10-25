@@ -123,11 +123,11 @@ describe('ProgressCard', () => {
       Task.deleteAll()
       server.resetHandlers()
     })
-    it('show the message "Open a task to see your progress"', () => {
+    it('show the message "No open tasks"', () => {
       const element = wrapper.find('.progress-card__no-items')
       expect(wrapper.vm.tasks).toHaveLength(0)
       expect(element.exists()).toBeTruthy()
-      expect(element.text()).toBe('Open a task to see your progress')
+      expect(element.text()).toBe('No open tasks')
     })
   })
 })

@@ -37,7 +37,7 @@
       </li>
     </ul>
     <div v-else class="progress-card__no-items text-center text-secondary text-small">
-      Open a task to see your progress
+      No open tasks
     </div>
   </div>
 </template>
