@@ -3,9 +3,13 @@ import { escapeRegExp, find, filter, get } from 'lodash'
 import Task from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import Tip from '@/models/Tip'
+import ShortkeyBadge from '@/components/ShortkeyBadge'
 
 export default {
   name: 'AppSearchResults',
+  components: {
+    ShortkeyBadge
+  },
   props: {
     query: {
       type: String,
@@ -60,6 +64,12 @@ export default {
         .where('taskRecordsCount', (value) => value > 0).get()
     }
   },
+  created () {
+    this.$shortkey.bind('enter', () => {
+      this.$emit('shortkey:enter')
+    })
+  },
+
   methods: {
     isActive (index) {
       return index === this.activeItem
@@ -106,7 +116,7 @@ export default {
     isTaskQuerysetActive (taskId) {
       return this.querysetId === this.taskQuerysetId(taskId)
     },
-    isTipQuerysetActive (taskId) {
+    isTipQuerysetActive () {
       return this.querysetId === this.tipQuerysetId()
     },
     taskRecordReviewsCount (taskId) {
@@ -130,6 +140,8 @@ export default {
 
 <template>
   <div class="app-search-results card card-body rounded-sm border-primary shadow-sm">
+    <div class="text-right text-secondary px-4 "><span class="align-middle">Search</span>
+          <shortkey-badge :value="['Enter']" class="ml-2" /></div>
     <b-tabs
       active-nav-item-class="app-search-results__tabs__nav__active"
       class="app-search-results__tabs mt-3"
@@ -143,6 +155,7 @@ export default {
         :active="isTaskQuerysetActive(task.id)"
         :key="task.id"
         @click="activateQueryset(taskQuerysetId(task.id))"
+        no-key-nav
         lazy
         title-item-class="app-search-results__tabs__nav__item app-search-results__tabs__nav__item--task"
         title-link-class="app-search-results__tabs__nav__item__link"

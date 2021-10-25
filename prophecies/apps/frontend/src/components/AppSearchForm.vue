@@ -33,7 +33,8 @@ export default {
       query: '',
       queryset: [],
       activeItem: -1,
-      activeQuerysetId: null
+      activeQuerysetId: null,
+      isOpen: false
     }
   },
   computed: {
@@ -76,10 +77,10 @@ export default {
     },
     shortkeys () {
       return {
-        'activatePreviousItem': 'up',
-        'activateNextItem': 'down',
-        'close': 'esc',
-        'focus': 'ctrl+f'
+        activatePreviousItem: 'up',
+        activateNextItem: 'down',
+        close: 'esc',
+        focus: 'ctrl+f'
       }
     },
     tipsToSearch () {
@@ -103,12 +104,23 @@ export default {
     },
     maxActiveItem () {
       return this.activeQueryset.length - 1
+    },
+    activeTaskIdWithQueryset () {
+      if (this.hasQueryset && !!this.activeQueryset.length) {
+        const activeQS = this.activeQueryset[0]
+        if (activeQS.type === 'TaskRecordReview') {
+          const taskRecordReview = TaskRecordReview.query().find(activeQS.id)
+          return taskRecordReview.taskId
+        }
+      }
+      return null
     }
   },
   methods: {
     close () {
       this.activeItem = -1
       this.$el.querySelector(this.searchInputSelector).blur()
+      this.isOpen = false
     },
     focus () {
       this.$el.querySelector(this.searchInputSelector).focus()
@@ -182,6 +194,7 @@ export default {
           this.queryset = flatten(all.map(qs => qs.entitiesIdAndType))
           this.activeQuerysetId = this.defaultQuerysetId
           this.activeItem = -1
+          this.isOpen = true
         }
       } finally {
         this.$wait.end(`app-search-form-load-${query}`)
@@ -189,7 +202,13 @@ export default {
     },
     searchWithThrottle: throttle(function (query) {
       return this.search(query)
-    }, 600)
+    }, 600),
+
+    enterSearchResultsPage (query) {
+      if (this.activeTaskIdWithQueryset) {
+        this.$router.push({ path: `/task-record-reviews/${this.activeTaskIdWithQueryset}?filter[search]=${query}` })
+      }
+    }
   }
 }
 </script>
@@ -201,7 +220,7 @@ export default {
     :is="is"
     :class="classList"
     @submit.prevent>
-    <label 
+    <label
       class="app-search-form__field d-flex align-items-center justify-content-start w-100"
       v-shortkey="shortkeys"
       @shortkey="mapShortkeys($event)">
@@ -216,6 +235,8 @@ export default {
       </app-waiter>
       <b-form-input
         @input="searchWithThrottle(query)"
+        @focus="isOpen = true"
+        @keyup.enter="enterSearchResultsPage(query)"
         @keyup.up="activatePreviousItem"
         @keyup.down="activateNextItem"
         @keyup.esc="close"
@@ -232,9 +253,10 @@ export default {
       <span class="app-search-form__field__separator"></span>
       <app-search-results
         class="app-search-form__field__results"
-        v-if="hasQueryset && !isLoading"
+        v-if="isOpen && hasQueryset && !isLoading"
         :active-item.sync="activeItem"
         :active-queryset-id.sync="activeQuerysetId"
+        @shortkey:enter="enterSearchResultsPage(query)"
         :counts="counts"
         :query="query"
         :queryset="queryset" />
@@ -293,12 +315,6 @@ export default {
         display: block;
       }
 
-      .app-search-form--has-queryset &__input:focus ~ &__results,
-      .app-search-form--has-active-item &__results,
-      .app-search-form--has-queryset &__results:hover {
-        display: block;
-      }
-
       &__placeholder {
         display: flex;
         align-items: center;
@@ -316,7 +332,6 @@ export default {
       }
 
       &__results {
-        display: none;
         z-index: $zindex-dropdown;
         position: absolute;
         top: calc(100% + #{$spacer});
