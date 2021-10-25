@@ -37,7 +37,7 @@
     "tips": "Tips",
     "search": "Search",
     "shortcuts": "Shortcuts",
-    "tutorial":"Tutorial",
+    "tutorial": "Tutorial",
     "logOut": "Sign out"
   },
   "appVersion": {
@@ -75,16 +75,17 @@
       }
     }
   },
-  "taskRecordReviewList":{
-    "selectAll":"Select {n} record | Select {n} records",
-    "selectedResults":"{n} result selected | {n} results selected",
-    "lockedResults":"{n} of which is locked | {n} of which are locked"
+  "taskRecordReviewList": {
+    "clearFilters": "Clear filters",
+    "selectAll": "Select {n} record | Select {n} records",
+    "selectedResults": "{n} result selected | {n} results selected",
+    "lockedResults": "{n} of which is locked | {n} of which are locked"
   },
-  "taskStatsCard":{
-    "closed":"Closed!",
-    "locked":"Locked",
-    "fullyCheckedItems":"Fully checked record | Fully checked records",
-    "priority":"Priority",
-    "round":"Round"
+  "taskStatsCard": {
+    "closed": "Closed!",
+    "locked": "Locked",
+    "fullyCheckedItems": "Fully checked record | Fully checked records",
+    "priority": "Priority",
+    "round": "Round"
   }
 }
