@@ -218,6 +218,7 @@ export default {
         ...this.appliedRouteFiltersQueryParams,
         'filter[task_record__task]': this.taskId,
         'filter[checker]': User.me().id,
+        'filter[search]': this.$route.query['filter[search]'],
         'page[size]': this.pageSize,
         'page[number]': this.pageNumber,
         sort: this.sort
@@ -441,7 +442,7 @@ export default {
               </li>
               <li class="list-inline-item">
                 <b-btn variant="link" @click="clearFilters()" v-if="hasFilters">
-                  Clear filters
+                  {{$t('taskRecordReviewList.clearFilters')}}
                 </b-btn>
               </li>
               <li class="list-inline-item">

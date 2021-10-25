@@ -88,6 +88,12 @@ export default {
             { value: '1', label: 'yes', name: 'With notes' },
             { value: '0', label: 'no', name: 'Without notes' }
           ]
+        },
+        search: {
+          name: 'Search',
+          param: 'search',
+          label: 'name',
+          field: 'value'
         }
       }
     },
