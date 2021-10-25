@@ -111,27 +111,53 @@ export default {
       })
     },
     setProjectFilter (val) {
-      this.projectFilter = val
-      const tipsOfProject = Tip.query().where('projectId', val).get()
-      const notContainingTask = tipsOfProject.filter(t => t.taskId === this.taskFilter).length === 0
-      if (notContainingTask) {
+      if (this.projectNotContainingTask(val, this.taskFilter)) {
         this.taskFilter = null
       }
+      if (this.creatorFilter && this.projectNotContainingUser(val, this.creatorFilter)) {
+        this.creatorFilter = null
+      }
+      this.projectFilter = val
       this.updateFilters()
     },
     setTaskFilter (val) {
       const tipsOfTask = Tip.query().where('taskId', val).get()
       // tipsOfTask can't be empty because it only uses taskId with at least a tip.
       this.projectFilter = tipsOfTask[0].projectId
+      if (this.creatorFilter && this.taskNotContainingUser(val, this.creatorFilter)) {
+        this.creatorFilter = null
+      }
       this.taskFilter = val
       this.updateFilters()
     },
     setCreatorFilter (val) {
+      if (val !== null) {
+        if (this.taskFilter && this.taskNotContainingUser(this.taskFilter, val)) {
+          this.taskFilter = null
+        }
+        if (this.projectFilter && this.projectNotContainingUser(this.projectFilter, val)) {
+          this.projectFilter = null
+        }
+      }
       this.creatorFilter = val
       this.updateFilters()
     },
     updateFilters () {
       return this.$router.push({ name: 'tip-list', query: this.tipParams })
+    },
+    projectNotContainingTask (projectId, taskId) {
+      const tipsOfProject = Tip.query().where('projectId', projectId).get()
+      return tipsOfProject.filter(t => t.taskId === taskId).length === 0
+    },
+    taskNotContainingUser (taskId, creatorId) {
+      return Tip.query()
+        .where('taskId', taskId)
+        .where('creatorId', creatorId).get().length === 0
+    },
+    projectNotContainingUser (projectId, creatorId) {
+      return Tip.query()
+        .where('projectId', projectId)
+        .where('creatorId', creatorId).get().length === 0
     },
     sortTipsByProjectAndTask (a, b) {
       if (!a.project) { return -1 }
