@@ -73,7 +73,7 @@ export default {
       if (this.query[FILTER_TYPES.PROJECT]) tips = tips.filter(t => t.projectId === this.query[FILTER_TYPES.PROJECT])
       if (this.query[FILTER_TYPES.TASK]) tips = tips.filter(t => t.taskId === this.query[FILTER_TYPES.TASK])
       if (this.query[FILTER_TYPES.CREATOR]) tips = tips.filter(t => t.creatorId === this.query[FILTER_TYPES.CREATOR])
-      return tips
+      return tips.sort(this.sortTipsByProjectAndTask)
     },
     tipsGroupedByProject () {
       return groupBy(this.filteredTips, (tip) => {
@@ -132,6 +132,18 @@ export default {
     },
     updateFilters () {
       return this.$router.push({ name: 'tip-list', query: this.tipParams })
+    },
+    sortTipsByProjectAndTask (a, b) {
+      if (!a.project) { return -1 }
+      if (!b.project) { return 1 }
+      const projectSort = a.project?.name.localeCompare(b.project?.name)
+      if (projectSort !== 0) {
+        return projectSort
+      } else {
+        if (!a.task) { return -1 }
+        if (!b.task) { return 1 }
+        return (a.task?.name.localeCompare(b.task?.name))
+      }
     }
   }
 }
