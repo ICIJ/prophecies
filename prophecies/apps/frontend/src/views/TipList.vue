@@ -121,9 +121,11 @@ export default {
     },
     setTaskFilter (val) {
       const tipsOfTask = Tip.query().where('taskId', val).get()
-      this.projectFilter = tipsOfTask[0].projectId
-      this.taskFilter = val
-      this.updateFilters()
+      if (tipsOfTask?.length) {
+        this.projectFilter = tipsOfTask[0].projectId
+        this.taskFilter = val
+        this.updateFilters()
+      }
     },
     setCreatorFilter (val) {
       this.creatorFilter = val
