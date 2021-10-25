@@ -46,14 +46,11 @@ export default {
         })
     },
     tips () {
-      let tips = Tip.query()
+      return Tip.query()
         .with('project')
         .with('task')
         .orderBy('createdAt', 'desc')
         .get()
-        return tips.filter(t => {
-          return t.task ? (t.task.status !== 'CLOSED') : true
-        })
     },
     fetchTaskLoader () {
       return uniqueId('load-dashboard-task-')

@@ -56,23 +56,17 @@ export default {
       return uniqueId('load-filtered-tips-')
     },
     latestTips () {
-      let tips = Tip.query()
+      return Tip.query()
         .with('project')
         .with('task')
         .orderBy('createdAt', 'desc')
         .get()
-      return tips.filter(t => {
-        return t.task ? (t.task.status !== 'CLOSED') : true
-      })
     },
     tips () {
-      let tips = Tip.query()
+      return Tip.query()
         .with('project')
         .with('task')
         .get()
-      return tips.filter(t => {
-        return t.task ? (t.task.status !== 'CLOSED') : true
-      })
     },
     filteredTips () {
       let tips = this.tips
