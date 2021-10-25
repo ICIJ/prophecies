@@ -73,7 +73,8 @@ export default {
       return Project.all()
     },
     taskOptions () {
-      return Task.all()
+      let tasks = Task.all()
+      return tasks.filter(t => t.status !== 'CLOSED')
     },
     creatorOptions () {
       return User.all()
