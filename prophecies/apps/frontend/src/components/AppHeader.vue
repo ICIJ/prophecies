@@ -6,6 +6,7 @@ import AppSearchForm from '@/components/AppSearchForm'
 import AppVersion from '@/components/AppVersion'
 import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
+import ShortcutListCard from '@/components/ShortcutListCard'
 
 export default {
   name: 'AppHeader',
@@ -13,7 +14,8 @@ export default {
     AppSearchForm,
     AppVersion,
     UserNotificationsDropdownMenu,
-    ShortkeyBadge
+    ShortkeyBadge,
+    ShortcutListCard
   },
   props: {
     reduced: {
@@ -81,11 +83,28 @@ export default {
         <b-navbar-nav class="app-header__nav-right">
           <slot name="nav-right" />
           <template v-if="!reduced">
-            <b-nav-item :to="{ name: 'shortcut-list' }">
+            <b-nav-item v-b-modal.modal-shortcuts>
               <command-icon class="app-header__nav-right__shortcuts mr-2" />
               {{ $t('appHeader.shortcuts') }}
               <shortkey-badge :value="['Ctrl', 'k']" class="ml-2" />
             </b-nav-item>
+            <b-modal
+              size="md"
+              content-class="bg-transparent shadow-none border-0"
+              body-class="p-0"
+              id="modal-shortcuts"
+              ref="modal-shortcuts"
+              hide-footer
+              hide-header>
+              <shortcut-list-card>
+                <template #header>
+                  <b-btn class="float-right px-2" variant="link" @click="$refs['modal-shortcuts'].toggle()">
+                    <x-icon />
+                    <span class="sr-only">Close</span>
+                  </b-btn>
+                </template>
+              </shortcut-list-card>
+            </b-modal>
             <b-nav-item :to="{ name: 'tip-list', query: tipQueryParams}">
               <smile-icon class="app-header__nav-right__tips mr-2" />
               {{ $t('appHeader.tips') }}
