@@ -110,6 +110,10 @@ export default {
         return tip.task ? tip.task.name : ''
       })
     },
+    taskClosed (taskValue) {
+      const tip = taskValue.length ? taskValue[0] : taskValue
+      return tip.task ? (tip.task.status === 'CLOSED') : false
+    },
     setProjectFilter (val) {
       if (this.projectNotContainingTask(val, this.taskFilter)) {
         this.taskFilter = null
@@ -201,7 +205,14 @@ export default {
             <div v-for="(projectValue, name) in tipsGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
               <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
               <div v-for="(taskValue, taskName) in tipsGroupedByTask(projectValue)" :key="taskName" class="mb-4">
-                <h2 class="mb-4 ml-4 mt-4">{{ taskName }}</h2>
+                <div class="d-flex flex-row mb-4 ml-4 mt-4">
+                  <div>
+                    <h2>{{ taskName }}</h2>
+                  </div>
+                  <div class="closed-indicator" v-if="taskClosed(taskValue)">
+                    Closed
+                  </div>
+                </div>
                 <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
                   <tip-card :tip-id="tip.id" />
                 </b-list-group-item>
@@ -221,6 +232,11 @@ export default {
 
    h2 {
      color: $tertiary;
+   }
+
+   .closed-indicator {
+     margin-top: 2px;
+     margin-left: 25px;
    }
  }
 </style>
