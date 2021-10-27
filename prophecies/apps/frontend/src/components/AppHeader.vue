@@ -103,6 +103,13 @@ export default {
                     <span class="sr-only">Close</span>
                   </b-btn>
                 </template>
+                <template #footer>
+                  <router-link class="btn btn-primary" :to="{ name: 'shortcut-list' }">
+                    <span class="font-weight-bold">
+                      See shortcuts for all tasks
+                    </span>
+                  </router-link>
+                </template>
               </shortcut-list-card>
             </b-modal>
             <b-nav-item :to="{ name: 'tip-list', query: tipQueryParams}">

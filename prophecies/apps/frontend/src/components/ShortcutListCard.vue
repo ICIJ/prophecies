@@ -23,8 +23,8 @@
             </h3>
           <div :class="{ 'shortcut-list-card__content__row--highlighted': isActiveTask(task) }"
                :key="`task-${task.id}-shortcut-${choice.id}`"
-               class="row shortcut-list-card__content__row" 
-               v-for="choice in task.choiceGroup.choices" > 
+               class="row shortcut-list-card__content__row"
+               v-for="choice in task.choiceGroup.choices" >
             <div class="col shortcut-list-card__content__row__name font-weight-bold">
               {{ generateName(choice.value) }}
             </div>
@@ -33,8 +33,12 @@
             </div>
           </div>
         </div>
+        <div class="d-flex justify-content-center my-5">
+          <div>
+            <slot name="footer" />
+          </div>
+        </div>
       </div>
-      <slot name="footer" />
     </app-waiter>
   </div>
 </template>
