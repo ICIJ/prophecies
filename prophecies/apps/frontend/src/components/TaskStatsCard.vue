@@ -9,6 +9,10 @@ export default {
     },
     team: {
       type: Boolean
+    },
+    extended: {
+      type: Boolean,
+      default: false
     }
   },
   filters: {
@@ -129,20 +133,22 @@ export default {
             </span>
           </li>
         </ul>
-        <span
-          class="
-            task-stats-card__progress
-            bg-primary
-            text-white
-            font-weight-bold
-            rounded
-            py-1
-            px-2
-            ml-auto
-          "
-        >
-          {{ progress | round }}%
-        </span>
+        <slot name="allRounds">
+          <span
+            class="
+              task-stats-card__progress
+              bg-primary
+              text-white
+              font-weight-bold
+              rounded
+              py-1
+              px-2
+              ml-auto
+            "
+          >
+            {{ progress | round }}%
+          </span>
+        </slot>
       </div>
     </div>
   </div>
