@@ -18,7 +18,16 @@
               v-for="task in tasks"
               :key="task.id"
               :team="teamTaskStats"
-              :task-id="task.id" />
+              :task-id="task.id" >
+              <template #allRounds>
+                <TaskStatsCardAllRounds
+                :progress="10"
+                :round="10"
+                :done="10"
+                :pending="10"
+                />
+              </template>
+              </task-stats-card>
             </app-waiter>
 
           </div>
@@ -36,6 +45,7 @@ import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
 
 import TaskStatsCard from '@/components/TaskStatsCard'
+import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import Task from '@/models/Task'
 export default {
   name: 'StatsList',
@@ -43,7 +53,8 @@ export default {
     AppHeader,
     AppSidebar,
     AppWaiter,
-    TaskStatsCard
+    TaskStatsCard,
+    TaskStatsCardAllRounds
   },
   props: {
 
