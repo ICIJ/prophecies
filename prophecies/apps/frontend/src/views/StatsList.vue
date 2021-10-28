@@ -4,24 +4,24 @@
     <div class="stats-list__container flex-grow-1">
       <app-header reduced />
       <div class="container-fluid p-5">
-
-        <div class="d-flex align-items-center">
-          <b-form-group>
-            <b-form-radio-group
+        <div class="col-12">
+          <div class="d-flex flex-column">
+            <b-form-group>
+              <b-form-radio-group
               v-model="teamTaskStats"
               buttons
               button-variant="outline-primary"
               :options="taskStatsOptions" />
-          </b-form-group>
-          <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-
-            <task-stats-card class="my-5"
+            </b-form-group>
+            <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
+              <task-stats-card class="my-5"
               v-for="task in tasks"
               :key="task.id"
               :team="teamTaskStats"
               :task-id="task.id" />
-          </app-waiter>
+            </app-waiter>
 
+          </div>
         </div>
       </div>
     </div>
