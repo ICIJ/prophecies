@@ -8,34 +8,41 @@
         button-variant="outline-primary"
         :options="progressOptions" class="flex-grow-1"/>
     </div>
-    <ul v-if="tasks.length" class="list-unstyled progress-card__items">
+    <template v-if="tasks.length">
+      <ul class="list-unstyled progress-card__items">
         <li class="font-weight-bold progress-card__items__item progress-card__items__item--mean">
-        <div class="d-flex align-items-start">
-          <div class="mr-1 progress-card__items__item__value">
-            {{ meanProgress | round }}%
+          <div class="d-flex align-items-start">
+            <div class="mr-1 progress-card__items__item__value">
+              {{ meanProgress | round }}%
+            </div>
+            <div class="flex-grow-1 pt-1 pb-4">
+              <b-progress :value="meanProgress" :max="100" class="mb-1" />
+              <span class="progress-card__items__item__name">
+                all open tasks
+              </span>
+            </div>
           </div>
-          <div class="flex-grow-1 pt-1 pb-4">
-            <b-progress :value="meanProgress" :max="100" class="mb-1" />
-            <span class="progress-card__items__item__name">
-              all open tasks
-            </span>
+        </li>
+        <li v-for="task in tasks" :key="task.id" class="progress-card__items__item">
+          <div class="d-flex align-items-start">
+            <div class="mr-1 progress-card__items__item__value">
+              {{ taskProgress(task) | round }}%
+            </div>
+            <div class="flex-grow-1 pt-1 pb-4">
+              <b-progress :value="taskProgress(task)" :style="task | taskProgressStyle" :max="100" class="mb-1" />
+              <span class="progress-card__items__item__name">
+                {{ task.name }}
+              </span>
+            </div>
           </div>
-        </div>
-      </li>
-      <li v-for="task in tasks" :key="task.id" class="progress-card__items__item">
-        <div class="d-flex align-items-start">
-          <div class="mr-1 progress-card__items__item__value">
-            {{ taskProgress(task) | round }}%
-          </div>
-          <div class="flex-grow-1 pt-1 pb-4">
-            <b-progress :value="taskProgress(task)" :style="task | taskProgressStyle" :max="100" class="mb-1" />
-            <span class="progress-card__items__item__name">
-              {{ task.name }}
-            </span>
-          </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+      <div class="d-flex justify-content-center">
+        <router-link class="btn btn-link text-secondary" :to="{ name: 'stats-list' }">
+          {{ $t("progressCard.moreProgress") }}
+        </router-link>
+      </div>
+    </template>
     <div v-else class="progress-card__no-items text-center text-secondary text-small">
       No open tasks
     </div>

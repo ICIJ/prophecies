@@ -75,6 +75,9 @@
       }
     }
   },
+  "progressCard": {
+    "moreProgress": "More progress"
+  },
   "taskRecordReviewList": {
     "clearFilters": "Clear filters",
     "selectAll": "Select {n} record | Select {n} records",

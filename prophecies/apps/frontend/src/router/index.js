@@ -7,6 +7,7 @@ import TaskRecordReviewList from '@/views/TaskRecordReviewList.vue'
 import TaskRecordReviewRetrieve from '@/views/TaskRecordReviewRetrieve.vue'
 import TipList from '@/views/TipList.vue'
 import TipRetrieve from '@/views/TipRetrieve.vue'
+import StatsList from '@/views/StatsList.vue'
 
 export const router = {
   routes: [
@@ -55,6 +56,12 @@ export const router = {
       path: '/tips',
       component: TipList,
       props: (route) => ({ query: route.query })
+    },
+    {
+      name: 'stats-list',
+      path: '/stats',
+      component: StatsList,
+      props: true
     },
     {
       name: 'tip-retreive',

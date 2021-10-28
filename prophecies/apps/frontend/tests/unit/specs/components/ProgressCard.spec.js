@@ -15,8 +15,10 @@ describe('ProgressCard', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
-    Core.init(localVue).useAll()
-    wrapper = mount(ProgressCard, { localVue })
+    const core = Core.init(localVue).useAll()
+    const { i18n, router } = core
+    const stubs = ['router-link']
+    wrapper = mount(ProgressCard, { localVue, i18n, stubs, router })
   })
 
   it('should show 4 progress items', () => {
