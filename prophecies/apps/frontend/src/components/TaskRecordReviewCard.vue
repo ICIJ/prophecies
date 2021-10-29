@@ -69,9 +69,13 @@ export default {
     },
     async selectChoice (data) {
       try {
-        // We use a dedicated method that will format the data for the JSONAPI spec
-        // and return the updated object (the store shall be updated as well).
-        await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, data)
+        if (data) {
+          // We use a dedicated method that will format the data for the JSONAPI spec
+          // and return the updated object (the store shall be updated as well).
+          await TaskRecordReview.api().selectChoice(this.taskRecordReviewId, data)
+        } else {
+          await TaskRecordReview.api().cancelChoice(this.taskRecordReviewId)
+        }
         // Hide node to avoid using unecessary space
         this.showNotes = false
         // Let parent component know about the update
@@ -79,7 +83,8 @@ export default {
       } catch (_) {
         const variant = 'danger'
         const title = 'Something went wrong'
-        this.$bvToast.toast('Unable to update your review.', { variant, title })
+        const message = 'Unable to update your review.'
+        this.makeToast(variant, title, message)
       }
     },
     async lock () {
@@ -89,7 +94,9 @@ export default {
         this.emitUpdate()
       } catch (error) {
         const message = get(error, 'response.data.errors[0].detail')
-        this.makeToast('warning', `⛔ Task record #${this.taskRecord.id}`, message)
+        const variant = 'warning'
+        const title = `⛔ Task record #${this.taskRecord.id}`
+        this.makeToast(variant, title, message)
       }
     },
     async lockWithLoader () {
@@ -104,7 +111,9 @@ export default {
         this.emitUpdate()
       } catch (error) {
         const message = get(error, 'response.data.errors[0].detail')
-        this.makeToast('warning', `⛔ Task record #${this.taskRecord.id}`, message)
+        const variant = 'warning'
+        const title = `⛔ Task record #${this.taskRecord.id}`
+        this.makeToast(variant, title, message)
       }
     },
     async unlockWithLoader () {
@@ -231,8 +240,8 @@ export default {
                   </b-form-checkbox>
                 </div>
                 <div class="col text-center px-0 pb-3 text-lg-left">
-                  <haptic-copy 
-                    :text="taskRecord.originalValue" 
+                  <haptic-copy
+                    :text="taskRecord.originalValue"
                     class="task-record-review-card__original-value font-weight-bold px-3 py-2"
                     tooltip-placement="right"
                     v-b-tooltip.hover.right="'Click to copy'">
@@ -267,7 +276,8 @@ export default {
                     class="task-record-review-card__history"
                     :task-record-review-id="taskRecordReviewId"
                     @toggle-notes="highlightAndToggleNotes($event)"
-                    @same="selectChoiceWithLoader" />
+                    @same="selectChoiceWithLoader"
+                    @cancel="selectChoiceWithLoader" />
                 </div>
               </div>
             </div>
@@ -370,7 +380,7 @@ export default {
       &__clipboard {
         min-width: 1.2rem;
         align-self: center;
-        color: $tertiary; 
+        color: $tertiary;
         opacity: 0;
         transition: $btn-transition, opacity .15s;
       }

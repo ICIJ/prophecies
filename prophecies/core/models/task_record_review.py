@@ -134,7 +134,7 @@ class TaskRecordReview(models.Model):
         except AttributeError:
             return None
 
-    @cached_property
+    @cached_property 
     def history(self):
         try:
             return self.task_record.reviews.all()
@@ -150,8 +150,10 @@ class TaskRecordReview(models.Model):
 
 
     def save(self, *args, **kwargs):
-        if not self.choice is None:
+        if not self.choice is None :
             self.status = StatusType.DONE
+        elif self.choice_cancelled : # on cancel the status goes from DONE to PENDING
+            self.status = StatusType.PENDING
         super().save(*args, **kwargs)
 
 
@@ -172,6 +174,15 @@ class TaskRecordReview(models.Model):
             max_round = self.task_record.task.rounds
             if self.task_record.reviews.count() >= max_round:
                 raise ValidationError(f'Task record #{self.task_record.id} cannot get more than {max_round} reviews')
+    
+    @property
+    def choice_cancelled(self):
+        if self.pk is not None:
+            instance = TaskRecordReview.objects.get(pk=self.pk)
+            had_choice = instance.choice is not None
+            has_no_choice = self.choice is None
+            return had_choice and has_no_choice
+        return False
 
     @property
     def already_has_note(self):

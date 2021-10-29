@@ -34,7 +34,7 @@ class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
 class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     checker = ResourceRelatedField(many=False, read_only=True)
-    choice = ResourceRelatedField(many=False, queryset=Choice.objects, required=False)
+    choice = ResourceRelatedField(many=False, queryset=Choice.objects, required=False, allow_null=True)
     task_record = ResourceRelatedField(many=False, read_only=True)
     task_id = serializers.CharField(read_only=True)
     history = SerializerMethodResourceRelatedField(many=True, model=TaskRecordReview, read_only=True)
@@ -89,7 +89,12 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     def save(self):
         user = self.context.get('request').user
         if 'choice' in self.validated_data:
-            action.send(user, verb='reviewed', target=self.instance, action_object=self.validated_data.get('choice'), task_id=self.instance.task_record.task_id)
+            choice = self.validated_data.get('choice', None)
+            has_choice = not choice is None
+            if has_choice: 
+                action.send(user, verb='reviewed', target=self.instance, action_object=self.validated_data.get('choice'), task_id=self.instance.task_record.task_id)
+            else:
+                action.send(user, verb='cancelled', target=self.instance, task_id=self.instance.task_record.task_id)
         if self.validated_data.get('alternative_value', None):
             action.send(user, verb='selected', target=self.instance, alternative_value=self.validated_data.get('alternative_value'), task_id=self.instance.task_record.task_id)
         if 'note' in self.validated_data:

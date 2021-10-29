@@ -73,6 +73,16 @@ export default class TaskRecordReview extends Model {
         }
         return Operation.api().post('', { data }, { headers })
       },
+      cancelChoice (id, { ...attributes }) {
+        return this.save(id, {
+          attributes,
+          relationships: {
+            choice: {
+              data: null
+            }
+          }
+        })
+      },
       selectChoice (id, { choice, ...attributes }) {
         return this.save(id, {
           attributes,
