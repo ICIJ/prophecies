@@ -41,9 +41,6 @@ export default {
     progress: {
       type: Number
     },
-    round: {
-      type: Number
-    },
     done: {
       type: Number
     },

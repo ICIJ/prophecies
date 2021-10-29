@@ -19,12 +19,11 @@
               :key="task.id"
               :team="teamTaskStats"
               :task-id="task.id" extended>
-              <template #allRounds>
+              <template v-slot:allRounds="{rounds}">
                 <TaskStatsCardAllRounds
-                :progress="100"
-                :round="10"
-                :done="10000"
-                :pending="10000"
+                :progress="rounds.progress"
+                :done="rounds.done"
+                :pending="rounds.pending"
                 />
               </template>
             </task-stats-card>

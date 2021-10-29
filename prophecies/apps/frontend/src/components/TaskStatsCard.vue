@@ -30,6 +30,9 @@ export default {
       }
       return this.task.userTaskRecordsCount
     },
+    taskRecordsPendingCount () {
+      return this.taskRecordsCount - this.taskRecordsDoneCount
+    },
     taskRecordsDoneCount () {
       if (this.team) {
         return this.task.taskRecordsDoneCount
@@ -100,7 +103,7 @@ export default {
             </p>
           </div>
         </div>
-        <slot name="allRounds" v-if="extended">
+        <slot name="allRounds" v-if="extended" v-bind:rounds="{progress:progress,done:taskRecordsDoneCount,pending:taskRecordsPendingCount}">
         </slot>
         <div class="">
           <span v-if="taskIsClosed" class="ml-auto task-stats-card__heading--closed" >
