@@ -65,52 +65,60 @@ export default {
   <div class="task-stats-card card card-body shadow-sm d-flex">
     <div></div>
     <div>
-      <div class="d-flex align-items-center mb-3 task-stats-card__heading">
-        <h3 class="m-0">
-          <router-link
+      <div class="d-flex justify-content-between mb-3 task-stats-card__heading">
+        <div class="">
+          <h3 class="m-0">
+            <router-link
             :to="{
               name: 'task-record-review-list',
               params: { taskId: task.id },
-            }"
-            class="d-inline-block"
-          >
-            {{ task.name }}
-          </router-link>
-          <b-badge
+              }"
+              class="d-inline-block"
+              >
+              {{ task.name }}
+            </router-link>
+            <b-badge
             class="
-              task-stats-card__heading__project
-              bg-transparent
-              font-weight-normal
-              text-muted
+            task-stats-card__heading__project
+            bg-transparent
+            font-weight-normal
+            text-muted
             "
-          >
+            >
             {{ task.project.name }}
-          </b-badge>
-        </h3>
-        <span v-if="taskIsClosed" class="ml-auto task-stats-card__heading--closed" >
-          {{ $t('taskStatsCard.closed') }}
-        </span>
-        <span v-else class=" bg-warning rounded ml-auto py-1 px-2  task-stats-card__heading__priority">
-          {{ $t('taskStatsCard.priority') }} {{ task.priority }}
-        </span>
-      </div>
-      <div class="d-flex align-items-center">
-        <p>
-          {{ $tc('taskStatsCard.fullyCheckedItems', taskRecordsCount) }}:
-          <span
-            class="text-danger font-weight-bold ml-2 task-stats-card__checked"
-          >
-            {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
+            </b-badge>
+          </h3>
+
+          <div class="d-flex align-items-center">
+            <p>
+              {{ $tc('taskStatsCard.fullyCheckedItems', taskRecordsCount) }}:
+              <span
+                class="text-danger font-weight-bold ml-2 task-stats-card__checked"
+              >
+                {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
+              </span>
+            </p>
+          </div>
+        </div>
+        <slot name="allRounds" v-if="extended">
+        </slot>
+        <div class="">
+          <span v-if="taskIsClosed" class="ml-auto task-stats-card__heading--closed" >
+            {{ $t('taskStatsCard.closed') }}
           </span>
-        </p>
-        <p class="ml-auto d-flex text-danger" v-if="taskIsLocked">
-          <lock-icon size="1.5x" /><span class="sr-only">Unlock</span>
-          <span class="task-stats-card__status--locked ml-2"> {{ $t('taskStatsCard.locked') }}</span>
-        </p>
-        <p class="ml-auto d-flex" v-else-if="taskIsDone || taskIsClosed">
-          <span class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">Closed</span>
-        </p>
+          <span v-else class=" bg-warning rounded ml-auto py-1 px-2  task-stats-card__heading__priority">
+            {{ $t('taskStatsCard.priority') }} {{ task.priority }}
+          </span>
+          <p class="ml-auto d-flex text-danger" v-if="taskIsLocked">
+            <lock-icon size="1.5x" /><span class="sr-only">Unlock</span>
+            <span class="task-stats-card__status--locked ml-2"> {{ $t('taskStatsCard.locked') }}</span>
+          </p>
+          <p class="ml-auto d-flex" v-else-if="taskIsDone || taskIsClosed">
+            <span class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">Closed</span>
+          </p>
+        </div>
       </div>
+
       <div class="d-flex align-items-center">
         <ul class="task-stats-card__progress-by-round list-inline m-0">
           <li
@@ -133,7 +141,7 @@ export default {
             </span>
           </li>
         </ul>
-        <slot name="allRounds">
+        <slot name="allRounds" v-if="!extended">
           <span
             class="
               task-stats-card__progress

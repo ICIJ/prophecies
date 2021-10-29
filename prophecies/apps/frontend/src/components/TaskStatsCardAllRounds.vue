@@ -1,22 +1,34 @@
 <template>
-  <div class="task-stats-card-all-rounds">
-      All
-        <b-progress :value="progress | round" :max="100" />
-    <div class="row">
-        <span class="task-stats-card-all-rounds__all
+  <div class="task-stats-card-all-rounds card rounded col-3">
+    <div class="d-flex flex-column card-body">
+      <div class="row">
+        <div class="task-stats-card-all-rounds__all text-right col-3">
+          All
+        </div>
+
+        <div class="col-9">
+          <div class="task-stats-card-all-rounds__progress py-2">
+            <b-progress :value="progress | round" :max="100" />
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-row font-weight-bold">
+        <div class="col-3 offset-3 text-center">
+          <span class="task-stats-card-all-rounds__all p-1
             bg-primary
             text-white
-            font-weight-bold
             rounded" >
-        {{ progress | round }}%
-        </span>
-        <span class="task-stats-card-all-rounds__done">
-            <check-icon class="text-primary" />  {{done}}
-        </span>
+            {{ progress | round }}%
+          </span>
+        </div>
+        <div class="">
+          <check-icon size="1.3x" class="text-primary mr-2" />  {{done}}
+        </div>
+        <div class="">
+          <clock-icon size="1.3x" class="text-danger mr-2" />  {{pending}}
+        </div>
 
-        <span class="task-stats-card-all-rounds__pending">
-            <clock-icon class="text-danger"/>  {{pending}}
-        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -47,6 +59,24 @@ export default {
   computed: {
 
   }
-
 }
 </script>
+
+<style lang="scss" scoped>
+  .task-stats-card-all-rounds {
+    min-width: 330px;
+
+    .card-body {
+      background-color: $secondary-50;
+    }
+
+    &__all {
+      color: $primary;
+      font-weight: bold;
+    }
+
+    &__progress {
+      height: 2em;
+    }
+  }
+</style>

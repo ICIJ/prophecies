@@ -18,16 +18,16 @@
               v-for="task in tasks"
               :key="task.id"
               :team="teamTaskStats"
-              :task-id="task.id" >
+              :task-id="task.id" extended>
               <template #allRounds>
                 <TaskStatsCardAllRounds
-                :progress="10"
+                :progress="100"
                 :round="10"
-                :done="10"
-                :pending="10"
+                :done="10000"
+                :pending="10000"
                 />
               </template>
-              </task-stats-card>
+            </task-stats-card>
             </app-waiter>
 
           </div>
