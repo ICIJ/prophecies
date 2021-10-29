@@ -1,8 +1,8 @@
 <template>
-  <div class="task-stats-card-all-rounds card rounded col-3">
-    <div class="d-flex flex-column card-body">
-      <div class="row">
-        <div class="task-stats-card-all-rounds__all text-right col-3">
+  <div class="task-stats-card-all-rounds card rounded card-body">
+    <div class="container p-0">
+      <div class="row justify-content-end">
+        <div class="task-stats-card-all-rounds__all text-right ">
           All
         </div>
 
@@ -12,19 +12,19 @@
           </div>
         </div>
       </div>
-      <div class="d-flex flex-row font-weight-bold">
-        <div class="col-3 offset-3 text-center">
-          <span class="task-stats-card-all-rounds__all p-1
+      <div class="row font-weight-bold text-center justify-content-end">
+        <div class="col-3  ">
+          <span class=" p-1
             bg-primary
             text-white
             rounded" >
             {{ progress | round }}%
           </span>
         </div>
-        <div class="">
+        <div class="col-3">
           <check-icon size="1.3x" class="text-primary mr-2" />  {{done}}
         </div>
-        <div class="">
+        <div class="col-3">
           <clock-icon size="1.3x" class="text-danger mr-2" />  {{pending}}
         </div>
 
@@ -64,11 +64,10 @@ export default {
 
 <style lang="scss" scoped>
   .task-stats-card-all-rounds {
-    min-width: 330px;
+    min-width: 425px;
+    max-width: 450px;
 
-    .card-body {
       background-color: $secondary-50;
-    }
 
     &__all {
       color: $primary;
