@@ -66,11 +66,9 @@ export default {
 
 <template>
   <div class="task-stats-card card card-body shadow-sm d-flex">
-    <div></div>
-    <div>
-      <div class="d-flex justify-content-between mb-3 task-stats-card__heading">
-        <div class="">
-          <h3 class="m-0">
+      <div class="d-flex justify-content-between ">
+        <div class="task-stats-card__heading">
+          <h3>
             <router-link
             :to="{
               name: 'task-record-review-list',
@@ -80,20 +78,11 @@ export default {
               >
               {{ task.name }}
             </router-link>
-            <b-badge
-            class="
-            task-stats-card__heading__project
-            bg-transparent
-            font-weight-normal
-            text-muted
-            "
-            >
+            <b-badge class="task-stats-card__heading__project bg-transparent font-weight-normal text-muted">
             {{ task.project.name }}
             </b-badge>
           </h3>
-
-          <div class="d-flex align-items-center">
-            <p>
+          <p class="pt-2">
               {{ $tc('taskStatsCard.fullyCheckedItems', taskRecordsCount) }}:
               <span
                 class="text-danger font-weight-bold ml-2 task-stats-card__checked"
@@ -101,7 +90,6 @@ export default {
                 {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
               </span>
             </p>
-          </div>
         </div>
         <slot name="allRounds" v-if="extended" v-bind:rounds="{progress:progress,done:taskRecordsDoneCount,pending:taskRecordsPendingCount}">
         </slot>
@@ -165,7 +153,6 @@ export default {
         </slot>
       </div>
     </div>
-  </div>
 </template>
 
 <style lang="scss" scoped>
