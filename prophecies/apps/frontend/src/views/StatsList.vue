@@ -20,13 +20,18 @@
               :team="teamTaskStats"
               :task-id="task.id" extended>
               <template v-slot:allRounds="{rounds}">
-                <TaskStatsCardAllRounds
+                <task-stats-card-all-rounds
                 :progress="rounds.progress"
                 :done="rounds.done"
                 :pending="rounds.pending"
                 />
               </template>
+
+              <template v-slot:usersByRound>
+                <user-stats-by-round />
+              </template>
             </task-stats-card>
+
             </app-waiter>
 
           </div>
@@ -46,6 +51,8 @@ import AppWaiter from '@/components/AppWaiter'
 import TaskStatsCard from '@/components/TaskStatsCard'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import Task from '@/models/Task'
+
+import UserStatsByRound from '@/components/UserStatsByRound.vue'
 export default {
   name: 'StatsList',
   components: {
@@ -53,7 +60,8 @@ export default {
     AppSidebar,
     AppWaiter,
     TaskStatsCard,
-    TaskStatsCardAllRounds
+    TaskStatsCardAllRounds,
+    UserStatsByRound
   },
   props: {
 
