@@ -123,27 +123,30 @@ export default {
       </div>
 
       <div class="d-flex align-items-center">
-        <ul class="task-stats-card__progress-by-round list-inline m-0">
-          <li
-            class="task-stats-card__progress-by-round__item list-inline-item"
-            v-for="round in task.rounds"
-            :key="round"
-          >
-            {{ $t('taskStatsCard.round') }} {{ round }}
-            <span
-              class="
-                task-stats-card__progress-by-round__item__value
-                font-weight-bold
-                ml-3
-              "
+
+        <slot name="usersByRound">
+          <ul class="task-stats-card__progress-by-round list-inline m-0">
+            <li
+              class="task-stats-card__progress-by-round__item list-inline-item"
+              v-for="round in task.rounds"
+              :key="round"
             >
-              {{ progressByRound[round] | round }}%
-            </span>
-            <span class="text-muted mx-2" v-if="round !== task.rounds">
-              |
-            </span>
-          </li>
-        </ul>
+              {{ $t('taskStatsCard.round') }} {{ round }}
+              <span
+                class="
+                  task-stats-card__progress-by-round__item__value
+                  font-weight-bold
+                  ml-3
+                "
+              >
+                {{ progressByRound[round] | round }}%
+              </span>
+              <span class="text-muted mx-2" v-if="round !== task.rounds">
+                |
+              </span>
+            </li>
+          </ul>
+        </slot>
         <slot name="allRounds" v-if="!extended">
           <span
             class="
