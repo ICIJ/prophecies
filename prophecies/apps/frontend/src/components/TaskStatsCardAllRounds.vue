@@ -1,34 +1,29 @@
 <template>
-  <div class="task-stats-card-all-rounds card rounded card-body">
-    <div class="container p-0">
-      <div class="row justify-content-end">
-        <div class="task-stats-card-all-rounds__all text-right ">
-          All
-        </div>
-
-        <div class="col-9">
-          <div class="task-stats-card-all-rounds__progress py-2">
-            <b-progress :value="progress | round" :max="100" />
-          </div>
-        </div>
+  <div class="task-stats-card-all-rounds card card-body rounded ">
+    <div class="d-flex flex-row">
+      <div class="col-1 task-stats-card-all-rounds__all text-right px-0">
+        All
       </div>
-      <div class="row font-weight-bold text-center justify-content-end">
-        <div class="col-3  ">
-          <span class=" p-1
-            bg-primary
-            text-white
-            rounded" >
-            {{ progress | round }}%
-          </span>
+        <div class="col-11 task-stats-card-all-rounds__progress py-2">
+          <b-progress :value="progress | round" :max="100" />
         </div>
-        <div class="col-3">
-          <check-icon size="1.3x" class="text-primary mr-2" />  {{done}}
-        </div>
-        <div class="col-3">
-          <clock-icon size="1.3x" class="text-danger mr-2" />  {{pending}}
-        </div>
-
+    </div>
+    <div class="d-flex flex-row font-weight-bold text-center ">
+      <div class="offset-1 col-3 px-0">
+        <span class=" p-1
+          bg-primary
+          text-white
+          rounded" >
+          {{ progress | round }}%
+        </span>
       </div>
+      <div class="col-4 px-0">
+        <check-icon size="1x" class="text-primary mr-2" />  {{done}}
+      </div>
+      <div class="col-4  px-0">
+        <clock-icon size="1x" class="text-danger mr-2" />  {{pending}}
+      </div>
+
     </div>
   </div>
 </template>
@@ -61,9 +56,11 @@ export default {
 
 <style lang="scss" scoped>
   .task-stats-card-all-rounds {
-    min-width: 425px;
-    max-width: 450px;
-
+padding-left: 48px;
+padding-right: 48px;
+width:370px;
+min-width:370px;
+max-width:370px;
       background-color: $secondary-50;
 
     &__all {

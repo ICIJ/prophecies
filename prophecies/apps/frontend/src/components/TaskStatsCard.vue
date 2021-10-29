@@ -93,7 +93,7 @@ export default {
         </div>
         <slot name="allRounds" v-if="extended" v-bind:rounds="{progress:progress,done:taskRecordsDoneCount,pending:taskRecordsPendingCount}">
         </slot>
-        <div class="">
+        <div :class="{ 'col-auto text-right': extended }">
           <span v-if="taskIsClosed" class="ml-auto task-stats-card__heading--closed" >
             {{ $t('taskStatsCard.closed') }}
           </span>
