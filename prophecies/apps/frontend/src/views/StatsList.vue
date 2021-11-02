@@ -27,8 +27,14 @@
                 />
               </template>
 
-              <template v-slot:usersByRound>
-                <user-stats-by-round />
+              <template v-slot:usersByRound="{stats}">
+                <user-stats-by-round
+                  v-for="(round,index) in stats.rounds"
+                  :key="round"
+                  :round="index+1"
+                  :progress="stats.progress[index]"
+                  class="col-4" />
+            
               </template>
             </task-stats-card>
 

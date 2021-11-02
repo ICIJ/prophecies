@@ -1,8 +1,8 @@
 <template>
   <div class="user-stats-by-round d-flex flex-column py-3">
     <div class="user-stats-by-round__progress d-flex flex-row py-4">
-       <div class="col-3 pl-0 font-weight-bold ">Round 1</div>
-     <div class="col-9 py-2"> <b-progress :value="10 | round" :max="100" /></div>
+       <div class="col-3 pl-0 font-weight-bold text-primary">Round {{ round }}</div>
+     <div class="col-9 py-2"> <b-progress :value="progress | round" :max="100" /></div>
     </div>
     <div class="user-stats-by-round__users d-flex flex-column">
       <div class="d-flex flex-row py-2" v-for="(user, index) in users" :key="index">
@@ -50,6 +50,12 @@ import { toVariant } from '@/utils/variant'
 export default {
   name: 'UserStatsByRound',
   props: {
+    round: {
+      type: Number
+    },
+    progress: {
+      type: Number
+    }
   },
   filters: {
     toVariant,

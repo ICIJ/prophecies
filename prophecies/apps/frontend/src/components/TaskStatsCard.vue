@@ -112,7 +112,7 @@ export default {
 
       <div class="d-flex align-items-center">
 
-        <slot name="usersByRound">
+        <slot name="usersByRound" v-bind:stats="{rounds:task.rounds,progress:progressByRound}">
           <ul class="task-stats-card__progress-by-round list-inline m-0">
             <li
               class="task-stats-card__progress-by-round__item list-inline-item"
