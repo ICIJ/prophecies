@@ -70,6 +70,16 @@ class TestTaskRecordReview(TestCase):
         self.assertEqual(progress[2], 75)
 
 
+    def test_cancels_a_review(self):
+        # Round 1 is completed at 0% by django and at 100% by olivia
+        correct = Choice.objects.create(value='Correct', choice_group=self.choice_group)
+        review = TaskRecordReview.objects.create(choice=correct, task_record=self.record_foo)
+        review.save()
+        self.assertEqual(review.status, StatusType.DONE)
+        review.choice = None
+        review.save()
+        self.assertEqual(review.status, StatusType.PENDING)
+
     def test_set_has_notes_in_task_record_to_true(self):
         TaskRecordReview.objects.create(note='foo', task_record=self.record_foo)
         TaskRecordReview.objects.create(note='bar', task_record=self.record_foo)
