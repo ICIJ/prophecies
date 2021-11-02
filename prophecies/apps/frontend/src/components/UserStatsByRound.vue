@@ -55,6 +55,18 @@ export default {
     },
     progress: {
       type: Number
+    },
+    choices: {
+      type: Array,
+      default:()=>([])
+    },
+    users: {
+      type: Array,
+      default:()=>([])
+    },
+    summary: {
+      type: Array,
+      default:()=>([])
     }
   },
   filters: {
@@ -71,57 +83,7 @@ export default {
   },
   data () {
     return {
-        choices:[
-          {
-            value:"correct",
-            name:"Correct",
-            progress:100
-          },
-          {
-            value:"incorrect",
-            name:"Incorrect",
-            progress:100
-          },
-          {
-            value:"dontknow",
-            name:"Don't know",
-            progress:100
-          }
-        ],
-        users: [
-          {
-            name: 'augie',
-            progress: 100,
-            done: 5,
-            pending: 0
-          },
-          {
-            name: 'marco',
-            progress: 0,
-            done: 0,
-            pending: 20
-          },
-          {
-            name: 'mago',
-            progress: 0,
-            done: 0,
-            pending: 30
-          }
-        ],
-        summary: [
-          {
-            name: 'C',
-            value: 95
-          },
-          {
-            name: 'I',
-            value: 1
-          },
-          {
-            name: 'D',
-            value: 4
-          }
-        ]
+
     }
   },
   computed: {
