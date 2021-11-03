@@ -21,6 +21,9 @@ export default {
     }
   },
   computed: {
+    classList () {
+      return this.extended ? 'd-flex flex-row-reverse' : 'd-flex flex-column text-right'
+    },
     task () {
       return Task.query().with('project').find(this.taskId)
     },
@@ -94,11 +97,11 @@ export default {
         <slot name="allRounds" v-if="extended" v-bind:rounds="{progress:progress,done:taskRecordsDoneCount,pending:taskRecordsPendingCount}">
         </slot>
         <div class="d-flex flex-column justify-content-between" >
-          <div class="text-right">
+          <div :class="classList">
             <span v-if="taskIsClosed" class="task-stats-card__heading--closed" >
               {{ $t('taskStatsCard.closed') }}
             </span>
-            <span v-else class=" bg-warning rounded ml-auto py-1 mb-2 px-2  task-stats-card__heading__priority">
+            <span v-else class="bg-warning rounded ml-auto py-1 mb-2 px-2  task-stats-card__heading__priority">
               {{ $t('taskStatsCard.priority') }} {{ task.priority }}
             </span>
             <p class="task-stats-card__status text-danger" v-if="taskIsLocked">
