@@ -4,7 +4,7 @@
        <div class="col-3 pl-0 font-weight-bold text-primary">Round {{ round }}</div>
      <div class="col-9 py-2"> <b-progress :value="progress | round" :max="100" /></div>
     </div>
-    <div class="user-stats-by-round__users d-flex flex-column">
+    <div class="user-stats-by-round__users d-flex flex-column flex-grow-1">
       <div class="d-flex flex-row py-2" v-for="(user, index) in users" :key="index">
         <div class="col-3  pl-0">
           {{ user.name }}
@@ -19,7 +19,7 @@
           <clock-icon size="1x" class="text-danger mr-2" />{{user.pending}}
         </div>
       </div>
-      <div class="user-stats-by-round__total d-flex flex-row py-2 font-weight-bold " >
+      <div class="user-stats-by-round__total d-flex flex-row py-2 font-weight-bold flex-grow-1 align-items-end" >
         <div class="col-3  pl-0">
           Total
         </div>
@@ -58,15 +58,15 @@ export default {
     },
     choices: {
       type: Array,
-      default:()=>([])
+      default: () => ([])
     },
     users: {
       type: Array,
-      default:()=>([])
+      default: () => ([])
     },
     summary: {
       type: Array,
-      default:()=>([])
+      default: () => ([])
     }
   },
   filters: {
@@ -87,8 +87,8 @@ export default {
     }
   },
   computed: {
-    badgeColumnClass(){
-      return this.choices.length?`col-${12/this.choices.length}`:'';
+    badgeColumnClass () {
+      return this.choices.length ? `col-${12 / this.choices.length}` : ''
     }
   }
 }

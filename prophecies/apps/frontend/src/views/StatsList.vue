@@ -37,7 +37,6 @@
                   :users='usersByRound[round]'
                   :summary='summaryByRound[round]'
                   class="col-4" />
-            
               </template>
             </task-stats-card>
 
@@ -61,70 +60,80 @@ import TaskStatsCard from '@/components/TaskStatsCard'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import Task from '@/models/Task'
 
-import Choice from '@/models/Choice'
-import ChoiceGroup from '@/models/ChoiceGroup'
-
 import UserStatsByRound from '@/components/UserStatsByRound.vue'
 const choices = [
-   {
-      value:"correct",
-      name:"Correct",
-      progress:100
-    },
-    {
-      value:"incorrect",
-      name:"Incorrect",
-      progress:100
-    },
-    {
-      value:"dontknow",
-      name:"Dont know",
-      progress:100
-    }
+  {
+    value: 'correct',
+    name: 'Correct',
+    progress: 100
+  },
+  {
+    value: 'incorrect',
+    name: 'Incorrect',
+    progress: 100
+  },
+  {
+    value: 'dontknow',
+    name: 'Dont know',
+    progress: 100
+  }
 ]
-const         users= [
-          {
-            name: 'augie',
-            progress: 100,
-            done: 5,
-            pending: 0
-          },
-          {
-            name: 'marco',
-            progress: 0,
-            done: 0,
-            pending: 20
-          },
-          {
-            name: 'mago',
-            progress: 0,
-            done: 0,
-            pending: 30
-          }
-        ]
-  const         usersround3= [
-          {
-            name: 'augie',
-            progress: 100,
-            done: 5,
-            pending: 0
-          }
-        ]
-  const summary= [
-          {
-            name: 'C',
-            value: 95
-          },
-          {
-            name: 'I',
-            value: 1
-          },
-          {
-            name: 'D',
-            value: 4
-          }
-        ]
-
+const users = [
+  {
+    name: 'augie',
+    progress: 100,
+    done: 5,
+    pending: 0
+  },
+  {
+    name: 'marco',
+    progress: 0,
+    done: 0,
+    pending: 20
+  },
+  {
+    name: 'mago',
+    progress: 0,
+    done: 0,
+    pending: 30
+  }
+]
+const usersround2 = [
+  {
+    name: 'augie',
+    progress: 100,
+    done: 5,
+    pending: 0
+  },
+  {
+    name: 'marco',
+    progress: 0,
+    done: 0,
+    pending: 20
+  }
+]
+const usersround3 = [
+  {
+    name: 'augie',
+    progress: 100,
+    done: 5,
+    pending: 0
+  }
+]
+const summary = [
+  {
+    name: 'C',
+    value: 95
+  },
+  {
+    name: 'I',
+    value: 1
+  },
+  {
+    name: 'D',
+    value: 4
+  }
+]
 
 export default {
   name: 'StatsList',
@@ -159,7 +168,7 @@ export default {
       this.$wait.start(loader)
       await fn()
       this.$wait.end(loader)
-    },
+    }
 
   },
   computed: {
@@ -177,32 +186,29 @@ export default {
           return 0
         })
     },
-    choicesByRound() {
+    choicesByRound () {
       //! TODO API Call stats/:taskId OR tasks/taskId/stats
-      return   {
-          '1':[...choices],
-          '2':[...choices],        
-          '3':[...choices],
-        }
-
+      return {
+        1: [...choices],
+        2: [...choices],
+        3: [...choices]
+      }
     },
-    usersByRound() {
+    usersByRound () {
       //! TODO API Call stats/:taskId/users OR tasks/taskId/stats/users
-      return   {
-          '1':[...users],
-          '2':[...users],        
-          '3':[...usersround3],
-        }
-
+      return {
+        1: [...users],
+        2: [...usersround2],
+        3: [...usersround3]
+      }
     },
-    summaryByRound() {
+    summaryByRound () {
       //! TODO API Call stats/:taskId OR tasks/taskId/stats
-      return   {
-          '1':[...summary],
-          '2':[...summary],        
-          '3':[...summary],
-        }
-
+      return {
+        1: [...summary],
+        2: [...summary],
+        3: [...summary]
+      }
     },
     fetchTaskLoader () {
       return uniqueId('load-stats-task-')
