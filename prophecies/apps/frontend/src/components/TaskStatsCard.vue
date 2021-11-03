@@ -93,20 +93,25 @@ export default {
         </div>
         <slot name="allRounds" v-if="extended" v-bind:rounds="{progress:progress,done:taskRecordsDoneCount,pending:taskRecordsPendingCount}">
         </slot>
-        <div :class="{ 'col-auto text-right': extended }">
-          <span v-if="taskIsClosed" class="ml-auto task-stats-card__heading--closed" >
-            {{ $t('taskStatsCard.closed') }}
-          </span>
-          <span v-else class=" bg-warning rounded ml-auto py-1 px-2  task-stats-card__heading__priority">
-            {{ $t('taskStatsCard.priority') }} {{ task.priority }}
-          </span>
-          <p class="ml-auto d-flex text-danger" v-if="taskIsLocked">
-            <lock-icon size="1.5x" /><span class="sr-only">Unlock</span>
-            <span class="task-stats-card__status--locked ml-2"> {{ $t('taskStatsCard.locked') }}</span>
-          </p>
-          <p class="ml-auto d-flex" v-else-if="taskIsDone || taskIsClosed">
-            <span class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">Closed</span>
-          </p>
+        <div class="d-flex flex-column justify-content-between" >
+          <div class="text-right">
+            <span v-if="taskIsClosed" class="task-stats-card__heading--closed" >
+              {{ $t('taskStatsCard.closed') }}
+            </span>
+            <span v-else class=" bg-warning rounded ml-auto py-1 mb-2 px-2  task-stats-card__heading__priority">
+              {{ $t('taskStatsCard.priority') }} {{ task.priority }}
+            </span>
+            <p class="task-stats-card__status text-danger" v-if="taskIsLocked">
+              <lock-icon size="1.5x" /><span class="sr-only">Unlock</span>
+              <span class="task-stats-card__status--locked ml-2"> {{ $t('taskStatsCard.locked') }}</span>
+            </p>
+            <p class="task-stats-card__status " v-else-if="taskIsDone || taskIsClosed && !extended">
+              <span class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">Closed</span>
+            </p>
+          </div>
+          <div v-if="extended" class="task-stats-card__read-tips ">
+            <router-link :to="{ name: 'tip-list', query: { 'filter[task]': task.id } }" class="btn btn-danger"> Read tips </router-link>
+          </div>
         </div>
       </div>
 
@@ -162,6 +167,11 @@ export default {
       &--closed  {
         color: $secondary;
       }
+    }
+
+    &__status{
+      padding-top:12px;
+      vertical-align:middle;
     }
   }
 </style>
