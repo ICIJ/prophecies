@@ -3,6 +3,7 @@ from colorfield.fields import ColorField
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import signals
+from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from prophecies.core.models.project import Project
@@ -31,7 +32,7 @@ class Task(models.Model):
     color = ColorField(default='#31807D')
     recordLinkTemplate = models.CharField(max_length=1000, null=True, blank=True, verbose_name="Record link template", help_text="A link template to build a link for each task record. Task record can override this value with their own link")
     status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.OPEN, max_length=6, help_text="Status of the task. Set to closed or locked will prevent any update of the records.")
-
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
