@@ -242,7 +242,7 @@ export default {
                     </span>
                   </haptic-copy>
                   <b-btn variant="link" class="text-muted px-3" :href="link" v-if="link" target="_blank">
-                    <link-icon size="1x" class="mr-1" /> Open link
+                    <link-icon size="1x" class="mr-1" />Open link
                     <span v-if="active">
                       <shortkey-badge :value="['Ctrl', 'l']" class="ml-2" />
                     </span>
