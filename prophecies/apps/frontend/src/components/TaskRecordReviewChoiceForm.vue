@@ -109,7 +109,7 @@ export default {
       return this.taskRecord.task.status !== 'OPEN'
     }
   }
-} 
+}
 </script>
 
 <template>

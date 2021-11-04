@@ -18,7 +18,7 @@ import messages from '@/messages/en'
 import settings from '@/settings'
 import * as icons from '@/utils/icons'
 import App from '@/views/App'
-import vShortkey  from '@/directives/shortkey'
+import vShortkey from '@/directives/shortkey'
 import Shortkey from '@/plugins/Shortkey'
 
 /**

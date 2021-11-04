@@ -1,68 +1,68 @@
 <script>
-  import { toVariant } from '@/utils/variant'
-  import ChoiceGroup from '@/models/ChoiceGroup'
-  import ShortkeyBadge from '@/components/ShortkeyBadge'
+import { toVariant } from '@/utils/variant'
+import ChoiceGroup from '@/models/ChoiceGroup'
+import ShortkeyBadge from '@/components/ShortkeyBadge'
 
-  export default {
-    name: 'ChoiceGroupButtons',
-    model: {
-      prop: 'choiceId',
-      event: 'update:choiceId'
+export default {
+  name: 'ChoiceGroupButtons',
+  model: {
+    prop: 'choiceId',
+    event: 'update:choiceId'
+  },
+  props: {
+    choiceId: {
+      type: [String, Number],
+      default: null
     },
-    props: {
-      choiceId: {
-        type: [String, Number],
-        default: null
-      },
-      choiceGroupId: {
-        type: [String, Number]
-      },
-      activateShortkeys: {
-        type: Boolean
-      }
+    choiceGroupId: {
+      type: [String, Number]
     },
-    filters: {
-      toVariant
+    activateShortkeys: {
+      type: Boolean
+    }
+  },
+  filters: {
+    toVariant
+  },
+  components: {
+    ShortkeyBadge
+  },
+  computed: {
+    choiceGroup () {
+      return ChoiceGroup
+        .query()
+        .with('choices')
+        .find(this.choiceGroupId)
     },
-    components: {
-      ShortkeyBadge
-    },
-    computed: {
-      choiceGroup () {
-        return ChoiceGroup
-          .query()
-          .with('choices')
-          .find(this.choiceGroupId)
-      },
-      hasChoice () {
-        return this.choiceId !== null
-      }
-    },
-    methods: {
-      async selectChoice ({ id }) {
-        /**
+    hasChoice () {
+      return this.choiceId !== null
+    }
+  },
+  methods: {
+    async selectChoice ({ id }) {
+      /**
          * Fired when the user selected a choice
          * @event update:choiceId
          * @param The selected choice
          */
-        this.$emit('update:choiceId', id)
-      },
-      choiceIsSelected ({ id }) {
-        return id === this.choiceId
-      },
-      choiceClassList (choice) {
-        return {
-          'choice-group-buttons__item--selected': this.choiceIsSelected(choice)
-        }
-      },
-      choiceShortkeys ({ shortkeys = null }) {
-        if (!this.activateShortkeys || !shortkeys) {
-          return null
-        }
-        return shortkeys.split(',')
+      this.$emit('update:choiceId', id)
+    },
+    choiceIsSelected ({ id }) {
+      return id === this.choiceId
+    },
+    choiceClassList (choice) {
+      return {
+        'choice-group-buttons__item--selected': this.choiceIsSelected(choice)
       }
+    },
+    choiceShortkeys ({ shortkeys = null }) {
+      if (!this.activateShortkeys || !shortkeys) {
+        return null
+      }
+      return shortkeys.split(',')
     }
   }
+}
 </script>
 
 <template>
