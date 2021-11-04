@@ -50,7 +50,7 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TaskRecordReview
-        fields = ['id', 'url', 'checker', 'choice', 'status',
+        fields = ['id', 'url', 'checker', 'choice', 'choice_id', 'status',
                     'note', 'note_created_at', 'note_updated_at',
                     'alternative_value', 'task_record', 'task_id', 'history']
         read_only_fields = ['status',]

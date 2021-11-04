@@ -1,5 +1,5 @@
 <script>
-import { get, orderBy } from 'lodash'
+import { get, uniqueId } from 'lodash'
 
 import User from '@/models/User'
 import { toVariant } from '@/utils/variant'
@@ -41,11 +41,18 @@ export default {
     },
     selectSameChoice ({ alternativeValue = null, choice } = {}) {
       /**
-       * Fired when user select the same alternative value
+       * Fired when user selects the same alternative value
        * @event submit
        * @param The changed attributes and relationships
        */
       this.$emit('same', { alternativeValue, choice })
+    },
+    cancelReview (choice) {
+      /**
+       * Fired when user cancels their choice
+       * @event cancel
+       */
+      this.$emit('cancel')
     }
   },
   computed: {
@@ -68,6 +75,9 @@ export default {
         .orderBy(({ id }) => -Number(id))
         .get()
       return [this.taskRecordReview, ...history]
+    },
+    tooltipId () {
+      return uniqueId('choice-tooltip-')
     }
   }
 }
@@ -84,10 +94,13 @@ export default {
           </template>
         </span>
       </div>
-      <div class="task-record-review-history__checker__choice">
-        <b-badge class="task-record-review-history__checker__choice__badge" :variant="choice.value | toVariant" v-if="choice" :title="choice.name" v-b-tooltip.right>
+      <div v-if="choice!==null" class="task-record-review-history__checker__choice">
+        <b-badge class="task-record-review-history__checker__choice__badge" :variant="choice.value | toVariant"  v-if="choice" :id="tooltipId" >
           {{ choice.name | firstLetter }}<span class="sr-only">{{ choice.name | skipFirstLetter }}</span>
         </b-badge>
+          <b-tooltip class="task-record-review-history__checker__choice__tooltip" :target="tooltipId" triggers="hover" placement="right" v-if="choice">
+            <span class="py-1 px-2 font-weight-bold task-record-review-history__checker__choice__tooltip__choice-name">{{choice.name}}</span>|<b-btn size="sm" variant="link" class="text-white" @click="cancelReview(choice)">Cancel my choice</b-btn>
+          </b-tooltip>
       </div>
       <div class="task-record-review-history__checker__alternative-value flex-grow-1">
         <template v-if="alternativeValue">
@@ -127,6 +140,11 @@ export default {
         display: flex;
         align-items: center;
         padding-right: $spacer-sm;
+
+        &__tooltip__choice-name {
+          line-height: 1.7;
+          display: inline-block;
+        }
       }
 
       &__name {
