@@ -144,7 +144,7 @@ export default {
     <div  class="history-list-item__prefix-column" v-html="prefix"></div>
     <div class="row container-fluid justify-content-between flex-grow-1">
         <div class="d-flex flex-grow-lg-0 flex-grow-1 px-3 py-1 history-list-item__content-column col-12 col-lg-5" :class="className">
-        {{who }}<a v-if="hasLink" class="pl-1" :href='`${link}`'> {{content}} </a> <template v-else> {{content}} </template>
+          <p>{{who }}<a v-if="hasLink" class="pl-1" :href='`${link}`'> {{content}} </a> <template v-else> {{content}} </template></p>
         </div>
         <div class="d-flex ml-auto flex-md-row flex-lg-grow-0 justify-content-md-right flex-sm-column flex-sm-grow-1 justify-content-sm-between">
           <div class="px-3 py-1 text-sm-left text-lg-right history-list-item__category-column">{{category}}</div>
