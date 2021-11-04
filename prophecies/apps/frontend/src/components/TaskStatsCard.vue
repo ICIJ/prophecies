@@ -136,7 +136,7 @@ export default {
               >
                 {{ progressByRound[round] | round }}%
               </span>
-              <span class="text-muted mx-2" v-if="round !== task.rounds">
+              <span class="text-secondary mx-2" v-if="round !== task.rounds">
                 |
               </span>
             </li>
