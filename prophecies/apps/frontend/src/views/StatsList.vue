@@ -19,7 +19,6 @@
               :key="task.id"
               :team="teamTaskStats"
               :task-id="task.id" extended>
-              
               <template v-slot:taskCreatedAt="{ date }">
                 <span class="text-secondary">
                   Created at {{ date | formatDate }}
@@ -35,7 +34,7 @@
               </template>
 
               <template v-slot:usersByRound="{stats}">
-                <user-stats-by-round
+                <stats-by-round
                   v-for="(round,index) in stats.rounds"
                   :key="round"
                   :round="index+1"
@@ -43,6 +42,7 @@
                   :choices='choicesByRound[round]'
                   :users='usersByRound[round]'
                   :summary='summaryByRound[round]'
+                  extended
                   class="col-4" />
               </template>
             </task-stats-card>
@@ -67,9 +67,8 @@ import TaskStatsCard from '@/components/TaskStatsCard'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import Task from '@/models/Task'
 
-import UserStatsByRound from '@/components/UserStatsByRound.vue'
-
 import moment from 'moment'
+import StatsByRound from '@/components/StatsByRound.vue'
 const choices = [
   {
     value: 'correct',
@@ -152,10 +151,7 @@ export default {
     AppWaiter,
     TaskStatsCard,
     TaskStatsCardAllRounds,
-    UserStatsByRound
-  },
-  props: {
-
+    StatsByRound
   },
   filters: {
     formatDate (d) {
@@ -230,6 +226,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

@@ -32,41 +32,41 @@ describe('TaskStatsCard', () => {
   })
 
   it('should show 3 rounds', () => {
-    const elements = wrapper.findAll('.task-stats-card__progress-by-round__item')
+    const elements = wrapper.findAll('stats-by-round-stub')
     expect(elements).toHaveLength(3)
   })
 
   it('should show 100% progress at round 1 for the user', () => {
-    const element = wrapper.findAll('.task-stats-card__progress-by-round__item__value').at(0)
-    expect(element.text()).toBe('100%')
+    const element = wrapper.findAll('stats-by-round-stub').at(0)
+    expect(element.attributes('progress')).toBe('100')
   })
 
   it('should show 50% progress at round 1 for the team', async () => {
     await wrapper.setProps({ team: true })
-    const element = wrapper.findAll('.task-stats-card__progress-by-round__item__value').at(0)
-    expect(element.text()).toBe('50%')
+    const element = wrapper.findAll('stats-by-round-stub').at(0)
+    expect(element.attributes('progress')).toBe('50')
   })
 
   it('should show 25% progress at round 2 for the user', () => {
-    const element = wrapper.findAll('.task-stats-card__progress-by-round__item__value').at(1)
-    expect(element.text()).toBe('25%')
+    const element = wrapper.findAll('stats-by-round-stub').at(1)
+    expect(element.attributes('progress')).toBe('25')
   })
 
   it('should show 25% progress at round 2 for the team', async () => {
     await wrapper.setProps({ team: true })
-    const element = wrapper.findAll('.task-stats-card__progress-by-round__item__value').at(1)
-    expect(element.text()).toBe('25%')
+    const element = wrapper.findAll('stats-by-round-stub').at(1)
+    expect(element.attributes('progress')).toBe('25')
   })
 
   it('should show 25% progress at round 3 for the user', () => {
-    const element = wrapper.findAll('.task-stats-card__progress-by-round__item__value').at(2)
-    expect(element.text()).toBe('25%')
+    const element = wrapper.findAll('stats-by-round-stub').at(2)
+    expect(element.attributes('progress')).toBe('25')
   })
 
   it('should show 30% progress at round 3 for the team', async () => {
     await wrapper.setProps({ team: true })
-    const element = wrapper.findAll('.task-stats-card__progress-by-round__item__value').at(2)
-    expect(element.text()).toBe('30%')
+    const element = wrapper.findAll('stats-by-round-stub').at(2)
+    expect(element.attributes('progress')).toBe('30')
   })
   it('should show the task locked', async () => {
     const element = wrapper.find('.task-stats-card__status__lock--locked')

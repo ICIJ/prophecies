@@ -1,8 +1,12 @@
 <script>
 import Task from '@/models/Task'
+import StatsByRound from '@/components/StatsByRound.vue'
 
 export default {
   name: 'TaskStatsCard',
+  components: {
+    StatsByRound
+  },
   props: {
     taskId: {
       type: [Number, String]
@@ -125,30 +129,20 @@ export default {
         </div>
       </div>
 
-      <div class="d-flex " :class="{'align-items-center':!extended}">
-        <slot name="usersByRound" v-bind:stats="{rounds:task.rounds,progress:progressByRound}">
-          <ul class="task-stats-card__progress-by-round list-inline m-0">
-            <li
-              class="task-stats-card__progress-by-round__item list-inline-item"
+      <div class="d-flex flex-row flex-grow-1 " :class="{'align-items-center':!extended}">
+         <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 "
+              :class="{'mx-auto':extended}"
+         >
+          <slot name="usersByRound" v-bind:stats="{rounds:task.rounds,progress:progressByRound}">
+            <stats-by-round
               v-for="round in task.rounds"
               :key="round"
-            >
-              {{ $t('taskStatsCard.round') }} {{ round }}
-              <span
-                class="
-                  task-stats-card__progress-by-round__item__value
-                  font-weight-bold
-                  ml-3
-                "
-              >
-                {{ progressByRound[round] | round }}%
-              </span>
-              <span class="text-secondary mx-2" v-if="round !== task.rounds">
-                |
-              </span>
-            </li>
-          </ul>
-        </slot>
+              :round="round"
+              :nbRounds="task.rounds"
+              :progress="progressByRound[round]"
+            />
+          </slot>
+         </div>
         <slot name="allRounds" v-if="!extended">
           <span
             class="
