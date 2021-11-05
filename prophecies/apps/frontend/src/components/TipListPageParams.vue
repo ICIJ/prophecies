@@ -21,7 +21,18 @@
                      @input="$emit('update:taskId', idOrNull($event))"
                      placeholder="Select a task"
                      label="name"
-                     track-by="id" />
+                     track-by="id">
+          <template slot="option" slot-scope="{ option }">
+            <div class="d-flex">
+              <div>
+                {{ option.name }}
+              </div>
+              <div class="tip-list-page-params__task__show-status ml-auto text-capitalize font-weight-normal" v-if="option.status === 'closed'">
+                {{ option.status }}
+              </div>
+            </div>
+          </template>
+        </multiselect>
       </label>
       <label class="tip-list-page-params__creator col-lg-4 col-xl-3">
         <div class="mb-3">Author</div>
@@ -107,7 +118,16 @@ export default {
       const elements = this.tips.reduce((options, tip) => {
         const elementId = tip[elId]
         const elementName = tip[elType]?.[elValue]
-        if (elementId && !options[elementId]) { options[elementId] = { id: elementId, [elValue]: elementName } }
+        if (elementId && !options[elementId]) { 
+          options[elementId] = { 
+            id: elementId, 
+            [elValue]: elementName 
+          }
+          if (elType === 'task') {
+            const status = tip[elType]?.status
+            options[elementId].status = status.toLowerCase()
+          }
+        }
         return options
       }, {})
       return Object.values(elements)
@@ -115,3 +135,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .tip-list-page-params {
+    &__task {
+      &__show-status {
+        font-size: smaller;
+      }
+    }
+  }
+</style>
