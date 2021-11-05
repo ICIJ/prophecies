@@ -86,13 +86,15 @@ export default {
             </b-badge>
           </h3>
           <p class="pt-2">
-              {{ $tc('taskStatsCard.fullyCheckedItems', taskRecordsCount) }}:
-              <span
-                class="text-danger font-weight-bold ml-2 task-stats-card__checked"
-              >
-                {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
-              </span>
-            </p>
+            {{ $tc('taskStatsCard.fullyCheckedItems', taskRecordsCount) }}:
+            <span
+              class="text-danger font-weight-bold ml-2 task-stats-card__checked"
+            >
+              {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
+            </span>
+          </p>
+          <slot name="taskCreatedAt" v-if="extended" v-bind:date="task.createdAt">
+          </slot>
         </div>
         <slot name="allRounds" v-if="extended" v-bind:rounds="{progress:progress,done:taskRecordsDoneCount,pending:taskRecordsPendingCount}">
         </slot>

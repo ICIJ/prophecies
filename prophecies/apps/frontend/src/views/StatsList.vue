@@ -19,6 +19,13 @@
               :key="task.id"
               :team="teamTaskStats"
               :task-id="task.id" extended>
+              
+              <template v-slot:taskCreatedAt="{ date }">
+                <span class="text-secondary">
+                  Created at {{ date | formatDate }}
+                </span>
+              </template>
+
               <template v-slot:allRounds="{rounds}">
                 <task-stats-card-all-rounds
                 :progress="rounds.progress"
@@ -61,6 +68,8 @@ import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import Task from '@/models/Task'
 
 import UserStatsByRound from '@/components/UserStatsByRound.vue'
+
+import moment from 'moment'
 const choices = [
   {
     value: 'correct',
@@ -147,6 +156,11 @@ export default {
   },
   props: {
 
+  },
+  filters: {
+    formatDate (d) {
+      return moment(d).format('ddd DD, MMM YYYY')
+    }
   },
   data () {
     return {

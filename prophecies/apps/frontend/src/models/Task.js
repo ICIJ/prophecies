@@ -19,6 +19,7 @@ export default class Task extends Model {
       choiceGroup: this.belongsTo(ChoiceGroup, 'choiceGroupId'),
       choiceGroupId: this.attr(null),
       colors: this.attr(),
+      createdAt: this.string(),
       priority: this.number(1),
       progress: this.number(0),
       progressByRound: this.attr(),
