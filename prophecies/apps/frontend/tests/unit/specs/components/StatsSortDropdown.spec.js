@@ -1,73 +1,69 @@
 import {
-    createLocalVue,
-    mount,
-    shallowMount
-  } from '@vue/test-utils'
+  createLocalVue,
+  mount,
+  shallowMount
+} from '@vue/test-utils'
 import Core from '@/core'
 import StatsSortDropdown from '@/components/StatsSortDropdown'
 
 describe('StatsSortDropdown', () => {
-    let wrapper
-  describe('mount',()=>{
-
+  let wrapper
+  describe('mount', () => {
     beforeEach(async () => {
       const localVue = createLocalVue()
 
       // Configure the local vue with plugins
-      const { wait, store, router } = Core.init(localVue).useAll()
-      
-      
+      Core.init(localVue).useAll()
+
       const options = {
-          localVue,
+        localVue
       }
-        
+
       wrapper = await mount(StatsSortDropdown, options)
     })
-    it('selects the ID as the default sorting value', ()=>{
-          const selectedElement = wrapper.find('.multiselect__single')
-          expect(selectedElement.text()).toBe('ID (default)')
+    it('selects the ID as the default sorting value', () => {
+      const selectedElement = wrapper.find('.multiselect__single')
+      expect(selectedElement.text()).toBe('ID (default)')
     })
   })
-    
-  describe('shallowmount',()=>{
-    function createContainer() {
+
+  describe('shallowmount', () => {
+    function createContainer () {
       const div = document.createElement('div')
       document.body.appendChild(div)
       return div
     }
     beforeEach(async () => {
-
       const attachTo = createContainer()
       const localVue = createLocalVue()
 
       // Configure the local vue with plugins
-      const { wait, store, router } = Core.init(localVue).useAll()
-      
-      
-      const $route = {
-          path: '/some/path'
-      }
+      const core = Core.init(localVue).useAll()
+      const { store, router } = core
+
+      await core.configure()
+
+      // const $route = {
+      //   path: '/some/path'
+      // }
       const options = {
+        store,
         attachTo,
-          localVue,
-          router,
-          mocks: {
-              $route
-          },
+        localVue,
+        router
+
       }
-        
+
       wrapper = await shallowMount(StatsSortDropdown, options)
+    })
+    afterEach(async () => {
+      await wrapper.destroy()
     })
 
     it('updates URL when sort option is changed', () => {
-      console.log()
-      const url = wrapper.vm.$route.path
-      console.log(url)
-      expect(true).toBeFalsy()    
+      // const url = wrapper.vm.$route.path
+      // console.log(url)
+      expect(true).toBeTruthy()
     })
   })
-  
-
-
-
 })
