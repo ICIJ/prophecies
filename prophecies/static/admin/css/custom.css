@@ -110,3 +110,7 @@ body {
 .object-tools a.exportlink {
   background-image: url(../images/tooltag-export.svg);  
 }
+
+.task-record-review-display__choice:not(:empty):before {  
+  content: "Classified as "
+}

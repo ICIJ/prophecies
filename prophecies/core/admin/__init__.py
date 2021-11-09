@@ -4,4 +4,5 @@ from .project_admin import ProjectAdmin
 from .setting_admin import *
 from .task_admin import TaskAdmin
 from .task_record_admin import TaskRecordAdmin
+from .task_record_review_admin import TaskRecordReviewAdmin
 from .tip_admin import TipAdmin

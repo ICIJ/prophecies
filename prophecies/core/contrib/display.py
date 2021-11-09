@@ -29,3 +29,11 @@ def display_status(status):
     variant = to_variant(status, prefix='badge-')
     context = dict(status=status, variant=variant)
     return format_html('<span class="badge {variant}">{status}</span>', **context)
+
+
+def display_choice(choice):
+    if choice:
+        variant = to_variant(choice.value, prefix='badge-')
+        context = dict(status=choice.name, variant=variant)
+        return format_html('<span class="badge {variant}">{status}</span>', **context)
+    return format_html('<span class="badge badge-quiet">Unknown</span>')

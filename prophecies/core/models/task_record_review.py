@@ -107,7 +107,9 @@ class TaskRecordReview(models.Model):
 
 
     def __str__(self):
-        return f'Task record #{self.task_record.id} on round {self.round}'
+        if self.task_record and self.checker:
+            return f'Record #{self.task_record.id} reviewed by {self.checker}'
+        return super().__str__()
 
 
 
