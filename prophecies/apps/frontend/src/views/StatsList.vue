@@ -20,11 +20,6 @@
               :key="task.id"
               :team="teamTaskStats"
               :task-id="task.id" extended>
-              <template v-slot:taskCreatedAt="{ date }">
-                <span class="text-secondary">
-                  Created at {{ date | formatDate }}
-                </span>
-              </template>
 
               <template v-slot:allRounds="{rounds}">
                 <task-stats-card-all-rounds
@@ -68,7 +63,6 @@ import TaskStatsCard from '@/components/TaskStatsCard'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import Task from '@/models/Task'
 
-import moment from 'moment'
 import StatsByRound from '@/components/StatsByRound.vue'
 import StatsSortDropdown from '@/components/StatsSortDropdown.vue'
 const choices = [
@@ -155,11 +149,6 @@ export default {
     TaskStatsCardAllRounds,
     StatsByRound,
     StatsSortDropdown
-  },
-  filters: {
-    formatDate (d) {
-      return moment(d).format('ddd DD, MMM YYYY')
-    }
   },
   data () {
     return {

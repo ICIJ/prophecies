@@ -1,4 +1,5 @@
 <script>
+import moment from 'moment'
 import Task from '@/models/Task'
 import StatsByRound from '@/components/StatsByRound.vue'
 
@@ -20,6 +21,9 @@ export default {
     }
   },
   filters: {
+    formatDate (d) {
+      return moment(d).format('ddd DD, MMM YYYY')
+    },
     round (value) {
       return Math.round(value)
     }
@@ -97,8 +101,9 @@ export default {
               {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
             </span>
           </p>
-          <slot name="taskCreatedAt" v-if="extended" v-bind:date="task.createdAt">
-          </slot>
+          <span v-if="extended" class="text-secondary">
+              Created at {{ date | formatDate }}
+          </span>
         </div>
         <slot name="allRounds" v-if="extended" v-bind:rounds="{progress:progress,done:taskRecordsDoneCount,pending:taskRecordsPendingCount}">
         </slot>
