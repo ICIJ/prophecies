@@ -3,6 +3,7 @@
    <app-sidebar class="w-100 sticky-top" />
     <div class="stats-list__container flex-grow-1">
       <app-header reduced />
+      <stats-sort-dropdown />
       <div class="container-fluid p-5">
         <div class="col-12">
           <div class="d-flex flex-column">
@@ -69,6 +70,7 @@ import Task from '@/models/Task'
 
 import moment from 'moment'
 import StatsByRound from '@/components/StatsByRound.vue'
+import StatsSortDropdown from '@/components/StatsSortDropdown.vue'
 const choices = [
   {
     value: 'correct',
@@ -151,7 +153,8 @@ export default {
     AppWaiter,
     TaskStatsCard,
     TaskStatsCardAllRounds,
-    StatsByRound
+    StatsByRound,
+    StatsSortDropdown
   },
   filters: {
     formatDate (d) {
