@@ -39,7 +39,7 @@ export default {
     }
   },
   methods: {
-    async selectChoice ({ id }) {
+    selectChoice ({ id }) {
       /**
          * Fired when the user selected a choice
          * @event update:choiceId
