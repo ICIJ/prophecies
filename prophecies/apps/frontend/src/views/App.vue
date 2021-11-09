@@ -15,6 +15,9 @@ export default {
       }
     }
   },
+  created () {
+    this.$root.$on('prophecies::toggleShortcuts', this.toggleShortcuts)    
+  },
   methods: {
     mapShortkeys ({ detail: { srcKey: method } }) {
       if (method in this.$options.methods) {
