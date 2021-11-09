@@ -38,9 +38,9 @@
         </li>
       </ul>
       <div class="d-flex justify-content-center">
-        <router-link class="btn btn-link text-secondary" :to="{ name: 'stats-list' }">
+        <!-- <router-link class="btn btn-link text-secondary" :to="{ name: 'stats-list' }">
           {{ $t("progressCard.moreProgress") }}
-        </router-link>
+        </router-link> -->
       </div>
     </template>
     <div v-else class="progress-card__no-items text-center text-secondary text-small">
