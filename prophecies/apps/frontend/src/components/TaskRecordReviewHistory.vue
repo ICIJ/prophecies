@@ -99,7 +99,8 @@ export default {
           {{ choice.name | firstLetter }}<span class="sr-only">{{ choice.name | skipFirstLetter }}</span>
         </b-badge>
           <b-tooltip class="task-record-review-history__checker__choice__tooltip" :target="tooltipId" triggers="hover" placement="right" v-if="choice">
-            <span class="py-1 px-2 font-weight-bold task-record-review-history__checker__choice__tooltip__choice-name">{{choice.name}}</span>|<b-btn size="sm" variant="link" class="text-white" @click="cancelReview(choice)">Cancel my choice</b-btn>
+            <span class="py-1 px-2 font-weight-bold task-record-review-history__checker__choice__tooltip__choice-name">{{choice.name}}</span>
+            <template v-if="isMe(checker)">|<b-btn size="sm" variant="link" class="text-white" @click="cancelReview(choice)">Cancel my choice</b-btn></template>
           </b-tooltip>
       </div>
       <div class="task-record-review-history__checker__alternative-value flex-grow-1">
