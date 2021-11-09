@@ -32,5 +32,6 @@ describe('StatsList', () => {
             const element = wrapper.find('stats-sort-dropdown-stub')
             expect(element.exists()).toBeTruthy()
         })
+     
     })
 })
