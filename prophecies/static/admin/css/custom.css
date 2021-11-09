@@ -95,3 +95,18 @@ body {
   text-transform: uppercase;
   padding: 0.25rem 0.5rem;
 }
+
+.object-tools a.uploadlink,
+.object-tools a.exportlink {
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  padding-right: 26px;
+}
+
+.object-tools a.uploadlink {
+  background-image: url(../images/tooltag-upload.svg);  
+}
+
+.object-tools a.exportlink {
+  background-image: url(../images/tooltag-export.svg);  
+}

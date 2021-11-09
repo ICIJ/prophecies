@@ -6,6 +6,7 @@ from django.urls import path
 from django.utils.html import format_html
 from admin_auto_filters.filters import AutocompleteFilterFactory
 from textwrap import shorten
+from import_export.admin import ExportMixin
 
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon, display_task_record_link
 from prophecies.core.forms import TaskRecordAssignForm, TaskRecordUploadForm
@@ -27,11 +28,10 @@ class TaskRecordReviewInline(admin.TabularInline):
 
     def has_add_permission(self, request, obj=None):
         return False
-
-
+    
 
 @admin.register(TaskRecord)
-class TaskRecordAdmin(admin.ModelAdmin):
+class TaskRecordAdmin(ExportMixin, admin.ModelAdmin):
     change_list_template = "admin/task_record_changelist.html"
     exclude = ['metadata', 'rounds', 'link', 'status']
     readonly_fields = ['round_count', 'status_badge', 'computed_link', 'metadata_json']
@@ -51,7 +51,6 @@ class TaskRecordAdmin(admin.ModelAdmin):
     inlines = [TaskRecordReviewInline,]
     actions = ['assign_action']
     search_fields = ['original_value', 'predicted_value', 'metadata', 'link']
-
 
     def get_queryset(self, request):
         return super().get_queryset(request) \

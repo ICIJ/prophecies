@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'webpack_loader',
     'colorfield',
     'constance',
+    'import_export',
     'constance.backends.database',
     'prophecies.apps.api',
     'prophecies.core'

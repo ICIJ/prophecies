@@ -24,6 +24,7 @@ django-activity-stream = "*"
 django-jsonfield = "*"
 markdown = "*"
 django-admin-autocomplete-filter = "*"
+django-import-export = "*"
 
 [dev-packages]
 
