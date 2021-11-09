@@ -1,73 +1,73 @@
 <script>
-  import { find } from 'lodash'
-  import Multiselect from 'vue-multiselect'
+import { find } from 'lodash'
+import Multiselect from 'vue-multiselect'
 
-  export default {
-    name: 'TaskRecordReviewPageParams',
-    components: {
-      Multiselect
+export default {
+  name: 'TaskRecordReviewPageParams',
+  components: {
+    Multiselect
+  },
+  props: {
+    pageSize: {
+      type: String,
+      default: '10'
     },
-    props: {
-      pageSize: {
-        type: String,
-        default: '10'
-      },
-      sort: {
-        type: String,
-        default: 'task_record__id'
-      }
+    sort: {
+      type: String,
+      default: 'task_record__id'
+    }
+  },
+  data () {
+    return {
+      intermediaryPageSize: this.pageSize,
+      intermediarySort: this.sort
+    }
+  },
+  watch: {
+    pageSize (value) {
+      this.intermediaryPageSize = value
     },
-    data () {
-      return {
-        intermediaryPageSize: this.pageSize,
-        intermediarySort: this.sort
-      }
+    sort (value) {
+      this.intermediarySort = value
+    }
+  },
+  computed: {
+    pageSizeOptions () {
+      return [
+        { value: '10', label: '10 by page' },
+        { value: '25', label: '25 by page' },
+        { value: '50', label: '50 by page' }
+      ]
     },
-    watch: {
-      pageSize (value) {
-        this.intermediaryPageSize = value
-      },
-      sort (value) {
-        this.intermediarySort = value
-      }
+    sortOptions () {
+      return [
+        { value: 'task_record__id', label: 'ID (default)', $isDefault: true },
+        { value: 'task_record__predicted_value', label: 'Predicted value (A - Z)' },
+        { value: '-task_record__predicted_value', label: 'Predicted value (Z - A)' },
+        { value: 'task_record__original_value', label: 'Original value (A - Z)' },
+        { value: '-task_record__original_value', label: 'Original value (Z - A)' },
+        { value: 'task_record__priority', label: 'Priority (low to high)', $isDisabled: true },
+        { value: '-task_record__priority', label: 'Priority (high to low)', $isDisabled: true }
+      ]
     },
-    computed: {
-      pageSizeOptions () {
-        return [
-          { value: '10', label: '10 by page' },
-          { value: '25', label: '25 by page' },
-          { value: '50', label: '50 by page' }
-        ]
-      },
-      sortOptions () {
-        return [
-          { value: 'task_record__id', label: 'ID (default)', $isDefault: true },
-          { value: 'task_record__predicted_value', label: 'Predicted value (A - Z)' },
-          { value: '-task_record__predicted_value', label: 'Predicted value (Z - A)' },
-          { value: 'task_record__original_value', label: 'Original value (A - Z)' },
-          { value: '-task_record__original_value', label: 'Original value (Z - A)' },
-          { value: 'task_record__priority', label: 'Priority (low to high)', $isDisabled: true },
-          { value: '-task_record__priority', label: 'Priority (high to low)', $isDisabled: true },
-        ]
-      },
-      selectedPageSizeOption () {
-        return find(this.pageSizeOptions, { value: this.intermediaryPageSize })
-      },
-      selectedSortOption () {
-        return find(this.sortOptions, { value: this.intermediarySort })
-      },
-      isDefaultSortOption () {
-        return this.intermediarySort === this.$options.props.sort.default
-      }
+    selectedPageSizeOption () {
+      return find(this.pageSizeOptions, { value: this.intermediaryPageSize })
     },
-    methods: {
-      submit () {
-        const pageSize = this.intermediaryPageSize
-        const sort = this.intermediarySort
-        this.$emit('submit', { pageSize, sort })
-      }
+    selectedSortOption () {
+      return find(this.sortOptions, { value: this.intermediarySort })
+    },
+    isDefaultSortOption () {
+      return this.intermediarySort === this.$options.props.sort.default
+    }
+  },
+  methods: {
+    submit () {
+      const pageSize = this.intermediaryPageSize
+      const sort = this.intermediarySort
+      this.$emit('submit', { pageSize, sort })
     }
   }
+}
 </script>
 
 <template>
