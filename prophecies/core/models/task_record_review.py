@@ -108,7 +108,9 @@ class TaskRecordReview(models.Model):
 
     def __str__(self):
         if self.task_record and self.checker:
-            return f'Record #{self.task_record.id} reviewed by {self.checker}'
+            if self.choice:
+                return f'Record #{self.task_record.id} reviewed by {self.checker}'
+            return f'Record #{self.task_record.id} pending review by {self.checker}'            
         return super().__str__()
 
 
