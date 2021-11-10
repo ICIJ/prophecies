@@ -121,6 +121,9 @@ STATICFILES_DIRS = [
     project_root.path('apps', 'frontend', 'dist').root,
 ]
 
+# Allow user to update up to 5000 records at the same time
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000
+
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 # https://github.com/jacobian/dj-database-url#url-schema
