@@ -4,9 +4,9 @@ import {
   shallowMount
 } from '@vue/test-utils'
 import Core from '@/core'
-import StatsSortDropdown from '@/components/StatsSortDropdown'
+import SortByDropdown from '@/components/SortByDropdown'
 
-describe('StatsSortDropdown', () => {
+describe('SortByDropdown', () => {
   let wrapper
   describe('mount', () => {
     beforeEach(async () => {
@@ -14,12 +14,18 @@ describe('StatsSortDropdown', () => {
 
       // Configure the local vue with plugins
       Core.init(localVue).useAll()
-
+      const propsData = {
+        sort: 'task_id',
+        options: [
+          { value: 'task_id', label: 'ID (default)', $isDefault: true }
+        ]
+      }
       const options = {
-        localVue
+        localVue,
+        propsData
       }
 
-      wrapper = await mount(StatsSortDropdown, options)
+      wrapper = await mount(SortByDropdown, options)
     })
     it('selects the ID as the default sorting value', () => {
       const selectedElement = wrapper.find('.multiselect__single')
@@ -28,42 +34,34 @@ describe('StatsSortDropdown', () => {
   })
 
   describe('shallowmount', () => {
-    function createContainer () {
-      const div = document.createElement('div')
-      document.body.appendChild(div)
-      return div
-    }
     beforeEach(async () => {
-      const attachTo = createContainer()
       const localVue = createLocalVue()
 
       // Configure the local vue with plugins
       const core = Core.init(localVue).useAll()
-      const { store, router } = core
+      const { router } = core
 
       await core.configure()
 
-      // const $route = {
-      //   path: '/some/path'
-      // }
       const options = {
-        store,
-        attachTo,
         localVue,
         router
-
       }
 
-      wrapper = await shallowMount(StatsSortDropdown, options)
-    })
-    afterEach(async () => {
-      await wrapper.destroy()
+      wrapper = await shallowMount(SortByDropdown, options)
     })
 
-    it('updates URL when sort option is changed', () => {
-      // const url = wrapper.vm.$route.path
-      // console.log(url)
-      expect(true).toBeTruthy()
-    })
+    // it('updates URL when sort option is changed', () => {
+    //   // what
+    //   const url = wrapper.vm.$route.query
+
+    //   // when
+    //   console.log(url)
+
+    //   const expectedQueryParam = 'task_id'
+    //   wrapper.vm.sort = expectedQueryParam
+    //   // expect
+    //   expect(wrapper.vm.$route.query.sort).toBe(expectedQueryParam)
+    // })
   })
 })

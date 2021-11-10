@@ -3,17 +3,25 @@
    <app-sidebar class="w-100 sticky-top" />
     <div class="stats-list__container flex-grow-1">
       <app-header reduced />
-      <stats-sort-dropdown />
       <div class="container-fluid p-5">
         <div class="col-12">
           <div class="d-flex flex-column">
-            <b-form-group>
-              <b-form-radio-group
-              v-model="teamTaskStats"
-              buttons
-              button-variant="outline-primary"
-              :options="taskStatsOptions" />
-            </b-form-group>
+            <div class="d-flex flex-row justify-content-between">
+              <div class="d-flex flex-row align-items-end" >
+              <b-form-group >
+                <b-form-radio-group
+                v-model="teamTaskStats"
+                buttons
+                button-variant="outline-primary"
+                :options="taskStatsOptions" />
+              </b-form-group>
+              </div>
+              <sort-by-dropdown
+                :sort.sync="sortField"
+                :options="sortOptions"
+                class="mb-3"/>
+
+            </div>
             <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
               <task-stats-card class="my-5"
               v-for="task in tasks"
@@ -64,7 +72,7 @@ import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import Task from '@/models/Task'
 
 import StatsByRound from '@/components/StatsByRound.vue'
-import StatsSortDropdown from '@/components/StatsSortDropdown.vue'
+import SortByDropdown from '@/components/SortByDropdown.vue'
 const choices = [
   {
     value: 'correct',
@@ -148,10 +156,24 @@ export default {
     TaskStatsCard,
     TaskStatsCardAllRounds,
     StatsByRound,
-    StatsSortDropdown
+    SortByDropdown
   },
   data () {
     return {
+      sortField: 'task_id',
+      sortOptions: [
+        { value: 'task_id', label: 'ID (default)', $isDefault: true },
+        { value: 'task_created_at_desc', label: 'Latest created' },
+        { value: 'task_created_at_asc', label: 'Oldest created' }
+        //   { value: 'task_record__id', label: 'Task name (A-Z)' },
+        //   { value: 'task_record__id', label: 'Task name (Z-A)' },
+        //   { value: 'task_record__id', label: 'Project name (A-Z)' },
+        //   { value: 'task_record__id', label: 'Project name (Z-A)' },
+        //   { value: 'task_record__id', label: 'Progress (low to high)' },
+        //   { value: 'task_record__id', label: 'Progress (high to low)' },
+        //   { value: 'task_record__priority', label: 'Priority (low to high)' },
+        //   { value: '-task_record__priority', label: 'Priority (high to low)' },
+      ],
       teamTaskStats: true,
       taskStatsOptions: [
         { text: 'Team stats', value: true },

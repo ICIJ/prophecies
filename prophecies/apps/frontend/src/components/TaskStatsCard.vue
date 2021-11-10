@@ -102,7 +102,7 @@ export default {
             </span>
           </p>
           <span v-if="extended" class="text-secondary">
-              Created at {{ date | formatDate }}
+              Created at {{ task.created_at | formatDate }}
           </span>
         </div>
         <slot name="allRounds" v-if="extended" v-bind:rounds="{progress:progress,done:taskRecordsDoneCount,pending:taskRecordsPendingCount}">

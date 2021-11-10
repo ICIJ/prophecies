@@ -27,10 +27,9 @@ describe('StatsList', () => {
   afterEach(async () => {
     await wrapper.destroy()
   })
-  describe('Sort by task', () => {
-    it('Shows sort dropdown', () => {
-      const element = wrapper.find('stats-sort-dropdown-stub')
-      expect(element.exists()).toBeTruthy()
-    })
+
+  it('Shows sort dropdown', () => {
+    const element = wrapper.find('sort-by-dropdown-stub')
+    expect(element.exists()).toBeTruthy()
   })
 })
