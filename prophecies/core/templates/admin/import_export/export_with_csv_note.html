@@ -1,0 +1,9 @@
+{% extends "admin/import_export/export.html" %}
+
+
+{% block content %}
+  <p class="help mx-2">
+    <span class="font-weight-bold">Note:</span> for big dataset, we recommend using the CSV format.
+  </p>
+  {{ block.super }}
+{% endblock %}
