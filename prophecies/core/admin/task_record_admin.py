@@ -1,19 +1,25 @@
+from admin_auto_filters.filters import AutocompleteFilterFactory
 from django.contrib import admin, messages
 from django.contrib.admin.helpers import AdminForm
-from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import redirect, render
 from django.urls import path
 from django.utils.html import format_html
-from admin_auto_filters.filters import AutocompleteFilterFactory
+from import_export.resources import ModelResource
 from textwrap import shorten
-from import_export.admin import ExportMixin
 
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon, display_task_record_link
 from prophecies.core.forms import TaskRecordAssignForm, TaskRecordUploadForm
 from prophecies.core.models import TaskRecord, TaskRecordReview
 from prophecies.core.admin.filters import DistinctValuesDropdownFilter, ReviewedTaskRecordFilter
+from prophecies.core.mixins import ExportWithCsvStreamMixin, ExportCsvGeneratorMixin
 
 
+class TaskRecordResource(ExportCsvGeneratorMixin, ModelResource):
+
+    class Meta:
+        model = TaskRecord
+        
+        
 class TaskRecordReviewInline(admin.TabularInline):
     model = TaskRecordReview
     fk_name = "task_record"
@@ -31,7 +37,8 @@ class TaskRecordReviewInline(admin.TabularInline):
     
 
 @admin.register(TaskRecord)
-class TaskRecordAdmin(ExportMixin, admin.ModelAdmin):
+class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
+    resource_class = TaskRecordResource
     change_list_template = "admin/task_record_changelist.html"
     exclude = ['metadata', 'rounds', 'link', 'status']
     readonly_fields = ['round_count', 'status_badge', 'computed_link', 'metadata_json']

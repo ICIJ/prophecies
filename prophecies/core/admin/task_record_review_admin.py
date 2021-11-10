@@ -1,15 +1,25 @@
 from admin_auto_filters.filters import AutocompleteFilterFactory
 from django.contrib import admin
 from django.utils.html import format_html
-from import_export.admin import ExportMixin
+from import_export.resources import ModelResource
+
 from textwrap import shorten
 
 from prophecies.core.models import TaskRecordReview
 from prophecies.core.contrib.display import display_status, display_task_addon, display_choice
+from prophecies.core.mixins import ExportWithCsvStreamMixin, ExportCsvGeneratorMixin
+
+class TaskRecordReviewResource(ExportCsvGeneratorMixin, ModelResource):
+
+    class Meta:
+        model = TaskRecordReview
+        fields = ('id', 'status', 'checker__username', 'round', 'choice__value', 
+                    'note', 'alternative_value', 'task_record__id', 'task_record__uid', )
 
 
 @admin.register(TaskRecordReview)
-class TaskRecordReviewAdmin(ExportMixin, admin.ModelAdmin):    
+class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):    
+    resource_class = TaskRecordReviewResource
     list_display = ['review_with_details', 'task_with_addon', 'round', 'status_badge']
     list_filter = [
         AutocompleteFilterFactory('task', 'task_record__task'),
@@ -29,9 +39,11 @@ class TaskRecordReviewAdmin(ExportMixin, admin.ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request) \
             .prefetch_related('checker') \
+            .prefetch_related('choice') \
             .prefetch_related('task_record') \
             .prefetch_related('task_record__task') \
             .prefetch_related('task_record__task__project')
+            
 
     def review_with_details(self, review):
         review_title = str(review)
