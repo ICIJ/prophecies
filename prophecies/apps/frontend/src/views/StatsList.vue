@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { uniqueId } from 'lodash'
+import { uniqueId, orderBy, find } from 'lodash'
 
 import AppHeader from '@/components/AppHeader.vue'
 import AppSidebar from '@/components/AppSidebar'
@@ -69,7 +69,7 @@ import AppWaiter from '@/components/AppWaiter'
 
 import TaskStatsCard from '@/components/TaskStatsCard'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
-import Task from '@/models/Task'
+import Task, { TaskStatusOrder } from '@/models/Task'
 
 import StatsByRound from '@/components/StatsByRound.vue'
 import SortByDropdown from '@/components/SortByDropdown.vue'
@@ -160,19 +160,15 @@ export default {
   },
   data () {
     return {
-      // sortField: 'task_id',
       sortOptions: [
-        { value: 'task_id', label: 'ID (default)', $isDefault: true },
-        { value: 'task_created_at_desc', label: 'Latest created' },
-        { value: 'task_created_at_asc', label: 'Oldest created' }
-        //   { value: 'task_record__id', label: 'Task name (A-Z)' },
-        //   { value: 'task_record__id', label: 'Task name (Z-A)' },
-        //   { value: 'task_record__id', label: 'Project name (A-Z)' },
-        //   { value: 'task_record__id', label: 'Project name (Z-A)' },
-        //   { value: 'task_record__id', label: 'Progress (low to high)' },
-        //   { value: 'task_record__id', label: 'Progress (high to low)' },
-        //   { value: 'task_record__priority', label: 'Priority (low to high)' },
-        //   { value: '-task_record__priority', label: 'Priority (high to low)' },
+        { value: 'name_asc', label: 'Name (A-Z)', $isDefault: true },
+        { value: 'name_desc', label: 'Name (Z-A)' },
+        // { value: 'lastReviewed_desc', label: 'Recently reviewed' },
+        { value: 'createdAt_desc', label: 'Recently created' },
+        { value: 'priority_asc', label: 'Priority (0-9)' },
+        { value: 'priority_desc', label: 'Priority (9-0)' },
+        { value: 'progress_asc', label: 'Progress (0%-100%)' },
+        { value: 'progress_desc', label: 'Progress (100%-0%)' }
       ],
       teamTaskStats: true,
       taskStatsOptions: [
@@ -193,22 +189,35 @@ export default {
       await fn()
       this.$wait.end(loader)
     }
-
   },
   computed: {
     tasks () {
-      return Task
+      const tasks = Task
         .query()
         .where('taskRecordsCount', (value) => value > 0)
         .get()
-        .sort((a, b) => {
-          if (a.status === 'CLOSED') {
-            return 1
-          } else if (b.status === 'CLOSED') {
-            return -1
-          }
-          return 0
-        })
+      return orderBy(tasks, [this.selectedSortName, this.sortByStatus, 'name'], [this.selectedSortOptionOrder, 'asc', 'asc'])
+    },
+    sortAttributes () {
+      return [
+        this.sortField,
+        this.sortByStatus,
+        'name'
+      ]
+    },
+    selectedSortOption () {
+      return find(this.sortOptions, { value: this.sortField })
+    },
+    selectedSortName () {
+      return this.selectedSortOption.value.split('_')[0]
+    },
+    selectedSortOptionOrder () {
+      return this.selectedSortOption.value.split('_')[1]
+    },
+    sortByStatus () {
+      return function (task) {
+        return TaskStatusOrder[task.status] === 0
+      }
     },
     choicesByRound () {
       //! TODO API Call stats/:taskId OR tasks/taskId/stats
@@ -239,7 +248,12 @@ export default {
     },
     sortField: {
       get () {
-        return this.$route.query.sort || 'task_id'
+        const isParamValid = find(this.sortOptions, { value: this.$route.query.sort })
+        if (!isParamValid) {
+          return 'name_asc'
+        } else {
+          return this.$route.query.sort
+        }
       },
       set (value) {
         const query = { ...this.$route.query, sort: value }

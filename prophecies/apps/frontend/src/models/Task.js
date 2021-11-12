@@ -11,6 +11,11 @@ export const TaskStatus = {
   CLOSED: 'CLOSED',
   LOCKED: 'LOCKED'
 }
+export const TaskStatusOrder = {
+  [TaskStatus.OPEN]: 0,
+  [TaskStatus.LOCKED]: 0,
+  [TaskStatus.CLOSED]: 1
+}
 export default class Task extends Model {
   static entity = 'Task'
 

@@ -1,5 +1,5 @@
 <script>
-import { uniqueId } from 'lodash'
+import { uniqueId, orderBy } from 'lodash'
 
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
@@ -7,7 +7,7 @@ import AppWaiter from '@/components/AppWaiter'
 import LatestTipsCard from '@/components/LatestTipsCard'
 import ProgressCard from '@/components/ProgressCard'
 import TaskStatsCard from '@/components/TaskStatsCard'
-import Task, { TaskStatus } from '@/models/Task'
+import Task, { TaskStatusOrder } from '@/models/Task'
 import Tip from '@/models/Tip'
 import HistoryList from '@/components/HistoryList.vue'
 
@@ -32,18 +32,14 @@ export default {
   },
   computed: {
     tasks () {
-      return Task
+      const tasks = Task
         .query()
         .where('taskRecordsCount', (value) => value > 0)
         .get()
-        .sort((a, b) => {
-          if (a.status === TaskStatus.CLOSED) {
-            return 1
-          } else if (b.status === TaskStatus.CLOSED) {
-            return -1
-          }
-          return 0
-        })
+      return orderBy(tasks, [this.sortByStatus, 'name'], ['asc', 'asc'])
+    },
+    sortByStatus () {
+      return function (task) { return TaskStatusOrder[task.status] }
     },
     tips () {
       return Tip.query()
