@@ -1,9 +1,9 @@
 <template>
-  <div class="tip-card">
-    <h2 class="mb-5">
+  <div :class="contentClass['tipCardMargin']" class="tip-card">
+    <h2 :class="contentClass['tipNameMargin']">
       {{ tip.name }}
     </h2>
-    <div class="my-3" v-html="tip.descriptionHTML"></div>
+    <div :class="contentClass['tipDescriptionPadding']" v-html="tip.descriptionHTML"></div>
     <div class="text-right text-secondary">
       Last modified: <strong>{{ tip.creator.displayName }}</strong>,
       <router-link
@@ -26,6 +26,15 @@ export default {
   props: {
     tipId: {
       type: String
+    },
+    contentClass: {
+      type: Object,
+      default: () => ({
+          'tipCardMargin': 'mb-4',
+          'tipNameMargin': 'mb-5',
+          'tipDescriptionPadding': 'py-0'
+
+      })
     }
   },
   computed: {

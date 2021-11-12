@@ -36,8 +36,11 @@ export default {
     toggleTutorial () {
       this.showTutorial = !this.showTutorial
     },
-    toggleShortcuts() {
+    toggleShortcuts () {
       this.$root.$emit('prophecies::toggleShortcuts')
+    },
+    toggleTips () {
+      this.$root.$emit('prophecies::toggleTips')
     }
   },
   computed: {
@@ -91,7 +94,7 @@ export default {
               {{ $t('appHeader.shortcuts') }}
               <shortkey-badge :value="['Ctrl', 'k']" class="ml-2" />
             </b-nav-item>
-            <b-nav-item :to="{ name: 'tip-list', query: tipQueryParams }">
+            <b-nav-item @click.prevent="toggleTips">
               <smile-icon class="app-header__nav-right__tips mr-2" />
               {{ $t('appHeader.tips') }}
               <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2" />
