@@ -30,8 +30,10 @@ export default {
       this.goTo('history')
     },
     toggleModalFn (modalRef) {
-      return (event) => {
-        event.preventDefault()
+      return (event = null) => {
+        if (event) {
+          event.preventDefault()
+        }
         this.$refs[modalRef].toggle()
       }
     }
