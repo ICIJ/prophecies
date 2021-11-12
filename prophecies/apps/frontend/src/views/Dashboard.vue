@@ -7,7 +7,7 @@ import AppWaiter from '@/components/AppWaiter'
 import LatestTipsCard from '@/components/LatestTipsCard'
 import ProgressCard from '@/components/ProgressCard'
 import TaskStatsCard from '@/components/TaskStatsCard'
-import Task, { TaskStatusOrder } from '@/models/Task'
+import Task, { TaskStatus, TaskStatusOrder } from '@/models/Task'
 import Tip from '@/models/Tip'
 import HistoryList from '@/components/HistoryList.vue'
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
@@ -27,7 +27,16 @@ export default {
   data () {
     return {
       sortField: 'name_asc',
-      sortByCb: (tasks) => tasks,
+      sortByCb: (tasks) => {
+        return tasks.sort((a, b) => {
+          if (a.status === TaskStatus.CLOSED) {
+            return 1
+          } else if (b.status === TaskStatus.CLOSED) {
+            return -1
+          }
+          return 0
+        })
+      },
       teamTaskStats: true
     }
   },
