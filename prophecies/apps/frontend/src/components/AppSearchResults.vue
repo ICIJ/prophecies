@@ -1,6 +1,6 @@
 <script>
 import { escapeRegExp, find, filter, get } from 'lodash'
-import Task from '@/models/Task'
+import Task, { TaskStatus } from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import Tip from '@/models/Tip'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
@@ -60,7 +60,7 @@ export default {
     tasks () {
       // retrieve tasks that are not closed and with at least one record
       return Task.query()
-        .where('status', (value) => value !== 'CLOSED')
+        .where('status', (value) => value !== TaskStatus.CLOSED)
         .where('taskRecordsCount', (value) => value > 0).get()
     }
   },

@@ -138,7 +138,7 @@ class TestTask(TestCase):
         self.assertEqual(action.target, task)
 
     def test_it_log_action_when_task_is_open(self):
-        task = Task.objects.create(name='Foo', project=self.project, creator=self.olivia, status='CLOSE')
+        task = Task.objects.create(name='Foo', project=self.project, creator=self.olivia, status='CLOSED')
         task.open()
         action = Action.objects.filter_actor(actor=self.olivia).first()
         self.assertTrue(action is not None)

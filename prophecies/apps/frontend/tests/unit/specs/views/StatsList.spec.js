@@ -11,16 +11,19 @@ describe('StatsList', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
-    const { wait, store } = Core.init(localVue).useAll()
+    const core = Core.init(localVue).useAll()
+    const { wait, store, router } = core
     const stubs = ['app-waiter']
 
     const options = {
       stubs,
       localVue,
       store,
-      wait
+      wait,
+      router
     }
 
+    await core.configure()
     wrapper = await shallowMount(StatsList, options)
   })
 

@@ -1,6 +1,6 @@
 <script>
 import moment from 'moment'
-import Task from '@/models/Task'
+import Task, { TaskStatus } from '@/models/Task'
 import StatsByRound from '@/components/StatsByRound.vue'
 
 export default {
@@ -51,10 +51,10 @@ export default {
       return this.task.userTaskRecordsDoneCount
     },
     taskIsLocked () {
-      return this.task.status === 'LOCKED'
+      return this.task.status === TaskStatus.LOCKED
     },
     taskIsClosed () {
-      return this.task.status === 'CLOSED'
+      return this.task.status === TaskStatus.CLOSED
     },
     taskIsDone () {
       return this.taskRecordsCount !== 0 ? (this.taskRecordsDoneCount / this.taskRecordsCount) === 1 : false

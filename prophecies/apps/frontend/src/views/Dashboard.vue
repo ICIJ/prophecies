@@ -7,7 +7,7 @@ import AppWaiter from '@/components/AppWaiter'
 import LatestTipsCard from '@/components/LatestTipsCard'
 import ProgressCard from '@/components/ProgressCard'
 import TaskStatsCard from '@/components/TaskStatsCard'
-import Task from '@/models/Task'
+import Task, { TaskStatus } from '@/models/Task'
 import Tip from '@/models/Tip'
 import HistoryList from '@/components/HistoryList.vue'
 
@@ -37,9 +37,9 @@ export default {
         .where('taskRecordsCount', (value) => value > 0)
         .get()
         .sort((a, b) => {
-          if (a.status === 'CLOSED') {
+          if (a.status === TaskStatus.CLOSED) {
             return 1
-          } else if (b.status === 'CLOSED') {
+          } else if (b.status === TaskStatus.CLOSED) {
             return -1
           }
           return 0

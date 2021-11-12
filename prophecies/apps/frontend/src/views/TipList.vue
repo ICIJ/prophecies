@@ -7,6 +7,7 @@ import LatestTipsCard from '@/components/LatestTipsCard'
 import Tip from '@/models/Tip'
 import TipCard from '@/components/TipCard'
 import TipListPageParams from '@/components/TipListPageParams'
+import { TaskStatus } from '@/models/Task'
 
 const FILTER_TYPES = {
   PROJECT: 'filter[project]',
@@ -112,7 +113,7 @@ export default {
     },
     taskClosed (taskValue) {
       const tip = taskValue.length ? taskValue[0] : taskValue
-      return tip.task ? (tip.task.status === 'CLOSED') : false
+      return tip.task ? (tip.task.status === TaskStatus.CLOSED) : false
     },
     setProjectFilter (val) {
       if (this.projectNotContainingTask(val, this.taskFilter)) {
