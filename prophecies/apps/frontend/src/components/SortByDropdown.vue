@@ -1,6 +1,8 @@
 <template>
     <label :for="dropdownId" class="sort-by-dropdown ">
-      <div class="mb-3">Sort by</div>
+      <slot name="label">
+        <div class="mb-3">Sort by</div>
+      </slot>
       <multiselect :allow-empty="false"
                     :show-labels="false"
                     :searchable="false"
