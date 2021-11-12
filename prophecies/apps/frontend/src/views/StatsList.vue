@@ -8,17 +8,17 @@
           <div class="d-flex flex-column">
             <div class="d-flex flex-row justify-content-between">
               <div class="d-flex flex-row align-items-end" >
-              <b-form-group >
-                <b-form-radio-group
-                v-model="teamTaskStats"
-                buttons
-                button-variant="outline-primary"
-                :options="taskStatsOptions" />
-              </b-form-group>
+                <b-form-group >
+                  <b-form-radio-group
+                  v-model="teamTaskStats"
+                  buttons
+                  button-variant="outline-primary"
+                  :options="taskStatsOptions" />
+                </b-form-group>
               </div>
-              <sort-by-dropdown
+              <task-sort-by-dropdown
                 :sort.sync="sortField"
-                :options="sortOptions"
+                @update:sort-by-cb="updateSortByCallback"
                 class="mb-3 stats-list__sort-by"/>
 
             </div>
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { uniqueId, orderBy, find } from 'lodash'
+import { uniqueId } from 'lodash'
 
 import AppHeader from '@/components/AppHeader.vue'
 import AppSidebar from '@/components/AppSidebar'
@@ -69,10 +69,10 @@ import AppWaiter from '@/components/AppWaiter'
 
 import TaskStatsCard from '@/components/TaskStatsCard'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
-import Task, { TaskStatusOrder } from '@/models/Task'
+import Task from '@/models/Task'
 
 import StatsByRound from '@/components/StatsByRound.vue'
-import SortByDropdown from '@/components/SortByDropdown.vue'
+import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
 const choices = [
   {
     value: 'correct',
@@ -156,20 +156,12 @@ export default {
     TaskStatsCard,
     TaskStatsCardAllRounds,
     StatsByRound,
-    SortByDropdown
+    TaskSortByDropdown
   },
   data () {
     return {
-      sortOptions: [
-        { value: 'name_asc', label: 'Name (A-Z)', $isDefault: true },
-        { value: 'name_desc', label: 'Name (Z-A)' },
-        // { value: 'lastReviewed_desc', label: 'Recently reviewed' },
-        { value: 'createdAt_desc', label: 'Recently created' },
-        { value: 'priority_asc', label: 'Priority (0-9)' },
-        { value: 'priority_desc', label: 'Priority (9-0)' },
-        { value: 'progress_asc', label: 'Progress (0%-100%)' },
-        { value: 'progress_desc', label: 'Progress (100%-0%)' }
-      ],
+      sortField: 'name_asc',
+      sortByCb: (tasks) => tasks,
       teamTaskStats: true,
       taskStatsOptions: [
         { text: 'Team stats', value: true },
@@ -188,6 +180,9 @@ export default {
       this.$wait.start(loader)
       await fn()
       this.$wait.end(loader)
+    },
+    updateSortByCallback (cb) {
+      this.sortByCb = cb
     }
   },
   computed: {
@@ -198,22 +193,9 @@ export default {
         .get()
     },
     tasks () {
-      return orderBy(this.unorderedTasks, [this.selectedSortName, this.sortByStatus, 'name'], [this.selectedSortOptionOrder, 'asc', 'asc'])
+      return this.sortByCb(this.unorderedTasks)
     },
-    selectedSortOption () {
-      return find(this.sortOptions, { value: this.sortField })
-    },
-    selectedSortName () {
-      return this.selectedSortOption.value.split('_')[0]
-    },
-    selectedSortOptionOrder () {
-      return this.selectedSortOption.value.split('_')[1]
-    },
-    sortByStatus () {
-      return function (task) {
-        return TaskStatusOrder[task.status] === 0
-      }
-    },
+
     choicesByRound () {
       //! TODO API Call stats/:taskId OR tasks/taskId/stats
       return {
@@ -240,20 +222,6 @@ export default {
     },
     fetchTaskLoader () {
       return uniqueId('load-stats-task-')
-    },
-    sortField: {
-      get () {
-        const isParamValid = find(this.sortOptions, { value: this.$route.query.sort })
-        if (!isParamValid) {
-          return 'name_asc'
-        } else {
-          return this.$route.query.sort
-        }
-      },
-      set (value) {
-        const query = { ...this.$route.query, sort: value }
-        this.$router.push({ path: this.$route.path, query }, null)
-      }
     }
   }
 }

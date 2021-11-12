@@ -1,5 +1,5 @@
 <script>
-import { uniqueId, orderBy } from 'lodash'
+import { uniqueId } from 'lodash'
 
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
@@ -10,6 +10,7 @@ import TaskStatsCard from '@/components/TaskStatsCard'
 import Task, { TaskStatusOrder } from '@/models/Task'
 import Tip from '@/models/Tip'
 import HistoryList from '@/components/HistoryList.vue'
+import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
 
 export default {
   name: 'Dashboard',
@@ -20,10 +21,13 @@ export default {
     LatestTipsCard,
     ProgressCard,
     TaskStatsCard,
-    HistoryList
+    HistoryList,
+    TaskSortByDropdown
   },
   data () {
     return {
+      sortField: 'name_asc',
+      sortByCb: (tasks) => tasks,
       teamTaskStats: true
     }
   },
@@ -38,7 +42,7 @@ export default {
         .get()
     },
     tasks () {
-      return orderBy(this.unorderedTasks, [this.sortByStatus, 'name'], ['asc', 'asc'])
+      return this.sortByCb(this.unorderedTasks)
     },
     sortByStatus () {
       return function (task) { return TaskStatusOrder[task.status] }
@@ -71,6 +75,9 @@ export default {
       this.$wait.start(loader)
       await Promise.all(fns.map(fn => fn()))
       this.$wait.end(loader)
+    },
+    updateSortByCallback (cb) {
+      this.sortByCb = cb
     }
   }
 }
@@ -87,14 +94,20 @@ export default {
             <div class="dashboard__container__left-panel">
               <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
                 <template v-if="tasks.length">
-                  <div class="d-flex align-items-center">
-                    <b-form-group>
-                      <b-form-radio-group
-                        v-model="teamTaskStats"
-                        buttons
-                        button-variant="outline-primary"
-                        :options="taskStatsOptions" />
-                    </b-form-group>
+                  <div class="d-flex flex-row justify-content-between ">
+                    <div class="d-flex flex-row align-items-end" >
+                      <b-form-group>
+                        <b-form-radio-group
+                          v-model="teamTaskStats"
+                          buttons
+                          button-variant="outline-primary"
+                          :options="taskStatsOptions" />
+                      </b-form-group>
+                    </div>
+                      <task-sort-by-dropdown
+                        :sort.sync="sortField"
+                        @update:sort-by-cb="updateSortByCallback"
+                        class="dashboard__container__left-panel__tasks__sort-by "/>
                   </div>
                   <task-stats-card class="my-5"
                                    v-for="task in tasks"
@@ -176,6 +189,9 @@ export default {
     &__container {
       &__left-panel {
         max-width: 460px;
+        &__tasks__sort-by{
+          flex:0 1 200px;
+        }
       }
 
       &__right-panel {

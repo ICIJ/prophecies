@@ -3,35 +3,35 @@ import {
   mount
 } from '@vue/test-utils'
 import Core from '@/core'
-import StatsList from '@/views/StatsList'
+import TaskSortByDropdown from '@/components/TaskSortByDropdown'
 
-describe('StatsList', () => {
+describe('TaskSortByDropdown', () => {
   let wrapper
 
   beforeEach(async () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
     const core = Core.init(localVue).useAll()
-    const { wait, store, router, i18n } = core
+    const { wait, store, router } = core
     const stubs = ['app-waiter']
-
+    const propsData = { sort: 'name_asc' }
     const options = {
       stubs,
       localVue,
       store,
       wait,
-      i18n,
-      router
+      router,
+      propsData
     }
 
     await core.configure()
-    wrapper = await mount(StatsList, options)
+    wrapper = await mount(TaskSortByDropdown, options)
   })
   afterEach(async () => {
     await wrapper.destroy()
   })
   it('Shows sort dropdown', () => {
-    const element = wrapper.find('.stats-list__sort-by')
+    const element = wrapper.find('.task-sort-by-dropdown')
     expect(element.exists()).toBeTruthy()
   })
 
