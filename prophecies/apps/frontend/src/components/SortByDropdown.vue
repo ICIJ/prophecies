@@ -1,18 +1,17 @@
 <template>
-<div class="sort-by-dropdown d-flex align-items-start flex-column">
-    <label :for="dropdownId" class="sort-by-dropdown__label text-primary mb-1">Sort by</label>
-    <multiselect :allow-empty="false"
-                  :show-labels="false"
-                  :searchable="false"
-                  :options="options"
-                  :value="selectedSortOption"
-                  placeholder="Sort by"
-                  @input="intermediarySort = $event.value"
-                  label="label"
-                  track-by="value"
-                  class="sort-by-dropdown__select "/>
-
-</div>
+    <label :for="dropdownId" class="sort-by-dropdown ">
+      <div class="mb-3">Sort by</div>
+      <multiselect :allow-empty="false"
+                    :show-labels="false"
+                    :searchable="false"
+                    :options="options"
+                    :value="selectedSortOption"
+                    placeholder="Sort by"
+                    @input="intermediarySort = $event.value"
+                    label="label"
+                    track-by="value"
+                    class="sort-by-dropdown__select "/>
+    </label>
 </template>
 
 <script>
@@ -41,26 +40,21 @@ export default {
   },
   data () {
     return {
-      intermediarySort: this.sort,
       dropdownId: uniqueId('sortByDropdown-')
     }
   },
   computed: {
     selectedSortOption () {
       return find(this.options, { value: this.intermediarySort })
-    }
-  },
-  watch: {
-    intermediarySort (value) {
-      this.$emit('update:sort', value)
+    },
+    intermediarySort: {
+      get () {
+        return this.sort
+      },
+      set (value) {
+        this.$emit('update:sort', value)
+      }
     }
   }
 }
 </script>
-<style lang='scss' scoped>
-  .sort-by-dropdown{
-    flex:0 1 270px;
-    &__label{
-    }
-  }
-</style>

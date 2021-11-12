@@ -19,7 +19,7 @@
               <sort-by-dropdown
                 :sort.sync="sortField"
                 :options="sortOptions"
-                class="mb-3"/>
+                class="mb-3 stats-list__sort-by"/>
 
             </div>
             <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
@@ -160,7 +160,7 @@ export default {
   },
   data () {
     return {
-      sortField: 'task_id',
+      // sortField: 'task_id',
       sortOptions: [
         { value: 'task_id', label: 'ID (default)', $isDefault: true },
         { value: 'task_created_at_desc', label: 'Latest created' },
@@ -236,7 +236,21 @@ export default {
     },
     fetchTaskLoader () {
       return uniqueId('load-stats-task-')
+    },
+    sortField: {
+      get () {
+        return this.$route.query.sort || 'task_id'
+      },
+      set (value) {
+        const query = { ...this.$route.query, sort: value }
+        this.$router.push({ path: this.$route.path, query }, null)
+      }
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+  .stats-list__sort-by  {
+      flex:0 1 270px;
+  }
+</style>
