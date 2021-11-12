@@ -31,12 +31,14 @@ export default {
     await this.waitFor(this.fetchTaskLoader, [this.fetchTask, this.fetchTips])
   },
   computed: {
-    tasks () {
-      const tasks = Task
+    unorderedTasks () {
+      return Task
         .query()
         .where('taskRecordsCount', (value) => value > 0)
         .get()
-      return orderBy(tasks, [this.sortByStatus, 'name'], ['asc', 'asc'])
+    },
+    tasks () {
+      return orderBy(this.unorderedTasks, [this.sortByStatus, 'name'], ['asc', 'asc'])
     },
     sortByStatus () {
       return function (task) { return TaskStatusOrder[task.status] }

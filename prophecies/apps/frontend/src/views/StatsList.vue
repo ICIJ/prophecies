@@ -191,19 +191,14 @@ export default {
     }
   },
   computed: {
-    tasks () {
-      const tasks = Task
+    unorderedTasks () {
+      return Task
         .query()
         .where('taskRecordsCount', (value) => value > 0)
         .get()
-      return orderBy(tasks, [this.selectedSortName, this.sortByStatus, 'name'], [this.selectedSortOptionOrder, 'asc', 'asc'])
     },
-    sortAttributes () {
-      return [
-        this.sortField,
-        this.sortByStatus,
-        'name'
-      ]
+    tasks () {
+      return orderBy(this.unorderedTasks, [this.selectedSortName, this.sortByStatus, 'name'], [this.selectedSortOptionOrder, 'asc', 'asc'])
     },
     selectedSortOption () {
       return find(this.sortOptions, { value: this.sortField })
