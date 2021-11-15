@@ -30,28 +30,26 @@
             :key="task.id"
             :team="teamTaskStats"
             :task-id="task.id" extended>
-
-            <template v-slot:allRounds="{rounds}">
-              <task-stats-card-all-rounds
-              :progress="rounds.progress"
-              :done="rounds.done"
-              :pending="rounds.pending"
-              />
-            </template>
-
-            <template v-slot:usersByRound="{stats}">
-              <stats-by-round
-                v-for="(round,index) in stats.rounds"
-                :key="round"
-                :round="index+1"
-                :progress="stats.progress[round]"
-                :choices='choicesByRound[round]'
-                :users='usersByRound[round]'
-                :summary='summaryByRound[round]'
-                extended
-                class="col-4" />
-            </template>
-          </task-stats-card>
+              <template v-slot:allRounds="{rounds}">
+                <task-stats-card-all-rounds
+                :progress="rounds.progress"
+                :done="rounds.done"
+                :pending="rounds.pending"
+                />
+              </template>
+              <template v-slot:usersByRound="{stats}">
+                <stats-by-round
+                  v-for="(round,index) in stats.rounds"
+                  :key="round"
+                  :round="index+1"
+                  :progress="stats.progress[round]"
+                  :choices='choicesByRound[round]'
+                  :users='usersByRound[round]'
+                  :summary='summaryByRound[round]'
+                  extended
+                  class="col-4" />
+              </template>
+            </task-stats-card>
 
           </app-waiter>
 
