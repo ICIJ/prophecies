@@ -67,14 +67,52 @@ export default {
       hide-footer 
       hide-header>
       <tip-list-card :query="{ 'filter[task]': taskId }">
-        <template #header>
+        <template #header="{ taskAttributes }">
           <b-btn class="float-right px-2" variant="link" @click="$refs['modal-tips'].toggle()">
             <x-icon />
             <span class="sr-only">Close</span>
           </b-btn>
+
+          <ul class="app__breadcrumb list-inline my-3 pt-3 text-primary">
+            <li class="list-inline-item app__breadcrumb__item app__item--dashboard mt-1">
+              <h3>Tips for {{ taskAttributes.projectName }} > {{ taskAttributes.taskName }} </h3>
+            </li>
+					</ul>
         </template>
       </tip-list-card>
     </b-modal>
     <router-view />
   </div>
 </template>
+
+<style lang="scss">
+.app {
+  &__breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 2.6rem;
+    text-decoration: underline;
+    text-decoration-color: $warning;
+    text-decoration-thickness: 7px;
+    text-underline-offset: 5px;
+    line-height: 24px;
+
+    &:after {
+        content: "\00a0\00a0";
+    }
+
+    &__item--dashboard svg {
+      transform: translateY(-0.2em);
+    }
+
+    &__item.list-inline-item {
+      font-size: $font-size-lg;
+      margin-right: 0;
+      display: inline-flex;
+      align-items: center;
+      font-weight: 600;
+    }
+  }
+}
+
+</style>

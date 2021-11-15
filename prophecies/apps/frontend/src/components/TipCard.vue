@@ -1,8 +1,10 @@
 <template>
   <div :class="contentClass['tipCardMargin']" class="tip-card">
-    <h2 :class="contentClass['tipNameMargin']">
-      {{ tip.name }}
-    </h2>
+    <slot name="tip-name"> 
+      <h2 :class="contentClass['tipNameMargin']">
+        {{ tip.name }}
+      </h2>
+    </slot>
     <div :class="contentClass['tipDescriptionPadding']" v-html="tip.descriptionHTML"></div>
     <div class="text-right text-secondary">
       Last modified: <strong>{{ tip.creator.displayName }}</strong>,
@@ -33,7 +35,6 @@ export default {
           'tipCardMargin': 'mb-4',
           'tipNameMargin': 'mb-5',
           'tipDescriptionPadding': 'py-0'
-
       })
     }
   },
