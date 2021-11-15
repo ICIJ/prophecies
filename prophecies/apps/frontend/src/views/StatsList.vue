@@ -5,55 +5,56 @@
       <app-header reduced />
       <div class="container-fluid p-5">
         <div class="col-12">
-          <div class="d-flex flex-column">
-            <div class="d-flex flex-row justify-content-between">
-              <div class="d-flex flex-row align-items-end" >
-                <b-form-group >
-                  <b-form-radio-group
-                  v-model="teamTaskStats"
-                  buttons
-                  button-variant="outline-primary"
-                  :options="taskStatsOptions" />
-                </b-form-group>
-              </div>
+          <div class="d-flex flex-wrap justify-content-between">
+              <b-form-group class="stats-list__radio d-flex align-items-end mr-5">
+                <b-form-radio-group
+                v-model="teamTaskStats"
+                buttons
+                button-variant="outline-primary"
+                :options="taskStatsOptions" />
+              </b-form-group>
+            <div class="stats-list__filters d-flex align-items-end ">
+              <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="onlyOpenTasks">
+                <span class="text-nowrap text-primary">{{$t('statsList.showOnlyOpenTasks')}}</span>
+              </b-form-checkbox>
               <task-sort-by-dropdown
                 :sort.sync="sortField"
                 @update:sort-by-cb="updateSortByCallback"
-                class="mb-3 stats-list__sort-by"/>
-
+                class="mb-3 stats-list__filters__sort-by"
+              />
             </div>
-            <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-              <task-stats-card class="my-5"
-              v-for="task in tasks"
-              :key="task.id"
-              :team="teamTaskStats"
-              :task-id="task.id" extended>
-
-              <template v-slot:allRounds="{rounds}">
-                <task-stats-card-all-rounds
-                :progress="rounds.progress"
-                :done="rounds.done"
-                :pending="rounds.pending"
-                />
-              </template>
-
-              <template v-slot:usersByRound="{stats}">
-                <stats-by-round
-                  v-for="(round,index) in stats.rounds"
-                  :key="round"
-                  :round="index+1"
-                  :progress="stats.progress[round]"
-                  :choices='choicesByRound[round]'
-                  :users='usersByRound[round]'
-                  :summary='summaryByRound[round]'
-                  extended
-                  class="col-4" />
-              </template>
-            </task-stats-card>
-
-            </app-waiter>
-
           </div>
+          <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
+            <task-stats-card class="my-5"
+            v-for="task in tasks"
+            :key="task.id"
+            :team="teamTaskStats"
+            :task-id="task.id" extended>
+
+            <template v-slot:allRounds="{rounds}">
+              <task-stats-card-all-rounds
+              :progress="rounds.progress"
+              :done="rounds.done"
+              :pending="rounds.pending"
+              />
+            </template>
+
+            <template v-slot:usersByRound="{stats}">
+              <stats-by-round
+                v-for="(round,index) in stats.rounds"
+                :key="round"
+                :round="index+1"
+                :progress="stats.progress[round]"
+                :choices='choicesByRound[round]'
+                :users='usersByRound[round]'
+                :summary='summaryByRound[round]'
+                extended
+                class="col-4" />
+            </template>
+          </task-stats-card>
+
+          </app-waiter>
+
         </div>
       </div>
     </div>
@@ -61,7 +62,7 @@
 </template>
 
 <script>
-import { uniqueId } from 'lodash'
+import { uniqueId, filter } from 'lodash'
 
 import AppHeader from '@/components/AppHeader.vue'
 import AppSidebar from '@/components/AppSidebar'
@@ -69,7 +70,7 @@ import AppWaiter from '@/components/AppWaiter'
 
 import TaskStatsCard from '@/components/TaskStatsCard'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
-import Task from '@/models/Task'
+import Task, { TaskStatus } from '@/models/Task'
 
 import StatsByRound from '@/components/StatsByRound.vue'
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
@@ -193,9 +194,30 @@ export default {
         .get()
     },
     tasks () {
-      return this.sortByCb(this.unorderedTasks)
+      const sortedTasks = this.sortByCb(this.unorderedTasks)
+      return this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatus.OPEN || TaskStatus.LOCKED]) : sortedTasks
     },
-
+    onlyOpenTasks: {
+      get () {
+        const onlyOpenTasks = this.$route.query.only_open
+        if (onlyOpenTasks) {
+          if (onlyOpenTasks === 'true') {
+            return true
+          }
+          if (onlyOpenTasks === 'false') {
+            return false
+          }
+          const query = { ...this.$route.query }
+          delete query.only_open
+          this.$router.replace({ path: this.$route.path, query }, null)
+        }
+        return false
+      },
+      set (value) {
+        const query = { ...this.$route.query, only_open: !!value }
+        this.$router.push({ path: this.$route.path, query }, null)
+      }
+    },
     choicesByRound () {
       //! TODO API Call stats/:taskId OR tasks/taskId/stats
       return {
@@ -227,7 +249,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .stats-list__sort-by  {
-      flex:0 1 270px;
-  }
+.stats-list__filters__sort-by
+{
+  width:220px;
+}
 </style>

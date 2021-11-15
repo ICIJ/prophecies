@@ -83,6 +83,9 @@
   "progressCard": {
     "moreProgress": "More progress"
   },
+  "statsList": {
+    "showOnlyOpenTasks": "Show only open tasks"
+  },
   "taskRecordReviewList": {
     "clearFilters": "Clear filters",
     "selectAll": "Select {n} record | Select {n} records",
