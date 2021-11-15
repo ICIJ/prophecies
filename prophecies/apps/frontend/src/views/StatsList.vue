@@ -200,16 +200,8 @@ export default {
     onlyOpenTasks: {
       get () {
         const onlyOpenTasks = this.$route.query.only_open
-        if (onlyOpenTasks) {
-          if (onlyOpenTasks === 'true') {
-            return true
-          }
-          if (onlyOpenTasks === 'false') {
-            return false
-          }
-          const query = { ...this.$route.query }
-          delete query.only_open
-          this.$router.replace({ path: this.$route.path, query }, null)
+        if (onlyOpenTasks === 'true') {
+          return true
         }
         return false
       },
