@@ -66,11 +66,7 @@ export default {
     sortField: {
       get () {
         const isParamValid = find(this.sortOptions, { value: this.$route.query.sort })
-        if (!isParamValid) {
-          return this.sort
-        } else {
-          return this.$route.query.sort
-        }
+        return isParamValid ? this.$route.query.sort : this.sort
       },
       set (value) {
         const query = { ...this.$route.query, sort: value }
