@@ -2,7 +2,7 @@
   <div class="stats-by-round d-flex flex-column py-3 " :class="{'user-stats-by-round--extended mx-auto':extended}">
     <template v-if="extended">
       <div class="stats-by-round__progress d-flex  py-4">
-        <div class="col-3 pl-0 font-weight-bold text-primary">Round {{ round }}</div>
+        <div class="col-3 pl-0 font-weight-bold text-primary text-nowrap">Round {{ round }}</div>
         <div class="stats-by-round__progress__value col-9 py-2"> <b-progress :value="progress | round" :max="100" /></div>
       </div>
       <stats-by-users :users="users"/>

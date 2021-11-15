@@ -1,16 +1,16 @@
 <template>
     <div class="stats-by-users d-flex flex-column flex-grow-1">
       <div class="stats-by-users__table d-flex flex-row py-2" v-for="(user, index) in users" :key="index">
-        <div class="col-3  pl-0">
+        <div class="col-3  pl-0 text-nowrap">
           {{ user.name }}
         </div>
-        <div  class="col-3">
+        <div  class="col-3 text-nowrap">
           {{ user.progress }}%
         </div>
-        <div class="col-3">
+        <div class="col-3 text-nowrap">
           <check-icon size="1x" class="text-primary mr-2" />{{user.done}}
         </div>
-        <div class="col-3" >
+        <div class="col-3 text-nowrap" >
           <clock-icon size="1x" class="text-danger mr-2" />{{user.pending}}
         </div>
       </div>
