@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { uniqueId, filter } from 'lodash'
+import { uniqueId, filter, orderBy } from 'lodash'
 
 import AppHeader from '@/components/AppHeader.vue'
 import AppSidebar from '@/components/AppSidebar'
@@ -69,7 +69,7 @@ import AppWaiter from '@/components/AppWaiter'
 
 import TaskStatsCard from '@/components/TaskStatsCard'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
-import Task, { TaskStatus } from '@/models/Task'
+import Task, { TaskStatus, TaskStatusOrder } from '@/models/Task'
 
 import StatsByRound from '@/components/StatsByRound.vue'
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
@@ -160,9 +160,12 @@ export default {
   },
   data () {
     return {
-      sortField: 'name_asc',
-      sortByCb: (tasks) => tasks,
+      sortField: 'status_asc',
+      sortByCb: (tasks) => orderBy(tasks, function (task) {
+        return TaskStatusOrder[task.status] === 1
+      }),
       teamTaskStats: true,
+      taskStatusFilter: true,
       taskStatsOptions: [
         { text: 'Team stats', value: true },
         { text: 'Your stats', value: false }
@@ -242,6 +245,6 @@ export default {
 <style lang="scss" scoped>
 .stats-list__filters__sort-by
 {
-  width:220px;
+  width:240px;
 }
 </style>

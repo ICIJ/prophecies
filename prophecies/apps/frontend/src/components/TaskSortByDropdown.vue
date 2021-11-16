@@ -37,14 +37,15 @@ export default {
   data () {
     return {
       sortOptions: [
-        { value: 'name_asc', label: 'Name (A-Z)', $isDefault: true },
+        { value: 'status_asc', label: 'Status (Open - Closed)', $isDefault: true, needStatus: true },
+        { value: 'progress_asc', label: 'Progress (0%-100%)' },
+        { value: 'progress_desc', label: 'Progress (100%-0%)' },
+        { value: 'priority_asc', label: 'Priority (0-9)', needStatus: true },
+        { value: 'priority_desc', label: 'Priority (9-0)', needStatus: true },
+        { value: 'name_asc', label: 'Name (A-Z)' },
         { value: 'name_desc', label: 'Name (Z-A)' },
         // { value: 'lastReviewed_desc', label: 'Recently reviewed' },
-        { value: 'createdAt_desc', label: 'Recently created' },
-        { value: 'priority_asc', label: 'Priority (0-9)' },
-        { value: 'priority_desc', label: 'Priority (9-0)' },
-        { value: 'progress_asc', label: 'Progress (0%-100%)' },
-        { value: 'progress_desc', label: 'Progress (100%-0%)' }
+        { value: 'createdAt_desc', label: 'Recently created' }
       ]
     }
   },
@@ -60,7 +61,7 @@ export default {
     },
     sortByStatus () {
       return function (task) {
-        return TaskStatusOrder[task.status] === 0
+        return TaskStatusOrder[task.status] === 1
       }
     },
     sortField: {
@@ -77,7 +78,15 @@ export default {
     },
     callbackOrderBy () {
       return (tasks) => {
-        return orderBy(tasks, [this.selectedSortName, this.sortByStatus, 'name'], [this.selectedSortOptionOrder, 'asc', 'asc'])
+        // adding this condition can help ignoring the closed tasks on priority sorting
+        // else if (this.selectedSortOption.needStatus) {
+        //   return orderBy(tasks, [this.sortByStatus, this.selectedSortName, 'name'], ['asc', this.selectedSortOptionOrder, 'asc', 'asc'])
+        // }
+        if (this.selectedSortName === 'status') {
+          return orderBy(tasks, [this.sortByStatus, 'name'], ['asc', 'asc'])
+        } else {
+          return orderBy(tasks, [this.selectedSortName, 'name'], [this.selectedSortOptionOrder, 'asc'])
+        }
       }
     }
 
