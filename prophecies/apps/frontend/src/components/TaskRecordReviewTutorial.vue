@@ -11,7 +11,7 @@ export default {
     return {
       stepNumber: 1,
       steps: [{
-        text: 'Read the content',
+        text: 'Read the content to be checked',
         class: 'offset-2 col-8 ',
         width: '130px'
       },
