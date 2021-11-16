@@ -81,7 +81,7 @@ export default {
 <template>
   <div class="task-stats-card card card-body shadow-sm d-flex">
       <div class="d-flex justify-content-between ">
-        <div class="task-stats-card__heading d-flex flex-column">
+        <div class="task-stats-card__heading d-flex flex-column mr-3 pb-3">
           <h3>
             <router-link
             :to="{
@@ -110,14 +110,14 @@ export default {
         </div>
         <slot name="allRounds" v-if="extended" v-bind:rounds="{progress:progress,done:taskRecordsDoneCount,pending:taskRecordsPendingCount}">
         </slot>
-        <div class="task-stats-card__status d-flex flex-column  text-right" >
+        <div class="task-stats-card__status d-flex flex-column justify-content-between text-right" :class="{'task-stats-card__status--extended':extended}">
           <div  :class="{'flex-row-reverse flex-wrap' : extended}">
             <div class="task-stats-card__status__top " :class="{'ml-5 pb-3 ' : extended}">
               <span v-if="taskIsClosed" class="task-stats-card__status__top--closed text-nowrap" >
                 {{ $t('taskStatsCard.closed') }}
               <span v-if="extended && celebrate" class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">{{taskIsClosed? 'Closed':'Done'}}</span>
               </span>
-              <span v-else class="task-stats-card__status__top__priority bg-warning rounded py-1 px-2 text-nowrap" >
+              <span v-else class="task-stats-card__status__top__priority bg-warning rounded py-1 px-2 text-nowrap">
                 {{ $t('taskStatsCard.priority') }} {{ task.priority }}
               </span>
             </div>
@@ -173,9 +173,13 @@ export default {
 
 <style lang="scss" scoped>
   .task-stats-card {
-
+    &__heading {
+      flex: 0 1 275px
+    }
     &__status{
-
+      &--extended {
+        flex: 0 1 275px
+      }
       &__top{
 
         &--closed  {

@@ -35,6 +35,7 @@
                 :progress="rounds.progress"
                 :done="rounds.done"
                 :pending="rounds.pending"
+                class="mx-3"
                 />
               </template>
               <template v-slot:usersByRound="{stats}">
@@ -47,7 +48,7 @@
                   :users='usersByRound[round]'
                   :summary='summaryByRound[round]'
                   extended
-                  class="col-4" />
+                  class=" mx-auto " />
               </template>
             </task-stats-card>
 

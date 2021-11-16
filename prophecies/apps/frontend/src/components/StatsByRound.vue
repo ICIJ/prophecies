@@ -1,14 +1,14 @@
 <template>
-  <div class="stats-by-round d-flex flex-column py-3 " :class="{'user-stats-by-round--extended mx-auto':extended}">
+  <div class="stats-by-round d-flex flex-column py-3 " :class="{'stats-by-round--extended':extended}">
     <template v-if="extended">
-      <div class="stats-by-round__progress d-flex  py-4">
+      <div class="stats-by-round__progress d-flex  py-3">
         <div class="col-3 pl-0 font-weight-bold text-primary text-nowrap">Round {{ round }}</div>
         <div class="stats-by-round__progress__value col-9 py-2"> <b-progress :value="progress | round" :max="100" /></div>
       </div>
-      <stats-by-users :users="users"/>
-      <div class="stats-by-round__summary row">
-        <div class="stats-by-round__summary__choice" :class="badgeColumnClass" v-for="choice in choices" :key="choice.value">
-          <b-badge class="task-record-review-history__checker__choice__badge" :variant="choice.value | toVariant" v-if="choice" :title="choice.name" v-b-tooltip.right>
+      <stats-by-users :users="users" />
+      <div class="stats-by-round__summary row py-3">
+        <div class="stats-by-round__summary__choice d-flex align-items-center" :class="badgeColumnClass" v-for="choice in choices" :key="choice.value">
+          <b-badge class="stats-by-round__summary__choice__badge mr-3 " :variant="choice.value | toVariant" v-if="choice" :title="choice.name" v-b-tooltip.right>
             {{ choice.name | firstLetter }}<span class="sr-only">{{ choice.name | skipFirstLetter }}</span>
           </b-badge>{{choice.progress}}%
         </div>
@@ -17,7 +17,7 @@
     <template v-else>
       <span class="stats-by-round__progress ">
         {{ $t('taskStatsCard.round') }} {{ round }}
-        <span class="stats-by-round__item__value font-weight-bold ml-2">
+        <span class="stats-by-round__item__value font-weight-bold ml-2 ">
           {{ progress | round }}%
         </span>
         <span class="text-secondary mx-2" v-if="Number(round) !== Number(nbRounds)">
@@ -85,10 +85,18 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.stats-by-round--extended{
-  min-width: 350px;
-  max-width: 350px;
-  width: 350px;
+<style lang="scss">
+
+.stats-by-round
+{
+  &--extended{
+    min-width: 340px;
+  }
+
+  &__summary__choice__badge{
+    width:1.5em;
+    height:1.5em;
+    display: inline-block;
+  }
 }
 </style>
