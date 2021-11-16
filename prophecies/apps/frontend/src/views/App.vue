@@ -14,11 +14,12 @@ export default {
     }
   },
   created () {
+    this.$root.$on('prophecies::closeTips', this.closeTips)
     this.$root.$on('prophecies::toggleShortcuts', this.toggleModalFn('modal-shortcuts')) 
     this.$root.$on('prophecies::toggleTips', this.toggleModalFn('modal-tips'))  
     this.$shortkey.bind('ctrl+k', this.toggleModalFn('modal-shortcuts')) 
     this.$shortkey.bind('ctrl+shift+t', this.toggleModalFn('modal-tips')) 
-    this.$shortkey.bind('ctrl+shift+h', this.goToHistory) 
+    this.$shortkey.bind('ctrl+shift+h', this.goToHistory)
   },
   methods: {
     goTo (name) {
@@ -36,6 +37,10 @@ export default {
         }
         this.$refs[modalRef].toggle()
       }
+    },
+    closeTips () {
+      this.$bvModal.hide('modal-tips')
+      this.goTo('tip-list')
     }
   }
 }
@@ -63,6 +68,7 @@ export default {
       size="md"
       content-class="bg-transparent shadow-none border-0" 
       body-class="p-0"
+      id="modal-tips"
       ref="modal-tips" 
       hide-footer 
       hide-header>
@@ -73,7 +79,7 @@ export default {
             <span class="sr-only">Close</span>
           </b-btn>
 
-          <ul class="app__breadcrumb list-inline my-3 pt-3 text-primary">
+          <ul class="app__breadcrumb list-inline mt-3 mb-5 pt-3 text-primary">
             <li class="list-inline-item app__breadcrumb__item app__item--dashboard mt-1">
               <h3>Tips for {{ taskAttributes.projectName }} > {{ taskAttributes.taskName }} </h3>
             </li>
