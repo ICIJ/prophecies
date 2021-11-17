@@ -1,4 +1,4 @@
-from django_filters import CharFilter, FilterSet 
+from django_filters import CharFilter, FilterSet
 from prophecies.core.models import TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record_review import StatusType
 
@@ -23,6 +23,9 @@ class TaskRecordFilter(FilterSet):
 
 class TaskRecordReviewFilter(FilterSet):
     task_record__reviewed = CharFilter(method='reviewed_filter')
+    task_record__locked = CharFilter(method='locked_filter')
+    task_record__has_notes = CharFilter(method='has_notes_filter')
+    task_record__has_disagreements = CharFilter(method='has_disagreements_filter')
 
     class Meta:
         model = TaskRecordReview
@@ -33,15 +36,39 @@ class TaskRecordReviewFilter(FilterSet):
           'task_record__priority': ('exact', 'in'),
           'task_record__rounds': ('exact', 'in'),
           'task_record__task': ('exact', 'in'),
-          'task_record__locked': ('exact',),
-          'task_record__has_notes': ('exact',),
-          'task_record__has_disagreements': ('exact',),
           'task_record__predicted_value': ('icontains', 'exact', 'iexact', 'contains', 'in', 'iregex'),
           'task_record__original_value': ('icontains', 'exact', 'iexact', 'contains', 'in'),
           'task_record__reviews__checker': ('exact', 'in'),
           'task_record__reviews__choice': ('exact', 'in'),
           'task_record__reviews__id': ('exact', 'in'),
         }
+
+    def has_disagreements_filter(self, queryset, name, value):
+        if value == '0':
+                return queryset \
+                        .filter(task_record__has_disagreements=False)
+        if value == '1':
+                return queryset \
+                        .filter(task_record__has_disagreements=True)
+        return queryset
+
+    def has_notes_filter(self, queryset, name, value):
+        if value == '0':
+            return queryset \
+                .filter(task_record__has_notes=False)
+        if value == '1':
+            return queryset \
+                .filter(task_record__has_notes=True)
+        return queryset
+		
+    def locked_filter(self, queryset, name, value):
+        if value == '0':
+            return queryset \
+                .filter(task_record__locked=False)
+        if value == '1':
+            return queryset \
+                .filter(task_record__locked=True)
+        return queryset
 
     def reviewed_filter(self, queryset, name, value):
         if value == '0':
