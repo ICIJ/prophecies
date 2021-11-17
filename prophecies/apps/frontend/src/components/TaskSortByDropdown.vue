@@ -78,12 +78,10 @@ export default {
     },
     callbackOrderBy () {
       return (tasks) => {
-        // adding this condition can help ignoring the closed tasks on priority sorting
-        // else if (this.selectedSortOption.needStatus) {
-        //   return orderBy(tasks, [this.sortByStatus, this.selectedSortName, 'name'], ['asc', this.selectedSortOptionOrder, 'asc', 'asc'])
-        // }
         if (this.selectedSortName === 'status') {
           return orderBy(tasks, [this.sortByStatus, 'name'], ['asc', 'asc'])
+        } else if (this.selectedSortOption.needStatus) { // adding this condition can help ignoring the closed tasks on priority sorting
+          return orderBy(tasks, [this.sortByStatus, this.selectedSortName, 'name'], ['asc', this.selectedSortOptionOrder, 'asc', 'asc'])
         } else {
           return orderBy(tasks, [this.selectedSortName, 'name'], [this.selectedSortOptionOrder, 'asc'])
         }
