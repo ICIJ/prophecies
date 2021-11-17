@@ -56,12 +56,11 @@ export default {
 
 <style lang="scss" scoped>
   .task-stats-card-all-rounds {
-    
       padding-left: 48px;
       padding-right: 48px;
-      width:370px;
-      min-width:370px;
-      max-width:370px;
+      width:340px;
+      min-width:340px;
+      max-width:340px;
       background-color: $secondary-50;
 
     &__all {

@@ -1,12 +1,15 @@
 <script>
 import moment from 'moment'
 import Task, { TaskStatus } from '@/models/Task'
+import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import StatsByRound from '@/components/StatsByRound.vue'
 
 export default {
   name: 'TaskStatsCard',
   components: {
-    StatsByRound
+    StatsByRound,
+    TaskStatsCardAllRounds
+
   },
   props: {
     taskId: {
@@ -81,7 +84,7 @@ export default {
 <template>
   <div class="task-stats-card card card-body shadow-sm d-flex">
       <div class="d-flex justify-content-between ">
-        <div class="task-stats-card__heading d-flex flex-column mr-3 pb-3">
+        <div class="task-stats-card__heading d-flex flex-column ">
           <h3>
             <router-link
             :to="{
@@ -108,8 +111,13 @@ export default {
               Created at {{ task.created_at | formatDate }}
           </span>
         </div>
-        <slot name="allRounds" v-if="extended" v-bind:rounds="{progress:progress,done:taskRecordsDoneCount,pending:taskRecordsPendingCount}">
-        </slot>
+         <task-stats-card-all-rounds
+              v-if="extended"
+                :progress="progress"
+                :done="taskRecordsDoneCount"
+                :pending="taskRecordsPendingCount"
+                class="mx-5 d-none d-lg-block"
+          />
         <div class="task-stats-card__status d-flex flex-column justify-content-between text-right" :class="{'task-stats-card__status--extended':extended}">
           <div  :class="{'flex-row-reverse flex-wrap' : extended}">
             <div class="task-stats-card__status__top " :class="{'ml-5 pb-3 ' : extended}">
@@ -137,6 +145,13 @@ export default {
         </div>
       </div>
 
+         <task-stats-card-all-rounds
+              v-if="extended"
+                :progress="progress"
+                :done="taskRecordsDoneCount"
+                :pending="taskRecordsPendingCount"
+                class="mx-auto my-3 d-lg-none"
+          />
       <div class="d-flex flex-row flex-grow-1 " :class="{'align-items-center':!extended}">
          <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 "
               :class="{'mx-auto':extended}"
