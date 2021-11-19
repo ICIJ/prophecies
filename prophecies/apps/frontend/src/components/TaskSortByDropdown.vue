@@ -5,7 +5,6 @@
       class="mb-3 task-sort-by-dropdown"
       >
       <template #label>
-            <div class="mb-1 text-primary">Sort by</div>
       </template>
     </sort-by-dropdown>
 </template>
