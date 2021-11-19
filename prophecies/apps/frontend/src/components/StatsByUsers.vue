@@ -1,7 +1,7 @@
 <template>
     <div class="stats-by-users d-flex flex-column flex-grow-1 py-3">
       <div class="stats-by-users__table d-flex flex-row py-3" v-for="(user, index) in users" :key="index">
-        <div class="stats-by-users__table__username col-3 pl-0 text-nowrap">
+        <div class="stats-by-users__table__username col-3 px-0 text-nowrap">
           {{ user.name }}
         </div>
         <div   class="stats-by-users__table__progress text-right mx-3">

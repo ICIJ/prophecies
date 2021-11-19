@@ -1,5 +1,5 @@
 <template>
-  <div class="stats-by-round d-flex flex-column py-3 " :class="{'stats-by-round--extended':extended}">
+  <div class="stats-by-round d-flex flex-column" :class="{'stats-by-round--extended':extended}">
     <template v-if="extended">
       <div class="stats-by-round__progress d-flex  py-3">
         <div class="col-3 pl-0 font-weight-bold text-primary text-nowrap">Round {{ round }}</div>

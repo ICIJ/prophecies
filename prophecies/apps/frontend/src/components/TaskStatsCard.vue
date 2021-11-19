@@ -84,8 +84,8 @@ export default {
 <template>
   <div class="task-stats-card card card-body shadow-sm d-flex">
       <div class="d-flex justify-content-between ">
-        <div class="task-stats-card__heading d-flex flex-column ">
-          <h3>
+        <div class="task-stats-card__heading d-flex flex-column " :class="{'justify-content-between':extended}">
+          <h2>
             <router-link
             :to="{
               name: 'task-record-review-list',
@@ -98,16 +98,16 @@ export default {
             <b-badge class="task-stats-card__heading__project bg-transparent font-weight-normal text-muted">
             {{ task.project.name }}
             </b-badge>
-          </h3>
-          <p class="pt-2 text-nowrap">
+          </h2>
+          <span class="py-2 text-nowrap">
             {{ $tc('taskStatsCard.fullyCheckedItems', taskRecordsCount) }}:
             <span
               class="text-danger font-weight-bold ml-2 task-stats-card__checked"
             >
               {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
             </span>
-          </p>
-          <span v-if="extended" class="text-secondary">
+          </span>
+          <span v-if="extended" class="text-secondary pt-2">
               {{$t("taskStatsCard.createdOn") }} {{ task.created_at | formatDate }}
           </span>
         </div>
@@ -152,7 +152,7 @@ export default {
                 :pending="taskRecordsPendingCount"
                 class="mx-auto my-3 d-lg-none"
           />
-      <div class="d-flex flex-row flex-grow-1 " :class="{'align-items-center':!extended}">
+      <div class="d-flex flex-row flex-grow-1 pt-1" :class="{'align-items-center':!extended}">
          <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 "
               :class="{'mx-auto':extended}"
          >
