@@ -108,7 +108,7 @@ export default {
             </span>
           </p>
           <span v-if="extended" class="text-secondary">
-              Created at {{ task.created_at | formatDate }}
+              {{$t("taskStatsCard.createdOn") }} {{ task.created_at | formatDate }}
           </span>
         </div>
          <task-stats-card-all-rounds

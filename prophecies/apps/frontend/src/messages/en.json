@@ -94,6 +94,7 @@
   },
   "taskStatsCard": {
     "closed": "Closed!",
+    "createdOn": "Created on",
     "locked": "Locked",
     "fullyCheckedItems": "Fully checked record | Fully checked records",
     "priority": "Priority",
