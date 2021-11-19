@@ -1,15 +1,15 @@
 from actstream.models import Action
-from rest_framework import exceptions, serializers, status, permissions, viewsets
+from django.db.models.expressions import RawSQL
+from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Count
 from rest_framework.response import Response
-from django.db.models import Sum,Count
 
 class ActionAggregationSerializer(serializers.ModelSerializer):
-    #id = serializers.CharField(required=True)
-
     class Meta:
         model = Action
-        fields = ('id', 'actor_object_id','verb')
+        fields = ('id', 'verb', 'timestamp')
+
 
 class ActionAggregationViewSet(viewsets.ModelViewSet):
     queryset = Action.objects.all()
@@ -18,10 +18,13 @@ class ActionAggregationViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'head']
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return self.queryset.filter(verb=verb).values('id', 'actor_object_id','verb').annotate(count_by_verb =Count('verb'))
-        
-
+    def list(self, request, *args, **kwargs):
+        actions = Action.objects.annotate(
+            day=RawSQL( 'select DATE(timestamp) as day from actstream_action',() )
+        )
+        res = actions.order_by('day').values('verb','actor_object_id','day').annotate(Count('verb'))
+       
+        return Response(res)
 
 """
 /action-aggregations/?filter[actor=13]
