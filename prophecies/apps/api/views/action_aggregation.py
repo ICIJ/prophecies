@@ -1,17 +1,19 @@
+from prophecies.core.models import ActionAggregation
 from actstream.models import Action
 from django.db.models.expressions import RawSQL
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Count
 from rest_framework.response import Response
+import uuid
 
-class ActionAggregationSerializer(serializers.ModelSerializer):
+class ActionAggregationSerializer(serializers.Serializer):
+  
     class Meta:
-        model = Action
-        fields = ('id', 'verb', 'timestamp')
+        model = ActionAggregation
+        fields = ('verb','actor_object_id','day')
 
-
-class ActionAggregationViewSet(viewsets.ModelViewSet):
+class ActionAggregationViewSet(viewsets.ViewSet):
     queryset = Action.objects.all()
     serializer_class = ActionAggregationSerializer
     resource_name = 'ActionAggregation'
@@ -24,7 +26,8 @@ class ActionAggregationViewSet(viewsets.ModelViewSet):
         )
         res = actions.order_by('day').values('verb','actor_object_id','day').annotate(Count('verb'))
        
-        return Response(res)
+        serializer = ActionAggregationSerializer(res, many=True)
+        return Response(serializer.instance)
 
 """
 /action-aggregations/?filter[actor=13]
