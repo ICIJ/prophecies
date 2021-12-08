@@ -84,7 +84,7 @@ export default {
 <template>
   <div class="task-stats-card card card-body shadow-sm d-flex">
       <div class="d-flex justify-content-between ">
-        <div class="task-stats-card__heading d-flex flex-column " :class="{'justify-content-between':extended}">
+        <div class="task-stats-card__heading d-flex flex-column justify-content-between">
           <h2>
             <router-link
             :to="{
@@ -119,8 +119,8 @@ export default {
                 class="mx-5 d-none d-lg-block"
           />
         <div class="task-stats-card__status d-flex flex-column justify-content-between text-right" :class="{'task-stats-card__status--extended':extended}">
-          <div  :class="{'flex-row-reverse flex-wrap' : extended}">
-            <div class="task-stats-card__status__top " :class="{'ml-5 pb-3 ' : extended}">
+          <div  class='d-flex flex-column flex-grow-1 justify-content-between '>
+            <div class="task-stats-card__status__top " :class="{'ml-5 ' : extended}">
               <span v-if="taskIsClosed" class="task-stats-card__status__top--closed text-nowrap" >
                 {{ $t('taskStatsCard.closed') }}
               <span v-if="extended && celebrate" class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">{{taskIsClosed? 'Closed':'Done'}}</span>
@@ -129,7 +129,7 @@ export default {
                 {{ $t('taskStatsCard.priority') }} {{ task.priority }}
               </span>
             </div>
-            <div  v-if="taskIsLocked"  :class="{' mt-0 py-0' : extended,'py-3':!extended}" >
+            <div  v-if="taskIsLocked"  :class="{' mt-0 py-0' : extended,'py-2':!extended}" >
               <span  class="task-stats-card__status__lock text-danger " >
                 <lock-icon size="1.3x" /><span class="sr-only">Unlock</span>
                 <span class="task-stats-card__status__lock--locked ml-2 "> {{ $t('taskStatsCard.locked') }}</span>
@@ -139,7 +139,7 @@ export default {
               <span class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">{{taskIsClosed? 'Closed':'Done'}}</span>
             </div>
           </div>
-          <div v-if="extended" class="task-stats-card__read-tips pt-3 ">
+          <div v-if="extended" class="task-stats-card__read-tips pt-2 ">
             <router-link :to="{ name: 'tip-list', query: { 'filter[task]': task.id } }" class="btn btn-danger px-3"> Read tips </router-link>
           </div>
         </div>
@@ -152,7 +152,7 @@ export default {
                 :pending="taskRecordsPendingCount"
                 class="mx-auto my-3 d-lg-none"
           />
-      <div class="d-flex flex-row flex-grow-1 pt-1" :class="{'align-items-center':!extended}">
+      <div class="d-flex flex-row flex-grow-1 pt-2" :class="{'align-items-center':!extended}">
          <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 "
               :class="{'mx-auto':extended}"
          >
