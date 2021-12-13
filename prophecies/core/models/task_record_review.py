@@ -1,12 +1,11 @@
-import re
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Count, F, Max, signals
+from django.db.models import Count, F, signals
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
-from prophecies.core.models import Choice, TaskChecker, TaskRecord, Task, Project, UserNotification
+from prophecies.core.models import Choice, TaskRecord, UserNotification
 from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action, mentioned, notify_mentioned_users
 
 class StatusType(models.TextChoices):

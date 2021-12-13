@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from prophecies.core.models import Choice, TaskRecord, TaskRecordReview
 from rest_framework import viewsets
 from rest_framework_json_api import serializers
-from rest_framework_json_api.relations import ResourceRelatedField, PolymorphicResourceRelatedField
+from rest_framework_json_api.relations import PolymorphicResourceRelatedField
 
 
 class GenericModelSerializer(serializers.ModelSerializer):
