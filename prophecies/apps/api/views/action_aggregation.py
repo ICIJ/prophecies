@@ -12,7 +12,6 @@ from prophecies.apps.api.views.user import UserSerializer
 
 
 class ActionAggregationSerializer(serializers.ModelSerializer):
-    actor_id = UserSerializer(source='actor', read_only=True)
     class Meta:
         model = ActionAggregation
         resource_name = 'ActionAggregation'
