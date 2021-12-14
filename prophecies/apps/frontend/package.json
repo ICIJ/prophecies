@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.0.1-beta13",
+  "version": "0.0.1-beta14",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
