@@ -27,6 +27,7 @@ django-admin-autocomplete-filter = "*"
 django-import-export = "*"
 
 [dev-packages]
+time-machine = "*"
 
 [requires]
 python_version = "3.8"

@@ -2,6 +2,8 @@ from actstream import action
 from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
+import time_machine
+import datetime as dt
 
 class TestActionAggregation(TestCase):
     client = APIClient()
@@ -54,3 +56,12 @@ class TestActionAggregation(TestCase):
         data = request.json().get('data')
         relationships = data[0].get('relationships')
         self.assertEqual(relationships['actor']['data']['id'], str(self.olivia.id))
+
+    def test_aggregate_on_two_days(self):
+        with time_machine.travel(0, tick=False) as traveller:
+            action.send(self.olivia, verb='follow', target=self.django)
+            traveller.shift(dt.timedelta(days=1))
+            action.send(self.olivia, verb='follow', target=self.django)
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/action-aggregations/')
+        self.assertEqual(len(request.json().get('data')), 2)
