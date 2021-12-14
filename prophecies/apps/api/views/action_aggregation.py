@@ -32,6 +32,7 @@ class ActionAggregationViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'head']
     permission_classes = [IsAuthenticated]
     ordering = ['-date']
+    filterset_fields = ['verb', 'date', 'actor_id']
 
 """
 /action-aggregations/?filter[actor=13]
