@@ -70,14 +70,3 @@ class TestActionAggregation(TestCase):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/action-aggregations/')
         self.assertEqual(len(request.json().get('data')), 2)
-
-    def test_aggregates_only_actions_from_user_actor_content_type(self):
-        action.send(self.olivia, verb='added', target=self.django)
-        choice_group = ChoiceGroup.objects.create(name='Is it correct?')
-        choice = Choice.objects.create(name='Yes', choice_group=choice_group)
-        action.send(choice, verb='added', target=self.django)
-        self.assertEqual(len(Action.objects.filter_actor_content_type('user')), 1)
-
-    def test_error_raise_when_actor_content_type_is_not_a_known_model_name(self):
-        with self.assertRaises(ValueError):
-            Action.objects.filter_actor_content_type('User')
