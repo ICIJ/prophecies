@@ -62,7 +62,7 @@ jobs:
           name: Install pipenv and project's pip packages
           command: |
             sudo pip install pipenv
-            pipenv install
+            pipenv install --dev
       - save_cache:
           name: Save virtualenvs cache for future builds
           key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
