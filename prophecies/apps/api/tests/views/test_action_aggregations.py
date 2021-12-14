@@ -1,9 +1,14 @@
 from actstream import action
+from actstream.models import Action
 from django.contrib.auth.models import User
+from prophecies.core.models.choice import Choice
+from prophecies.core.models.choice_group import ChoiceGroup
+
 from django.test import TestCase
 from rest_framework.test import APIClient
 import time_machine
 import datetime as dt
+
 
 class TestActionAggregation(TestCase):
     client = APIClient()
@@ -65,3 +70,14 @@ class TestActionAggregation(TestCase):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/action-aggregations/')
         self.assertEqual(len(request.json().get('data')), 2)
+
+    def test_aggregates_only_actions_from_user_actor_content_type(self):
+        action.send(self.olivia, verb='added', target=self.django)
+        choice_group = ChoiceGroup.objects.create(name='Is it correct?')
+        choice = Choice.objects.create(name='Yes', choice_group=choice_group)
+        action.send(choice, verb='added', target=self.django)
+        self.assertEqual(len(Action.objects.filter_actor_content_type('user')), 1)
+
+    def test_error_raise_when_actor_content_type_is_not_a_known_model_name(self):
+        with self.assertRaises(ValueError):
+            Action.objects.filter_actor_content_type('User')

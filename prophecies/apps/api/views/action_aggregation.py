@@ -33,20 +33,6 @@ class ActionAggregationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     ordering = ['-date']
 
-    # def list(self, request, *args, **kwargs):
-    #     actions = Action.objects.annotate(
-    #         day=RawSQL( 'select DATE(timestamp) as day from actstream_action',() )
-    #     )
-    #     res = actions.order_by('day').values('verb','actor_object_id','actor_content_type','day').annotate(Count('verb'))
-       
-    #     serializer = ActionAggregationSerializer(res, many=True)
-    #     return Response(serializer.instance)
-    # def list(self, request, *args, **kwargs):
-    #     res = self.queryset.values('verb','actor','count')
-       
-    #     serializer = ActionAggregationSerializer(res, many=True)
-    #     return Response(serializer.instance)
-
 """
 /action-aggregations/?filter[actor=13]
 {

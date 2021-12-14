@@ -24,7 +24,9 @@ class PropheciesConfig(AppConfig):
         signals.post_save.connect(create_aggregate_on_action_save, sender=Action)
 
 def create_aggregate_on_action_save(sender, instance, **kwargs):
-    from prophecies.core.models import ActionAggregation
-    action_agg, _created = ActionAggregation.objects.get_or_create(verb = instance.verb, date=instance.timestamp,actor = instance.actor)
-    action_agg.count += 1
-    action_agg.save()
+        
+    if(instance.actor_content_type.model == 'user'):
+        from prophecies.core.models import ActionAggregation
+        action_agg, _created = ActionAggregation.objects.get_or_create(verb = instance.verb, date=instance.timestamp, actor_id = instance.actor_object_id)
+        action_agg.count += 1
+        action_agg.save()

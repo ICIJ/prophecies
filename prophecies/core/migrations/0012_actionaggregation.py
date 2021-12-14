@@ -3,6 +3,13 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
+from prophecies.apps import create_aggregate_on_action_save
+
+
+def create_aggregates(apps, schema_editor):
+    Action = apps.get_model('actstream', 'Action')
+    for action in Action.objects.all():
+        create_aggregate_on_action_save(None, action)
 
 
 class Migration(migrations.Migration):
@@ -23,4 +30,5 @@ class Migration(migrations.Migration):
                 ('actor', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
             ],
         ),
+        migrations.RunPython(create_aggregates, migrations.RunPython.noop)
     ]
