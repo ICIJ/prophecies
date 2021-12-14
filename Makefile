@@ -9,6 +9,11 @@ clean:
 
 install: install-pip install-yarn
 
+install-dev: install-pip-dev install-yarn
+
+install-pip-dev:
+		pipenv install --dev
+
 install-pip:
 		pipenv install
 
