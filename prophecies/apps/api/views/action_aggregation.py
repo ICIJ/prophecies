@@ -1,19 +1,11 @@
-from rest_framework_json_api.relations import PolymorphicResourceRelatedField, ResourceRelatedField
-from prophecies.apps.api.views.action import GenericModelSerializer
-from prophecies.core.models import ActionAggregation
-from actstream.models import Action
-from django.db.models.expressions import RawSQL
+from prophecies.core.models import ActionAggregate
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Count
-from rest_framework.response import Response
 from prophecies.apps.api.views.user import UserSerializer
-
-
 
 class ActionAggregationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ActionAggregation
+        model = ActionAggregate
         resource_name = 'ActionAggregation'
         fields = ('verb','date','actor','actor_id','count')
     
@@ -26,7 +18,7 @@ class ActionAggregationSerializer(serializers.ModelSerializer):
     
 
 class ActionAggregationViewSet(viewsets.ModelViewSet):
-    queryset = ActionAggregation.objects.all()
+    queryset = ActionAggregate.objects.all()
     serializer_class = ActionAggregationSerializer
     resource_name = 'ActionAggregation'
     http_method_names = ['get', 'head']

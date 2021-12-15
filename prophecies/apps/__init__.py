@@ -26,7 +26,7 @@ class PropheciesConfig(AppConfig):
 def create_aggregate_on_action_save(sender, instance, **kwargs):
         
     if(instance.actor_content_type.model == 'user'):
-        from prophecies.core.models import ActionAggregation
-        action_agg, _created = ActionAggregation.objects.get_or_create(verb = instance.verb, date=instance.timestamp, actor_id = instance.actor_object_id)
+        from prophecies.core.models import ActionAggregate
+        action_agg, _created = ActionAggregate.objects.get_or_create(verb = instance.verb, date=instance.timestamp, actor_id = instance.actor_object_id)
         action_agg.count += 1
         action_agg.save()
