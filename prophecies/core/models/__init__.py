@@ -1,4 +1,4 @@
-from .action_aggregation import ActionAggregate
+from .action_aggregate import ActionAggregate
 from .alternative_value import AlternativeValue
 from .choice import Choice
 from .choice_group import ChoiceGroup
