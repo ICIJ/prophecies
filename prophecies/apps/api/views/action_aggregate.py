@@ -2,19 +2,22 @@ from prophecies.core.models import ActionAggregate
 from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
 from prophecies.apps.api.views.user import UserSerializer
+from prophecies.apps.api.views.task import TaskSerializer
 
 class ActionAggregateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ActionAggregate
-        resource_name = 'ActionAggregate'
-        fields = ('verb','date','actor','actor_id','count')
     
     included_serializers = {
-        'actor': UserSerializer,
+        'user': UserSerializer,
+        'task': TaskSerializer,
     }
     
     class JSONAPIMeta:
-        included_resources = ['actor']
+        included_resources = ['user','task']
+
+    class Meta:
+        model = ActionAggregate
+        resource_name = 'ActionAggregate'
+        fields = ('verb','date','user','task','count')
     
 
 class ActionAggregateViewSet(viewsets.ModelViewSet):
@@ -24,7 +27,7 @@ class ActionAggregateViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'head']
     permission_classes = [IsAuthenticated]
     ordering = ['-date']
-    filterset_fields = ['verb', 'date', 'actor_id']
+    filterset_fields = ['verb', 'date', 'user_id']
 
 """
 /action-aggregations/?filter[actor=13]

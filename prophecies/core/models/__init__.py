@@ -1,4 +1,3 @@
-from .action_aggregate import ActionAggregate
 from .alternative_value import AlternativeValue
 from .choice import Choice
 from .choice_group import ChoiceGroup
@@ -10,3 +9,5 @@ from .user_notification import UserNotification
 from .task_record import TaskRecord
 from .task_record_review import TaskRecordReview
 from .tip import Tip
+# Requires Task to be loaded first
+from .action_aggregate import ActionAggregate
