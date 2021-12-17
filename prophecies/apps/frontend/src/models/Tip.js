@@ -37,7 +37,7 @@ export default class Tip extends Model {
   }
 
   get descriptionWithMentions () {
-    let string = String(this.description).replace(User.usernamePattern, (match, p1) => {
+    const string = String(this.description).replace(User.usernamePattern, (match, p1) => {
       if (User.me() && p1 === User.me().username) {
         return `<span class="mention mention--is-me">${match}</span>`
       } else if (p1.toLowerCase() === 'project' || p1.toLowerCase() === 'task') {
