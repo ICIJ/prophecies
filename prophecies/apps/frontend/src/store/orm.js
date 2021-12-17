@@ -3,6 +3,7 @@ import VuexORM from '@vuex-orm/core'
 import VuexORMAxios from '@vuex-orm/plugin-axios'
 
 import Action from '@/models/Action'
+import ActionAggregate from '@/models/ActionAggregate'
 import AlternativeValue from '@/models/AlternativeValue'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -27,6 +28,7 @@ VuexORM.use(VuexORMAxios, { axios, baseURL })
 export const database = new VuexORM.Database()
 // Models must be registered manually so a store module is created
 database.register(Action)
+database.register(ActionAggregate)
 database.register(AlternativeValue)
 database.register(Choice)
 database.register(ChoiceGroup)

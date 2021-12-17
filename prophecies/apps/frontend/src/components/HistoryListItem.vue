@@ -47,7 +47,7 @@ export default {
       required: true
     },
     value: {
-      type: [String, Object],
+      type: [Number, String, Object],
       default: null
     }
   },
@@ -82,7 +82,7 @@ export default {
         return capitalize ? 'You' : 'you'
       }
       if (!user.firstName || !user.lastName) {
-        return user.username
+        return `@${user.username}`
       }
       return `${user.firstName}`
     },

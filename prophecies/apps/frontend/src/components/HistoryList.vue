@@ -4,31 +4,8 @@ import AppWaiter from '@/components/AppWaiter'
 import Action from '@/models/Action'
 import Task from '@/models/Task'
 import Tip from '@/models/Tip'
+import ActionAggregate from '@/models/ActionAggregate'
 import HistoryListGroup from '@/components/HistoryListGroup.vue'
-import { ITEM_TYPES } from '@/components/HistoryListItem.vue'
-const pontus = { projectId: '1', projectName: 'Pontus', tasks: [{ taskId: '2', taskName: 'Passports' }] }
-const chronos = { projectId: '2', projectName: 'Chronos', tasks: [{ taskId: '1', taskName: 'Addresses' }] }
-
-const checkedRecords = [
-  {
-    type: ITEM_TYPES.CHECKED_RECORDS,
-    date: '2021-09-20T11:43:15.263Z',
-    user: 'Jelena',
-    nbRecords: 252,
-    projectName: chronos.projectName,
-    taskName: chronos.tasks[0].taskName
-  },
-
-  {
-    type: ITEM_TYPES.CHECKED_RECORDS,
-    date: '2021-09-19T11:43:15.263Z',
-    user: 'Augie',
-    nbRecords: 2,
-    projectName: pontus.projectName,
-    taskName: pontus.tasks[0].taskName
-  }
-
-]
 
 export default {
   name: 'HistoryList',
@@ -71,9 +48,9 @@ export default {
       this.$wait.end(loader)
     },
     async fetchAll () {
-      this.checkedRecords = checkedRecords
       await Task.api().get()
       await Action.api().get()
+      await ActionAggregate.api().get()
       await Tip.api().get()
     }
   },

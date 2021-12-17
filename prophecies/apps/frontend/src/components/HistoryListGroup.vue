@@ -3,6 +3,9 @@ import { uniqueId } from 'lodash'
 import Action from '@/models/Action'
 import Tip from '@/models/Tip'
 import HistoryListItem, { ITEM_TYPES } from '@/components/HistoryListItem.vue'
+import Task from '@/models/Task'
+import User from '@/models/User'
+import ActionAggregate from '@/models/ActionAggregate'
 
 export default {
   name: 'HistoryListGroup',
@@ -30,6 +33,13 @@ export default {
 
     loadMore () {
       this.nbTimesMore++
+    },
+    task (taskId) {
+      return Task
+        .query()
+        .find(taskId)
+        .with('project')
+        .get()
     }
 
   },
@@ -99,7 +109,28 @@ export default {
         })
     },
     aggregatedItems () {
-      return this.checkedRecords.slice()
+      const agg = ActionAggregate
+        .query()
+        .get()
+      const users = {}
+      const tasks = {}
+      return agg.map(checkedItem => {
+        if (!tasks[checkedItem.taskId]) {
+          tasks[checkedItem.taskId] = Task.query().with('project').find(checkedItem.taskId)
+        }
+        if (!users[checkedItem.userId]) {
+          users[checkedItem.userId] = User.query().find(checkedItem.userId)
+        }
+        return {
+          type: ITEM_TYPES.CHECKED_RECORDS,
+          timestamp: new Date(checkedItem.date).toISOString(),
+          user: users[checkedItem.userId],
+          content: checkedItem.count,
+          projectName: tasks[checkedItem.taskId].project?.name,
+          taskName: tasks[checkedItem.taskId].name,
+          link: `#/task-record-reviews/${checkedItem.taskId}`
+        }
+      })
     },
 
     items () {
