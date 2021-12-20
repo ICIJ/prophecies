@@ -40,8 +40,28 @@ export default {
         .find(taskId)
         .with('project')
         .get()
-    }
+    },
+    sortByTimestamp (a, b) {
+      return -a.timestamp.localeCompare(b.timestamp)
+    },
+    countCheckedReviewsByDateUserIdTaskId (acc, checkedItem) { // compute checked reviews (reviewed - cancelled)
+      const date = new Date(checkedItem.date).toISOString()
+      const id = `${date}_${checkedItem.userId}_${checkedItem.taskId}`
 
+      const item = {
+        type: ITEM_TYPES.CHECKED_RECORDS,
+        timestamp: date,
+        user: User.query().find(checkedItem.userId),
+        content: 0,
+        projectName: Task.query().with('project').find(checkedItem.taskId).project?.name,
+        taskName: Task.query().with('project').find(checkedItem.taskId).name,
+        link: `#/task-record-reviews/${checkedItem.taskId}`
+      }
+
+      acc[id] = acc[id] || item
+      acc[id].content += checkedItem.verb === 'reviewed' ? checkedItem.count : -checkedItem.count
+      return acc
+    }
   },
   computed: {
     fetchHistoryLoader () {
@@ -108,41 +128,31 @@ export default {
           }
         })
     },
-    aggregatedItems () {
-      const agg = ActionAggregate
+    reviewedOrCancelledItems () {
+      return ActionAggregate
         .query()
+        .where('verb', v => v === 'reviewed' || v === 'cancelled')
         .get()
-      const users = {}
-      const tasks = {}
-      return agg.map(checkedItem => {
-        if (!tasks[checkedItem.taskId]) {
-          tasks[checkedItem.taskId] = Task.query().with('project').find(checkedItem.taskId)
-        }
-        if (!users[checkedItem.userId]) {
-          users[checkedItem.userId] = User.query().find(checkedItem.userId)
-        }
-        return {
-          type: ITEM_TYPES.CHECKED_RECORDS,
-          timestamp: new Date(checkedItem.date).toISOString(),
-          user: users[checkedItem.userId],
-          content: checkedItem.count,
-          projectName: tasks[checkedItem.taskId].project?.name,
-          taskName: tasks[checkedItem.taskId].name,
-          link: `#/task-record-reviews/${checkedItem.taskId}`
-        }
-      })
+    },
+    reviewedItems () {
+      const itemsGroupedByDateUserIdTaskId = ActionAggregate
+        .query()
+        .where('verb', v => v === 'reviewed' || v === 'cancelled')
+        .get()
+        .reduce(this.countCheckedReviewsByDateUserIdTaskId, {})
+
+      return Object.values(itemsGroupedByDateUserIdTaskId)
     },
 
     items () {
-      let key = 0
       return [...this.mentions,
         ...this.closedTasks,
         ...this.tips,
-        ...this.aggregatedItems]
-        .map((item, i) => { return { ...item, id: `history-item-${++key}` } })
+        ...this.reviewedItems]
+        .map((item, i) => { return { ...item, id: `history-item-${i}` } })
     },
     sortedByTimestampItems () {
-      return this.items.slice().sort((a, b) => -a.timestamp.localeCompare(b.timestamp))
+      return this.items.slice().sort(this.sortByTimestamp)
     },
     nbVisibleItems () {
       const limitAndMore = this.limit + this.more * this.nbTimesMore
