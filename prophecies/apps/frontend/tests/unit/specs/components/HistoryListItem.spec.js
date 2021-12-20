@@ -10,7 +10,7 @@ describe('HistoryListItem', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
-    const { store } = Core.init(localVue).useAll()
+    const { store, i18n } = Core.init(localVue).useAll()
     const propsData = {
       type: ITEM_TYPES.MENTIONED_USER,
       timestamp: '2021-10-14T15:10:53.364880Z',
@@ -35,7 +35,8 @@ describe('HistoryListItem', () => {
     wrapper = await shallowMount(HistoryListItem, {
       localVue,
       store,
-      propsData
+      propsData,
+      i18n
     })
   })
   it('should display the timestamp as iso date', () => {

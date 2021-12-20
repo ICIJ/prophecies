@@ -58,6 +58,12 @@
     "logout": "Sign out",
     "help": "Ask for help"
   },
+  "historyListItem": {
+    "tip": "added a new tip: \"{value}\"",
+    "checked-records": "checked {n} records",
+    "closed-task": "closed the task",
+    "mentioned-user": "mentioned {value} in a note"
+  },
   "login": {
     "title": "Login",
     "welcome": "Welcome to Prophecies",

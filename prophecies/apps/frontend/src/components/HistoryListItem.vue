@@ -107,27 +107,7 @@ export default {
       return category
     },
     content () {
-      const content = ITEM_TYPES_CONTENT[this.type]
-      const text = content.text
-      let itemText = text
-      switch (this.type) {
-        case ITEM_TYPES.CHECKED_RECORDS:
-        {
-          itemText = text.replace('$value', this.value)
-          break
-        }
-        case ITEM_TYPES.MENTIONED_USER:
-        {
-          itemText = text.replace('$value', this.mentionContent(this.value))
-          break
-        }
-        case ITEM_TYPES.TIP:
-        {
-          itemText = `${text}: "${this.value}"`
-          break
-        }
-      }
-      return itemText
+      return this.type === ITEM_TYPES.MENTIONED_USER ? this.mentionContent(this.value) : this.value
     },
     hasLink () {
       return this.type === ITEM_TYPES.MENTIONED_USER || this.type === ITEM_TYPES.TIP
@@ -144,7 +124,8 @@ export default {
     <div  class="history-list-item__prefix-column" v-html="prefix"></div>
     <div class="row container-fluid justify-content-between flex-grow-1">
         <div class="d-flex flex-grow-lg-0 flex-grow-1 px-3 py-1 history-list-item__content-column col-12 col-lg-5" :class="className">
-          <p>{{who }}<a v-if="hasLink" class="pl-1" :href='`${link}`'> {{content}} </a> <template v-else> {{content}} </template></p>
+          <p>{{who }}<a v-if="hasLink" class="pl-1" :href='`${link}`'> {{$t(`historyListItem.${type}`, { value:content } )}}
+             </a> <template v-else> {{$tc(`historyListItem.${type}`, content)}} </template></p>
         </div>
         <div class="d-flex ml-auto flex-md-row flex-lg-grow-0 justify-content-md-right flex-sm-column flex-sm-grow-1 justify-content-sm-between">
           <div class="px-3 py-1 text-sm-left text-lg-right history-list-item__category-column">{{category}}</div>
