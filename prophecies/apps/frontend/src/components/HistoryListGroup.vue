@@ -47,19 +47,24 @@ export default {
     countCheckedReviewsByDateUserIdTaskId (acc, checkedItem) { // compute checked reviews (reviewed - cancelled)
       const date = new Date(checkedItem.date).toISOString()
       const id = `${date}_${checkedItem.userId}_${checkedItem.taskId}`
+      const count = checkedItem.verb === 'reviewed' ? checkedItem.count : -checkedItem.count
+      if (!acc[id]) {
+        acc[id] = {
+          type: ITEM_TYPES.CHECKED_RECORDS,
+          timestamp: date,
+          user: User.query().find(checkedItem.userId),
+          content: 0,
+          projectName: Task.query().with('project').find(checkedItem.taskId).project?.name,
+          taskName: Task.query().with('project').find(checkedItem.taskId).name,
+          link: `#/task-record-reviews/${checkedItem.taskId}`
+        }
+      }
+      acc[id].content += count
 
-      const item = {
-        type: ITEM_TYPES.CHECKED_RECORDS,
-        timestamp: date,
-        user: User.query().find(checkedItem.userId),
-        content: 0,
-        projectName: Task.query().with('project').find(checkedItem.taskId).project?.name,
-        taskName: Task.query().with('project').find(checkedItem.taskId).name,
-        link: `#/task-record-reviews/${checkedItem.taskId}`
+      if (acc[id].content === 0) {
+        delete acc[id]
       }
 
-      acc[id] = acc[id] || item
-      acc[id].content += checkedItem.verb === 'reviewed' ? checkedItem.count : -checkedItem.count
       return acc
     }
   },
@@ -135,13 +140,7 @@ export default {
         .get()
     },
     reviewedItems () {
-      const itemsGroupedByDateUserIdTaskId = ActionAggregate
-        .query()
-        .where('verb', v => v === 'reviewed' || v === 'cancelled')
-        .get()
-        .reduce(this.countCheckedReviewsByDateUserIdTaskId, {})
-
-      return Object.values(itemsGroupedByDateUserIdTaskId)
+      return Object.values(this.reviewedOrCancelledItems.reduce(this.countCheckedReviewsByDateUserIdTaskId, {}))
     },
 
     items () {

@@ -119,6 +119,52 @@ export default [
                 }
               }
             }
+          },
+          {
+            type: 'ActionAggregate',
+            id: '6',
+            attributes: {
+              verb: 'reviewed',
+              date: '2021-12-20',
+              count: 3
+            },
+            relationships: {
+              user: {
+                data: {
+                  type: 'User',
+                  id: '4'
+                }
+              },
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '3'
+                }
+              }
+            }
+          },
+          {
+            type: 'ActionAggregate',
+            id: '7',
+            attributes: {
+              verb: 'cancelled',
+              date: '2021-12-20',
+              count: 3
+            },
+            relationships: {
+              user: {
+                data: {
+                  type: 'User',
+                  id: '4'
+                }
+              },
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '3'
+                }
+              }
+            }
           }
         ]
 

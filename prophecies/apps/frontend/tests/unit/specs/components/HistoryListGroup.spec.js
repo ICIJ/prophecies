@@ -85,8 +85,8 @@ describe('HistoryListGroup', () => {
     }
   })
 
-  it('should display the number of checked reviews (subtraction of cancelled from reviewed) grouped by date, by user and by task', () => {
-    expect(wrapper.vm.reviewedOrCancelledItems.length).toEqual(4)
+  it('should display the positive number of checked reviews (subtraction of cancelled from reviewed) grouped by date, by user and by task', () => {
+    expect(wrapper.vm.reviewedOrCancelledItems.length).toEqual(6)
 
     const reviews = wrapper.vm.reviewedItems
     expect(reviews.length).toEqual(3)
