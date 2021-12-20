@@ -57,7 +57,7 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     @lru_cache(maxsize=None)
     def get_user_task_records_done_count(self, task):
         checker = self.context.get('request').user
-        filter = dict(task_record__task=task, task_record__status=StatusType.DONE, checker=checker)
+        filter = dict(task_record__task=task, status=StatusType.DONE, checker=checker)
         return TaskRecordReview.objects.filter(**filter).count()
 
     @lru_cache(maxsize=None)

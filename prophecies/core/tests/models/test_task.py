@@ -56,29 +56,64 @@ class TestTask(TestCase):
 
 
     def test_progress_is_0(self):
-        TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
-        TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
+        record1 = TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
+        record2 = TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
+
+        record1.reviews.add(
+            TaskRecordReview.objects.create(round=1, status=StatusType.PENDING, checker=self.olivia))
+        record1.reviews.add(
+            TaskRecordReview.objects.create(round=2, status=StatusType.PENDING, checker=self.django))
+        record2.reviews.add(
+            TaskRecordReview.objects.create(round=1, status=StatusType.PENDING, checker=self.olivia))
+
         self.assertEqual(self.art.progress, 0)
 
 
     def test_progress_is_50(self):
-        TaskRecord.objects.create(task=self.art, status=StatusType.DONE)
-        TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
+        record1 = TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
+        record2 = TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
+
+        record1.reviews.add(
+            TaskRecordReview.objects.create(round=1, status=StatusType.DONE, checker=self.olivia))
+        record1.reviews.add(
+            TaskRecordReview.objects.create(round=2, status=StatusType.PENDING, checker=self.django))
+        record2.reviews.add(
+            TaskRecordReview.objects.create(round=1, status=StatusType.DONE, checker=self.olivia))
+        record2.reviews.add(
+            TaskRecordReview.objects.create(round=1, status=StatusType.PENDING, checker=self.django))
+
         self.assertEqual(self.art.progress, 50)
 
 
     def test_progress_is_75(self):
-        TaskRecord.objects.create(task=self.art, status=StatusType.DONE)
-        TaskRecord.objects.create(task=self.art, status=StatusType.DONE)
-        TaskRecord.objects.create(task=self.art, status=StatusType.DONE)
-        TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
+        record1 = TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
+        record2 = TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
+
+        record1.reviews.add(
+            TaskRecordReview.objects.create(round=1, status=StatusType.DONE, checker=self.olivia))
+        record1.reviews.add(
+            TaskRecordReview.objects.create(round=2, status=StatusType.DONE, checker=self.django))
+        record2.reviews.add(
+            TaskRecordReview.objects.create(round=1, status=StatusType.DONE, checker=self.olivia))
+        record2.reviews.add(
+            TaskRecordReview.objects.create(round=1, status=StatusType.PENDING, checker=self.django))
+
         self.assertEqual(self.art.progress, 75)
 
 
     def test_progress_is_100(self):
-        TaskRecord.objects.create(task=self.art, status=StatusType.DONE)
-        TaskRecord.objects.create(task=self.art, status=StatusType.DONE)
-        TaskRecord.objects.create(task=self.art, status=StatusType.DONE)
+        record1 = TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
+        record2 = TaskRecord.objects.create(task=self.art, status=StatusType.PENDING)
+
+        record1.reviews.add(
+            TaskRecordReview.objects.create(round=1, status=StatusType.DONE, checker=self.olivia))
+        record1.reviews.add(
+            TaskRecordReview.objects.create(round=2, status=StatusType.DONE, checker=self.django))
+        record2.reviews.add(
+            TaskRecordReview.objects.create(round=1, status=StatusType.DONE, checker=self.olivia))
+        record2.reviews.add(
+            TaskRecordReview.objects.create(round=1, status=StatusType.DONE, checker=self.django))
+
         self.assertEqual(self.art.progress, 100)
 
 

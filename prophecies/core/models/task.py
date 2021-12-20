@@ -91,12 +91,14 @@ class Task(models.Model):
             return self.is_locked != instance.is_locked
         return False
 
-
     @cached_property
     def progress(self):
-        all = self.task_records.count()
-        done = self.task_records.done().count()
-        return 100 if all == 0 else done / all * 100
+        from prophecies.core.models.task_record_review import TaskRecordReview, StatusType as st
+        tasks_reviews = TaskRecordReview.objects.filter(task_record__task_id=self.id)
+        done_reviews= tasks_reviews.filter(status=st.DONE)
+        all_reviews = len(tasks_reviews)
+        done_reviews = len(done_reviews)
+        return 100 if all_reviews == 0 else done_reviews / all_reviews * 100
 
     @cached_property
     def colors(self):
