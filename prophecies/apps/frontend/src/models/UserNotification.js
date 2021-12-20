@@ -33,7 +33,7 @@ export default class UserNotification extends Model {
         const data = { attributes, id, type }
         return this.put(`${id}/`, { data }, { headers: defaultHeaders() })
       },
-      bulkMarkAsRead(ids) {
+      bulkMarkAsRead (ids) {
         const headers = defaultHeaders()
         const operations = ids.map(id => ({ id, method: 'update', payload: '1' }))
         const payloads = [
