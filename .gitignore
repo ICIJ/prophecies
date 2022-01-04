@@ -91,3 +91,4 @@ data/
 todelete*.txt
 
 !zipped_data/
+pytest.ini

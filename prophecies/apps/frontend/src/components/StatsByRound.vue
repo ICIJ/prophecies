@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import User from '@/models/User'
 import { toVariant } from '@/utils/variant'
 import StatsByUsers from '@/components/StatsByUsers.vue'
 
@@ -49,9 +50,9 @@ export default {
       type: Array,
       default: () => ([])
     },
-    users: {
-      type: Array,
-      default: () => ([])
+    progressByUserIds: {
+      type: Object,
+      default: () => ({})
     },
     summary: {
       type: Array,
@@ -78,6 +79,15 @@ export default {
     }
   },
   computed: {
+    users () {
+      return Object.keys(this.progressByUserIds).map(id => {
+        const user = User.query().find(id)
+        if (!this.progressByUserIds[id]) {
+          return { name: user.username, pending: 0, done: 0, progress: 0 }
+        }
+        return { name: user.username, ...this.progressByUserIds[id] }
+      })
+    },
     badgeColumnClass () {
       return this.choices.length ? `col-${12 / this.choices.length}` : ''
     }

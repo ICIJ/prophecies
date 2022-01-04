@@ -75,6 +75,14 @@ class TaskRecordReviewManager(models.Manager):
             .annotate(count=models.Count('round')) \
             .order_by('count')
         return { i['round']: i['count'] for i in buckets }
+    
+    def pending_by_round(self, **filter):
+        buckets = self.pending() \
+            .filter(**filter) \
+            .values('round') \
+            .annotate(count=models.Count('round')) \
+            .order_by('count')
+        return { i['round']: i['count'] for i in buckets }
 
 
     def progress_by_round(self, **filter):
@@ -84,6 +92,14 @@ class TaskRecordReviewManager(models.Manager):
         progress = lambda round, total: done.get(round, 0) / total * 100
         # Return a dictionnary combinings both aggregations dict
         return { round: progress(round, count) for (round, count) in all.items() }
+
+    def stats_by_round(self, **filter):
+        # A lambda to calculate the progression for a given round
+        progress = lambda round, total: done.get(round, 0) / total * 100
+        done = self.done_by_round(**filter)
+        pending = self.pending_by_round(**filter)
+        # Return a dictionnary combinings both aggregations dict
+        return { round: { 'progress' : progress(round, count), 'done' : done.get(round, 0), 'pending' : pending.get(round, 0) } for (round, count) in done.items() }
 
 
 class TaskRecordReview(models.Model):
