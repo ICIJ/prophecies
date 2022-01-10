@@ -68,11 +68,10 @@
     "title": "Login",
     "welcome": "Welcome to Prophecies",
     "sumUp": "<a href=\"https://icij.org\">ICIJ</a> data cleaning and validation platform.",
-    "authenticationPlatform": "To log in, use ICIJ secure authentication platform:",
-    "account": "Login with Account",
-    "supportDesk": "If you need any help, please visit our support desk:",
+    "accountDescription": "Use your account to continue:",
+    "account": "Login",
     "askHelp": "Ask for help",
-    "logout": "You have been logged out from Datashare.",
+    "logout": "You have been logged out.",
     "login": "Login to continue"
   },
   "notification": {

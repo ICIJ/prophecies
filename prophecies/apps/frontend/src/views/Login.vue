@@ -5,6 +5,18 @@ export default {
     loginUrl () {
       return this.$core.config.get('loginUrl')
     },
+    loginWelcome () {
+      return this.$core.config.get('loginWelcome') || this.$t('login.welcome')
+    },
+    loginAccountDescription () {
+      return this.$core.config.get('loginAccountDescription') || this.$t('login.accountDescription')
+    },
+    loginAccountButton () {
+      return this.$core.config.get('loginAccountButton') || this.$t('login.account')
+    },
+    helpDescription  () {
+      return this.$core.config.get('helpDescription')
+    },
     helpLink () {
       return this.$core.config.get('helpLink')
     }
@@ -30,22 +42,20 @@ export default {
   <div class="login">
     <div class="login__card card text-center">
       <div class="login__card__heading card-title mt-4">
-        <h2 class="display-4">{{ $t('login.welcome') }}</h2>
+        <h2 class="display-4">{{ loginWelcome }}</h2>
         <p class="lead mb-0" v-html="$t('login.sumUp')"></p>
       </div>
       <div class="login__card__body">
         <ul class="list-group">
           <li class="list-group-item bg-muted border-top border-bottom border-left-0 border-right-0 rounded-0">
-            <p>
-              {{ $t('login.authenticationPlatform') }}
-            </p>
-            <a class="btn btn-dark btn-lg" :href="loginUrl">
+            <p>{{ loginAccountDescription }}</p>
+            <a class="btn btn-dark btn-lg font-weight-bold" :href="loginUrl">
               <shield-icon size="1x" class="mr-1" />
-              {{ $t('login.account') }}
+              {{ loginAccountButton }}
             </a>
           </li>
           <li class="list-group-item border-0">
-            <p>{{ $t('login.supportDesk') }}</p>
+            <p>{{ helpDescription }}</p>
             <a class="btn btn-outline-tertiary btn-lg" :href="helpLink" target="_blank" :title="$t('login.askHelp')">
               <fa icon="ambulance" class="mr-2"></fa>
               {{ $t('login.askHelp') }}
@@ -69,6 +79,10 @@ export default {
 
       &__heading h2 {
         font-size: 2.5rem;
+      }
+
+      p:empty {
+        display: none;
       }
     }
   }
