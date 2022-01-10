@@ -13,13 +13,17 @@ export default {
       return this.$route.params.taskId || null
     }
   },
-  created () {
-    this.$root.$on('prophecies::closeTips', this.closeTips)
-    this.$root.$on('prophecies::toggleShortcuts', this.toggleModalFn('modal-shortcuts')) 
-    this.$root.$on('prophecies::toggleTips', this.toggleModalFn('modal-tips'))  
-    this.$shortkey.bind('ctrl+k', this.toggleModalFn('modal-shortcuts')) 
-    this.$shortkey.bind('ctrl+shift+t', this.toggleModalFn('modal-tips')) 
-    this.$shortkey.bind('ctrl+shift+h', this.goToHistory)
+  async created () {
+    if (await this.$core.getUser()) {
+      // Bind root events
+      this.$root.$on('prophecies::closeTips', this.closeTips)
+      this.$root.$on('prophecies::toggleShortcuts', this.toggleModalFn('modal-shortcuts')) 
+      this.$root.$on('prophecies::toggleTips', this.toggleModalFn('modal-tips'))  
+      // Bind keyboard shortcuts
+      this.$shortkey.bind('ctrl+k', this.toggleModalFn('modal-shortcuts')) 
+      this.$shortkey.bind('ctrl+shift+t', this.toggleModalFn('modal-tips')) 
+      this.$shortkey.bind('ctrl+shift+h', this.goToHistory)
+    }
   },
   methods: {
     goTo (name) {
