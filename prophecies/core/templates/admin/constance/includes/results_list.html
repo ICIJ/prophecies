@@ -5,7 +5,6 @@
             <tr>
                 <th><div class="text">{% trans "Name" %}</div></th>
                 <th><div class="text">{% trans "Public" %}</div></th>
-                <th><div class="text">{% trans "Default" %}</div></th>
                 <th><div class="text">{% trans "Value" %}</div></th>
                 <th><div class="text">{% trans "Is modified" %}</div></th>
             </tr>
@@ -21,9 +20,6 @@
             </th>
             <td>
                 {{ item.visibility_field }}
-            </td>
-            <td>
-                {{ item.default|linebreaks }}
             </td>
             <td>
                 {{ item.form_field.errors }}
@@ -45,7 +41,9 @@
                         {% elif item.is_datetime %}{{ item.raw_default|date:"U" }}
                         {% else %}{{ item.default }}
                         {% endif %}
-                        {% endspaceless %}">{% trans "Reset to default" %}</a>
+                        {% endspaceless %}">
+                        {% trans "Reset to default" %}
+                    </a>
                 {% endif %}
             </td>
             <td>
