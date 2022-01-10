@@ -37,7 +37,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/actions/907/'
+              self: 'http://pph.icij.org/api/v1/actions/907/'
             }
           },
           {
@@ -73,7 +73,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/actions/910/'
+              self: 'http://pph.icij.org/api/v1/actions/910/'
             }
           },
           {
@@ -109,7 +109,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/actions/909/'
+              self: 'http://pph.icij.org/api/v1/actions/909/'
             }
           },
           {
@@ -145,7 +145,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/actions/908/'
+              self: 'http://pph.icij.org/api/v1/actions/908/'
             }
           },
           {
@@ -179,7 +179,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/actions/907/'
+              self: 'http://pph.icij.org/api/v1/actions/907/'
             }
           },
           {
@@ -246,7 +246,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/actions/905/'
+              self: 'http://pph.icij.org/api/v1/actions/905/'
             }
           },
           {
@@ -282,7 +282,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/actions/904/'
+              self: 'http://pph.icij.org/api/v1/actions/904/'
             }
           },
           {
@@ -318,7 +318,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/actions/903/'
+              self: 'http://pph.icij.org/api/v1/actions/903/'
             }
           },
           {
@@ -354,7 +354,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/actions/902/'
+              self: 'http://pph.icij.org/api/v1/actions/902/'
             }
           },
           {
@@ -388,7 +388,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/actions/901/'
+              self: 'http://pph.icij.org/api/v1/actions/901/'
             }
           }
         ],
@@ -460,7 +460,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/task-record-reviews/1001/'
+              self: 'http://pph.icij.org/api/v1/task-record-reviews/1001/'
             }
           },
           {
@@ -490,7 +490,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/task-record-reviews/1002/'
+              self: 'http://pph.icij.org/api/v1/task-record-reviews/1002/'
             }
           },
           {
@@ -582,7 +582,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/task-record-reviews/1005/'
+              self: 'http://pph.icij.org/api/v1/task-record-reviews/1005/'
             }
           },
           {
@@ -612,7 +612,7 @@ export default [
               }
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/task-record-reviews/1006/'
+              self: 'http://pph.icij.org/api/v1/task-record-reviews/1006/'
             }
           },
           {
@@ -627,7 +627,7 @@ export default [
               csrfToken: null
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/users/1/'
+              self: 'http://pph.icij.org/api/v1/users/1/'
             }
           },
           {
@@ -642,7 +642,7 @@ export default [
               csrfToken: null
             },
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/users/4/'
+              self: 'http://pph.icij.org/api/v1/users/4/'
             }
           },
           {
@@ -650,7 +650,7 @@ export default [
             id: '3',
             attributes: {},
             links: {
-              self: 'http://prophecies-staging.cloud.icij.org/api/v1/tasks/1/'
+              self: 'http://pph.icij.org/api/v1/tasks/1/'
             }
           }
         ]
