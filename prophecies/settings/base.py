@@ -289,7 +289,11 @@ CONSTANCE_CONFIG = {
     'avatarUrlTemplate': ('https://www.gravatar.com/avatar/{{ emailMd5 }}', 'Template to build the avatar URL'),
     'defaultLocale': ('en', 'Define locale code (ie. "en", "fr", "jp", ...)'),
     'helpLink': ('https://github.com/ICIJ/prophecies/issues/new', 'Link to the support'),
+    'helpDescription': ('Any trouble logging in?', 'Help text for the login page. Must be public.'),
     'loginUrl': ('%s?next=/' % SOCIAL_AUTH_LOGIN_URL, 'Link to create a user session'),
+    'loginWelcome': ('Welcome to Prophecies', 'Title for the login page. Must be public.'),
+    'loginAccountDescription': ('Use your account to continue:', 'Account description for the login page. Must be public.'),
+    'loginAccountButton': ('Login', 'Login button for the login page. Must be public.'),
     'logoutUrl': ('/admin/logout/?next=/', 'Link to logout'),
     'orgName': ('ICIJ', 'Name of the organization deploying this app')
 }
