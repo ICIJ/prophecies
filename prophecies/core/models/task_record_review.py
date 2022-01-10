@@ -82,7 +82,7 @@ class TaskRecordReview(models.Model):
 
 
     class Meta:
-        unique_together = ('task_record_id', 'checker_id')
+        unique_together = ('task_record_id', 'checker_id', 'round')
         get_latest_by = 'round'
 
 
@@ -165,8 +165,11 @@ class TaskRecordReview(models.Model):
             raise ValidationError(f'{self.checker} is not a checker for the task "{self.task_record.task}"')
 
 
-    def check_unique_constraints(self, **kwargs):
+    def check_unique_constraints(self, ignored_fields=[], **kwargs):
         for fields in self._meta.unique_together:
+            # Remove ignored field
+            fields = [field for field in fields if field not in ignored_fields]
+            # Collect values for the field that must be unique together
             opts = { field: getattr(self, field) for field in fields }
             if TaskRecordReview.objects.filter(**opts).exists():
                 raise ValidationError(f'Task record #{self.task_record.id} was already attributed to {self.checker} before')

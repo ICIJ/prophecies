@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Project, Task, TaskRecord, TaskRecordReview, task_record
 from prophecies.core.forms import TaskRecordAssignForm
 
 class TaskRecordAssignFormTests(TestCase):
@@ -75,6 +75,26 @@ class TaskRecordAssignFormTests(TestCase):
         TaskRecordAssignForm(data).save()
         olivia_reviews_count = TaskRecordReview.objects.filter(checker=self.olivia, round=3).count()
         self.assertEqual(olivia_reviews_count, 2)
+        
+        
+    def test_it_can_assign_a_record_twice_to_olivia(self):
+        self.task.allow_multiple_checks = True
+        self.task.save()
+        task_records = [self.task_record_blue]
+        data = { "task_records": task_records, "checker": self.olivia }
+        self.assertEqual(TaskRecordAssignForm(data).is_valid(), True)
+        TaskRecordAssignForm(data).save()        
+        self.assertEqual(TaskRecordAssignForm(data).is_valid(), True)
+        
+        
+    def test_it_cannot_assign_a_record_twice_to_olivia(self):
+        self.task.allow_multiple_checks = False
+        self.task.save()
+        task_records = [self.task_record_blue]
+        data = { "task_records": task_records, "checker": self.olivia }
+        self.assertEqual(TaskRecordAssignForm(data).is_valid(), True)
+        TaskRecordAssignForm(data).save()       
+        self.assertEqual(TaskRecordAssignForm(data).is_valid(), False)
 
 
     def test_it_cannot_create_two_more_reviews_for_olivia_at_round_one(self):

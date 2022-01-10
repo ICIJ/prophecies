@@ -15,7 +15,8 @@ class TaskRecordAssignForm(forms.Form):
         if self.is_valid():
             for object in self.task_record_reviews():
                     object.check_user_is_authorized()
-                    object.check_unique_constraints()
+                    ignored_fields = [] if object.task.allow_multiple_checks else ['round']
+                    object.check_unique_constraints(ignored_fields=ignored_fields)
                     object.check_round_upper_bound()
 
 
