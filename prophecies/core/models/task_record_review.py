@@ -15,7 +15,7 @@ class StatusType(models.TextChoices):
 
 class TaskRecordReviewQuerySet(models.QuerySet):
 
-    def count_by_task(self, task_field='task_id', count_field='count'):
+    def count_by_task(self, task_field='task', count_field='count'):
         count = Count('pk', distinct=True)
         annotate = { task_field: F('task_record__task_id'), count_field: count }
         return self.exclude(task_record=None) \
@@ -23,7 +23,16 @@ class TaskRecordReviewQuerySet(models.QuerySet):
             .annotate(**annotate) \
             .values(task_field, count_field) \
             .order_by()
-
+            
+    def count_by_choice(self, choice_field='choice', count_field='count'):
+        count = Count('pk', distinct=True)
+        annotate = { choice_field: F('choice_id'), count_field: count }
+        return self \
+            .values('choice_id') \
+            .annotate(**annotate) \
+            .values(choice_field, count_field) \
+            .order_by()
+            
 
 class TaskRecordReviewManager(models.Manager):
 

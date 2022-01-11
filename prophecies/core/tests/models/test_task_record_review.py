@@ -176,9 +176,9 @@ class TestTaskRecordReview(TestCase):
         self.record_fax.reviews.add(TaskRecordReview.objects.create())
         count_by = TaskRecordReview.objects.all().count_by_task()
         self.assertEqual(len(count_by), 2)
-        self.assertEqual(count_by[0]['task_id'], 1)
+        self.assertEqual(count_by[0]['task'], 1)
         self.assertEqual(count_by[0]['count'], 2)
-        self.assertEqual(count_by[1]['task_id'], 2)
+        self.assertEqual(count_by[1]['task'], 2)
         self.assertEqual(count_by[1]['count'], 1)
 
 
@@ -196,6 +196,20 @@ class TestTaskRecordReview(TestCase):
         self.record_bar.reviews.add(TaskRecordReview.objects.create())
         count_by = TaskRecordReview.objects.all().count_by_task(count_field='total')
         self.assertEqual(count_by[0]['total'], 2)
+        
+    
+    def test_it_count_reviews_by_choice(self):
+        correct = Choice.objects.create(value='Correct', choice_group=self.choice_group)
+        incorrect = Choice.objects.create(value='Incorrect', choice_group=self.choice_group)
+        # Two reviews for the Art task
+        self.record_foo.reviews.add(TaskRecordReview.objects.create(choice=correct))
+        self.record_bar.reviews.add(TaskRecordReview.objects.create(choice=incorrect))    
+        count_by = TaskRecordReview.objects.all().count_by_choice()
+        self.assertEqual(len(count_by), 2)
+        self.assertEqual(count_by[0]['choice'], correct.id)
+        self.assertEqual(count_by[0]['count'], 1)
+        self.assertEqual(count_by[1]['choice'], incorrect.id)
+        self.assertEqual(count_by[1]['count'], 1)
 
 
     def test_it_should_returns_no_mentions(self):
