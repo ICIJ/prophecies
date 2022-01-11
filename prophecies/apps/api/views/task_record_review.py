@@ -106,8 +106,10 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
         if many:
             view = self.context['view']
             queryset = view.filter_queryset(view.get_queryset())
+            count_by_task = queryset.count_by_task(task_field='taskId')
+            count_by_choice = queryset.count_by_choice(choice_field='choiceId') 
             return {
-                'countBy': queryset.count_by_task(task_field='taskId')
+                'countBy': list(count_by_task) + list(count_by_choice)
             }
         return { }
 
