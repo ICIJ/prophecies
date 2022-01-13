@@ -89,6 +89,7 @@
   ],
   "jest": {
     "preset": "@vue/cli-plugin-unit-jest",
+    "globalSetup": "<rootDir>/tests/unit/global-setup.js",
     "setupFilesAfterEnv": [
       "<rootDir>/tests/unit/setup.js"
     ]
