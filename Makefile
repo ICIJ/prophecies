@@ -1,5 +1,5 @@
-DOCKER_REGISTRY := registry.cloud.icij.org
-DOCKER_NAME := prophecies
+DOCKER_REGISTRY := registry.hub.docker.com
+DOCKER_NAME := icij/prophecies
 PWD := `pwd`
 CURRENT_VERSION ?= `python -c "from prophecies import __version__ ; print(__version__)"`
 

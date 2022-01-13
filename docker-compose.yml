@@ -15,7 +15,7 @@ services:
         - web
 
   web:
-    image: prophecies
+    image: icij/prophecies
     environment:
       - WAIT_HOSTS=db:5432
       - WAIT_HOSTS_TIMEOUT=60
