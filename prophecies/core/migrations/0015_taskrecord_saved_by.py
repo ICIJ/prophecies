@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('core', '0012_actionaggregate'),
+        ('core', '0014_rename_recordlinktemplate_task_record_link_template'),
     ]
 
     operations = [
