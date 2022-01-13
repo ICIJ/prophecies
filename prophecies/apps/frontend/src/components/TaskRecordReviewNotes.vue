@@ -105,10 +105,10 @@ export default {
 <template>
   <div class="task-record-review-notes">
     <b-btn class="task-record-review-notes__close text-muted d-flex align-items-center"
-           variant="link" s
+           variant="link"
            quared
            size="sm"
-           v-shortkey.propagate="closeShortkey"
+           v-shortkey="closeShortkey"
            @shortkey="$emit('close')"
            @click="$emit('close')">
       <x-icon />

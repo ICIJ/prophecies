@@ -36,6 +36,9 @@ export default {
     toggleTutorial () {
       this.showTutorial = !this.showTutorial
     },
+    toggleCinematicView () {
+      this.$root.$emit('prophecies::toggleCinematicView')
+    },
     toggleShortcuts () {
       this.$root.$emit('prophecies::toggleShortcuts')
     },
@@ -89,8 +92,12 @@ export default {
         <b-navbar-nav class="app-header__nav-right">
           <slot name="nav-right" />
           <template v-if="!reduced">
+            <b-nav-item @click.prevent="toggleCinematicView">
+              <film-icon class="mr-2" />
+              {{ $t('appHeader.cinematicView') }}
+            </b-nav-item>
             <b-nav-item @click.prevent="toggleShortcuts">
-              <command-icon class="app-header__nav-right__shortcuts mr-2" />
+              <command-icon class="mr-2" />
               {{ $t('appHeader.shortcuts') }}
               <shortkey-badge :value="['Ctrl', 'k']" class="ml-2" />
             </b-nav-item>
@@ -103,7 +110,7 @@ export default {
               :class="{ 'font-weight-bold app-header__nav-right__tutorial--show': showTutorial }"
               @click="toggleTutorial"
               href="#">
-              <help-circle-icon class="app-header__nav-right__shortcuts mr-2" />
+              <help-circle-icon class="mr-2" />
               {{ $t('appHeader.tutorial') }}
             </b-nav-item>
           </template>
@@ -179,6 +186,10 @@ export default {
     & /deep/ .nav-item .dropdown-toggle {
       display: flex;
       align-items: center;
+    }
+
+    & /deep/ &__nav-right .nav-link {
+      white-space: nowrap;
     }
 
     & /deep/ &__nav-right__notifications__menu {

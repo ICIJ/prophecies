@@ -39,6 +39,7 @@
   "appHeader": {
     "api": "API",
     "admin": "Admin",
+    "cinematicView": "Cinematic view",
     "tips": "Tips",
     "search": "Search",
     "shortcuts": "Shortcuts",

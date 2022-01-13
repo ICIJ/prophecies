@@ -107,7 +107,7 @@ export default [
               status: 'PENDING',
               note: '',
               alternativeValue: '',
-              taskId: '1'
+              taskId: '2'
             },
             relationships: {
               choice: {
@@ -241,16 +241,17 @@ export default [
             attributes: {
               originalValue: 'fronce',
               predictedValue: 'France',
+              locked: false,
               link: 'https://www.openstreetmap.org/search?query=fronce',
               metadata: null,
               rounds: 3,
-              status: 'DONE'
+              status: 'ASSIGNED'
             },
             relationships: {
               task: {
                 data: {
                   type: 'Task',
-                  id: '1'
+                  id: '2'
                 }
               }
             },
@@ -291,7 +292,7 @@ export default [
             attributes: {
               originalValue: 'La France',
               predictedValue: 'FRA',
-              locked: true,
+              locked: false,
               link: 'https://www.openstreetmap.org/search?query=La%20France',
               metadata: null,
               rounds: 3,

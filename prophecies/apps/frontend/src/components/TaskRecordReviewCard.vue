@@ -131,10 +131,13 @@ export default {
       await this.fetchTaskRecordActions()
       this.$wait.end(this.loader)
     },
-    async toggleChanges (toggler = null) {
+    async fetchAndToggleChanges (toggler = null) {
       if (!this.showChanges || toggler) {
         await this.fetchTaskRecordActionsWithLoader()
       }
+      this.toggleChanges(toggler)
+    },
+    async toggleChanges (toggler = null) {
       this.showChanges = toggler !== null ? !!toggler : !this.showChanges
     },
     toggleNotes (toggler = null, highlightedReviewId) {
@@ -306,7 +309,7 @@ export default {
             :task-record-review-id="taskRecordReviewId"
             @lock="lockWithLoader"
             @unlock="unlockWithLoader"
-            @toggle-changes="toggleChanges()" />
+            @toggle-changes="fetchAndToggleChanges()" />
         </div>
       </div>
     </div>

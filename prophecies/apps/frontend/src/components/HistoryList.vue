@@ -75,12 +75,10 @@ export default {
 </template>
 
 <style lang="scss">
-
  .history-list {
     &__title{
       color:$primary;
         letter-spacing: -0.03em;
     }
-
  }
 </style>

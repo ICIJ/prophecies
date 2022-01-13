@@ -1,9 +1,10 @@
 <script>
-import { compact, get, filter, isEqual, keys, noop, uniqueId, values } from 'lodash'
+import { compact, get, find, filter, isEqual, keys, noop, uniqueId, values } from 'lodash'
 
 import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
 import AppWaiter from '@/components/AppWaiter'
+import CinematicView from '@/components/CinematicView'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
 import TaskRecordReviewAppliedFilters from '@/components/TaskRecordReviewAppliedFilters'
 import TaskRecordReviewAppliedSorting from '@/components/TaskRecordReviewAppliedSorting'
@@ -25,6 +26,7 @@ export default {
     AppBreadcrumb,
     AppHeader,
     AppWaiter,
+    CinematicView,
     ShortkeyBadge,
     TaskRecordReviewBulkChoiceForm,
     TaskRecordReviewCard,
@@ -41,9 +43,11 @@ export default {
   },
   data () {
     return {
+      countBy: [],
       pagination: null,
       selectedIds: {},
       showFilters: false,
+      showCinematicView: false,
       taskRecordReviewIds: []
     }
   },
@@ -76,6 +80,9 @@ export default {
     }
   },
   created () {
+    this.$root.$on('prophecies::toggleCinematicView', () => {
+      this.showCinematicView = !this.showCinematicView
+    })
     return this.setup()
   },
   computed: {
@@ -246,6 +253,9 @@ export default {
         .where('locked', false)
         .first()
     },
+    firstPendingTaskRecordReviewId () {
+      return get(this, 'firstPendingTaskRecordReview.id')
+    },
     filtersTogglerVariant () {
       return this.showFilters ? 'primary' : 'outline-primary'
     },
@@ -285,8 +295,10 @@ export default {
     async fetchTaskRecordReviews () {
       const params = this.taskRecordReviewsParams
       const { response } = await TaskRecordReview.api().get('', { params })
+      const countBy = get(response, 'data.meta.countBy', null)
       const pagination = get(response, 'data.meta.pagination', null)
-      const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)
+      const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)      
+      this.$set(this, 'countBy', countBy)
       this.$set(this, 'pagination', pagination)
       this.$set(this, 'taskRecordReviewIds', taskRecordReviewIds)
     },
@@ -299,6 +311,13 @@ export default {
       // Don't go to a page if it doesn't exist
       if (currentPage < parseInt(this.pagination.pages)) {
         return this.goToPage(currentPage + 1)
+      }
+    },
+    async goToPreviousPage () {
+      const currentPage = parseInt(this.pageNumber)
+      // Don't go to a page if it doesn't exist
+      if (currentPage > 1) {
+        return this.goToPage(currentPage - 1)
       }
     },
     async scrollToActiveTaskRecordReviewCard ({ id }) {
@@ -314,7 +333,7 @@ export default {
     },
     isTaskRecordReviewActive (id) {
       const isSelected = this.isTaskRecordReviewSelected(id)
-      return !isSelected && get(this, 'firstPendingTaskRecordReview.id') === id
+      return !this.showCinematicView && !isSelected && this.firstPendingTaskRecordReviewId === id
     },
     isTrailingTaskRecordReview (id) {
       return this.trailingTaskRecordReview.id === id
@@ -374,6 +393,31 @@ export default {
 
 <template>
   <div class="task-record-review-list">
+    <b-modal v-if="pagination"
+             v-model="showCinematicView"
+             content-class="bg-transparent border-0 shadow-none"
+             dialog-class="mw-100 mx-5"
+             header-class="border-0 p-0"
+             hide-backdrop
+             hide-footer
+             body-class="px-0"
+             lazy
+             modal-class="task-record-review-list__cinematic-view"
+             no-close-on-backdrop
+             size="xl">
+      <template #modal-header="{ close }">
+        <b-button variant="link" class="p-0" @click="close()">
+          Back to list view
+        </b-button>
+      </template>
+      <cinematic-view @previousPage="goToPreviousPage"
+                      @nextPage="goToNextPage"
+                      :buzy="$wait.is(fetchTaskRecordReviewsLoader)"
+                      :page-number="Number(pageNumber)"
+                      :total-rows="pagination.count"
+                      :per-page="Number(pageSize)"
+                      :task-record-review-ids="taskRecordReviewIds" />
+    </b-modal>
     <div class="d-flex align-items-center">
       <app-breadcrumb v-if="task">
         {{ task.name }}
@@ -497,8 +541,12 @@ export default {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .task-record-review-list {
+
+    &__cinematic-view {
+      background: $primary-10;
+    }
 
     &__container {
 

@@ -57,6 +57,7 @@ class VNodeHotkey {
     return e => {
       if (!this.propagate) {
         e.preventDefault()
+        e.stopPropagation()
       }
       const event = new CustomEvent('shortkey', { detail })
       this.el.dispatchEvent(event)
