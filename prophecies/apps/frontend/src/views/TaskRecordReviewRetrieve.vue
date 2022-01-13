@@ -130,11 +130,12 @@ export default {
 
     <div class="task-record-review-retrieve__container">
       <div class="container-fluid p-5">
-    <task-record-review-tutorial />
+        <task-record-review-tutorial />
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
           <template v-if="resolvedTaskRecordReviewId">
             <task-record-review-card
               active
+              preview-link
               :highlight-note="highlightNote"
               :task-record-review-id="resolvedTaskRecordReviewId" />
           </template>

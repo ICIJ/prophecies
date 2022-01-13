@@ -30,6 +30,9 @@ export default {
     selected: {
       type: Boolean
     },
+    previewLink: {
+      type: Boolean
+    },
     frozen: {
       type: Boolean
     },
@@ -170,6 +173,9 @@ export default {
     }
   },
   computed: {
+    showLinkPreview () {
+      return !this.showNotes && !this.showChanges && this.previewLink && !!this.taskRecord?.embeddableLink
+    },
     initialHighlightedReviewId () {
       // If the `highlightNote` is a boolean, we highlight
       // the current task record review by default
@@ -200,6 +206,15 @@ export default {
     },
     link () {
       return get(this, 'taskRecordReview.taskRecord.link')
+    },
+    embeddableLink () {
+      return get(this, 'taskRecordReview.taskRecord.embeddableLink')
+    },
+    embeddableLinkIfVisible () {
+      if (this.showLinkPreview) {
+        return this.embeddableLink
+      }
+      return "about:blank"
     },
     isDone () {
       return get(this, 'taskRecordReview.status') === 'DONE'
@@ -299,6 +314,16 @@ export default {
                   :activate-shortkeys="active"
                   :highlighted-review-id="highlightedReviewId"
                   @close="toggleNotes(false)" />
+              </b-collapse>
+              <b-collapse :visible="showLinkPreview">
+                <iframe 
+                  :src="embeddableLinkIfVisible" 
+                  class="border" 
+                  style="border:0" 
+                  loading="lazy" 
+                  allowfullscreen 
+                  width="100%" 
+                  height="400px" />
               </b-collapse>
             </div>
           </div>

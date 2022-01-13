@@ -14,6 +14,7 @@ export default class TaskRecord extends Model {
       originalValue: this.string(),
       predictedValue: this.string(),
       link: this.string(),
+      embeddableLink: this.string(),
       locked: this.boolean(),
       lockedById: this.attr(null),
       lockedBy: this.belongsTo(User, 'lockedById'),

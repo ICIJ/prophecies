@@ -30,6 +30,7 @@ export default class Task extends Model {
       choiceGroupId: this.attr(null),
       colors: this.attr(),
       createdAt: this.string(),
+      embeddableLinks: this.boolean(),
       priority: this.number(1),
       progress: this.number(0),
       progressByRound: this.attr(),

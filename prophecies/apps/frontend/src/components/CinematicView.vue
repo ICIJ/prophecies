@@ -54,6 +54,9 @@ export default {
     }
   },
   computed: {
+    taskRecordReview () {
+      return TaskRecordReview.query().with('task').find(this.id)
+    },
     taskRecordReviews () {
       return TaskRecordReview
         .query()
@@ -111,6 +114,9 @@ export default {
     },
     hasNext () {
       return this.taskRecordReviewIds.indexOf(this.id) < this.taskRecordReviewIds.length - 1 || !this.isLastPage
+    },
+    previewLink () {
+      return !!this.taskRecordReview?.task?.embeddableLinks
     },
     progressIndex () {
       const isPageLoaded = this.pageNumber in this.taskRecordReviewIdsPerPage
@@ -181,6 +187,7 @@ export default {
             @update="next" 
             :task-record-review-id="id" 
             :frozen="buzy"
+            :preview-link="previewLink"
             active />
         </div>
       </transition>
