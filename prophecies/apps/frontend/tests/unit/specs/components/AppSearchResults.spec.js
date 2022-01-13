@@ -43,18 +43,18 @@ describe('AppSearchResults', () => {
       expect(wrapper.findAllComponents(BTab)).toHaveLength(4)
     })
 
-    it('should have 3 items for task 1', () => {
-      expect(wrapper.vm.querysetTaskRecordReviews('1')).toHaveLength(3)
+    it('should have 2 items for task 1', () => {
+      expect(wrapper.vm.querysetTaskRecordReviews('1')).toHaveLength(2)
     })
 
-    it('should have 2 items for task 1', async () => {
+    it('should have 1 item for task 1', async () => {
       await wrapper.setProps({
         queryset: [
           { id: '37', type: 'TaskRecordReview', querysetId: 'qs-1' },
           { id: '36', type: 'TaskRecordReview', querysetId: 'qs-1' }
         ]
       })
-      expect(wrapper.vm.querysetTaskRecordReviews('1')).toHaveLength(2)
+      expect(wrapper.vm.querysetTaskRecordReviews('1')).toHaveLength(1)
     })
 
     it('should have 1 tip', () => {
@@ -65,8 +65,8 @@ describe('AppSearchResults', () => {
       expect(wrapper.vm.taskRecordReviewsCount('1')).toEqual(3)
     })
 
-    it('should count 0 reviews for task 2', () => {
-      expect(wrapper.vm.taskRecordReviewsCount('2')).toEqual(0)
+    it('should count 3 reviews for task 2', () => {
+      expect(wrapper.vm.taskRecordReviewsCount('2')).toEqual(3)
     })
 
     it('should count 1 tip', async () => {
