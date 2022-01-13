@@ -88,7 +88,7 @@ class TestTaskRecordReview(TestCase):
 
 
     def test_it_returns_task_record_with_link_from_task(self):
-        self.task.recordLinkTemplate = 'https://icij.org/{original_value:u}.json'
+        self.task.record_link_template = 'https://icij.org/{original_value:u}.json'
         self.task.save()
         attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django)
         self.client.login(username='django', password='django')
