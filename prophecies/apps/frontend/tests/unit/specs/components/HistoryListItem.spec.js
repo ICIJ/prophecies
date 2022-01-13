@@ -39,17 +39,21 @@ describe('HistoryListItem', () => {
       i18n
     })
   })
+
   it('should display the timestamp as iso date', () => {
     const dateColumn = wrapper.find('.history-list-item__date-column')
     expect(dateColumn.text()).toBe('Thu 14, Oct 2021 - 3:10pm')
   })
+
   it('should display the category format  "Task | project"', async () => {
     expect(wrapper.vm.category).toBe('Addresses | Chronos')
   })
+  
   it('should display the category format  "General | project" when no task is set', async () => {
     await wrapper.setProps({ taskName: null })
     expect(wrapper.vm.category).toBe('General | Chronos')
   })
+
   it('should display the category format  "General" when no project is set', async () => {
     await wrapper.setProps({ projectName: null })
     expect(wrapper.vm.category).toBe('General')
@@ -83,10 +87,12 @@ describe('HistoryListItem', () => {
     elem = wrapper.find('.history-list-item__content-column')
     expect(elem.text()).toBe('Olivia mentioned Olivia (@olivia) in a note')
   })
+
   it('should display a mention text for a user mentioned event', async () => {
     const elem = wrapper.find('.history-list-item__content-column')
     expect(elem.text()).toBe('You mentioned you (@olivia) in a note')
   })
+  
   it('should display a tip text for a tip event', async () => {
     const propsData = {
       type: ITEM_TYPES.TIP,
