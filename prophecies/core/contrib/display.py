@@ -19,7 +19,7 @@ def display_task_addon(task):
 
 
 def display_task_record_link(task_record):
-    if not task_record.link and not task_record.task.recordLinkTemplate:
+    if not task_record.link and not task_record.task.record_link_template:
         return '-'
     href = task_record.computed_link()
     return format_html('<a href="{0}" target="_blank">{0}</a>', href)

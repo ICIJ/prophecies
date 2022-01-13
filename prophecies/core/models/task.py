@@ -30,7 +30,7 @@ class Task(models.Model):
     choice_group = models.ForeignKey(ChoiceGroup, verbose_name="Choices", on_delete=models.SET_NULL, null=True, blank=True)
     allow_items_addition = models.BooleanField(default=False, verbose_name="Allow checker to add items")
     color = ColorField(default='#31807D')
-    recordLinkTemplate = models.CharField(max_length=1000, null=True, blank=True, verbose_name="Record link template", help_text="A link template to build a link for each task record. Task record can override this value with their own link")
+    record_link_template = models.CharField(max_length=1000, null=True, blank=True, verbose_name="Record link template", help_text="A link template to build a link for each task record. Task record can override this value with their own link")
     status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.OPEN, max_length=6, help_text="Status of the task. Set to closed or locked will prevent any update of the records.")
     created_at = models.DateTimeField(default=timezone.now)
 

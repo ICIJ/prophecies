@@ -130,13 +130,13 @@ class TaskRecord(models.Model):
     def computed_link(self):
         if self.link:
             return self.link
-        elif self.task.recordLinkTemplate:
+        elif self.task.record_link_template:
             opts = deepcopy(self.__dict__)
             # Convert metadata field into ExtendedNamespace to use dot notation
             if type(opts['metadata']) == dict or type(opts['metadata']) == list:
                 opts['metadata'] = ExtendedNamespace(opts.get('metadata', {}))
             formatter = URLEncodedFormatter()
-            return formatter.format(self.task.recordLinkTemplate, **opts)
+            return formatter.format(self.task.record_link_template, **opts)
 
 
     def update_rounds_and_status(self):
