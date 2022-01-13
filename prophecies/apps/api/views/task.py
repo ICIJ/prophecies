@@ -31,7 +31,7 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
         model = Task
         fields = ['id', 'url', 'choice_group', 'checkers', 'colors', 'created_at',
             'description', 'name', 'project', 'priority', 'rounds',
-            'task_records_count',  'task_records_done_count',
+            'task_records_count',  'task_records_done_count', 'embeddable_links',
             'user_task_records_count', 'user_task_records_done_count',
             'user_progress_by_round', 'user_progress', 'status',
             'progress', 'progress_by_round',]

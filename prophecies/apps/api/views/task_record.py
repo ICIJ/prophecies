@@ -14,6 +14,7 @@ from prophecies.apps.api.views.user import UserSerializer
 class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
     task = ResourceRelatedField(many=False, read_only=True)
     link = serializers.SerializerMethodField()
+    embeddable_link = serializers.SerializerMethodField()
     locked_by = ResourceRelatedField(many=False, read_only=True)
     included_serializers = {
         'locked_by': UserSerializer,
@@ -26,11 +27,14 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TaskRecord
         resource_name = 'TaskRecord'
-        fields = ['id', 'url', 'task', 'original_value', 'predicted_value', 'link', 'locked', 'locked_by', 'metadata', 'rounds', 'status']
-        read_only_fields = ['url',  'original_value', 'predicted_value', 'link', 'metadata', 'rounds', 'status']
+        fields = ['id', 'url', 'task', 'original_value', 'predicted_value', 'link', 'embeddable_link', 'locked', 'locked_by', 'metadata', 'rounds', 'status']
+        read_only_fields = ['url',  'original_value', 'predicted_value', 'link', 'embeddable_link', 'metadata', 'rounds', 'status']
 
     def get_link(self, task_record):
         return task_record.computed_link()
+    
+    def get_embeddable_link(self, task_record):
+        return task_record.computed_embeddable_link()
 
     def update(self, instance, validated_data):
         user = self.context.get('request').user
