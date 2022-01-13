@@ -50,6 +50,7 @@ class TaskRecord(models.Model):
     rounds = models.PositiveIntegerField(default=0, help_text="Number of rounds this record was submitted to")
     priority = models.PositiveIntegerField(default=1, verbose_name="Priority")
     link = models.CharField(max_length=1000, null=True, blank=True, help_text="An optional link to the record")
+    embeddable_link = models.CharField(max_length=1000, null=True, blank=True, help_text="An optional alternative link to preview the record in an iframe")
     locked = models.BooleanField(default=False, help_text="A user locked this task record")
     locked_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, help_text="User who locked this task record", related_name="locked_task_records")
     has_notes = models.BooleanField(default=False, help_text="One or more reviews have notes")
@@ -132,13 +133,25 @@ class TaskRecord(models.Model):
         if self.link:
             return self.link
         elif self.task.record_link_template:
-            opts = deepcopy(self.__dict__)
-            # Convert metadata field into ExtendedNamespace to use dot notation
-            if type(opts['metadata']) == dict or type(opts['metadata']) == list:
-                opts['metadata'] = ExtendedNamespace(opts.get('metadata', {}))
-            formatter = URLEncodedFormatter()
-            return formatter.format(self.task.record_link_template, **opts)
+            return self.format_link_template(self.task.record_link_template)
+        
+        
+    def computed_embeddable_link(self):
+        if self.embeddable_link:
+            return self.embeddable_link
+        elif self.task.embeddable_record_link_template:
+            return self.format_link_template(self.task.embeddable_record_link_template)
+        return self.computed_link()
+    
 
+    def format_link_template(self, link_template):
+        opts = deepcopy(self.__dict__)
+        # Convert metadata field into ExtendedNamespace to use dot notation
+        if type(opts['metadata']) == dict or type(opts['metadata']) == list:
+            opts['metadata'] = ExtendedNamespace(opts.get('metadata', {}))
+        formatter = URLEncodedFormatter()
+        return formatter.format(link_template, **opts)
+        
 
     def update_rounds_and_status(self):
         self.status = self.computed_status()
