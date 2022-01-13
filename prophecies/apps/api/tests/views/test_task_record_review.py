@@ -135,7 +135,7 @@ class TestTaskRecordReview(TestCase):
         request = self.client.get('/api/v1/task-record-reviews/')
         self.assertEqual(request.status_code, 200)
         countBy = request.json().get('meta').get('countBy')
-        self.assertEqual(len(countBy), 1)
+        self.assertEqual(len(countBy), 2)
         self.assertEqual(countBy[0]['taskId'], 1)
         self.assertEqual(countBy[0]['count'], 2)
 
