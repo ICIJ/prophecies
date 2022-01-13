@@ -67,11 +67,12 @@ docker-build:
 		docker build -t $(DOCKER_NAME) .
 
 docker-tag:
+		docker tag $(DOCKER_NAME) $(DOCKER_NAME):${CURRENT_VERSION}
 		docker tag $(DOCKER_NAME) $(DOCKER_REGISTRY)/$(DOCKER_NAME):${CURRENT_VERSION}
 		docker tag $(DOCKER_NAME) $(DOCKER_REGISTRY)/$(DOCKER_NAME):latest
 
 docker-push:
-		docker push $(DOCKER_REGISTRY)/$(DOCKER_NAME):${CURRENT_VERSION}
-		docker push $(DOCKER_REGISTRY)/$(DOCKER_NAME):latest
+		docker push $(DOCKER_NAME):${CURRENT_VERSION}
+		docker push $(DOCKER_NAME):latest
 
 docker-publish: docker-build docker-tag docker-push
