@@ -2,6 +2,7 @@ import { createLocalVue, mount, shallowMount } from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
+import TaskRecord from '@/models/TaskRecord'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
@@ -94,18 +95,36 @@ describe('TaskRecordReviewChoiceForm', () => {
     })
 
     it('should be in disabled state when record is locked and task is open ', async () => {
-      const propsData = { taskRecordReviewId: '24' }
+      const { taskId, taskRecordId } = TaskRecordReview.find('38')
+      Task.update({ where: taskId, data: { status: 'OPEN' } })
+      TaskRecord.update({ where: taskRecordId, data: { locked: true } })
+
+      const propsData = { taskRecordReviewId: '38' }
       await wrapper.setProps(propsData)
       const element = wrapper.find('.task-record-review-choice-form')
       expect(element.classes('task-record-review-choice-form--is-locked')).toBeTruthy()
     })
 
-    it('should be in disabled state when task is not open', async () => {
+    it('should be in disabled state when record is locked and task is locked', async () => {
+      const { taskId, taskRecordId } = TaskRecordReview.find('38')
+      Task.update({ where: taskId, data: { status: 'LOCKED' } })
+      TaskRecord.update({ where: taskRecordId, data: { locked: true } })
+
       const propsData = { taskRecordReviewId: '38' }
       await wrapper.setProps(propsData)
-
       const element = wrapper.find('.task-record-review-choice-form')
       expect(element.classes('task-record-review-choice-form--is-locked')).toBeTruthy()
+    })    
+    
+    it('should not be in disabled state when record is not locked and task is open', async () => {
+      const { taskId, taskRecordId } = TaskRecordReview.find('38')
+      Task.update({ where: taskId, data: { status: 'OPEN' } })
+      TaskRecord.update({ where: taskRecordId, data: { locked: false } })
+
+      const propsData = { taskRecordReviewId: '38' }
+      await wrapper.setProps(propsData)
+      const element = wrapper.find('.task-record-review-choice-form')
+      expect(element.classes('task-record-review-choice-form--is-locked')).toBeFalsy()
     })
   })
 
