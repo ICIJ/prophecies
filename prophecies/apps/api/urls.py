@@ -3,6 +3,7 @@ from django.views.generic import RedirectView
 from rest_framework import routers
 from prophecies.apps.api.views.action import ActionViewSet
 from prophecies.apps.api.views.action_aggregate import ActionAggregateViewSet
+from prophecies.apps.api.views.task_user_statistics import TaskUserStatisticsViewSet
 from prophecies.apps.api.views.choice_group import ChoiceGroupViewSet
 from prophecies.apps.api.views.user_notification import UserNotificationViewSet
 from prophecies.apps.api.views.project import ProjectViewSet
@@ -17,6 +18,7 @@ from prophecies.apps.api.views.tip import TipViewSet
 router = routers.DefaultRouter()
 router.register(r'actions', ActionViewSet)
 router.register(r'action-aggregates', ActionAggregateViewSet, basename='action-aggregates')
+router.register(r'task-user-statistics', TaskUserStatisticsViewSet, basename='task-user-statistics')
 router.register(r'choice-groups', ChoiceGroupViewSet)
 router.register(r'projects', ProjectViewSet)
 router.register(r'settings', SettingViewSet, basename='settings')

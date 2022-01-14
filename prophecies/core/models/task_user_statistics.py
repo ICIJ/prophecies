@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.utils.functional import cached_property
 from prophecies.core.models.task import Task
 
 
@@ -17,8 +16,12 @@ class TaskUserStatistics(models.Model):
     class Meta:
         unique_together = ('task_id', 'checker_id', 'round')
 
-    @cached_property
+    @property
     def progress(self):
-        if self.done_count == 0:
+        if self.total_count == 0:
             return 0
-        return (self.done_count + self.pending_count) / self.done_count * 100
+        return self.done_count / self.total_count * 100
+
+    @property
+    def total_count(self):
+        return self.done_count + self.pending_count
