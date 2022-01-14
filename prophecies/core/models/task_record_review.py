@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
-from prophecies.core.models import Choice, TaskRecord, UserNotification
+from prophecies.core.models import Choice, TaskRecord, UserNotification, TaskUserStatistics
 from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action, mentioned, notify_mentioned_users
 
 class StatusType(models.TextChoices):
@@ -84,6 +84,13 @@ class TaskRecordReviewManager(models.Manager):
             .order_by('count')
         return { i['round']: i['count'] for i in buckets }
 
+    def pending_by_checker_by_round(self, **filter):
+        buckets = self.pending() \
+            .filter(**filter) \
+            .values('checker','round') \
+            .annotate(count=models.Count('round')) \
+            .order_by('count')
+        return { i['round']: {i['checker'] : i['count']} for i in buckets }
 
     def progress_by_round(self, **filter):
         all = self.all_by_round(**filter)
@@ -107,7 +114,11 @@ class TaskRecordReview(models.Model):
 
 
     class Meta:
-        unique_together = ('task_record_id', 'checker_id', 'round')
+        unique_together = ('task_record_id', 'checker_id')
+        index_together = [
+            ('checker_id', 'round'),
+            ('checker_id', 'round', 'status'),
+        ]
         get_latest_by = 'round'
 
 
@@ -270,7 +281,26 @@ class TaskRecordReview(models.Model):
         if task is not None:
             notify_mentioned_users(instance.checker, task.checkers.all(), instance)
 
+    @staticmethod
+    def signal_save_task_user_statistics(sender, instance, **kwargs) :
+        # Find or create the relevant TaskUserStatistics
+        task = instance.task
+        checker = instance.checker
+        round = instance.round
+        # Avoid collecting statistics for uncomplete review
+        if task and checker:
+            stats, _ = TaskUserStatistics.objects.get_or_create(task=task, checker=checker, round=round)
+            # Collect the statitics
+            task_round_reviews = sender.objects.filter(task_record__task=task, checker=checker, round=round)
+            done_count = task_round_reviews.filter(status=StatusType.DONE).count()
+            pending_count = task_round_reviews.filter(status=StatusType.PENDING).count()
+            # Save the statistics
+            stats.done_count = done_count
+            stats.pending_count = pending_count
+            stats.save()
 
+
+signals.post_save.connect(TaskRecordReview.signal_save_task_user_statistics, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_notify_members_in_mentioned_project, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_notify_task_checkers_in_mentioned_task, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_notify_members_in_mentioned_project, sender=TaskRecordReview)
