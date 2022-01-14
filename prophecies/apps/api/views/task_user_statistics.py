@@ -37,6 +37,10 @@ class TaskUserStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TaskUserStatisticsSerializer
     resource_name = 'TaskUserStatistics'
     permission_classes = [IsAuthenticated]
+    pagination_class = None
+    filterset_fields = ['task',
+                        'checker', 
+                        'round']
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
