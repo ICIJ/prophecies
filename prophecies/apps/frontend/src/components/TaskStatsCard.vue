@@ -76,9 +76,6 @@ export default {
         return this.task.progressByRound
       }
       return this.task.userProgressByRound
-    },
-    progressByRoundByUserIds () {
-      return this.task.usersProgressByRound
     }
   }
 }
@@ -159,7 +156,7 @@ export default {
          <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 "
               :class="{'mx-auto':extended}"
          >
-          <slot name="usersByRound" v-bind:stats="{rounds:task.rounds,progress:progressByRound,progressByRoundByUserIds:progressByRoundByUserIds}">
+          <slot name="usersByRound" v-bind:stats="{rounds:task.rounds,progress:progressByRound}">
             <stats-by-round
               v-for="round in task.rounds"
               :key="round"

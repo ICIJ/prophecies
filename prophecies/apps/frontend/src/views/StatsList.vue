@@ -38,7 +38,7 @@
                   :round="index+1"
                   :progress="stats.progress[round]"
                   :choices='choicesByRound[round]'
-                  :progress-by-user-ids='stats.progressByRoundByUserIds[round]'
+                  :progress-by-user-ids='taskUserStatistics(task.id,round)'
                   :summary='summaryByRound[round]'
                   extended
                   class=" mx-auto " />
@@ -65,7 +65,7 @@ import Task, { TaskStatus, TaskStatusOrder } from '@/models/Task'
 
 import StatsByRound from '@/components/StatsByRound.vue'
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
-import User from '@/models/User'
+import TaskUserStatistics from '@/models/TaskUserStatistics'
 const choices = [
   {
     value: 'correct',
@@ -124,23 +124,25 @@ export default {
     }
   },
   async created () {
-    await this.waitFor(this.fetchTaskLoader, this.fetchTask)
-    await this.fetchUser()
+    await this.waitFor(this.fetchTaskLoader, [this.fetchTask, this.fetchTaskUserStats])
   },
   methods: {
     fetchTask () {
       return Task.api().get()
     },
-    fetchUser () {
-      return User.api().get()
+    fetchTaskUserStats () {
+      return TaskUserStatistics.api().get()
     },
-    async waitFor (loader, fn) {
+    async waitFor (loader, fns = []) {
       this.$wait.start(loader)
-      await fn()
+      await Promise.all(fns.map(fn => fn()))
       this.$wait.end(loader)
     },
     updateSortByCallback (cb) {
       this.sortByCb = cb
+    },
+    taskUserStatistics (taskId, round) {
+      return TaskUserStatistics.query().with('checker').where('taskId', taskId).where('round', round).get()
     }
   },
   computed: {
