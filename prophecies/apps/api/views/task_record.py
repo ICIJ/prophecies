@@ -15,6 +15,7 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
     task = ResourceRelatedField(many=False, read_only=True)
     link = serializers.SerializerMethodField()
     embeddable_link = serializers.SerializerMethodField()
+    saved = serializers.SerializerMethodField()
     locked_by = ResourceRelatedField(many=False, read_only=True)
     included_serializers = {
         'locked_by': UserSerializer,
@@ -27,15 +28,19 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TaskRecord
         resource_name = 'TaskRecord'
-        fields = ['id', 'url', 'task', 'original_value', 'predicted_value', 'link', 'embeddable_link', 'locked', 'locked_by', 'metadata', 'rounds', 'status']
-        read_only_fields = ['url',  'original_value', 'predicted_value', 'link', 'embeddable_link', 'metadata', 'rounds', 'status']
+        fields = ['id', 'url', 'task', 'original_value', 'predicted_value', 'link', 'embeddable_link', 'locked', 'locked_by', 'metadata', 'rounds', 'status', 'saved']
+        read_only_fields = ['url',  'original_value', 'predicted_value', 'link', 'embeddable_link', 'metadata', 'rounds', 'status', 'saved']
 
     def get_link(self, task_record):
         return task_record.computed_link()
     
     def get_embeddable_link(self, task_record):
         return task_record.computed_embeddable_link()
-
+    
+    def get_saved(self, task_record):
+        user = self.context.get('request').user
+        return task_record.saved_by.filter(id=user.id).exists()
+                
     def update(self, instance, validated_data):
         user = self.context.get('request').user
         if validated_data.get('locked') is True:
@@ -59,6 +64,7 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
         elif not value and not self.instance.can_unlock(user):
             raise serializers.ValidationError('Cannot unlock this task record')
         return value
+    
 
 
 class TaskRecordViewSet(viewsets.ModelViewSet):

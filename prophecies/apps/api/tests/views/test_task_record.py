@@ -14,12 +14,14 @@ class TestTaskRecord(TestCase):
         choice_group = ChoiceGroup.objects.create(name='Is it correct?')
         Choice.objects.create(name='Yes', choice_group=choice_group)
         Choice.objects.create(name='No', choice_group=choice_group)
-        # Create project and task
-        project = Project.objects.create(name='foo')
-        self.task = Task.objects.create(name="paintings", project=project, choice_group=choice_group)
         # And finally get our two users (from the fixtures)
         self.olivia = User.objects.get(username='olivia')
         self.django = User.objects.get(username='django')
+        # Create project and task
+        project = Project.objects.create(name='foo')
+        self.task = Task.objects.create(name="paintings", project=project, choice_group=choice_group)
+        self.task.checkers.add(self.django)
+        self.task.checkers.add(self.olivia)
 
 
     def test_he_cannot_lock_non_assigned_record(self):
@@ -159,3 +161,27 @@ class TestTaskRecord(TestCase):
         }
         request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload, content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 403)
+        
+        
+    def test_olivia_saved_a_record(self):
+        task_record = TaskRecord.objects.create(task=self.task)
+        task_record.saved_by.add(self.olivia)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
+        
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/task-records/%s/' % task_record.id)
+        data = request.json().get('data')
+        self.assertTrue(data.get('attributes').get('saved'))
+    
+    
+    def test_django_didnt_saved_a_record(self):
+        task_record = TaskRecord.objects.create(task=self.task)
+        task_record.saved_by.add(self.olivia)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
+        
+        self.client.login(username='django', password='django')
+        request = self.client.get('/api/v1/task-records/%s/' % task_record.id)
+        data = request.json().get('data')
+        self.assertFalse(data.get('attributes').get('saved'))
