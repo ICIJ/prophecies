@@ -1,3 +1,4 @@
+import pdb
 from actstream import action
 from rest_framework import exceptions, viewsets
 from rest_framework import decorators
@@ -29,7 +30,7 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
         model = TaskRecord
         resource_name = 'TaskRecord'
         fields = ['id', 'url', 'task', 'original_value', 'predicted_value', 'link', 'embeddable_link', 'locked', 'locked_by', 'metadata', 'rounds', 'status', 'saved']
-        read_only_fields = ['url',  'original_value', 'predicted_value', 'link', 'embeddable_link', 'metadata', 'rounds', 'status', 'saved']
+        read_only_fields = ['url',  'original_value', 'predicted_value', 'link', 'embeddable_link', 'metadata', 'rounds', 'status']
 
     def get_link(self, task_record):
         return task_record.computed_link()
@@ -42,17 +43,39 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
         return task_record.saved_by.filter(id=user.id).exists()
                 
     def update(self, instance, validated_data):
+        self.update_locked(instance, validated_data)
+        self.update_saved(instance, validated_data)
+        instance.save()
+        return instance
+    
+    def update_locked(self, instance, validated_data):
         user = self.context.get('request').user
-        if validated_data.get('locked') is True:
+        locked = validated_data.get('locked')
+        if locked is True:
             instance.locked = True
             instance.locked_by = user
             action.send(user, verb='locked', target=instance)
-        elif validated_data.get('locked') is False:
+        elif locked is False:
             instance.locked = False
             instance.locked_by = None
             action.send(user, verb='unlocked', target=instance)
-        instance.save()
         return instance
+
+    def update_saved(self, instance, validated_data):
+        user = self.context.get('request').user
+        # "saved" is not in the validated_data dict because it's a method field
+        saved = self.initial_data.get('saved')
+        if saved is True:
+            instance.saved_by.add(user)
+            action.send(user, verb='saved', target=instance)
+        elif saved is False:
+            instance.saved_by.remove(user)
+            action.send(user, verb='unsaved', target=instance)
+        return instance
+    
+    def validate(self, data):
+        print(data)
+        return super().validate(data)
 
     def validate_locked(self, value):
         """
