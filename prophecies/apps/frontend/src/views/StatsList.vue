@@ -32,13 +32,13 @@
             :task-id="task.id" extended>
 
               <template v-slot:usersByRound="{stats}">
-                <stats-by-round
+                 <stats-by-round
                   v-for="(round,index) in stats.rounds"
                   :key="round"
                   :round="index+1"
                   :progress="stats.progress[round]"
                   :choices='choicesByRound[round]'
-                  :users='usersByRound[round]'
+                  :progress-by-user-ids='taskUserStatistics(task.id,round)'
                   :summary='summaryByRound[round]'
                   extended
                   class=" mx-auto " />
@@ -65,6 +65,7 @@ import Task, { TaskStatus, TaskStatusOrder } from '@/models/Task'
 
 import StatsByRound from '@/components/StatsByRound.vue'
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
+import TaskUserStatistics from '@/models/TaskUserStatistics'
 const choices = [
   {
     value: 'correct',
@@ -82,48 +83,7 @@ const choices = [
     progress: 100
   }
 ]
-const users = [
-  {
-    name: 'augie',
-    progress: 100,
-    done: 5,
-    pending: 0
-  },
-  {
-    name: 'marco',
-    progress: 0,
-    done: 0,
-    pending: 20
-  },
-  {
-    name: 'mago',
-    progress: 0,
-    done: 0,
-    pending: 30
-  }
-]
-const usersround2 = [
-  {
-    name: 'augie',
-    progress: 100,
-    done: 5,
-    pending: 0
-  },
-  {
-    name: 'marco',
-    progress: 0,
-    done: 0,
-    pending: 20
-  }
-]
-const usersround3 = [
-  {
-    name: 'augie',
-    progress: 100,
-    done: 5,
-    pending: 0
-  }
-]
+
 const summary = [
   {
     name: 'C',
@@ -164,19 +124,25 @@ export default {
     }
   },
   async created () {
-    await this.waitFor(this.fetchTaskLoader, this.fetchTask)
+    await this.waitFor(this.fetchTaskLoader, [this.fetchTask, this.fetchTaskUserStats])
   },
   methods: {
     fetchTask () {
       return Task.api().get()
     },
-    async waitFor (loader, fn) {
+    fetchTaskUserStats () {
+      return TaskUserStatistics.api().get()
+    },
+    async waitFor (loader, fns = []) {
       this.$wait.start(loader)
-      await fn()
+      await Promise.all(fns.map(fn => fn()))
       this.$wait.end(loader)
     },
     updateSortByCallback (cb) {
       this.sortByCb = cb
+    },
+    taskUserStatistics (taskId, round) {
+      return TaskUserStatistics.query().with('checker').where('taskId', taskId).where('round', round).get()
     }
   },
   computed: {
@@ -211,15 +177,7 @@ export default {
         3: [...choices]
       }
     },
-    usersByRound () {
-      //! TODO API Call stats/:taskId/users OR tasks/taskId/stats/users
-      return {
-        1: [...users],
-        2: [...usersround2],
-        3: [...usersround3]
-      }
-    },
-    summaryByRound () {
+    summaryByRound (taskId) {
       //! TODO API Call stats/:taskId OR tasks/taskId/stats
       return {
         1: [...summary],

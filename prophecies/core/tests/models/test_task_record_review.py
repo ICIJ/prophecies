@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Choice, ChoiceGroup, UserNotification, Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, ChoiceGroup, UserNotification, Project, Task, TaskRecord, TaskRecordReview, TaskUserStatistics
 from prophecies.core.models.task_record_review import StatusType
 
 class TestTaskRecordReview(TestCase):
@@ -404,3 +404,15 @@ class TestTaskRecordReview(TestCase):
         ruby = User.objects.create(username='ruby')
         TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @task!", checker=self.django)
         self.assertEqual(UserNotification.objects.filter(recipient=ruby).count(), 0)
+
+
+    def test_it_creates_a_task_user_statistics_on_save(self):
+        TaskRecordReview.objects.create(task_record=self.record_foo, checker=self.django, round=2)
+        tus = TaskUserStatistics.objects.filter(checker=self.django, task=self.record_foo.task, round=2)
+        self.assertTrue(tus.exists())
+
+    def test_it_creates_a_task_user_statistics_on_save_with_two_pendings(self):
+        TaskRecordReview.objects.create(task_record=self.record_foo, checker=self.django, round=2)
+        TaskRecordReview.objects.create(task_record=self.record_bar, checker=self.django, round=2)
+        tus = TaskUserStatistics.objects.get(checker=self.django, task=self.record_foo.task, round=2)
+        self.assertEqual(tus.pending_count, 2)

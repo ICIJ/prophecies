@@ -48,6 +48,14 @@ class Task(models.Model):
         rounds = range(1, self.rounds + 1)
         return { round: progress.get(round, 0) for round in rounds }
 
+    def stats_by_round(self, **task_record_review_filter):   
+        from prophecies.core.models.task_record_review import TaskRecordReview
+        filter = dict(task_record__task=self, **task_record_review_filter)
+        stats = TaskRecordReview.objects.stats_by_round(**filter)
+        # Get all task's rounds to only display the progress by existing rounds
+        rounds = range(1, self.rounds + 1)
+        return { round: stats.get(round, 0) for round in rounds }
+
     def open(self):
         self.status = StatusType.OPEN
         self.save()

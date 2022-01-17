@@ -79,8 +79,7 @@ export default {
   computed: {
     tasks () {
       // make stats on tasks with at least one record
-      const ltasks = Task.query().where('status', (value) => value !== 'CLOSED').where('taskRecordsCount', (value) => value > 0).get()
-      return ltasks
+      return Task.query().where('status', (value) => value !== 'CLOSED').where('taskRecordsCount', (value) => value > 0).get()
     },
     meanProgress () {
       if (!this.tasks.length) {

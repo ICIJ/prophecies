@@ -49,7 +49,7 @@ export default {
       type: Array,
       default: () => ([])
     },
-    users: {
+    progressByUserIds: {
       type: Array,
       default: () => ([])
     },
@@ -78,6 +78,16 @@ export default {
     }
   },
   computed: {
+    users () {
+      return this.progressByUserIds.map(elem => {
+        return {
+          name: elem.checker.username,
+          pending: elem.doneCount,
+          done: elem.pendingCount,
+          progress: elem.progress
+        }
+      })
+    },
     badgeColumnClass () {
       return this.choices.length ? `col-${12 / this.choices.length}` : ''
     }

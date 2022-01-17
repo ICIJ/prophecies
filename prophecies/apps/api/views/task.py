@@ -33,9 +33,8 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
             'description', 'name', 'project', 'priority', 'rounds',
             'task_records_count',  'task_records_done_count', 'embeddable_links',
             'user_task_records_count', 'user_task_records_done_count',
-            'user_progress_by_round', 'user_progress', 'status',
-            'progress', 'progress_by_round',]
-
+            'user_progress_by_round', 'user_progress','status',
+            'progress', 'progress_by_round', 'stats_by_round']
 
     @lru_cache(maxsize=None)
     def get_user_progress_by_round(self, task):
