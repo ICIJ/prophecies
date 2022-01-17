@@ -43,6 +43,12 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
                 
     def update(self, instance, validated_data):
         user = self.context.get('request').user
+        self.check_locked(instance, user, validated_data)
+        self.check_saved(instance, user, validated_data)
+        instance.save()
+        return instance
+
+    def check_locked(self, instance, user, validated_data):
         if validated_data.get('locked') is True:
             instance.locked = True
             instance.locked_by = user
@@ -51,8 +57,14 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
             instance.locked = False
             instance.locked_by = None
             action.send(user, verb='unlocked', target=instance)
-        instance.save()
-        return instance
+
+    def check_saved(self, instance, user, validated_data):
+        if validated_data.get('saved') is True:
+            instance.saved = True
+            action.send(user, verb='saved', target=instance)
+        elif validated_data.get('saved') is False:
+            instance.saved = False
+            action.send(user, verb='unsaved', target=instance)
 
     def validate_locked(self, value):
         """
