@@ -72,10 +72,6 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
             instance.saved_by.remove(user)
             action.send(user, verb='unsaved', target=instance)
         return instance
-    
-    def validate(self, data):
-        print(data)
-        return super().validate(data)
 
     def validate_locked(self, value):
         """
