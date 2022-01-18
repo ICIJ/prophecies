@@ -1,3 +1,25 @@
+<script>
+export default {
+  name: 'TaskStatsCardAllRounds',
+  props: {
+    progress: {
+      type: Number
+    },
+    done: {
+      type: Number
+    },
+    pending: {
+      type: Number
+    }
+  },
+  filters: {
+    round (value) {
+      return Math.round(value)
+    }
+  }
+}
+</script>
+
 <template>
   <div class="task-stats-card-all-rounds card card-body rounded ">
     <div class="d-flex flex-row">
@@ -27,32 +49,6 @@
     </div>
   </div>
 </template>
-
-<script>
-
-export default {
-  name: 'TaskStatsCardAllRounds',
-  props: {
-    progress: {
-      type: Number
-    },
-    done: {
-      type: Number
-    },
-    pending: {
-      type: Number
-    }
-  },
-  filters: {
-    round (value) {
-      return Math.round(value)
-    }
-  },
-  computed: {
-
-  }
-}
-</script>
 
 <style lang="scss" scoped>
   .task-stats-card-all-rounds {

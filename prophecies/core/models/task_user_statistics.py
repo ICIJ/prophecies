@@ -1,7 +1,6 @@
-from django.contrib.auth.models import User
 from django.db import models
-from prophecies.core.models.task import Task
-
+from django.contrib.auth.models import User
+from prophecies.core.models import Task
 
 class TaskUserStatistics(models.Model):
     task = models.ForeignKey(Task, null=False, blank=False, on_delete=models.CASCADE)
