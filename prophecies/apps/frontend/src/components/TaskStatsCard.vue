@@ -1,15 +1,18 @@
 <script>
 import moment from 'moment'
-import Task, { TaskStatus } from '@/models/Task'
+import Task from '@/models/Task'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
+import TaskStatsCardHeading from '@/components/TaskStatsCardHeading.vue'
+import TaskStatsCardStatus from './TaskStatsCardStatus.vue'
 import StatsByRound from '@/components/StatsByRound.vue'
 
 export default {
   name: 'TaskStatsCard',
   components: {
+    TaskStatsCardAllRounds,
     StatsByRound,
-    TaskStatsCardAllRounds
-
+    TaskStatsCardHeading,
+    TaskStatsCardStatus
   },
   props: {
     taskId: {
@@ -32,12 +35,6 @@ export default {
     }
   },
   computed: {
-    celebrate () {
-      return this.taskIsDone || this.taskIsClosed
-    },
-    classList () {
-      return this.extended ? 'd-flex flex-row-reverse' : 'd-flex flex-column text-right'
-    },
     task () {
       return Task.query().with('project').find(this.taskId)
     },
@@ -56,15 +53,6 @@ export default {
       }
       return this.task.userTaskRecordsDoneCount
     },
-    taskIsLocked () {
-      return this.task.status === TaskStatus.LOCKED
-    },
-    taskIsClosed () {
-      return this.task.status === TaskStatus.CLOSED
-    },
-    taskIsDone () {
-      return this.taskRecordsCount !== 0 ? (this.taskRecordsDoneCount / this.taskRecordsCount) === 1 : false
-    },
     progress () {
       if (this.team) {
         return this.task.progress
@@ -82,81 +70,42 @@ export default {
 </script>
 
 <template>
-  <div class="task-stats-card card card-body shadow-sm d-flex">
+    <div class="task-stats-card card card-body shadow-sm d-flex">
       <div class="d-flex justify-content-between ">
-        <div class="task-stats-card__heading d-flex flex-column justify-content-between">
-          <h2>
-            <router-link
-            :to="{
-              name: 'task-record-review-list',
-              params: { taskId: task.id },
-              }"
-              class="d-inline-block"
-              >
-              {{ task.name }}
-            </router-link>
-            <b-badge class="task-stats-card__heading__project bg-transparent font-weight-normal text-muted">
-            {{ task.project.name }}
-            </b-badge>
-          </h2>
-          <span class="py-2 text-nowrap">
-            {{ $tc('taskStatsCard.fullyCheckedItems', taskRecordsCount) }}:
-            <span
-              class="text-danger font-weight-bold ml-2 task-stats-card__checked"
-            >
-              {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
-            </span>
-          </span>
-          <span v-if="extended" class="text-secondary pt-2">
-              {{$t("taskStatsCard.createdOn") }} {{ task.created_at | formatDate }}
-          </span>
-        </div>
-         <task-stats-card-all-rounds
-              v-if="extended"
-                :progress="progress"
-                :done="taskRecordsDoneCount"
-                :pending="taskRecordsPendingCount"
-                class="mx-5 d-none d-lg-block"
-          />
-        <div class="task-stats-card__status d-flex flex-column justify-content-between text-right" :class="{'task-stats-card__status--extended':extended}">
-          <div  class='d-flex flex-column flex-grow-1 justify-content-between '>
-            <div class="task-stats-card__status__top " :class="{'ml-5 ' : extended}">
-              <span v-if="taskIsClosed" class="task-stats-card__status__top--closed text-nowrap" >
-                {{ $t('taskStatsCard.closed') }}
-              <span v-if="extended && celebrate" class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">{{taskIsClosed? 'Closed':'Done'}}</span>
-              </span>
-              <span v-else class="task-stats-card__status__top__priority bg-warning rounded py-1 px-2 text-nowrap">
-                {{ $t('taskStatsCard.priority') }} {{ task.priority }}
-              </span>
-            </div>
-            <div  v-if="taskIsLocked"  :class="{' mt-0 py-0' : extended,'py-2':!extended}" >
-              <span  class="task-stats-card__status__lock text-danger " >
-                <lock-icon size="1.3x" /><span class="sr-only">Unlock</span>
-                <span class="task-stats-card__status__lock--locked ml-2 "> {{ $t('taskStatsCard.locked') }}</span>
-              </span>
-            </div>
-            <div v-else-if="!extended && celebrate" class="mt-2 pt-1">
-              <span class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">{{taskIsClosed? 'Closed':'Done'}}</span>
-            </div>
-          </div>
-          <div v-if="extended" class="task-stats-card__read-tips pt-2 ">
-            <router-link :to="{ name: 'tip-list', query: { 'filter[task]': task.id } }" class="btn btn-danger px-3"> Read tips </router-link>
-          </div>
-        </div>
+        <task-stats-card-heading
+          :extended="extended"
+          :taskId="task.id"
+          :taskRecordsDoneCount="taskRecordsDoneCount"
+          :taskRecordsCount="taskRecordsCount"
+        />
+        <task-stats-card-all-rounds
+          v-if="extended"
+          :progress="progress"
+          :done="taskRecordsDoneCount"
+          :pending="taskRecordsPendingCount"
+          class="mx-5 d-none d-lg-block"
+        />
+        <task-stats-card-status
+          :extended="extended"
+          :taskId="task.id"
+          :taskRecordsDoneCount="taskRecordsDoneCount"
+          :taskRecordsCount="taskRecordsCount"
+        />
       </div>
-
-         <task-stats-card-all-rounds
-              v-if="extended"
-                :progress="progress"
-                :done="taskRecordsDoneCount"
-                :pending="taskRecordsPendingCount"
-                class="mx-auto my-3 d-lg-none"
-          />
-      <div class="d-flex flex-row flex-grow-1 pt-2" :class="{'align-items-center':!extended}">
-         <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 "
-              :class="{'mx-auto':extended}"
-         >
-          <slot name="usersByRound" v-bind:stats="{rounds:task.rounds,progress:progressByRound}">
+      <task-stats-card-all-rounds
+            v-if="extended"
+            :progress="progress"
+            :done="taskRecordsDoneCount"
+            :pending="taskRecordsPendingCount"
+            class="mx-auto my-3 d-lg-none"
+      />
+      <div v-if="extended" class="d-flex flex-row flex-grow-1 pt-2">
+         <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 mx-auto">
+          <slot name="taskStatsByRound" v-bind:stats="{rounds:task.rounds,progress:progressByRound}" />
+         </div>
+      </div>
+      <div v-else class="d-flex flex-row flex-grow-1 pt-2 align-items-center">
+         <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 ">
             <stats-by-round
               v-for="round in task.rounds"
               :key="round"
@@ -164,24 +113,10 @@ export default {
               :nbRounds="task.rounds"
               :progress="progressByRound[round]"
             />
-          </slot>
          </div>
-        <slot name="allRounds" v-if="!extended">
-          <span
-            class="
-              task-stats-card__progress
-              bg-primary
-              text-white
-              font-weight-bold
-              rounded
-              py-1
-              px-2
-              ml-auto
-            "
-          >
+          <span class="task-stats-card__progress bg-primary text-white font-weight-bold rounded py-1 px-2 ml-auto">
             {{ progress | round }}%
           </span>
-        </slot>
       </div>
     </div>
 </template>

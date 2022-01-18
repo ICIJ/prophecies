@@ -25,13 +25,8 @@
             </div>
           </div>
           <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-            <task-stats-card class="my-5"
-            v-for="task in tasks"
-            :key="task.id"
-            :team="teamTaskStats"
-            :task-id="task.id" extended>
-
-              <template v-slot:usersByRound="{stats}">
+            <task-stats-card class="my-5" v-for="task in tasks" :key="task.id" :task-id="task.id" :team="teamTaskStats" extended>
+              <template v-slot:taskStatsByRound="{stats}">
                  <stats-by-round
                   v-for="(round,index) in stats.rounds"
                   :key="round"
@@ -41,7 +36,7 @@
                   :progress-by-user-ids='taskUserStatistics(task.id,round)'
                   :summary='summaryByRound[round]'
                   extended
-                  class=" mx-auto " />
+                  class="mx-auto" />
               </template>
             </task-stats-card>
 

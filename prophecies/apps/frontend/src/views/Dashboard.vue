@@ -101,7 +101,8 @@ export default {
                                    v-for="task in tasks"
                                    :key="task.id"
                                    :team="teamTaskStats"
-                                   :task-id="task.id" />
+                                   :task-id="task.id" >
+                  </task-stats-card>
                   <!-- <div class="d-flex justify-content-center py-3 my-3">
                     <router-link class="btn btn-primary font-weight-bold" :to="{name:'stats-list'}">All stats</router-link>
                   </div> -->

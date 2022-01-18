@@ -68,16 +68,4 @@ describe('TaskStatsCard', () => {
     const element = wrapper.findAll('stats-by-round-stub').at(2)
     expect(element.attributes('progress')).toBe('30')
   })
-  it('should show the task locked', async () => {
-    const element = wrapper.find('.task-stats-card__status__lock--locked')
-    expect(element.exists()).toBe(true)
-  })
-
-  describe('Extended task stats card', () => {
-    it('should display the read tips button', async () => {
-      await wrapper.setProps({ extended: true })
-      const readTipsButton = wrapper.find('.task-stats-card__read-tips')
-      expect(readTipsButton.exists()).toBeTruthy()
-    })
-  })
 })
