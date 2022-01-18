@@ -96,10 +96,7 @@ export default {
         // Let parent component know about the update
         this.emitUpdate()
       } catch (error) {
-        const message = get(error, 'response.data.errors[0].detail')
-        const variant = 'warning'
-        const title = `⛔ Task record #${this.taskRecord.id}`
-        this.makeToast(variant, title, message)
+        this.displayError(error);
       }
     },
     async lockWithLoader () {
@@ -113,16 +110,27 @@ export default {
         // Let parent component know about the update
         this.emitUpdate()
       } catch (error) {
-        const message = get(error, 'response.data.errors[0].detail')
-        const variant = 'warning'
-        const title = `⛔ Task record #${this.taskRecord.id}`
-        this.makeToast(variant, title, message)
+        this.displayError(error);
       }
     },
     async unlockWithLoader () {
       this.$wait.start(this.loader)
       await this.unlock()
       this.$wait.end(this.loader)
+    },
+    async saveRecord () {
+      try {
+        await TaskRecord.api().saveRecord(this.taskRecord.id)
+      } catch (error) {
+        this.displayError(error);
+      }
+    },
+    async unsaveRecord () {
+      try {
+        await TaskRecord.api().unsaveRecord(this.taskRecord.id)
+      } catch (error) {
+        this.displayError(error);
+      }
     },
     async fetchTaskRecordActions () {
       const taskRecordId = this.taskRecordReview.taskRecordId
@@ -170,6 +178,12 @@ export default {
       if (this.link) {
         window.open(this.link)
       }
+    },
+    displayError(error) {
+      const message = get(error, 'response.data.errors[0].detail')
+      const variant = 'warning'
+      const title = `⛔ Task record #${this.taskRecord.id}`
+      this.makeToast(variant, title, message)
     }
   },
   computed: {
@@ -316,13 +330,13 @@ export default {
                   @close="toggleNotes(false)" />
               </b-collapse>
               <b-collapse :visible="showLinkPreview">
-                <iframe 
-                  :src="embeddableLinkIfVisible" 
-                  class="border" 
-                  style="border:0" 
-                  loading="lazy" 
-                  allowfullscreen 
-                  width="100%" 
+                <iframe
+                  :src="embeddableLinkIfVisible"
+                  class="border"
+                  style="border:0"
+                  loading="lazy"
+                  allowfullscreen
+                  width="100%"
                   height="400px" />
               </b-collapse>
             </div>
@@ -334,7 +348,9 @@ export default {
             :task-record-review-id="taskRecordReviewId"
             @lock="lockWithLoader"
             @unlock="unlockWithLoader"
-            @toggle-changes="fetchAndToggleChanges()" />
+            @toggle-changes="fetchAndToggleChanges()"
+            @saveRecord="saveRecord"
+            @unsaveRecord="unsaveRecord"/>
         </div>
       </div>
     </div>

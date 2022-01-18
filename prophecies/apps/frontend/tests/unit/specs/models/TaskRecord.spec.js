@@ -7,6 +7,7 @@ describe('TaskRecord', () => {
   })
 
   afterAll(() => {
+    var tr = TaskRecord.all()
     TaskRecord.deleteAll()
   })
 
@@ -24,5 +25,10 @@ describe('TaskRecord', () => {
   it('should return an originalValue', async () => {
     expect(TaskRecord.find(1).originalValue).toBe('fronce')
     expect(TaskRecord.find(3).originalValue).toBe('La France')
+  })
+
+  it('should return a saved attribute', async () => {
+    expect(TaskRecord.find(1).saved).toBeFalsy()
+    expect(TaskRecord.find(3).saved).toBeTruthy()
   })
 })

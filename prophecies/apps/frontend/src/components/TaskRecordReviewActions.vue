@@ -71,6 +71,20 @@ export default {
        */
       this.$emit('unlock', this.taskRecordReview)
     },
+    emitSaveRecord () {
+      /**
+       * @event saveRecord
+       * @param TaskRecordReview
+       */
+      this.$emit('saveRecord', this.taskRecordReview)
+    },
+    emitUnsaveRecord () {
+      /**
+       * @event unsaveRecord
+       * @param TaskRecordReview
+       */
+      this.$emit('unsaveRecord', this.taskRecordReview)
+    },
     emitToggleChanges () {
       /**
        * @event emitToggleChanges
@@ -114,6 +128,14 @@ export default {
       <b-btn variant="link" class="text-dark" title="See history" v-b-tooltip.left @click="emitToggleChanges">
         <clock-icon size="1.5x" />
         <span class="sr-only">See changes history</span>
+      </b-btn>
+      <b-btn variant="link" v-if="!taskRecord.saved" class="text-dark" title="Save record" v-b-tooltip.left @click="emitSaveRecord">
+        <bookmark-icon size="1.5x"/>
+        <span class="sr-only">Save record</span>
+      </b-btn>
+      <b-btn variant="link" v-else class="text-dark" title="Unsave record" v-b-tooltip.left @click="emitUnsaveRecord">
+        <bookmark-icon size="1.5x" fill="currentColor"/>
+        <span class="sr-only">Unsave record</span>
       </b-btn>
     </b-btn-group>
   </div>
