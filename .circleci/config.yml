@@ -1,5 +1,8 @@
 version: 2
 
+orbs:
+  docker: circleci/docker@1.7.0
+
 workflows:
   version: 2
   test:
@@ -11,14 +14,18 @@ workflows:
       - test-backend:
           requires:
             - checkout
-      - publish-docker:
+      - docker/publish:
+          docker-password: $DOCKER_PASS 
+          docker-username: $DOCKER_USER 
+          image: icij/prophecies 
+          tag: $CIRCLE_SHA1,latest 
           requires:
             - checkout
             - test-frontend
             - test-backend
           filters:
               tags:
-                  only: /^v[0-9.]*/
+                  only: /^v[0-9.]*(\w+\d+)?/
               branches:
                   ignore: /.*/
 jobs:
@@ -81,19 +88,3 @@ jobs:
       - run:
           name: Run unit tests
           command: pipenv run python manage.py test --settings=prophecies.settings.test
-
-  publish-docker:
-    docker:
-      - image: docker:17.05.0-ce-git
-    working_directory: ~/repository/
-    steps:
-      - restore_cache:
-          name: Restore app bundle repository from the `checkout` job
-          key: repository-cache-{{ .Branch }}-{{ .Environment.CIRCLE_SHA1 }}
-      - setup_remote_docker 
-      - run:
-          name: build and push docker image
-          command: |
-            docker build -t icij/prophecies:${CIRCLE_TAG} ~/repository/
-            docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-            docker push icij/prophecies:${CIRCLE_TAG}
