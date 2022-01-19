@@ -23,14 +23,10 @@ workflows:
             tags:
               only: /.*/
       - docker/publish:
-          before_build:
-            - run:
-                name: Remove the "v" prefix from the CIRCLE_TAG variable to build the DOCKER_TAG value
-                command: echo 'export DOCKER_TAG="${CIRCLE_TAG/#v})"' >> $BASH_ENV
           docker-password: DOCKER_PASS 
           docker-username: DOCKER_USER
           image: icij/prophecies 
-          tag: "$DOCKER_TAG,latest" 
+          tag: "${CIRCLE_TAG/#v},latest" 
           registry: registry.hub.docker.com
           requires:
             - test-frontend
