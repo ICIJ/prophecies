@@ -18,15 +18,7 @@ workflows:
           docker-username: DOCKER_USER
           image: icij/prophecies 
           tag: "$CIRCLE_SHA1,latest" 
-          requires:
-            - checkout
-            - test-frontend
-            - test-backend
-          filters:
-            tags:
-                only: /^v[0-9.]*/
-            branches:
-                ignore: /.*/
+          
 jobs:
   checkout:
     docker:
