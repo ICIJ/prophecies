@@ -79,8 +79,9 @@ pipenv run bumpversion minor
 pipenv run bumpversion major
 ```
 
-Then build and push the Docker image while ICIJ internal VPN is running:
+Then the new tag on Github. The CI will take care of shipping the new version on Docker Hub:
 
 ```
-make docker-publish
+git push origin main --tags
+git push origin main
 ```
