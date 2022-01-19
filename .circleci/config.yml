@@ -24,7 +24,7 @@ workflows:
             - test-backend
           filters:
             tags:
-              only: /^v[0-9.]*/
+              only: /^v.*/
             branches:
               ignore: /.*/
           
