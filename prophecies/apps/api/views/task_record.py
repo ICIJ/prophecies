@@ -16,7 +16,7 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
     task = ResourceRelatedField(many=False, read_only=True)
     link = serializers.SerializerMethodField()
     embeddable_link = serializers.SerializerMethodField()
-    saved = serializers.SerializerMethodField()
+    bookmarked = serializers.SerializerMethodField()
     locked_by = ResourceRelatedField(many=False, read_only=True)
     included_serializers = {
         'locked_by': UserSerializer,
@@ -29,7 +29,7 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TaskRecord
         resource_name = 'TaskRecord'
-        fields = ['id', 'url', 'task', 'original_value', 'predicted_value', 'link', 'embeddable_link', 'locked', 'locked_by', 'metadata', 'rounds', 'status', 'saved']
+        fields = ['id', 'url', 'task', 'original_value', 'predicted_value', 'link', 'embeddable_link', 'locked', 'locked_by', 'metadata', 'rounds', 'status', 'bookmarked']
         read_only_fields = ['url',  'original_value', 'predicted_value', 'link', 'embeddable_link', 'metadata', 'rounds', 'status']
 
     def get_link(self, task_record):
@@ -38,13 +38,13 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
     def get_embeddable_link(self, task_record):
         return task_record.computed_embeddable_link()
     
-    def get_saved(self, task_record):
+    def get_bookmarked(self, task_record):
         user = self.context.get('request').user
-        return task_record.saved_by.filter(id=user.id).exists()
+        return task_record.bookmarked_by.filter(id=user.id).exists()
                 
     def update(self, instance, validated_data):
         self.update_locked(instance, validated_data)
-        self.update_saved(instance, validated_data)
+        self.update_bookmarked(instance, validated_data)
         instance.save()
         return instance
     
@@ -61,16 +61,16 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
             action.send(user, verb='unlocked', target=instance)
         return instance
 
-    def update_saved(self, instance, validated_data):
+    def update_bookmarked(self, instance, validated_data):
         user = self.context.get('request').user
-        # "saved" is not in the validated_data dict because it's a method field
-        saved = self.initial_data.get('saved')
-        if saved is True:
-            instance.saved_by.add(user)
-            action.send(user, verb='saved', target=instance)
-        elif saved is False:
-            instance.saved_by.remove(user)
-            action.send(user, verb='unsaved', target=instance)
+        # "bookmarked" is not in the validated_data dict because it's a method field
+        bookmarked = self.initial_data.get('bookmarked')
+        if bookmarked is True:
+            instance.bookmarked_by.add(user)
+            action.send(user, verb='bookmarked', target=instance)
+        elif bookmarked is False:
+            instance.bookmarked_by.remove(user)
+            action.send(user, verb='unbookmarked', target=instance)
         return instance
 
     def validate_locked(self, value):

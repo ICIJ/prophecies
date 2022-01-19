@@ -55,7 +55,7 @@ class TaskRecord(models.Model):
     locked_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, help_text="User who locked this task record", related_name="locked_task_records")
     has_notes = models.BooleanField(default=False, help_text="One or more reviews have notes")
     has_disagreements = models.BooleanField(default=False, help_text="Reviews are different")
-    saved_by = models.ManyToManyField(User, help_text="Users who saved this task record", related_name='saved_task_records')
+    bookmarked_by = models.ManyToManyField(User, help_text="Users who bookmarked this task record", related_name='bookmarked_task_records')
 
     def __str__(self):
         return f'Record #{self.id} to be review in {self.task.name}'

@@ -163,30 +163,30 @@ class TestTaskRecord(TestCase):
         self.assertEqual(request.status_code, 403)
         
         
-    def test_olivia_saved_a_record(self):
+    def test_olivia_bookmarked_a_record(self):
         task_record = TaskRecord.objects.create(task=self.task)
-        task_record.saved_by.add(self.olivia)
+        task_record.bookmarked_by.add(self.olivia)
         TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
         TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
         
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/task-records/%s/' % task_record.id)
         data = request.json().get('data')
-        self.assertTrue(data.get('attributes').get('saved'))
+        self.assertTrue(data.get('attributes').get('bookmarked'))
     
     
-    def test_django_didnt_saved_a_record(self):
+    def test_django_didnt_bookmark_a_record(self):
         task_record = TaskRecord.objects.create(task=self.task)
-        task_record.saved_by.add(self.olivia)
+        task_record.bookmarked_by.add(self.olivia)
         TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
         TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
         
         self.client.login(username='django', password='django')
         request = self.client.get('/api/v1/task-records/%s/' % task_record.id)
         data = request.json().get('data')
-        self.assertFalse(data.get('attributes').get('saved'))
+        self.assertFalse(data.get('attributes').get('bookmarked'))
         
-    def test_he_can_save_a_record(self):
+    def test_he_can_unbookmark_a_record(self):
         task_record = TaskRecord.objects.create(task=self.task)
         TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
         self.client.login(username='django', password='django')
@@ -195,17 +195,17 @@ class TestTaskRecord(TestCase):
                 'type': 'TaskRecord',
                 'id': task_record.id,
                 'attributes': {
-                    'saved': True
+                    'bookmarked': True
                 }
             }
         }
         request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload, content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)
-        self.assertTrue(task_record.saved_by.filter(id=self.django.id).exists())
+        self.assertTrue(task_record.bookmarked_by.filter(id=self.django.id).exists())
         
-    def test_he_can_unsave_a_record(self):
+    def test_he_can_unbookmark_a_record(self):
         task_record = TaskRecord.objects.create(task=self.task)
-        task_record.saved_by.add(self.django)
+        task_record.bookmarked_by.add(self.django)
         TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
         self.client.login(username='django', password='django')
         payload = {
@@ -213,10 +213,10 @@ class TestTaskRecord(TestCase):
                 'type': 'TaskRecord',
                 'id': task_record.id,
                 'attributes': {
-                    'saved': False
+                    'bookmarked': False
                 }
             }
         }
         request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload, content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)        
-        self.assertFalse(task_record.saved_by.filter(id=self.django.id).exists())
+        self.assertFalse(task_record.bookmarked_by.filter(id=self.django.id).exists())
