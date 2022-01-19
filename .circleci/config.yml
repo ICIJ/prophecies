@@ -26,7 +26,7 @@ workflows:
             tags:
               only: /^v.*/
             branches:
-              ignore: /.*/
+              only: /main/
           
 jobs:
   checkout:
