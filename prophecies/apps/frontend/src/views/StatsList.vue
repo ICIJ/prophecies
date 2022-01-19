@@ -33,7 +33,7 @@
                   :round="index+1"
                   :progress="stats.progress[round]"
                   :choices='choicesByRound[round]'
-                  :progress-by-user-ids='taskUserStatistics(task.id,round)'
+                  :progress-by-user='taskUserStatistics(task.id,round)'
                   :summary='summaryByRound[round]'
                   extended
                   class="mx-auto" />
