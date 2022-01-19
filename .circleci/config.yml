@@ -11,6 +11,16 @@ workflows:
       - test-backend:
           requires:
             - checkout
+      - publish-docker:
+          requires:
+            - checkout
+            - test-frontend
+            - test-backend
+          filters:
+              tags:
+                  only: /^[0-9.]*/
+              branches:
+                  ignore: /.*/
 jobs:
   checkout:
     docker:
@@ -71,3 +81,19 @@ jobs:
       - run:
           name: Run unit tests
           command: pipenv run python manage.py test --settings=prophecies.settings.test
+
+  publish-docker:
+    docker:
+      - image: docker:17.05.0-ce-git
+    working_directory: ~/repository/
+    steps:
+      - restore_cache:
+          name: Restore app bundle repository from the `checkout` job
+          key: repository-cache-{{ .Branch }}-{{ .Environment.CIRCLE_SHA1 }}
+      - setup_remote_docker
+      - run:
+          name: build and push docker image
+          command: |
+            docker build -t icij/prophecies:${CIRCLE_TAG} ~/repository/
+            docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+            docker push icij/prophecies:${CIRCLE_TAG}
