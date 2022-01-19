@@ -1,10 +1,9 @@
-version: 2
+version: 2.1
 
 orbs:
-  docker: circleci/docker@1.7.0
+  docker: circleci/docker@2.0.1
 
 workflows:
-  version: 2
   test:
     jobs:
       - checkout
@@ -15,10 +14,10 @@ workflows:
           requires:
             - checkout
       - docker/publish:
-          docker-password: $DOCKER_PASS 
-          docker-username: $DOCKER_USER 
+          docker-password: DOCKER_PASS 
+          docker-username: DOCKER_USER
           image: icij/prophecies 
-          tag: $CIRCLE_SHA1,latest 
+          tag: "$CIRCLE_SHA1,latest" 
           requires:
             - checkout
             - test-frontend
