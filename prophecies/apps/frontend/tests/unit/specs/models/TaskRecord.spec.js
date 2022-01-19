@@ -28,7 +28,7 @@ describe('TaskRecord', () => {
   })
 
   it('should return a saved attribute', async () => {
-    expect(TaskRecord.find(1).saved).toBeFalsy()
-    expect(TaskRecord.find(3).saved).toBeTruthy()
+    expect(TaskRecord.find(1).bookmarked).toBeFalsy()
+    expect(TaskRecord.find(3).bookmarked).toBeTruthy()
   })
 })

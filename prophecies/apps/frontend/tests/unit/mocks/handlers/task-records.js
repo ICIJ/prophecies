@@ -21,7 +21,7 @@ export default [
               link: 'https://www.openstreetmap.org/search?query=La%20France',
               metadata: null,
               rounds: 3,
-              saved: true,
+              bookmarked: true,
               status: 'ASSIGNED'
             },
             relationships: {
@@ -68,7 +68,7 @@ export default [
               link: 'https://www.openstreetmap.org/search?query=fronce',
               metadata: null,
               rounds: 3,
-              saved: false,
+              bookmarked: false,
               status: 'DONE'
             },
             relationships: {
