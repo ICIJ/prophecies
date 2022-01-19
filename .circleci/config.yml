@@ -26,7 +26,7 @@ workflows:
           before_build:
             - run:
                 name: Remove the "v" prefix from the CIRCLE_TAG variable to build the DOCKER_TAG value
-                command: $DOCKER_TAG=$(echo ${$CIRCLE_TAG/#v})
+                command: $DOCKER_TAG=$(echo ${CIRCLE_TAG/#v})
           docker-password: DOCKER_PASS 
           docker-username: DOCKER_USER
           image: icij/prophecies 
