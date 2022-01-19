@@ -118,16 +118,16 @@ export default {
       await this.unlock()
       this.$wait.end(this.loader)
     },
-    async saveRecord () {
+    async bookmark () {
       try {
-        await TaskRecord.api().saveRecord(this.taskRecord.id)
+        await TaskRecord.api().bookmark(this.taskRecord.id)
       } catch (error) {
         this.displayError(error);
       }
     },
-    async unsaveRecord () {
+    async unbookmark () {
       try {
-        await TaskRecord.api().unsaveRecord(this.taskRecord.id)
+        await TaskRecord.api().unbookmark(this.taskRecord.id)
       } catch (error) {
         this.displayError(error);
       }
@@ -349,8 +349,8 @@ export default {
             @lock="lockWithLoader"
             @unlock="unlockWithLoader"
             @toggle-changes="fetchAndToggleChanges()"
-            @save-record="saveRecord"
-            @unsave-record="unsaveRecord"/>
+            @bookmark="bookmark"
+            @unbookmark="unbookmark"/>
         </div>
       </div>
     </div>

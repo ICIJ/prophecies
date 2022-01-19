@@ -23,7 +23,7 @@ export default class TaskRecord extends Model {
       status: this.string(),
       taskId: this.attr(null),
       task: this.belongsTo(Task, 'taskId'),
-      saved: this.boolean()
+      bookmarked: this.boolean()
     }
   }
 
@@ -44,12 +44,12 @@ export default class TaskRecord extends Model {
         const attributes = { locked: false }
         return this.save(id, { attributes })
       },
-      saveRecord (id) {
-        const attributes = { saved: true }
+      bookmark (id) {
+        const attributes = { bookmarked: true }
         return this.save(id, { attributes })
       },
-      unsaveRecord (id) {
-        const attributes = { saved: false }
+      unbookmark (id) {
+        const attributes = { bookmarked: false }
         return this.save(id, { attributes })
       }
     }

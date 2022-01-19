@@ -71,19 +71,19 @@ export default {
        */
       this.$emit('unlock', this.taskRecordReview)
     },
-    emitSaveRecord () {
+    emitBookmark () {
       /**
-       * @event save-record
+       * @event bookmark
        * @param TaskRecordReview
        */
-      this.$emit('save-record', this.taskRecordReview)
+      this.$emit('bookmark', this.taskRecordReview)
     },
-    emitUnsaveRecord () {
+    emitUnbookmark () {
       /**
-       * @event unsave-record
+       * @event unbookmark
        * @param TaskRecordReview
        */
-      this.$emit('unsave-record', this.taskRecordReview)
+      this.$emit('unbookmark', this.taskRecordReview)
     },
     emitToggleChanges () {
       /**
@@ -102,6 +102,14 @@ export default {
       <b-btn variant="link" class="text-dark" :to="taskRecordRoute" title="Open in a new window" v-b-tooltip.left target="_blank">
         <external-link-icon size="1.5x" />
         <span class="sr-only">Link</span>
+      </b-btn>
+      <b-btn variant="link" v-if="!taskRecord.bookmarked" class="text-dark" title="Bookmark" v-b-tooltip.left @click="emitBookmark">
+        <bookmark-icon size="1.5x"/>
+        <span class="sr-only">Bookmark</span>
+      </b-btn>
+      <b-btn variant="link" v-else class="text-dark" title="Remove bookmark" v-b-tooltip.left @click="emitUnbookmark">
+        <bookmark-icon size="1.5x" fill="currentColor"/>
+        <span class="sr-only">Remove bookmark</span>
       </b-btn>
       <b-btn variant="link" disabled class="text-dark" title="Duplicate record" v-b-tooltip.left @click="emitCopy">
         <copy-icon size="1.5x" />
@@ -128,14 +136,6 @@ export default {
       <b-btn variant="link" class="text-dark" title="See history" v-b-tooltip.left @click="emitToggleChanges">
         <clock-icon size="1.5x" />
         <span class="sr-only">See changes history</span>
-      </b-btn>
-      <b-btn variant="link" v-if="!taskRecord.saved" class="text-dark" title="Save record" v-b-tooltip.left @click="emitSaveRecord">
-        <bookmark-icon size="1.5x"/>
-        <span class="sr-only">Save record</span>
-      </b-btn>
-      <b-btn variant="link" v-else class="text-dark" title="Unsave record" v-b-tooltip.left @click="emitUnsaveRecord">
-        <bookmark-icon size="1.5x" fill="currentColor"/>
-        <span class="sr-only">Unsave record</span>
       </b-btn>
     </b-btn-group>
   </div>
