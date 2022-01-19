@@ -35,6 +35,7 @@ describe('TaskRecordReviewActions', () => {
     const taskNotOpened = wrapper.find('.task-record-review-actions__task_not_open')
     expect(taskNotOpened.exists()).toBe(true)
   })
+  
   it('should prevent user from locking a record when the task is OPEN', async () => {
     const propsData = { taskId: '2', taskRecordReviewId: '25' }
     await wrapper.setProps(propsData)
