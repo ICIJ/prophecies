@@ -6,13 +6,22 @@ orbs:
 workflows:
   test:
     jobs:
-      - checkout
+      - checkout:
+          filters:
+            tags:
+              only: /.*/
       - test-frontend:
           requires:
             - checkout
+          filters:
+            tags:
+              only: /.*/
       - test-backend:
           requires:
             - checkout
+          filters:
+            tags:
+              only: /.*/
       - docker/publish:
           docker-password: DOCKER_PASS 
           docker-username: DOCKER_USER
