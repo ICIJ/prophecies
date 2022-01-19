@@ -18,7 +18,7 @@ workflows:
             - test-backend
           filters:
               tags:
-                  only: /^[0-9.]*/
+                  only: /^v[0-9.]*/
               branches:
                   ignore: /.*/
 jobs:
@@ -90,7 +90,7 @@ jobs:
       - restore_cache:
           name: Restore app bundle repository from the `checkout` job
           key: repository-cache-{{ .Branch }}-{{ .Environment.CIRCLE_SHA1 }}
-      - setup_remote_docker
+      - setup_remote_docker 
       - run:
           name: build and push docker image
           command: |
