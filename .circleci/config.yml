@@ -17,11 +17,16 @@ workflows:
           docker-password: DOCKER_PASS 
           docker-username: DOCKER_USER
           image: icij/prophecies 
-          tag: "$CIRCLE_SHA1,latest" 
+          tag: "$CIRCLE_TAG,latest" 
+          registry: registry.hub.docker.com
           requires:
-            - checkout
             - test-frontend
             - test-backend
+          filters:
+            tags:
+              only: /^v[0-9.]*/
+            branches:
+              ignore: /.*/
           
 jobs:
   checkout:
