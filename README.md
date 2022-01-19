@@ -12,7 +12,7 @@ An ICIJ app to conduct data validation and cleaning.
 Required:
 
 * Python 3.8
-* Node 12.x
+* Node 14.x
 * Pipenv 11.x
 * Yarn 1.x
 
