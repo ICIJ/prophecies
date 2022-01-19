@@ -73,17 +73,17 @@ export default {
     },
     emitSaveRecord () {
       /**
-       * @event saveRecord
+       * @event save-record
        * @param TaskRecordReview
        */
-      this.$emit('saveRecord', this.taskRecordReview)
+      this.$emit('save-record', this.taskRecordReview)
     },
     emitUnsaveRecord () {
       /**
-       * @event unsaveRecord
+       * @event unsave-record
        * @param TaskRecordReview
        */
-      this.$emit('unsaveRecord', this.taskRecordReview)
+      this.$emit('unsave-record', this.taskRecordReview)
     },
     emitToggleChanges () {
       /**

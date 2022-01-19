@@ -349,8 +349,8 @@ export default {
             @lock="lockWithLoader"
             @unlock="unlockWithLoader"
             @toggle-changes="fetchAndToggleChanges()"
-            @saveRecord="saveRecord"
-            @unsaveRecord="unsaveRecord"/>
+            @save-record="saveRecord"
+            @unsave-record="unsaveRecord"/>
         </div>
       </div>
     </div>
