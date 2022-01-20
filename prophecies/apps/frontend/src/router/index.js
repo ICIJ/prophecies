@@ -8,6 +8,7 @@ import TaskRecordReviewRetrieve from '@/views/TaskRecordReviewRetrieve.vue'
 import TipList from '@/views/TipList.vue'
 import TipRetrieve from '@/views/TipRetrieve.vue'
 import StatsList from '@/views/StatsList.vue'
+import SavedRecords from "@/views/SavedRecords";
 
 export const router = {
   routes: [
@@ -61,6 +62,12 @@ export const router = {
       name: 'stats-list',
       path: '/stats',
       component: StatsList,
+      props: true
+    },
+    {
+      name: 'saved-records',
+      path: '/saved-records',
+      component: SavedRecords,
       props: true
     },
     {
