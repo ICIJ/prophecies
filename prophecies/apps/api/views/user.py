@@ -35,7 +35,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ['id', 'first_name', 'last_name', 'username']
     filterset_fields = {
        'username': ('icontains', 'exact', 'iexact', 'contains', 'in'),
-       'is_staff': ('exact',),
+       'is_staff': ('exact',)
     }
 
     def get_object(self):
