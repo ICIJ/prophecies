@@ -107,5 +107,18 @@
     "open": "Open",
     "locked": "Locked",
     "closed": "Closed"
+  },
+  "userProfileDropdownMenu": {
+    "profile": "Your profile",
+    "api": "API",
+    "admin": "Admin",
+    "help": "Help",
+    "logOut": "Log out"
+  },
+  "userRetreiveProfile": {
+    "title": {
+      "yours": "Your profile",
+      "others": "{displayFullName}'s profile"
+    }
   }
 }

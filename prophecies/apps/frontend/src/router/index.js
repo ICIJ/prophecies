@@ -8,6 +8,8 @@ import TaskRecordReviewRetrieve from '@/views/TaskRecordReviewRetrieve.vue'
 import TipList from '@/views/TipList.vue'
 import TipRetrieve from '@/views/TipRetrieve.vue'
 import StatsList from '@/views/StatsList.vue'
+import UserRetreive from '@/views/UserRetreive.vue'
+import UserRetreiveProfile from '@/views/UserRetreiveProfile.vue'
 
 export const router = {
   routes: [
@@ -26,6 +28,19 @@ export const router = {
       meta: {
         title: ({ i18n }) => i18n.t('login.title')
       }
+    },
+    {
+      path: '/users/:username',
+      component: UserRetreive,
+      props: true,
+      children: [
+        {
+          name: 'user-retreive-profile',
+          path: '',
+          props: true,
+          component: UserRetreiveProfile
+        }
+      ]
     },
     {
       name: 'history',

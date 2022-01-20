@@ -3,6 +3,7 @@ export {
   ArrowDownIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
+  AwardIcon,
   BellIcon,
   BookmarkIcon,
   CheckIcon,
