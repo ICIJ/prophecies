@@ -37,15 +37,11 @@
     }
   },
   "appHeader": {
-    "api": "API",
-    "admin": "Admin",
     "cinematicView": "Cinematic view",
     "tips": "Tips",
     "search": "Search",
     "shortcuts": "Shortcuts",
-    "tutorial": "Tutorial",
-    "help": "Help",
-    "logOut": "Log out"
+    "tutorial": "Tutorial"
   },
   "appVersion": {
     "version": "Version {version}"
@@ -106,5 +102,12 @@
     "fullyCheckedItems": "Fully checked record | Fully checked records",
     "priority": "Priority",
     "round": "Round"
+  },
+  "userProfileDropdownMenu": {
+    "profile": "Your profile",
+    "api": "API",
+    "admin": "Admin",
+    "help": "Help",
+    "logOut": "Log out"
   }
 }
