@@ -77,6 +77,6 @@ class TaskViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TaskSerializer
     search_fields = ['name', 'description']
     ordering_fields = ['name']
-    filterset_fields = ['name', 'rounds', 'priority']
+    filterset_fields = ['name', 'rounds', 'priority', 'checkers']
     pagination_class = None
     ordering = ['-id']
