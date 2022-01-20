@@ -1,5 +1,5 @@
 <script>
-import { compact, get, find, filter, isEqual, keys, noop, uniqueId, values } from 'lodash'
+import { compact, get, filter, isEqual, keys, noop, uniqueId, values } from 'lodash'
 
 import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
@@ -297,7 +297,7 @@ export default {
       const { response } = await TaskRecordReview.api().get('', { params })
       const countBy = get(response, 'data.meta.countBy', null)
       const pagination = get(response, 'data.meta.pagination', null)
-      const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)      
+      const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)
       this.$set(this, 'countBy', countBy)
       this.$set(this, 'pagination', pagination)
       this.$set(this, 'taskRecordReviewIds', taskRecordReviewIds)

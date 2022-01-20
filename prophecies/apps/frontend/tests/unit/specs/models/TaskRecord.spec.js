@@ -7,7 +7,6 @@ describe('TaskRecord', () => {
   })
 
   afterAll(() => {
-    var tr = TaskRecord.all()
     TaskRecord.deleteAll()
   })
 

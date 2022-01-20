@@ -117,4 +117,9 @@ export default class TaskRecordReview extends Model {
     const taskRecordLocked = this.taskRecordId && TaskRecord.find(this.taskRecordId)?.locked
     return !!(taskLocked || taskRecordLocked)
   }
+
+  get bookmarked () {
+    const taskRecordLocked = this.taskRecordId && TaskRecord.find(this.taskRecordId)?.bookmarked
+    return taskRecordLocked
+  }
 }

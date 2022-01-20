@@ -38,6 +38,10 @@ export default {
             History
             <shortkey-badge :value="['Ctrl', 'Shift', 'h']" class="ml-2" />
           </b-nav-item>
+          <b-nav-item :to="{ name: 'saved-records' }">
+            <bookmark-icon class="mr-2" />
+            Saved Records
+          </b-nav-item>
           <b-nav-item :href="$config.get('adminUrl')">
             <trello-icon class="mr-3" />
             Admin
