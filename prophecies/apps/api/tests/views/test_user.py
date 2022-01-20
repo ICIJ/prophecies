@@ -26,6 +26,13 @@ class TestUser(TestCase):
         request = self.client.get('/api/v1/users/2/')
         self.assertEqual(request.json().get('data').get('id'), '2')
         self.assertEqual(request.json().get('data').get('attributes').get('username'), 'django')
+        
+        
+    def test_get_with_username_returns_user(self):
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/users/django/')
+        self.assertEqual(request.json().get('data').get('id'), '2')
+        self.assertEqual(request.json().get('data').get('attributes').get('username'), 'django')        
 
 
     def test_list_reject_unauthenticated_request(self):

@@ -38,9 +38,12 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
        'is_staff': ('exact',),
     }
 
-    def get_user(self, pk):
+    def get_object(self):
         try:
-            return User.objects.get(pk=pk)
+            pk = self.kwargs['pk']
+            if str(pk).isdigit():
+                return User.objects.get(pk=pk)
+            return  User.objects.get(username=pk)
         except User.DoesNotExist:
             raise exceptions.NotFound()
 
@@ -53,7 +56,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         # the serialized data is correct (the render uses this view property
         # to find the current type).
         self.resource_name = 'Action'
-        queryset = self.get_user(pk).actor_actions.all()
+        queryset = self.get_object().actor_actions.all()
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = ActionSerializer(page, many=True, context={'request': request})
