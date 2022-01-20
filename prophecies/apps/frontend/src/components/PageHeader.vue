@@ -47,7 +47,7 @@ export default {
     }
 
     &__title {
-      padding-bottom: $spacer-sm;
+      padding-bottom: $spacer-xs;
       border-bottom: 7px solid $warning;   
     }
   }
