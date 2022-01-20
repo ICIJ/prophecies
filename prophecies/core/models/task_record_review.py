@@ -302,7 +302,6 @@ class TaskRecordReview(models.Model):
         if task and checker and my_choice:
             # Collect the statitics
             reviews_choice_counts = sender.objects.filter(task_record__task=task, checker=checker, round=round).exclude(choice=None).count_by_checker_by_choice_by_round()
-            print(reviews_choice_counts) 
             existing_stats = TaskUserChoiceStatistics.objects.filter(task=task, checker=checker, round=round )
             # because it's hard to guess the previous value of the review and
             # the count value of another choice can be staled

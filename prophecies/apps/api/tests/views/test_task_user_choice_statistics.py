@@ -89,15 +89,5 @@ class TestTaskUserChoiceStatistics(TestCase):
         self.assertEqual(data[0].get('relationships').get('choice').get('data').get('id'),str(choice.id))
         self.assertEqual(data[0].get('attributes').get('count'),2)
 
-    def test_it_returns_no_stats_if_olivia_cancel_her_review(self):
-        choice = self.paintings.choice_group.choices.first()
-        
-        TaskRecordReview.objects.create(task_record=self.task_record_of_paintings_foo, checker=self.olivia, round=1, choice=choice)
-        self.client.login(username='olivia', password='olivia')
-        request = self.client.get('/api/v1/task-user-choice-statistics/')
-        data = request.json().get('data')
-        self.assertEqual(len(data), 1)
-        self.assertEqual(data[0].get('relationships').get('choice').get('data').get('id'),str(choice.id))
-        self.assertEqual(data[0].get('attributes').get('count'),2)
         
         
