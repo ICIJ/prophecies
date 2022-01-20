@@ -1,3 +1,4 @@
+from secrets import choice
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Count, F, signals
@@ -5,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
-from prophecies.core.models import Choice, TaskRecord, UserNotification, TaskUserStatistics
+from prophecies.core.models import Choice, TaskRecord, UserNotification, TaskUserStatistics, TaskUserChoiceStatistics
 from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action, mentioned, notify_mentioned_users
 
 class StatusType(models.TextChoices):
@@ -33,6 +34,15 @@ class TaskRecordReviewQuerySet(models.QuerySet):
             .values(choice_field, count_field) \
             .order_by()
             
+    def count_by_checker_by_choice_by_round(self, checker_field='checker', choice_field='choice', round_field='roundNumber', count_field='count'):
+        count = Count('pk', distinct=True)
+        
+        annotate = { checker_field: F('checker_id'), choice_field: F('choice_id'), round_field:F('round'), count_field: count }
+        return self \
+            .values('checker_id','choice_id','round') \
+            .annotate(**annotate) \
+            .values(checker_field, choice_field, round_field, count_field) \
+            .order_by()
 
 class TaskRecordReviewManager(models.Manager):
 
@@ -272,17 +282,43 @@ class TaskRecordReview(models.Model):
         round = instance.round
         # Avoid collecting statistics for uncomplete review
         if task and checker:
-            stats, _ = TaskUserStatistics.objects.get_or_create(task=task, checker=checker, round=round)
+            stats_user, _ = TaskUserStatistics.objects.get_or_create(task=task, checker=checker, round=round)
             # Collect the statitics
             task_round_reviews = sender.objects.filter(task_record__task=task, checker=checker, round=round)
-            done_count = task_round_reviews.filter(status=StatusType.DONE).count()
-            pending_count = task_round_reviews.filter(status=StatusType.PENDING).count()
+            stats_user.done_count = task_round_reviews.filter(status=StatusType.DONE).count()
+            stats_user.pending_count = task_round_reviews.filter(status=StatusType.PENDING).count()
             # Save the statistics
-            stats.done_count = done_count
-            stats.pending_count = pending_count
-            stats.save()
+            stats_user.save()
+            
 
+    @staticmethod
+    def signal_save_task_user_choice_statistics(sender, instance, **kwargs) :
+        # Find or create the relevant TaskUserStatistics
+        task = instance.task
+        checker = instance.checker
+        my_choice = instance.choice
+        round = instance.round
+        # Avoid collecting statistics for uncomplete review
+        if task and checker and my_choice:
+            # Collect the statitics
+            reviews_choice_counts = sender.objects.filter(task_record__task=task, checker=checker, round=round).exclude(choice=None).count_by_checker_by_choice_by_round()
+            print(reviews_choice_counts) 
+            existing_stats = TaskUserChoiceStatistics.objects.filter(task=task, checker=checker, round=round )
+            # because it's hard to guess the previous value of the review and
+            # the count value of another choice can be staled
+            # we remove all existing stats for the task/checker/round 
+            for stat in existing_stats :
+                stat.delete()
+                
+            # create all the necessary stats for all of the choices 
+            for row in reviews_choice_counts:
+                local_stats = TaskUserChoiceStatistics.objects.create(task=task, choice_id=row.get('choice'), checker=checker, round=round)
+                local_stats.count=row.get('count')
+                local_stats.save()        
+            
+            
 
+signals.post_save.connect(TaskRecordReview.signal_save_task_user_choice_statistics, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_save_task_user_statistics, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_notify_members_in_mentioned_project, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_notify_task_checkers_in_mentioned_task, sender=TaskRecordReview)
