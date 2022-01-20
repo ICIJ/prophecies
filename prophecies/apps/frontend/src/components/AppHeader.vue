@@ -7,6 +7,7 @@ import AppVersion from '@/components/AppVersion'
 import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
 import ShortcutListCard from '@/components/ShortcutListCard'
+import UserProfileDropdownMenu from '@/components/UserProfileDropdownMenu.vue'
 
 export default {
   name: 'AppHeader',
@@ -15,7 +16,8 @@ export default {
     AppVersion,
     UserNotificationsDropdownMenu,
     ShortkeyBadge,
-    ShortcutListCard
+    ShortcutListCard,
+    UserProfileDropdownMenu
   },
   props: {
     reduced: {
@@ -137,25 +139,7 @@ export default {
               </span>
               <img :src="userAvatarUrl" class="app-header__nav-right__user__avatar rounded-circle ml-2 d-none d-lg-inline" height="42" width="42" />
             </template>
-            <b-dropdown-item :href="$config.get('apiUrl')" class="app-header__nav-right__user__api">
-              <code-icon class="mr-2" />
-              {{ $t('appHeader.api') }}
-            </b-dropdown-item>
-            <template v-if="user.isStaff">
-              <b-dropdown-item :href="$config.get('adminUrl')" class="app-header__nav-right__user__admin">
-                <trello-icon class="mr-2" />
-                {{ $t('appHeader.admin') }}
-              </b-dropdown-item>
-            </template>
-            <b-dropdown-divider />
-            <b-dropdown-item :href="$config.get('logoutUrl')" class="app-header__nav-right__user__logout">
-              <log-out-icon class="mr-2" />
-              {{ $t('appHeader.logOut') }}
-            </b-dropdown-item>
-            <b-dropdown-divider />
-            <b-dropdown-text class="small text-center p-0 text-muted">
-              <app-version />
-            </b-dropdown-text>
+            <user-profile-dropdown-menu />
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </div>

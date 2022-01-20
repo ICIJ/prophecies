@@ -2,7 +2,6 @@ from admin_auto_filters.filters import AutocompleteFilterFactory
 from django.contrib import admin
 from django.utils.html import format_html
 from import_export.resources import ModelResource
-
 from textwrap import shorten
 
 from prophecies.core.models import TaskRecordReview

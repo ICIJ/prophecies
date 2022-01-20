@@ -44,7 +44,8 @@
     "search": "Search",
     "shortcuts": "Shortcuts",
     "tutorial": "Tutorial",
-    "logOut": "Sign out"
+    "help": "Help",
+    "logOut": "Log out"
   },
   "appVersion": {
     "version": "Version {version}"

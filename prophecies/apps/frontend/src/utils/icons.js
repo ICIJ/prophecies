@@ -1,4 +1,5 @@
 export {
+  TruckIcon,
   ArrowDownIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
