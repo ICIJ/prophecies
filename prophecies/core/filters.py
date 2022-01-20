@@ -1,3 +1,4 @@
+from xmlrpc.client import Boolean
 from django_filters import CharFilter, FilterSet
 from prophecies.core.models import TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record_review import StatusType
@@ -42,40 +43,38 @@ class TaskRecordReviewFilter(FilterSet):
           'task_record__reviews__choice': ('exact', 'in'),
           'task_record__reviews__id': ('exact', 'in'),
         }
-
+    
+    @staticmethod
+    def get_as_boolean(value):
+        if(value == '0' or value == '1'):
+            return (True, bool(int(value)))
+        return (False)
+    
+    def boolean_filter_on(self, queryset, filter_name, value):
+        is_param_valid, filter_value = self.get_as_boolean(value)
+        if is_param_valid:
+            filter = {filter_name:filter_value}
+            return queryset \
+                    .filter(**filter)
+        return queryset
+    
     def has_disagreements_filter(self, queryset, name, value):
-        if value == '0':
-                return queryset \
-                        .filter(task_record__has_disagreements=False)
-        if value == '1':
-                return queryset \
-                        .filter(task_record__has_disagreements=True)
-        return queryset
-
+        return self.boolean_filter_on(queryset,"task_record__has_disagreements",value)   
+        
     def has_notes_filter(self, queryset, name, value):
-        if value == '0':
-            return queryset \
-                .filter(task_record__has_notes=False)
-        if value == '1':
-            return queryset \
-                .filter(task_record__has_notes=True)
-        return queryset
+        return self.boolean_filter_on(queryset,"task_record__has_notes",value)
 		
     def locked_filter(self, queryset, name, value):
-        if value == '0':
-            return queryset \
-                .filter(task_record__locked=False)
-        if value == '1':
-            return queryset \
-                .filter(task_record__locked=True)
-        return queryset
+        return self.boolean_filter_on(queryset,"task_record__locked",value)  
 
     def reviewed_filter(self, queryset, name, value):
-        if value == '0':
+        is_param_valid, filter_value = self.get_as_boolean(value)
+        if not is_param_valid:
+            return queryset       
+        if filter_value:
             return queryset \
                 .filter(task_record__reviews__status=StatusType.PENDING)
-        if value == '1':
+        else:
             return queryset \
                 .filter(task_record__reviews__status=StatusType.DONE) \
                 .exclude(task_record__reviews__status=StatusType.PENDING)
-        return queryset
