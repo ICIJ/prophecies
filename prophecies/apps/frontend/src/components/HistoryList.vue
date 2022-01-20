@@ -70,7 +70,6 @@ export default {
        <slot name="footer"/>
        </template>
      </history-list-group>
-
     </app-waiter>
 </template>
 
