@@ -1,10 +1,12 @@
 <script>
+import AppBrand from '@/components/AppBrand'
 import AppVersion from '@/components/AppVersion'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
 
 export default {
   name: 'AppSidebar',
   components: {
+    AppBrand,
     AppVersion,
     ShortkeyBadge
   }
@@ -13,14 +15,7 @@ export default {
 
 <template>
   <div class="app-sidebar d-flex flex-column">
-    <router-link class="app-sidebar__brand" :to="{ name: 'dashboard' }">
-      <h1 class="app-sidebar__brand__app-name mb-0 font-weight-bold">
-        <img class="app-sidebar__brand__app-name__logo" src="@/assets/images/name-and-logo.svg" :alt="$config.get('appName')" />
-      </h1>
-      <div class="app-sidebar__brand__org-name">
-        {{ $config.get('orgName') }}
-      </div>
-    </router-link>
+    <app-brand class="app-sidebar__brand" />
     <div class="app-sidebar__container flex-grow-1">
       <b-nav vertical>
         <b-nav-item :to="{ name: 'dashboard' }" exact>
@@ -59,20 +54,6 @@ export default {
     max-width: 260px;
     min-height: 100vh;
     font-size: $font-size-lg;
-
-    &__brand {
-      display: block;
-      padding: $spacer $spacer-lg 60px;
-      color: $primary;
-
-      &:hover {
-        text-decoration: none;
-      }
-
-      &__org-name {
-        font-weight: 300;
-      }
-    }
 
     &__container {
 
