@@ -1,13 +1,12 @@
-import { createLocalVue, mount } from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
+import AppBrand from '@/components/AppBrand'
 import AppSidebar from '@/components/AppSidebar'
+import AppVersion from '@/components/AppVersion'
 import Core from '@/core'
 
 describe('AppSidebar', () => {
   let localVue
   let wrapper
-  let i18n
-  let config
-  let router
 
   beforeEach(async () => {
     localVue = createLocalVue()
@@ -16,33 +15,17 @@ describe('AppSidebar', () => {
     // Load the settings
     await core.configure()
     // Those core properties must be available for each test
-    i18n = core.i18n
-    config = core.config
-    router = core.router
-    wrapper = mount(AppSidebar, { i18n, localVue, router })
+    const { router, i18n } = core.i18n
+    wrapper = shallowMount(AppSidebar, { i18n, router, localVue })
   })
 
-  it('should display the backend value of `appName` as app name', () => {
-    const brandName = wrapper.find('.app-sidebar__brand__app-name__logo')
-    expect(brandName.attributes('alt')).toBe('Data Fact Check')
+  it('should display an AppBrand component', () => {
+    const appBrand = wrapper.findComponent(AppBrand)
+    expect(appBrand.exists()).toBeTruthy()
   })
 
-  it('should display the config value of `appName` as app name', async () => {
-    config.set('appName', 'Prophecies')
-    await wrapper.vm.$nextTick()
-    const brandName = wrapper.find('.app-sidebar__brand__app-name__logo')
-    expect(brandName.attributes('alt')).toBe('Prophecies')
-  })
-
-  it('should display the backend value of `orgName` as org name', () => {
-    const brandName = wrapper.find('.app-sidebar__brand__org-name')
-    expect(brandName.text()).toBe('ICIJ.org')
-  })
-
-  it('should display the config value of `orgName` as org name', async () => {
-    config.set('orgName', 'ICIJ')
-    await wrapper.vm.$nextTick()
-    const brandName = wrapper.find('.app-sidebar__brand__org-name')
-    expect(brandName.text()).toBe('ICIJ')
+  it('should display an AppVersion component', () => {
+    const appVersion = wrapper.findComponent(AppVersion)
+    expect(appVersion.exists()).toBeTruthy()
   })
 })
