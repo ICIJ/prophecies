@@ -39,7 +39,8 @@ export default {
         .get()
     },
     tasks () {
-      return orderBy(this.unorderedTasks, [function (task) { return TaskStatusOrder[task.status] === 1 }, 'priority', 'name'])
+      const orderByStatus = task => TaskStatusOrder[task.status] === 1
+      return orderBy(this.unorderedTasks, [orderByStatus, 'priority', 'name'])
     },
     tips () {
       return Tip.query()
