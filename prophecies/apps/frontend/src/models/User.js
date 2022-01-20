@@ -41,13 +41,23 @@ export default class User extends Model {
   }
 
   /**
-   * Get full name of the user.
+   * Get first name of the user.
    */
   get displayName () {
     if (this.firstName) {
       return this.firstName
     }
     return this.username
+  }
+
+  /**
+   * Get full name of the user.
+   */
+  get displayFullName() {
+    if (!this.firstName || !this.lastName) {
+      return this.username
+    }
+    return `${this.firstName} ${this.lastName}`
   }
 
   toString () {

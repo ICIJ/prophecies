@@ -52,12 +52,6 @@ export default {
     user () {
       return this.$config.get('user')
     },
-    userDisplayName () {
-      if (!this.user.firstName || !this.user.lastName) {
-        return this.user.username
-      }
-      return `${this.user.firstName} ${this.user.lastName}`
-    },
     userAvatarUrl () {
       const interpolate = this.$config.get('templateInterpolate')
       const avatarUrlTemplate = this.$config.get('avatarUrlTemplate')
@@ -135,7 +129,7 @@ export default {
             <!-- Using 'button-content' slot -->
             <template #button-content>
               <span class="app-header__nav-right__user__display-name">
-                {{ userDisplayName }}
+                {{ user.displayFullName }}
               </span>
               <img :src="userAvatarUrl" class="app-header__nav-right__user__avatar rounded-circle ml-2 d-none d-lg-inline" height="42" width="42" />
             </template>
