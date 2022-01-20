@@ -1,5 +1,5 @@
 <script>
-import { get, groupBy, split, uniqueId } from 'lodash'
+import { groupBy, uniqueId } from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
@@ -66,7 +66,7 @@ export default {
   <div class="tip-retreive d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top" />
     <div class="tip-retreive__container flex-grow-1">
-      <app-header reduced />
+      <app-header hide-nav />
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchTipLoader" waiter-class="my-5 mx-auto d-block">
           <tip-card class="card card-body shadow" :tip-id="tipId" v-if="tip" />

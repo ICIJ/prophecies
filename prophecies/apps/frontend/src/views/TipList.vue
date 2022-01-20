@@ -184,7 +184,7 @@ export default {
   <div class="tip-list d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top" />
     <div class="tip-list__container flex-grow-1">
-      <app-header reduced />
+      <app-header hide-nav />
       <div class="container-fluid px-4">
         <app-waiter :loader="fetchTipsLoader" waiter-class="my-5 mx-auto d-block">
           <b-collapse :visible="showLatestTips">

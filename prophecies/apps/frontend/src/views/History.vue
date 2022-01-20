@@ -17,7 +17,7 @@ export default {
   <div class="history d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top" />
     <div class="history__container flex-grow-1">
-      <app-header reduced />
+      <app-header hide-nav />
   <div class="container-fluid p-5">
 
       <history-list :limit='20'>

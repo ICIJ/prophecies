@@ -78,7 +78,7 @@ export default {
   <div class="dashboard d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top" />
     <div class="dashboard__container flex-grow-1">
-      <app-header reduced />
+      <app-header hide-nav />
       <div class="container-fluid p-5">
         <div class="row justify-content-between">
           <div class="col-12 col-xl-6">
