@@ -18,8 +18,8 @@ describe('TaskRecordChanges', () => {
       const localVue = createLocalVue()
       const propsData = { actionIds: [] }
       // Configure the local vue with plugins
-      const { i18n, store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(TaskRecordChanges, { localVue, propsData, i18n, store, wait })
+      const { i18n, store, router, wait } = Core.init(localVue).useAll()
+      wrapper = mount(TaskRecordChanges, { localVue, propsData, i18n, store, router, wait })
     })
 
     it('should show no chnages message', () => {

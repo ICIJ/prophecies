@@ -87,17 +87,16 @@ export default {
   <div class="task-record-review-history">
     <div class="task-record-review-history__checker d-flex p-1" v-for="{ id, checker, alternativeValue, choice, note } in history" :key="id">
       <div class="task-record-review-history__checker__name" :class="{ 'task-record-review-history__checker__name--is-me': isMe(checker) }">
-        <span class="text-truncate">
+        <router-link class="text-truncate" :to="{ name: 'user-retreive-profile', params: { username: checker.username } }">
           {{ checker.displayName }}
           <template v-if="isMe(checker)">
             (you)
           </template>
-        </span>
+        </router-link>
       </div>
       <div v-if="choice!==null" class="task-record-review-history__checker__choice">
         <b-badge class="task-record-review-history__checker__choice__badge" :variant="choice.value | toVariant"  v-if="choice" :id="tooltipId+checker" >
           {{ choice.name | firstLetter }}<span class="sr-only">{{ choice.name | skipFirstLetter }}</span>
-
         </b-badge>
         <b-tooltip :target="tooltipId+checker" triggers="hover" placement="right" >
           <div class="task-record-review-history__checker__choice__tooltip d-flex align-items-center">

@@ -117,9 +117,9 @@ export default {
     </b-btn>
     <div v-for="review in history" :key="review.id" class="task-record-review-notes__item"  :class="{ 'task-record-review-notes__item--highlighted': review.id === highlightedReviewId }">
       <div class="task-record-review-notes__item__checker">
-        <span class="text-truncate">
-          {{ review.checker.firstName || review.checker.username }}
-        </span>
+        <router-link class="text-truncate" :to="{ name: 'user-retreive-profile', params: { username: review.checker.username } }">
+          {{ review.checker.displayName }}
+        </router-link>
       </div>
       <div class="task-record-review-notes__item__note">
         <template v-if="isMe(review.checker)">
