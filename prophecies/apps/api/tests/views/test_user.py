@@ -41,12 +41,12 @@ class TestUser(TestCase):
         self.assertEqual(request.status_code, 403)
 
 
-    def test_get_has_email_md5_field_only(self):
+    def test_get_has_email_and_email_md5_field(self):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/users/me/')
         email = 'engineering@icij.org'
         email_md5 = '628e9a99d87799e9d434b63d2c3744ca'
-        self.assertEqual(request.json().get('data').get('attributes').get('email'), None)
+        self.assertEqual(request.json().get('data').get('attributes').get('email'), email)
         self.assertEqual(request.json().get('data').get('attributes').get('emailMd5'), email_md5)
 
     def test_get_user_actions(self):
