@@ -18,29 +18,31 @@ export default {
     <app-brand class="app-sidebar__brand" />
     <div class="app-sidebar__container flex-grow-1">
       <b-nav vertical>
-        <b-nav-item :to="{ name: 'dashboard' }" exact>
-          <grid-icon class="mr-2" />
-          Dashboard
-        </b-nav-item>
-        <b-nav-item :to="{ name: 'shortcut-list' }">
-          <command-icon class="mr-2" />
-          Shortcuts
-          <shortkey-badge :value="['Ctrl', 'k']" class="ml-2" />
-        </b-nav-item>
-        <b-nav-item :to="{ name: 'tip-list' }">
-          <smile-icon class="mr-2" />
-          Tips
-          <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2" />
-        </b-nav-item>
-        <b-nav-item :to="{ name: 'history' }">
-          <clock-icon class="mr-2" />
-          History
-          <shortkey-badge :value="['Ctrl', 'Shift', 'h']" class="ml-2" />
-        </b-nav-item>
-        <b-nav-item :href="$config.get('adminUrl')">
-          <trello-icon class="mr-2" />
-          Admin
-        </b-nav-item>
+        <slot name="items">
+          <b-nav-item :to="{ name: 'dashboard' }" exact>
+            <grid-icon class="mr-2" />
+            Dashboard
+          </b-nav-item>
+          <b-nav-item :to="{ name: 'shortcut-list' }">
+            <command-icon class="mr-2" />
+            Shortcuts
+            <shortkey-badge :value="['Ctrl', 'k']" class="ml-2" />
+          </b-nav-item>
+          <b-nav-item :to="{ name: 'tip-list' }">
+            <smile-icon class="mr-2" />
+            Tips
+            <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2" />
+          </b-nav-item>
+          <b-nav-item :to="{ name: 'history' }">
+            <clock-icon class="mr-2" />
+            History
+            <shortkey-badge :value="['Ctrl', 'Shift', 'h']" class="ml-2" />
+          </b-nav-item>
+          <b-nav-item :href="$config.get('adminUrl')">
+            <trello-icon class="mr-2" />
+            Admin
+          </b-nav-item>
+        </slot>
       </b-nav>
     </div>
     <div class="app-sidebar__footer">
