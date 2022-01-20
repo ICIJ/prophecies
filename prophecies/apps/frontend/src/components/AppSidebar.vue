@@ -20,26 +20,26 @@ export default {
       <b-nav vertical>
         <slot name="items">
           <b-nav-item :to="{ name: 'dashboard' }" exact>
-            <grid-icon class="mr-2" />
+            <grid-icon class="mr-3" />
             Dashboard
           </b-nav-item>
           <b-nav-item :to="{ name: 'shortcut-list' }">
-            <command-icon class="mr-2" />
+            <command-icon class="mr-3" />
             Shortcuts
             <shortkey-badge :value="['Ctrl', 'k']" class="ml-2" />
           </b-nav-item>
           <b-nav-item :to="{ name: 'tip-list' }">
-            <smile-icon class="mr-2" />
+            <smile-icon class="mr-3" />
             Tips
             <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2" />
           </b-nav-item>
           <b-nav-item :to="{ name: 'history' }">
-            <clock-icon class="mr-2" />
+            <clock-icon class="mr-3" />
             History
             <shortkey-badge :value="['Ctrl', 'Shift', 'h']" class="ml-2" />
           </b-nav-item>
           <b-nav-item :href="$config.get('adminUrl')">
-            <trello-icon class="mr-2" />
+            <trello-icon class="mr-3" />
             Admin
           </b-nav-item>
         </slot>
