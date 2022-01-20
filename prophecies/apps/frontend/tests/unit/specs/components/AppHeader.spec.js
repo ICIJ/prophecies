@@ -52,13 +52,8 @@ describe('AppHeader', () => {
       expect(wrapper.find('.app-header__nav-right__user__display-name').text()).toBe('Olivia Reinhardt')
     })
 
-    it('should build an avatar URL using the emailMd5', () => {
-      const src = wrapper.find('.app-header__nav-right__user__avatar').attributes('src')
-      expect(src).toBe('https://www.gravatar.com/avatar/628e9a99d87799e9d434b63d2c3744ca')
-    })
-
     it('should display a link to the admin if the user is staff', () => {
-      expect(wrapper.find('.app-header__nav-right__user__admin').exists()).toBeTruthy()
+      expect(wrapper.find('.user-profile-dropdown-menu__item--admin').exists()).toBeTruthy()
     })
   })
 
@@ -104,7 +99,7 @@ describe('AppHeader', () => {
     })
 
     it('should not display a link to the admin if the user isnt staff', () => {
-      expect(wrapper.find('.app-header__nav-right__user__admin').exists()).toBeFalsy()
+      expect(wrapper.find('.user-profile-dropdown-menu__item--admin').exists()).toBeFalsy()
     })
   })
 })
