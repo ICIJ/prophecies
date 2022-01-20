@@ -21,7 +21,11 @@
         const interpolate = this.$config.get('templateInterpolate')
         const avatarUrlTemplate = this.$config.get('avatarUrlTemplate')
         const compiled = template(avatarUrlTemplate, { interpolate })
-        return compiled(this.user)
+        try {
+          return compiled(this.user)
+        } catch (_) {
+          return null
+        }
       }
     }
   }
