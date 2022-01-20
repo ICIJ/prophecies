@@ -16,6 +16,7 @@ export default class User extends Model {
       email: this.attr(''),
       emailMd5: this.attr(''),
       isStaff: this.boolean(false),
+      isSuperuser: this.boolean(false),
       isMe: this.boolean(false),
       csrfToken: this.string(null).nullable()
     }
@@ -53,7 +54,7 @@ export default class User extends Model {
   /**
    * Get full name of the user.
    */
-  get displayFullName() {
+  get displayFullName () {
     if (!this.firstName || !this.lastName) {
       return this.username
     }

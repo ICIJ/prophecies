@@ -24,7 +24,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'url', 'first_name', 'last_name', 'username',
-                    'email_md5', 'is_staff', 'csrf_token']
+                    'email_md5', 'is_staff', 'is_superuser', 'csrf_token']
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
