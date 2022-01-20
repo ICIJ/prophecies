@@ -1,5 +1,4 @@
 <script>
-import { template } from 'lodash'
 import store from '@/store'
 import UserNotification from '@/models/UserNotification'
 import AppSearchForm from '@/components/AppSearchForm'
@@ -7,7 +6,8 @@ import AppVersion from '@/components/AppVersion'
 import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
 import ShortcutListCard from '@/components/ShortcutListCard'
-import UserProfileDropdownMenu from '@/components/UserProfileDropdownMenu.vue'
+import UserAvatar from '@/components/UserAvatar'
+import UserProfileDropdownMenu from '@/components/UserProfileDropdownMenu'
 
 export default {
   name: 'AppHeader',
@@ -17,10 +17,14 @@ export default {
     UserNotificationsDropdownMenu,
     ShortkeyBadge,
     ShortcutListCard,
+    UserAvatar,
     UserProfileDropdownMenu
   },
   props: {
-    reduced: {
+    hideNav: {
+      type: Boolean
+    },
+    hideSearch: {
       type: Boolean
     },
     tipQueryParams: {
@@ -52,12 +56,6 @@ export default {
     user () {
       return this.$config.get('user')
     },
-    userAvatarUrl () {
-      const interpolate = this.$config.get('templateInterpolate')
-      const avatarUrlTemplate = this.$config.get('avatarUrlTemplate')
-      const compiled = template(avatarUrlTemplate, { interpolate })
-      return compiled(this.user)
-    },
     hasUnreadNotifications () {
       return this.unreadNotifications > 0
     },
@@ -82,12 +80,14 @@ export default {
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="app-header__nav-left flex-grow-1">
         <slot name="nav-left" />
-        <app-search-form is-nav class="app-header__nav-left__search-form" />
+        <template v-if="!hideSearch">
+          <app-search-form is-nav class="app-header__nav-left__search-form" />
+        </template>
       </b-navbar-nav>
       <div class="ml-auto">
         <b-navbar-nav class="app-header__nav-right">
           <slot name="nav-right" />
-          <template v-if="!reduced">
+          <template v-if="!hideNav">
             <b-nav-item @click.prevent="toggleCinematicView">
               <film-icon class="mr-2" />
               {{ $t('appHeader.cinematicView') }}
@@ -131,7 +131,7 @@ export default {
               <span class="app-header__nav-right__user__display-name">
                 {{ user.displayFullName }}
               </span>
-              <img :src="userAvatarUrl" class="app-header__nav-right__user__avatar rounded-circle ml-2 d-none d-lg-inline" height="42" width="42" />
+              <user-avatar :user-id="user.id" class="app-header__nav-right__user__avatar ml-2 d-none d-lg-inline" />
             </template>
             <user-profile-dropdown-menu />
           </b-nav-item-dropdown>
