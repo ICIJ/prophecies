@@ -102,12 +102,5 @@
     "fullyCheckedItems": "Fully checked record | Fully checked records",
     "priority": "Priority",
     "round": "Round"
-  },
-  "userProfileDropdownMenu": {
-    "profile": "Your profile",
-    "api": "API",
-    "admin": "Admin",
-    "help": "Help",
-    "logOut": "Log out"
   }
 }
