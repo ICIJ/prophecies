@@ -18,7 +18,8 @@ export default class User extends Model {
       isStaff: this.boolean(false),
       isSuperuser: this.boolean(false),
       isMe: this.boolean(false),
-      csrfToken: this.string(null).nullable()
+      csrfToken: this.string(null).nullable(),
+      lastLogin: this.attr(null).nullable()
     }
   }
 
