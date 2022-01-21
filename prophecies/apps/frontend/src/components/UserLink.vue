@@ -1,8 +1,20 @@
 <script>
+  import UserCard from '@/components/UserCard'
   import User from '@/models/User'
 
   export default {
     name: 'UserLink',
+    components: {
+      UserCard
+    },
+    data () {
+      return {
+        mounted: false
+      }
+    },
+    async mounted () {
+      this.mounted = !!await this.$nextTick()
+    },
     props: {
       userId: {
         type: [String, Number]
@@ -12,6 +24,9 @@
         default: () => ({ })
       },
       useDisplayName: {
+        type: Boolean
+      },
+      noCard: {
         type: Boolean
       }
     },
@@ -39,5 +54,10 @@
     <slot v-bind="{ user }">
       {{ label }}
     </slot>
+    <template v-if="mounted && !noCard">
+      <b-popover :target="$el" triggers="hover focus" placement="bottom" variant="transparent">
+        <user-card :user-id="userId" />
+      </b-popover>
+    </template>
   </router-link>
 </template>

@@ -5,6 +5,12 @@ import Core from '@/core'
 
 describe('UserLink', () => {
 
+  function createContainer() {
+    const div = document.createElement('div')
+    document.body.appendChild(div)
+    return div
+  }
+
   beforeAll(() => {
     User.insert({
       data: {
@@ -24,6 +30,7 @@ describe('UserLink', () => {
 
     beforeEach(async () => {
       const localVue = createLocalVue()
+      const attachTo = createContainer()
       const propsData = { userId: '2000' }
       // Configure the local vue
       const core = Core.init(localVue).useAll()
@@ -32,7 +39,7 @@ describe('UserLink', () => {
       // Get router from core
       const { i18n, store, router } = core 
       // Finally, instanciate the component
-      wrapper = mount(UserLink, { localVue, propsData, i18n, store, router })
+      wrapper = mount(UserLink, { attachTo, localVue, propsData, i18n, store, router })
     })
 
     it('should build a link to the user profile', () => {
@@ -57,6 +64,7 @@ describe('UserLink', () => {
 
     beforeEach(async () => {
       const localVue = createLocalVue()
+      const attachTo = createContainer()
       const propsData = { userId: 'fatima' }
       // Configure the local vue
       const core = Core.init(localVue).useAll()
@@ -66,7 +74,7 @@ describe('UserLink', () => {
       const { i18n, store, router } = core
       const scopedSlots = { default: '<template slot-scope="{ user }">{{ user.email }}</template>'}
       // Finally, instanciate the component
-      wrapper = mount(UserLink, { localVue, propsData, i18n, store, router, scopedSlots })
+      wrapper = mount(UserLink, { attachTo, localVue, propsData, i18n, store, router, scopedSlots })
     })
 
     it('should show the email instead of the username', () => {
@@ -80,6 +88,7 @@ describe('UserLink', () => {
 
     beforeEach(async () => {
       const localVue = createLocalVue()
+      const attachTo = createContainer()
       const propsData = { userId: 'edmond' }
       // Configure the local vue
       const core = Core.init(localVue).useAll()
@@ -88,7 +97,7 @@ describe('UserLink', () => {
       // Get router from core
       const { i18n, store, router } = core
       // Finally, instanciate the component
-      wrapper = mount(UserLink, { localVue, propsData, i18n, store, router })
+      wrapper = mount(UserLink, { attachTo, localVue, propsData, i18n, store, router })
     })
 
     it('should show nothing when the user is unknown', () => {
