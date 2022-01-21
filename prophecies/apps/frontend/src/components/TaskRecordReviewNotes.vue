@@ -1,6 +1,7 @@
 <script>
 import { get, find, uniqueId } from 'lodash'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
+import UserLink from '@/components/UserLink'
 import TaskRecordReviewNoteTimestamp from '@/components/TaskRecordReviewNoteTimestamp'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import User from '@/models/User'
@@ -9,7 +10,8 @@ export default {
   name: 'TaskRecordReviewNote',
   components: {
     ShortkeyBadge,
-    TaskRecordReviewNoteTimestamp
+    TaskRecordReviewNoteTimestamp,
+    UserLink
   },
   props: {
     taskRecordReviewId: {
@@ -116,9 +118,9 @@ export default {
     </b-btn>
     <div v-for="review in history" :key="review.id" class="task-record-review-notes__item"  :class="{ 'task-record-review-notes__item--highlighted': review.id === highlightedReviewId }">
       <div class="task-record-review-notes__item__checker">
-        <router-link class="text-truncate" :to="{ name: 'user-retreive-profile', params: { username: review.checker.username } }">
+        <user-link class="text-truncate" :user-id="review.checker.id">
           {{ review.checker.displayName }}
-        </router-link>
+        </user-link>
       </div>
       <div class="task-record-review-notes__item__note">
         <template v-if="isMe(review.checker)">

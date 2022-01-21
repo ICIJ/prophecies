@@ -5,9 +5,13 @@ import User from '@/models/User'
 import { toVariant } from '@/utils/variant'
 import AlternativeValue from '@/models/AlternativeValue'
 import TaskRecordReview from '@/models/TaskRecordReview'
+import UserLink from '@/components/UserLink'
 
 export default {
   name: 'TaskRecordReviewHistory',
+  components: {
+    UserLink
+  },
   filters: {
     toVariant,
     firstLetter (str) {
@@ -87,12 +91,12 @@ export default {
   <div class="task-record-review-history">
     <div class="task-record-review-history__checker d-flex p-1" v-for="{ id, checker, alternativeValue, choice, note } in history" :key="id">
       <div class="task-record-review-history__checker__name" :class="{ 'task-record-review-history__checker__name--is-me': isMe(checker) }">
-        <router-link class="text-truncate" :to="{ name: 'user-retreive-profile', params: { username: checker.username } }">
+        <user-link class="text-truncate" :user-id="checker.id">
           {{ checker.displayName }}
           <template v-if="isMe(checker)">
             (you)
           </template>
-        </router-link>
+        </user-link>
       </div>
       <div v-if="choice!==null" class="task-record-review-history__checker__choice">
         <b-badge class="task-record-review-history__checker__choice__badge" :variant="choice.value | toVariant"  v-if="choice" :id="tooltipId+checker" >
