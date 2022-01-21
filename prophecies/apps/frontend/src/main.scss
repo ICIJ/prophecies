@@ -53,3 +53,16 @@ html {
     border-radius: 0 $input-border-radius $input-border-radius 0;
   }
 }
+
+.b-popover.b-popover-transparent {
+  .arrow {
+    display: none;
+  }
+
+  &, .popover-body {
+    box-shadow: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+}
