@@ -286,7 +286,7 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 CONSTANCE_CONFIG = {
     'appName': ('Prophecies', 'Name of the app to display publicaly'),
-    'avatarUrlTemplate': ('https://www.gravatar.com/avatar/{{ emailMd5 }}', 'Template to build the avatar URL'),
+    'avatarUrlTemplate': ('https://www.gravatar.com/avatar/{{ emailMd5 }}?d=mp', 'Template to build the avatar URL'),
     'defaultLocale': ('en', 'Define locale code (ie. "en", "fr", "jp", ...)'),
     'helpLink': ('https://github.com/ICIJ/prophecies/issues/new', 'Link to the support'),
     'helpDescription': ('Any trouble logging in?', 'Help text for the login page. Must be public.'),
