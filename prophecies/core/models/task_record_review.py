@@ -301,19 +301,23 @@ class TaskRecordReview(models.Model):
         # Avoid collecting statistics for uncomplete review
         if task and checker and my_choice:
             # Collect the statitics
-            reviews_choice_counts = sender.objects.filter(task_record__task=task, checker=checker, round=round).exclude(choice=None).count_by_checker_by_choice_by_round()
-            existing_stats = TaskUserChoiceStatistics.objects.filter(task=task, checker=checker, round=round )
+            reviews_choice_counts = sender.objects \
+                                        .filter(task_record__task=task, checker=checker, round=round) \
+                                        .exclude(choice=None) \
+                                        .count_by_checker_by_choice_by_round()
+            
             # because it's hard to guess the previous value of the review and
             # the count value of another choice can be staled
             # we remove all existing stats for the task/checker/round 
-            for stat in existing_stats :
-                stat.delete()
+            TaskUserChoiceStatistics.objects.filter(task=task, checker=checker, round=round ).delete()
                 
-            # create all the necessary stats for all of the choices 
+            # create all the necessary stats for all of the choices
+            taskUserChoiceStatisticsList = []
             for row in reviews_choice_counts:
-                local_stats = TaskUserChoiceStatistics.objects.create(task=task, choice_id=row.get('choice'), checker=checker, round=round)
-                local_stats.count=row.get('count')
-                local_stats.save()        
+                tucs = TaskUserChoiceStatistics(task=task, choice_id=row['choice'], checker=checker, round=round, count=row['count'])
+                taskUserChoiceStatisticsList.append(tucs)
+            
+            TaskUserChoiceStatistics.objects.bulk_create(taskUserChoiceStatisticsList)
             
             
 

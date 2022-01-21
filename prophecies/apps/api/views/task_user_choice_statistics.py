@@ -8,8 +8,6 @@ from prophecies.core.models import TaskUserChoiceStatistics,Choice
 
    
 class TaskUserChoiceStatisticsSerializer(serializers.ModelSerializer):
-    choice_id = serializers.PrimaryKeyRelatedField(
-        queryset=Choice.objects.all(), source='choice', write_only=True)
     choice = ResourceRelatedField(many=False, read_only=True)
     checker = ResourceRelatedField(many=False, read_only=True)
     task = ResourceRelatedField(many=False, read_only=True)
@@ -29,7 +27,6 @@ class TaskUserChoiceStatisticsSerializer(serializers.ModelSerializer):
         fields = [
                     'task',
                     'checker',
-                    'choice_id',
                     'choice',
                     'round',
                     'count',
