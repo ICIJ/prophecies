@@ -82,19 +82,18 @@ export default {
             Last login: {{ user.lastLogin | formatDate }}
           </li>
         </ul>
-
-          <div v-if="assignedTasks.length">
-            <p>Assigned in:</p>
-            <ul>
-              <li v-for="task in assignedTasks" :key="task.id" class="mb-2">
-                <router-link :to="task | taskRoute" class="font-weight-bold">
-                  {{ task.name }}
-                </router-link>
-                in {{ task.project.name }}
-                <task-status :task-id="task.id" class="ml-2" v-if="!task.open" />
-              </li>
-            </ul>
-          </div>
+        <div v-if="assignedTasks.length">
+          <p>Assigned in:</p>
+          <ul>
+            <li v-for="task in assignedTasks" :key="task.id" class="mb-2">
+              <router-link :to="task | taskRoute" class="font-weight-bold">
+                {{ task.name }}
+              </router-link>
+              in {{ task.project.name }}
+              <task-status :task-id="task.id" class="ml-2" v-if="!task.open" />
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
