@@ -1,6 +1,5 @@
 <script>
-import { get, find, filter, uniqueId } from 'lodash'
-import moment from 'moment'
+import { get, find, uniqueId } from 'lodash'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
 import TaskRecordReviewNoteTimestamp from '@/components/TaskRecordReviewNoteTimestamp'
 import TaskRecordReview from '@/models/TaskRecordReview'
