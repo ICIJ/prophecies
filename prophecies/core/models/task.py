@@ -65,33 +65,31 @@ class Task(models.Model):
         return self.status == StatusType.OPEN
 
     @property
-    def is_open_changed(self):
-        if self.pk is not None:
-            instance = Task.objects.get(pk=self.pk)
-            return self.is_open != instance.is_open
-        return False
-
-    @property
     def is_closed(self):
         return self.status == StatusType.CLOSED
-
-    @property
-    def is_closed_changed(self):
-        if self.pk is not None:
-            instance = Task.objects.get(pk=self.pk)
-            return self.is_closed != instance.is_closed
-        return False
 
     @property
     def is_locked(self):
         return self.status == StatusType.LOCKED
 
+    @staticmethod
+    def has_attribute_changed(current_instance, attribute_name):
+        if current_instance.pk is not None:
+            instance = Task.objects.get(pk=current_instance.pk)
+            return getattr(current_instance,attribute_name) != getattr(instance,attribute_name)
+        return False
+    
+    @property
+    def is_open_changed(self):
+        return Task.has_attribute_changed(self,'is_open')
+    
+    @property
+    def is_closed_changed(self):
+        return Task.has_attribute_changed(self,'is_closed')
+    
     @property
     def is_locked_changed(self):
-        if self.pk is not None:
-            instance = Task.objects.get(pk=self.pk)
-            return self.is_locked != instance.is_locked
-        return False
+        return Task.has_attribute_changed(self,'is_locked')
 
     @cached_property
     def progress(self):
