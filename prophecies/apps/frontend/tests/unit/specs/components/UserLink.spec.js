@@ -52,11 +52,11 @@ describe('UserLink', () => {
     })
   })
 
-  describe('user link with slot', () => {
+  describe('user link with slot, and username as "userId"', () => {
 
     beforeEach(async () => {
       const localVue = createLocalVue()
-      const propsData = { userId: '2000' }
+      const propsData = { userId: 'fatima' }
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       // Configure the core
