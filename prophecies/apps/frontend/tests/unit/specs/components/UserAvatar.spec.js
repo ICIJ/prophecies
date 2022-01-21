@@ -6,11 +6,11 @@ import Core from '@/core'
 describe('UserAvatar', () => {
   let wrapper
 
-  beforeAll(async () => {
+  beforeAll(() => {
     User.insert({
       data: { 
         id: '2000',
-        username: 'Fátima',
+        username: 'fatima',
         firstName: 'Fátima',
         lastName: 'Reinhardt',
         email: 'engineering@icij.org',
