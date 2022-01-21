@@ -35,7 +35,7 @@
 </script>
 
 <template>
-  <router-link :to="to">
+  <router-link :to="to" v-if="user">
     <slot v-bind="{ user }">
       {{ label }}
     </slot>

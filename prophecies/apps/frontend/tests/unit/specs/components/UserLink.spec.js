@@ -4,7 +4,6 @@ import User from '@/models/User'
 import Core from '@/core'
 
 describe('UserLink', () => {
-  let wrapper
 
   beforeAll(() => {
     User.insert({
@@ -21,6 +20,7 @@ describe('UserLink', () => {
   })
 
   describe('user link without slot', () => {
+    let wrapper
 
     beforeEach(async () => {
       const localVue = createLocalVue()
@@ -53,6 +53,7 @@ describe('UserLink', () => {
   })
 
   describe('user link with slot, and username as "userId"', () => {
+    let wrapper
 
     beforeEach(async () => {
       const localVue = createLocalVue()
@@ -71,6 +72,28 @@ describe('UserLink', () => {
     it('should show the email instead of the username', () => {
       const text = wrapper.text()
       expect(text).toBe('engineering@icij.org')
+    })
+  })
+
+  describe('disabled user link with an unknown user', () => {
+    let wrapper
+
+    beforeEach(async () => {
+      const localVue = createLocalVue()
+      const propsData = { userId: 'edmond' }
+      // Configure the local vue
+      const core = Core.init(localVue).useAll()
+      // Configure the core
+      await core.configure()
+      // Get router from core
+      const { i18n, store, router } = core
+      // Finally, instanciate the component
+      wrapper = mount(UserLink, { localVue, propsData, i18n, store, router })
+    })
+
+    it('should show nothing when the user is unknown', () => {
+      const text = wrapper.text()
+      expect(text).toBe('')
     })
   })
 })
