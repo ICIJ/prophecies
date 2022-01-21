@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     user () {
-      return User.query().where('username', this.username).first()
+      return User.find(this.username)
     },
     assignedTasks () {
       return Task

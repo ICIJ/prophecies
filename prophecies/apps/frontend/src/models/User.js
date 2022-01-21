@@ -42,6 +42,13 @@ export default class User extends Model {
     return user
   }
 
+  static find (idOrUsername) {
+    if (isNaN(idOrUsername)) {
+      return this.query().where('username', idOrUsername).first()
+    }
+    return this.query().whereId(idOrUsername).first()
+  }
+
   /**
    * Get first name of the user.
    */

@@ -35,7 +35,7 @@ export default {
     },
     userRoute () {
       const params = { username: this.username }
-      return { name: 'user-retreive', params }
+      return { name: 'user-retreive-profile', params }
     },
     fetchUserLoader () {
       return uniqueId('load-user-')
@@ -44,7 +44,7 @@ export default {
       return this.$t(this.routeTitleKey, this.user)
     },
     user () {
-      return User.query().where('username', this.username).first()
+      return User.find(this.username)
     },
     icon () {
       return 'UserIcon'

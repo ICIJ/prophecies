@@ -38,5 +38,37 @@ describe('User', () => {
       await expect(User.api().me()).rejects.toBeInstanceOf(Error)
       expect(User.me()).toBe(null)
     })
+
+    it('should find a user with id 3000', () => {
+      User.insert({
+        data: {
+          id: '3000',
+          username: 'fatima'
+        }
+      })
+      expect(User.find('3000')).toBeInstanceOf(Object)
+      expect(User.find('3000')).toHaveProperty('username', 'fatima')
+    })
+
+    it('should find a user with username "fatima"', () => {
+      User.insert({
+        data: {
+          id: '3000',
+          username: 'fatima'
+        }
+      })
+      expect(User.find('fatima')).toBeInstanceOf(Object)
+      expect(User.find('fatima')).toHaveProperty('username', 'fatima')
+    })
+
+    it('should not find a user with id 4000', () => {
+      User.insert({
+        data: {
+          id: '3000',
+          username: 'fatima'
+        }
+      })
+      expect(User.find('4000')).toBeNull()
+    })
   })
 })
