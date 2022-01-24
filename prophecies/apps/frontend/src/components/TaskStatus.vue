@@ -33,6 +33,9 @@ export default {
     },
     taskLabel () {
       return this.$t(this.taskLabelKey)
+    },
+    size () {
+      return this.status === TaskStatusEnum.LOCKED ? '1.3x' : '1x'
     }
   }
 }
@@ -40,7 +43,7 @@ export default {
 
 <template>
   <span class="task-status d-flex-inline justify-content-center" :class="classList">
-    <component :is="icon" size="1x" />
+    <component :is="icon" :size="size" />
     {{ taskLabel }}
   </span>
 </template>

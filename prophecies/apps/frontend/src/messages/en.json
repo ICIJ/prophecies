@@ -106,7 +106,8 @@
   "taskStatus": {
     "open": "Open",
     "locked": "Locked",
-    "closed": "Closed"
+    "closed": "Closed",
+    "done": "Done"
   },
   "userProfileDropdownMenu": {
     "profile": "Your profile",

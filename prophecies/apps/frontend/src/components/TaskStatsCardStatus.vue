@@ -1,9 +1,10 @@
 <script>
 import { formatDate } from '@/utils/date'
 import Task, { TaskStatusEnum } from '@/models/Task'
-
-
+import TaskStatus from '@/components/TaskStatus.vue'
+import { camelCase } from 'lodash'
 export default {
+  components: { TaskStatus },
   name: 'TaskStatsCardStatus',
   props: {
     taskId: {
@@ -32,19 +33,27 @@ export default {
   },
   computed: {
     celebrate () {
-      return this.taskIsDone || this.taskIsClosed
+      return this.taskIsDone || this.task.close
     },
     task () {
       return Task.query().with('project').find(this.taskId)
     },
-    taskIsLocked () {
-      return this.task.status === TaskStatusEnum.LOCKED
-    },
-    taskIsClosed () {
-      return this.task.status === TaskStatusEnum.CLOSED
-    },
     taskIsDone () {
       return this.taskRecordsCount !== 0 ? (this.taskRecordsDoneCount / this.taskRecordsCount) === 1 : false
+    },
+
+    status () {
+      if (this.task.open && this.taskIsDone) {
+        return 'DONE'
+      }
+
+      return this.task?.status || TaskStatusEnum.OPEN
+    },
+    taskLabelKey () {
+      return ['taskStatus', camelCase(this.status)].join('.')
+    },
+    taskLabel () {
+      return this.$t(this.taskLabelKey)
     }
   }
 }
@@ -54,22 +63,19 @@ export default {
   <div class="task-stats-card__status d-flex flex-column justify-content-between text-right" :class="{'task-stats-card__status--extended':extended}">
     <div  class='d-flex flex-column flex-grow-1 justify-content-between '>
       <div class="task-stats-card__status__top " :class="{'ml-5 ' : extended}">
-        <span v-if="taskIsClosed" class="task-stats-card__status__top--closed text-nowrap" >
-          {{ $t('taskStatsCard.closed') }}
-        <span v-if="extended && celebrate" class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">{{taskIsClosed? 'Closed':'Done'}}</span>
-        </span>
+        <template v-if="task.close">
+          <task-status :task-id="task.id" class="ml-2" />
+          <template v-if="extended && celebrate"><span class="ml-2">🎉</span><span class="sr-only">{{taskLabel}}</span></template>
+        </template>
         <span v-else class="task-stats-card__status__top__priority bg-warning rounded py-1 px-2 text-nowrap">
           {{ $t('taskStatsCard.priority') }} {{ task.priority }}
         </span>
       </div>
-      <div  v-if="taskIsLocked"  :class="{' mt-0 py-0' : extended,'py-2':!extended}" >
-        <span  class="task-stats-card__status__lock text-danger " >
-          <lock-icon size="1.3x" /><span class="sr-only">Unlock</span>
-          <span class="task-stats-card__status__lock--locked ml-2 "> {{ $t('taskStatsCard.locked') }}</span>
-        </span>
+      <div  v-if="task.locked"  :class="{'mt-0 py-0' : extended,'py-2':!extended}" >
+          <task-status :task-id="task.id" class="ml-2" />
       </div>
-      <div v-else-if="!extended && celebrate" class="mt-2 pt-1">
-        <span class="task-stats-card__status--closed ml-2">🎉</span><span class="sr-only">{{taskIsClosed? 'Closed':'Done'}}</span>
+      <div v-else-if="!extended && celebrate" class="py-2 mb-1">
+        <span class="ml-2">🎉</span><span class="sr-only">{{taskLabel}}</span>
       </div>
     </div>
     <div v-if="extended" class="task-stats-card__read-tips pt-2 ">
@@ -84,14 +90,6 @@ export default {
 
       &--extended {
         flex: 0 1 275px
-      }
-
-      &__top{
-
-        &--closed  {
-          color: $secondary;
-        }
-
       }
 
     }

@@ -26,8 +26,8 @@ describe('Task stats card status', () => {
     expect(readTipsButtonExt.exists()).toBeTruthy()
   })
 
-  it('should show the task locked', async () => {
-    const element = wrapper.find('.task-stats-card__status__lock--locked')
+  it('should show the task status', async () => {
+    const element = wrapper.find('task-status-stub')
     expect(element.exists()).toBe(true)
   })
 })
