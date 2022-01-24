@@ -1,70 +1,70 @@
 <script>
-  import { uniqueId } from 'lodash'
-  import AppWaiter from '@/components/AppWaiter'
-  import TaskStatus from '@/components/TaskStatus'
-  import UserAvatar from '@/components/UserAvatar'
-  import Task from '@/models/Task'
-  import User from '@/models/User'
+import { uniqueId } from 'lodash'
+import AppWaiter from '@/components/AppWaiter'
+import TaskStatus from '@/components/TaskStatus'
+import UserAvatar from '@/components/UserAvatar'
+import Task from '@/models/Task'
+import User from '@/models/User'
 
-  export default {
-    name: 'UserCard',
-    components: {
-      AppWaiter,
-      TaskStatus,
-      UserAvatar,
-      // UserLink is a recursive component
-      UserLink: () => import('@/components/UserLink')
+export default {
+  name: 'UserCard',
+  components: {
+    AppWaiter,
+    TaskStatus,
+    UserAvatar,
+    // UserLink is a recursive component
+    UserLink: () => import('@/components/UserLink')
+  },
+  props: {
+    userId: {
+      type: [String, Number]
+    }
+  },
+  data () {
+    return {
+      assignedTaskIds: []
+    }
+  },
+  async created () {
+    await this.fetchWithLoader()
+  },
+  computed: {
+    user () {
+      return User.find(this.userId)
     },
-    props: {
-      userId: {
-        type: [String, Number]
-      }
+    assignedTasks () {
+      return Task
+        .query()
+        .with('project')
+        .findIn(this.assignedTaskIds)
     },
-    data () {
-      return { 
-        assignedTaskIds: []
-      }
-    },
-    async created () {
-      await this.fetchWithLoader()
-    },
-    computed: {
-      user () {
-        return User.find(this.userId)
-      },
-      assignedTasks () {
-        return Task
-          .query()
-          .with('project')
-          .findIn(this.assignedTaskIds)
-      },
-      fetchLoader () {
-        return uniqueId('fetch-user-card-')
-      }
-    },
-    filters: {
-      taskRoute ({ id: taskId }) {
-        return {
-          name: 'task-record-review-list',
-          params: {
-            taskId
-          }
+    fetchLoader () {
+      return uniqueId('fetch-user-card-')
+    }
+  },
+  filters: {
+    taskRoute ({ id: taskId }) {
+      return {
+        name: 'task-record-review-list',
+        params: {
+          taskId
         }
       }
+    }
+  },
+  methods: {
+    async fetch () {
+      const params = { 'filter[checkers]': this.user.id }
+      const { entities: { Task: tasks } } = await Task.api().get('', { params })
+      this.assignedTaskIds = tasks.map(t => t.id)
     },
-    methods: {
-      async fetch () {
-        const params = { 'filter[checkers]': this.user.id }
-        const { entities: { Task: tasks } } = await Task.api().get('', { params })
-        this.assignedTaskIds = tasks.map(t => t.id)
-      },
-      async fetchWithLoader () {
-        this.$wait.start(this.fetchLoader)
-        await this.fetch()
-        this.$wait.end(this.fetchLoader)
-      }
+    async fetchWithLoader () {
+      this.$wait.start(this.fetchLoader)
+      await this.fetch()
+      this.$wait.end(this.fetchLoader)
     }
   }
+}
 </script>
 
 <template>
