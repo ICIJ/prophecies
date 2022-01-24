@@ -2,7 +2,7 @@
   <div class="stats-list d-flex align-items-start">
    <app-sidebar class="w-100 sticky-top" />
     <div class="stats-list__container flex-grow-1">
-      <app-header hide-nav />
+      <app-header hide-nav hide-search/>
       <div class="container-fluid p-5">
         <div class="col-12">
           <div class="d-flex flex-wrap justify-content-between">
