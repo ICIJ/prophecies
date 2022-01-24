@@ -1,21 +1,21 @@
 <script>
-  import AppVersion from './AppVersion.vue'
+import AppVersion from './AppVersion.vue'
 
-  export default {
-    name: 'UserProfileDropdownMenu',
-    components: {
-      AppVersion,
+export default {
+  name: 'UserProfileDropdownMenu',
+  components: {
+    AppVersion
+  },
+  computed: {
+    user () {
+      return this.$config.get('user')
     },
-    computed: {
-      user () {
-        return this.$config.get('user')
-      },
-      userRoute () {
-        const params = { username: this.user.username }
-        return { name: 'user-retreive-profile', params }
-      }
+    userRoute () {
+      const params = { username: this.user.username }
+      return { name: 'user-retrieve-profile', params }
     }
   }
+}
 </script>
 
 <template>

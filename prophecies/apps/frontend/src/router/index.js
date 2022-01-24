@@ -8,8 +8,8 @@ import TaskRecordReviewRetrieve from '@/views/TaskRecordReviewRetrieve.vue'
 import TipList from '@/views/TipList.vue'
 import TipRetrieve from '@/views/TipRetrieve.vue'
 import StatsList from '@/views/StatsList.vue'
-import UserRetreive from '@/views/UserRetreive.vue'
-import UserRetreiveProfile from '@/views/UserRetreiveProfile.vue'
+import UserRetrieve from '@/views/UserRetrieve.vue'
+import UserRetrieveProfile from '@/views/UserRetrieveProfile.vue'
 import Bookmarks from '@/views/Bookmarks'
 
 export const router = {
@@ -32,14 +32,14 @@ export const router = {
     },
     {
       path: '/users/:username',
-      component: UserRetreive,
+      component: UserRetrieve,
       props: true,
       children: [
         {
-          name: 'user-retreive-profile',
+          name: 'user-retrieve-profile',
           path: '',
           props: true,
-          component: UserRetreiveProfile
+          component: UserRetrieveProfile
         }
       ]
     },
@@ -86,7 +86,7 @@ export const router = {
       props: true
     },
     {
-      name: 'tip-retreive',
+      name: 'tip-retrieve',
       path: '/tips/:tipId',
       component: TipRetrieve,
       props: true

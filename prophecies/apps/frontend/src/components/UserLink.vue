@@ -1,52 +1,52 @@
 <script>
-  import UserCard from '@/components/UserCard'
-  import User from '@/models/User'
+import UserCard from '@/components/UserCard'
+import User from '@/models/User'
 
-  export default {
-    name: 'UserLink',
-    components: {
-      UserCard
+export default {
+  name: 'UserLink',
+  components: {
+    UserCard
+  },
+  data () {
+    return {
+      mounted: false
+    }
+  },
+  async mounted () {
+    this.mounted = !!await this.$nextTick()
+  },
+  props: {
+    userId: {
+      type: [String, Number]
     },
-    data () {
-      return {
-        mounted: false
+    params: {
+      type: Object,
+      default: () => ({ })
+    },
+    useDisplayName: {
+      type: Boolean
+    },
+    noCard: {
+      type: Boolean
+    }
+  },
+  computed: {
+    user () {
+      return User.find(this.userId)
+    },
+    to () {
+      const username = this.user.username
+      const params = { username, ...this.params }
+      return { name: 'user-retrieve-profile', params }
+    },
+    label () {
+      if (this.useDisplayName) {
+        return this.user.displayName
       }
-    },
-    async mounted () {
-      this.mounted = !!await this.$nextTick()
-    },
-    props: {
-      userId: {
-        type: [String, Number]
-      },
-      params: {
-        type: Object,
-        default: () => ({ })
-      },
-      useDisplayName: {
-        type: Boolean
-      },
-      noCard: {
-        type: Boolean
-      }
-    },
-    computed: {
-      user () {
-        return User.find(this.userId)
-      },
-      to () {
-        const username = this.user.username
-        const params = { username, ...this.params }
-        return { name: 'user-retreive-profile', params }
-      },
-      label () {
-        if (this.useDisplayName) {
-          return this.user.displayName
-        }
-        return `@${this.user.username}`
-      }
+      return `@${this.user.username}`
     }
   }
+}
 </script>
 
 <template>

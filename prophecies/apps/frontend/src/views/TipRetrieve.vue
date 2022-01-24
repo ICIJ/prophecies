@@ -19,7 +19,7 @@ export default {
       type: [String, Number]
     }
   },
-  created() {
+  created () {
     return this.setup()
   },
   computed: {
@@ -63,9 +63,9 @@ export default {
 </script>
 
 <template>
-  <div class="tip-retreive d-flex align-items-start">
+  <div class="tip-retrieve d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top" />
-    <div class="tip-retreive__container flex-grow-1">
+    <div class="tip-retrieve__container flex-grow-1">
       <app-header hide-nav />
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchTipLoader" waiter-class="my-5 mx-auto d-block">

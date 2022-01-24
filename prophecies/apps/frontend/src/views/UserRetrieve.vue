@@ -8,7 +8,7 @@ import AppWaiter from '@/components/AppWaiter'
 import PageHeader from '@/components/PageHeader'
 
 export default {
-  name: 'UserRetreive',
+  name: 'UserRetrieve',
   components: {
     AppHeader,
     AppSidebar,
@@ -35,7 +35,7 @@ export default {
     },
     userRoute () {
       const params = { username: this.username }
-      return { name: 'user-retreive-profile', params }
+      return { name: 'user-retrieve-profile', params }
     },
     fetchUserLoader () {
       return uniqueId('load-user-')
@@ -74,7 +74,7 @@ export default {
 </script>
 
 <template>
-  <div class="user-retreive d-flex align-items-start">
+  <div class="user-retrieve d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top">
       <template #items>
         <b-nav-item :to="userRoute" exact>
@@ -91,7 +91,7 @@ export default {
         </b-nav-item>
       </template>
     </app-sidebar>
-    <div class="user-retreive__container flex-grow-1">
+    <div class="user-retrieve__container flex-grow-1">
       <app-header hide-nav hide-search />
       <div class="container-fluid">
         <page-header :title="title" :icon="icon" class="mb-5" />

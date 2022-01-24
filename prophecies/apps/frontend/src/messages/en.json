@@ -115,7 +115,7 @@
     "help": "Help",
     "logOut": "Log out"
   },
-  "userRetreiveProfile": {
+  "userRetrieveProfile": {
     "title": {
       "yours": "Your profile",
       "others": "{displayFullName}'s profile"

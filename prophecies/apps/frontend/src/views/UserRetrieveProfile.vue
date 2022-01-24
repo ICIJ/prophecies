@@ -6,7 +6,7 @@ import Task from '@/models/Task'
 import User from '@/models/User'
 
 export default {
-  name: 'UserRetreiveProfile',
+  name: 'UserRetrieveProfile',
   components: {
     TaskStatus,
     UserAvatar
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <template>
-  <div class="user-retreive-profile" v-if="user">
+  <div class="user-retrieve-profile" v-if="user">
     <div class="d-flex">
       <div class="pr-4">
         <user-avatar :user-id="user.id" />

@@ -15,7 +15,7 @@
       <li class="latest-tips-card__tips__item" v-for="tip in latestTips" :key="tip.id">
         <div class="row">
           <div class="col">
-            <router-link :to="{ name: 'tip-retreive', params: { tipId: tip.id } }">
+            <router-link :to="{ name: 'tip-retrieve', params: { tipId: tip.id } }">
               <slot name="itemTitle" :tip="tip">
                 <h2 class="latest-tips-card__tips__item__title-tips font-weight-bold">
                   {{ tip.name }}

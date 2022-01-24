@@ -92,7 +92,7 @@ export default {
       // We need to find the id of the review assigned to the current user.
       const params = { 'filter[task_record__reviews__id]': this.taskRecordReviewId }
       const { response } = await TaskRecordReview.api().get('', { params })
-      // We retreive the review and change their default order
+      // We retrieve the review and change their default order
       // to ensure the review match with the current page is first.
       const reviews = get(response, 'data.data', []).sort(({ id }) => id !== this.taskRecordReviewId)
       const userReviewId = find(reviews, ({ id }) => TaskRecordReview.find(id)?.editable)?.id || null

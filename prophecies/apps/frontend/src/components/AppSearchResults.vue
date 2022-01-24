@@ -195,7 +195,7 @@ export default {
             :class="{ 'app-search-results__tabs__content__link--active': isActive(index) }"
             v-for="(tip, index) in querysetTips()"
             :key="tip.id"
-            :to="{ name: 'tip-retreive', params: { tipId: tip.id } }">
+            :to="{ name: 'tip-retrieve', params: { tipId: tip.id } }">
             <span v-html="highlight(tip.name)"></span>
           </router-link>
         </b-card-text>

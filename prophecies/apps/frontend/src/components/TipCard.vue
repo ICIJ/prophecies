@@ -9,7 +9,7 @@
     <div class="text-right text-secondary">
       Last modified: <strong>{{ tip.creator.displayName }}</strong>,
       <router-link
-        :to="{ name: 'tip-retreive', params: { tipId } }"
+        :to="{ name: 'tip-retrieve', params: { tipId } }"
         :title="tip.updatedAt | formatDateLong"
         v-b-tooltip.hover
         class="text-secondary">

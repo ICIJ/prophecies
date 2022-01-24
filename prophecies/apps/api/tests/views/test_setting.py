@@ -65,13 +65,13 @@ class TestSetting(TestCase):
         self.assertEqual(len(request.json().get('data')), 2)
 
 
-    def test_it_return_cannot_retreive_a_public_setting_for_unauthenticated_request(self):
+    def test_it_return_cannot_retrieve_a_public_setting_for_unauthenticated_request(self):
         self.client.logout()
         request = self.client.get('/api/v1/settings/defaultLocale/')
         self.assertEqual(request.status_code, 404)
 
 
-    def test_it_return_can_retreive_a_public_setting_for_unauthenticated_request(self):
+    def test_it_return_can_retrieve_a_public_setting_for_unauthenticated_request(self):
         Setting.objects.get(key='defaultLocale').publish()
         self.client.logout()
         request = self.client.get('/api/v1/settings/defaultLocale/')
