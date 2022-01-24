@@ -324,3 +324,20 @@ class TestTaskRecordReview(TestCase):
         }
         request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload, content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 403)
+
+    def test_it_returns_bookmarked_reviews_for_an_user(self):
+        TaskRecordReview.objects.create(task_record=self.task_record_foo)
+        TaskRecordReview.objects.create(task_record=self.task_record_bar)
+        self.task_record_foo.bookmarked_by.add(self.django)
+        self.task_record_bar.bookmarked_by.add(self.django)
+        self.task_record_foo.bookmarked_by.add(self.olivia)
+
+        self.client.login(username='django', password='django')
+        request = self.client.get('/api/v1/task-record-reviews/?filter[task_record__bookmarked_by]=%s' % self.django.id)
+        data = request.json().get('data')
+        self.assertEqual(len(data), 2)
+
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/task-record-reviews/?filter[task_record__bookmarked_by]=%s' % self.olivia.id)
+        data = request.json().get('data')
+        self.assertEqual(len(data), 1)

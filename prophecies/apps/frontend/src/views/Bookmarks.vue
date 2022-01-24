@@ -45,8 +45,6 @@ export default {
         .with('project')
         .with('task')
         .with('taskRecord')
-        .where('bookmarked', true)
-        .where('checkerId', User.me().id)
         .get()
     },
     filteredBookmarks () {
@@ -59,6 +57,11 @@ export default {
       return groupBy(this.filteredBookmarks, (record) => {
         return record.task.project ? record.task.project.name : ''
       })
+    },
+    taskRecordReviewsParams () {
+      return {
+        'filter[task_record__bookmarked_by]': User.me().id
+      }
     }
   },
   methods: {
@@ -75,8 +78,9 @@ export default {
       await fn()
       this.$wait.end(loader)
     },
-    fetchBookmarks() {
-      return TaskRecordReview.api().get()
+    async fetchBookmarks() {
+      const params = this.taskRecordReviewsParams
+      return TaskRecordReview.api().get('', { params })
     },
     bookmarksGroupedByTask (records) {
       return groupBy(records, (record) => {

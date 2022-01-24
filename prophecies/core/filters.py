@@ -1,4 +1,3 @@
-from xmlrpc.client import Boolean
 from django_filters import CharFilter, FilterSet
 from prophecies.core.models import TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record_review import StatusType
@@ -27,6 +26,7 @@ class TaskRecordReviewFilter(FilterSet):
     task_record__locked = CharFilter(method='locked_filter')
     task_record__has_notes = CharFilter(method='has_notes_filter')
     task_record__has_disagreements = CharFilter(method='has_disagreements_filter')
+    task_record__bookmarked_by = CharFilter(method='bookmarked_by_filter')
 
     class Meta:
         model = TaskRecordReview
@@ -53,19 +53,22 @@ class TaskRecordReviewFilter(FilterSet):
     def boolean_filter_on(self, queryset, filter_name, value):
         is_param_valid, filter_value = self.get_as_boolean(value)
         if is_param_valid:
-            filter = {filter_name:filter_value}
+            ftr = {filter_name: filter_value}
             return queryset \
-                    .filter(**filter)
+                    .filter(**ftr)
         return queryset
     
     def has_disagreements_filter(self, queryset, name, value):
-        return self.boolean_filter_on(queryset,"task_record__has_disagreements",value)   
+        return self.boolean_filter_on(queryset, "task_record__has_disagreements", value)
         
     def has_notes_filter(self, queryset, name, value):
-        return self.boolean_filter_on(queryset,"task_record__has_notes",value)
+        return self.boolean_filter_on(queryset, "task_record__has_notes", value)
 		
     def locked_filter(self, queryset, name, value):
-        return self.boolean_filter_on(queryset,"task_record__locked",value)  
+        return self.boolean_filter_on(queryset, "task_record__locked", value)
+
+    def bookmarked_by_filter(self, queryset, name, value):
+        return queryset.filter(task_record__bookmarked_by=value)
 
     def reviewed_filter(self, queryset, name, value):
         is_param_valid, filter_value = self.get_as_boolean(value)
