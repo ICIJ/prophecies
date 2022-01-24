@@ -9,6 +9,11 @@ export default {
     AppBrand,
     AppVersion,
     ShortkeyBadge
+  },
+  computed: {
+    inDev () {
+      return process.env.NODE_ENV === "development"
+    }
   }
 }
 </script>
@@ -38,7 +43,7 @@ export default {
             History
             <shortkey-badge :value="['Ctrl', 'Shift', 'h']" class="ml-2" />
           </b-nav-item>
-          <b-nav-item :to="{ name: 'bookmarks' }">
+          <b-nav-item :to="{ name: 'bookmarks' }" v-if="inDev">
             <bookmark-icon class="mr-3" />
             Bookmarks
           </b-nav-item>
