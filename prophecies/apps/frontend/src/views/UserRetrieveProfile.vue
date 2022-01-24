@@ -20,13 +20,8 @@ export default {
     formatDate (d) {
       return formatDateLongAlt(d)
     },
-    taskRoute ({ id: taskId }) {
-      return {
-        name: 'task-record-review-list',
-        params: {
-          taskId
-        }
-      }
+    isTaskOpen (taskId) {
+      return Task.find(taskId)?.open
     }
   },
   data () {
@@ -40,12 +35,6 @@ export default {
   computed: {
     user () {
       return User.find(this.username)
-    },
-    assignedTasks () {
-      return Task
-        .query()
-        .with('project')
-        .findIn(this.assignedTaskIds)
     }
   },
   methods: {
@@ -81,15 +70,11 @@ export default {
             Last login: {{ user.lastLogin | formatDate }}
           </li>
         </ul>
-        <div v-if="assignedTasks.length">
+        <div v-if="assignedTaskIds.length">
           <p>Assigned in:</p>
           <ul>
-            <li v-for="task in assignedTasks" :key="task.id" class="mb-2">
-              <router-link :to="task | taskRoute" class="font-weight-bold">
-                {{ task.name }}
-              </router-link>
-              in {{ task.project.name }}
-              <task-status :task-id="task.id" class="ml-2" v-if="!task.open" />
+            <li v-for="taskId in assignedTaskIds" :key="taskId" class="mb-2">
+              <task-list-item :task-id="taskId" :no-status="taskId | isTaskOpen" />
             </li>
           </ul>
         </div>

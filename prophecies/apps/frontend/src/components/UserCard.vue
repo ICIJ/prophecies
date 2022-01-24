@@ -1,7 +1,7 @@
 <script>
 import { uniqueId } from 'lodash'
 import AppWaiter from '@/components/AppWaiter'
-import TaskStatus from '@/components/TaskStatus'
+import TaskListItem from '@/components/TaskListItem'
 import UserAvatar from '@/components/UserAvatar'
 import Task from '@/models/Task'
 import User from '@/models/User'
@@ -10,7 +10,7 @@ export default {
   name: 'UserCard',
   components: {
     AppWaiter,
-    TaskStatus,
+    TaskListItem,
     UserAvatar,
     // UserLink is a recursive component
     UserLink: () => import('@/components/UserLink')
@@ -21,7 +21,7 @@ export default {
     }
   },
   data () {
-    return {
+    return { 
       assignedTaskIds: []
     }
   },
@@ -32,24 +32,13 @@ export default {
     user () {
       return User.find(this.userId)
     },
-    assignedTasks () {
-      return Task
-        .query()
-        .with('project')
-        .findIn(this.assignedTaskIds)
-    },
     fetchLoader () {
       return uniqueId('fetch-user-card-')
     }
   },
   filters: {
-    taskRoute ({ id: taskId }) {
-      return {
-        name: 'task-record-review-list',
-        params: {
-          taskId
-        }
-      }
+    isTaskOpen (taskId) {
+      return Task.find(taskId)?.open
     }
   },
   methods: {
@@ -79,15 +68,11 @@ export default {
           <p>
             <user-link class="font-weight-bold text-muted" no-card :user-id="userId" />
           </p>
-          <div v-if="assignedTasks.length">
+          <div v-if="assignedTaskIds.length">
             <p>Assigned in:</p>
             <ul>
-              <li v-for="task in assignedTasks" :key="task.id" class="mb-2">
-                <router-link :to="task | taskRoute" class="font-weight-bold">
-                  {{ task.name }}
-                </router-link>
-                in {{ task.project.name }}
-                <task-status :task-id="task.id" class="ml-2" v-if="!task.open" />
+              <li v-for="taskId in assignedTaskIds" :key="taskId" class="mb-2">
+                <task-list-item :task-id="taskId" :no-status="taskId | isTaskOpen" />
               </li>
             </ul>
           </div>
