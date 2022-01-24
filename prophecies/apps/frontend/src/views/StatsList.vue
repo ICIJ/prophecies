@@ -56,7 +56,7 @@ import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
 
 import TaskStatsCard from '@/components/TaskStatsCard'
-import Task, { TaskStatus, TaskStatusOrder } from '@/models/Task'
+import Task, { TaskStatusEnum, TaskStatusOrder } from '@/models/Task'
 
 import StatsByRound from '@/components/StatsByRound.vue'
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
@@ -149,7 +149,7 @@ export default {
     },
     tasks () {
       const sortedTasks = this.sortByCb(this.unorderedTasks)
-      return this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatus.OPEN || TaskStatus.LOCKED]) : sortedTasks
+      return this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatusEnum.OPEN || TaskStatusEnum.LOCKED]) : sortedTasks
     },
     onlyOpenTasks: {
       get () {

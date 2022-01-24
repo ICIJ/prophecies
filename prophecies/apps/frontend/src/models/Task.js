@@ -6,15 +6,15 @@ import Project from '@/models/Project'
 import TaskChecker from '@/models/TaskChecker'
 import User from '@/models/User'
 
-export const TaskStatus = {
+export const TaskStatusEnum = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
   LOCKED: 'LOCKED'
 }
 export const TaskStatusOrder = {
-  [TaskStatus.OPEN]: 0,
-  [TaskStatus.LOCKED]: 0,
-  [TaskStatus.CLOSED]: 1
+  [TaskStatusEnum.OPEN]: 0,
+  [TaskStatusEnum.LOCKED]: 0,
+  [TaskStatusEnum.CLOSED]: 1
 }
 export default class Task extends Model {
   static entity = 'Task'
@@ -58,14 +58,14 @@ export default class Task extends Model {
   }
 
   get open () {
-    return this.status === TaskStatus.OPEN
+    return this.status === TaskStatusEnum.OPEN
   }
 
   get close () {
-    return this.status === TaskStatus.CLOSED
+    return this.status === TaskStatusEnum.CLOSED
   }
 
   get locked () {
-    return this.status === TaskStatus.LOCKED
+    return this.status === TaskStatusEnum.LOCKED
   }
 }

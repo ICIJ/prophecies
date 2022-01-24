@@ -1,6 +1,6 @@
 <script>
 import { camelCase, kebabCase } from 'lodash'
-import Task, { TaskStatus } from '@/models/Task'
+import Task, { TaskStatusEnum } from '@/models/Task'
 
 export default {
   name: 'TaskStatus',
@@ -15,17 +15,18 @@ export default {
     },
     icon () {
       switch (this.status) {
-        case TaskStatus.OPEN:
+        case TaskStatusEnum.OPEN:
           return 'CheckIcon'
-        case TaskStatus.LOCKED:
+        case TaskStatusEnum.LOCKED:
           return 'LockIcon'
       }
+      return ''
     },
     task () {
       return Task.find(this.taskId)
     },
     status () {
-      return this.task?.status || TaskStatus.OPEN
+      return this.task?.status || TaskStatusEnum.OPEN
     },
     taskLabelKey () {
       return ['taskStatus', camelCase(this.status)].join('.')

@@ -1,6 +1,7 @@
 <script>
 import { formatDate } from '@/utils/date'
-import Task, { TaskStatus } from '@/models/Task'
+import Task, { TaskStatusEnum } from '@/models/Task'
+
 
 export default {
   name: 'TaskStatsCardStatus',
@@ -37,10 +38,10 @@ export default {
       return Task.query().with('project').find(this.taskId)
     },
     taskIsLocked () {
-      return this.task.status === TaskStatus.LOCKED
+      return this.task.status === TaskStatusEnum.LOCKED
     },
     taskIsClosed () {
-      return this.task.status === TaskStatus.CLOSED
+      return this.task.status === TaskStatusEnum.CLOSED
     },
     taskIsDone () {
       return this.taskRecordsCount !== 0 ? (this.taskRecordsDoneCount / this.taskRecordsCount) === 1 : false
