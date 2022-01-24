@@ -15,7 +15,7 @@ const FILTER_TYPES = {
 }
 
 export default {
-  name: 'SavedRecords',
+  name: 'Bookmarks',
   components: {
     AppSidebar,
     AppHeader,
@@ -36,10 +36,10 @@ export default {
     return this.setup()
   },
   computed: {
-    fetchSavedRecordsLoader () {
-      return uniqueId('load-saved-records-')
+    fetchBookmarksLoader () {
+      return uniqueId('load-bookmarks-')
     },
-    savedRecords () {
+    bookmarks () {
       return TaskRecordReview
         .query()
         .with('project')
@@ -49,14 +49,14 @@ export default {
         .where('checkerId', User.me().id)
         .get()
     },
-    filteredSavedRecords () {
-      let savedRecords = this.savedRecords.slice()
-      if (this.query[FILTER_TYPES.PROJECT]) savedRecords = savedRecords.filter(t => t.projectId === this.query[FILTER_TYPES.PROJECT])
-      if (this.query[FILTER_TYPES.TASK]) savedRecords = savedRecords.filter(t => t.taskId === this.query[FILTER_TYPES.TASK])
-      return savedRecords.sort(this.sortSavedRecordsByProjectAndTask)
+    filteredBookmarks () {
+      let bookmarks = this.bookmarks.slice()
+      if (this.query[FILTER_TYPES.PROJECT]) bookmarks = bookmarks.filter(t => t.projectId === this.query[FILTER_TYPES.PROJECT])
+      if (this.query[FILTER_TYPES.TASK]) bookmarks = bookmarks.filter(t => t.taskId === this.query[FILTER_TYPES.TASK])
+      return bookmarks.sort(this.sortBookmarksByProjectAndTask)
     },
-    savedRecordsGroupedByProject () {
-      return groupBy(this.filteredSavedRecords, (record) => {
+    bookmarksGroupedByProject () {
+      return groupBy(this.filteredBookmarks, (record) => {
         return record.task.project ? record.task.project.name : ''
       })
     }
@@ -64,9 +64,9 @@ export default {
   methods: {
     async setup () {
       try {
-        await this.waitFor(this.fetchSavedRecordsLoader, this.fetchSavedRecords)
+        await this.waitFor(this.fetchBookmarksLoader, this.fetchBookmarks)
       } catch (error) {
-        const title = 'Unable to retrieve the saved records'
+        const title = 'Unable to retrieve the bookmarks'
         this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
@@ -75,15 +75,15 @@ export default {
       await fn()
       this.$wait.end(loader)
     },
-    fetchSavedRecords() {
+    fetchBookmarks() {
       return TaskRecordReview.api().get()
     },
-    savedRecordsGroupedByTask (records) {
+    bookmarksGroupedByTask (records) {
       return groupBy(records, (record) => {
         return record.task ? record.task.name : ''
       })
     },
-    sortSavedRecordsByProjectAndTask (a, b) {
+    sortBookmarksByProjectAndTask (a, b) {
       if (!a.project) { return -1 }
       if (!b.project) { return 1 }
       const projectSort = a.project?.name.localeCompare(b.project?.name)
@@ -100,21 +100,21 @@ export default {
 </script>
 
 <template>
-  <div class="saved-records d-flex align-items-start">
+  <div class="bookmarks d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top" />
-    <div class="saved-records-list__container flex-grow-1">
+    <div class="bookmarks-list__container flex-grow-1">
       <app-header reduced />
       <div class="container-fluid p-5">
-        <app-waiter :loader="fetchSavedRecordsLoader" waiter-class="my-5 mx-auto d-block">
+        <app-waiter :loader="fetchBookmarksLoader" waiter-class="my-5 mx-auto d-block">
           <div class="d-flex flex-grow-1 align-items-center mt-3 mb-5">
             <bookmark-icon class="text-primary mr-4" />
-            <h1 class="saved-records-list__title text-primary mb-0 font-weight-bold">
-              Saved Records
+            <h1 class="bookmarks-list__title text-primary mb-0 font-weight-bold">
+              Bookmarks
             </h1>
           </div>
-          <div v-for="(projectValue, name) in savedRecordsGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
+          <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
             <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
-            <div v-for="(taskValue, taskName) in savedRecordsGroupedByTask(projectValue)" :key="taskName" class="mb-4">
+            <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="mb-4">
               <div class="d-flex flex-row mb-4 ml-4 mt-4">
                 <div>
                   <h2>{{ taskName }}</h2>

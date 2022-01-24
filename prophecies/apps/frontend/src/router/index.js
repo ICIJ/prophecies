@@ -10,7 +10,7 @@ import TipRetrieve from '@/views/TipRetrieve.vue'
 import StatsList from '@/views/StatsList.vue'
 import UserRetreive from '@/views/UserRetreive.vue'
 import UserRetreiveProfile from '@/views/UserRetreiveProfile.vue'
-import SavedRecords from "@/views/SavedRecords";
+import Bookmarks from '@/views/Bookmarks'
 
 export const router = {
   routes: [
@@ -80,9 +80,9 @@ export const router = {
       props: true
     },
     {
-      name: 'saved-records',
-      path: '/saved-records',
-      component: SavedRecords,
+      name: 'bookmarks',
+      path: '/bookmarks',
+      component: Bookmarks,
       props: true
     },
     {
