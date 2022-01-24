@@ -1,9 +1,9 @@
 <script>
+import { formatDateLongAlt } from '@/utils/date'
 import User from '@/models/User'
 import Task from '@/models/Task'
 import Project from '@/models/Project'
 import Tip from '@/models/Tip'
-import moment from 'moment'
 
 export const ITEM_TYPES = {
   TIP: 'tip',
@@ -53,7 +53,7 @@ export default {
   },
   filters: {
     formatDate (d) {
-      return moment(d).format('ddd DD, MMM YYYY - h:MMa')
+      return formatDateLongAlt(d)
     }
   },
   methods: {

@@ -1,5 +1,5 @@
 <script>
-import moment from 'moment'
+import { formatDate } from '@/utils/date'
 import Task from '@/models/Task'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import TaskStatsCardHeading from '@/components/TaskStatsCardHeading.vue'
@@ -28,7 +28,7 @@ export default {
   },
   filters: {
     formatDate (d) {
-      return moment(d).format('ddd DD, MMM YYYY')
+      return formatDate(d)
     },
     round (value) {
       return Math.round(value)

@@ -1,5 +1,5 @@
 <script>
-import moment from 'moment'
+import { formatDateFromNow, formatDateLong } from '@/utils/date'
 import TaskRecordReview from '@/models/TaskRecordReview'
 
 export default {
@@ -36,10 +36,10 @@ export default {
   },
   filters: {
     formatDateLong (d) {
-      return moment(d).format('MMM Do YYYY - hh:mm')
+      return formatDateLong(d)
     },
     formatDateFromNow (d) {
-      return moment(d).fromNow()
+      return formatDateFromNow(d)
     }
   }
 }

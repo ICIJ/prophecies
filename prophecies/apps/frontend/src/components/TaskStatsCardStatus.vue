@@ -1,5 +1,5 @@
 <script>
-import moment from 'moment'
+import { formatDate } from '@/utils/date'
 import Task, { TaskStatus } from '@/models/Task'
 
 export default {
@@ -23,7 +23,7 @@ export default {
   },
   filters: {
     formatDate (d) {
-      return moment(d).format('ddd DD, MMM YYYY')
+      return formatDate(d)
     },
     round (value) {
       return Math.round(value)

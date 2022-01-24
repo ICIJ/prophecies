@@ -1,5 +1,5 @@
 <script>
-import moment from 'moment'
+import { formatDateLongAlt } from '@/utils/date'
 import TaskStatus from '@/components/TaskStatus'
 import UserAvatar from '@/components/UserAvatar'
 import Task from '@/models/Task'
@@ -7,7 +7,7 @@ import User from '@/models/User'
 
 export default {
   name: 'UserRetreiveProfile',
-  components:  {
+  components: {
     TaskStatus,
     UserAvatar
   },
@@ -18,7 +18,7 @@ export default {
   },
   filters: {
     formatDate (d) {
-      return moment(d).format('ddd DD, MMM YYYY - h:MMa')
+      return formatDateLongAlt(d)
     },
     taskRoute ({ id: taskId }) {
       return {
@@ -57,7 +57,6 @@ export default {
   }
 }
 </script>
-
 
 <template>
   <div class="user-retreive-profile" v-if="user">

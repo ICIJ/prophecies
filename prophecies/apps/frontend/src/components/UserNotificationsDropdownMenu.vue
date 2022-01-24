@@ -1,5 +1,5 @@
 <script>
-import moment from 'moment'
+import { formatDateFromNow, formatDateLong } from '@/utils/date'
 import { uniqueId } from 'lodash'
 import AppWaiter from '@/components/AppWaiter'
 import UserNotification from '@/models/UserNotification'
@@ -16,10 +16,10 @@ export default {
   },
   filters: {
     formatDateLong (d) {
-      return moment(d).format('MMM Do YYYY - hh:mm')
+      return formatDateLong(d)
     },
     formatDateFromNow (d) {
-      return moment(d).fromNow()
+      return formatDateFromNow(d)
     }
   },
   async created () {
@@ -86,9 +86,9 @@ export default {
           <h3>Notifications</h3>
         </b-dropdown-text>
         <div class="px-3 text-right user-notifications-dropdown-menu__read_all">
-          <b-btn 
+          <b-btn
             @click="markAllAsRead"
-            :disabled="!hasUnreadNotifications" 
+            :disabled="!hasUnreadNotifications"
             class="btn-sm user-notifications-dropdown-menu__read_all--mark_all"
             variant="link">
             <check-icon size="1.3x"/>

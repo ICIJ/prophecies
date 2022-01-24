@@ -1,6 +1,6 @@
 <template>
   <div :class="contentClass['tipCardMargin']" class="tip-card">
-    <slot name="tip-name"> 
+    <slot name="tip-name">
       <h2 :class="contentClass['tipNameMargin']">
         {{ tip.name }}
       </h2>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import { formatDateFromNow, formatDateLong } from '@/utils/date'
 import Tip from '@/models/Tip'
 
 export default {
@@ -32,9 +32,9 @@ export default {
     contentClass: {
       type: Object,
       default: () => ({
-          'tipCardMargin': 'mb-4',
-          'tipNameMargin': 'mb-5',
-          'tipDescriptionPadding': 'py-0'
+        tipCardMargin: 'mb-4',
+        tipNameMargin: 'mb-5',
+        tipDescriptionPadding: 'py-0'
       })
     }
   },
@@ -48,11 +48,11 @@ export default {
   },
   filters: {
     formatDateLong (d) {
-      return moment(d).format('MMM Do YYYY - hh:mm')
+      return formatDateLong(d)
     },
     formatDateFromNow (d) {
-      return moment(d).fromNow()
+      return formatDateFromNow(d)
     }
-  },
+  }
 }
 </script>
