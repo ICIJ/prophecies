@@ -1,6 +1,6 @@
 <script>
 import { formatDateLongAlt } from '@/utils/date'
-import TaskStatus from '@/components/TaskStatus'
+import TaskListItem from '@/components/TaskListItem'
 import UserAvatar from '@/components/UserAvatar'
 import Task from '@/models/Task'
 import User from '@/models/User'
@@ -8,7 +8,7 @@ import User from '@/models/User'
 export default {
   name: 'UserRetrieveProfile',
   components: {
-    TaskStatus,
+    TaskListItem,
     UserAvatar
   },
   props: {
