@@ -46,9 +46,9 @@ class TaskRecordReviewFilter(FilterSet):
     
     @staticmethod
     def get_as_boolean(value):
-        if(value == '0' or value == '1'):
-            return (True, bool(int(value)))
-        return (False)
+        if value == '0' or value == '1':
+            return True, bool(int(value))
+        return False,
     
     def boolean_filter_on(self, queryset, filter_name, value):
         is_param_valid, filter_value = self.get_as_boolean(value)
@@ -63,12 +63,12 @@ class TaskRecordReviewFilter(FilterSet):
         
     def has_notes_filter(self, queryset, name, value):
         return self.boolean_filter_on(queryset, "task_record__has_notes", value)
-		
+
     def locked_filter(self, queryset, name, value):
         return self.boolean_filter_on(queryset, "task_record__locked", value)
 
     def bookmarked_by_filter(self, queryset, name, value):
-        return queryset.filter(task_record__bookmarked_by=value)
+        return queryset.filter(task_record__bookmarked_by=value, checker=value)
 
     def reviewed_filter(self, queryset, name, value):
         is_param_valid, filter_value = self.get_as_boolean(value)

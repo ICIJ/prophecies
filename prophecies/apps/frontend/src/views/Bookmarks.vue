@@ -8,12 +8,6 @@ import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import User from '@/models/User'
 import TaskRecordReview from '@/models/TaskRecordReview'
 
-const FILTER_TYPES = {
-  PROJECT: 'filter[project]',
-  TASK: 'filter[task]',
-  CREATOR: 'filter[creator]'
-}
-
 export default {
   name: 'Bookmarks',
   components: {
@@ -21,16 +15,6 @@ export default {
     AppHeader,
     AppWaiter,
     TaskRecordReviewCard
-  },
-  props: {
-    query: {
-      type: Object,
-      default: () => ({
-        [FILTER_TYPES.PROJECT]: null,
-        [FILTER_TYPES.TASK]: null,
-        [FILTER_TYPES.CREATOR]: null
-      })
-    }
   },
   created() {
     return this.setup()
@@ -47,14 +31,12 @@ export default {
         .with('taskRecord')
         .get()
     },
-    filteredBookmarks () {
+    sortBookmarks () {
       let bookmarks = this.bookmarks.slice()
-      if (this.query[FILTER_TYPES.PROJECT]) bookmarks = bookmarks.filter(t => t.projectId === this.query[FILTER_TYPES.PROJECT])
-      if (this.query[FILTER_TYPES.TASK]) bookmarks = bookmarks.filter(t => t.taskId === this.query[FILTER_TYPES.TASK])
       return bookmarks.sort(this.sortBookmarksByProjectAndTask)
     },
     bookmarksGroupedByProject () {
-      return groupBy(this.filteredBookmarks, (record) => {
+      return groupBy(this.sortBookmarks, (record) => {
         return record.task.project ? record.task.project.name : ''
       })
     },
