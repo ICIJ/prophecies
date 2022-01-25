@@ -28,6 +28,7 @@ bump2version = "==1.0.1"
 
 [dev-packages]
 time-machine = "*"
+pytest-django = "*"
 
 [requires]
 python_version = "3.8"
