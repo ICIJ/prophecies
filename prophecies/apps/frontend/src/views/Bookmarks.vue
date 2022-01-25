@@ -1,5 +1,5 @@
 <script>
-import {get, groupBy, uniqueId} from "lodash"
+import { groupBy, uniqueId } from 'lodash'
 
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
@@ -16,35 +16,8 @@ export default {
     AppWaiter,
     TaskRecordReviewCard
   },
-  created() {
+  created () {
     return this.setup()
-  },
-  computed: {
-    fetchBookmarksLoader () {
-      return uniqueId('load-bookmarks-')
-    },
-    bookmarks () {
-      return TaskRecordReview
-        .query()
-        .with('project')
-        .with('task')
-        .with('taskRecord')
-        .get()
-    },
-    sortBookmarks () {
-      let bookmarks = this.bookmarks.slice()
-      return bookmarks.sort(this.sortBookmarksByProjectAndTask)
-    },
-    bookmarksGroupedByProject () {
-      return groupBy(this.sortBookmarks, (record) => {
-        return record.task.project ? record.task.project.name : ''
-      })
-    },
-    taskRecordReviewsParams () {
-      return {
-        'filter[task_record__bookmarked_by]': User.me().id
-      }
-    }
   },
   methods: {
     async setup () {
@@ -60,9 +33,8 @@ export default {
       await fn()
       this.$wait.end(loader)
     },
-    async fetchBookmarks() {
-      const params = this.taskRecordReviewsParams
-      return TaskRecordReview.api().get('', { params })
+    async fetchBookmarks () {
+      return TaskRecordReview.api().get('', { params: { 'filter[task_record__bookmarked_by]': User.me().id } })
     },
     bookmarksGroupedByTask (records) {
       return groupBy(records, (record) => {
@@ -80,6 +52,28 @@ export default {
         if (!b.task) { return 1 }
         return (a.task?.name.localeCompare(b.task?.name))
       }
+    }
+  },
+  computed: {
+    fetchBookmarksLoader () {
+      return uniqueId('load-bookmarks-')
+    },
+    bookmarks () {
+      return TaskRecordReview
+        .query()
+        .with('project')
+        .with('task')
+        .with('taskRecord')
+        .get()
+    },
+    sortBookmarks () {
+      const bookmarks = this.bookmarks.slice()
+      return bookmarks.sort(this.sortBookmarksByProjectAndTask)
+    },
+    bookmarksGroupedByProject () {
+      return groupBy(this.sortBookmarks, (record) => {
+        return record.task.project ? record.task.project.name : ''
+      })
     }
   }
 }

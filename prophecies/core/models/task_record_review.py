@@ -116,7 +116,7 @@ class TaskRecordReview(models.Model):
 
 
     task_record = models.ForeignKey(TaskRecord, null=True, on_delete=models.SET_NULL, related_name='reviews')
-    checker = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='reviews')
+    checker = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='reviewer')
     round = models.PositiveIntegerField(verbose_name="Attribution round", null=True, default=None)
     status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.PENDING, max_length=7)
     choice = models.ForeignKey(Choice, null=True, blank=True, on_delete=models.SET_NULL)
