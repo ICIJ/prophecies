@@ -6,19 +6,19 @@ orbs:
 workflows:
   test:
     jobs:
-      - checkout:
+      - repository/checkout:
           filters:
             tags:
               only: /.*/
-      - test-frontend:
+      - test/frontend:
           requires:
-            - checkout
+            - repository/checkout
           filters:
             tags:
               only: /.*/
-      - test-backend:
+      - test/backend:
           requires:
-            - checkout
+            - repository/checkout
           filters:
             tags:
               only: /.*/
@@ -29,8 +29,8 @@ workflows:
           tag: "${CIRCLE_TAG/#v},latest" 
           registry: registry.hub.docker.com
           requires:
-            - test-frontend
-            - test-backend
+            - test/frontend
+            - test/backend
           filters:
             tags:
               only: /^v.*/
@@ -38,7 +38,7 @@ workflows:
               ignore: /.*/
           
 jobs:
-  checkout:
+  repository/checkout:
     docker:
       - image: circleci/node:14.15.5
     working_directory: ~/repository/
@@ -50,7 +50,7 @@ jobs:
           paths:
             - ~/repository/
 
-  test-frontend:
+  test/frontend:
     docker:
       - image: circleci/node:14.15.5
     working_directory: ~/repository/
@@ -73,7 +73,7 @@ jobs:
           name: Run unit tests
           command: yarn test:unit --maxWorkers 2
 
-  test-backend:
+  test/backend:
     docker:
       - image: circleci/python:3.8
     working_directory: ~/repository/
