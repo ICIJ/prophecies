@@ -8,6 +8,7 @@ import Tip from '@/models/Tip'
 import TipCard from '@/components/TipCard'
 import TipListPageParams from '@/components/TipListPageParams'
 import { TaskStatusEnum } from '@/models/Task'
+import { sortByProjectThenTask } from '@/utils/sort'
 
 const FILTER_TYPES = {
   PROJECT: 'filter[project]',
@@ -74,7 +75,7 @@ export default {
       if (this.query[FILTER_TYPES.PROJECT]) tips = tips.filter(t => t.projectId === this.query[FILTER_TYPES.PROJECT])
       if (this.query[FILTER_TYPES.TASK]) tips = tips.filter(t => t.taskId === this.query[FILTER_TYPES.TASK])
       if (this.query[FILTER_TYPES.CREATOR]) tips = tips.filter(t => t.creatorId === this.query[FILTER_TYPES.CREATOR])
-      return tips.sort(this.sortTipsByProjectAndTask)
+      return tips.sort(sortByProjectThenTask)
     },
     tipsGroupedByProject () {
       return groupBy(this.filteredTips, (tip) => {
@@ -163,18 +164,6 @@ export default {
       return Tip.query()
         .where('projectId', projectId)
         .where('creatorId', creatorId).get().length === 0
-    },
-    sortTipsByProjectAndTask (a, b) {
-      if (!a.project) { return -1 }
-      if (!b.project) { return 1 }
-      const projectSort = a.project?.name.localeCompare(b.project?.name)
-      if (projectSort !== 0) {
-        return projectSort
-      } else {
-        if (!a.task) { return -1 }
-        if (!b.task) { return 1 }
-        return (a.task?.name.localeCompare(b.task?.name))
-      }
     }
   }
 }
