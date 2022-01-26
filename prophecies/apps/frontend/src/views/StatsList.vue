@@ -26,15 +26,15 @@
           </div>
           <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
             <task-stats-card class="my-5" v-for="task in tasks" :key="task.id" :task-id="task.id" :team="teamTaskStats" extended>
-              <template v-slot:taskStatsByRound="{stats}">
+              <template v-if="fetchTaskUserStatsLoader" v-slot:taskStatsByRound="{stats}" >
                  <stats-by-round
                   v-for="(round,index) in stats.rounds"
                   :key="round"
                   :round="index+1"
                   :progress="stats.progress[round]"
-                  :choices='choicesByRound[round]'
+                  :user-choice='choicesByRound[round]'
                   :progress-by-user='taskUserStatistics(task.id,round)'
-                  :summary='summaryByRound[round]'
+                  :summary='taskUserChoiceStatistics(task.id,round)'
                   extended
                   class="mx-auto" />
               </template>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { uniqueId, filter, orderBy } from 'lodash'
+import { cloneDeep, uniqueId, filter, orderBy } from 'lodash'
 
 import AppHeader from '@/components/AppHeader.vue'
 import AppSidebar from '@/components/AppSidebar'
@@ -61,6 +61,8 @@ import Task, { TaskStatusEnum, TaskStatusOrder } from '@/models/Task'
 import StatsByRound from '@/components/StatsByRound.vue'
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
+import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
+import User from '@/models/User'
 const choices = [
   {
     value: 'correct',
@@ -76,21 +78,6 @@ const choices = [
     value: 'dontknow',
     name: 'Dont know',
     progress: 100
-  }
-]
-
-const summary = [
-  {
-    name: 'C',
-    value: 95
-  },
-  {
-    name: 'I',
-    value: 1
-  },
-  {
-    name: 'D',
-    value: 4
   }
 ]
 
@@ -119,37 +106,86 @@ export default {
     }
   },
   async created () {
-    await this.waitFor(this.fetchTaskLoader, [this.fetchTask, this.fetchTaskUserStats])
+    await this.waitFor(this.fetchTaskLoader, [this.fetchTask])
+    await this.waitFor(this.fetchTaskUserStatsLoader, [this.fetchTaskUserStats, this.fetchTaskUserChoiceStats])
   },
   methods: {
     fetchTask () {
-      return Task.api().get()
+      const params = { include: 'choiceGroup.choices' }
+      return Task.api().get('', { params })
     },
     fetchTaskUserStats () {
       return TaskUserStatistics.api().get()
+    },
+    fetchTaskUserChoiceStats () {
+      return TaskUserChoiceStatistics.api().get()
     },
     async waitFor (loader, fns = []) {
       this.$wait.start(loader)
       await Promise.all(fns.map(fn => fn()))
       this.$wait.end(loader)
     },
+    isMe ({ id = null } = {}) {
+      return id === User.me().id
+    },
     updateSortByCallback (cb) {
       this.sortByCb = cb
     },
     taskUserStatistics (taskId, round) {
-      return TaskUserStatistics.query().with('checker').where('taskId', taskId).where('round', round).get()
+      let request = TaskUserStatistics.query().with('checker').where('taskId', taskId).where('round', round)
+      if (!this.teamTaskStats) {
+        request = request.where('checkerId', User.me().id)
+      }
+      return request.get()
+    },
+    taskUserChoiceStatistics (taskId, round) {
+      const stats = TaskUserChoiceStatistics.query().where('taskId', taskId).with('choice').where('round', round).get()
+
+      if (!stats.length) {
+        return Object.values(this.defaultChoicesByTaskId[taskId])
+      }
+
+      const statsAcc = { stats: cloneDeep(this.defaultChoicesByTaskId[taskId]), count: 0 }
+
+      const cumulatedStats = stats.reduce((acc, checkerStat) => {
+        const cumulate = this.teamTaskStats || (!this.teamTaskStats && this.isMe({ id: checkerStat.checkerId }))
+        if (cumulate) {
+          acc.stats[checkerStat.choiceId].progress += checkerStat.count
+          acc.count += checkerStat.count
+        }
+        return acc
+      }, statsAcc)
+
+      const total = cumulatedStats.count !== 0 ? cumulatedStats.count : 1
+      for (const choice in cumulatedStats.stats) {
+        cumulatedStats.stats[choice].progress = cumulatedStats.stats[choice].progress * 100 / total
+      }
+      return Object.values(cumulatedStats.stats)
     }
   },
   computed: {
     unorderedTasks () {
       return Task
         .query()
+        .with('choiceGroup.choices')
         .where('taskRecordsCount', (value) => value > 0)
         .get()
     },
     tasks () {
       const sortedTasks = this.sortByCb(this.unorderedTasks)
       return this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatusEnum.OPEN || TaskStatusEnum.LOCKED]) : sortedTasks
+    },
+    defaultChoicesByTaskId () {
+      return this.tasks.reduce((acc, currTask) => {
+        if (!acc[currTask.id]) {
+          acc[currTask.id] = {}
+          for (const choice in currTask.choiceGroup.choices) {
+            const currChoice = currTask.choiceGroup.choices[choice]
+            acc[currTask.id][currChoice.id] = { id: currChoice.id, name: currChoice.name, value: currChoice.value, progress: 0 }
+          }
+        }
+        return acc
+      }, {})
     },
     onlyOpenTasks: {
       get () {
@@ -172,16 +208,11 @@ export default {
         3: [...choices]
       }
     },
-    summaryByRound (taskId) {
-      //! TODO API Call stats/:taskId OR tasks/taskId/stats
-      return {
-        1: [...summary],
-        2: [...summary],
-        3: [...summary]
-      }
-    },
     fetchTaskLoader () {
       return uniqueId('load-stats-task-')
+    },
+    fetchTaskUserStatsLoader () {
+      return uniqueId('load-stats-task-user')
     }
   }
 }

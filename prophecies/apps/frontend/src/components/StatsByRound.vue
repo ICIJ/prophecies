@@ -15,7 +15,7 @@ export default {
     progress: {
       type: Number
     },
-    choices: {
+    userChoice: {
       type: Array,
       default: () => ([])
     },
@@ -52,14 +52,14 @@ export default {
       return this.progressByUser.map(elem => {
         return {
           name: elem.checker.username,
-          pending: elem.doneCount,
-          done: elem.pendingCount,
+          pending: elem.pendingCount,
+          done: elem.doneCount,
           progress: elem.progress
         }
       })
     },
     badgeColumnClass () {
-      return this.choices.length ? `col-${12 / this.choices.length}` : ''
+      return this.summary.length ? `col-${12 / this.summary.length}` : ''
     }
   }
 }
@@ -74,10 +74,10 @@ export default {
       </div>
       <stats-by-users :users="users" />
       <div class="stats-by-round__summary row py-3">
-        <div class="stats-by-round__summary__choice d-flex align-items-center" :class="badgeColumnClass" v-for="choice in choices" :key="choice.value">
-          <b-badge class="stats-by-round__summary__choice__badge mr-3 " :variant="choice.value | toVariant" v-if="choice" :title="choice.name" v-b-tooltip.right>
-            {{ choice.name | firstLetter }}<span class="sr-only">{{ choice.name | skipFirstLetter }}</span>
-          </b-badge>{{choice.progress}}%
+       <div class="stats-by-round__summary__choice d-flex align-items-center" :class="badgeColumnClass" v-for="statChoice in summary" :key="statChoice.value">
+           <b-badge class="stats-by-round__summary__choice__badge mr-3 " :variant="statChoice.value | toVariant" v-if="statChoice" :title="statChoice.name" v-b-tooltip.right>
+            {{ statChoice.name | firstLetter }}<span class="sr-only">{{ statChoice.name | skipFirstLetter }}</span>
+          </b-badge><span class="stats-by-round__number">{{statChoice.progress | round }}</span>%
         </div>
       </div>
     </template>
@@ -85,7 +85,7 @@ export default {
       <span class="stats-by-round__progress ">
         {{ $t('taskStatsCard.round') }} {{ round }}
         <span class="stats-by-round__item__value font-weight-bold ml-2 ">
-          {{ progress | round }}%
+          <span class="stats-by-round__number">{{ progress | round }}</span>%
         </span>
         <span class="text-secondary mx-2" v-if="Number(round) !== Number(nbRounds)">
           |
@@ -99,6 +99,9 @@ export default {
 
 .stats-by-round
 {
+  &__number{
+    font-variant-numeric: tabular-nums;
+  }
   &--extended{
     min-width: 340px;
   }
