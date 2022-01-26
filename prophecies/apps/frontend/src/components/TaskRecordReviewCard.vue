@@ -96,7 +96,7 @@ export default {
         // Let parent component know about the update
         this.emitUpdate()
       } catch (error) {
-        this.displayError(error);
+        this.displayError(error)
       }
     },
     async lockWithLoader () {
@@ -110,7 +110,7 @@ export default {
         // Let parent component know about the update
         this.emitUpdate()
       } catch (error) {
-        this.displayError(error);
+        this.displayError(error)
       }
     },
     async unlockWithLoader () {
@@ -122,14 +122,14 @@ export default {
       try {
         await TaskRecord.api().bookmark(this.taskRecord.id)
       } catch (error) {
-        this.displayError(error);
+        this.displayError(error)
       }
     },
     async unbookmark () {
       try {
         await TaskRecord.api().unbookmark(this.taskRecord.id)
       } catch (error) {
-        this.displayError(error);
+        this.displayError(error)
       }
     },
     async fetchTaskRecordActions () {
@@ -179,7 +179,7 @@ export default {
         window.open(this.link)
       }
     },
-    displayError(error) {
+    displayError (error) {
       const message = get(error, 'response.data.errors[0].detail')
       const variant = 'warning'
       const title = `⛔ Task record #${this.taskRecord.id}`
@@ -210,10 +210,11 @@ export default {
       }
     },
     taskRecordReview () {
-      return TaskRecordReview
+      const trr = TaskRecordReview
         .query()
         .with('taskRecord')
         .find(this.taskRecordReviewId)
+      return trr
     },
     taskRecord () {
       return get(this, 'taskRecordReview.taskRecord')
@@ -228,7 +229,7 @@ export default {
       if (this.showLinkPreview) {
         return this.embeddableLink
       }
-      return "about:blank"
+      return 'about:blank'
     },
     isDone () {
       return get(this, 'taskRecordReview.status') === 'DONE'
