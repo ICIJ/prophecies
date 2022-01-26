@@ -1,5 +1,6 @@
 <script>
-import { groupBy, uniqueId } from 'lodash'
+import { get, groupBy, uniqueId } from 'lodash'
+import { sortByProjectThenTask } from '@/utils/sort'
 
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
@@ -7,6 +8,8 @@ import AppWaiter from '@/components/AppWaiter'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import User from '@/models/User'
 import TaskRecordReview from '@/models/TaskRecordReview'
+import Task from '@/models/Task'
+import ChoiceGroup from '@/models/ChoiceGroup'
 
 export default {
   name: 'Bookmarks',
@@ -16,62 +19,112 @@ export default {
     AppWaiter,
     TaskRecordReviewCard
   },
+  data () {
+    return {
+      countBy: [],
+      pagination: null,
+      taskRecordReviewIds: [],
+      taskIds: []
+    }
+  },
   created () {
     return this.setup()
   },
   methods: {
     async setup () {
       try {
-        await this.waitFor(this.fetchBookmarksLoader, this.fetchBookmarks)
+        await this.waitFor(this.fetchBookmarksLoader, this.fetchAll)
       } catch (error) {
         const title = 'Unable to retrieve the bookmarks'
         this.$router.replace({ name: 'error', params: { title, error } })
       }
+    },
+    async fetchAll () {
+      await this.fetchBookmarks()
+      await this.fetchTasks()
+      await this.fetchChoiceGroups()
+    },
+    async fetchBookmarks () {
+      const params = { 'filter[task_record__bookmarked_by]': User.me().id }
+      const { response } = await TaskRecordReview.api().get('', { params })
+      const countBy = get(response, 'data.meta.countBy', null)
+      const pagination = get(response, 'data.meta.pagination', null)
+
+      const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)
+      this.$set(this, 'countBy', countBy)
+      this.$set(this, 'pagination', pagination)
+      this.$set(this, 'taskRecordReviewIds', taskRecordReviewIds)
+    },
+    async fetchChoiceGroup (taskId) {
+      const params = { include: 'alternative_values,choices' }
+      return ChoiceGroup.api().find(taskId, { params })
+    },
+    async fetchChoiceGroups () {
+      const uniqueChoiceGroups = this.tasks.reduce((acc, curr) => {
+        if (!acc.choiceGroupIds[curr.choiceGroupId]) {
+          acc.choiceGroupIds[curr.choiceGroupId] = true
+          acc.promises.push(this.fetchChoiceGroup(curr.choiceGroupId))
+        }
+        return acc
+      }, { choiceGroupIds: {}, promises: [] })
+
+      await Promise.all(uniqueChoiceGroups.promises)
+    },
+    async fetchTask (taskId) {
+      const params = { include: 'project,checkers' }
+      return Task.api().find(taskId, { params })
+    },
+    async fetchTasks () {
+      const uniqueTaskIds = this.taskRecordReviews.reduce((acc, curr) => {
+        if (!acc.taskIds[curr.taskId]) {
+          acc.taskIds[curr.taskId] = true
+          acc.promises.push(this.fetchTask(curr.taskId))
+        }
+        return acc
+      }, { taskIds: {}, promises: [] })
+
+      this.$set(this, 'taskIds', Object.keys(uniqueTaskIds.taskIds))
+      await Promise.all(uniqueTaskIds.promises)
+
+      this.$set(this, 'taskRecordReviewIds', this.taskRecordReviewIds)
     },
     async waitFor (loader, fn) {
       this.$wait.start(loader)
       await fn()
       this.$wait.end(loader)
     },
-    async fetchBookmarks () {
-      return TaskRecordReview.api().get('', { params: { 'filter[task_record__bookmarked_by]': User.me().id } })
-    },
     bookmarksGroupedByTask (records) {
       return groupBy(records, (record) => {
         return record.task ? record.task.name : ''
       })
-    },
-    sortBookmarksByProjectAndTask (a, b) {
-      if (!a.project) { return -1 }
-      if (!b.project) { return 1 }
-      const projectSort = a.project?.name.localeCompare(b.project?.name)
-      if (projectSort !== 0) {
-        return projectSort
-      } else {
-        if (!a.task) { return -1 }
-        if (!b.task) { return 1 }
-        return (a.task?.name.localeCompare(b.task?.name))
-      }
     }
   },
   computed: {
     fetchBookmarksLoader () {
       return uniqueId('load-bookmarks-')
     },
-    bookmarks () {
-      return TaskRecordReview
+    tasks () {
+      return Task
         .query()
         .with('project')
-        .with('task')
-        .with('taskRecord')
+        .with('choiceGroup')
+        .whereIdIn(this.taskIds)
         .get()
     },
-    sortBookmarks () {
-      const bookmarks = this.bookmarks.slice()
-      return bookmarks.sort(this.sortBookmarksByProjectAndTask)
+    taskRecordReviews () {
+      return TaskRecordReview
+        .query()
+        .with('task.project')
+        .with('task')
+        .with('taskRecord')
+        .whereIdIn(this.taskRecordReviewIds)
+        .get()
+    },
+    sortedBookmarks () {
+      return this.taskRecordReviews.slice().sort(sortByProjectThenTask)
     },
     bookmarksGroupedByProject () {
-      return groupBy(this.sortBookmarks, (record) => {
+      return groupBy(this.sortedBookmarks, (record) => {
         return record.task.project ? record.task.project.name : ''
       })
     }
