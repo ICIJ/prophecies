@@ -83,7 +83,7 @@ export const router = {
       name: 'bookmarks',
       path: '/bookmarks',
       component: Bookmarks,
-      props: true
+      props: (route) => ({ query: route.query })
     },
     {
       name: 'tip-retrieve',

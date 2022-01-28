@@ -6,10 +6,16 @@ import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
+import BookmarksPageParams from '@/components/BookmarksPageParams'
 import User from '@/models/User'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import Task from '@/models/Task'
 import ChoiceGroup from '@/models/ChoiceGroup'
+
+const FILTER_TYPES = {
+  PROJECT: 'filter[project]',
+  TASK: 'filter[task]'
+}
 
 export default {
   name: 'Bookmarks',
@@ -17,11 +23,24 @@ export default {
     AppSidebar,
     AppHeader,
     AppWaiter,
-    TaskRecordReviewCard
+    TaskRecordReviewCard,
+    BookmarksPageParams
+  },
+  props: {
+    query: {
+      type: Object,
+      default: () => ({
+        [FILTER_TYPES.PROJECT]: null,
+        [FILTER_TYPES.TASK]: null
+      })
+    }
   },
   data () {
     return {
       countBy: [],
+      FILTER_TYPES: FILTER_TYPES,
+      projectFilter: this.query[FILTER_TYPES.PROJECT],
+      taskFilter: this.query[FILTER_TYPES.TASK],
       pagination: null,
       taskRecordReviewIds: [],
       taskIds: []
@@ -97,6 +116,32 @@ export default {
       return groupBy(records, (record) => {
         return record.task ? record.task.name : ''
       })
+    },
+    setProjectFilter (val) {
+      if (this.projectNotContainingTask(val, this.taskFilter)) {
+        this.taskFilter = null
+      }
+
+      this.projectFilter = val
+      this.updateFilters()
+    },
+    setTaskFilter (val) {
+      const reviewsOfTask = TaskRecordReview.query().with('task').where('taskId', val).get()
+      this.projectFilter = reviewsOfTask[0].task.projectId
+
+      this.taskFilter = val
+      this.updateFilters()
+    },
+    updateFilters () {
+      return this.$router.push({ name: 'bookmarks', query: this.bookmarksParams })
+    },
+    projectNotContainingTask (projectId, taskId) {
+      const reviewsOfProject = Task.query().where('projectId', projectId).get()
+      return reviewsOfProject.filter(t => t.id === taskId).length === 0
+    },
+    taskNotContainingUser (taskId) {
+      return TaskRecordReview.query()
+        .where('task.id', taskId)
     }
   },
   computed: {
@@ -120,13 +165,22 @@ export default {
         .whereIdIn(this.taskRecordReviewIds)
         .get()
     },
-    sortedBookmarks () {
-      return this.taskRecordReviews.slice().sort(sortByProjectThenTask)
+    filteredBookmarks () {
+      let bookmarks = this.taskRecordReviews.slice()
+      if (this.query[FILTER_TYPES.PROJECT]) bookmarks = bookmarks.filter(trw => trw.task.project.id === this.query[FILTER_TYPES.PROJECT])
+      if (this.query[FILTER_TYPES.TASK]) bookmarks = bookmarks.filter(trw => trw.task.id === this.query[FILTER_TYPES.TASK])
+      return bookmarks.sort(sortByProjectThenTask)
     },
     bookmarksGroupedByProject () {
-      return groupBy(this.sortedBookmarks, (record) => {
+      return groupBy(this.filteredBookmarks, (record) => {
         return record.task.project ? record.task.project.name : ''
       })
+    },
+    bookmarksParams () {
+      const filters = {}
+      if (this.projectFilter) filters[FILTER_TYPES.PROJECT] = this.projectFilter
+      if (this.taskFilter) filters[FILTER_TYPES.TASK] = this.taskFilter
+      return filters
     }
   }
 }
@@ -145,6 +199,12 @@ export default {
               Bookmarks
             </h1>
           </div>
+          <bookmarks-page-params
+            :tasks="tasks"
+            :project-id="query[FILTER_TYPES.PROJECT]"
+            @update:projectId="setProjectFilter"
+            :task-id="query[FILTER_TYPES.TASK]"
+            @update:taskId="setTaskFilter"/>
           <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
             <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
             <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="mb-4">
