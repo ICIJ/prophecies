@@ -41,7 +41,6 @@ export default {
       FILTER_TYPES: FILTER_TYPES,
       projectFilter: this.query[FILTER_TYPES.PROJECT],
       taskFilter: this.query[FILTER_TYPES.TASK],
-      pagination: null,
       taskRecordReviewIds: [],
       taskIds: []
     }
@@ -66,12 +65,8 @@ export default {
     async fetchBookmarks () {
       const params = { 'filter[task_record__bookmarked_by]': User.me().id }
       const { response } = await TaskRecordReview.api().get('', { params })
-      const countBy = get(response, 'data.meta.countBy', null)
-      const pagination = get(response, 'data.meta.pagination', null)
 
       const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)
-      this.$set(this, 'countBy', countBy)
-      this.$set(this, 'pagination', pagination)
       this.$set(this, 'taskRecordReviewIds', taskRecordReviewIds)
     },
     async fetchChoiceGroup (taskId) {
