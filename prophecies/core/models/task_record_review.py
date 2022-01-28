@@ -299,7 +299,8 @@ class TaskRecordReview(models.Model):
         my_choice = instance.choice
         round = instance.round
         # Avoid collecting statistics for uncomplete review
-        if task and checker and my_choice:
+        if task and checker:
+            
             # Collect the statitics
             reviews_choice_counts = sender.objects \
                                         .filter(task_record__task=task, checker=checker, round=round) \
@@ -310,7 +311,7 @@ class TaskRecordReview(models.Model):
             # the count value of another choice can be staled
             # we remove all existing stats for the task/checker/round 
             TaskUserChoiceStatistics.objects.filter(task=task, checker=checker, round=round ).delete()
-                
+             
             # create all the necessary stats for all of the choices
             taskUserChoiceStatisticsList = []
             for row in reviews_choice_counts:

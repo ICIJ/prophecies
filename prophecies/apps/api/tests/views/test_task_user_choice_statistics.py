@@ -75,7 +75,24 @@ class TestTaskUserChoiceStatistics(TestCase):
         self.assertEqual(data[0].get('relationships').get('choice').get('data').get('id'),str(choice2.id))
         self.assertEqual(data[0].get('attributes').get('count'),1)
 
-
+    def test_it_updates_counts_when_olivia_cancel_her_review(self):
+        choice1 = self.paintings.choice_group.choices.first()
+        
+        TaskRecordReview.objects.create(task_record=self.task_record_of_paintings_foo, checker=self.olivia, round=1, choice=choice1)
+        
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/task-user-choice-statistics/')
+        data = request.json().get('data')
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0].get('relationships').get('choice').get('data').get('id'),str(choice1.id))
+        self.assertEqual(data[0].get('attributes').get('count'),1)
+        
+        trr,_=TaskRecordReview.objects.get_or_create(task_record=self.task_record_of_paintings_foo, checker=self.olivia, round=1)
+        trr.choice=None
+        trr.save()
+        request = self.client.get('/api/v1/task-user-choice-statistics/')
+        data = request.json().get('data')
+        self.assertEqual(len(data), 0)
 
     def test_it_returns_a_count_of_two_when_olivia_use_twice_same_choice_on_same_round(self):
         choice = self.paintings.choice_group.choices.first()
