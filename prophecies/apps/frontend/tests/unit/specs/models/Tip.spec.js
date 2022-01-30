@@ -12,7 +12,7 @@ describe('Tip', () => {
   })
 
   it('should retrieve 4 tips', () => {
-    expect(Tip.all()).toHaveLength(4)
+    expect(Tip.all()).toHaveLength(5)
   })
 
   it('should have one user object as creator', () => {

@@ -37,14 +37,10 @@ export default {
 
 <style lang="scss">
   .bookmarks-page-params {
-
     &__task {
-
       &__show-status {
         font-size: smaller;
       }
-
     }
-
   }
 </style>
