@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="stats-by-users__total d-flex flex-row py-2 font-weight-bold flex-grow-1 align-items-end" >
-        <div class="col-3  pl-0">
+        <div class="col-3 pl-0">
           Total
         </div>
         <div class="stats-by-users__table__progress text-right mx-3" >

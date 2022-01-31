@@ -8,7 +8,7 @@ describe('UserAvatar', () => {
 
   beforeAll(() => {
     User.insert({
-      data: { 
+      data: {
         id: '2000',
         username: 'fatima',
         firstName: 'Fátima',

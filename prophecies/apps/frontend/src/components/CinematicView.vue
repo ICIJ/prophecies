@@ -37,7 +37,7 @@ export default {
       pageNumberHistory: [this.pageNumber],
       taskRecordReviewIdsPerPage: { [this.pageNumber]: this.taskRecordReviewIds }
     }
-  }, 
+  },
   created () {
     this.id = this.defaultId
   },
@@ -106,7 +106,7 @@ export default {
     isFirstPage () {
       return this.pageNumber === 1
     },
-    isLastPage () {      
+    isLastPage () {
       return this.pageNumber === Math.ceil(this.totalRows / this.perPage)
     },
     hasPrevious () {
@@ -130,15 +130,15 @@ export default {
   methods: {
     previous () {
       if (this.taskRecordReviewIds.indexOf(this.id) === 0 && !this.isFirstPage) {
-        this.$delete(this.taskRecordReviewIdsPerPage, this.pageNumber - 1)  
+        this.$delete(this.taskRecordReviewIdsPerPage, this.pageNumber - 1)
         return this.$emit('previousPage')
       }
       const previous = this.taskRecordReviewIds.indexOf(this.id) - 1
       this.id = previous > -1 ? this.taskRecordReviewIds[previous] : this.id
     },
     next () {
-      if (this.taskRecordReviewIds.indexOf(this.id) === this.taskRecordReviewIds.length - 1 && !this.isLastPage) {      
-        this.$delete(this.taskRecordReviewIdsPerPage, this.pageNumber + 1)  
+      if (this.taskRecordReviewIds.indexOf(this.id) === this.taskRecordReviewIds.length - 1 && !this.isLastPage) {
+        this.$delete(this.taskRecordReviewIdsPerPage, this.pageNumber + 1)
         return this.$emit('nextPage')
       }
       const next = this.taskRecordReviewIds.indexOf(this.id) + 1
@@ -152,7 +152,7 @@ export default {
   <div class="cinematic-view">
     <fieldset :disabled="buzy" class="cinematic-view__nav d-flex align-items-center justify-content-center text-center mb-3">
       <shortkey-badge :value="['Ctrl', '←']" class="mx-3" />
-      <b-button @click="previous" 
+      <b-button @click="previous"
                 @shortkey="previous()"
                 :disabled="!hasPrevious"
                 v-shortkey="['ctrl', 'left']"
@@ -164,13 +164,13 @@ export default {
         <div class="mr-3">
           {{ progressIndex }}/{{ totalRows }}
         </div>
-        <b-progress :value="progressIndex" 
+        <b-progress :value="progressIndex"
                     :max="totalRows"
                     class="cinematic-view__nav__progress__bar"
-                    show-progress 
+                    show-progress
                     variant="lighter" />
       </div>
-      <b-button @click="next" 
+      <b-button @click="next"
                 @shortkey="next()"
                 :disabled="!hasNext"
                 v-shortkey="['ctrl', 'right']"
@@ -183,9 +183,9 @@ export default {
     <div class="position-relative">
       <transition :name="transition">
         <div class="cinematic-view__card" :key="id">
-          <task-record-review-card 
-            @update="next" 
-            :task-record-review-id="id" 
+          <task-record-review-card
+            @update="next"
+            :task-record-review-id="id"
             :frozen="buzy"
             :preview-link="previewLink"
             active />
@@ -222,8 +222,8 @@ export default {
     &__card {
       position: absolute;
       top: 0;
-      left: 0; 
-      right: 0; 
+      left: 0;
+      right: 0;
       z-index: 10;
 
       .task-record-review-card {
@@ -231,9 +231,9 @@ export default {
       }
     }
 
-    .slide-backward-enter-active, 
+    .slide-backward-enter-active,
     .slide-backward-leave-active,
-    .slide-forward-enter-active, 
+    .slide-forward-enter-active,
     .slide-forward-leave-active {
       transition: transform .6s ease, opacity .6s ease;
     }

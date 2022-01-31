@@ -7,7 +7,7 @@ import TaskRecordReviewList from '@/views/TaskRecordReviewList'
 import Task from '@/models/Task'
 
 describe('TaskRecordReviewList', () => {
-  function createContainer() {
+  function createContainer () {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -22,8 +22,7 @@ describe('TaskRecordReviewList', () => {
       const localVue = createLocalVue()
 
       // Configure the local vue
-      const core = await Core.init(localVue).useAll()
-      const { i18n, wait, store, router } = core
+      const { i18n, wait, store, router } = await Core.init(localVue).useAll()
       const propsData = { taskId: '1' }
       const stubs = ['router-link', 'app-waiter']
       // Finally, instanciate the component
