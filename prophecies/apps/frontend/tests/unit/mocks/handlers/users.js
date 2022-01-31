@@ -8,6 +8,21 @@ export default [
         data: [
           {
             type: 'User',
+            id: '1',
+            attributes: {
+              firstName: '',
+              lastName: '',
+              username: 'olivia',
+              email: '',
+              emailMd5: 'd41d8cd98f00b204e9800998ecf8427e',
+              isStaff: true
+            },
+            links: {
+              self: 'http://localhost:9009/api/v1/users/1/'
+            }
+          },
+          {
+            type: 'User',
             id: '2',
             attributes: {
               url: 'http://localhost/api/v1/users/2/',
