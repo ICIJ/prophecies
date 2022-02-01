@@ -24,12 +24,6 @@ export default class TaskUserStatistics extends Model {
 
   static apiConfig = {
     baseURL: `${settings.apiUrl}/task-user-statistics/`,
-    dataTransformer: responseNormalizer,
-    actions: {
-      getByTask (taskId, config = {}) {
-        const params = { ...config.params, 'filter[task]': taskId }
-        return this.get('', { ...config, params })
-      }
-    }
+    dataTransformer: responseNormalizer
   }
 }
