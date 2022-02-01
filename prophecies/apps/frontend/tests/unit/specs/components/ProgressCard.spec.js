@@ -74,6 +74,11 @@ describe('ProgressCard', () => {
     expect(element.text()).toBe('53%')
   })
 
+  it('should show the link to the stats', () => {
+    const element = wrapper.find('.progress-card__stats-link')
+    expect(element.text()).toBe('More progress')
+  })
+
   describe('No task opened', () => {
     beforeEach(async () => {
       Task.deleteAll()

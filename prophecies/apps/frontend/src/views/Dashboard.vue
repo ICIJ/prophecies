@@ -104,9 +104,9 @@ export default {
                                    :team="teamTaskStats"
                                    :task-id="task.id" >
                   </task-stats-card>
-                  <!-- <div class="d-flex justify-content-center py-3 my-3">
+                  <div class="dashboard__container__left-panel__stats-link d-flex justify-content-center py-3 my-3">
                     <router-link class="btn btn-primary font-weight-bold" :to="{name:'stats-list'}">All stats</router-link>
-                  </div> -->
+                  </div>
                 </template>
                 <div v-else class="card card-body shadow-sm text-center text-muted text-small">
                   No tasks yet.

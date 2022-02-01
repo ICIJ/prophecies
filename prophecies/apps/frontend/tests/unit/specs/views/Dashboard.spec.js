@@ -37,4 +37,9 @@ describe('Dashboard', () => {
     const element = wrapper.findAll('task-stats-card-stub')
     expect(element).toHaveLength(4)
   })
+
+  it('should show the link to the stats', () => {
+    const element = wrapper.find('.dashboard__container__left-panel__stats-link')
+    expect(element.text()).toBe('All stats')
+  })
 })
