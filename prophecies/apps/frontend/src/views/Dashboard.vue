@@ -104,7 +104,7 @@ export default {
                                    :team="teamTaskStats"
                                    :task-id="task.id" >
                   </task-stats-card>
-                  <div class="dashboard__container__left-panel__stats-link d-flex justify-content-center py-3 my-3">
+                  <div class="dashboard__container__left-panel__stats-link d-flex justify-content-center py-3 mt-3 mb-5">
                     <router-link class="btn btn-primary font-weight-bold" :to="{name:'stats-list'}">{{ $t('dashboard.allStats') }}</router-link>
                   </div>
                 </template>
