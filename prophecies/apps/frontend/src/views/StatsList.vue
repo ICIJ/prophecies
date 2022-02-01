@@ -33,7 +33,6 @@
                     :key="round"
                     :round="index+1"
                     :progress="stats.progress[round]"
-                    :user-choice='choicesByRound[round]'
                     :progress-by-user='taskUserStatistics(task.id,round)'
                     :summary='taskUserChoiceStatistics(task.id,round)'
                     extended
@@ -63,23 +62,6 @@ import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
 import User from '@/models/User'
-const choices = [
-  {
-    value: 'correct',
-    name: 'Correct',
-    progress: 100
-  },
-  {
-    value: 'incorrect',
-    name: 'Incorrect',
-    progress: 100
-  },
-  {
-    value: 'dontknow',
-    name: 'Dont know',
-    progress: 100
-  }
-]
 
 export default {
   name: 'StatsList',
@@ -198,14 +180,6 @@ export default {
       set (value) {
         const query = { ...this.$route.query, only_open: !!value }
         this.$router.push({ path: this.$route.path, query }, null)
-      }
-    },
-    choicesByRound () {
-      //! TODO API Call stats/:taskId OR tasks/taskId/stats
-      return {
-        1: [...choices],
-        2: [...choices],
-        3: [...choices]
       }
     },
     fetchTaskLoader () {
