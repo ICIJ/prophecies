@@ -4,6 +4,7 @@ import User from '@/models/User'
 import Task from '@/models/Task'
 import Project from '@/models/Project'
 import Tip from '@/models/Tip'
+import UserLink from '@/components/UserLink'
 
 export const ITEM_TYPES = {
   TIP: 'tip',
@@ -21,6 +22,9 @@ const ITEM_TYPES_CONTENT = {
 
 export default {
   name: 'HistoryListItem',
+  components: {
+    UserLink
+  },
   props: {
     type: {
       type: String,
@@ -111,9 +115,6 @@ export default {
     },
     hasLink () {
       return this.type === ITEM_TYPES.MENTIONED_USER || this.type === ITEM_TYPES.TIP
-    },
-    who () {
-      return this.userDisplayName(this.creator, true)
     }
   }
 }
@@ -124,8 +125,10 @@ export default {
     <div  class="history-list-item__prefix-column" v-html="prefix"></div>
     <div class="row container-fluid justify-content-between flex-grow-1">
         <div class="d-flex flex-grow-lg-0 flex-grow-1 px-3 py-1 history-list-item__content-column col-12 col-lg-5" :class="className">
-          <p>{{who }}<a v-if="hasLink" class="pl-1" :href='`${link}`'> {{$t(`historyListItem.${type}`, { value:content } )}}
-             </a> <template v-else> {{$tc(`historyListItem.${type}`, content)}} </template></p>
+          <p>
+            <user-link class="text-truncate" :user-id="creator.id">
+              {{ creator.displayName }}<template v-if="creator.isMe">You</template></user-link> <a v-if="hasLink" class="pl-1" :href='`${link}`'>{{$t(`historyListItem.${type}`, { value:content } )}}
+            </a><template v-else>{{$tc(`historyListItem.${type}`, content)}} </template></p>
         </div>
         <div class="d-flex ml-auto flex-md-row flex-lg-grow-0 justify-content-md-right flex-sm-column flex-sm-grow-1 justify-content-sm-between">
           <div class="px-3 py-1 text-sm-left text-lg-right history-list-item__category-column">{{category}}</div>

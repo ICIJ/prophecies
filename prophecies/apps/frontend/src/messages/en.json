@@ -109,6 +109,9 @@
     "priority": "Priority",
     "round": "Round"
   },
+  "tips": {
+    "lastModified": "Last modified"
+  },
   "taskStatus": {
     "open": "Open",
     "locked": "Locked",

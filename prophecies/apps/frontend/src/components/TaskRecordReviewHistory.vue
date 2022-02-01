@@ -84,24 +84,24 @@ export default {
 <template>
   <div class="task-record-review-history">
     <div class="task-record-review-history__checker d-flex p-1" v-for="{ id, checker, alternativeValue, choice, note } in history" :key="id">
-      <div class="task-record-review-history__checker__name" :class="{ 'task-record-review-history__checker__name--is-me': isMe(checker) }">
+      <div class="task-record-review-history__checker__name" :class="{ 'task-record-review-history__checker__name--is-me': checker.isMe }">
         <user-link class="text-truncate" :user-id="checker.id">
           {{ checker.displayName }}
-          <template v-if="isMe(checker)">
+          <template v-if="checker.isMe">
             (you)
           </template>
         </user-link>
       </div>
       <div v-if="choice!==null" class="task-record-review-history__checker__choice">
         <choice-badge :name="choice.name" :value="choice.value" class="task-record-review-history__checker__choice__badge">
-          <template #afterTooltip v-if="isMe(checker)">
+          <template #afterTooltip v-if="checker.isMe">
             |<b-btn size="sm" variant="link" class="text-white" @click="cancelReview(choice)">Cancel my choice</b-btn>
           </template>
         </choice-badge>
       </div>
       <div class="task-record-review-history__checker__alternative-value flex-grow-1">
         <template v-if="alternativeValue">
-          <template v-if="isMe(checker)">
+          <template v-if="checker.isMe">
             <span class="text-truncate text-dark px-2">
               {{ alternativeValue | alternativeValueName }}
             </span>
@@ -119,7 +119,7 @@ export default {
         <template v-if="!!note">
           <message-square-icon size="1x" class="mr-1" />1 note
         </template>
-        <template v-else-if="isMe(checker)">
+        <template v-else-if="checker.isMe">
           <edit-3-icon size="1x" class="mr-1" />Comment
         </template>
       </b-btn>

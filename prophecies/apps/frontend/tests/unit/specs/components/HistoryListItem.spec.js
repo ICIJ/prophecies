@@ -48,7 +48,7 @@ describe('HistoryListItem', () => {
   it('should display the category format  "Task | project"', async () => {
     expect(wrapper.vm.category).toBe('Addresses | Chronos')
   })
-  
+
   it('should display the category format  "General | project" when no task is set', async () => {
     await wrapper.setProps({ taskName: null })
     expect(wrapper.vm.category).toBe('General | Chronos')
@@ -77,6 +77,7 @@ describe('HistoryListItem', () => {
     await wrapper.setProps({
       creator: {
         id: '1',
+        displayName: 'Olivia',
         username: 'olivia',
         firstName: 'Olivia',
         lastName: 'Reinhardt',
@@ -92,7 +93,7 @@ describe('HistoryListItem', () => {
     const elem = wrapper.find('.history-list-item__content-column')
     expect(elem.text()).toBe('You mentioned you (@olivia) in a note')
   })
-  
+
   it('should display a tip text for a tip event', async () => {
     const propsData = {
       type: ITEM_TYPES.TIP,
