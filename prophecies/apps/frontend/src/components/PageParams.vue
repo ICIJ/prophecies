@@ -96,18 +96,21 @@ export default {
     retrieveUniqueAssociatedEntity (elType, elId, elValue) {
       const elements = this.values.reduce((options, currentObject) => {
         const elementId = currentObject[elId] ?? currentObject.id
-        const elementType = currentObject[elType] ?? currentObject
-        const elementName = elementType[elValue]
-        if (elementId && !options[elementId]) {
-          options[elementId] = {
-            id: elementId,
-            [elValue]: elementName
-          }
-          if (elType === 'task') {
-            const status = elementType.status
-            options[elementId].status = status.toLowerCase()
+        const elementType = currentObject[elType] === undefined ? currentObject : currentObject[elType]
+        if (elementType) {
+          const elementName = elementType[elValue]
+          if (elementId && !options[elementId]) {
+            options[elementId] = {
+              id: elementId,
+              [elValue]: elementName
+            }
+            if (elType === 'task') {
+              const status = elementType.status
+              options[elementId].status = status.toLowerCase()
+            }
           }
         }
+
         return options
       }, {})
       return Object.values(elements)
