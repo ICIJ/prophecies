@@ -4,44 +4,44 @@
     <div class="stats-list__container flex-grow-1">
       <app-header hide-nav hide-search/>
       <div class="container-fluid p-5">
-        <div class="col-12">
-          <div class="d-flex flex-wrap justify-content-between">
-              <b-form-group class="stats-list__radio d-flex align-items-end mr-5">
-                <b-form-radio-group
-                v-model="teamTaskStats"
-                buttons
-                button-variant="outline-primary"
-                :options="taskStatsOptions" />
-              </b-form-group>
-            <div class="stats-list__filters d-flex align-items-end ">
-              <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="onlyOpenTasks">
-                <span class="text-nowrap text-primary">{{$t('statsList.showOnlyOpenTasks')}}</span>
-              </b-form-checkbox>
-              <task-sort-by-dropdown
-                :sort.sync="sortField"
-                @update:sort-by-cb="updateSortByCallback"
-                class="mb-3 stats-list__filters__sort-by"
-              />
+        <div class="row">
+          <div class="col-12">
+            <div class="d-flex flex-wrap justify-content-between">
+                <b-form-group class="stats-list__radio d-flex  mr-5">
+                  <b-form-radio-group
+                  v-model="teamTaskStats"
+                  buttons
+                  button-variant="outline-primary"
+                  :options="taskStatsOptions" />
+                </b-form-group>
+              <div class="stats-list__filters d-flex align-items-end ">
+                <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="onlyOpenTasks">
+                  <span class="text-nowrap text-primary">{{$t('statsList.showOnlyOpenTasks')}}</span>
+                </b-form-checkbox>
+                <task-sort-by-dropdown
+                  :sort.sync="sortField"
+                  @update:sort-by-cb="updateSortByCallback"
+                  class="mb-3 stats-list__filters__sort-by"
+                />
+              </div>
             </div>
+            <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
+              <task-stats-card class="my-5" v-for="task in tasks" :key="task.id" :task-id="task.id" :team="teamTaskStats" extended>
+                <template v-if="fetchTaskUserStatsLoader" v-slot:taskStatsByRound="{stats}" >
+                  <stats-by-round
+                    v-for="(round,index) in stats.rounds"
+                    :key="round"
+                    :round="index+1"
+                    :progress="stats.progress[round]"
+                    :user-choice='choicesByRound[round]'
+                    :progress-by-user='taskUserStatistics(task.id,round)'
+                    :summary='taskUserChoiceStatistics(task.id,round)'
+                    extended
+                    class="mx-auto" />
+                </template>
+              </task-stats-card>
+            </app-waiter>
           </div>
-          <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-            <task-stats-card class="my-5" v-for="task in tasks" :key="task.id" :task-id="task.id" :team="teamTaskStats" extended>
-              <template v-if="fetchTaskUserStatsLoader" v-slot:taskStatsByRound="{stats}" >
-                 <stats-by-round
-                  v-for="(round,index) in stats.rounds"
-                  :key="round"
-                  :round="index+1"
-                  :progress="stats.progress[round]"
-                  :user-choice='choicesByRound[round]'
-                  :progress-by-user='taskUserStatistics(task.id,round)'
-                  :summary='taskUserChoiceStatistics(task.id,round)'
-                  extended
-                  class="mx-auto" />
-              </template>
-            </task-stats-card>
-
-          </app-waiter>
-
         </div>
       </div>
     </div>
