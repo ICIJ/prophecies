@@ -37,7 +37,6 @@ export default {
   },
   data () {
     return {
-      countBy: [],
       FILTER_TYPES: FILTER_TYPES,
       projectFilter: this.query[FILTER_TYPES.PROJECT],
       taskFilter: this.query[FILTER_TYPES.TASK],
@@ -81,8 +80,9 @@ export default {
         }
         return acc
       }, { choiceGroupIds: {}, promises: [] })
-
-      await Promise.all(uniqueChoiceGroups.promises)
+      try {
+        await Promise.all(uniqueChoiceGroups.promises)
+      } catch (_) { }
     },
     async fetchTask (taskId) {
       const params = { include: 'project,checkers' }
@@ -98,7 +98,9 @@ export default {
       }, { taskIds: {}, promises: [] })
 
       this.$set(this, 'taskIds', Object.keys(uniqueTaskIds.taskIds))
-      await Promise.all(uniqueTaskIds.promises)
+      try {
+        await Promise.all(uniqueTaskIds.promises)
+      } catch (_) { }
 
       this.$set(this, 'taskRecordReviewIds', this.taskRecordReviewIds)
     },
@@ -194,26 +196,31 @@ export default {
               Bookmarks
             </h1>
           </div>
-          <bookmarks-page-params
-            :tasks="tasks"
-            :project-id="query[FILTER_TYPES.PROJECT]"
-            @update:projectId="setProjectFilter"
-            :task-id="query[FILTER_TYPES.TASK]"
-            @update:taskId="setTaskFilter"/>
-          <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
-            <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
-            <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="mb-4">
-              <div class="d-flex flex-row mb-4 ml-4 mt-4">
-                <div>
-                  <h2>{{ taskName }}</h2>
+          <template v-if="taskRecordReviewIds.length">
+            <bookmarks-page-params
+              :tasks="tasks"
+              :project-id="query[FILTER_TYPES.PROJECT]"
+              @update:projectId="setProjectFilter"
+              :task-id="query[FILTER_TYPES.TASK]"
+              @update:taskId="setTaskFilter"/>
+            <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
+              <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
+              <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="mb-4">
+                <div class="d-flex flex-row mb-4 ml-4 mt-4">
+                  <div>
+                    <h2>{{ taskName }}</h2>
+                  </div>
                 </div>
+                <b-list-group-item v-for="record in taskValue" class="flex-column align-items-start ml-4 border-0" :key="record.id">
+                  <task-record-review-card
+                    :task-record-review-id="record.id"
+                    :active="true"/>
+                </b-list-group-item>
               </div>
-              <b-list-group-item v-for="record in taskValue" class="flex-column align-items-start ml-4 border-0" :key="record.id">
-                <task-record-review-card
-                  :task-record-review-id="record.id"
-                  :active="true"/>
-              </b-list-group-item>
             </div>
+          </template>
+          <div v-else class="bookmarks__no-items text-center text-secondary text-small">
+            No bookmarks
           </div>
         </app-waiter>
       </div>

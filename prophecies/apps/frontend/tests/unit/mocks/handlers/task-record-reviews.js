@@ -307,6 +307,17 @@ export default [
               },
               lockedBy: {
                 data: '2'
+              },
+              bookmarkedBy: {
+                data: [
+                  {
+                    type: 'User',
+                    id: '1'
+                  }
+                ],
+                meta: {
+                  count: 1
+                }
               }
             },
             links: {
