@@ -28,7 +28,7 @@ describe('TaskRecordReviewHistory', () => {
     const localVue = createLocalVue()
     const propsData = { taskRecordReviewId: '38' }
     // Configure the local vue with plugins
-    const { store, router,wait } = Core.init(localVue).useAll()
+    const { store, router, wait } = Core.init(localVue).useAll()
     wrapper = mount(TaskRecordReviewHistory, { attachTo, localVue, propsData, store, router, wait })
   })
 
@@ -54,13 +54,6 @@ describe('TaskRecordReviewHistory', () => {
 
   it('should not be me', () => {
     expect(wrapper.vm.isMe({ id: '3' })).toBeFalsy()
-  })
-
-  it('should only show the first letter of the status', () => {
-    const firstCheckerBadge = wrapper.find('.task-record-review-history__checker__choice__badge')
-    expect(firstCheckerBadge.text()).toBe('Unkown')
-    const firstCheckerBadgeEnd = wrapper.find('.task-record-review-history__checker__choice__badge .sr-only')
-    expect(firstCheckerBadgeEnd.text()).toBe('nkown')
   })
 
   it('should show "you" next to the current checker name', () => {

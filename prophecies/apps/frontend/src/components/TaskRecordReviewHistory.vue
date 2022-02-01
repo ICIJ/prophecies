@@ -2,24 +2,18 @@
 import { get, uniqueId } from 'lodash'
 
 import User from '@/models/User'
-import { toVariant } from '@/utils/variant'
 import AlternativeValue from '@/models/AlternativeValue'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import UserLink from '@/components/UserLink'
+import ChoiceBadge from './ChoiceBadge.vue'
 
 export default {
   name: 'TaskRecordReviewHistory',
   components: {
-    UserLink
+    UserLink,
+    ChoiceBadge
   },
   filters: {
-    toVariant,
-    firstLetter (str) {
-      return String(str).slice(0, 1)
-    },
-    skipFirstLetter (str) {
-      return String(str).slice(1)
-    },
     alternativeValueName (value) {
       const alternativeValue = AlternativeValue.query().where('value', value).first()
       const valueBetweenQuotes = `"${value}"`
@@ -99,15 +93,11 @@ export default {
         </user-link>
       </div>
       <div v-if="choice!==null" class="task-record-review-history__checker__choice">
-        <b-badge class="task-record-review-history__checker__choice__badge" :variant="choice.value | toVariant"  v-if="choice" :id="tooltipId+checker" >
-          {{ choice.name | firstLetter }}<span class="sr-only">{{ choice.name | skipFirstLetter }}</span>
-        </b-badge>
-        <b-tooltip :target="tooltipId+checker" triggers="hover" placement="right" >
-          <div class="task-record-review-history__checker__choice__tooltip d-flex align-items-center">
-            <span class="py-1 px-2 font-weight-bold ">{{choice.name}}</span>
-            <template v-if="isMe(checker)">|<b-btn size="sm" variant="link" class="text-white" @click="cancelReview(choice)">Cancel my choice</b-btn></template>
-          </div>
-        </b-tooltip>
+        <choice-badge :name="choice.name" :value="choice.value" class="task-record-review-history__checker__choice__badge">
+          <template #afterTooltip v-if="isMe(checker)">
+            |<b-btn size="sm" variant="link" class="text-white" @click="cancelReview(choice)">Cancel my choice</b-btn>
+          </template>
+        </choice-badge>
       </div>
       <div class="task-record-review-history__checker__alternative-value flex-grow-1">
         <template v-if="alternativeValue">
@@ -156,20 +146,6 @@ export default {
 
         &:after {
           content: ":"
-        }
-      }
-
-      &__choice {
-        width: 100%;
-        max-width: 2rem;
-
-        & /deep/ .badge {
-          padding: 0;
-          width: 1.6em;
-          height: 1.6em;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
         }
       }
 

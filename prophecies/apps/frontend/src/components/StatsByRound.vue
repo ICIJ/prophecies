@@ -1,6 +1,6 @@
 <script>
-import { toVariant } from '@/utils/variant'
 import StatsByUsers from '@/components/StatsByUsers.vue'
+import ChoiceBadge from './ChoiceBadge.vue'
 
 export default {
   name: 'StatsByRound',
@@ -15,10 +15,6 @@ export default {
     progress: {
       type: Number
     },
-    userChoice: {
-      type: Array,
-      default: () => ([])
-    },
     progressByUser: {
       type: Array,
       default: () => ([])
@@ -29,20 +25,14 @@ export default {
     },
     nbRounds: {
       type: Number,
-      default: 0
+      default: 1
     }
   },
   components: {
-    StatsByUsers
+    StatsByUsers,
+    ChoiceBadge
   },
   filters: {
-    toVariant,
-    firstLetter (str) {
-      return String(str).slice(0, 1)
-    },
-    skipFirstLetter (str) {
-      return String(str).slice(1)
-    },
     round (value) {
       return Math.round(value)
     }
@@ -74,10 +64,12 @@ export default {
       </div>
       <stats-by-users :users="users" />
       <div class="stats-by-round__summary row py-3">
-       <div class="stats-by-round__summary__choice d-flex align-items-center" :class="badgeColumnClass" v-for="statChoice in summary" :key="statChoice.value">
-           <b-badge class="stats-by-round__summary__choice__badge mr-3 " :variant="statChoice.value | toVariant" v-if="statChoice" :title="statChoice.name" v-b-tooltip.right>
-            {{ statChoice.name | firstLetter }}<span class="sr-only">{{ statChoice.name | skipFirstLetter }}</span>
-          </b-badge><span class="stats-by-round__number">{{statChoice.progress | round }}</span>%
+        <div class="stats-by-round__summary__choice d-flex align-items-center" :class="badgeColumnClass" v-for="statChoice in summary" :key="statChoice.value">
+          <choice-badge
+          class="stats-by-round__summary__choice__badge"
+          :name="statChoice.name"
+          :value="statChoice.value"
+          /><span class="stats-by-round__number">{{statChoice.progress | round }}</span>%
         </div>
       </div>
     </template>
@@ -99,17 +91,14 @@ export default {
 
 .stats-by-round
 {
+
   &__number{
     font-variant-numeric: tabular-nums;
   }
+
   &--extended{
     min-width: 340px;
   }
 
-  &__summary__choice__badge{
-    width:1.5em;
-    height:1.5em;
-    display: inline-block;
-  }
 }
 </style>
