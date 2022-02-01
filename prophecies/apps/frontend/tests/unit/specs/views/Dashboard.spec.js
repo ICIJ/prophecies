@@ -15,9 +15,10 @@ describe('Dashboard', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
-    const { wait, store } = Core.init(localVue).useAll()
+    const { i18n, wait, store } = Core.init(localVue).useAll()
 
     wrapper = await shallowMount(Dashboard, {
+      i18n,
       localVue,
       store,
       wait

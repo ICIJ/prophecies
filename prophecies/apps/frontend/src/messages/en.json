@@ -47,7 +47,13 @@
     "version": "Version {version}"
   },
   "dashboard": {
-    "title": "Dashboard"
+    "title": "Dashboard",
+    "allHistory": "Show me all history",
+    "allStats": "All stats",
+    "latestTips": "Latest tips",
+    "moreNiceTips": "More nice tips",
+    "noTask": "No tasks yet",
+    "lately": "Lately"
   },
   "error": {
     "title": "Something's wrong here",

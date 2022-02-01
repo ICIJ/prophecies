@@ -105,11 +105,11 @@ export default {
                                    :task-id="task.id" >
                   </task-stats-card>
                   <div class="dashboard__container__left-panel__stats-link d-flex justify-content-center py-3 my-3">
-                    <router-link class="btn btn-primary font-weight-bold" :to="{name:'stats-list'}">All stats</router-link>
+                    <router-link class="btn btn-primary font-weight-bold" :to="{name:'stats-list'}">{{ $t('dashboard.allStats') }}</router-link>
                   </div>
                 </template>
                 <div v-else class="card card-body shadow-sm text-center text-muted text-small">
-                  No tasks yet.
+                  {{ $t('dashboard.noTask') }}.
                 </div>
               </app-waiter>
             </div>
@@ -121,7 +121,7 @@ export default {
                 <latest-tips-card :tips="tips">
                   <template v-slot:title>
                     <h2 class="title-dashboard mb-0 font-weight-bold">
-                      Latest tips
+                      {{ $t('dashboard.latestTips') }}
                     </h2>
                   </template>
                   <template v-slot:itemTitle="slotProps">
@@ -136,7 +136,7 @@ export default {
                         title="All tips"
                         v-b-tooltip.hover
                         class="text-secondary">
-                        More nice tips
+                        {{ $t('dashboard.moreNiceTips') }}
                       </router-link>
                     </div>
                   </template>
@@ -151,7 +151,7 @@ export default {
           <div class="col-12">
           <history-list :fluid="false" :limit=5>
             <template v-slot:title>
-              <span class="text-danger">Lately</span> in Prophecies
+              <span class="text-danger">{{ $t('dashboard.lately') }}</span> in Prophecies
             </template>
             <template v-slot:footer>
               <div class="d-flex justify-content-center pt-3">
@@ -161,7 +161,7 @@ export default {
                   title="All history"
                   class="text-white"
                   >
-                  Show me all history
+                  {{ $t('dashboard.allHistory') }}
                 </router-link>
                 </button>
               </div>
