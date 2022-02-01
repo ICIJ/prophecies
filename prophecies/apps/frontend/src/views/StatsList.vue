@@ -26,7 +26,7 @@
               </div>
             </div>
             <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-              <task-stats-card class="my-5" v-for="task in tasks" :key="task.id" :task-id="task.id" :team="teamTaskStats" extended>
+              <task-stats-card class="stats-list__task-card my-5" v-for="task in tasks" :key="task.id" :task-id="task.id" :team="teamTaskStats" extended>
                 <template v-if="fetchTaskUserStatsLoader" v-slot:taskStatsByRound="{stats}" >
                   <stats-by-round
                     v-for="(round,index) in stats.rounds"
@@ -36,7 +36,7 @@
                     :progress-by-user='taskUserStatistics(task.id,round)'
                     :summary='taskUserChoiceStatistics(task.id,round)'
                     extended
-                    class="mx-auto" />
+                    class="stats-list__task-card__round mx-auto" />
                 </template>
               </task-stats-card>
             </app-waiter>
@@ -87,11 +87,14 @@ export default {
       ]
     }
   },
-  async created () {
-    await this.waitFor(this.fetchTaskLoader, [this.fetchTask])
-    await this.waitFor(this.fetchTaskUserStatsLoader, [this.fetchTaskUserStats, this.fetchTaskUserChoiceStats])
+  created () {
+    return this.setup()
   },
   methods: {
+    async setup () {
+      await this.waitFor(this.fetchTaskLoader, [this.fetchTask])
+      await this.waitFor(this.fetchTaskUserStatsLoader, [this.fetchTaskUserStats, this.fetchTaskUserChoiceStats])
+    },
     fetchTask () {
       const params = { include: 'choiceGroup.choices' }
       return Task.api().get('', { params })
