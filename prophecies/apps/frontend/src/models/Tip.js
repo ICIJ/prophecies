@@ -1,5 +1,5 @@
 import { Model } from '@vuex-orm/core'
-import marked from 'marked'
+import { marked } from 'marked'
 import { responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import Project from '@/models/Project'
