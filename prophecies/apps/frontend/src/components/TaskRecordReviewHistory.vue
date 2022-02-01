@@ -5,7 +5,7 @@ import User from '@/models/User'
 import AlternativeValue from '@/models/AlternativeValue'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import UserLink from '@/components/UserLink'
-import ChoiceBadge from './ChoiceBadge.vue'
+import ChoiceBadge from '@/components/ChoiceBadge.vue'
 
 export default {
   name: 'TaskRecordReviewHistory',
