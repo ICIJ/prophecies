@@ -17,15 +17,13 @@ describe('HistoryListItem', () => {
       creator: {
         id: '1',
         username: 'olivia',
-        firstName: 'Olivia',
-        lastName: 'Reinhardt',
+        displayName: 'Olivia',
         isMe: true
       },
       value: {
         id: '1',
         username: 'olivia',
-        firstName: 'Olivia',
-        lastName: 'Reinhardt',
+        displayName: 'Olivia',
         isMe: true
       },
       projectName: 'Chronos',
@@ -65,9 +63,8 @@ describe('HistoryListItem', () => {
     await wrapper.setProps({
       value: {
         id: '1',
+        displayName: 'Olivia',
         username: 'olivia',
-        firstName: 'Olivia',
-        lastName: 'Reinhardt',
         isMe: false
       }
     })
@@ -79,8 +76,6 @@ describe('HistoryListItem', () => {
         id: '1',
         displayName: 'Olivia',
         username: 'olivia',
-        firstName: 'Olivia',
-        lastName: 'Reinhardt',
         isMe: false
       }
     })
@@ -101,8 +96,7 @@ describe('HistoryListItem', () => {
       creator: {
         id: '1',
         username: 'olivia',
-        firstName: 'Olivia',
-        lastName: 'Reinhardt',
+        displayName: 'Olivia',
         isMe: true
       },
       value: 'Bonjour hello',
@@ -122,8 +116,7 @@ describe('HistoryListItem', () => {
       creator: {
         id: '1',
         username: 'olivia',
-        firstName: 'Olivia',
-        lastName: 'Reinhardt',
+        displayName: 'Olivia',
         isMe: true
       },
       projectName: 'Chronos',

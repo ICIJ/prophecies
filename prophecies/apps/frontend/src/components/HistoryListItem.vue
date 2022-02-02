@@ -85,10 +85,7 @@ export default {
       if (user.isMe) {
         return capitalize ? 'You' : 'you'
       }
-      if (!user.firstName || !user.lastName) {
-        return `@${user.username}`
-      }
-      return `${user.firstName}`
+      return `${user.displayName}`
     },
     mentionContent (user) {
       return `${this.userDisplayName(user)} (@${user.username})`
@@ -126,8 +123,7 @@ export default {
     <div class="row container-fluid justify-content-between flex-grow-1">
         <div class="d-flex flex-grow-lg-0 flex-grow-1 px-3 py-1 history-list-item__content-column col-12 col-lg-5" :class="className">
           <p>
-            <user-link class="text-truncate" :user-id="creator.id">
-              {{ creator.displayName }}<template v-if="creator.isMe">You</template></user-link> <a v-if="hasLink" class="pl-1" :href='`${link}`'>{{$t(`historyListItem.${type}`, { value:content } )}}
+            <user-link class="text-truncate" :user-id="creator.id">{{ userDisplayName(creator,true) }}</user-link> <a v-if="hasLink" class="pl-1" :href='`${link}`'>{{$t(`historyListItem.${type}`, { value:content } )}}
             </a><template v-else>{{$tc(`historyListItem.${type}`, content)}} </template></p>
         </div>
         <div class="d-flex ml-auto flex-md-row flex-lg-grow-0 justify-content-md-right flex-sm-column flex-sm-grow-1 justify-content-sm-between">
