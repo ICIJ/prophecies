@@ -6,7 +6,6 @@ import TaskRecordReview from '@/models/TaskRecordReview'
 import Task from '@/models/Task'
 import Bookmarks from '@/views/Bookmarks'
 import User from '@/models/User'
-import ChoiceGroup from '@/models/ChoiceGroup'
 
 
 describe('Bookmarks', () => {
@@ -63,6 +62,24 @@ describe('Bookmarks', () => {
     expect(wrapper.vm.taskIds).toHaveLength(2)
     expect(project.at(0).find('h2').text()).toContain('Shops')
     expect(project.at(1).find('h2').text()).toContain('Addresses')
+  })
+
+  it('should apply filters', async () => {
+    await wrapper.setProps({ query: {'filter[project]': '2', 'filter[task]': null} })
+    await wrapper.vm.setup()
+
+    let project = await wrapper.findAll('.bookmarks-list__project')
+    expect(project).toHaveLength(1)
+    expect(project.at(0).find('h1').text()).toContain('Demeter')
+    expect(project.at(0).find('h2').text()).toContain('Shops')
+    expect(project.at(0).findAll('task-record-review-card-stub')).toHaveLength(3)
+
+    await wrapper.setProps({ query: {'filter[project]': null, 'filter[task]': '1'} })
+    project = await wrapper.findAll('.bookmarks-list__project')
+    expect(project).toHaveLength(1)
+    expect(project.at(0).find('h1').text()).toContain('Chronos')
+    expect(project.at(0).find('h2').text()).toContain('Addresses')
+    expect(project.at(0).findAll('task-record-review-card-stub')).toHaveLength(2)
   })
 
   it('should show the message "No bookmarks" when list is empty', async () => {
