@@ -119,7 +119,6 @@
     "done": "Done"
   },
   "userProfileDropdownMenu": {
-    "profile": "Your profile",
     "api": "API",
     "admin": "Admin",
     "help": "Help",
@@ -129,6 +128,12 @@
     "title": {
       "yours": "Your profile",
       "others": "{displayFullName}'s profile"
+    }
+  },
+  "userRetrieveTeam": {
+    "title": {
+      "yours": "Your team",
+      "others": "{displayFullName}'s team"
     }
   }
 }

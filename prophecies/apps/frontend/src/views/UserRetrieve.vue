@@ -24,24 +24,25 @@ export default {
     await this.fetchUserWithLoader()
   },
   computed: {
-    routeKey () {
-      return camelCase(this.$route.name)
-    },
-    routeTitleKey () {
-      if (this.user?.isMe) {
-        return [this.routeKey, 'title', 'yours'].join('.')
-      }
-      return [this.routeKey, 'title', 'others'].join('.')
-    },
-    userRoute () {
+    profileRoute () {
       const params = { username: this.username }
       return { name: 'user-retrieve-profile', params }
+    },
+    teamRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-team', params }
     },
     fetchUserLoader () {
       return uniqueId('load-user-')
     },
     title () {
-      return this.$t(this.routeTitleKey, this.user)
+      return this.routeTitle(this.$route.name)
+    },
+    profileTitle () {
+      return this.routeTitle(this.profileRoute.name)
+    },
+    teamTitle () {
+      return this.routeTitle(this.teamRoute.name)
     },
     user () {
       return User.find(this.username)
@@ -51,6 +52,20 @@ export default {
     }
   },
   methods: {
+    getRouteKey (route) {
+      return camelCase(route)
+    },
+    getRouteKeyPath (routeKey) {
+      if (this.user?.isMe) {
+        return [routeKey, 'title', 'yours'].join('.')
+      }
+      return [routeKey, 'title', 'others'].join('.')
+    },
+    routeTitle (routeName) {
+      const routeKey = this.getRouteKey(routeName)
+      const path = this.getRouteKeyPath(routeKey)
+      return this.$t(path, this.user)
+    },
     fetchUser () {
       return User.api().get(this.username)
     },
@@ -77,17 +92,21 @@ export default {
   <div class="user-retrieve d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top">
       <template #items>
-        <b-nav-item :to="userRoute" exact>
+        <b-nav-item :to="profileRoute" exact>
           <user-icon class="mr-3" />
-          Profile
+          {{ profileTitle }}
+        </b-nav-item>
+        <b-nav-item :to="teamRoute" exact>
+          <users-icon class="mr-3" />
+          {{ teamTitle }}
         </b-nav-item>
         <b-nav-item :href="$config.get('helpLink')">
           <truck-icon class="mr-3" />
-          Help
+          {{ $t('userProfileDropdownMenu.help') }}
         </b-nav-item>
         <b-nav-item :href="$config.get('logoutUrl')">
           <log-out-icon class="mr-3" />
-          Sign out
+          {{ $t('userProfileDropdownMenu.logOut') }}
         </b-nav-item>
       </template>
     </app-sidebar>
