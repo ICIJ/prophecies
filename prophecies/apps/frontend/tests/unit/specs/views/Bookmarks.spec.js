@@ -65,8 +65,8 @@ describe('Bookmarks', () => {
   })
 
   it('should apply filters', async () => {
-    await wrapper.setProps({ query: {'filter[project]': '2'} })
     await wrapper.vm.setup()
+    await wrapper.setProps({ query: {'filter[project]': '2'} })
 
     let project = await wrapper.findAll('.bookmarks-list__project')
     expect(project).toHaveLength(1)
