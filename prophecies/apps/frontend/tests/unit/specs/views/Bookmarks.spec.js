@@ -65,7 +65,7 @@ describe('Bookmarks', () => {
   })
 
   it('should apply filters', async () => {
-    await wrapper.setProps({ query: {'filter[project]': '2', 'filter[task]': null} })
+    await wrapper.setProps({ query: {'filter[project]': '2'} })
     await wrapper.vm.setup()
 
     let project = await wrapper.findAll('.bookmarks-list__project')
@@ -74,7 +74,7 @@ describe('Bookmarks', () => {
     expect(project.at(0).find('h2').text()).toContain('Shops')
     expect(project.at(0).findAll('task-record-review-card-stub')).toHaveLength(3)
 
-    await wrapper.setProps({ query: {'filter[project]': null, 'filter[task]': '1'} })
+    await wrapper.setProps({ query: {'filter[task]': '1'} })
     project = await wrapper.findAll('.bookmarks-list__project')
     expect(project).toHaveLength(1)
     expect(project.at(0).find('h1').text()).toContain('Chronos')
