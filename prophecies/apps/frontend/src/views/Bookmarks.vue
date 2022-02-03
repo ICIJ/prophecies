@@ -203,15 +203,15 @@ export default {
               @update:projectId="setProjectFilter"
               :task-id="query[FILTER_TYPES.TASK]"
               @update:taskId="setTaskFilter"/>
-            <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
+            <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="bookmarks-list__project mt-4 mb-4 border-bottom">
               <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
-              <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="mb-4">
+              <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="bookmarks-list__project__task mb-4">
                 <div class="d-flex flex-row mb-4 ml-4 mt-4">
                   <div>
                     <h2>{{ taskName }}</h2>
                   </div>
                 </div>
-                <b-list-group-item v-for="record in taskValue" class="flex-column align-items-start ml-4 border-0" :key="record.id">
+                <b-list-group-item v-for="record in taskValue" class="bookmarks-list__project__task__record flex-column align-items-start ml-4 border-0" :key="record.id">
                   <task-record-review-card
                     :task-record-review-id="record.id"
                     :active="true"/>
