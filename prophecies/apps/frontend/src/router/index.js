@@ -11,7 +11,7 @@ import StatsList from '@/views/StatsList.vue'
 import UserRetrieve from '@/views/UserRetrieve.vue'
 import UserRetrieveProfile from '@/views/UserRetrieveProfile.vue'
 import UserRetrieveTeam from '@/views/UserRetrieveTeam.vue'
-import Bookmarks from '@/views/Bookmarks'
+import UserRetrieveBookmarks from '@/views/UserRetrieveBookmarks.vue'
 
 export const router = {
   routes: [
@@ -47,6 +47,12 @@ export const router = {
           path: 'teams',
           props: true,
           component: UserRetrieveTeam
+        },
+        {
+          name: 'user-retrieve-bookmarks',
+          path: 'bookmarks',
+          component: UserRetrieveBookmarks,
+          props: (route) => ({ query: route.query })
         }
       ]
     },
@@ -85,12 +91,6 @@ export const router = {
       path: '/stats',
       component: StatsList,
       props: true
-    },
-    {
-      name: 'bookmarks',
-      path: '/bookmarks',
-      component: Bookmarks,
-      props: (route) => ({ query: route.query })
     },
     {
       name: 'tip-retrieve',

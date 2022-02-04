@@ -135,5 +135,11 @@
       "yours": "Your team",
       "others": "{displayFullName}'s team"
     }
+  },
+  "userRetrieveBookmarks": {
+    "title": {
+      "yours": "Your bookmarks",
+      "others": "{displayFullName}'s bookmarks"
+    }
   }
 }

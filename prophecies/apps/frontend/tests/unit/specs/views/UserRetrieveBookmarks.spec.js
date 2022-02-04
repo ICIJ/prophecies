@@ -4,7 +4,7 @@ import '@/store'
 import Core from '@/core'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import Task from '@/models/Task'
-import Bookmarks from '@/views/Bookmarks'
+import UserRetrieveBookmarks from '@/views/UserRetrieveBookmarks'
 import User from '@/models/User'
 
 
@@ -27,7 +27,7 @@ describe('Bookmarks', () => {
     }
     const propsData = { query }
 
-    wrapper = await shallowMount(Bookmarks, {
+    wrapper = await shallowMount(UserRetrieveBookmarks, {
       i18n,
       localVue,
       propsData,
@@ -54,7 +54,7 @@ describe('Bookmarks', () => {
   it('should display bookmarked items grouped by projects then by tasks', async () => {
     await wrapper.vm.setup()
 
-    const project = await wrapper.findAll('.bookmarks-list__project')
+    const project = await wrapper.findAll('.user-retrieve-bookmarks__project')
     expect(project).toHaveLength(2)
     expect(project.at(0).find('h1').text()).toContain('Demeter')
     expect(project.at(1).find('h1').text()).toContain('Chronos')
@@ -68,14 +68,14 @@ describe('Bookmarks', () => {
     await wrapper.vm.setup()
     await wrapper.setProps({ query: {'filter[project]': '2'} })
 
-    let project = await wrapper.findAll('.bookmarks-list__project')
+    let project = await wrapper.findAll('.user-retrieve-bookmarks__project')
     expect(project).toHaveLength(1)
     expect(project.at(0).find('h1').text()).toContain('Demeter')
     expect(project.at(0).find('h2').text()).toContain('Shops')
     expect(project.at(0).findAll('task-record-review-card-stub')).toHaveLength(3)
 
     await wrapper.setProps({ query: {'filter[task]': '1'} })
-    project = await wrapper.findAll('.bookmarks-list__project')
+    project = await wrapper.findAll('.user-retrieve-bookmarks__project')
     expect(project).toHaveLength(1)
     expect(project.at(0).find('h1').text()).toContain('Chronos')
     expect(project.at(0).find('h2').text()).toContain('Addresses')
@@ -83,7 +83,7 @@ describe('Bookmarks', () => {
   })
 
   it('should show the message "No bookmarks" when list is empty', async () => {
-    const element = wrapper.find('.bookmarks__no-items')
+    const element = wrapper.find('.user-retrieve-bookmarks__no-items')
     expect(wrapper.vm.taskRecordReviewIds).toHaveLength(0)
     expect(element.exists()).toBeTruthy()
     expect(element.text()).toBe('No bookmarks')

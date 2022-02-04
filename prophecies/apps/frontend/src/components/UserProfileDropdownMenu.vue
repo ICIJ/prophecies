@@ -17,6 +17,10 @@ export default {
     teamRoute () {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-team', params }
+    },
+    bookmarksRoute () {
+      const params = { username: this.user.username }
+      return { name: 'user-retrieve-bookmarks', params }
     }
   }
 }
@@ -31,6 +35,10 @@ export default {
     <b-dropdown-item :to="teamRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--team">
       <users-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveTeam.title.yours') }}
+    </b-dropdown-item>
+    <b-dropdown-item :to="bookmarksRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--bookmarks">
+      <bookmark-icon class="user-profile-dropdown-menu__item__icon" />
+      {{ $t('userRetrieveBookmarks.title.yours') }}
     </b-dropdown-item>
     <b-dropdown-item :href="$config.get('apiUrl')" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--api">
       <code-icon class="user-profile-dropdown-menu__item__icon" />

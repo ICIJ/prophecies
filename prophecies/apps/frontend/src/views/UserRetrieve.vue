@@ -32,6 +32,10 @@ export default {
       const params = { username: this.username }
       return { name: 'user-retrieve-team', params }
     },
+    bookmarksRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-bookmarks', params }
+    },
     fetchUserLoader () {
       return uniqueId('load-user-')
     },
@@ -44,11 +48,21 @@ export default {
     teamTitle () {
       return this.routeTitle(this.teamRoute.name)
     },
+    bookmarksTitle () {
+      return this.routeTitle(this.bookmarksRoute.name)
+    },
     user () {
       return User.find(this.username)
     },
     icon () {
-      return 'UserIcon'
+      switch (this.title) {
+        case this.teamTitle:
+          return 'UsersIcon'
+        case this.bookmarksTitle:
+          return 'BookmarkIcon'
+        default:
+          return 'UserIcon'
+      }
     }
   },
   methods: {
@@ -99,6 +113,10 @@ export default {
         <b-nav-item :to="teamRoute" exact>
           <users-icon class="mr-3" />
           {{ teamTitle }}
+        </b-nav-item>
+        <b-nav-item :to="bookmarksRoute" exact>
+          <bookmark-icon class="mr-3" />
+          {{ bookmarksTitle }}
         </b-nav-item>
         <b-nav-item :href="$config.get('helpLink')">
           <truck-icon class="mr-3" />

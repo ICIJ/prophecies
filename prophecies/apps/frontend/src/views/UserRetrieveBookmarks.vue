@@ -134,7 +134,7 @@ export default {
       this.updateFilters()
     },
     updateFilters () {
-      return this.$router.push({ name: 'bookmarks', query: this.bookmarksParams })
+      return this.$router.push({ name: 'user-retrieve-bookmarks', query: this.bookmarksParams })
     },
     projectNotContainingTask (projectId, taskId) {
       const reviewsOfProject = Task.query().where('projectId', projectId).get()
@@ -208,41 +208,30 @@ export default {
 </script>
 
 <template>
-  <div class="bookmarks d-flex align-items-start">
-    <app-sidebar class="w-100 sticky-top" />
-    <div class="bookmarks-list__container flex-grow-1">
-      <app-header reduced />
-      <div class="container-fluid">
-        <app-waiter :loader="fetchBookmarksLoader" waiter-class="my-5 mx-auto d-block">
-          <page-header icon="BookmarkIcon" class="mb-5">
-            Bookmarks
-          </page-header>
-          <template v-if="taskRecordReviewIds.length">
-            <bookmarks-page-params
-              :tasks="tasks"
-              :project-id.sync="projectId"
-              :task-id.sync="taskId"/>
-            <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="bookmarks-list__project mt-4 mb-4 border-bottom">
-              <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
-              <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="bookmarks-list__project__task mb-4">
-                <div class="d-flex flex-row mb-4 ml-4 mt-4">
-                  <div>
-                    <h2>{{ taskName }}</h2>
-                  </div>
-                </div>
-                <b-list-group-item v-for="record in taskValue" class="bookmarks-list__project__task__record flex-column align-items-start ml-4 border-0" :key="record.id">
-                  <task-record-review-card
-                    :task-record-review-id="record.id"
-                    :active="true"/>
-                </b-list-group-item>
-              </div>
+  <div class="user-retrieve-bookmarks">
+    <template v-if="taskRecordReviewIds.length">
+      <bookmarks-page-params
+        :tasks="tasks"
+        :project-id.sync="projectId"
+        :task-id.sync="taskId"/>
+      <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="user-retrieve-bookmarks__project mt-4 mb-4 border-bottom">
+        <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
+        <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="user-retrieve-bookmarks__project__task mb-4">
+          <div class="d-flex flex-row mb-4 ml-4 mt-4">
+            <div>
+              <h2>{{ taskName }}</h2>
             </div>
-          </template>
-          <div v-else class="bookmarks__no-items text-center text-secondary text-small">
-            No bookmarks
           </div>
-        </app-waiter>
+          <b-list-group-item v-for="record in taskValue" class="user-retrieve-bookmarks__project__task__record flex-column align-items-start ml-4 border-0" :key="record.id">
+            <task-record-review-card
+              :task-record-review-id="record.id"
+              :active="true"/>
+          </b-list-group-item>
+        </div>
       </div>
+    </template>
+    <div v-else class="user-retrieve-bookmarks__no-items text-center text-secondary text-small">
+      No bookmarks
     </div>
   </div>
 </template>
