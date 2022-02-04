@@ -21,11 +21,18 @@ class TestActionAggregate(TestCase):
         Choice.objects.create(name='No', choice_group=choice_group)
         # Create project and task
         project = Project.objects.create(name='foo')
-        self.task = Task.objects.create(name="paintings", project=project, choice_group=choice_group)
+        project_bar = Project.objects.create(name='bar')
+        self.task = Task.objects.create(name="paintings", project=project_bar, choice_group=choice_group)
         self.task_shops = Task.objects.create(name="shops", project=project, choice_group=choice_group)
 
         self.olivia = User.objects.get(username='olivia')
         self.django = User.objects.get(username='django')
+        self.ruby = User.objects.get(username='ruby')
+        self.task_shops.checkers.add(self.ruby)
+        self.task_shops.checkers.add(self.olivia)
+        self.task.checkers.add(self.olivia)
+        
+        
 
     def test_create_aggregated_action_post_save_on_action(self):
         action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
@@ -87,3 +94,17 @@ class TestActionAggregate(TestCase):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get(action_aggregates_url)
         self.assertEqual(len(request.json().get('data')), 2)
+
+    def test_access_only_records_of_my_projects(self):
+        action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
+        action.send(self.olivia, verb='added', target=self.django, task_id=self.task_shops.id)
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get(action_aggregates_url)
+        action_aggregates = request.json().get('data')
+        self.assertEqual(len(action_aggregates),2)
+        
+        self.client.login(username='ruby', password='ruby')
+        request = self.client.get(action_aggregates_url)
+        action_aggregates = request.json().get('data')
+        self.assertEqual(len(action_aggregates),1)
+        
