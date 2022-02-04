@@ -1,5 +1,5 @@
 <script>
-import { get, groupBy, uniqueId } from 'lodash'
+import {get, groupBy, remove, uniqueId} from 'lodash'
 import { sortByProjectThenTask } from '@/utils/sort'
 
 import AppHeader from '@/components/AppHeader'
@@ -37,7 +37,7 @@ export default {
   },
   data () {
     return {
-      FILTER_TYPES: FILTER_TYPES,
+      FILTER_TYPES: Object.freeze(FILTER_TYPES),
       projectFilter: this.query[FILTER_TYPES.PROJECT],
       taskFilter: this.query[FILTER_TYPES.TASK],
       taskRecordReviewIds: [],
@@ -142,6 +142,22 @@ export default {
     }
   },
   computed: {
+    projectId: {
+      get () {
+        return this.query[FILTER_TYPES.PROJECT]
+      },
+      set (value) {
+        this.setProjectFilter(value)
+      }
+    },
+    taskId: {
+      get () {
+        return this.query[FILTER_TYPES.TASK]
+      },
+      set (value) {
+        this.setTaskFilter(value)
+      }
+    },
     fetchBookmarksLoader () {
       return uniqueId('load-bookmarks-')
     },
@@ -164,8 +180,12 @@ export default {
     },
     filteredBookmarks () {
       let bookmarks = this.taskRecordReviews.slice()
-      if (this.query[FILTER_TYPES.PROJECT]) bookmarks = bookmarks.filter(trw => trw.task.project.id === this.query[FILTER_TYPES.PROJECT])
-      if (this.query[FILTER_TYPES.TASK]) bookmarks = bookmarks.filter(trw => trw.task.id === this.query[FILTER_TYPES.TASK])
+      if (this.query[FILTER_TYPES.PROJECT]) {
+        remove(bookmarks, trw => trw.task.project.id !== this.query[FILTER_TYPES.PROJECT])
+      }
+      if (this.query[FILTER_TYPES.TASK]) {
+        remove(bookmarks, trw => trw.task.id !== this.query[FILTER_TYPES.TASK])
+      }
       return bookmarks.sort(sortByProjectThenTask)
     },
     bookmarksGroupedByProject () {
@@ -174,10 +194,10 @@ export default {
       })
     },
     bookmarksParams () {
-      const filters = {}
-      if (this.projectFilter) filters[FILTER_TYPES.PROJECT] = this.projectFilter
-      if (this.taskFilter) filters[FILTER_TYPES.TASK] = this.taskFilter
-      return filters
+      return {
+        [FILTER_TYPES.PROJECT]: this.projectFilter,
+        [FILTER_TYPES.TASK]: this.taskFilter
+      }
     }
   }
 }
@@ -199,9 +219,8 @@ export default {
           <template v-if="taskRecordReviewIds.length">
             <bookmarks-page-params
               :tasks="tasks"
-              :project-id="query[FILTER_TYPES.PROJECT]"
-              @update:projectId="setProjectFilter"
-              :task-id="query[FILTER_TYPES.TASK]"
+              :project-id.sync="projectId"
+              :task-id.sync="taskId"
               @update:taskId="setTaskFilter"/>
             <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="bookmarks-list__project mt-4 mb-4 border-bottom">
               <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
