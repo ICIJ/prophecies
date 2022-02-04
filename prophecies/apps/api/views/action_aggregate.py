@@ -33,8 +33,6 @@ class ActionAggregateViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return ActionAggregate.objects.none()
-        if self.request.user.is_superuser:
-            return ActionAggregate.objects.all()
 
         # retrieve projects from tasks where i'm a checker
         my_projects = ActionAggregate.objects.filter(task__checkers__in = [self.request.user] ).values('task__project')

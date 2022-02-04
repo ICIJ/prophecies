@@ -32,6 +32,7 @@ export default {
   },
   data () {
     return {
+      errorMessage: '',
       assignedTaskIds: []
     }
   },
@@ -58,8 +59,14 @@ export default {
   methods: {
     async fetchUserTasks () {
       const params = { 'filter[checkers]': this.user.id }
-      const { entities: { Task: tasks } } = await Task.api().get('', { params })
-      this.assignedTaskIds = tasks.map(t => t.id)
+      try {
+        const { entities: { Task: tasks } } = await Task.api().get('', { params })
+        this.errorMessage = ''
+        this.assignedTaskIds = tasks.map(t => t.id)
+      } catch (error) {
+        this.errorMessage = 'Sorry, this profile is no longer available.'
+        this.assignedTaskIds = []
+      }
     },
     async fetchWithLoader () {
       this.$wait.start(this.fetchLoader)
@@ -73,7 +80,8 @@ export default {
 <template>
   <div class="user-card" :class="{'user-card--with-background':background}" v-if="user">
     <app-waiter :loader="fetchLoader">
-      <div class="d-flex">
+      <div v-if="errorMessage.length">{{errorMessage}}</div>
+      <div v-else class="d-flex">
         <div class="pr-4">
           <user-avatar :user-id="user.id" />
         </div>

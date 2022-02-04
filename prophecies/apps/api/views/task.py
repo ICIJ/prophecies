@@ -84,12 +84,6 @@ class TaskViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Task.objects.none()
-        if self.request.user.is_superuser:
-            return Task.objects.all()\
-                    .prefetch_related('project') \
-                    .prefetch_related('project__creator') \
-                    .prefetch_related('choice_group') \
-                    .prefetch_related('choice_group__choices')
 
         # retrieve projects from tasks where i'm a checker
         my_projects = Task.objects.filter(checkers__in = [self.request.user] ).values('project')
