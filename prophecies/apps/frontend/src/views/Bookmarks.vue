@@ -7,6 +7,7 @@ import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import BookmarksPageParams from '@/components/BookmarksPageParams'
+import PageHeader from '@/components/PageHeader'
 import User from '@/models/User'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import Task from '@/models/Task'
@@ -24,7 +25,8 @@ export default {
     AppHeader,
     AppWaiter,
     TaskRecordReviewCard,
-    BookmarksPageParams
+    BookmarksPageParams,
+    PageHeader
   },
   props: {
     query: {
@@ -188,14 +190,11 @@ export default {
     <app-sidebar class="w-100 sticky-top" />
     <div class="bookmarks-list__container flex-grow-1">
       <app-header reduced />
-      <div class="container-fluid p-5">
+      <div class="container-fluid">
         <app-waiter :loader="fetchBookmarksLoader" waiter-class="my-5 mx-auto d-block">
-          <div class="d-flex flex-grow-1 align-items-center mt-3 mb-5">
-            <bookmark-icon class="text-primary mr-4" />
-            <h1 class="bookmarks-list__title text-primary mb-0 font-weight-bold">
-              Bookmarks
-            </h1>
-          </div>
+          <page-header icon="BookmarkIcon" class="mb-5">
+            Bookmarks
+          </page-header>
           <template v-if="taskRecordReviewIds.length">
             <bookmarks-page-params
               :tasks="tasks"
