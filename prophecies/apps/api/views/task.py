@@ -1,5 +1,6 @@
 from functools import lru_cache
-from rest_framework import filters, viewsets
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField
 from prophecies.core.models import Task, TaskRecord, TaskRecordReview
@@ -69,14 +70,32 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TaskViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Task.objects.all() \
-        .prefetch_related('project') \
-        .prefetch_related('project__creator') \
-        .prefetch_related('choice_group') \
-        .prefetch_related('choice_group__choices')
+    permission_classes = [IsAuthenticated]
+    
     serializer_class = TaskSerializer
     search_fields = ['name', 'description']
     ordering_fields = ['name']
     filterset_fields = ['name', 'rounds', 'priority', 'checkers']
     pagination_class = None
     ordering = ['-id']
+    # Queryset is overridden within the `get_queryset` method
+    queryset = Task.objects.none()
+
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Task.objects.none()
+        if self.request.user.is_superuser:
+            return Task.objects.all()\
+                    .prefetch_related('project') \
+                    .prefetch_related('project__creator') \
+                    .prefetch_related('choice_group') \
+                    .prefetch_related('choice_group__choices')
+
+        # retrieve projects from tasks where i'm a checker
+        my_projects = Task.objects.filter(checkers__in = [self.request.user] ).values('project')
+        # retrieve tasks from my projects
+        return Task.objects.filter(project__in = my_projects)\
+                    .prefetch_related('project') \
+                    .prefetch_related('project__creator') \
+                    .prefetch_related('choice_group') \
+                    .prefetch_related('choice_group__choices')
