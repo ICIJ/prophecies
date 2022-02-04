@@ -1,5 +1,5 @@
 <script>
-import {get, groupBy, remove, uniqueId} from 'lodash'
+import { get, groupBy, remove, uniqueId } from 'lodash'
 import { sortByProjectThenTask } from '@/utils/sort'
 
 import AppHeader from '@/components/AppHeader'
@@ -124,8 +124,10 @@ export default {
     },
     setTaskFilter (val) {
       const reviewsOfTask = TaskRecordReview.query().with('task').where('taskId', val).get()
-      this.projectFilter = reviewsOfTask[0].task.projectId
-
+      // keep the current project filter if no task is selected
+      if (reviewsOfTask[0].task.projectId) {
+        this.projectFilter = reviewsOfTask[0].task.projectId
+      }
       this.taskFilter = val
       this.updateFilters()
     },
@@ -179,7 +181,7 @@ export default {
         .get()
     },
     filteredBookmarks () {
-      let bookmarks = this.taskRecordReviews.slice()
+      const bookmarks = this.taskRecordReviews.slice()
       if (this.query[FILTER_TYPES.PROJECT]) {
         remove(bookmarks, trw => trw.task.project.id !== this.query[FILTER_TYPES.PROJECT])
       }
@@ -220,8 +222,7 @@ export default {
             <bookmarks-page-params
               :tasks="tasks"
               :project-id.sync="projectId"
-              :task-id.sync="taskId"
-              @update:taskId="setTaskFilter"/>
+              :task-id.sync="taskId"/>
             <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="bookmarks-list__project mt-4 mb-4 border-bottom">
               <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
               <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="bookmarks-list__project__task mb-4">
