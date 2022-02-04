@@ -15,8 +15,9 @@ class TestTip(TestCase):
         self.tip_top = Tip.objects.create(name='top', description='@user try this instead', task=self.task_paintings, project=self.project_foo)
         self.tip_fuzz = Tip.objects.create(name='fuzz', description='hello', project=self.project_foo)
         TaskChecker.objects.create(task=self.task_paintings, checker=self.olivia)
+        self.task_paintings.checkers.add(self.olivia)
 
-    def test_it_returns_all_tips(self):
+    def test_it_returns_all_tips_from_projects_where_olivia_is_a_checker(self):
         self.client.login(username=self.olivia, password='olivia')
         request = self.client.get('/api/v1/tips/')
         data = request.json().get('data')
