@@ -12,7 +12,7 @@ describe('Bookmarks', () => {
   let wrapper
 
   beforeAll(async () => {
-    await User.api().me()
+    await User.api().get()
     await TaskRecordReview.api().get()
     await Task.api().get()
   })
@@ -25,7 +25,7 @@ describe('Bookmarks', () => {
       'filter[project]': null,
       'filter[task]': null
     }
-    const propsData = { query }
+    const propsData = { query , username: 'django' }
 
     wrapper = await shallowMount(UserRetrieveBookmarks, {
       i18n,

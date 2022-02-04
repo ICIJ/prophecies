@@ -52,7 +52,7 @@ export const router = {
           name: 'user-retrieve-bookmarks',
           path: 'bookmarks',
           component: UserRetrieveBookmarks,
-          props: (route) => ({ query: route.query })
+          props: (route) => ({ query: route.query, username: route.params.username })
         }
       ]
     },

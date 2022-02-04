@@ -19,7 +19,7 @@ const FILTER_TYPES = {
 }
 
 export default {
-  name: 'Bookmarks',
+  name: 'UserRetrieveBookmarks',
   components: {
     AppSidebar,
     AppHeader,
@@ -29,6 +29,9 @@ export default {
     PageHeader
   },
   props: {
+    username: {
+      type: String
+    },
     query: {
       type: Object,
       default: () => ({
@@ -64,7 +67,7 @@ export default {
       await this.fetchChoiceGroups()
     },
     async fetchBookmarks () {
-      const params = { 'filter[task_record__bookmarked_by]': User.me().id }
+      const params = { 'filter[task_record__bookmarked_by]': this.user.id }
       const { response } = await TaskRecordReview.api().get('', { params })
 
       const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)
@@ -134,7 +137,7 @@ export default {
       this.updateFilters()
     },
     updateFilters () {
-      return this.$router.push({ name: 'user-retrieve-bookmarks', query: this.bookmarksParams })
+      return this.$router.push({ name: 'user-retrieve-bookmarks', query: this.bookmarksParams, username: this.username })
     },
     projectNotContainingTask (projectId, taskId) {
       const reviewsOfProject = Task.query().where('projectId', projectId).get()
@@ -202,6 +205,9 @@ export default {
         [FILTER_TYPES.PROJECT]: this.projectFilter,
         [FILTER_TYPES.TASK]: this.taskFilter
       }
+    },
+    user () {
+      return User.find(this.username)
     }
   }
 }
