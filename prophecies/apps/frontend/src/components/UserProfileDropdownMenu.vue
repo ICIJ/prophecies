@@ -13,6 +13,10 @@ export default {
     userRoute () {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-profile', params }
+    },
+    teamRoute () {
+      const params = { username: this.user.username }
+      return { name: 'user-retrieve-team', params }
     }
   }
 }
@@ -22,7 +26,11 @@ export default {
   <div class="user-profile-dropdown-menu">
     <b-dropdown-item :to="userRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--profile">
       <user-icon class="user-profile-dropdown-menu__item__icon" />
-      {{ $t('userProfileDropdownMenu.profile') }}
+      {{ $t('userRetrieveProfile.title.yours') }}
+    </b-dropdown-item>
+    <b-dropdown-item :to="teamRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--team">
+      <users-icon class="user-profile-dropdown-menu__item__icon" />
+      {{ $t('userRetrieveTeam.title.yours') }}
     </b-dropdown-item>
     <b-dropdown-item :href="$config.get('apiUrl')" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--api">
       <code-icon class="user-profile-dropdown-menu__item__icon" />

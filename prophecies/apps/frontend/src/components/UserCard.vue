@@ -1,5 +1,6 @@
 <script>
 import { uniqueId } from 'lodash'
+import { formatDateLongAlt } from '@/utils/date'
 import AppWaiter from '@/components/AppWaiter'
 import TaskListItem from '@/components/TaskListItem'
 import UserAvatar from '@/components/UserAvatar'
@@ -17,7 +18,16 @@ export default {
   },
   props: {
     userId: {
-      type: [String, Number]
+      type: [String, Number],
+      default: undefined
+    },
+    username: {
+      type: String,
+      default: undefined
+    },
+    background: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -30,26 +40,30 @@ export default {
   },
   computed: {
     user () {
-      return User.find(this.userId)
+      const id = this.userId ?? this.username
+      return User.find(id)
     },
     fetchLoader () {
       return uniqueId('fetch-user-card-')
     }
   },
   filters: {
+    formatDate (d) {
+      return formatDateLongAlt(d)
+    },
     isTaskOpen (taskId) {
       return Task.find(taskId)?.open
     }
   },
   methods: {
-    async fetch () {
+    async fetchUserTasks () {
       const params = { 'filter[checkers]': this.user.id }
       const { entities: { Task: tasks } } = await Task.api().get('', { params })
       this.assignedTaskIds = tasks.map(t => t.id)
     },
     async fetchWithLoader () {
       this.$wait.start(this.fetchLoader)
-      await this.fetch()
+      await this.fetchUserTasks()
       this.$wait.end(this.fetchLoader)
     }
   }
@@ -57,17 +71,18 @@ export default {
 </script>
 
 <template>
-  <div class="user-card" v-if="user">
+  <div class="user-card" :class="{'user-card--with-background':background}" v-if="user">
     <app-waiter :loader="fetchLoader">
       <div class="d-flex">
         <div class="pr-4">
-          <user-avatar :user-id="userId" />
+          <user-avatar :user-id="user.id" />
         </div>
         <div class="flex-grow-1">
           <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-          <p>
-            <user-link class="font-weight-bold text-muted" no-card :user-id="userId" />
+          <p class="user-card__link font-weight-bold text-muted">
+            <user-link no-card :user-id="user.id" />
           </p>
+          <slot name="content" :user={user}></slot>
           <div v-if="assignedTaskIds.length">
             <p>Assigned in:</p>
             <ul>
@@ -84,13 +99,14 @@ export default {
 
 <style lang="scss" scoped>
   .user-card {
-    background: $primary-10;
-    padding: $spacer-xl;
-    font-size: 1rem;
-    min-width: 100%;
-    width: 530px;
-    max-width: 90vw;
-    border-radius: $border-radius;
-    box-shadow: $box-shadow-sm;
+    min-height: 140px;
+
+    &--with-background{
+      background: $primary-10;
+      padding: $spacer-xl;
+      border-radius: $border-radius;
+      box-shadow: $box-shadow-sm;
+    }
+
   }
 </style>

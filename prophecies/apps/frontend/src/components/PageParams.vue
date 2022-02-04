@@ -27,7 +27,7 @@
           </template>
         </multiselect>
       </label>
-      <label class="page-params__creator col-lg-4 col-xl-3" v-if="creatorId !== null">
+      <label class="page-params__creator col-lg-4 col-xl-3" v-if="creatorId !== undefined">
         <div class="mb-3">Author</div>
         <multiselect :allow-empty ="true"
                      :show-labels="false"
@@ -66,7 +66,7 @@ export default {
     },
     creatorId: {
       type: String,
-      default: null
+      default: undefined
     }
   },
   computed: {
@@ -77,7 +77,7 @@ export default {
       return this.retrieveUniqueAssociatedEntity('task', 'taskId', 'name')
     },
     creatorOptions () {
-      return this.creatorId !== null ? this.retrieveUniqueAssociatedEntity('creator', 'creatorId', 'displayName') : []
+      return this.retrieveUniqueAssociatedEntity('creator', 'creatorId', 'displayName')
     },
     selectedProjectOption () {
       return find(this.projectOptions, { id: this.projectId })

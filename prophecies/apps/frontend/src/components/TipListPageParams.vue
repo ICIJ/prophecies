@@ -1,12 +1,9 @@
 <template>
   <page-params
     :values='tips'
-    :projectId="projectId"
-    @update:projectId="$emit('update:projectId',$event)"
-    :taskId="taskId"
-    @update:taskId="$emit('update:taskId',$event)"
-    :creatorId="creatorId"
-    @update:creatorId="$emit('update:creatorId',$event)"
+    :projectId.sync="projectId_"
+    :taskId.sync="taskId_"
+    :creatorId.sync="creatorId_"
     class="tip-list-page-params"
   />
 </template>
@@ -44,8 +41,31 @@ export default {
         .with('task')
         .with('creator')
         .get()
+    },
+    projectId_: {
+      get () {
+        return this.projectId
+      },
+      set (value) {
+        this.$emit('update:projectId', value)
+      }
+    },
+    taskId_: {
+      get () {
+        return this.taskId
+      },
+      set (value) {
+        this.$emit('update:taskId', value)
+      }
+    },
+    creatorId_: {
+      get () {
+        return this.creatorId
+      },
+      set (value) {
+        this.$emit('update:creatorId', value)
+      }
     }
-
   },
   methods: {
     fetchTips () {

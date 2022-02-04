@@ -50,14 +50,25 @@ export default {
 </script>
 
 <template>
-  <router-link :to="to" v-if="user">
+  <router-link :to="to" v-if="user" class="user-link">
     <slot v-bind="{ user }">
       {{ label }}
     </slot>
     <template v-if="mounted && !noCard">
       <b-popover :target="$el" triggers="hover focus" placement="bottom" variant="transparent">
-        <user-card :user-id="userId" />
+        <user-card :user-id="userId" class="user-link__card" background/>
       </b-popover>
     </template>
   </router-link>
 </template>
+
+<style lang="scss" scoped>
+  .user-link {
+    &__card{
+      font-size: 1rem;
+      min-width: 100%;
+      width: 530px;
+      max-width: 90vw;
+    }
+  }
+</style>

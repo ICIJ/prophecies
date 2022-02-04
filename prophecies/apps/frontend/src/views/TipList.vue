@@ -1,5 +1,5 @@
 <script>
-import { groupBy, uniqueId } from 'lodash'
+import { remove, groupBy, uniqueId } from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
@@ -39,7 +39,7 @@ export default {
   data () {
     return {
       showLatestTips: true,
-      FILTER_TYPES: FILTER_TYPES,
+      FILTER_TYPES: Object.freeze(FILTER_TYPES),
       projectFilter: this.query[FILTER_TYPES.PROJECT],
       taskFilter: this.query[FILTER_TYPES.TASK],
       creatorFilter: this.query[FILTER_TYPES.CREATOR],
@@ -70,11 +70,41 @@ export default {
         .with('task')
         .get()
     },
+    projectId: {
+      get () {
+        return this.query[FILTER_TYPES.PROJECT]
+      },
+      set (value) {
+        this.setProjectFilter(value)
+      }
+    },
+    taskId: {
+      get () {
+        return this.query[FILTER_TYPES.TASK]
+      },
+      set (value) {
+        this.setTaskFilter(value)
+      }
+    },
+    creatorId: {
+      get () {
+        return this.query[FILTER_TYPES.CREATOR]
+      },
+      set (value) {
+        this.setCreatorFilter(value)
+      }
+    },
     filteredTips () {
-      let tips = this.tips.slice()
-      if (this.query[FILTER_TYPES.PROJECT]) tips = tips.filter(t => t.projectId === this.query[FILTER_TYPES.PROJECT])
-      if (this.query[FILTER_TYPES.TASK]) tips = tips.filter(t => t.taskId === this.query[FILTER_TYPES.TASK])
-      if (this.query[FILTER_TYPES.CREATOR]) tips = tips.filter(t => t.creatorId === this.query[FILTER_TYPES.CREATOR])
+      const tips = this.tips.slice()
+      if (this.query[FILTER_TYPES.PROJECT]) {
+        remove(tips, t => t.projectId !== this.query[FILTER_TYPES.PROJECT])
+      }
+      if (this.query[FILTER_TYPES.TASK]) {
+        remove(tips, t => t.taskId !== this.query[FILTER_TYPES.TASK])
+      }
+      if (this.query[FILTER_TYPES.CREATOR]) {
+        remove(tips, t => t.creatorId !== this.query[FILTER_TYPES.CREATOR])
+      }
       return tips.sort(sortByProjectThenTask)
     },
     tipsGroupedByProject () {
@@ -83,11 +113,11 @@ export default {
       })
     },
     tipParams () {
-      const filters = {}
-      if (this.projectFilter) filters[FILTER_TYPES.PROJECT] = this.projectFilter
-      if (this.taskFilter) filters[FILTER_TYPES.TASK] = this.taskFilter
-      if (this.creatorFilter) filters[FILTER_TYPES.CREATOR] = this.creatorFilter
-      return filters
+      return {
+        [FILTER_TYPES.PROJECT]: this.projectFilter,
+        [FILTER_TYPES.TASK]: this.taskFilter,
+        [FILTER_TYPES.CREATOR]: this.creatorFilter
+      }
     }
   },
   methods: {
@@ -129,7 +159,10 @@ export default {
     setTaskFilter (val) {
       const tipsOfTask = Tip.query().where('taskId', val).get()
       // tipsOfTask can't be empty because it only uses taskId with at least a tip.
-      this.projectFilter = tipsOfTask[0].projectId
+      // except when we remove the filter on tasks ...
+      if (tipsOfTask[0].projectId) {
+        this.projectFilter = tipsOfTask[0].projectId
+      }
       if (this.creatorFilter && this.taskNotContainingUser(val, this.creatorFilter)) {
         this.creatorFilter = null
       }
@@ -186,12 +219,9 @@ export default {
             </latest-tips-card>
           </b-collapse>
           <tip-list-page-params
-            :project-id="query[FILTER_TYPES.PROJECT]"
-            @update:projectId="setProjectFilter"
-            :task-id="query[FILTER_TYPES.TASK]"
-            @update:taskId="setTaskFilter"
-            :creator-id="query[FILTER_TYPES.CREATOR]"
-            @update:creatorId="setCreatorFilter"/>
+            :project-id.sync="projectId"
+            :task-id.sync="taskId"
+            :creator-id.sync="creatorId"/>
             <div v-for="(projectValue, name) in tipsGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
               <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
               <div v-for="(taskValue, taskName) in tipsGroupedByTask(projectValue)" :key="taskName" class="mb-4">

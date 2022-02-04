@@ -10,6 +10,7 @@ import TipRetrieve from '@/views/TipRetrieve.vue'
 import StatsList from '@/views/StatsList.vue'
 import UserRetrieve from '@/views/UserRetrieve.vue'
 import UserRetrieveProfile from '@/views/UserRetrieveProfile.vue'
+import UserRetrieveTeam from '@/views/UserRetrieveTeam.vue'
 import Bookmarks from '@/views/Bookmarks'
 
 export const router = {
@@ -40,6 +41,12 @@ export const router = {
           path: '',
           props: true,
           component: UserRetrieveProfile
+        },
+        {
+          name: 'user-retrieve-team',
+          path: 'teams',
+          props: true,
+          component: UserRetrieveTeam
         }
       ]
     },

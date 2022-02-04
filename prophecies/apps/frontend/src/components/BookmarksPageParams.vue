@@ -1,10 +1,8 @@
 <template>
   <page-params
     :values='tasks'
-    :projectId="projectId"
-    @update:projectId="$emit('update:projectId',$event)"
-    :taskId="taskId"
-    @update:taskId="$emit('update:taskId',$event)"
+    :projectId.sync="projectId_"
+    :taskId.sync="taskId_"
     class="bookmarks-page-params"
   />
 
@@ -30,6 +28,24 @@ export default {
     tasks: {
       type: Array,
       default: () => ([])
+    }
+  },
+  computed: {
+    projectId_: {
+      get () {
+        return this.projectId
+      },
+      set (value) {
+        this.$emit('update:projectId', value)
+      }
+    },
+    taskId_: {
+      get () {
+        return this.taskId
+      },
+      set (value) {
+        this.$emit('update:taskId', value)
+      }
     }
   }
 }

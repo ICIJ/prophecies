@@ -32,7 +32,7 @@ describe('UserCard', () => {
     // Get router from core
     const { i18n, store, router, wait } = core
     // Mock fetch method to avoid loading data
-    UserCard.methods.fetch = () => (null)
+    UserCard.methods.fetchUserTasks = () => (null)
     // Finally, instanciate the component
     wrapper = mount(UserCard, { localVue, propsData, i18n, store, router, wait })
   })
