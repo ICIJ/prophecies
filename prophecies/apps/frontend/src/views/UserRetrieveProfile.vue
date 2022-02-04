@@ -1,15 +1,13 @@
 <script>
 import { formatDateLongAlt } from '@/utils/date'
-import TaskListItem from '@/components/TaskListItem'
-import UserAvatar from '@/components/UserAvatar'
 import Task from '@/models/Task'
 import User from '@/models/User'
+import UserCard from '@/components/UserCard.vue'
 
 export default {
   name: 'UserRetrieveProfile',
   components: {
-    TaskListItem,
-    UserAvatar
+    UserCard
   },
   props: {
     username: {
@@ -48,37 +46,22 @@ export default {
 </script>
 
 <template>
-  <div class="user-retrieve-profile" v-if="user">
-    <div class="d-flex">
-      <div class="pr-4">
-        <user-avatar :user-id="user.id" />
-      </div>
-      <div class="flex-grow-1">
-        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-        <p class="font-weight-bold text-muted mb-5">@{{ user.username }}</p>
-        <ul class="list-unstyled">
-          <li class="mb-3" v-if="user.isSuperuser">
-            <span class="d-inline-flex py-0 px-3 bg-warning rounded align-items-center text-primary">
-              <award-icon size="1.5x" class="my-2 mr-2" />
-              Admin
-            </span>
-          </li>
-          <li class="mb-3">
-            Email: <a :href="`mailto:${user.email}`">{{ user.email }}</a>
-          </li>
-          <li>
-            Last login: {{ user.lastLogin | formatDate }}
-          </li>
-        </ul>
-        <div v-if="assignedTaskIds.length">
-          <p>Assigned in:</p>
-          <ul>
-            <li v-for="taskId in assignedTaskIds" :key="taskId" class="mb-2">
-              <task-list-item :task-id="taskId" :no-status="taskId | isTaskOpen" />
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+  <user-card :username="username" >
+    <template #content :user={user}>
+      <ul class="list-unstyled mt-5" >
+        <li class="mb-3" v-if="user.isSuperuser">
+          <span class="d-inline-flex py-0 px-3 bg-warning rounded align-items-center text-primary">
+            <award-icon size="1.5x" class="my-2 mr-2" />
+            Admin
+          </span>
+        </li>
+        <li class="mb-3">
+          Email: <a :href="`mailto:${user.email}`">{{ user.email }}</a>
+        </li>
+        <li>
+          Last login: {{ user.lastLogin | formatDate }}
+        </li>
+      </ul>
+    </template>
+  </user-card>
 </template>
