@@ -1,8 +1,6 @@
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField
-from rest_framework import status, viewsets
-from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework import exceptions, viewsets
 from rest_framework.permissions import IsAuthenticated
 from prophecies.apps.api.views.action import ActionSerializer
 from prophecies.apps.api.views.user import UserSerializer

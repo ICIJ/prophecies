@@ -1,12 +1,11 @@
 from actstream import action
 from functools import lru_cache
-from django.db.models import Prefetch
 from prophecies.core.filters import TaskRecordReviewFilter
-from rest_framework import exceptions, viewsets, permissions
+from rest_framework import exceptions, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField, SerializerMethodResourceRelatedField
-from prophecies.core.models import Choice, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, TaskRecordReview
 from prophecies.apps.api.views.choice import ChoiceSerializer
 from prophecies.apps.api.views.task_record import TaskRecordSerializer
 from prophecies.apps.api.views.user import UserSerializer
