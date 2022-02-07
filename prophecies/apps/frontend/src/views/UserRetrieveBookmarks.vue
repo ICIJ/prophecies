@@ -2,12 +2,8 @@
 import { get, groupBy, remove, uniqueId } from 'lodash'
 import { sortByProjectThenTask } from '@/utils/sort'
 
-import AppHeader from '@/components/AppHeader'
-import AppSidebar from '@/components/AppSidebar'
-import AppWaiter from '@/components/AppWaiter'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import BookmarksPageParams from '@/components/BookmarksPageParams'
-import PageHeader from '@/components/PageHeader'
 import User from '@/models/User'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import Task from '@/models/Task'
@@ -21,12 +17,8 @@ const FILTER_TYPES = {
 export default {
   name: 'UserRetrieveBookmarks',
   components: {
-    AppSidebar,
-    AppHeader,
-    AppWaiter,
     TaskRecordReviewCard,
-    BookmarksPageParams,
-    PageHeader
+    BookmarksPageParams
   },
   props: {
     username: {
