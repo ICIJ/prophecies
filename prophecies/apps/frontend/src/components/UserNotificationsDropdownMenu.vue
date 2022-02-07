@@ -83,20 +83,22 @@ export default {
     <app-waiter :loader="loader" waiter-class="my-5 mx-auto d-block">
       <template v-if="notifications.length">
         <b-dropdown-text>
-          <h3>Notifications</h3>
+          <div class="d-flex align-items-center">
+            <h3 class="m-0 p-0">Notifications</h3>
+            <div class="ml-auto user-notifications-dropdown-menu__read_all">
+              <b-btn
+                @click="markAllAsRead"
+                :disabled="!hasUnreadNotifications"
+                class="btn-sm user-notifications-dropdown-menu__read_all--mark_all"
+                variant="link">
+                <check-icon size="1.3x"/>
+                <span class="pl-1 align-middle">
+                  {{$t('notification.markAll')}}
+                </span>
+              </b-btn>
+            </div>
+          </div>
         </b-dropdown-text>
-        <div class="px-3 text-right user-notifications-dropdown-menu__read_all">
-          <b-btn
-            @click="markAllAsRead"
-            :disabled="!hasUnreadNotifications"
-            class="btn-sm user-notifications-dropdown-menu__read_all--mark_all"
-            variant="link">
-            <check-icon size="1.3x"/>
-            <span class="pl-1 align-middle">
-              {{$t('notification.markAll')}}
-            </span>
-          </b-btn>
-        </div>
         <div class="user-notifications-dropdown-menu__list">
           <div
             v-for="notification in notifications"
