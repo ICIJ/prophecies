@@ -38,9 +38,7 @@ export default {
   methods: {
     async fetchUserTasks () {
       const params = { 'filter[checkers]': this.user.id, include: 'project,checkers' }
-      const { entities: { Task: tasks, User: users } } = await Task.api().get('', { params })
-      this.assignedTaskIds = tasks.map(t => t.id)
-
+      const { entities: { User: users } } = await Task.api().get('', { params })
       this.teammates = users.filter(u => u.id !== this.user.id)
     }
   }
@@ -48,14 +46,24 @@ export default {
 </script>
 
 <template>
-  <div class="user-retrieve-team container-fluid" >
-    <div class="row ">
-      <div class="col-12 col-lg-6 mb-3 " v-for="({username}) in teammates" :key="username">
-  <user-card :username="username"
-  background>
-
-  </user-card>
+  <div class="user-retrieve-team container-fluid">
+    <div class="row">
+      <div
+        class="col-12 col-lg-6 mb-3"
+        v-for="{ username } in teammates"
+        :key="username"
+      >
+        <user-card class="user-retrieve-team__user-card" :username="username" background/>
       </div>
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+  .user-retrieve-team  {
+    & /deep/ .user-card__assigned-tasks__list{
+          height: 5rem;
+          overflow-y: auto;
+    }
+  }
+</style>
