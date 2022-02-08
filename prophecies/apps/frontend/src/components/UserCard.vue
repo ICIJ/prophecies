@@ -62,7 +62,7 @@ export default {
       try {
         const { entities: { Task: tasks } } = await Task.api().get('', { params })
         this.errorMessage = ''
-        this.assignedTaskIds = tasks.map(t => t.id)
+        this.assignedTaskIds = tasks.sort((a, b) => a.name.localeCompare(b.name)).map(t => t.id)
       } catch (error) {
         this.errorMessage = 'Sorry, this profile is no longer available.'
         this.assignedTaskIds = []
