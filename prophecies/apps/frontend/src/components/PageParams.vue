@@ -104,9 +104,8 @@ export default {
               id: elementId,
               [elValue]: elementName
             }
-            if (elType === 'task') {
-              const status = elementType.status
-              options[elementId].status = status.toLowerCase()
+            if (elType === 'task' && elementType.status) {
+              options[elementId].status = elementType.status?.toLowerCase()
             }
           }
         }
