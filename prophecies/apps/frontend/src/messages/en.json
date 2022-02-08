@@ -7,7 +7,7 @@
     },
     "reviewed": {
       "taskRecordReview": {
-        "*": "{actor} cancelled their record classification",
+        "*": "{actor} classified their record with unknown choice",
         "choice": "{actor} classified the record as <strong>\"{actionObject}\"</strong>"
       }
     },
@@ -125,11 +125,20 @@
     "help": "Help",
     "logOut": "Log out"
   },
+  "userRetrieveBookmarks": {
+    "title": {
+      "yours": "Your bookmarks",
+      "others": "{displayFullName}'s bookmarks"
+    },
+    "noBookmarks": "No bookmarks"
+  },
   "userRetrieveProfile": {
     "title": {
       "yours": "Your profile",
       "others": "{displayFullName}'s profile"
-    }
+    },
+    "lastLogin": "Last login",
+    "notProvided": "Not provided"
   },
   "userRetrieveTeam": {
     "title": {
@@ -137,10 +146,7 @@
       "others": "{displayFullName}'s team"
     }
   },
-  "userRetrieveBookmarks": {
-    "title": {
-      "yours": "Your bookmarks",
-      "others": "{displayFullName}'s bookmarks"
-    }
+  "userCard": {
+    "assignedTasks": "Assigned to {n} task: | Assigned to {n} tasks:"
   }
 }

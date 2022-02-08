@@ -1,6 +1,7 @@
 <script>
 import { get, groupBy, remove, uniqueId } from 'lodash'
 import { sortByProjectThenTask } from '@/utils/sort'
+import AppWaiter from '@/components/AppWaiter'
 
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import BookmarksPageParams from '@/components/BookmarksPageParams'
@@ -17,6 +18,7 @@ const FILTER_TYPES = {
 export default {
   name: 'UserRetrieveBookmarks',
   components: {
+    AppWaiter,
     TaskRecordReviewCard,
     BookmarksPageParams
   },
@@ -65,27 +67,26 @@ export default {
       const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)
       this.$set(this, 'taskRecordReviewIds', taskRecordReviewIds)
     },
-    async fetchChoiceGroup (taskId) {
+    fetchChoiceGroup (taskId) {
       const params = { include: 'alternative_values,choices' }
       return ChoiceGroup.api().find(taskId, { params })
     },
-    async fetchChoiceGroups () {
-      const uniqueChoiceGroups = this.tasks.reduce((acc, curr) => {
+    fetchChoiceGroups () {
+      const uniqueChoiceGroups = this.tasks?.reduce((acc, curr) => {
         if (!acc.choiceGroupIds[curr.choiceGroupId]) {
           acc.choiceGroupIds[curr.choiceGroupId] = true
           acc.promises.push(this.fetchChoiceGroup(curr.choiceGroupId))
         }
         return acc
       }, { choiceGroupIds: {}, promises: [] })
-      try {
-        await Promise.all(uniqueChoiceGroups.promises)
-      } catch (_) { }
+
+      return Promise.all(uniqueChoiceGroups.promises)
     },
-    async fetchTask (taskId) {
+    fetchTask (taskId) {
       const params = { include: 'project,checkers' }
       return Task.api().find(taskId, { params })
     },
-    async fetchTasks () {
+    fetchTasks () {
       const uniqueTaskIds = this.taskRecordReviews.reduce((acc, curr) => {
         if (!acc.taskIds[curr.taskId]) {
           acc.taskIds[curr.taskId] = true
@@ -95,11 +96,7 @@ export default {
       }, { taskIds: {}, promises: [] })
 
       this.$set(this, 'taskIds', Object.keys(uniqueTaskIds.taskIds))
-      try {
-        await Promise.all(uniqueTaskIds.promises)
-      } catch (_) { }
-
-      this.$set(this, 'taskRecordReviewIds', this.taskRecordReviewIds)
+      return Promise.all(uniqueTaskIds.promises)
     },
     async waitFor (loader, fn) {
       this.$wait.start(loader)
@@ -207,29 +204,31 @@ export default {
 
 <template>
   <div class="user-retrieve-bookmarks">
-    <template v-if="taskRecordReviewIds.length">
-      <bookmarks-page-params
-        :tasks="tasks"
-        :project-id.sync="projectId"
-        :task-id.sync="taskId"/>
-      <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="user-retrieve-bookmarks__project mt-4 mb-4 border-bottom">
-        <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
-        <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="user-retrieve-bookmarks__project__task mb-4">
-          <div class="d-flex flex-row mb-4 ml-4 mt-4">
-            <div>
-              <h2>{{ taskName }}</h2>
+    <app-waiter :loader="fetchBookmarksLoader" waiter-class="my-5 mx-auto d-block">
+      <template v-if="taskRecordReviewIds.length">
+        <bookmarks-page-params
+          :tasks="tasks"
+          :project-id.sync="projectId"
+          :task-id.sync="taskId"/>
+        <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="user-retrieve-bookmarks__project mt-4 mb-4 border-bottom">
+          <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
+          <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="user-retrieve-bookmarks__project__task mb-4">
+            <div class="d-flex flex-row mb-4 ml-4 mt-4">
+              <div>
+                <h2>{{ taskName }}</h2>
+              </div>
             </div>
+            <b-list-group-item v-for="record in taskValue" class="user-retrieve-bookmarks__project__task__record flex-column align-items-start ml-4 border-0" :key="record.id">
+              <task-record-review-card
+                :task-record-review-id="record.id"
+                :active="true"/>
+            </b-list-group-item>
           </div>
-          <b-list-group-item v-for="record in taskValue" class="user-retrieve-bookmarks__project__task__record flex-column align-items-start ml-4 border-0" :key="record.id">
-            <task-record-review-card
-              :task-record-review-id="record.id"
-              :active="true"/>
-          </b-list-group-item>
         </div>
+      </template>
+      <div v-else class="user-retrieve-bookmarks__no-items text-center text-secondary text-small">
+        {{$t('userRetrieveBookmarks.noBookmarks')}}
       </div>
-    </template>
-    <div v-else class="user-retrieve-bookmarks__no-items text-center text-secondary text-small">
-      No bookmarks
-    </div>
+    </app-waiter>
   </div>
 </template>

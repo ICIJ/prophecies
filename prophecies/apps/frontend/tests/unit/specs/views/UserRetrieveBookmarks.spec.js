@@ -2,18 +2,14 @@ import { createLocalVue, shallowMount } from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
-import TaskRecordReview from '@/models/TaskRecordReview'
-import Task from '@/models/Task'
-import UserRetrieveBookmarks from '@/views/UserRetrieveBookmarks'
 import User from '@/models/User'
+import UserRetrieveBookmarks from '@/views/UserRetrieveBookmarks'
 
 describe('Bookmarks', () => {
   let wrapper
 
   beforeAll(async () => {
     await User.api().get()
-    await TaskRecordReview.api().get()
-    await Task.api().get()
   })
 
   beforeEach(async () => {
@@ -34,25 +30,17 @@ describe('Bookmarks', () => {
       router,
       wait
     })
-  })
 
-  afterEach(async () => {
-    await TaskRecordReview.deleteAll()
-    await Task.deleteAll()
-    await wrapper.destroy()
+    await wrapper.vm.setup()
   })
 
   it('should display bookmarked items', async () => {
-    await wrapper.vm.setup()
-
     const bookmarks = await wrapper.findAll('task-record-review-card-stub')
     expect(wrapper.vm.taskRecordReviewIds).toHaveLength(5)
     expect(bookmarks).toHaveLength(5)
   })
 
   it('should display bookmarked items grouped by projects then by tasks', async () => {
-    await wrapper.vm.setup()
-
     const project = await wrapper.findAll('.user-retrieve-bookmarks__project')
     expect(project).toHaveLength(2)
     expect(project.at(0).find('h1').text()).toContain('Demeter')
@@ -64,7 +52,6 @@ describe('Bookmarks', () => {
   })
 
   it('should apply filters', async () => {
-    await wrapper.vm.setup()
     await wrapper.setProps({ query: { 'filter[project]': '2' } })
 
     let project = await wrapper.findAll('.user-retrieve-bookmarks__project')
@@ -82,8 +69,9 @@ describe('Bookmarks', () => {
   })
 
   it('should show the message "No bookmarks" when list is empty', async () => {
-    const element = wrapper.find('.user-retrieve-bookmarks__no-items')
+    await wrapper.setData({ taskRecordReviewIds: [] })
     expect(wrapper.vm.taskRecordReviewIds).toHaveLength(0)
+    const element = wrapper.find('.user-retrieve-bookmarks__no-items')
     expect(element.exists()).toBeTruthy()
     expect(element.text()).toBe('No bookmarks')
   })
