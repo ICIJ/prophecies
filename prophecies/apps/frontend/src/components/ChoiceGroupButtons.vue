@@ -36,6 +36,9 @@ export default {
     },
     hasChoice () {
       return this.choiceId !== null
+    },
+    choices () {
+      return this.choiceGroup?.choices ?? []
     }
   },
   methods: {
@@ -68,7 +71,7 @@ export default {
 <template>
   <ul class="choice-group-buttons list-unstyled row"
      :class="{ 'choice-group-buttons--has-choice': this.hasChoice }">
-    <li v-for="choice in choiceGroup.choices"
+    <li v-for="choice in choices"
         class="col choice-group-buttons__item pb-3"
         :class="choiceClassList(choice)"
         :key="choice.id">
