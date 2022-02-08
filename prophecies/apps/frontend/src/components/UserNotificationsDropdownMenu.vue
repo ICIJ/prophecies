@@ -1,38 +1,16 @@
 <script>
-import { formatDateFromNow, formatDateLong } from '@/utils/date'
-import { uniqueId } from 'lodash'
-import AppWaiter from '@/components/AppWaiter'
+import UserNotifications from '@/components/UserNotifications'
+import UserNotificationLink from '@/components/UserNotificationLink'
 import UserNotification from '@/models/UserNotification'
 
 export default {
   name: 'UserNotificationsDropdownMenu',
   components: {
-    AppWaiter
-  },
-  data () {
-    return {
-      planFetchNotificationsId: null
-    }
-  },
-  filters: {
-    formatDateLong (d) {
-      return formatDateLong(d)
-    },
-    formatDateFromNow (d) {
-      return formatDateFromNow(d)
-    }
-  },
-  async created () {
-    await this.fetchNotificationsWithLoader()
-    this.planFetchNotifications()
-  },
-  beforeDestroy () {
-    clearInterval(this.planFetchNotificationsId)
+    UserNotifications,
+    UserNotificationLink,
+    UserNotifications
   },
   computed: {
-    loader () {
-      return uniqueId('user-notifications-dropdown-menu-')
-    },
     notifications () {
       return UserNotification
         .query()
@@ -51,83 +29,43 @@ export default {
     }
   },
   methods: {
-    async fetchNotificationsWithLoader () {
-      this.$wait.start(this.loader)
-      await this.fetchNotifications()
-      this.$wait.end(this.loader)
-    },
-    fetchNotifications () {
-      const pageSize = 50
-      const include = 'action.actionObject'
-      const params = { 'page[size]': pageSize, include }
-      return UserNotification.api().get('', { params })
-    },
-    planFetchNotifications () {
-      this.planFetchNotificationsId = setInterval(this.fetchNotifications, 1e4)
-    },
-    markAsRead (notification) {
-      return UserNotification.api().markAsRead(notification.id)
-    },
     async markAllAsRead () {
       const ids = this.unreadNotifications.map(n => n.id)
       await UserNotification.api().bulkMarkAsRead(ids)
       await this.fetchNotifications()
     }
-
   }
 }
 </script>
 
 <template>
   <div class="user-notifications-dropdown-menu">
-    <app-waiter :loader="loader" waiter-class="my-5 mx-auto d-block">
-      <template v-if="notifications.length">
-        <b-dropdown-text>
-          <div class="d-flex align-items-center">
-            <h3 class="m-0 p-0">Notifications</h3>
-            <div class="ml-auto user-notifications-dropdown-menu__read_all">
-              <b-btn
-                @click="markAllAsRead"
-                :disabled="!hasUnreadNotifications"
-                class="btn-sm user-notifications-dropdown-menu__read_all--mark_all"
-                variant="link">
-                <check-icon size="1.3x"/>
-                <span class="pl-1 align-middle">
-                  {{$t('notification.markAll')}}
-                </span>
-              </b-btn>
-            </div>
-          </div>
-        </b-dropdown-text>
-        <div class="user-notifications-dropdown-menu__list">
-          <div
-            v-for="notification in notifications"
-            class="user-notifications-dropdown-menu__list__item"
-            :class="{ 'user-notifications-dropdown-menu__list__item--read': notification.read }"
-            :key="notification.id">
-            <b-dropdown-item link-class="user-notifications-dropdown-menu__list__item__link" @click="markAsRead(notification)" :href="notification.link">
-              <div class="row">
-                <div class="col-10 user-notifications-dropdown-menu__list__item__link__description" v-html="$t(notification.i18n, notification.action)"></div>
-                <div v-if="!notification.read" class="d-flex flex-grow-1 align-items-center justify-content-center pr-3">
-                  <span class="user-notifications-dropdown-menu__list__item--unread"></span>
-                  </div>
-              </div>
-              <span class="user-notifications-dropdown-menu__list__item__link__created-at text-primary small" :title="notification.createdAt | formatDateLong" v-b-tooltip.bottom>
-                {{ notification.createdAt | formatDateFromNow }}
-              </span>
-            </b-dropdown-item>
-          </div>
+    <user-notifications class="user-notifications-dropdown-menu__list dropdown">
+      <template #header>
+        <div class="b-dropdown-text d-flex align-items-center">
+          <h3 class="my-2">
+            Notifications
+          </h3>
+          <b-btn
+            @click="markAllAsRead"
+            :disabled="!hasUnreadNotifications"
+            class="user-notifications-dropdown-menu__mark-all ml-auto"
+            size="sm"
+            variant="link">
+            <check-icon size="1.3x"/>
+            <span class="pl-1 align-middle">
+              {{$t('notification.markAll')}}
+            </span>
+          </b-btn>
         </div>
       </template>
-      <b-dropdown-text v-else class="user-notifications-dropdown-menu__empty text-muted text-center">
-        <div class="text-center p-3 text-muted">
-          <bell-icon size="3x" />
-        </div>
-        <p>
-          You don't have any notification yet.
-        </p>
-      </b-dropdown-text>
-    </app-waiter>
+      <template #link="{ notification }">
+        <user-notification-link 
+          class="dropdown-item py-3"
+          :notification-id="notification.id" 
+          :key="notification.id" />
+      </template>
+    </user-notifications>
   </div>
 </template>
 
@@ -136,26 +74,6 @@ export default {
     &__list{
       max-height: 375px;
       overflow: auto;
-      &__item {
-          //border-top: 1px solid $secondary-50;
-          &--read &__link {
-            opacity: $btn-disabled-opacity;
-          }
-          &--unread {
-            display: inline-flex;
-            z-index: 2;
-            width: 14px;
-            height: 14px;
-            background-color: $danger;
-            border-radius: 50%;
-          }
-
-          & &__link {
-            white-space: normal;
-            padding: $spacer $dropdown-item-padding-x;
-          }
-        }
     }
-
   }
 </style>
