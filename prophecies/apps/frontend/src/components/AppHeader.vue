@@ -2,10 +2,8 @@
 import store from '@/store'
 import UserNotification from '@/models/UserNotification'
 import AppSearchForm from '@/components/AppSearchForm'
-import AppVersion from '@/components/AppVersion'
 import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdownMenu'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
-import ShortcutListCard from '@/components/ShortcutListCard'
 import UserAvatar from '@/components/UserAvatar'
 import UserProfileDropdownMenu from '@/components/UserProfileDropdownMenu'
 
@@ -13,10 +11,8 @@ export default {
   name: 'AppHeader',
   components: {
     AppSearchForm,
-    AppVersion,
     UserNotificationsDropdownMenu,
     ShortkeyBadge,
-    ShortcutListCard,
     UserAvatar,
     UserProfileDropdownMenu
   },

@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
@@ -6,7 +6,6 @@ import TaskRecordReview from '@/models/TaskRecordReview'
 import Task from '@/models/Task'
 import UserRetrieveBookmarks from '@/views/UserRetrieveBookmarks'
 import User from '@/models/User'
-
 
 describe('Bookmarks', () => {
   let wrapper
@@ -25,7 +24,7 @@ describe('Bookmarks', () => {
       'filter[project]': null,
       'filter[task]': null
     }
-    const propsData = { query , username: 'django' }
+    const propsData = { query, username: 'django' }
 
     wrapper = await shallowMount(UserRetrieveBookmarks, {
       i18n,
@@ -66,7 +65,7 @@ describe('Bookmarks', () => {
 
   it('should apply filters', async () => {
     await wrapper.vm.setup()
-    await wrapper.setProps({ query: {'filter[project]': '2'} })
+    await wrapper.setProps({ query: { 'filter[project]': '2' } })
 
     let project = await wrapper.findAll('.user-retrieve-bookmarks__project')
     expect(project).toHaveLength(1)
@@ -74,7 +73,7 @@ describe('Bookmarks', () => {
     expect(project.at(0).find('h2').text()).toContain('Shops')
     expect(project.at(0).findAll('task-record-review-card-stub')).toHaveLength(3)
 
-    await wrapper.setProps({ query: {'filter[task]': '1'} })
+    await wrapper.setProps({ query: { 'filter[task]': '1' } })
     project = await wrapper.findAll('.user-retrieve-bookmarks__project')
     expect(project).toHaveLength(1)
     expect(project.at(0).find('h1').text()).toContain('Chronos')
