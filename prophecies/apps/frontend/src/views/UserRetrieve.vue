@@ -36,6 +36,10 @@ export default {
       const params = { username: this.username }
       return { name: 'user-retrieve-bookmarks', params }
     },
+    notificationsRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-notifications', params }
+    },
     fetchUserLoader () {
       return uniqueId('load-user-')
     },
@@ -51,6 +55,9 @@ export default {
     bookmarksTitle () {
       return this.routeTitle(this.bookmarksRoute.name)
     },
+    notificationsTitle () {
+      return this.routeTitle(this.notificationsRoute.name)
+    },
     user () {
       return User.find(this.username)
     },
@@ -60,6 +67,8 @@ export default {
           return 'UsersIcon'
         case this.bookmarksTitle:
           return 'BookmarkIcon'
+        case this.notificationsTitle:
+          return 'BellIcon'
         default:
           return 'UserIcon'
       }
@@ -113,6 +122,10 @@ export default {
         <b-nav-item :to="teamRoute" exact>
           <users-icon class="mr-3" />
           {{ teamTitle }}
+        </b-nav-item>
+        <b-nav-item :to="notificationsRoute" exact>
+          <bell-icon class="mr-3" />
+          {{ notificationsTitle }}
         </b-nav-item>
         <b-nav-item :to="bookmarksRoute" exact>
           <bookmark-icon class="mr-3" />
