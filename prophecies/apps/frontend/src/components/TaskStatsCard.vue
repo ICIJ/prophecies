@@ -120,25 +120,3 @@ export default {
       </div>
     </div>
 </template>
-
-<style lang="scss" scoped>
-  .task-stats-card {
-    &__heading {
-      flex: 0 1 275px
-    }
-    &__status{
-      &--extended {
-        flex: 0 1 275px
-      }
-      &__top{
-
-        &--closed  {
-          color: $secondary;
-        }
-
-      }
-
-    }
-
-  }
-</style>
