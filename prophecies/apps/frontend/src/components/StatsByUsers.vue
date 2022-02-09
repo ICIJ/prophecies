@@ -46,7 +46,7 @@ export default {
       return users.reduce((acc, user) => ({
         done: acc.done + user.done,
         pending: acc.pending + user.pending,
-        progress: acc.progress + user.progress / users.length
+        progress: acc.progress + (user.progress / users.length)
       }), { done: 0, pending: 0, progress: 0 })
     }
   },

@@ -99,6 +99,7 @@ export default {
               </li>
             </ul>
           </div>
+          <slot name="footer" ></slot>
         </div>
       </div>
     </app-waiter>
