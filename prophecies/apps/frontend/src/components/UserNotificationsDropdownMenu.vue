@@ -22,7 +22,7 @@ export default {
       return this.unreadNotifications.length > 0
     },
     username () {
-      return User.me().username
+      return User.me()?.username
     },
     userNotificationsRoute () {
       const params = { username: this.username }
