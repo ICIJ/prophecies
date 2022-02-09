@@ -10,17 +10,23 @@ export default {
     AppWaiter,
     UserNotificationLink
   },
-  data () {
-    return {
-      planFetchNotificationsId: null
+  created () {
+    // If the notifications were not fetched yet, 
+    // we start the component loader
+    if (!this.fetched) {
+      this.$wait.start(this.loader)
     }
+    // Plan notifications polling and fetch them
+    this.$store.dispatch('userNotificationsPoll/startPollAndFetch')
   },
-  async created () {
-    await this.fetchNotificationsWithLoader()
-    this.planFetchNotifications()
-  },
-  beforeDestroy () {
-    clearInterval(this.planFetchNotificationsId)
+  watch: {
+    fetched (fetched) {
+      // Once the notifications have been fetched,
+      // we stop the component loader
+      if (fetched) {
+        this.$wait.end(this.loader)
+      }
+    }
   },
   computed: {
     loader () {
@@ -37,27 +43,16 @@ export default {
     },
     hasUnreadNotifications () {
       return this.unreadNotifications.length > 0
+    },
+    fetched () {
+      return this.$store.getters['userNotificationsPoll/fetched']
     }
   },
   methods: {
-    async fetchNotificationsWithLoader () {
-      this.$wait.start(this.loader)
-      await this.fetchNotifications()
-      this.$wait.end(this.loader)
-    },
-    fetchNotifications () {
-      const pageSize = 50
-      const include = 'action.actionObject'
-      const params = { 'page[size]': pageSize, include }
-      return UserNotification.api().get('', { params })
-    },
-    planFetchNotifications () {
-      this.planFetchNotificationsId = setInterval(this.fetchNotifications, 1e4)
-    },
     async markAllAsRead () {
       const ids = this.unreadNotifications.map(n => n.id)
       await UserNotification.api().bulkMarkAsRead(ids)
-      await this.fetchNotifications()
+      this.$store.dispatch('userNotificationsPoll/fetch')
     }
   }
 }
@@ -76,7 +71,7 @@ export default {
           </template>
         </div>
       </template>
-      <template v-else>
+      <template v-else-if="fetched">
         <div  class="user-notifications__empty text-muted text-center">
           <div class="text-center p-3 text-muted">
             <bell-icon size="3x" />

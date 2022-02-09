@@ -28,7 +28,7 @@ describe('UserNotificationsDropdownMenu', () => {
       // Configure the local vue with plugins
       const { i18n, store, wait } = Core.init(localVue).useAll()
       wrapper = mount(UserNotificationsDropdownMenu, { attachTo, localVue, i18n, store, stubs, wait })      
-      jest.advanceTimersByTime(1e6)
+      jest.advanceTimersByTime(1e4)
     })
 
     afterEach(() => {
@@ -62,7 +62,7 @@ describe('UserNotificationsDropdownMenu', () => {
       const { i18n, store, wait } = Core.init(localVue).useAll()
       store.dispatch('entities/deleteAll')
       wrapper = mount(UserNotificationsDropdownMenu, { attachTo, localVue, i18n, store, stubs, wait })
-      jest.advanceTimersByTime(1e6)
+      jest.advanceTimersByTime(1e4)
     })
 
     afterEach(() => {
@@ -95,7 +95,7 @@ describe('UserNotificationsDropdownMenu', () => {
       UserNotification.insert({ data: { read: false } })
       UserNotification.insert({ data: { read: false } })
       wrapper = mount(UserNotificationsDropdownMenu, { attachTo, localVue, i18n, store, stubs, wait })
-      jest.advanceTimersByTime(1e6)
+      jest.advanceTimersByTime(1e4)
     })
 
     afterEach(() => {

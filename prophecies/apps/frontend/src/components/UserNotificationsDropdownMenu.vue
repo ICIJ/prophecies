@@ -1,6 +1,7 @@
 <script>
 import UserNotifications from '@/components/UserNotifications'
 import UserNotificationLink from '@/components/UserNotificationLink'
+import User from '@/models/User'
 import UserNotification from '@/models/UserNotification'
 
 export default {
@@ -12,20 +13,20 @@ export default {
   },
   computed: {
     notifications () {
-      return UserNotification
-        .query()
-        .with('action')
-        .with('action.*')
-        .with('action.target.*')
-        .with('action.actionObject.*')
-        .orderBy('createdAt', 'desc')
-        .get()
+      return UserNotification.query().get()
     },
     unreadNotifications () {
       return this.notifications.filter(n => !n.read)
     },
     hasUnreadNotifications () {
       return this.unreadNotifications.length > 0
+    },
+    username () {
+      return User.me().username
+    },
+    userNotificationsRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-notifications', params }
     }
   },
   methods: {
@@ -66,6 +67,11 @@ export default {
           :key="notification.id" />
       </template>
     </user-notifications>
+    <div class="user-notifications-dropdown-menu__footer border-top">
+      <b-btn block variant="link" :to="userNotificationsRoute" :disabled="!notifications.length">
+        See all notifications
+      </b-btn>
+    </div>
   </div>
 </template>
 
