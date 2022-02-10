@@ -1,8 +1,9 @@
-import { isFunction } from 'lodash'
+import { get, isFunction } from 'lodash'
 import UserNotification from '@/models/UserNotification'
 
 export const state = () => ({
   pollId: null,
+  fetchedIds: [],
   fetchs: 0
 })
 
@@ -19,6 +20,9 @@ export const mutations = {
   },
   fetched (state) {
     state.fetchs++
+  },
+  fetchedIds (state, fetchedIds) {
+    state.fetchedIds = fetchedIds
   }
 }
 
@@ -28,7 +32,9 @@ export const actions = {
     const include = 'action.actionObject'
     const params = { 'page[size]': pageSize, include }
     // This populates the store automaticaly with Vuex ORM
-    await UserNotification.api().get('', { params })
+    const { response } = await UserNotification.api().get('', { params })
+    // Collect fetched ids
+    commit('fetchedIds', get(response, 'data.data', []).map(n => n.id))
     // Count how many time the notifications are fetched
     commit('fetched')
   },
@@ -49,6 +55,16 @@ export const actions = {
 export const getters = {
   fetched (state) {
     return state.fetchs > 0
+  },
+  fetchedIds (state) {
+    return state.fetchedIds
+  },
+  fetchedObjects (state) {
+    return UserNotification
+      .query()
+      .whereIdIn(state.fetchedIds)
+      .orderBy('createdAt', 'desc')
+      .get()
   }
 }
 

@@ -24,15 +24,14 @@ describe('UserNotifications', () => {
       const stubs = ['app-waiter']
       // Configure the local vue with plugins
       const { i18n, store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(UserNotifications, { attachTo, localVue, i18n, store, stubs, wait })
-      await store.dispatch('userNotificationsPoll/fetch')
+
+      const { response } = await UserNotification.api().get('')
+      const notificationIds = response.data.data.map(t => t.id)
+      const propsData = { notificationIds }
+
+      wrapper = mount(UserNotifications, { attachTo, localVue, i18n, propsData, store, stubs, wait })
     })
 
-    afterEach(() => {
-      wrapper.destroy()
-      wrapper.vm.$store.dispatch('userNotificationsPoll/clearPoll')
-      UserNotification.deleteAll()
-    })
 
     it('should NOT show the "no notifications" message', () => {
       const message = wrapper.find('.user-notifications__empty')
@@ -46,12 +45,12 @@ describe('UserNotifications', () => {
 
     it('should show the first notification with the right content', () => {
       const first = wrapper.findAll('.user-notification-link__description').at(0)
-      expect(first.text()).toBe('Django mentioned you in a tip')
+      expect(first.text()).toBe('Django mentioned you in a note')
     })
 
     it('should show the second notification with the right content', () => {
       const first = wrapper.findAll('.user-notification-link__description').at(1)
-      expect(first.text()).toBe('Django mentioned you in a note')
+      expect(first.text()).toBe('Django mentioned you in a tip')
     })
 
     it('should show the chip indicating the notification is unread', () => {
@@ -64,34 +63,17 @@ describe('UserNotifications', () => {
     let wrapper
 
     beforeEach(async () => {
-      // Mock notifications endpoint to return nothing
-      server.use(rest.get('/api/v1/user-notifications', (req, res, ctx) => {
-        return res(ctx.json({ data: [] }))
-      }))
       const attachTo = createContainer()
       const localVue = createLocalVue()
       const stubs = ['app-waiter']
       // Configure the local vue with plugins
       const { i18n, store, wait } = Core.init(localVue).useAll()
-      store.dispatch('entities/deleteAll')
       wrapper = mount(UserNotifications, { attachTo, localVue, i18n, store, stubs, wait })
-      await store.dispatch('userNotificationsPoll/fetch')
-    })
-
-    afterEach(() => {
-      wrapper.destroy()
-      wrapper.vm.$store.dispatch('userNotificationsPoll/startPollAndFetch')
-      server.resetHandlers()
-      UserNotification.deleteAll()
     })
 
     it('should show the "no notifications" message', () => {
       const message = wrapper.find('.user-notifications__empty')
       expect(message.exists()).toBeTruthy()
-    })
-
-    it('should planify a poll to fetch user notification in the store', () => {
-      expect(wrapper.vm.$store.state.userNotificationsPoll.pollId).not.toBeNull()
     })
   })
 })

@@ -93,4 +93,19 @@ describe('userNotificationsPoll', () => {
     await advanceTimersByTimeAndFlushPromises(1e3)
     expect(store.getters['userNotificationsPoll/fetched']).toBeFalsy()
   })
+
+  it('should save the list of fetched notifications', async () => {
+    await store.dispatch('userNotificationsPoll/fetch')
+    expect(store.getters['userNotificationsPoll/fetchedIds']).toContain('4')
+    expect(store.getters['userNotificationsPoll/fetchedIds']).toContain('1')
+    expect(store.getters['userNotificationsPoll/fetchedIds']).toHaveLength(2)
+  })
+
+  it('should get the list of fetched notifications', async () => {
+    await store.dispatch('userNotificationsPoll/fetch')
+    const [n4, n1, ...nn] = store.getters['userNotificationsPoll/fetchedObjects']
+    expect(n4.id).toBe('4')
+    expect(n1.id).toBe('1')
+    expect(nn).toHaveLength(0)
+  })
 })

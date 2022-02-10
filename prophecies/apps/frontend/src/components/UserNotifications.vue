@@ -10,20 +10,27 @@ export default {
     AppWaiter,
     UserNotificationLink
   },
+  props: {
+    notificationIds: {
+      type: Array,
+      default: () => ([])
+    },
+    fetching: {
+      type: Boolean
+    }
+  },
   created () {
     // If the notifications were not fetched yet, 
     // we start the component loader
-    if (!this.fetched) {
+    if (this.fetching) {
       this.$wait.start(this.loader)
     }
-    // Plan notifications polling and fetch them
-    this.$store.dispatch('userNotificationsPoll/startPollAndFetch')
   },
   watch: {
-    fetched (fetched) {
+    fetching (fetching) {
       // Once the notifications have been fetched,
       // we stop the component loader
-      if (fetched) {
+      if (!fetching) {
         this.$wait.end(this.loader)
       }
     }
@@ -35,6 +42,7 @@ export default {
     notifications () {
       return UserNotification
         .query()
+        .whereIdIn(this.notificationIds)
         .orderBy('createdAt', 'desc')
         .get()
     },
@@ -43,9 +51,6 @@ export default {
     },
     hasUnreadNotifications () {
       return this.unreadNotifications.length > 0
-    },
-    fetched () {
-      return this.$store.getters['userNotificationsPoll/fetched']
     }
   },
   methods: {
@@ -71,7 +76,7 @@ export default {
           </template>
         </div>
       </template>
-      <template v-else-if="fetched">
+      <template v-else>
         <div  class="user-notifications__empty text-muted text-center">
           <div class="text-center p-3 text-muted">
             <bell-icon size="3x" />

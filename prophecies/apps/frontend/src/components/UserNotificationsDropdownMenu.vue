@@ -11,9 +11,16 @@ export default {
     UserNotificationLink,
     UserNotifications
   },
+  beforeCreate () {
+    // Plan notifications polling and fetch them
+    this.$store.dispatch('userNotificationsPoll/startPollAndFetch')
+  },
   computed: {
     notifications () {
-      return UserNotification.query().get()
+      return this.$store.getters['userNotificationsPoll/fetchedObjects']
+    },
+    notificationIds () {
+      return this.$store.getters['userNotificationsPoll/fetchedIds']
     },
     unreadNotifications () {
       return this.notifications.filter(n => !n.read)
@@ -33,7 +40,7 @@ export default {
     async markAllAsRead () {
       const ids = this.unreadNotifications.map(n => n.id)
       await UserNotification.api().bulkMarkAsRead(ids)
-      await this.fetchNotifications()
+      await this.$store.dispatch('userNotificationsPoll/fetch')
     }
   }
 }
@@ -41,7 +48,9 @@ export default {
 
 <template>
   <div class="user-notifications-dropdown-menu">
-    <user-notifications class="user-notifications-dropdown-menu__list dropdown">
+    <user-notifications 
+      class="user-notifications-dropdown-menu__list dropdown"
+      :notification-ids="notificationIds">
       <template #header>
         <div class="b-dropdown-text d-flex align-items-center">
           <h3 class="my-2">
