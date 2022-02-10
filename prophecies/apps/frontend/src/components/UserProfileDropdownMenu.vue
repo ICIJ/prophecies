@@ -14,6 +14,10 @@ export default {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-profile', params }
     },
+    notificationsRoute () {
+      const params = { username: this.user.username }
+      return { name: 'user-retrieve-notifications', params }
+    },
     teamRoute () {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-team', params }
@@ -35,6 +39,10 @@ export default {
     <b-dropdown-item :to="teamRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--team">
       <users-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveTeam.title.yours') }}
+    </b-dropdown-item>
+    <b-dropdown-item :to="notificationsRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--notifications">
+      <bell-icon class="user-profile-dropdown-menu__item__icon" />
+      {{ $t('userRetrieveNotifications.title.yours') }}
     </b-dropdown-item>
     <b-dropdown-item :to="bookmarksRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--bookmarks">
       <bookmark-icon class="user-profile-dropdown-menu__item__icon" />
