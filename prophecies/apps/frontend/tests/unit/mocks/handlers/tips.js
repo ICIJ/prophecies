@@ -8,6 +8,48 @@ export default [
         data: [
           {
             type: 'Tip',
+            id: '8',
+            attributes: {
+              name: 'tip for test 8',
+              description: 'test description 8',
+              createdAt: '2021-09-02T12:58:16.113007Z',
+              updatedAt: '2021-09-02T12:58:16.113038Z'
+            },
+            relationships: {
+              project: {
+                data: {
+                  type: 'Project',
+                  id: '2'
+                }
+              },
+              creator: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              }
+            }
+          },
+          {
+            type: 'Tip',
+            id: '7',
+            attributes: {
+              name: 'Tips without project',
+              description: 'test description 7',
+              createdAt: '2021-09-02T12:58:16.113007Z',
+              updatedAt: '2021-09-02T12:58:16.113038Z'
+            },
+            relationships: {
+              creator: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              }
+            }
+          },
+          {
+            type: 'Tip',
             id: '6',
             attributes: {
               name: 'tip for test 6',
@@ -288,7 +330,7 @@ export default [
               description: 'Review Shops',
               name: 'Shops',
               priority: 1,
-              rounds: 3,
+              rounds: 3
             },
             relationships: {
               choiceGroup: {
@@ -335,7 +377,7 @@ export default [
               description: 'Review Paintings',
               name: 'Paintings',
               priority: 1,
-              rounds: 3,
+              rounds: 3
             },
             relationships: {
               choiceGroup: {
@@ -382,7 +424,7 @@ export default [
               description: 'Review Addresses',
               name: 'Addresses',
               priority: 1,
-              rounds: 3,
+              rounds: 3
             },
             relationships: {
               choiceGroup: {

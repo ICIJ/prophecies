@@ -320,7 +320,7 @@ describe('AppSearchForm', () => {
     it('should only search for tips with no task or with task containing records ', async () => {
       await wrapper.setData({ query: 'foo' })
       await wrapper.vm.search('foo')
-      expect(wrapper.vm.tipsToSearch).toEqual(['2', '3', '4'])
+      expect(wrapper.vm.tipsToSearch).toEqual(['2', '3', '4', '7', '8'])
       expect(wrapper.vm.queryset).toHaveLength(3)
     })
   })

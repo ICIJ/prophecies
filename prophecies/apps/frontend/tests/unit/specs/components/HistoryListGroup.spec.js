@@ -29,9 +29,9 @@ describe('HistoryListGroup', () => {
       store
     })
   })
-  it('should display 10 events', () => {
+  it('should display 13 events', () => {
     const elem = wrapper.findAll('history-list-item-stub')
-    expect(elem).toHaveLength(11)
+    expect(elem).toHaveLength(13)
   })
   it('should limit view to 5 events', async () => {
     await wrapper.setProps({ limit: 5 })
@@ -43,7 +43,7 @@ describe('HistoryListGroup', () => {
     let elem = wrapper.find('.history-list-group__see-more')
     expect(elem.exists()).toBeTruthy()
 
-    await wrapper.setProps({ limit: 11 })
+    await wrapper.setProps({ limit: 13 })
     elem = wrapper.find('.history-list-group__see-more')
     expect(elem.exists()).toBeFalsy()
   })
@@ -68,8 +68,12 @@ describe('HistoryListGroup', () => {
     await wrapper.vm.$nextTick()
 
     items = wrapper.findAll('history-list-item-stub')
-    expect(items).toHaveLength(11)
+    expect(items).toHaveLength(12)
+
+    seeMoreBtn.trigger('click')
+    await wrapper.vm.$nextTick()
     seeMoreBtn = wrapper.find('.history-list-group__see-more__button')
+
     expect(seeMoreBtn.exists()).toBeFalsy()
   })
 
@@ -79,7 +83,7 @@ describe('HistoryListGroup', () => {
     expect(unorderedItems.sort(wrapper.vm.sortByTimestamp)).toEqual(expectedOrder)
 
     const items = wrapper.findAll('history-list-item-stub')
-    expect(items).toHaveLength(11)
+    expect(items).toHaveLength(13)
     for (let i = 0; i < items.length; ++i) {
       expect(items.at(i).attributes().id).toEqual(expectedOrder[i].id)
     }
