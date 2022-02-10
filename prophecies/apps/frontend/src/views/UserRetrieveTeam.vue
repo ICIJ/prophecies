@@ -85,11 +85,11 @@ export default {
   <div class="user-retrieve-team container-fluid">
     <div class="row">
       <div
-        class="col-12 col-xl-6 mb-3"
+        class="col-12 col-xl-6 mb-4"
         v-for="{ id } in teammates"
         :key="id"
       >
-        <user-card class="user-retrieve-team__user-card" :user-id="id" background>
+        <user-card class="user-retrieve-team__user-card h-100" :user-id="id" background>
           <template #footer >
             <task-stats-card-all-rounds
             :done='teammateStats[id].done'
