@@ -112,12 +112,16 @@ export default [
               },
               checkers: {
                 meta: {
-                  count: 1
+                  count: 2
                 },
                 data: [
                   {
                     type: 'User',
                     id: '2'
+                  },
+                  {
+                    type: 'User',
+                    id: '1'
                   }
                 ]
               }
@@ -571,7 +575,7 @@ export default [
     return res(
       ctx.status(200),
       ctx.json({
-        data:           {
+        data: {
           type: 'Task',
           id: '2',
           attributes: {
@@ -691,6 +695,21 @@ export default [
             },
             links: {
               self: 'http://localhost/api/v1/projects/1/'
+            }
+          },
+          {
+            type: 'User',
+            id: '1',
+            attributes: {
+              firstName: '',
+              lastName: '',
+              username: 'olivia',
+              email: '',
+              emailMd5: 'd41d8cd98f00b204e9800998ecf8427e',
+              isStaff: true
+            },
+            links: {
+              self: 'http://localhost:9009/api/v1/users/1/'
             }
           },
           {
