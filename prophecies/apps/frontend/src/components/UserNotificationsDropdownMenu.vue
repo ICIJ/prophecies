@@ -8,8 +8,7 @@ export default {
   name: 'UserNotificationsDropdownMenu',
   components: {
     UserNotifications,
-    UserNotificationLink,
-    UserNotifications
+    UserNotificationLink
   },
   beforeCreate () {
     // Plan notifications polling and fetch them
@@ -70,9 +69,9 @@ export default {
         </div>
       </template>
       <template #link="{ notification }">
-        <user-notification-link 
+        <user-notification-link
           class="dropdown-item py-3"
-          :notification-id="notification.id" 
+          :notification-id="notification.id"
           :key="notification.id" />
       </template>
     </user-notifications>
