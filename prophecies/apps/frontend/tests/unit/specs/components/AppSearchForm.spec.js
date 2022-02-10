@@ -161,13 +161,6 @@ describe('AppSearchForm', () => {
       wrapper = mount(AppSearchForm, { attachTo, i18n, localVue, stubs, store, wait })
     })
 
-    afterEach(async () => {
-      // Prevent a Vue warning in the next tick when the parentNode doesnt exist:
-      // > TypeError: Cannot read property 'createElement' of null
-      // @see https://stackoverflow.com/a/62262333
-      // wrapper.destroy()
-    })
-
     it('should search tips', async () => {
       const spy = jest.spyOn(wrapper.vm, 'searchTips')
       await wrapper.vm.search('foo')
@@ -293,10 +286,9 @@ describe('AppSearchForm', () => {
       const localVue = createLocalVue()
       const core = Core.init(localVue).useAll()
       const { i18n, store, wait } = core
-      const stubs = ['router-link', 'app-waiter']
       await core.configure()
       // Finally, instantiate the component
-      wrapper = mount(AppSearchForm, { i18n, localVue, stubs, store, wait })
+      wrapper = mount(AppSearchForm, { i18n, localVue, store, wait })
     })
 
     afterEach(async () => {

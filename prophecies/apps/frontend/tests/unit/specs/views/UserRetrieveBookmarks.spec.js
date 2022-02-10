@@ -22,7 +22,7 @@ describe('Bookmarks', () => {
     }
     const propsData = { query, username: 'django' }
 
-    wrapper = await shallowMount(UserRetrieveBookmarks, {
+    wrapper = shallowMount(UserRetrieveBookmarks, {
       i18n,
       localVue,
       propsData,
