@@ -61,6 +61,9 @@ export default {
     user () {
       return User.find(this.username)
     },
+    isMe () {
+      return this.username === User.me()?.username
+    },
     icon () {
       switch (this.title) {
         case this.teamTitle:
@@ -123,7 +126,7 @@ export default {
           <users-icon class="mr-3" />
           {{ teamTitle }}
         </b-nav-item>
-        <b-nav-item :to="notificationsRoute" exact>
+        <b-nav-item :to="notificationsRoute" exact v-if="isMe">
           <bell-icon class="mr-3" />
           {{ notificationsTitle }}
         </b-nav-item>
