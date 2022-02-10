@@ -25,7 +25,7 @@ export default class Task extends Model {
       url: this.string(),
       name: this.string(),
       description: this.string(),
-      checkers: this.belongsToMany(User, TaskChecker, 'checkerId', 'taskId'),
+      checkers: this.belongsToMany(User, TaskChecker, 'taskId', 'checkerId'),
       choiceGroup: this.belongsTo(ChoiceGroup, 'choiceGroupId'),
       choiceGroupId: this.attr(null),
       colors: this.attr(),
