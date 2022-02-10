@@ -54,16 +54,19 @@ export default {
       await Promise.all(promises)
       this.teammates = tms
     },
-    statsByUserId (userId) {
-      const stats = TaskUserStatistics.query().where('checkerId', userId).get()
-      const reduced = stats.reduce((acc, s) => {
-        acc.done += s.doneCount
-        acc.pending += s.pendingCount
-        acc.progress += s.progress
-        return acc
-      }, { done: 0, pending: 0, progress: 0 })
-      reduced.progress /= stats.length
+    reducer (acc, s) {
+      acc.done += s.doneCount
+      acc.pending += s.pendingCount
+      acc.progress += s.progress
+      return acc
+    },
+    getStatAvg (stats) {
+      const reduced = stats.reduce(this.reducer, { done: 0, pending: 0, progress: 0 })
+      reduced.progress = stats.length ? reduced.progress /= stats.length : 0
       return reduced
+    },
+    statsByUserId (userId) {
+      return this.getStatAvg(TaskUserStatistics.query().where('checkerId', userId).get())
     },
     async fetchUserTasks () {
       const params = { 'filter[checkers]': this.user.id, include: 'project,checkers' }
