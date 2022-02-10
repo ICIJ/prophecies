@@ -404,6 +404,7 @@ export default {
              lazy
              modal-class="task-record-review-list__cinematic-view"
              no-close-on-backdrop
+             no-close-on-esc
              size="xl">
       <template #modal-header="{ close }">
         <b-button variant="link" class="p-0" @click="close()">
