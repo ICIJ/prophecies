@@ -128,14 +128,14 @@
   "userRetrieveBookmarks": {
     "title": {
       "yours": "Your bookmarks",
-      "others": "{displayFullName}'s bookmarks"
+      "others": "Their bookmarks"
     },
     "noBookmarks": "No bookmarks"
   },
   "userRetrieveProfile": {
     "title": {
       "yours": "Your profile",
-      "others": "{displayFullName}'s profile"
+      "others": "{displayFullName}"
     },
     "lastLogin": "Last login",
     "notProvided": "Not provided"
@@ -143,7 +143,7 @@
   "userRetrieveTeam": {
     "title": {
       "yours": "Your team",
-      "others": "{displayFullName}'s team"
+      "others": "Their team"
     }
   },
   "userCard": {
@@ -152,7 +152,7 @@
   "userRetrieveNotifications": {
     "title": {
       "yours": "Your notifications",
-      "others": "{displayFullName}'s notifications"
+      "others": "Their notifications"
     }
   }
 }
