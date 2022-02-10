@@ -52,6 +52,9 @@ export default {
     user () {
       return this.$config.get('user')
     },
+    hasCinematicView () {
+      return this.$route?.name === 'task-record-review-list'
+    },
     hasUnreadNotifications () {
       return this.unreadNotifications > 0
     },
@@ -84,7 +87,7 @@ export default {
         <b-navbar-nav class="app-header__nav-right">
           <slot name="nav-right" />
           <template v-if="!hideNav">
-            <b-nav-item @click.prevent="toggleCinematicView">
+            <b-nav-item @click.prevent="toggleCinematicView" v-if="hasCinematicView">
               <film-icon class="mr-2" />
               {{ $t('appHeader.cinematicView') }}
             </b-nav-item>
