@@ -94,6 +94,13 @@ export default {
           param: 'search',
           label: 'name',
           field: 'value'
+        },
+        bookmarkedBy: {
+          name: 'Bookmarked by',
+          param: 'task_record__bookmarked_by',
+          options: task.checkers,
+          field: 'id',
+          label: 'displayName'
         }
       }
     },

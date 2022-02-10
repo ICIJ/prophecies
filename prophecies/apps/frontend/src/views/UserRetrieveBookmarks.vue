@@ -61,7 +61,10 @@ export default {
       await this.fetchChoiceGroups()
     },
     async fetchBookmarks () {
-      const params = { 'filter[task_record__bookmarked_by]': this.user.id }
+      const params = {
+        'filter[checker]': this.user.id,
+        'filter[task_record__bookmarked_by]': this.user.id
+      }
       const { response } = await TaskRecordReview.api().get('', { params })
 
       const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)

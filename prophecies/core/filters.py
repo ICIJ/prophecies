@@ -68,7 +68,13 @@ class TaskRecordReviewFilter(FilterSet):
         return self.boolean_filter_on(queryset, "task_record__locked", value)
 
     def bookmarked_by_filter(self, queryset, name, value):
-        return queryset.filter(task_record__bookmarked_by=value, checker=value)
+        if len(value) > 1:
+            union = queryset.none()
+            for user in value.split(','):
+                union = union | queryset.filter(task_record__bookmarked_by=user)
+            return union
+        else:
+            return queryset.filter(task_record__bookmarked_by=value)
 
     def reviewed_filter(self, queryset, name, value):
         is_param_valid, filter_value = self.get_as_boolean(value)

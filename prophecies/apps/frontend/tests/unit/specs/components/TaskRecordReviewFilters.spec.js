@@ -57,6 +57,12 @@ describe('TaskRecordReviewFilters', () => {
       expect(wrapper.vm.filters.assignedTo.options).toHaveLength(1)
     })
 
+    it('should have an object describing filters, including bookmarkedBy', () => {
+      expect(wrapper.vm.filters.bookmarkedBy).toBeDefined()
+      expect(wrapper.vm.filters.bookmarkedBy.param).toBe('task_record__bookmarked_by')
+      expect(wrapper.vm.filters.bookmarkedBy.options).toHaveLength(1)
+    })
+
     it('should have an object describing filters, including alternativeValues', () => {
       expect(wrapper.vm.filters.alternativeValues).toBeDefined()
       expect(wrapper.vm.filters.alternativeValues.param).toBe('alternative_value__iregex')

@@ -32,7 +32,8 @@ export default {
         rounds: [],
         hasDisagreements: [],
         locked: [],
-        hasNotes: []
+        hasNotes: [],
+        bookmarkedBy: [],
       }
     }
   },
@@ -102,7 +103,7 @@ export default {
 <template>
   <form class="task-record-review-filters mb-3" @submit.prevent>
     <div class="row">
-      <label class="col-12 col-sm-6 col-lg-3">
+      <label class="col-12 col-sm-6 col-lg">
         {{ filters.predictedValues.name }}
         <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
@@ -116,7 +117,7 @@ export default {
                      @tag="addArbitraryPredictedValue"
                      :options="filters.predictedValues.options" />
       </label>
-      <label class="col-12 col-sm-6 col-lg-3">
+      <label class="col-12 col-sm-6 col-lg">
         {{ filters.assignedTo.name }}
         <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
@@ -126,7 +127,17 @@ export default {
                      multiple
                      :options="filters.assignedTo.options" />
       </label>
-      <label class="col-12 col-sm-6 col-lg-3">
+      <label class="col-12 col-sm-6 col-lg">
+        {{ filters.bookmarkedBy.name }}
+        <multiselect class="mt-3 mb-3"
+                     placeholder="Type here..."
+                     v-model="selected.bookmarkedBy"
+                     :label="filters.bookmarkedBy.label"
+                     track-by="id"
+                     multiple
+                     :options="filters.bookmarkedBy.options" />
+      </label>
+      <label class="col-12 col-sm-6 col-lg">
         {{ filters.alternativeValues.name }}
         <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
@@ -140,7 +151,7 @@ export default {
                      @tag="addAlternativeValues"
                      :options="filters.alternativeValues.options" />
       </label>
-      <label class="col-12 col-sm-6 col-lg-3">
+      <label class="col-12 col-sm-6 col-lg">
         {{ filters.choices.name }}
         <multiselect class="mt-3 mb-3"
                      placeholder="Type here..."
