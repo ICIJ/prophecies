@@ -105,7 +105,8 @@ export default {
       if (this.query[FILTER_TYPES.CREATOR]) {
         remove(tips, t => t.creatorId !== this.query[FILTER_TYPES.CREATOR])
       }
-      return orderByProjectThenTask(tips)
+      orderByProjectThenTask(tips)
+      return tips
     },
     tipsGroupedByProject () {
       return groupBy(this.filteredTips, (tip) => {
@@ -222,7 +223,7 @@ export default {
             :project-id.sync="projectId"
             :task-id.sync="taskId"
             :creator-id.sync="creatorId"/>
-            <div v-for="(projectValue, name) in tipsGroupedByProject" :key="name" class="mt-4 mb-4 border-bottom">
+            <div v-for="(projectValue, name) in tipsGroupedByProject" :key="name" class="tip-list__container__list mt-4 mb-4 border-bottom">
               <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
               <div v-for="(taskValue, taskName) in tipsGroupedByTask(projectValue)" :key="taskName" class="mb-4">
                 <div class="d-flex flex-row mb-4 ml-4 mt-4">
