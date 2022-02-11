@@ -1,5 +1,5 @@
 import '@/store'
-import { sortByProjectThenTask, orderTasks } from '@/utils/sort'
+import { orderTasks, orderByProjectThenTask } from '@/utils/sort'
 import Tip from '@/models/Tip'
 import Task from '@/models/Task'
 
@@ -14,7 +14,7 @@ describe('utils/sort', () => {
     Task.deleteAll()
   })
 
-  describe('sortByProjectThenTask', () => {
+  describe('orderByProjectThenTask', () => {
     beforeAll(async () => {
       await Tip.api().get()
     })
@@ -24,11 +24,13 @@ describe('utils/sort', () => {
     })
     it('shouldn\'t sort when project and task aren\'t available', () => {
       const list = Tip.all()
-      const sorted = list.sort(sortByProjectThenTask)
-      expect(list).toBe(sorted)
+      const sorted = orderByProjectThenTask(list)
+      expect(list).toEqual(sorted)
     })
     it('should sort elements by project', () => {
-      const sorted = Tip.query().with('project').get().sort(sortByProjectThenTask)
+      const tips = Tip.query().with('project').get()
+      const sorted = orderByProjectThenTask(tips)
+
       expect(sorted[0].project).toBeNull()
       expect(sorted[1].project.name).toBe('Aladdin')
       expect(sorted[2].project.name).toBe('Aladdin')
@@ -39,7 +41,8 @@ describe('utils/sort', () => {
     })
 
     it('should sort elements project then by task if available', () => {
-      const sorted = Tip.query().with('project').with('task').get().sort(sortByProjectThenTask)
+      const tips = Tip.query().with('project').with('task').get()
+      const sorted = orderByProjectThenTask(tips)
       expect(sorted[1].project.name).toBe('Aladdin')
       expect(sorted[1].task.name).toBe('Addresses')
       expect(sorted[2].project.name).toBe('Aladdin')

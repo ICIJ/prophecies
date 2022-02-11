@@ -43,12 +43,12 @@ describe('Bookmarks', () => {
   it('should display bookmarked items grouped by projects then by tasks', async () => {
     const project = await wrapper.findAll('.user-retrieve-bookmarks__project')
     expect(project).toHaveLength(2)
-    expect(project.at(0).find('h1').text()).toContain('Demeter')
-    expect(project.at(1).find('h1').text()).toContain('Chronos')
+    expect(project.at(0).find('h1').text()).toContain('Chronos')
+    expect(project.at(1).find('h1').text()).toContain('Demeter')
 
     expect(wrapper.vm.taskIds).toHaveLength(2)
-    expect(project.at(0).find('h2').text()).toContain('Shops')
-    expect(project.at(1).find('h2').text()).toContain('Addresses')
+    expect(project.at(0).find('h2').text()).toContain('Addresses')
+    expect(project.at(1).find('h2').text()).toContain('Shops')
   })
 
   it('should apply filters', async () => {

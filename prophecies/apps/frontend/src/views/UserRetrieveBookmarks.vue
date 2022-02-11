@@ -1,6 +1,6 @@
 <script>
 import { get, groupBy, remove, uniqueId } from 'lodash'
-import { sortByProjectThenTask } from '@/utils/sort'
+import { orderByProjectThenTask } from '@/utils/sort'
 import AppWaiter from '@/components/AppWaiter'
 
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
@@ -185,7 +185,8 @@ export default {
       if (this.query[FILTER_TYPES.TASK]) {
         remove(bookmarks, trw => trw.task.id !== this.query[FILTER_TYPES.TASK])
       }
-      return bookmarks.sort(sortByProjectThenTask)
+      orderByProjectThenTask(bookmarks)
+      return bookmarks
     },
     bookmarksGroupedByProject () {
       return groupBy(this.filteredBookmarks, (record) => {

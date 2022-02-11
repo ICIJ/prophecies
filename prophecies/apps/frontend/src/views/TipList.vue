@@ -8,7 +8,7 @@ import Tip from '@/models/Tip'
 import TipCard from '@/components/TipCard'
 import TipListPageParams from '@/components/TipListPageParams'
 import { TaskStatusEnum } from '@/models/Task'
-import { sortByProjectThenTask } from '@/utils/sort'
+import { orderByProjectThenTask } from '@/utils/sort'
 
 const FILTER_TYPES = {
   PROJECT: 'filter[project]',
@@ -105,7 +105,7 @@ export default {
       if (this.query[FILTER_TYPES.CREATOR]) {
         remove(tips, t => t.creatorId !== this.query[FILTER_TYPES.CREATOR])
       }
-      return tips.sort(sortByProjectThenTask)
+      return orderByProjectThenTask(tips)
     },
     tipsGroupedByProject () {
       return groupBy(this.filteredTips, (tip) => {
