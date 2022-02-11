@@ -6,6 +6,7 @@ import TaskListItem from '@/components/TaskListItem'
 import UserAvatar from '@/components/UserAvatar'
 import Task from '@/models/Task'
 import User from '@/models/User'
+import { orderTasks } from '@/utils/sort'
 
 export default {
   name: 'UserCard',
@@ -62,7 +63,7 @@ export default {
       try {
         const { entities: { Task: tasks } } = await Task.api().get('', { params })
         this.errorMessage = ''
-        this.assignedTaskIds = tasks.sort((a, b) => a.name.localeCompare(b.name)).map(t => t.id)
+        this.assignedTaskIds = orderTasks(tasks).map(t => t.id)
       } catch (error) {
         this.errorMessage = 'Sorry, this profile is no longer available.'
         this.assignedTaskIds = []
