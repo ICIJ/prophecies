@@ -45,7 +45,7 @@ export const router = {
         },
         {
           name: 'user-retrieve-team',
-          path: 'teams',
+          path: 'team',
           props: true,
           component: UserRetrieveTeam
         },
