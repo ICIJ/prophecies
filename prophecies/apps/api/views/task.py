@@ -1,7 +1,6 @@
 from functools import lru_cache
-from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_json_api import serializers
+from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
 from prophecies.core.models import Task, TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record import StatusType
@@ -26,13 +25,13 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     }
 
     class JSONAPIMeta:
-        included_resources = ['project']
+        included_resources = []
 
     class Meta:
         model = Task
         fields = ['id', 'url', 'choice_group', 'checkers', 'colors', 'created_at',
-            'description', 'name', 'project', 'priority', 'rounds',
-            'task_records_count',  'task_records_done_count', 'embeddable_links',
+            'description', 'name', 'project', 'priority', 'rounds',  'embeddable_links',
+            'task_records_count',  'task_records_done_count',
             'user_task_records_count', 'user_task_records_done_count',
             'user_progress_by_round', 'user_progress','status',
             'progress', 'progress_by_round']
@@ -69,9 +68,12 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
         return TaskRecord.objects.filter(task=task).count()
 
 
-class TaskViewSet(viewsets.ReadOnlyModelViewSet):
+class TaskViewSet(views.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
-    
+    prefetch_for_includes = {
+        'project': ['project', 'project__creator'],
+        'choice_group': ['choice_group', 'choice_group__choices']
+    }
     serializer_class = TaskSerializer
     search_fields = ['name', 'description']
     ordering_fields = ['name']
@@ -84,12 +86,7 @@ class TaskViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Task.objects.none()
-
         # retrieve projects from tasks where i'm a checker
-        my_projects = Task.objects.filter(checkers__in = [self.request.user] ).values('project')
+        my_projects = Task.objects.filter(checkers__in=[self.request.user]).values('project')
         # retrieve tasks from my projects
-        return Task.objects.filter(project__in = my_projects)\
-                    .prefetch_related('project') \
-                    .prefetch_related('project__creator') \
-                    .prefetch_related('choice_group') \
-                    .prefetch_related('choice_group__choices')
+        return Task.objects.filter(project__in=my_projects)
