@@ -1,12 +1,11 @@
 import json
 
 from io import BytesIO
-from rest_framework import exceptions, serializers, status, permissions, viewsets
+from rest_framework import exceptions, serializers, viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api.parsers import JSONParser
 
-from prophecies.core.models import TaskRecordReview
 from prophecies.apps.api.views.task_record_review import TaskRecordReviewViewSet
 from prophecies.apps.api.views.user_notification import UserNotificationViewSet
 
@@ -113,8 +112,7 @@ class OperationSerializer(serializers.Serializer):
             serializer.save()
         return {}
 
-
-class OperationViewSet(viewsets.ViewSet):
+class OperationViewSet(viewsets.GenericViewSet):
     """
     To create bulk operations. Each operation is defined by a list of
     `operations` and a list of `payloads` to apply to resources. Each resource
@@ -130,7 +128,8 @@ class OperationViewSet(viewsets.ViewSet):
 
 
     def create(self, request):
-        serializer = OperationSerializer(data=request.data, many=False, context={'request': request})
+        context = {'request': request, 'view': self}
+        serializer = OperationSerializer(data=request.data, many=False, context=context)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.validated_data)

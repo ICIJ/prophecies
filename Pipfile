@@ -18,7 +18,7 @@ django-colorfield = "*"
 django-constance = {extras = [ "database",], version = "*"}
 django-filter = "*"
 django-crispy-forms = "*"
-djangorestframework-jsonapi = {extras = ["django-polymorphic"], version = "==4.2.1"}
+djangorestframework-jsonapi = {extras = ["django-polymorphic"], version = "==5.0.0"}
 django-activity-stream = "==0.10.0"
 django-jsonfield = "*"
 markdown = "*"
