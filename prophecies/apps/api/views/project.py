@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User
-from rest_framework_json_api import serializers
+from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
-from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from prophecies.apps.api.views.user import UserSerializer
 from prophecies.core.models.project import Project
+
+from rest_framework_json_api.utils import get_included_resources
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
@@ -20,18 +21,19 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     }
 
     class JSONAPIMeta:
-        included_resources = ['creator']
+        included_resources = []
 
 
-class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
+class ProjectViewSet(views.ReadOnlyModelViewSet):
     queryset = Project.objects.all()
+    select_for_includes = {'creator': ['creator']}
     serializer_class = ProjectSerializer
     search_fields = ['name']
     ordering = ['-id']
     ordering_fields = ['name']
     filterset_fields = ['name']
     pagination_class = None
-
+        
     @action(detail=True, methods=['get'])
     def tasks(self, request, pk=None, **kwarg):
         from prophecies.apps.api.views.task import TaskSerializer
