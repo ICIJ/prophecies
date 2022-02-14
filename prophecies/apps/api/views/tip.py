@@ -27,22 +27,12 @@ class TipSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TipViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = Tip.objects.none()
-
-    def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            return Tip.objects.none()
-        
-        my_projects = Tip.objects.filter(task__checkers__in = [self.request.user] ).values('task__project')
-
-        return Tip.objects.user_scope(self.request.user) \
-            .filter(project__in= my_projects) \
-            .prefetch_related('project') \
-            .prefetch_related('creator') \
-            .prefetch_related('task')
-
     serializer_class = TipSerializer
+    prefetch_for_includes = {
+        'project': ['project'],
+        'creator': ['creator'],
+        'task': ['task']
+    }
     search_fields = ['name', 'description']
     ordering_fields = ['name']
     filterset_fields = {
@@ -54,3 +44,15 @@ class TipViewSet(viewsets.ReadOnlyModelViewSet):
     }
     pagination_class = None
     ordering = ['-id']
+    permission_classes = [IsAuthenticated]
+    queryset = Tip.objects.none()
+
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Tip.objects.none()
+    
+        my_projects = Tip.objects.filter(task__checkers__in = [self.request.user] ).values('task__project')
+        
+        return Tip.objects.user_scope(self.request.user) \
+            .filter(project__in= my_projects)
+
