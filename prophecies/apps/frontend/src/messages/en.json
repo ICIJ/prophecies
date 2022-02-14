@@ -154,5 +154,12 @@
       "yours": "Your notifications",
       "others": "Their notifications"
     }
+  },
+  "userRetrieveHistory": {
+    "title": {
+      "yours": "Your history",
+      "others": "Their history"
+    }
   }
+
 }

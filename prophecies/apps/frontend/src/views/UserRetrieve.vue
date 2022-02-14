@@ -40,6 +40,10 @@ export default {
       const params = { username: this.username }
       return { name: 'user-retrieve-notifications', params }
     },
+    historyRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-history', params }
+    },
     fetchUserLoader () {
       return uniqueId('load-user-')
     },
@@ -58,6 +62,9 @@ export default {
     notificationsTitle () {
       return this.routeTitle(this.notificationsRoute.name)
     },
+    historyTitle () {
+      return this.routeTitle(this.historyRoute.name)
+    },
     user () {
       return User.find(this.username)
     },
@@ -72,9 +79,14 @@ export default {
           return 'BookmarkIcon'
         case this.notificationsTitle:
           return 'BellIcon'
+        case this.historyTitle:
+          return 'ClockIcon'
         default:
           return 'UserIcon'
       }
+    },
+    inDev () {
+      return process.env.NODE_ENV === "development"
     }
   },
   methods: {
@@ -133,6 +145,10 @@ export default {
         <b-nav-item :to="bookmarksRoute" exact>
           <bookmark-icon class="mr-3" />
           {{ bookmarksTitle }}
+        </b-nav-item>
+        <b-nav-item :to="historyRoute" exact v-if="inDev">
+          <clock-icon class="mr-3" />
+          {{ historyTitle }}
         </b-nav-item>
         <b-nav-item :href="$config.get('helpLink')">
           <truck-icon class="mr-3" />

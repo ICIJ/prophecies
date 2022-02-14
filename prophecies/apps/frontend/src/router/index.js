@@ -13,6 +13,7 @@ import UserRetrieveProfile from '@/views/UserRetrieveProfile.vue'
 import UserRetrieveTeam from '@/views/UserRetrieveTeam.vue'
 import UserRetrieveBookmarks from '@/views/UserRetrieveBookmarks.vue'
 import UserRetrieveNotifications from '@/views/UserRetrieveNotifications.vue'
+import UserRetrieveHistory from '@/views/UserRetrieveHistory.vue'
 
 export const router = {
   routes: [
@@ -59,6 +60,12 @@ export const router = {
           name: 'user-retrieve-notifications',
           path: 'notifications',
           component: UserRetrieveNotifications,
+          props: true
+        },
+        {
+          name: 'user-retrieve-history',
+          path: 'history',
+          component: UserRetrieveHistory,
           props: true
         }
       ]
