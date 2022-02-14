@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import Tip from '@/models/Tip'
 import PageParams from '@/components/PageParams'
 
 export default {
@@ -29,9 +30,6 @@ export default {
       type: String,
       default: ''
     }
-  },
-  created () {
-    return this.fetchTips()
   },
   computed: {
     tips () {

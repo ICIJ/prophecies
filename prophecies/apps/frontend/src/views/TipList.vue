@@ -224,16 +224,15 @@ export default {
             :project-id.sync="projectId"
             :task-id.sync="taskId"
             :creator-id.sync="creatorId"/>
-            <div v-for="(projectValue, name) in tipsGroupedByProject" :key="name" class="tip-list__container__list mt-4 mb-4 border-bottom">
-              <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
-              <div v-for="(taskValue, taskName) in tipsGroupedByTask(projectValue)" :key="taskName" class="mb-4">
-                <div class="d-flex flex-row mb-4 ml-4 mt-4">
-                  <div>
-                    <h2>{{ taskName }}</h2>
-                  </div>
-                  <div class="closed-indicator" v-if="taskClosed(taskValue)">
-                    Closed
-                  </div>
+          <div v-for="(projectValue, name) in tipsGroupedByProject" :key="name" class="tip-list__container__list mt-4 mb-4 border-bottom">
+            <h1 class="mb-3 mt-4 text-primary">{{ name }}</h1>
+            <div v-for="(taskValue, taskName) in tipsGroupedByTask(projectValue)" :key="taskName" class="mb-4">
+              <div class="d-flex flex-row mb-4 ml-4 mt-4">
+                <div>
+                  <h2 class="text-tertiary">{{ taskName }}</h2>
+                </div>
+                <div class="closed-indicator" v-if="taskClosed(taskValue)">
+                  Closed
                 </div>
               </div>
               <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
@@ -249,14 +248,6 @@ export default {
 
 <style lang="scss" scoped>
  .tip-list {
-   h1 {
-     color: $primary;
-   }
-
-   h2 {
-     color: $tertiary;
-   }
-
    .closed-indicator {
      margin-top: 2px;
      margin-left: 25px;
