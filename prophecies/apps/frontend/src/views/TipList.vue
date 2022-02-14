@@ -126,7 +126,6 @@ export default {
         await this.waitFor(this.fetchTipsLoader, this.fetchTips)
       } catch (error) {
         const title = 'Unable to retrieve tips'
-        console.log(error)
         this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
