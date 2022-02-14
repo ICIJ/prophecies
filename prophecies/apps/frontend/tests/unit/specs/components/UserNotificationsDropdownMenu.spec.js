@@ -148,7 +148,7 @@ describe('UserNotificationsDropdownMenu', () => {
     })
 
     it('should enable the button to mark all notifications as read', () => {
-      const markAllButton = wrapper.find('.user-notifications-dropdown-menu__mark-all')
+      const markAllButton = wrapper.find('.user-notifications-dropdown-menu__mark-all')      
       expect(markAllButton.attributes('disabled')).toBeFalsy()
     })
   })

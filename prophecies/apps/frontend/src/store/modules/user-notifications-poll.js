@@ -27,9 +27,25 @@ export const mutations = {
 }
 
 export const actions = {
+  async fetchLatest({ commit, dispatch, state }) {
+    const pageSize = 1
+    const params = { 'page[size]': pageSize }
+    const save = false
+    // This WONT populate the store automaticaly with Vuex ORM
+    const { response } = await UserNotification.api().get('', { params, save })
+    // Collect the first id in the list of latest ids
+    const [latestId = null] = get(response, 'data.data', []).map(n => n.id)
+    const [latestStoredId = null] = state.fetchedIds
+    // The id is different from the first in the state, we must fetch more
+    if (latestId !== latestStoredId) {
+      return dispatch('fetch')
+    }
+    // Count how many time the notifications are fetched
+    commit('fetched')
+  },
   async fetch ({ commit }) {
     const pageSize = 50
-    const include = 'action.actionObject'
+    const include = 'action.actionObject,action.actor'
     const params = { 'page[size]': pageSize, include }
     // This populates the store automaticaly with Vuex ORM
     const { response } = await UserNotification.api().get('', { params })
@@ -44,7 +60,7 @@ export const actions = {
   },
   startPoll({ commit, dispatch, state }) {
     if (!state.pollId) {
-      commit("setPollInterval", () => dispatch("fetch"))
+      commit("setPollInterval", () => dispatch("fetchLatest"))
     }
   },
   clearPoll({ commit }) {

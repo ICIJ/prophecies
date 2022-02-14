@@ -7,7 +7,7 @@ describe('userNotificationsPoll', () => {
 
   // Ensure we advance timers and run all pending job
   // in the PromiseJobs queue.
-  function advanceTimersByTimeAndFlushPromises (ms) {
+  function advanceTimersByTimeAndFlushPromises (ms = 0) {
     jest.advanceTimersByTime(ms)
     return new Promise(done => jest.requireActual("timers").setTimeout(done, 200))
   }
@@ -107,5 +107,25 @@ describe('userNotificationsPoll', () => {
     expect(n4.id).toBe('4')
     expect(n1.id).toBe('1')
     expect(nn).toHaveLength(0)
+  })
+
+  it('should fetch all notifications when starting the poll', done => {
+    store.subscribeAction((action) => {
+      if (action.type === 'userNotificationsPoll/fetch') {
+        done()
+      }
+    })
+    store.dispatch('userNotificationsPoll/startPollAndFetch')
+  })
+
+  it('should fetch only the latest notification after a while when starting the poll', async done => {
+    store.subscribeAction(async (action) => {
+      if (action.type === 'userNotificationsPoll/fetchLatest') {
+        await advanceTimersByTimeAndFlushPromises()
+        done()
+      }
+    })
+    store.dispatch('userNotificationsPoll/startPollAndFetch')
+    await advanceTimersByTimeAndFlushPromises(1e3 * 10)
   })
 })
