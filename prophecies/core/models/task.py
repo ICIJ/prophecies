@@ -1,5 +1,6 @@
 from actstream import action
 from colorfield.fields import ColorField
+from django.core.cache import cache
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import signals
@@ -38,15 +39,46 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+    
+    @property
+    def cache_key(self):
+        app_label = self._meta.app_label
+        model_name = self._meta.model_name
+        return "%s:%s:%s" % (app_label, model_name, self.pk)
 
-
+    @property
+    def progress(self):
+        cache_key = self.progress_cache_key()
+        progress = cache.get(cache_key)
+        if progress is None:
+            from prophecies.core.models.task_record_review import TaskRecordReview, StatusType as st
+            tasks_reviews = TaskRecordReview.objects.filter(task_record__task_id=self.id)
+            done_reviews= tasks_reviews.filter(status=st.DONE)
+            all_reviews = len(tasks_reviews)
+            done_reviews = len(done_reviews)
+            progress = 100 if all_reviews == 0 else done_reviews / all_reviews * 100
+            cache.set(cache_key, progress, timeout=300)
+        return progress
+    
+    def progress_cache_key(self):
+        return "%s:progress" % self.cache_key
+    
     def progress_by_round(self, **task_record_review_filter):
-        from prophecies.core.models.task_record_review import TaskRecordReview
-        filter = dict(task_record__task=self, **task_record_review_filter)
-        progress = TaskRecordReview.objects.progress_by_round(**filter)
-        # Get all task's rounds to only display the progress by existing rounds
-        rounds = range(1, self.rounds + 1)
-        return { round: progress.get(round, 0) for round in rounds }
+        cache_key = self.progress_by_round_cache_key(**task_record_review_filter)
+        progress = cache.get(cache_key)
+        if progress is None:
+            from prophecies.core.models.task_record_review import TaskRecordReview
+            filter = dict(task_record__task=self, **task_record_review_filter)
+            progress = TaskRecordReview.objects.progress_by_round(**filter)
+            # Get all task's rounds to only display the progress by existing rounds
+            rounds = range(1, self.rounds + 1)
+            progress = { round: progress.get(round, 0) for round in rounds }
+            cache.set(cache_key, progress, timeout=300)
+        return progress
+    
+    def progress_by_round_cache_key(self, **task_record_review_filter):
+        hash_key = hash(frozenset(task_record_review_filter.items()))
+        return "%s:progress_by_round:%s" % (self.cache_key, hash_key)
 
     def open(self):
         self.status = StatusType.OPEN
@@ -90,15 +122,6 @@ class Task(models.Model):
     @property
     def is_locked_changed(self):
         return Task.has_attribute_changed(self,'is_locked')
-
-    @cached_property
-    def progress(self):
-        from prophecies.core.models.task_record_review import TaskRecordReview, StatusType as st
-        tasks_reviews = TaskRecordReview.objects.filter(task_record__task_id=self.id)
-        done_reviews= tasks_reviews.filter(status=st.DONE)
-        all_reviews = len(tasks_reviews)
-        done_reviews = len(done_reviews)
-        return 100 if all_reviews == 0 else done_reviews / all_reviews * 100
 
     @cached_property
     def colors(self):

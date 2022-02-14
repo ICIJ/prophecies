@@ -283,7 +283,7 @@ CACHES = {
 # Dynamique settings
 # https://django-constance.readthedocs.io/en/latest/backends.html#database
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
-CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
+CONSTANCE_DATABASE_CACHE_BACKEND = env.str('CONSTANCE_DATABASE_CACHE_BACKEND', default='default')
 CONSTANCE_CONFIG = {
     'appName': ('Prophecies', 'Name of the app to display publicaly'),
     'avatarUrlTemplate': ('https://www.gravatar.com/avatar/{{ emailMd5 }}?d=mp', 'Template to build the avatar URL'),
