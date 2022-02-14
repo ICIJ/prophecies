@@ -19,7 +19,7 @@ class TipSerializer(serializers.HyperlinkedModelSerializer):
     }
 
     class JSONAPIMeta:
-        included_resources = ['creator', 'project', 'task']
+        included_resources = []
 
     class Meta:
         model = Tip
