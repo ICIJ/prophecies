@@ -64,7 +64,11 @@ export default {
       return Task.api().get()
     },
     fetchTips () {
-      return Tip.api().get()
+      const include = "project,task"
+      const pageSize = "1"
+      const sort = "-created_at"
+      const params = { include, 'page[size]': pageSize, sort }
+      return Tip.api().get('', { params })  
     },
     async waitFor (loader, fns = []) {
       this.$wait.start(loader)
