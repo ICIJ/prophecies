@@ -79,6 +79,26 @@ class Task(models.Model):
     def progress_by_round_cache_key(self, **task_record_review_filter):
         hash_key = hash(frozenset(task_record_review_filter.items()))
         return "%s:progress_by_round:%s" % (self.cache_key, hash_key)
+    
+    @property
+    def records_done_count(self):
+        cache_key = "%s:records_done_count" % self.cache_key
+        count = cache.get(cache_key)
+        if count is None:
+            from prophecies.core.models.task_record_review import TaskRecord
+            count = TaskRecord.objects.done().filter(task=self).count()
+            cache.set(cache_key, count, timeout=60)
+        return count
+
+    @property
+    def records_count(self):
+        cache_key = "%s:records_count" % self.cache_key
+        count = cache.get(cache_key)
+        if count is None:
+            from prophecies.core.models.task_record_review import TaskRecord
+            count = TaskRecord.objects.filter(task=self).count()
+            cache.set(cache_key, count, timeout=60)
+        return count
 
     def open(self):
         self.status = StatusType.OPEN

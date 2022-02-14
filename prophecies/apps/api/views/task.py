@@ -43,9 +43,13 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 
     @lru_cache(maxsize=None)
     def get_user_progress(self, task):
-        user_records = self.get_user_task_records_done_count(task)
         all_records = self.get_user_task_records_count(task)
-        return 100 if all_records == 0 else user_records / all_records * 100
+        # No records assigned to that user
+        if all_records == 0:
+            return 100
+        else:
+            user_records = self.get_user_task_records_done_count(task)
+            return user_records / all_records * 100
 
     @lru_cache(maxsize=None)
     def get_user_task_records_count(self, task):
@@ -59,13 +63,11 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
         filter = dict(task_record__task=task, status=StatusType.DONE, checker=checker)
         return TaskRecordReview.objects.filter(**filter).count()
 
-    @lru_cache(maxsize=None)
     def get_task_records_done_count(self, task):
-        return TaskRecord.objects.done().filter(task=task).count()
+        return task.records_done_count
 
-    @lru_cache(maxsize=None)
     def get_task_records_count(self, task):
-        return TaskRecord.objects.filter(task=task).count()
+        return task.records_count
 
 
 class TaskViewSet(views.ReadOnlyModelViewSet):
