@@ -11,14 +11,13 @@ from rest_framework_json_api.utils import get_included_resources
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     creator = ResourceRelatedField(many=False, queryset=User.objects)
-
-    class Meta:
-        model = Project
-        fields = ['id', 'url', 'creator', 'name']
-
     included_serializers = {
         'creator': UserSerializer,
     }
+    
+    class Meta:
+        model = Project
+        fields = ['id', 'url', 'creator', 'name']
 
     class JSONAPIMeta:
         included_resources = []
