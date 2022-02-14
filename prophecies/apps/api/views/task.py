@@ -83,7 +83,7 @@ class TaskViewSet(views.ReadOnlyModelViewSet):
     pagination_class = None
     ordering = ['-id']
     # Queryset is overridden within the `get_queryset` method
-    queryset = Task.objects.none()
+    queryset = Task.objects.all()
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
@@ -91,4 +91,4 @@ class TaskViewSet(views.ReadOnlyModelViewSet):
         # retrieve projects from tasks where i'm a checker
         my_projects = Task.objects.filter(checkers__in=[self.request.user]).values('project')
         # retrieve tasks from my projects
-        return Task.objects.filter(project__in=my_projects)
+        return super().get_queryset().filter(project__in=my_projects)
