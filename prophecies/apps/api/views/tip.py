@@ -34,7 +34,7 @@ class TipViewSet(viewsets.ReadOnlyModelViewSet):
         'task': ['task']
     }
     search_fields = ['name', 'description']
-    ordering_fields = ['name']
+    ordering_fields = ['name', 'created_at']
     filterset_fields = {
         'name': ('exact',),
         'project': ('exact',),
@@ -43,7 +43,7 @@ class TipViewSet(viewsets.ReadOnlyModelViewSet):
         'id': ('exact','in',),
     }
     pagination_class = None
-    ordering = ['-id']
+    ordering = ['-created_at']
     permission_classes = [IsAuthenticated]
     queryset = Tip.objects.none()
 
