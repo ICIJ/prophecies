@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import Tip from '@/models/Tip'
 import PageParams from '@/components/PageParams'
 
 export default {
@@ -65,11 +64,6 @@ export default {
       set (value) {
         this.$emit('update:creatorId', value)
       }
-    }
-  },
-  methods: {
-    fetchTips () {
-      return Tip.api().get()
     }
   }
 }
