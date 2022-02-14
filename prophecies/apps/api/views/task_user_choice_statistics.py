@@ -33,7 +33,7 @@ class TaskUserChoiceStatisticsSerializer(serializers.ModelSerializer):
                 ]
         
 class TaskUserChoiceStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = TaskUserChoiceStatistics.objects.none()
+    queryset = TaskUserChoiceStatistics.objects.all()
     serializer_class = TaskUserChoiceStatisticsSerializer
     resource_name = 'TaskChoiceStatistics'
     permission_classes = [IsAuthenticated]
@@ -46,5 +46,5 @@ class TaskUserChoiceStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return TaskUserChoiceStatistics.objects.none()
-        return TaskUserChoiceStatistics.objects.filter(task__in=self.request.user.task.all())
+        return super().get_queryset().filter(task__in=self.request.user.task.all())
     
