@@ -49,7 +49,6 @@ export default {
   created () {
     return this.setup()
   },
-
   computed: {
     fetchTipsLoader () {
       return uniqueId('load-tips-')
@@ -127,6 +126,7 @@ export default {
         await this.waitFor(this.fetchTipsLoader, this.fetchTips)
       } catch (error) {
         const title = 'Unable to retrieve tips'
+        console.log(error)
         this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
@@ -136,7 +136,9 @@ export default {
       this.$wait.end(loader)
     },
     fetchTips () {
-      return Tip.api().get()
+      const include = "project,task"
+      const params = { include }
+      return Tip.api().get('', { params })  
     },
     tipsGroupedByTask (tips) {
       return groupBy(tips, (tip) => {
@@ -234,11 +236,12 @@ export default {
                     Closed
                   </div>
                 </div>
-                <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
-                  <tip-card :tip-id="tip.id" />
-                </b-list-group-item>
               </div>
+              <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
+                <tip-card :tip-id="tip.id" />
+              </b-list-group-item>
             </div>
+          </div>
         </app-waiter>
       </div>
     </div>
