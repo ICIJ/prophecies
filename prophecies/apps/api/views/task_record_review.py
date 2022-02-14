@@ -1,9 +1,9 @@
 from actstream import action
 from functools import lru_cache
 from prophecies.core.filters import TaskRecordReviewFilter
-from rest_framework import exceptions, viewsets
+from rest_framework import exceptions
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_json_api import serializers
+from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField, SerializerMethodResourceRelatedField
 from prophecies.core.models import Choice, TaskRecordReview
 from prophecies.apps.api.views.choice import ChoiceSerializer
@@ -114,7 +114,7 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-class TaskRecordReviewViewSet(viewsets.ModelViewSet):
+class TaskRecordReviewViewSet(views.ModelViewSet):
     resource_name = 'TaskRecordReview'
     serializer_class = TaskRecordReviewSerializer
     http_method_names = ['get', 'put', 'head']
