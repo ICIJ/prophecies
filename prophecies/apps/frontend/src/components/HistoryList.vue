@@ -57,6 +57,9 @@ export default {
   computed: {
     fetchHistoryLoader () {
       return uniqueId('load-history-item-')
+    },
+    hasTitleSlot() {
+      return !!this.$slots.title
     }
   }
 }
@@ -64,7 +67,11 @@ export default {
 
 <template>
     <app-waiter :loader="fetchHistoryLoader" waiter-class="my-5 mx-auto d-block">
-    <h1 class="font-weight-bold mt-3 mb-5 history-list__title"><slot name="title">What happened <span class="text-danger">lately</span></slot></h1>
+    <h1 class="font-weight-bold mt-3 mb-5 history-list__title" v-if="hasTitleSlot">
+      <slot name="title">
+        What happened <span class="text-danger">lately</span>
+      </slot>
+    </h1>
      <history-list-group :limit="limit" :fluid="fluid">
        <template v-slot:footer>
        <slot name="footer"/>

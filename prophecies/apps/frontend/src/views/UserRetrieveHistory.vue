@@ -1,12 +1,23 @@
-<template>
-
-</template>
 
 <script>
+import AppWaiter from '@/components/AppWaiter'
+import HistoryList from '@/components/HistoryList'
+
 export default {
-  name: "UserRetrieveHistory"
+  name: "UserRetrieveHistory",
+  components: {
+    AppWaiter,
+    HistoryList
+  }
 }
 </script>
+
+<template>
+  <div class="user-retrieve-history">
+    <history-list/>
+  </div>
+</template>
+
 
 <style scoped>
 
