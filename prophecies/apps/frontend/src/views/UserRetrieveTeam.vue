@@ -5,12 +5,16 @@ import UserCard from '@/components/UserCard'
 import Task from '@/models/Task'
 import User from '@/models/User'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
+import AdminBadge from '@/components/AdminBadge.vue'
+import UserLink from '@/components/UserLink.vue'
 
 export default {
   name: 'UserRetrieveTeam',
   components: {
+    UserLink,
     UserCard,
-    TaskStatsCardAllRounds
+    TaskStatsCardAllRounds,
+    AdminBadge
   },
   props: {
     username: {
@@ -27,7 +31,7 @@ export default {
   },
   data () {
     return {
-      teammates: []
+      teammateIds: []
     }
   },
   created () {
@@ -38,9 +42,9 @@ export default {
       return User.find(this.username)
     },
     teammateStats () {
-      return this.teammates.reduce((acc, tm) => {
-        acc[tm.id] = acc[tm.id] || {}
-        acc[tm.id] = this.statsByUserId(tm.id)
+      return this.teammateIds.reduce((acc, tmId) => {
+        acc[tmId] = acc[tmId] || {}
+        acc[tmId] = this.statsByUserId(tmId)
         return acc
       }, {})
     }
@@ -52,7 +56,7 @@ export default {
         return this.fetchTaskUserStats(t.id)
       })
       await Promise.all(promises)
-      this.teammates = tms
+      this.teammateIds = tms.map(tm => tm.id)
     },
     reducer (acc, s) {
       acc.done += s.doneCount
@@ -86,10 +90,25 @@ export default {
     <div class="row">
       <div
         class="col-12 col-xl-6 mb-4"
-        v-for="{ id } in teammates"
+        v-for="id in teammateIds"
         :key="id"
       >
         <user-card class="user-retrieve-team__user-card h-100" :user-id="id" background>
+          <template #header="{user}" >
+            <div class="d-flex justify-content-between">
+              <div >
+                <h2 class="user-card__fullname">{{ user.displayFullName }}</h2>
+                <p class="user-card__link font-weight-bold text-muted">
+                  <user-link no-card :user-id="user.id" />
+                </p>
+              </div>
+              <div
+                v-if="user.isSuperuser"
+                class="user-retrieve-profile__super-user mb-3" >
+              <admin-badge/>
+              </div>
+            </div>
+          </template>
           <template #footer >
             <task-stats-card-all-rounds
             :done='teammateStats[id].done'

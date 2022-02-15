@@ -30,7 +30,7 @@ export default {
 
 <template>
   <user-card :username="username" class="user-retrieve-profile">
-    <template #content :user={user}>
+    <template #content="{user}">
       <ul class="list-unstyled mt-5" >
         <li class="user-retrieve-profile__super-user mb-3" v-if="user.isSuperuser">
           <admin-badge/>

@@ -87,11 +87,13 @@ export default {
           <user-avatar :user-id="user.id" />
         </div>
         <div class="flex-grow-1">
-          <h2 class="user-card__fullname">{{ user.displayFullName }}</h2>
-          <p class="user-card__link font-weight-bold text-muted">
-            <user-link no-card :user-id="user.id" />
-          </p>
-          <slot name="content" :user={user}></slot>
+          <slot name="header" :user="user" >
+            <h2 class="user-card__fullname">{{ user.displayFullName }}</h2>
+            <p class="user-card__link font-weight-bold text-muted">
+              <user-link no-card :user-id="user.id" />
+            </p>
+          </slot>
+          <slot name="content" :user="user"></slot>
           <div class="user-card__assigned-tasks" v-if="assignedTaskIds.length">
             <p>{{ $tc('userCard.assignedTasks', assignedTaskIds.length) }}</p>
             <ul class="user-card__assigned-tasks__list">

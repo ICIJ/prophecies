@@ -7,6 +7,7 @@ import TaskUserStatistics from '@/models/TaskUserStatistics'
 
 import UserRetrieveTeam from '@/views/UserRetrieveTeam'
 import UserCard from '@/components/UserCard'
+import AdminBadge from '@/components/AdminBadge'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 
 describe('UserRetrieveTeam', () => {
@@ -14,6 +15,10 @@ describe('UserRetrieveTeam', () => {
 
   beforeAll(async () => {
     await User.api().get()
+  })
+
+  afterAll(() => {
+    User.deleteAll()
   })
 
   beforeEach(async () => {
@@ -70,5 +75,18 @@ describe('UserRetrieveTeam', () => {
     expect(avg.done).toEqual(0)
     expect(avg.pending).toEqual(0)
     expect(avg.progress).toEqual(0)
+  })
+  it('shows admin badge if user is superuser', async () => {
+    const djangoIsNotAdmin = wrapper.findComponent(UserCard).findComponent(AdminBadge)
+    expect(djangoIsNotAdmin.exists()).toBeFalsy()
+    User.update({
+      where: '2',
+      data: {
+        isSuperuser: true
+      }
+    })
+    await wrapper.vm.$nextTick()
+    const djangoIsAdmin = wrapper.findComponent(UserCard).findComponent(AdminBadge)
+    expect(djangoIsAdmin.exists()).toBeTruthy()
   })
 })
