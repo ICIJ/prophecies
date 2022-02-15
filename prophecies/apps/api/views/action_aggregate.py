@@ -33,31 +33,7 @@ class ActionAggregateViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return ActionAggregate.objects.none()
-
         # retrieve projects from tasks where i'm a checker
         my_projects = ActionAggregate.objects.filter(task__checkers__in = [self.request.user] ).values('task__project')
         # retrieve tasks from my projects
         return ActionAggregate.objects.filter(task__project__in = my_projects)
-"""
-/action-aggregations/?filter[actor=13]
-{
-    data:[
-        {
-            attributes: {
-                ts:101010101,
-                type:"day"
-                actions:
-                    [
-                        {
-                            actor:'13',
-                            verb:'reviewed'
-                            targetType:'TaskRecordReview'
-                            count:25
-                        }
-                    ]
-            }
-        }
-    ]
-}
-
-"""
