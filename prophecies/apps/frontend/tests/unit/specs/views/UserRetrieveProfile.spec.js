@@ -1,4 +1,4 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
@@ -47,7 +47,7 @@ describe('UserRetrieveProfile', () => {
       wait
     }
     await core.configure()
-    wrapper = await shallowMount(UserRetrieveProfile, options)
+    wrapper = mount(UserRetrieveProfile, options)
   })
 
   afterEach(async () => {
