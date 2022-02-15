@@ -4,11 +4,12 @@ import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
 import LatestTipsCard from '@/components/LatestTipsCard'
+import TaskStatus from '@/components/TaskStatus'
 import Tip from '@/models/Tip'
 import TipCard from '@/components/TipCard'
 import TipListPageParams from '@/components/TipListPageParams'
-import { TaskStatusEnum } from '@/models/Task'
 import { orderByProjectThenTask } from '@/utils/sort'
+import { TaskStatusEnum } from '@/models/Task'
 
 const FILTER_TYPES = {
   PROJECT: 'filter[project]',
@@ -23,6 +24,7 @@ export default {
     AppHeader,
     AppWaiter,
     LatestTipsCard,
+    TaskStatus,
     TipCard,
     TipListPageParams
   },
@@ -69,6 +71,16 @@ export default {
         .with('task')
         .get()
     },
+    tasks () {
+      const tasks = { }
+      for (const tipId in this.tips) {
+        const tip = this.tips[tipId]
+        if (tip.task && !tasks[tip.task.id]) {
+          tasks[tip.task.id] = tip.task
+        }
+      }
+      return tasks
+    },
     projectId: {
       get () {
         return this.query[FILTER_TYPES.PROJECT]
@@ -107,10 +119,16 @@ export default {
 
       return orderByProjectThenTask(tips)
     },
-    tipsGroupedByProject () {
-      return groupBy(this.filteredTips, (tip) => {
+    tipsGroupedByProjectThenTask () {
+      const tipsGroupedByProject = groupBy(this.filteredTips, (tip) => {
         return tip.project ? tip.project.name : 'General'
       })
+      for (const project in tipsGroupedByProject) {
+        tipsGroupedByProject[project] = groupBy(tipsGroupedByProject[project], (tip) => {
+          return tip.task ? tip.task.id : ''
+        })
+      }
+      return tipsGroupedByProject
     },
     tipParams () {
       return {
@@ -135,18 +153,12 @@ export default {
       this.$wait.end(loader)
     },
     fetchTips () {
-      const include = "project,task"
+      const include = 'project,task'
       const params = { include }
-      return Tip.api().get('', { params })  
+      return Tip.api().get('', { params })
     },
-    tipsGroupedByTask (tips) {
-      return groupBy(tips, (tip) => {
-        return tip.task ? tip.task.name : ''
-      })
-    },
-    taskClosed (taskValue) {
-      const tip = taskValue.length ? taskValue[0] : taskValue
-      return tip.task ? (tip.task.status === TaskStatusEnum.CLOSED) : false
+    taskClosed (taskId) {
+      return this.tasks[taskId].status === TaskStatusEnum.CLOSED ?? false
     },
     setProjectFilter (val) {
       if (this.projectNotContainingTask(val, this.taskFilter)) {
@@ -224,18 +236,16 @@ export default {
             :project-id.sync="projectId"
             :task-id.sync="taskId"
             :creator-id.sync="creatorId"/>
-          <div v-for="(projectValue, name) in tipsGroupedByProject" :key="name" class="tip-list__container__list mt-4 mb-4 border-bottom">
-            <h1 class="mb-3 mt-4 text-primary">{{ name }}</h1>
-            <div v-for="(taskValue, taskName) in tipsGroupedByTask(projectValue)" :key="taskName" class="mb-4">
-              <div class="d-flex flex-row mb-4 ml-4 mt-4">
-                <div>
-                  <h2 class="text-tertiary">{{ taskName }}</h2>
-                </div>
-                <div class="closed-indicator" v-if="taskClosed(taskValue)">
-                  Closed
-                </div>
+          <div v-for="(tasksObject, projectName) in tipsGroupedByProjectThenTask" :key="projectName" class="tip-list__container__list mt-4 mb-4 border-bottom">
+            <h1 class="mb-3 mt-4 text-primary">{{ projectName }}</h1>
+            <div v-for="(taskTips, taskIdVal) in tasksObject" :key="taskIdVal" class="mb-4">
+              <div class="d-flex flex-row my-4 ml-4">
+                <template v-if="tasks[taskIdVal]">
+                  <h2 class="text-tertiary">{{ tasks[taskIdVal].name }}</h2>
+                  <task-status class="mt-0 ml-2" :task-id="taskIdVal" v-if=" taskClosed(taskIdVal)" />
+                </template>
               </div>
-              <b-list-group-item v-for="tip in taskValue" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
+              <b-list-group-item v-for="tip in taskTips" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
                 <tip-card :tip-id="tip.id" />
               </b-list-group-item>
             </div>
