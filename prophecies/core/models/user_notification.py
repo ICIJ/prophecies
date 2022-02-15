@@ -13,12 +13,6 @@ class LevelType(models.TextChoices):
 
 class UserNotificationQuerySet(models.QuerySet):
   
-    def user_scope(self, user):
-        return self.filter(recipient=user)
-    
-    
-class UserNotificationManager(models.Manager):
-
     def read(self):
         """
         Return only read items.
@@ -36,6 +30,30 @@ class UserNotificationManager(models.Manager):
         Mark as read any unread messages in the current queryset.
         """
         return self.unread().update(read=True)
+    
+    def user_scope(self, user):
+        return self.filter(recipient=user)
+    
+    
+class UserNotificationManager(models.Manager):
+
+    def read(self):
+        """
+        Return only read items.
+        """
+        return self.get_queryset().read()
+
+    def unread(self):
+        """
+        Return only unread items.
+        """
+        return self.get_queryset().unread()
+
+    def mark_as_read(self):
+        """
+        Mark as read any unread messages in the current queryset.
+        """
+        return self.get_queryset().mark_as_read()
     
     def user_scope(self, user):
         return self.get_queryset().user_scope(user)
