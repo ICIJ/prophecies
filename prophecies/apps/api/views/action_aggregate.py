@@ -27,13 +27,10 @@ class ActionAggregateViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     ordering = ['-date']
     filterset_fields = ['verb', 'date', 'user']
-    queryset = ActionAggregate.objects.none()
-    
-    
+
+    queryset = ActionAggregate.objects.all()
+            
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return ActionAggregate.objects.none()
-        # retrieve projects from tasks where i'm a checker
-        my_projects = ActionAggregate.objects.filter(task__checkers__in = [self.request.user] ).values('task__project')
-        # retrieve tasks from my projects
-        return ActionAggregate.objects.filter(task__project__in = my_projects)
+        return super().get_queryset().user_scope(self.request.user)
