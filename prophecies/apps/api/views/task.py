@@ -2,7 +2,7 @@ from functools import lru_cache
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
-from prophecies.core.models import Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Task, TaskRecordReview
 from prophecies.core.models.task_record import StatusType
 from prophecies.apps.api.views.choice_group import ChoiceGroupSerializer
 from prophecies.apps.api.views.project import ProjectSerializer
@@ -84,7 +84,7 @@ class TaskViewSet(views.ReadOnlyModelViewSet):
     ordering = ['-id']
     # Queryset is overridden within the `get_queryset` method
     queryset = Task.objects.all()
-
+        
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Task.objects.none()
