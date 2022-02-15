@@ -1,4 +1,4 @@
-from rest_framework import serializers, viewsets
+from rest_framework_json_api import serializers, views
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api.relations import ResourceRelatedField
 from prophecies.apps.api.views.choice import ChoiceSerializer
@@ -32,7 +32,7 @@ class TaskUserChoiceStatisticsSerializer(serializers.ModelSerializer):
                     'count',
                 ]
         
-class TaskUserChoiceStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
+class TaskUserChoiceStatisticsViewSet(views.ReadOnlyModelViewSet):
     queryset = TaskUserChoiceStatistics.objects.all()
     serializer_class = TaskUserChoiceStatisticsSerializer
     resource_name = 'TaskChoiceStatistics'
