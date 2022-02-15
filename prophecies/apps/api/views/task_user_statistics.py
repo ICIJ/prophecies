@@ -1,5 +1,5 @@
-from rest_framework import serializers, viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
 from prophecies.apps.api.views.user import UserSerializer
 from prophecies.apps.api.views.task import TaskSerializer
@@ -32,7 +32,7 @@ class TaskUserStatisticsSerializer(serializers.ModelSerializer):
                     'progress',
                 ]
         
-class TaskUserStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
+class TaskUserStatisticsViewSet(views.ReadOnlyModelViewSet):
     queryset = TaskUserStatistics.objects.all()
     serializer_class = TaskUserStatisticsSerializer
     resource_name = 'TaskUserStatistics'
