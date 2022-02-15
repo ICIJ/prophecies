@@ -1,4 +1,5 @@
 <script>
+import { orderBy } from 'lodash'
 import { formatDateLongAlt } from '@/utils/date'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import UserCard from '@/components/UserCard'
@@ -56,7 +57,7 @@ export default {
         return this.fetchTaskUserStats(t.id)
       })
       await Promise.all(promises)
-      this.teammateIds = tms.map(tm => tm.id)
+      this.teammateIds = orderBy(tms, ['isSuperuser'], 'desc').map(tm => tm.id)
     },
     reducer (acc, s) {
       acc.done += s.doneCount
