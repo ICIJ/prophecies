@@ -26,7 +26,7 @@ class ActionAggregateViewSet(viewsets.ReadOnlyModelViewSet):
     http_method_names = ['get', 'head']
     permission_classes = [IsAuthenticated]
     ordering = ['-date']
-    filterset_fields = ['verb', 'date', 'user_id']
+    filterset_fields = ['verb', 'date', 'user']
     queryset = ActionAggregate.objects.none()
     
     
