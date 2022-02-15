@@ -18,14 +18,15 @@ export default {
     <app-sidebar class="w-100 sticky-top" />
     <div class="history__container flex-grow-1">
       <app-header hide-nav />
-  <div class="container-fluid p-5">
-
-      <history-list :limit='20'>
-        <template v-slot:title>
-        <h1 class="font-weight-bold mb-5 history__title">What happened <span class="history__title--lately">lately</span></h1>
-        </template>
-      </history-list>
-  </div>
+      <div class="container-fluid p-5">
+        <history-list :limit='20'>
+          <template v-slot:title>
+            <h1 class="font-weight-bold mb-5 history__title">
+              What happened <span class="history__title--lately">lately</span>
+            </h1>
+          </template>
+        </history-list>
+      </div>
     </div>
   </div>
 </template>
