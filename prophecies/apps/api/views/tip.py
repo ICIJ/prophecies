@@ -50,9 +50,5 @@ class TipViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Tip.objects.none()
-    
-        my_projects = Tip.objects.filter(task__checkers__in = [self.request.user] ).values('task__project')
-        
-        return Tip.objects.user_scope(self.request.user) \
-            .filter(project__in= my_projects)
+        return Tip.objects.user_scope(self.request.user)
 
