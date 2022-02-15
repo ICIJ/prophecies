@@ -135,7 +135,7 @@ class TaskRecordReviewViewSet(views.ModelViewSet):
         if not self.request.user.is_authenticated:
             return TaskRecordReview.objects.none()
         return TaskRecordReview.objects \
-            .from_checker_task(self.request.user) \
+            .user_scope(self.request.user) \
             .select_related('checker') \
             .select_related('task_record') \
             .select_related('task_record__task') \

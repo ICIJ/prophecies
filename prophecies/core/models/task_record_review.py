@@ -50,7 +50,7 @@ class TaskRecordReviewManager(models.Manager):
         return TaskRecordReviewQuerySet(model=self.model,
             using=self._db, hints=self._hints)
 
-    def from_checker_task(self, user):
+    def user_scope(self, user):
         return self.filter(task_record__task__in=user.task.all())
 
 
