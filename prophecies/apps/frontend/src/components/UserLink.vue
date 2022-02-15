@@ -24,7 +24,8 @@ export default {
       default: () => ({ })
     },
     useDisplayName: {
-      type: Boolean
+      type: Boolean,
+      default: false
     },
     noCard: {
       type: Boolean
