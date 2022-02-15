@@ -2,8 +2,23 @@ from django.db import models
 from django.contrib.auth.models import User
 from prophecies.core.models import Task, Choice
 
+class TaskUserChoiceStatisticsQuerySet(models.QuerySet):
+    
+    def user_scope(self, user):
+        return self.filter(task__in=user.task.all())
+    
+    
+class TaskUserStatisticsManager(models.Manager):
+    
+    def user_scope(self, user):
+        return self.get_queryset().user_scope(user)
+    
+    def get_queryset(self) -> TaskUserChoiceStatisticsQuerySet:
+        return TaskUserChoiceStatisticsQuerySet(model=self.model, using=self._db, hints=self._hints)
+
 
 class TaskUserChoiceStatistics(models.Model):
+    objects = TaskUserStatisticsManager()
     task = models.ForeignKey(Task, null=False, blank=False, on_delete=models.CASCADE)    
     checker = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
     round = models.IntegerField(null=False, blank=False, help_text='Round number of the static entry')

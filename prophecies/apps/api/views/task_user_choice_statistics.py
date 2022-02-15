@@ -46,5 +46,5 @@ class TaskUserChoiceStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return TaskUserChoiceStatistics.objects.none()
-        return super().get_queryset().filter(task__in=self.request.user.task.all())
+        return super().get_queryset().user_scope(self.request.user)
     
