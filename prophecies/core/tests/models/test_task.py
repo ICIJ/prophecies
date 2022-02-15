@@ -7,9 +7,11 @@ from prophecies.core.contrib.colors import hex_scale_brightness
 
 class TestTask(TestCase):
     def setUp(self):
-        self.project = Project.objects.create(name='Pencil Papers')
-        self.art = Task.objects.create(name='Art', project=self.project, color='#fe6565', rounds=3)
-        self.shop = Task.objects.create(name='Shop', project=self.project, rounds=3)
+        self.pencil_papers = Project.objects.create(name='Pencil Papers')
+        self.art = Task.objects.create(name='Art', project=self.pencil_papers, color='#fe6565', rounds=3)
+        self.shop = Task.objects.create(name='Shop', project=self.pencil_papers, rounds=3)
+        self.cake_papers = Project.objects.create(name='Cake Papers')
+        self.pie =  Task.objects.create(name='Pie', project=self.cake_papers, rounds=3)
         self.olivia = User.objects.create(username='olivia')
         self.django = User.objects.create(username='django')
 
@@ -124,40 +126,40 @@ class TestTask(TestCase):
         self.assertEqual(self.art.progress, 100)
 
     def test_it_locks_the_task(self):
-        task = Task.objects.create(name='Foo', project=self.project)
+        task = Task.objects.create(name='Foo', project=self.pencil_papers)
         self.assertEqual(task.status, 'OPEN')
         task.lock()
         self.assertEqual(task.status, 'LOCKED')
 
     def test_it_closes_the_task(self):
-        task = Task.objects.create(name='Foo', project=self.project)
+        task = Task.objects.create(name='Foo', project=self.pencil_papers)
         self.assertEqual(task.status, 'OPEN')
         task.close()
         self.assertEqual(task.status, 'CLOSED')
 
     def test_it_opens_the_task(self):
-        task = Task.objects.create(name='Foo', status='CLOSED', project=self.project)
+        task = Task.objects.create(name='Foo', status='CLOSED', project=self.pencil_papers)
         self.assertEqual(task.status, 'CLOSED')
         task.open()
         self.assertEqual(task.status, 'OPEN')
 
     def test_task_is_locked(self):
-        task = Task.objects.create(name='Foo', project=self.project)
+        task = Task.objects.create(name='Foo', project=self.pencil_papers)
         task.lock()
         self.assertTrue(task.is_locked)
 
     def test_task_is_closed(self):
-        task = Task.objects.create(name='Foo', project=self.project)
+        task = Task.objects.create(name='Foo', project=self.pencil_papers)
         task.close()
         self.assertTrue(task.is_closed)
 
     def test_task_is_open(self):
-        task = Task.objects.create(name='Foo', status='CLOSED', project=self.project)
+        task = Task.objects.create(name='Foo', status='CLOSED', project=self.pencil_papers)
         task.open()
         self.assertTrue(task.is_open)
 
     def test_it_log_action_when_task_is_locked(self):
-        task = Task.objects.create(name='Foo', project=self.project, creator=self.olivia)
+        task = Task.objects.create(name='Foo', project=self.pencil_papers, creator=self.olivia)
         task.lock()
         action = Action.objects.filter_actor(actor=self.olivia).first()
         self.assertTrue(action is not None)
@@ -165,7 +167,7 @@ class TestTask(TestCase):
         self.assertEqual(action.target, task)
 
     def test_it_log_action_when_task_is_closed(self):
-        task = Task.objects.create(name='Foo', project=self.project, creator=self.olivia)
+        task = Task.objects.create(name='Foo', project=self.pencil_papers, creator=self.olivia)
         task.close()
         action = Action.objects.filter_actor(actor=self.olivia).first()
         self.assertTrue(action is not None)
@@ -173,9 +175,22 @@ class TestTask(TestCase):
         self.assertEqual(action.target, task)
 
     def test_it_log_action_when_task_is_open(self):
-        task = Task.objects.create(name='Foo', project=self.project, creator=self.olivia, status='CLOSED')
+        task = Task.objects.create(name='Foo', project=self.pencil_papers, creator=self.olivia, status='CLOSED')
         task.open()
         action = Action.objects.filter_actor(actor=self.olivia).first()
         self.assertTrue(action is not None)
         self.assertEqual(action.verb, 'open')
         self.assertEqual(action.target, task)
+
+    def test_it_returns_only_task_where_olivia_is_checker(self):
+        self.pie.checkers.add(self.olivia)
+        tasks = Task.objects.user_scope(self.olivia)
+        self.assertEqual(tasks.count(), 1)
+        self.assertTrue(self.pie in tasks)
+    
+    def test_it_returns_only_tasks_where_django_is_checker(self):
+        self.art.checkers.add(self.django)
+        tasks = Task.objects.user_scope(self.django)
+        self.assertEqual(tasks.count(), 2)
+        self.assertTrue(self.art in tasks)
+        self.assertTrue(self.shop in tasks)

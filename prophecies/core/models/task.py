@@ -16,9 +16,27 @@ class StatusType(models.TextChoices):
     OPEN = 'OPEN', _('Open')
     CLOSED = 'CLOSED', _('Closed')
     LOCKED = 'LOCKED', _('Locked')
+    
+
+class TaskQuerySet(models.QuerySet):
+
+    def user_scope(self, user):
+        projects = self.filter(checkers=user).values('project')
+        return self.filter(project__in=projects)
+    
+    
+class TaskManager(models.Manager):
+    
+    def user_scope(self, user):
+        return self.get_queryset().user_scope(user)
+    
+    def get_queryset(self) -> TaskQuerySet:
+        return TaskQuerySet(model=self.model, using=self._db, hints=self._hints)
 
 
 class Task(models.Model):
+    objects = TaskManager()
+    
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks", help_text="Project this task belong to")

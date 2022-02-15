@@ -1,6 +1,5 @@
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import viewsets
-from rest_framework_json_api import serializers
+from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
 from prophecies.core.models import Tip
 from prophecies.apps.api.views.project import ProjectSerializer
@@ -26,7 +25,7 @@ class TipSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'project', 'creator', 'task']
 
 
-class TipViewSet(viewsets.ReadOnlyModelViewSet):
+class TipViewSet(views.ReadOnlyModelViewSet):
     serializer_class = TipSerializer
     prefetch_for_includes = {
         'project': ['project'],
@@ -45,10 +44,10 @@ class TipViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = None
     ordering = ['-created_at']
     permission_classes = [IsAuthenticated]
-    queryset = Tip.objects.none()
+    queryset = Tip.objects.all()
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Tip.objects.none()
-        return Tip.objects.user_scope(self.request.user)
+        return super().get_queryset().user_scope(self.request.user)
 

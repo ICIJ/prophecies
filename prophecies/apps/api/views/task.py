@@ -88,7 +88,4 @@ class TaskViewSet(views.ReadOnlyModelViewSet):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Task.objects.none()
-        # retrieve projects from tasks where i'm a checker
-        my_projects = Task.objects.filter(checkers__in=[self.request.user]).values('project')
-        # retrieve tasks from my projects
-        return super().get_queryset().filter(project__in=my_projects)
+        return super().get_queryset().user_scope(self.request.user)

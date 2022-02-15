@@ -4,7 +4,9 @@ from django.db.models import signals
 from prophecies.core.models import Project, Task, UserNotification
 from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action, mentioned, notify_mentioned_users
 
-class TipManager(models.Manager):
+
+class TipQuerySet(models.QuerySet):
+
     def general(self):
         return self.filter(task_id__isnull=True, project_id__isnull=True).distinct().all()
     
@@ -13,6 +15,21 @@ class TipManager(models.Manager):
 
     def user_scope(self, user):
         return self.filter(task__checkers=user).distinct().all() | self.general() | self.general_in_project()
+    
+    
+class TipManager(models.Manager):
+    
+    def general(self):
+        return self.get_queryset().general()
+    
+    def general_in_project(self):
+        return self.get_queryset().general_in_project()
+
+    def user_scope(self, user):
+        return self.get_queryset().user_scope(user)
+    
+    def get_queryset(self) -> TipQuerySet:
+        return TipQuerySet(model=self.model, using=self._db, hints=self._hints)
 
 
 class Tip(models.Model):
