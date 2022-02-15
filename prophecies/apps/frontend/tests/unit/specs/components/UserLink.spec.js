@@ -4,8 +4,7 @@ import User from '@/models/User'
 import Core from '@/core'
 
 describe('UserLink', () => {
-
-  function createContainer() {
+  function createContainer () {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -37,7 +36,7 @@ describe('UserLink', () => {
       // Configure the core
       await core.configure()
       // Get router from core
-      const { i18n, store, router } = core 
+      const { i18n, store, router } = core
       // Finally, instanciate the component
       wrapper = mount(UserLink, { attachTo, localVue, propsData, i18n, store, router })
     })
@@ -45,8 +44,8 @@ describe('UserLink', () => {
     it('should build a link to the user profile', () => {
       const href = wrapper.attributes('href')
       expect(href).toBe('#/users/fatima/')
-    })  
-    
+    })
+
     it('should show the username by default', () => {
       const text = wrapper.text()
       expect(text).toBe('@fatima')
@@ -72,7 +71,7 @@ describe('UserLink', () => {
       await core.configure()
       // Get router from core
       const { i18n, store, router } = core
-      const scopedSlots = { default: '<template slot-scope="{ user }">{{ user.email }}</template>'}
+      const scopedSlots = { default: '<template slot-scope="{ user }">{{ user.email }}</template>' }
       // Finally, instanciate the component
       wrapper = mount(UserLink, { attachTo, localVue, propsData, i18n, store, router, scopedSlots })
     })
