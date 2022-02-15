@@ -104,8 +104,8 @@ export default {
       if (this.query[FILTER_TYPES.CREATOR]) {
         remove(tips, t => t.creatorId !== this.query[FILTER_TYPES.CREATOR])
       }
-      orderByProjectThenTask(tips)
-      return tips
+
+      return orderByProjectThenTask(tips)
     },
     tipsGroupedByProject () {
       return groupBy(this.filteredTips, (tip) => {

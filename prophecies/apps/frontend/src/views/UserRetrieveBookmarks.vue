@@ -185,8 +185,7 @@ export default {
       if (this.query[FILTER_TYPES.TASK]) {
         remove(bookmarks, trw => trw.task.id !== this.query[FILTER_TYPES.TASK])
       }
-      orderByProjectThenTask(bookmarks)
-      return bookmarks
+      return orderByProjectThenTask(bookmarks)
     },
     bookmarksGroupedByProject () {
       return groupBy(this.filteredBookmarks, (record) => {
@@ -215,12 +214,10 @@ export default {
           :project-id.sync="projectId"
           :task-id.sync="taskId"/>
         <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="user-retrieve-bookmarks__project mt-4 mb-4 border-bottom">
-          <h1 class="mb-3 mt-4 primary">{{ name }}</h1>
+          <h1 class="mb-3 mt-4 text-primary">{{ name }}</h1>
           <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="user-retrieve-bookmarks__project__task mb-4">
             <div class="d-flex flex-row mb-4 ml-4 mt-4">
-              <div>
-                <h2>{{ taskName }}</h2>
-              </div>
+                <h2 class="text-tertiary">{{ taskName }}</h2>
             </div>
             <b-list-group-item v-for="record in taskValue" class="user-retrieve-bookmarks__project__task__record flex-column align-items-start ml-4 border-0" :key="record.id">
               <task-record-review-card
