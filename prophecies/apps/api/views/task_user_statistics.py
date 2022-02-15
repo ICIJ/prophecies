@@ -33,7 +33,7 @@ class TaskUserStatisticsSerializer(serializers.ModelSerializer):
                 ]
         
 class TaskUserStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = TaskUserStatistics.objects.none()
+    queryset = TaskUserStatistics.objects.all()
     serializer_class = TaskUserStatisticsSerializer
     resource_name = 'TaskUserStatistics'
     permission_classes = [IsAuthenticated]
@@ -45,5 +45,5 @@ class TaskUserStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return TaskUserStatistics.objects.none()
-        return TaskUserStatistics.objects.filter(task__in=self.request.user.task.all())
+        return super().get_queryset().user_scope(self.request.user)
     
