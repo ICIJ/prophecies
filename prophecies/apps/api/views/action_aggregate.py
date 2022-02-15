@@ -1,6 +1,5 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
-
 from prophecies.core.models import ActionAggregate
 from prophecies.apps.api.views.user import UserSerializer
 from prophecies.apps.api.views.task import TaskSerializer
