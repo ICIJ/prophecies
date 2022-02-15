@@ -38,7 +38,6 @@ class UserNotificationViewSet(views.ModelViewSet):
     filterset_fields = ['level']
     resource_name = 'UserNotification'
 
-
     def get_queryset(self):
         """
         All notifications for the currently authenticated user.
