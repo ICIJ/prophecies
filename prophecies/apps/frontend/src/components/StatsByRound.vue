@@ -1,6 +1,6 @@
 <script>
 import StatsByUsers from '@/components/StatsByUsers.vue'
-import ChoiceBadge from './ChoiceBadge.vue'
+import ChoiceBadge from '@/components/ChoiceBadge.vue'
 
 export default {
   name: 'StatsByRound',
