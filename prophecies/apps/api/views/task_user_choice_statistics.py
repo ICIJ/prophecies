@@ -4,7 +4,7 @@ from rest_framework_json_api.relations import ResourceRelatedField
 from prophecies.apps.api.views.choice import ChoiceSerializer
 from prophecies.apps.api.views.user import UserSerializer
 from prophecies.apps.api.views.task import TaskSerializer
-from prophecies.core.models import TaskUserChoiceStatistics,Choice
+from prophecies.core.models import TaskUserChoiceStatistics
 
    
 class TaskUserChoiceStatisticsSerializer(serializers.ModelSerializer):
