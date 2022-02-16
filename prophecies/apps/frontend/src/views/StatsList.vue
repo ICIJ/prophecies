@@ -125,27 +125,34 @@ export default {
     },
     taskUserChoiceStatistics (taskId, round) {
       const stats = TaskUserChoiceStatistics.query().where('taskId', taskId).with('choice').where('round', round).get()
-
+      const defaultTaskChoices = this.defaultChoicesByTaskId[taskId]
+      const choiceGroups = Object.keys(defaultTaskChoices)
+      if (!choiceGroups.length) {
+        return []
+      }
+      const choiceGroupId = choiceGroups[0]
       if (!stats.length) {
-        return Object.values(this.defaultChoicesByTaskId[taskId])
+        return Object.values(defaultTaskChoices[choiceGroupId])
       }
 
-      const statsAcc = { stats: cloneDeep(this.defaultChoicesByTaskId[taskId]), count: 0 }
-
+      const statsAcc = { stats: cloneDeep(defaultTaskChoices), count: 0 }
       const cumulatedStats = stats.reduce((acc, checkerStat) => {
         const cumulate = this.teamTaskStats || (!this.teamTaskStats && this.isMe({ id: checkerStat.checkerId }))
-        if (cumulate) {
-          acc.stats[checkerStat.choiceId].progress += checkerStat.count
+        // check if stat choice group is consistent with task choice group
+        const statChoiceGroupId = acc.stats[checkerStat.choice.choiceGroupId]
+        if (cumulate && statChoiceGroupId) {
+          statChoiceGroupId[checkerStat.choiceId].progress += checkerStat.count
           acc.count += checkerStat.count
         }
         return acc
       }, statsAcc)
 
+      const statByChoiceGroup = cumulatedStats.stats[choiceGroupId]
       const total = cumulatedStats.count !== 0 ? cumulatedStats.count : 1
-      for (const choice in cumulatedStats.stats) {
-        cumulatedStats.stats[choice].progress = cumulatedStats.stats[choice].progress * 100 / total
+      for (const choice in statByChoiceGroup) {
+        statByChoiceGroup[choice].progress = statByChoiceGroup[choice].progress * 100 / total
       }
-      return Object.values(cumulatedStats.stats)
+      return Object.values(statByChoiceGroup)
     }
   },
   computed: {
@@ -161,14 +168,13 @@ export default {
       return this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatusEnum.OPEN || TaskStatusEnum.LOCKED]) : sortedTasks
     },
     defaultChoicesByTaskId () {
-      return this.tasks.reduce((acc, currTask) => {
-        if (!acc[currTask.id]) {
-          acc[currTask.id] = {}
-          for (const choice in currTask.choiceGroup.choices) {
-            const currChoice = currTask.choiceGroup.choices[choice]
-            acc[currTask.id][currChoice.id] = { id: currChoice.id, name: currChoice.name, value: currChoice.value, progress: 0 }
-          }
-        }
+      return this.tasks.reduce((acc, task) => {
+        const taskId = task.id
+        const choiceGroupId = task.choiceGroupId
+        const choices = task.choiceGroup.choices
+        const defaultChoices = choices.reduce((prev, choice) =>
+          ({ ...prev, [choice.id]: { id: choice.id, name: choice.name, value: choice.value, progress: 0 } }), {})
+        acc[taskId] = { [choiceGroupId]: { ...defaultChoices } }
         return acc
       }, {})
     },
