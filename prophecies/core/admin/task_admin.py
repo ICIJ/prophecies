@@ -15,7 +15,7 @@ class TaskAdminForm(forms.ModelForm):
 class TaskAdmin(admin.ModelAdmin):
     exclude = ['creator']
     search_fields = ['name']
-    list_display = ('task_with_addon', 'description', 'task_actions',)
+    list_display = ('task_with_addon', 'description', 'task_actions', 'task_status',)
     form = TaskAdminForm
 
     def task_actions(self, obj):
@@ -25,6 +25,10 @@ class TaskAdmin(admin.ModelAdmin):
 
     task_actions.short_description = 'Actions'
 
+    def task_status(self, task):
+        return task.status.capitalize() 
+
+    task_status.short_description = "Status"
 
     def task_with_addon(self, task):
         return display_task_addon(task)
