@@ -4,12 +4,13 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.html import format_html
 from prophecies.core.contrib.display import display_task_addon
-from prophecies.core.models import Task, TaskChecker, TaskRecord
+from prophecies.core.forms.task_form import TaskForm
+from prophecies.core.models import Task
 
 
 class TaskAdminForm(forms.ModelForm):
     checkers = forms.ModelMultipleChoiceField(required=True, queryset=User.objects.all(), widget=forms.CheckboxSelectMultiple)
-
+    form = TaskForm 
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
