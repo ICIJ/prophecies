@@ -47,7 +47,7 @@ export default {
           <b-progress class="col-12 p-0" :value="progress | round" :max="100" />
         </b-row>
         <b-row class="mt-auto">
-          <b-col class="pr-0">
+          <div class="d-flex flex-shrink-1 px-3">
             <span
               class="
                 task-stats-card-all-rounds__stats__progress
@@ -60,12 +60,12 @@ export default {
             >
               {{ progress | round }}%
             </span>
+          </div>
+          <b-col class="px-1 text-center">
+            <check-icon size="1x" class="text-primary mr-2" /><span class="sr-only">Done</span>{{done}}
           </b-col>
-          <b-col class="pr-0">
-            <check-icon size="1x" class="text-primary mr-2" /> {{ done }}
-          </b-col>
-          <b-col class="pr-0">
-            <clock-icon size="1x" class="text-danger mr-2" /> {{ pending }}
+          <b-col class="px-1 text-center">
+            <clock-icon size="1x" class="text-danger mr-2" /><span class="sr-only">Pending</span>{{pending}}
           </b-col>
         </b-row>
       </b-col>
