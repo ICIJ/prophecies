@@ -90,11 +90,11 @@ export default {
   <div class="user-retrieve-team container-fluid">
     <div class="row">
       <div
-        class="col-12 col-xl-6 mb-4"
+        class="col-12 col-xl-6 mb-5 px-4"
         v-for="id in teammateIds"
         :key="id"
       >
-        <user-card class="user-retrieve-team__user-card h-100" :user-id="id" background>
+        <user-card class="user-retrieve-team__user-card h-100 p-5"  :user-id="id" background>
           <template #header="{user}" >
             <div class="d-flex justify-content-between">
               <div >
@@ -134,10 +134,15 @@ export default {
       overflow-y: auto;
     }
 
+    & /deep/ .user-card__link {
+      margin-top: $spacer;
+    }
+
     & /deep/ .task-stats-card-all-rounds{
+      margin-top: $spacer-xl;
       background-color: white;
-      padding-left: 2.5em;
-      padding-right: 3em;
+      padding-left: $spacer-xl;
+      padding-right: $spacer-xxl;
       width: unset;
       min-width: unset;
       max-width: 360px;
