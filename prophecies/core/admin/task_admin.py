@@ -7,10 +7,8 @@ from prophecies.core.contrib.display import display_task_addon
 from prophecies.core.forms.task_form import TaskForm
 from prophecies.core.models import Task
 
-
-class TaskAdminForm(forms.ModelForm):
+class TaskAdminForm(TaskForm):
     checkers = forms.ModelMultipleChoiceField(required=True, queryset=User.objects.all(), widget=forms.CheckboxSelectMultiple)
-    form = TaskForm 
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):

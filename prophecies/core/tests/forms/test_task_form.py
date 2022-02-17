@@ -30,7 +30,7 @@ class TaskFormTests(TestCase):
         self.assertTrue(form.is_valid())
         form.save()
         
-        data['choice_group'] = self.correctness.id
+        data['choice_group'] = self.correctness
         form = TaskForm(data,instance=self.task)
         self.assertTrue(form.is_valid())
     
@@ -42,12 +42,12 @@ class TaskFormTests(TestCase):
         self.assertTrue(form.is_valid())
         form.save()
         
-        data['choice_group'] = self.colorness.id
+        data['choice_group'] = self.colorness
         form = TaskForm(data,instance=self.task)
         self.assertTrue(form.is_valid())
         form.save()
         
-        data['choice_group'] = self.correctness.id
+        data['choice_group'] = self.correctness
         form = TaskForm(data,instance=self.task)
         self.assertTrue(form.is_valid())
         form.save()
@@ -56,17 +56,18 @@ class TaskFormTests(TestCase):
         TaskRecordReview.objects.create(task_record=self.task_record_blue)
         self.task.choice_group = self.correctness
         data = TaskForm(instance=self.task).initial
-        form = TaskForm(data,instance=self.task)
+        form = TaskForm(data, instance=self.task)
         self.assertTrue(form.is_valid())
         form.save()
         
-        data['choice_group'] = self.colorness.id
-        form = TaskForm(data,instance=self.task)
-        self.assertFalse(form.is_valid())
+        data['choice_group'] = self.colorness
+        form = TaskForm(data, instance=self.task)
+        self.assertTrue(form.fields['choice_group'].disabled)
+        self.assertTrue(form.is_valid())
         
         
-        data['choice_group'] = self.correctness.id
-        form = TaskForm(data,instance=self.task)
+        data['choice_group'] = self.correctness
+        form = TaskForm(data, instance=self.task)
         self.assertTrue(form.is_valid())
         form.save()
     

@@ -8,14 +8,20 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['choice_group'].disabled = not self.can_change_choice_group
+
     def clean_choice_group(self):
-        if not self.can_change_choice_group:
+        if not self.can_change_choice_group and self.choice_group_changed:
             raise ValidationError("You cannot change the choice group.")
         return self.cleaned_data.get('choice_group')
 
     @property
     def can_change_choice_group(self):
-        return self.instance.choice_group is None or not self.choice_group_changed or not self.has_reviews
+        if self.instance and self.instance.pk:
+            return self.instance.choice_group is None or not self.has_reviews
+        return True
 
     @property
     def choice_group_changed(self):
