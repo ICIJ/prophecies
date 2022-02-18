@@ -21,8 +21,10 @@ export default {
 </script>
 
 <template>
-  <b-container class="task-stats-card-all-rounds card card-body rounded font-weight-bold">
-    <b-row class="pt-2">
+
+  <div class="task-stats-card-all-rounds d-flex flex-column mx-auto">
+    <slot name="top"></slot>
+    <b-row class="task-stats-card-all-rounds__card  card card-body rounded font-weight-bold mx-0">
       <div
         class="
           task-stats-card-all-rounds__all
@@ -34,19 +36,17 @@ export default {
       >
         <slot name="title">All</slot>
       </div>
-      <b-col class="task-stats-card-all-rounds__stats pr-0">
+      <b-col class="task-stats-card-all-rounds__stats pr-0 col-10">
         <b-row
           class="
             task-stats-card-all-rounds__stats__progress-bar
-            col-12
-            p-0
-            mx-0
+            mx-auto
             py-2
           "
         >
           <b-progress class="col-12 p-0" :value="progress | round" :max="100" />
         </b-row>
-        <b-row class="mt-auto">
+        <b-row class="mt-1">
           <div class="d-flex flex-shrink-1 px-3">
             <span
               class="
@@ -62,26 +62,26 @@ export default {
             </span>
           </div>
           <b-col class="px-1 text-center">
-            <check-icon size="1x" class="text-primary mr-2" /><span class="sr-only">Done</span>{{done}}
-          </b-col>
+            <check-icon size="1x" class="text-primary mr-2" /><span class="sr-only">Done</span>{{done}}</b-col>
           <b-col class="px-1 text-center">
-            <clock-icon size="1x" class="text-danger mr-2" /><span class="sr-only">Pending</span>{{pending}}
-          </b-col>
+            <clock-icon size="1x" class="text-danger mr-2" /><span class="sr-only">Pending</span>{{pending}}</b-col>
         </b-row>
       </b-col>
     </b-row>
-  </b-container>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .task-stats-card-all-rounds {
-  padding-left: $spacer-xxl;
-  padding-right: $spacer-xxl;
   min-width: 340px;
   max-width: 360px;
-  max-height: 93px;
-  background-color: $secondary-50;
 
+  &__card{
+    max-height: 93px;
+    padding-left: $spacer-xl;
+    padding-right: $spacer-xxl;
+    background-color: $secondary-50;
+  }
   &__stats {
     &__progress-bar {
       height: 2em;

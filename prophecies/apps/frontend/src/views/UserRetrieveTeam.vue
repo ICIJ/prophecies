@@ -110,7 +110,8 @@ export default {
               </div>
             </div>
           </template>
-          <template #footer >
+          <template #footer>
+
             <task-stats-card-all-rounds
             :done='teammateStats[id].done'
             :pending='teammateStats[id].pending'
@@ -132,6 +133,8 @@ export default {
     & /deep/ .user-card__assigned-tasks__list{
       height: 5rem;
       overflow-y: auto;
+      margin-bottom: $spacer-xl;
+
     }
 
     & /deep/ .user-card__link {
@@ -139,13 +142,13 @@ export default {
     }
 
     & /deep/ .task-stats-card-all-rounds{
-      margin-top: $spacer-xl;
-      background-color: white;
-      padding-left: $spacer-xl;
-      padding-right: $spacer-xxl;
+
       width: unset;
-      min-width: unset;
       max-width: 360px;
+      min-width: unset;
+      &__card{
+        background-color: white;
+      }
 
       &__all{
         display:flex;
