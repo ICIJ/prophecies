@@ -19,7 +19,6 @@ describe('HistoryList', () => {
         title: 'Test Title'
       }
     })
-    await wrapper.vm.setup()
 
     const elem = wrapper.find('.history-list__title')
     expect(elem.exists()).toBeTruthy()
@@ -32,7 +31,6 @@ describe('HistoryList', () => {
       localVue,
       store
     })
-    await wrapper.vm.setup()
 
     const elem = wrapper.find('.history-list__title')
     expect(elem.exists()).toBeFalsy()

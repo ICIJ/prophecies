@@ -1,4 +1,4 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
+import {createLocalVue, shallowMount} from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import Action from '@/models/Action'
@@ -7,25 +7,26 @@ import Tip from '@/models/Tip'
 import User from '@/models/User'
 import ActionAggregate from '@/models/ActionAggregate'
 import HistoryListGroup from '@/components/HistoryListGroup'
+import {get} from "lodash";
 
 describe('HistoryListGroup', () => {
   let wrapper
-
-  beforeAll(async () => {
-    await Task.api().get()
-    await Action.api().get()
-    await ActionAggregate.api().get()
-    await Tip.api().get()
-    await User.api().me()
-  })
 
   beforeEach(async () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
     const { store } = Core.init(localVue).useAll()
 
+    let itemsIds = {}
+    itemsIds.taskIds = get(await Task.api().get(), 'response.data.data', []).map(t => t.id)
+    itemsIds.actionIds = get(await Action.api().get(), 'response.data.data', []).map(a => a.id)
+    itemsIds.actionAggregateIds = get(await ActionAggregate.api().get(), 'response.data.data', []).map(aa => aa.id)
+    itemsIds.tipIds = get(await Tip.api().get(), 'response.data.data', []).map(t => t.id)
+    const propsData = { itemsIds }
+
     wrapper = await shallowMount(HistoryListGroup, {
       localVue,
+      propsData,
       store
     })
   })

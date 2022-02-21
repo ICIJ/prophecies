@@ -20,6 +20,10 @@ export default {
     fluid: {
       type: Boolean,
       default: true
+    },
+    itemsIds: {
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
@@ -39,6 +43,7 @@ export default {
         .query()
         .find(taskId)
         .with('project')
+        .whereIdIn(this.itemsIds.taskIds)
         .get()
     },
     sortByTimestamp (a, b) {
@@ -79,6 +84,7 @@ export default {
         .with('target')
         .with('target.name')
         .with('target.project')
+        .whereIdIn(this.itemsIds.actionIds)
         .where('targetType', 'Task')
         .where('verb', 'closed')
         .get()
@@ -100,6 +106,7 @@ export default {
         .with('actionObject')
         .with('actionObject.task')
         .with('actionObject.task.project')
+        .whereIdIn(this.itemsIds.actionIds)
         .where('verb', 'mentioned')
         .get()
         .map(mention => {
@@ -120,6 +127,7 @@ export default {
         .with('task')
         .with('project')
         .with('creator')
+        .whereIdIn(this.itemsIds.tipIds)
         .get()
         .map(tip => {
           return {
@@ -136,6 +144,7 @@ export default {
     reviewedOrCancelledItems () {
       return ActionAggregate
         .query()
+        .whereIdIn(this.itemsIds.actionAggregateIds)
         .where('verb', v => v === 'reviewed' || v === 'cancelled')
         .get()
     },

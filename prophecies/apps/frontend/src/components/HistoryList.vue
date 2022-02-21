@@ -1,5 +1,5 @@
 <script>
-import { uniqueId } from 'lodash'
+import {uniqueId} from 'lodash'
 import AppWaiter from '@/components/AppWaiter'
 import Action from '@/models/Action'
 import Task from '@/models/Task'
@@ -21,6 +21,13 @@ export default {
     fluid: {
       type: Boolean,
       default: true
+    },
+    fetching: {
+      type: Boolean
+    },
+    itemsIds: {
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
@@ -30,33 +37,45 @@ export default {
       checkedRecords: []
     }
   },
-  async created () {
-    await this.setup()
+  created () {
+    if (this.fetching) {
+      this.$wait.start(this.loader)
+    }
   },
-  methods: {
-    async setup () {
-      try {
-        await this.waitFor(this.fetchHistoryLoader, this.fetchAll)
-      } catch (error) {
-        const title = 'Unable to retrieve history'
-        this.$router.replace({ name: 'error', params: { title, error } })
+  watch: {
+    fetching (fetching) {
+      if (!fetching) {
+        this.$wait.end(this.loader)
       }
-    },
-    async waitFor (loader, fn) {
-      this.$wait.start(loader)
-      await fn()
-      this.$wait.end(loader)
-    },
-    async fetchAll () {
-      await Task.api().get()
-      await Action.api().get()
-      await ActionAggregate.api().get()
-      await Tip.api().get()
     }
   },
   computed: {
-    fetchHistoryLoader () {
-      return uniqueId('load-history-item-')
+    loader () {
+      return uniqueId('load-history-list-item-')
+    },
+    tasks () {
+      return Task
+        .query()
+        .whereIdIn(this.taskIds)
+        .get()
+    },
+    actions () {
+      return Action
+        .query()
+        .whereIdIn(this.actionIds)
+        .get()
+    },
+    actionAggregates () {
+      return ActionAggregate
+        .query()
+        .whereIdIn(this.actionAggregateIds)
+        .get()
+    },
+    tips () {
+      return Tip
+        .query()
+        .whereIdIn(this.tipIds)
+        .get()
     },
     hasTitleSlot() {
       return !!this.$slots.title
@@ -66,13 +85,13 @@ export default {
 </script>
 
 <template>
-    <app-waiter :loader="fetchHistoryLoader" waiter-class="my-5 mx-auto d-block">
+    <app-waiter :loader="loader" waiter-class="my-5 mx-auto d-block">
     <h1 class="font-weight-bold mt-3 mb-5 history-list__title" v-if="hasTitleSlot">
       <slot name="title">
         What happened <span class="text-danger">lately</span>
       </slot>
     </h1>
-     <history-list-group :limit="limit" :fluid="fluid">
+     <history-list-group :limit="limit" :fluid="fluid" :items-ids="itemsIds">
        <template v-slot:footer>
        <slot name="footer"/>
        </template>
