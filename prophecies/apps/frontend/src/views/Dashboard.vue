@@ -1,6 +1,5 @@
 <script>
-import {uniqueId, orderBy, get} from 'lodash'
-
+import { uniqueId, orderBy } from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
@@ -10,8 +9,7 @@ import TaskStatsCard from '@/components/TaskStatsCard'
 import Task, { TaskStatusOrder } from '@/models/Task'
 import Tip from '@/models/Tip'
 import HistoryList from '@/components/HistoryList.vue'
-import ActionAggregate from '@/models/ActionAggregate'
-import Action from '@/models/Action'
+import { fetchHistoryItemsIds } from '@/views/History'
 
 export default {
   name: 'Dashboard',
@@ -86,10 +84,7 @@ export default {
       return Tip.api().get('', { params })
     },
     async fetchHistory () {
-      this.itemsIds.taskIds = get(await Task.api().get(), 'response.data.data', []).map(t => t.id)
-      this.itemsIds.actionIds = get(await Action.api().get(), 'response.data.data', []).map(a => a.id)
-      this.itemsIds.actionAggregateIds = get(await ActionAggregate.api().get(), 'response.data.data', []).map(aa => aa.id)
-      this.itemsIds.tipIds = get(await Tip.api().get(), 'response.data.data', []).map(t => t.id)
+      this.itemsIds = await fetchHistoryItemsIds()
     },
     async waitFor (loader, fns = []) {
       this.$wait.start(loader)
