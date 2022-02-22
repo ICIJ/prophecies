@@ -59,4 +59,5 @@ class ActionSerializer(serializers.HyperlinkedModelSerializer):
 class ActionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
+    filterset_fields = ['verb']
     ordering = ['-timestamp']
