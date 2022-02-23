@@ -1,8 +1,20 @@
 from django_filters import CharFilter, FilterSet
 from prophecies.core.models import TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record_review import StatusType
+from actstream.models import Action, user_stream,actor_stream,target_stream
+from django.contrib.auth.models import User
 
 
+class ActionFilter(FilterSet):
+    user_stream = CharFilter(method='user_stream_filter')
+    class Meta:
+        model = Action
+        fields = {'verb':['exact', 'in']}
+        
+    def user_stream_filter(self, queryset, name, value):
+        user = User.objects.get(pk=value)
+        return queryset & (actor_stream(user) |  target_stream(user))
+    
 class TaskRecordFilter(FilterSet):
     reviewed = CharFilter(method='reviewed_filter')
 

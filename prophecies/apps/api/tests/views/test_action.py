@@ -11,7 +11,7 @@ class TestAction(TestCase):
     def setUp(self):
         self.olivia = User.objects.get(username='olivia')
         self.django = User.objects.get(username='django')
-
+        self.ruby = User.objects.get(username='ruby')
 
     def test_list_returns_all_actions(self):
         action.send(self.olivia, verb='follow', target=self.django)
@@ -58,3 +58,36 @@ class TestAction(TestCase):
         self.assertEqual(firstIncluded.get('type'), 'User')
         self.assertEqual(firstIncluded.get('id'), '1')
         self.assertEqual(firstIncluded.get('attributes').get('username'), 'olivia')
+        
+    def test_list_return_only_olivia_actions(self):
+        action.send(self.ruby, verb='added', target=self.django)
+        action.send(self.olivia, verb='follow', target=self.django)
+        action.send(self.django, verb='follow', target=self.olivia)
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/actions/?filter[user_stream]=%s' % self.olivia.id)
+        action_list = request.json().get('data')
+        self.assertEqual(len(action_list), 2)
+        request = self.client.get('/api/v1/actions/?filter[user_stream]=%s' % self.ruby.id)
+        action_list = request.json().get('data')
+        self.assertEqual(len(action_list), 1)
+        
+    
+    def test_list_return_only_purchased_actions(self):
+        action.send(self.olivia, verb='mentioned', target=self.django)
+        action.send(self.olivia, verb='added', target=self.django)
+        action.send(self.django, verb='purchased', target=self.olivia)
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/actions/?filter[verb]=purchased')
+        self.assertEqual(request.status_code, 200)
+        action_list = request.json().get('data')
+        self.assertEqual(len(action_list),1)
+        
+    def test_list_return_only_mentioned_and_purchased_actions(self):
+        action.send(self.olivia, verb='mentioned', target=self.django)
+        action.send(self.olivia, verb='added', target=self.django)
+        action.send(self.django, verb='purchased', target=self.olivia)
+        self.client.login(username='olivia', password='olivia')
+        request = self.client.get('/api/v1/actions/?filter[verb__in]=mentioned,purchased')
+        self.assertEqual(request.status_code, 200)
+        action_list = request.json().get('data')
+        self.assertEqual(len(action_list),2)

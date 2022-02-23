@@ -1,11 +1,12 @@
 from pydoc import locate
-from actstream.models import Action
-from django.contrib.auth.models import User
-from prophecies.core.models import Choice, TaskRecord, TaskRecordReview
 from rest_framework import viewsets
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import PolymorphicResourceRelatedField
 
+from actstream.models import Action
+from django.contrib.auth.models import User
+from prophecies.core.filters import ActionFilter
+from prophecies.core.models import Choice, TaskRecord, TaskRecordReview
 
 class GenericModelSerializer(serializers.ModelSerializer):
     MODEL_SERIALIZERS_MAPPING = {
@@ -59,5 +60,5 @@ class ActionSerializer(serializers.HyperlinkedModelSerializer):
 class ActionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
-    filterset_fields = ['verb']
+    filterset_class = ActionFilter
     ordering = ['-timestamp']
