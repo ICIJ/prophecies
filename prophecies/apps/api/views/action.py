@@ -6,13 +6,14 @@ from rest_framework_json_api.relations import PolymorphicResourceRelatedField
 from actstream.models import Action
 from django.contrib.auth.models import User
 from prophecies.core.filters import ActionFilter
-from prophecies.core.models import Choice, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, TaskRecord, TaskRecordReview, Tip
 
 class GenericModelSerializer(serializers.ModelSerializer):
     MODEL_SERIALIZERS_MAPPING = {
         User: 'prophecies.apps.api.views.user.UserSerializer',
         Choice: 'prophecies.apps.api.views.choice.ChoiceSerializer',
         TaskRecord: 'prophecies.apps.api.views.task_record.TaskRecordSerializer',
+        Tip: 'prophecies.apps.api.views.tip.TipSerializer',
         TaskRecordReview: 'prophecies.apps.api.views.task_record_review.FlatTaskRecordReviewSerializer'
     }
 

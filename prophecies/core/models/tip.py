@@ -1,3 +1,4 @@
+from actstream import action
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import signals
@@ -109,11 +110,18 @@ class Tip(models.Model):
     def signal_constraint_task_relationship_to_project(sender, instance, **kwargs):
         if instance.project and instance.task and instance.project != instance.task.project:
             instance.task = None
-
-
+    
+    @staticmethod
+    def signal_tip_creation(sender, instance, created,**kwargs):
+        if instance.creator:
+            if created :
+                action.send(instance.creator, verb='tip-created', data=instance.name, target=instance)
+            else:
+                action.send(instance.creator, verb='tip-updated', data=instance.name, target=instance)
 
 signals.pre_save.connect(Tip.signal_fill_project_from_task, sender=Tip)
 signals.pre_save.connect(Tip.signal_constraint_task_relationship_to_project, sender=Tip)
 signals.post_save.connect(Tip.signal_notify_mentioned_users, sender=Tip)
 signals.post_save.connect(Tip.signal_notify_members_in_mentioned_project, sender=Tip)
 signals.post_save.connect(Tip.signal_notify_task_checkers_in_mentioned_task, sender=Tip)
+signals.post_save.connect(Tip.signal_tip_creation, sender=Tip)
