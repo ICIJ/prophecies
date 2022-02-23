@@ -9,7 +9,7 @@ import TaskStatsCard from '@/components/TaskStatsCard'
 import Task, { TaskStatusOrder } from '@/models/Task'
 import Tip from '@/models/Tip'
 import HistoryList from '@/components/HistoryList.vue'
-import { fetchHistoryItemsIds } from '@/views/History'
+import { fetchHistoryItemsIds } from '@/utils/history'
 
 export default {
   name: 'Dashboard',
@@ -29,7 +29,7 @@ export default {
       itemsIds: {}
     }
   },
-   created () {
+  created () {
     return this.setup()
   },
   computed: {
@@ -77,9 +77,9 @@ export default {
       return Task.api().get()
     },
     fetchTips () {
-      const include = "project,task"
-      const pageSize = "1"
-      const sort = "-created_at"
+      const include = 'project,task'
+      const pageSize = '1'
+      const sort = '-created_at'
       const params = { include, 'page[size]': pageSize, sort }
       return Tip.api().get('', { params })
     },

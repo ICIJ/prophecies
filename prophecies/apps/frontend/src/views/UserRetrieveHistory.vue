@@ -1,15 +1,13 @@
 
 <script>
 import { uniqueId } from 'lodash'
-import { fetchHistoryItemsIds } from '@/views/History'
-import AppWaiter from '@/components/AppWaiter'
+import { fetchHistoryItemsIds } from '@/utils/history'
 import HistoryList from '@/components/HistoryList'
 import User from '@/models/User'
 
 export default {
-  name: "UserRetrieveHistory",
+  name: 'UserRetrieveHistory',
   components: {
-    AppWaiter,
     HistoryList
   },
   props: {
@@ -62,8 +60,3 @@ export default {
     <history-list :limit='20' :fetching="fetching" :items-ids="itemsIds"/>
   </div>
 </template>
-
-
-<style scoped>
-
-</style>

@@ -3,45 +3,7 @@ import { uniqueId } from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import HistoryList from '@/components/HistoryList'
-import Task from '@/models/Task'
-import Action from '@/models/Action'
-import ActionAggregate from '@/models/ActionAggregate'
-import Tip from '@/models/Tip'
-
-const getIds = (object) => {
-  const { response: { data: { data: arr } } } = object
-  return arr.map(o => o.id)
-}
-
-export const fetchHistoryItemsIds = async (userId) => {
-  const taskIdParams = userId ? { 'filter[checkers]': userId } : null
-  const actionIdParams = { 'filter[verb]': 'mentioned' }
-  const actionAggregateIdParams = userId ? { 'filter[user]': userId } : null
-  const tipIdParams = userId ? { 'filter[creator]': userId } : null
-
-  const taskPromise = Task.api().get('', {params: taskIdParams})
-    .then(response => getIds(response))
-  const actionPromise = Action.api().get('', { params: actionIdParams })
-    .then(({ response:{data:{data : actions}} }) => {
-      if ( userId ) {
-        actions = actions.filter(({ relationships: {actor, target}}) => {
-          return actor.data.id === userId || target.data.id === userId
-        })
-      }
-      return actions.map(action => action.id)
-    });
-  const actionAggregatePromise = ActionAggregate.api().get('', { params: actionAggregateIdParams })
-    .then(response => getIds(response));
-  const tipPromise = Tip.api().get('', { params: tipIdParams })
-    .then(response => getIds(response));
-  const [taskIds , actionIds, actionAggregateIds, tipIds] = await Promise.all([
-    taskPromise,
-    actionPromise,
-    actionAggregatePromise,
-    tipPromise
-  ])
-  return { taskIds , actionIds, actionAggregateIds, tipIds }
-}
+import { fetchHistoryItemsIds } from '@/utils/history'
 
 export default {
   name: 'History',
