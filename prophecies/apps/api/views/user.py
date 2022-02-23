@@ -1,4 +1,3 @@
-from actstream.models import Action
 from hashlib import md5
 from django.contrib.auth.models import User
 from django.template.context_processors import csrf
