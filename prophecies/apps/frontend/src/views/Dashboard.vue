@@ -9,7 +9,7 @@ import TaskStatsCard from '@/components/TaskStatsCard'
 import Task, { TaskStatusOrder } from '@/models/Task'
 import Tip from '@/models/Tip'
 import HistoryList from '@/components/HistoryList.vue'
-import { fetchHistoryItemsIds } from '@/utils/history'
+import HistoryFetcher from '@/components/HistoryFetcher.vue'
 
 export default {
   name: 'Dashboard',
@@ -20,13 +20,13 @@ export default {
     LatestTipsCard,
     ProgressCard,
     TaskStatsCard,
-    HistoryList
+    HistoryList,
+    HistoryFetcher
   },
   data () {
     return {
       sortField: 'name_asc',
-      teamTaskStats: true,
-      itemsIds: {}
+      teamTaskStats: true
     }
   },
   created () {
@@ -53,25 +53,16 @@ export default {
     fetchTaskLoader () {
       return uniqueId('load-dashboard-task-')
     },
-    fetchHistoryLoader () {
-      return uniqueId('load-dashboard-history-')
-    },
     taskStatsOptions () {
       return [
         { text: 'Team stats', value: true },
         { text: 'Your stats', value: false }
       ]
-    },
-    fetching () {
-      return this.$wait.is(this.fetchHistoryLoader)
     }
   },
   methods: {
     async setup () {
-      const taskPromise = this.waitFor(this.fetchTaskLoader, [this.fetchTask, this.fetchTips])
-      const historyPromise = this.waitFor(this.fetchHistoryLoader, [this.fetchHistory])
-      // Allows to load in parallel
-      await Promise.all([taskPromise, historyPromise])
+      await this.waitFor(this.fetchTaskLoader, [this.fetchTask, this.fetchTips])
     },
     fetchTask () {
       return Task.api().get()
@@ -82,9 +73,6 @@ export default {
       const sort = '-created_at'
       const params = { include, 'page[size]': pageSize, sort }
       return Tip.api().get('', { params })
-    },
-    async fetchHistory () {
-      this.itemsIds = await fetchHistoryItemsIds()
     },
     async waitFor (loader, fns = []) {
       this.$wait.start(loader)
@@ -167,26 +155,26 @@ export default {
         </div>
 
         <div class="row mt-5 pt-5">
-          <div class="col-12">
-              <history-list :fluid="false" :limit=5 :fetching="fetching" :items-ids="itemsIds">
-                <template v-slot:title>
-                  <span class="text-danger">{{ $t('dashboard.lately') }}</span> in Prophecies
-                </template>
-                <template v-slot:footer>
-                  <div class="d-flex justify-content-center pt-3">
-                    <button class="btn btn-primary border font-weight-bold">
-                    <router-link
-                      :to="{ name: 'history' }"
-                      title="All history"
-                      class="text-white"
-                      >
-                      {{ $t('dashboard.allHistory') }}
-                    </router-link>
-                    </button>
-                  </div>
-                </template>
-              </history-list>
-          </div>
+          <history-fetcher class="col-12" #default="{itemIds, isFetching}">
+            <history-list :fluid="false" :limit=5 :fetching="isFetching" :items-ids="itemIds">
+              <template v-slot:title>
+                <span class="text-danger">{{ $t('dashboard.lately') }}</span> in Prophecies
+              </template>
+              <template v-slot:footer>
+                <div class="d-flex justify-content-center pt-3">
+                  <button class="btn btn-primary border font-weight-bold">
+                  <router-link
+                    :to="{ name: 'history' }"
+                    title="All history"
+                    class="text-white"
+                    >
+                    {{ $t('dashboard.allHistory') }}
+                  </router-link>
+                  </button>
+                </div>
+              </template>
+            </history-list>
+          </history-fetcher>
         </div>
       </div>
     </div>

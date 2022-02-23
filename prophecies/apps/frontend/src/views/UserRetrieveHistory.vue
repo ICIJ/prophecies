@@ -1,62 +1,24 @@
 
 <script>
-import { uniqueId } from 'lodash'
-import { fetchHistoryItemsIds } from '@/utils/history'
+import HistoryFetcher from '@/components/HistoryFetcher'
 import HistoryList from '@/components/HistoryList'
-import User from '@/models/User'
 
 export default {
   name: 'UserRetrieveHistory',
   components: {
+    HistoryFetcher,
     HistoryList
   },
   props: {
     username: {
       type: String
     }
-  },
-  data () {
-    return {
-      itemsIds: {}
-    }
-  },
-  async created () {
-    await this.setup()
-  },
-  methods: {
-    async setup () {
-      try {
-        await this.waitFor(this.fetchHistoryLoader, this.fetchAll)
-      } catch (error) {
-        const title = 'Unable to retrieve history'
-        this.$router.replace({ name: 'error', params: { title, error } })
-      }
-    },
-    async waitFor (loader, fn) {
-      this.$wait.start(loader)
-      await fn()
-      this.$wait.end(loader)
-    },
-    async fetchAll () {
-      this.itemsIds = await fetchHistoryItemsIds(this.user.id)
-    }
-  },
-  computed: {
-    fetchHistoryLoader () {
-      return uniqueId('load-history-item-')
-    },
-    fetching () {
-      return this.$wait.is(this.fetchHistoryLoader)
-    },
-    user () {
-      return User.find(this.username)
-    }
   }
 }
 </script>
 
 <template>
-  <div class="user-retrieve-history">
-    <history-list :limit='20' :fetching="fetching" :items-ids="itemsIds"/>
-  </div>
+  <history-fetcher class="user-retrieve-history" :username="username" #default="{itemIds, isFetching}">
+    <history-list :limit='20' :fetching="isFetching" :items-ids="itemIds"/>
+  </history-fetcher>
 </template>
