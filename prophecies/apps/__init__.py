@@ -8,6 +8,7 @@ class PropheciesConfig(AppConfig):
         from django.contrib.auth.models import User
         self.register_action()
         registry.register(User)
+        registry.register(self.get_model('ActionAggregate'))
         registry.register(self.get_model('Choice'))
         registry.register(self.get_model('Task'))
         registry.register(self.get_model('TaskRecord'))

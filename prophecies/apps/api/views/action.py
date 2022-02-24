@@ -2,14 +2,14 @@ from pydoc import locate
 from rest_framework import viewsets
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import PolymorphicResourceRelatedField
-
 from actstream.models import Action
 from django.contrib.auth.models import User
 from prophecies.core.filters import ActionFilter
-from prophecies.core.models import Choice, TaskRecord, TaskRecordReview, Tip
+from prophecies.core.models import ActionAggregate, Choice, TaskRecord, TaskRecordReview, Tip
 
 class GenericModelSerializer(serializers.ModelSerializer):
     MODEL_SERIALIZERS_MAPPING = {
+        ActionAggregate: 'prophecies.apps.api.views.action_aggregate.ActionAggregateSerializer',
         User: 'prophecies.apps.api.views.user.UserSerializer',
         Choice: 'prophecies.apps.api.views.choice.ChoiceSerializer',
         TaskRecord: 'prophecies.apps.api.views.task_record.TaskRecordSerializer',
@@ -63,3 +63,8 @@ class ActionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ActionSerializer
     filterset_class = ActionFilter
     ordering = ['-timestamp']
+    
+    prefetch_for_includes = {
+        'action': ['action', 'action__actor', 'action__target', 'action__action_object'],
+        'action.actionObject': ['action', 'action__action_object']
+    }

@@ -1,4 +1,6 @@
+from actstream import action
 from django.db import models
+from django.db.models import signals
 from django.contrib.auth.models import User
 from prophecies.core.models import Task
 
@@ -27,3 +29,11 @@ class ActionAggregate(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     task = models.ForeignKey(Task, on_delete=models.SET_NULL, null=True, blank=True)
     count = models.IntegerField(default=0)
+    
+    @staticmethod
+    def signal_action_aggregate_creation(sender, instance, created,**kwargs):
+        if instance.user and created:
+            action.send(instance.user, verb='created-aggregate', target=instance)
+
+    
+signals.post_save.connect(ActionAggregate.signal_action_aggregate_creation, sender=ActionAggregate)

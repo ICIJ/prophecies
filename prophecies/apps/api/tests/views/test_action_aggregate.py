@@ -1,11 +1,13 @@
 from actstream import action
 from django.contrib.auth.models import User
-from prophecies.core.models import Choice, ChoiceGroup, Project, Task
+from prophecies.core.models import Choice, ChoiceGroup, Project, Task, ActionAggregate
 
 from django.test import TestCase
 from rest_framework.test import APIClient
+from django.utils import timezone
 import time_machine
 import datetime as dt
+
 
 action_aggregates_url = '/api/v1/action-aggregates/'
 
@@ -107,4 +109,45 @@ class TestActionAggregate(TestCase):
         request = self.client.get(action_aggregates_url)
         action_aggregates = request.json().get('data')
         self.assertEqual(len(action_aggregates),1)
+       
+    def test_send_only_one_action_when_aggregate_is_updated(self):
+        self.client.login(username=self.olivia, password='olivia')
+        request = self.client.get('/api/v1/actions/?filter[verb]=created-aggregate')
+        data = request.json().get('data')
+        self.assertEqual(len(data), 0)
+        my_agg = ActionAggregate.objects.create( verb='reviewed',date=timezone.now(),user=self.olivia, task=self.task,count=50 )
+        request = self.client.get(action_aggregates_url)
+        action_aggregates = request.json().get('data')
+        self.assertEqual(len(action_aggregates),1)
         
+        request = self.client.get('/api/v1/actions/?filter[verb]=created-aggregate')
+        data = request.json().get('data')
+        self.assertEqual(len(data), 1)
+        
+        my_agg.count= 60
+        my_agg.save()
+        
+        request = self.client.get(action_aggregates_url)
+        action_aggregates = request.json().get('data')
+        self.assertEqual(len(action_aggregates),1)
+        
+        request = self.client.get('/api/v1/actions/?filter[verb]=created-aggregate')
+        data = request.json().get('data')
+        self.assertEqual(len(data), 1) 
+        
+    def test_send_two_actions_created_aggregate_when_two_aggregates_are_created(self):
+        action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
+        action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
+        action.send(self.olivia, verb='added', target=self.django, task_id=self.task_shops.id)
+        self.client.login(username='olivia', password='olivia')
+        
+        request = self.client.get(action_aggregates_url)
+        action_aggregates = request.json().get('data')
+        self.assertEqual(len(action_aggregates),2)
+        
+        request = self.client.get('/api/v1/actions/?filter[verb]=created-aggregate')
+        data = request.json().get('data')
+        self.assertEqual(len(data), 2)
+        
+        
+       
