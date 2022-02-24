@@ -55,20 +55,18 @@ class TestTip(TestCase):
 
     def test_send_action_after_tip_created(self):
         self.client.login(username=self.olivia, password='olivia')
-        request = self.client.get('/api/v1/actions/?filter[verb]=tip-created')
+        request = self.client.get('/api/v1/actions/?filter[verb]=created')
         data = request.json().get('data')
         self.assertEqual(len(data), 0)
         new_tip =  Tip.objects.create(name='bar', creator=self.olivia, description='@user try this', task=self.task_paintings, project=self.project_foo)
-        request = self.client.get('/api/v1/actions/?filter[verb]=tip-created')
+        request = self.client.get('/api/v1/actions/?filter[verb]=created')
         data = request.json().get('data')
         self.assertEqual(len(data), 1)
         self.assertEqual(data[0]['relationships']['target']['data']['id'], str(new_tip.id))
-        self.assertEqual(data[0]['attributes']['data']['data'], new_tip.name)
 
         new_tip.name="hello world"
         new_tip.save()
-        request = self.client.get('/api/v1/actions/?filter[verb]=tip-updated')
+        request = self.client.get('/api/v1/actions/?filter[verb]=updated')
         data = request.json().get('data')
         self.assertEqual(len(data), 1)
         self.assertEqual(data[0]['relationships']['target']['data']['id'], str(new_tip.id))
-        self.assertEqual(data[0]['attributes']['data']['data'], new_tip.name)

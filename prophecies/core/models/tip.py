@@ -115,9 +115,9 @@ class Tip(models.Model):
     def signal_tip_creation(sender, instance, created,**kwargs):
         if instance.creator:
             if created :
-                action.send(instance.creator, verb='tip-created', data=instance.name, target=instance)
+                action.send(instance.creator, verb='created', target=instance)
             else:
-                action.send(instance.creator, verb='tip-updated', data=instance.name, target=instance)
+                action.send(instance.creator, verb='updated', target=instance)
 
 signals.pre_save.connect(Tip.signal_fill_project_from_task, sender=Tip)
 signals.pre_save.connect(Tip.signal_constraint_task_relationship_to_project, sender=Tip)
