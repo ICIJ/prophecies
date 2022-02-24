@@ -1,10 +1,6 @@
 <script>
-import {uniqueId} from 'lodash'
+import { uniqueId } from 'lodash'
 import AppWaiter from '@/components/AppWaiter'
-import Action from '@/models/Action'
-import Task from '@/models/Task'
-import Tip from '@/models/Tip'
-import ActionAggregate from '@/models/ActionAggregate'
 import HistoryListGroup from '@/components/HistoryListGroup.vue'
 
 export default {
@@ -25,9 +21,9 @@ export default {
     fetching: {
       type: Boolean
     },
-    itemsIds: {
-      type: Object,
-      default: () => ({})
+    actionIds: {
+      type: Array,
+      default: () => ([])
     }
   },
   data () {
@@ -53,31 +49,7 @@ export default {
     loader () {
       return uniqueId('load-history-list-item-')
     },
-    tasks () {
-      return Task
-        .query()
-        .whereIdIn(this.taskIds)
-        .get()
-    },
-    actions () {
-      return Action
-        .query()
-        .whereIdIn(this.actionIds)
-        .get()
-    },
-    actionAggregates () {
-      return ActionAggregate
-        .query()
-        .whereIdIn(this.actionAggregateIds)
-        .get()
-    },
-    tips () {
-      return Tip
-        .query()
-        .whereIdIn(this.tipIds)
-        .get()
-    },
-    hasTitleSlot() {
+    hasTitleSlot () {
       return !!this.$slots.title
     }
   }
@@ -91,7 +63,7 @@ export default {
         What happened <span class="text-danger">lately</span>
       </slot>
     </h1>
-     <history-list-group :limit="limit" :fluid="fluid" :items-ids="itemsIds">
+     <history-list-group :limit="limit" :fluid="fluid" :action-ids="actionIds">
        <template v-slot:footer>
        <slot name="footer"/>
        </template>

@@ -155,8 +155,8 @@ export default {
         </div>
 
         <div class="row mt-5 pt-5">
-          <history-fetcher class="col-12" #default="{itemIds, isFetching}">
-            <history-list :fluid="false" :limit=5 :fetching="isFetching" :items-ids="itemIds">
+          <history-fetcher class="col-12" #default="{actionIds, isFetching}">
+            <history-list :fluid="false" :limit=5 :fetching="isFetching" :action-ids="actionIds">
               <template v-slot:title>
                 <span class="text-danger">{{ $t('dashboard.lately') }}</span> in Prophecies
               </template>

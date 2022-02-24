@@ -18,7 +18,7 @@ export default {
 </script>
 
 <template>
-  <history-fetcher class="user-retrieve-history" :username="username" #default="{itemIds, isFetching}">
-    <history-list :limit='20' :fetching="isFetching" :items-ids="itemIds"/>
+  <history-fetcher class="user-retrieve-history" :username="username" #default="{actionIds, isFetching}">
+    <history-list :limit='20' :fetching="isFetching" :action-ids="actionIds"/>
   </history-fetcher>
 </template>

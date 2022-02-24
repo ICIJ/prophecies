@@ -14,7 +14,7 @@ export default {
   },
   data () {
     return {
-      itemIds: {}
+      actionIds: []
     }
   },
   async created () {
@@ -38,7 +38,7 @@ export default {
       if (this.username && !this.user?.id) {
         return Promise.reject(new Error('User not found'))
       }
-      this.itemIds = await fetchHistoryItemsIds(this.user?.id)
+      this.actionIds = await fetchHistoryItemsIds(this.user?.id)
     }
   },
   computed: {
@@ -57,6 +57,6 @@ export default {
 
 <template>
   <div class="history-fetcher">
-    <slot v-bind="{itemIds,isFetching}"/>
+    <slot v-bind="{actionIds,isFetching}"/>
   </div>
 </template>

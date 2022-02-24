@@ -21,8 +21,8 @@ export default {
     <app-sidebar class="w-100 sticky-top" />
     <div class="history__container flex-grow-1">
       <app-header hide-nav />
-      <history-fetcher class="container-fluid p-5" #default="{itemIds, isFetching}">
-        <history-list :limit='20' :fetching="isFetching" :items-ids="itemIds">
+      <history-fetcher class="container-fluid p-5" #default="{actionIds, isFetching}">
+        <history-list :limit='20' :fetching="isFetching" :action-ids="actionIds">
           <template v-slot:title>
             <h1 class="font-weight-bold mb-5 history__title">
               What happened <span class="history__title--lately">lately</span>

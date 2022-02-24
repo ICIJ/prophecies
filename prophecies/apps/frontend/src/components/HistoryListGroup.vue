@@ -1,11 +1,9 @@
 <script>
 import { uniqueId } from 'lodash'
 import Action from '@/models/Action'
-import Tip from '@/models/Tip'
 import HistoryListItem, { ITEM_TYPES } from '@/components/HistoryListItem.vue'
 import Task from '@/models/Task'
 import User from '@/models/User'
-import ActionAggregate from '@/models/ActionAggregate'
 
 export default {
   name: 'HistoryListGroup',
@@ -21,9 +19,9 @@ export default {
       type: Boolean,
       default: true
     },
-    itemsIds: {
-      type: Object,
-      default: () => ({})
+    actionIds: {
+      type: Array,
+      default: () => ([])
     }
   },
   data () {
@@ -34,17 +32,8 @@ export default {
     }
   },
   methods: {
-
     loadMore () {
       this.nbTimesMore++
-    },
-    task (taskId) {
-      return Task
-        .query()
-        .find(taskId)
-        .with('project')
-        .whereIdIn(this.itemsIds.taskIds)
-        .get()
     },
     sortByTimestamp (a, b) {
       return -a.timestamp.localeCompare(b.timestamp)
@@ -54,13 +43,14 @@ export default {
       const id = `${date}_${checkedItem.userId}_${checkedItem.taskId}`
       const count = checkedItem.verb === 'reviewed' ? checkedItem.count : -checkedItem.count
       if (!acc[id]) {
+        const currentTask = Task.query().with('project').find(checkedItem.taskId)
         acc[id] = {
           type: ITEM_TYPES.CHECKED_RECORDS,
           timestamp: date,
           user: User.query().find(checkedItem.userId),
           content: 0,
-          projectName: Task.query().with('project').find(checkedItem.taskId).project?.name,
-          taskName: Task.query().with('project').find(checkedItem.taskId).name,
+          projectName: currentTask.project?.name,
+          taskName: currentTask.name,
           link: `#/task-record-reviews/${checkedItem.taskId}`
         }
       }
@@ -84,19 +74,17 @@ export default {
         .with('target')
         .with('target.name')
         .with('target.project')
-        .whereIdIn(this.itemsIds.actionIds)
+        .whereIdIn(this.actionIds)
         .where('targetType', 'Task')
         .where('verb', 'closed')
         .get()
-        .map(task => {
-          return {
-            type: ITEM_TYPES.CLOSED_TASK,
-            timestamp: task.timestamp,
-            user: task.actor,
-            projectName: task.target.project?.name,
-            taskName: task.target.name
-          }
-        })
+        .map(task => ({
+          type: ITEM_TYPES.CLOSED_TASK,
+          timestamp: task.timestamp,
+          user: task.actor,
+          projectName: task.target.project?.name,
+          taskName: task.target.name
+        }))
     },
     mentions () {
       return Action
@@ -106,47 +94,57 @@ export default {
         .with('actionObject')
         .with('actionObject.task')
         .with('actionObject.task.project')
-        .whereIdIn(this.itemsIds.actionIds)
+        .whereIdIn(this.actionIds)
         .where('verb', 'mentioned')
         .get()
-        .map(mention => {
-          return {
-            type: ITEM_TYPES.MENTIONED_USER,
-            timestamp: mention.timestamp,
-            user: mention.actor,
-            content: mention.target,
-            projectName: mention.actionObject.task?.project?.name,
-            taskName: mention.actionObject.task?.name,
-            link: mention.link
-          }
-        })
+        .map(mention => ({
+          type: ITEM_TYPES.MENTIONED_USER,
+          timestamp: mention.timestamp,
+          user: mention.actor,
+          content: mention.target,
+          projectName: mention.actionObject.task?.project?.name,
+          taskName: mention.actionObject.task?.name,
+          link: mention.link
+        }))
     },
     tips () {
-      return Tip
+      return Action
         .query()
-        .with('task')
-        .with('project')
-        .with('creator')
-        .whereIdIn(this.itemsIds.tipIds)
+        .with('actor')
+        .with('target')
+        .with('target.task')
+        .with('target.project')
+        .whereIdIn(this.actionIds)
+        .where('targetType', 'Tip')
+        .where('verb', 'created')
         .get()
-        .map(tip => {
-          return {
-            type: ITEM_TYPES.TIP,
-            timestamp: tip.createdAt,
-            user: tip.creator,
-            content: tip.name,
-            projectName: tip.project?.name,
-            taskName: tip.task?.name,
-            link: `#/tips/${tip.id}`
-          }
-        })
+        .map(tip => ({
+          type: ITEM_TYPES.TIP,
+          timestamp: tip.target.createdAt,
+          user: tip.actor,
+          content: tip.target.name,
+          projectName: tip.target.project?.name,
+          taskName: tip.target.task?.name,
+          link: `#/tips/${tip.target.id}`
+        }))
     },
     reviewedOrCancelledItems () {
-      return ActionAggregate
+      return Action
         .query()
-        .whereIdIn(this.itemsIds.actionAggregateIds)
-        .where('verb', v => v === 'reviewed' || v === 'cancelled')
+        .with('actor')
+        .with('target')
+        .with('target.task')
+        .with('target.task.project')
+        .whereIdIn(this.actionIds)
+        .where('targetType', 'ActionAggregate')
+        .where('verb', 'created-aggregate')
         .get()
+        .reduce((prev, action) => {
+          if (action.target.verb === 'reviewed' || action.target.verb === 'cancelled') {
+            prev.push(action.target)
+          }
+          return prev
+        }, [])
     },
     reviewedItems () {
       return Object.values(this.reviewedOrCancelledItems.reduce(this.countCheckedReviewsByDateUserIdTaskId, {}))

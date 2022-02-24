@@ -5,7 +5,192 @@ export default [
       ctx.status(200),
       ctx.json({
         data: [
-
+          {
+            type: 'Action',
+            id: '353',
+            attributes: {
+              verb: 'created-aggregate',
+              data: null,
+              public: true,
+              description: null,
+              timestamp: '2022-02-15T00:00:00Z'
+            },
+            relationships: {
+              actor: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              actionObject: {
+                data: null
+              },
+              target: {
+                data: {
+                  type: 'ActionAggregate',
+                  id: '53'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost:9009/api/v1/actions/675/'
+            }
+          },
+          {
+            type: 'Action',
+            id: '352',
+            attributes: {
+              verb: 'created-aggregate',
+              data: null,
+              public: true,
+              description: null,
+              timestamp: '2022-02-15T00:00:00Z'
+            },
+            relationships: {
+              actor: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              actionObject: {
+                data: null
+              },
+              target: {
+                data: {
+                  type: 'ActionAggregate',
+                  id: '54'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost:9009/api/v1/actions/675/'
+            }
+          },
+          {
+            type: 'Action',
+            id: '675',
+            attributes: {
+              verb: 'created-aggregate',
+              data: null,
+              public: true,
+              description: null,
+              timestamp: '2022-02-15T00:00:00Z'
+            },
+            relationships: {
+              actor: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              actionObject: {
+                data: null
+              },
+              target: {
+                data: {
+                  type: 'ActionAggregate',
+                  id: '55'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost:9009/api/v1/actions/675/'
+            }
+          },
+          {
+            type: 'Action',
+            id: '676',
+            attributes: {
+              verb: 'created-aggregate',
+              data: null,
+              public: true,
+              description: null,
+              timestamp: '2022-02-14T00:00:00Z'
+            },
+            relationships: {
+              actor: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              actionObject: {
+                data: null
+              },
+              target: {
+                data: {
+                  type: 'ActionAggregate',
+                  id: '56'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost:9009/api/v1/actions/676/'
+            }
+          },
+          {
+            type: 'Action',
+            id: '677',
+            attributes: {
+              verb: 'created-aggregate',
+              data: null,
+              public: true,
+              description: null,
+              timestamp: '2022-02-11T00:00:00Z'
+            },
+            relationships: {
+              actor: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              actionObject: {
+                data: null
+              },
+              target: {
+                data: {
+                  type: 'ActionAggregate',
+                  id: '57'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost:9009/api/v1/actions/677/'
+            }
+          },
+          {
+            type: 'Action',
+            id: '1200',
+            attributes: {
+              verb: 'created-aggregate',
+              data: null,
+              public: true,
+              description: null,
+              timestamp: '2022-02-11T00:00:00Z'
+            },
+            relationships: {
+              actor: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              actionObject: {
+                data: null
+              },
+              target: {
+                data: {
+                  type: 'ActionAggregate',
+                  id: '58'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost:9009/api/v1/actions/1200/'
+            }
+          },
           {
             type: 'Action',
             id: '911',
@@ -393,6 +578,144 @@ export default [
           }
         ],
         included: [
+          {
+            type: 'ActionAggregate',
+            id: '53',
+            attributes: {
+              verb: 'selected',
+              date: '2022-02-15',
+              count: 6
+            },
+            relationships: {
+              user: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '3'
+                }
+              }
+            }
+          },
+          {
+            type: 'ActionAggregate',
+            id: '54',
+            attributes: {
+              verb: 'selected',
+              date: '2022-02-15',
+              count: 3
+            },
+            relationships: {
+              user: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '3'
+                }
+              }
+            }
+          },
+          {
+            type: 'ActionAggregate',
+            id: '55',
+            attributes: {
+              verb: 'reviewed',
+              date: '2022-02-15',
+              count: 3
+            },
+            relationships: {
+              user: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '3'
+                }
+              }
+            }
+          },
+          {
+            type: 'ActionAggregate',
+            id: '56',
+            attributes: {
+              verb: 'reviewed',
+              date: '2022-02-14',
+              count: 9
+            },
+            relationships: {
+              user: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '3'
+                }
+              }
+            }
+          },
+          {
+            type: 'ActionAggregate',
+            id: '57',
+            attributes: {
+              verb: 'reviewed',
+              date: '2022-02-11',
+              count: 87
+            },
+            relationships: {
+              user: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '3'
+                }
+              }
+            }
+          },
+          {
+            type: 'ActionAggregate',
+            id: '58',
+            attributes: {
+              verb: 'cancelled',
+              date: '2022-02-11',
+              count: 34
+            },
+            relationships: {
+              user: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '3'
+                }
+              }
+            }
+          },
           {
             type: 'Choice',
             id: '1',
