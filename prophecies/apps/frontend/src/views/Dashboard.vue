@@ -55,8 +55,8 @@ export default {
     },
     taskStatsOptions () {
       return [
-        { text: 'Team stats', value: true },
-        { text: 'Your stats', value: false }
+        { text: this.$t('statsList.title.team'), value: true },
+        { text: this.$t('statsList.title.yours'), value: false }
       ]
     }
   },

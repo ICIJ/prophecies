@@ -91,9 +91,17 @@
     }
   },
   "progressCard": {
+    "title": {
+      "yours": "Your progress",
+      "team": "Team progress"
+    },
     "moreProgress": "More progress"
   },
   "statsList": {
+    "title": {
+      "yours": "Your stats",
+      "team": "Team stats"
+    },
     "showOnlyOpenTasks": "Show only open tasks"
   },
   "taskRecordReviewList": {

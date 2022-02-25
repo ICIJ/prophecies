@@ -89,8 +89,8 @@ export default {
     },
     progressOptions () {
       return [
-        { text: 'Team progress', value: true },
-        { text: 'Your progress', value: false }
+        { text: this.$t('progressCard.title.team'), value: true },
+        { text: this.$t('progressCard.title.yours'), value: false }
       ]
     }
   }
