@@ -127,6 +127,9 @@
     "closed": "Closed",
     "done": "Done"
   },
+  "userCard": {
+    "assignedTasks": "Assigned to {n} task: | Assigned to {n} tasks:"
+  },
   "userProfileDropdownMenu": {
     "api": "API",
     "admin": "Admin",
@@ -154,8 +157,9 @@
       "others": "Their team"
     }
   },
-  "userCard": {
-    "assignedTasks": "Assigned to {n} task: | Assigned to {n} tasks:"
+  "userTaskStatsCard": {
+    "allOpenTasks": "All open tasks",
+    "allRecords": "All records"
   },
   "userRetrieveNotifications": {
     "title": {
@@ -169,5 +173,4 @@
       "others": "Their history"
     }
   }
-
 }

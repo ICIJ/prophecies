@@ -3,7 +3,6 @@ import { createLocalVue, mount } from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import User from '@/models/User'
-import TaskUserStatistics from '@/models/TaskUserStatistics'
 
 import UserRetrieveTeam from '@/views/UserRetrieveTeam'
 import UserCard from '@/components/UserCard'
@@ -60,22 +59,6 @@ describe('UserRetrieveTeam', () => {
     expect(stats.exists()).toBeTruthy()
   })
 
-  it('retrieves stats for a user and add all pending done and progress', async () => {
-    const params = { 'filter[checker]': '2' }
-    await TaskUserStatistics.api().get('', { params })
-    const userstats = TaskUserStatistics.query().where('checkerId', '2').get()
-    const avg = wrapper.vm.getStatAvg(userstats)
-    expect(avg.done).toEqual(15)
-    expect(avg.pending).toEqual(290)
-    expect(avg.progress).toBeCloseTo(11.76, 1)
-  })
-
-  it('retrieves stats for a user with no stats', () => {
-    const avg = wrapper.vm.getStatAvg([])
-    expect(avg.done).toEqual(0)
-    expect(avg.pending).toEqual(0)
-    expect(avg.progress).toEqual(0)
-  })
   it('shows admin badge if user is superuser', async () => {
     const djangoIsNotAdmin = wrapper.findComponent(UserCard).findComponent(AdminBadge)
     expect(djangoIsNotAdmin.exists()).toBeFalsy()

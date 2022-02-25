@@ -31,14 +31,19 @@ export default {
       default: false
     }
   },
+  filters: {
+    formatDate (d) {
+      return formatDateLongAlt(d)
+    },
+    isTaskOpen (taskId) {
+      return Task.find(taskId)?.open
+    }
+  },
   data () {
     return {
       errorMessage: '',
       assignedTaskIds: []
     }
-  },
-  async created () {
-    await this.fetchWithLoader()
   },
   computed: {
     user () {
@@ -49,15 +54,13 @@ export default {
       return uniqueId('fetch-user-card-')
     }
   },
-  filters: {
-    formatDate (d) {
-      return formatDateLongAlt(d)
-    },
-    isTaskOpen (taskId) {
-      return Task.find(taskId)?.open
-    }
+  created () {
+    this.setup()
   },
   methods: {
+    async setup () {
+      await this.waitFor(this.fetchLoader, this.fetchUserTasks)
+    },
     async fetchUserTasks () {
       const params = { 'filter[checkers]': this.user.id }
       try {
@@ -69,10 +72,10 @@ export default {
         this.assignedTaskIds = []
       }
     },
-    async fetchWithLoader () {
-      this.$wait.start(this.fetchLoader)
-      await this.fetchUserTasks()
-      this.$wait.end(this.fetchLoader)
+    async waitFor (loader, fn) {
+      this.$wait.start(loader)
+      await fn()
+      this.$wait.end(loader)
     }
   }
 }
@@ -102,7 +105,7 @@ export default {
               </li>
             </ul>
           </div>
-          <slot name="footer" ></slot>
+          <slot name="footer"  v-bind:assignedTaskIds="assignedTaskIds"></slot>
         </div>
       </div>
     </app-waiter>
