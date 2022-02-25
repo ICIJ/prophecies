@@ -48,7 +48,7 @@ export default {
         return Promise.reject(new Error('User not found'))
       }
       const { response } = await fetchHistoryItemsIds(this.user?.id, this.pageSize, this.pageNumber)
-      this.actionIds =  get(response, 'data.data', []).map(a => a.id)
+      this.actionIds = get(response, 'data.data', []).map(a => a.id)
       this.count = get(response, 'data.meta.pagination.count', 0)
     }
   },

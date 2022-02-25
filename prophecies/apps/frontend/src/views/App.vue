@@ -17,11 +17,11 @@ export default {
     if (await this.$core.getUser()) {
       // Bind root events
       this.$root.$on('prophecies::closeTips', this.closeTips)
-      this.$root.$on('prophecies::toggleShortcuts', this.toggleModalFn('modal-shortcuts')) 
-      this.$root.$on('prophecies::toggleTips', this.toggleModalFn('modal-tips'))  
+      this.$root.$on('prophecies::toggleShortcuts', this.toggleModalFn('modal-shortcuts'))
+      this.$root.$on('prophecies::toggleTips', this.toggleModalFn('modal-tips'))
       // Bind keyboard shortcuts
-      this.$shortkey.bind('ctrl+k', this.toggleModalFn('modal-shortcuts')) 
-      this.$shortkey.bind('ctrl+shift+t', this.toggleModalFn('modal-tips')) 
+      this.$shortkey.bind('ctrl+k', this.toggleModalFn('modal-shortcuts'))
+      this.$shortkey.bind('ctrl+shift+t', this.toggleModalFn('modal-tips'))
       this.$shortkey.bind('ctrl+shift+h', this.goToHistory)
     }
   },
@@ -52,12 +52,12 @@ export default {
 
 <template>
   <div class="app">
-    <b-modal 
+    <b-modal
       size="md"
-      content-class="bg-transparent shadow-none border-0" 
+      content-class="bg-transparent shadow-none border-0"
       body-class="p-0"
-      ref="modal-shortcuts" 
-      hide-footer 
+      ref="modal-shortcuts"
+      hide-footer
       hide-header>
       <shortcut-list-card>
         <template #header>
@@ -67,14 +67,14 @@ export default {
           </b-btn>
         </template>
       </shortcut-list-card>
-    </b-modal>    
-    <b-modal 
+    </b-modal>
+    <b-modal
       size="md"
-      content-class="bg-transparent shadow-none border-0" 
+      content-class="bg-transparent shadow-none border-0"
       body-class="p-0"
       id="modal-tips"
-      ref="modal-tips" 
-      hide-footer 
+      ref="modal-tips"
+      hide-footer
       hide-header>
       <tip-list-card :query="{ 'filter[task]': taskId }">
         <template #header="{ taskAttributes }">
@@ -87,7 +87,7 @@ export default {
             <li class="list-inline-item app__breadcrumb__item app__item--dashboard mt-1">
               <h3>Tips for {{ taskAttributes.projectName }} > {{ taskAttributes.taskName }} </h3>
             </li>
-					</ul>
+          </ul>
         </template>
       </tip-list-card>
     </b-modal>

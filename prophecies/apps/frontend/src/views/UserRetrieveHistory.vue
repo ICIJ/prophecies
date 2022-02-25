@@ -15,7 +15,7 @@ export default {
       type: String
     }
   },
-  computed:  {
+  computed: {
     pageSize () {
       return 50
     },
