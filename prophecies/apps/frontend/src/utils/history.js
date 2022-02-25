@@ -1,21 +1,18 @@
 import Action from '@/models/Action'
 import Task from '@/models/Task'
 
-const getActionIds = (object) => {
-  const { entities: { Action: arr } } = object
-  return arr.map(o => o.id)
-}
-
-export const fetchHistoryItemsIds = async (userId) => {
+export const fetchHistoryItemsIds = async (userId, pageSize, pageNumber) => {
   const userFilterParam = userId ? { 'filter[user_stream]': userId } : undefined
+  const paginationParam = pageSize ? { 'page[size]': pageSize, 'page[number]': pageNumber } : undefined
   const actionParams = {
     'filter[verb__in]': 'mentioned,created,updated,closed,created-aggregate',
     'page[size]': '1000',
-    ...userFilterParam
+    ...userFilterParam,
+    ...paginationParam
   }
 
   // TODO MV CD improve by retrieving only task actions. Maybe do the same for users
   await Task.api().get('', { params: { include: 'project' } })
 
-  return Action.api().get('', { params: actionParams }).then(getActionIds)
+  return Action.api().get('', { params: actionParams })
 }

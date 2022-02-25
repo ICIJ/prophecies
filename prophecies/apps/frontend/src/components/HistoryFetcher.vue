@@ -1,6 +1,6 @@
 
 <script>
-import { uniqueId } from 'lodash'
+import { get, uniqueId } from 'lodash'
 import { fetchHistoryItemsIds } from '@/utils/history'
 import User from '@/models/User'
 
@@ -10,11 +10,20 @@ export default {
     username: {
       type: String,
       default: null
+    },
+    pageSize: {
+      type: Number,
+      default: null
+    },
+    pageNumber: {
+      type: Number,
+      default: null
     }
   },
   data () {
     return {
-      actionIds: []
+      actionIds: [],
+      count: 0
     }
   },
   async created () {
@@ -38,7 +47,9 @@ export default {
       if (this.username && !this.user?.id) {
         return Promise.reject(new Error('User not found'))
       }
-      this.actionIds = await fetchHistoryItemsIds(this.user?.id)
+      const { response } = await fetchHistoryItemsIds(this.user?.id, this.pageSize, this.pageNumber)
+      this.actionIds =  get(response, 'data.data', []).map(a => a.id)
+      this.count = get(response, 'data.meta.pagination.count', 0)
     }
   },
   computed: {
@@ -51,12 +62,17 @@ export default {
     user () {
       return User.find(this.username)
     }
+  },
+  watch: {
+    pageNumber (value) {
+      return this.setup()
+    }
   }
 }
 </script>
 
 <template>
   <div class="history-fetcher">
-    <slot v-bind="{actionIds,isFetching}"/>
+    <slot v-bind="{ actionIds, isFetching, count }"/>
   </div>
 </template>

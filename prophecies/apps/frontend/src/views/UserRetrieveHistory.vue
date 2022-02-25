@@ -1,5 +1,6 @@
 
 <script>
+import { noop } from 'lodash'
 import HistoryFetcher from '@/components/HistoryFetcher'
 import HistoryList from '@/components/HistoryList'
 
@@ -13,12 +14,33 @@ export default {
     username: {
       type: String
     }
+  },
+  computed:  {
+    pageSize () {
+      return 50
+    },
+    pageNumber: {
+      get () {
+        return Number(this.$route.query['page[number]']) || 1
+      },
+      set (pageNumber) {
+        const query = { ...this.$route.query, 'page[number]': pageNumber }
+        this.$router.push({ path: this.$route.path, query }, noop)
+      }
+    }
   }
 }
 </script>
 
 <template>
-  <history-fetcher class="user-retrieve-history" :username="username" #default="{actionIds, isFetching}">
-    <history-list :limit='20' :fetching="isFetching" :action-ids="actionIds"/>
+  <history-fetcher class="user-retrieve-history" :username="username" :page-number="pageNumber"
+                   :page-size="pageSize" #default="{actionIds, isFetching, count}">
+    <history-list :fetching="isFetching" :action-ids="actionIds"/>
+    <custom-pagination
+      compact
+      v-if="!isFetching && count > pageSize"
+      v-model="pageNumber"
+      :per-page="pageSize"
+      :total-rows="count" />
   </history-fetcher>
 </template>
