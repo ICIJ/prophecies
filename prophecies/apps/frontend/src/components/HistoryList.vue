@@ -30,22 +30,32 @@ export default {
     return {
       more: 5,
       nbTimesMore: 0,
-      checkedRecords: []
-    }
-  },
-  created () {
-    if (this.fetching) {
-      this.$wait.start(this.loader)
+      checkedRecords: [],
+      useLoader: null
     }
   },
   watch: {
-    fetching (fetching) {
-      if (!fetching) {
-        this.$wait.end(this.loader)
+    fetching: {
+      immediate: true,
+      handler (isFetching) {
+        if (isFetching) {
+          if (!this.useLoader) {
+            this.useLoader = this.loaderAll
+          }
+          this.$wait.start(this.useLoader)
+        } else {
+          this.$wait.end(this.useLoader)
+          if (this.useLoader === this.loaderAll) {
+            this.useLoader = this.loader
+          }
+        }
       }
     }
   },
   computed: {
+    loaderAll () {
+      return uniqueId('load-all-history-list-')
+    },
     loader () {
       return uniqueId('load-history-list-item-')
     },
@@ -57,17 +67,20 @@ export default {
 </script>
 
 <template>
-    <app-waiter :loader="loader" waiter-class="my-5 mx-auto d-block">
-    <h1 class="font-weight-bold mt-3 mb-5 history-list__title" v-if="hasTitleSlot">
-      <slot name="title">
-        What happened <span class="text-danger">lately</span>
-      </slot>
-    </h1>
-     <history-list-group :limit="limit" :fluid="fluid" :action-ids="actionIds">
-       <template v-slot:footer>
-       <slot name="footer"/>
-       </template>
-     </history-list-group>
+    <app-waiter :loader="loaderAll" waiter-class="my-5 mx-auto d-block">
+      <h1 class="font-weight-bold mt-3 mb-5 history-list__title" v-if="hasTitleSlot">
+        <slot name="title">
+          What happened <span class="text-danger">lately</span>
+        </slot>
+      </h1>
+      <slot name="header"/>
+      <app-waiter :loader="loader" waiter-class="my-5 mx-auto d-block">
+        <history-list-group :limit="limit" :fluid="fluid" :action-ids="actionIds">
+          <template v-slot:footer>
+            <slot name="footer"/>
+          </template>
+        </history-list-group>
+      </app-waiter>
     </app-waiter>
 </template>
 

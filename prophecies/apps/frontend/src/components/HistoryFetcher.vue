@@ -22,6 +22,7 @@ export default {
   },
   data () {
     return {
+      isFetching: false,
       actionIds: [],
       count: 0
     }
@@ -32,16 +33,14 @@ export default {
   methods: {
     async setup () {
       try {
-        await this.waitFor(this.fetchHistoryLoader, this.fetchAll)
+        this.isFetching = true
+        await this.fetchAll()
       } catch (error) {
         const title = 'Unable to retrieve history'
         this.$router.replace({ name: 'error', params: { title, error } })
+      } finally {
+        this.isFetching = false
       }
-    },
-    async waitFor (loader, fn) {
-      this.$wait.start(loader)
-      await fn()
-      this.$wait.end(loader)
     },
     async fetchAll () {
       if (this.username && !this.user?.id) {
@@ -55,9 +54,6 @@ export default {
   computed: {
     fetchHistoryLoader () {
       return uniqueId('fetch-history-')
-    },
-    isFetching () {
-      return this.$wait.is(this.fetchHistoryLoader)
     },
     user () {
       return User.find(this.username)

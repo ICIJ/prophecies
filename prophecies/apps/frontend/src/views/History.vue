@@ -11,6 +11,20 @@ export default {
     AppHeader,
     HistoryList,
     HistoryFetcher
+  },
+  computed: {
+    pageSize () {
+      return 50
+    },
+    pageNumber: {
+      get () {
+        return Number(this.$route.query['page[number]']) || 1
+      },
+      set (pageNumber) {
+        const query = { ...this.$route.query, 'page[number]': pageNumber }
+        this.$router.push({ path: this.$route.path, query }, undefined)
+      }
+    }
   }
 }
 
@@ -21,26 +35,30 @@ export default {
     <app-sidebar class="w-100 sticky-top" />
     <div class="history__container flex-grow-1">
       <app-header hide-nav />
-      <history-fetcher class="container-fluid p-5" #default="{actionIds, isFetching}">
-        <history-list :limit='20' :fetching="isFetching" :action-ids="actionIds">
+      <history-fetcher
+        class="container-fluid p-5"
+        :page-size="pageSize"
+        :page-number="pageNumber"
+        #default="{actionIds, isFetching, count}" >
+
+        <history-list :fetching="isFetching" :action-ids="actionIds"  >
           <template v-slot:title>
             <h1 class="font-weight-bold mb-5 history__title">
-              What happened <span class="history__title--lately">lately</span>
+              What happened <span class="history__title--lately text-danger">lately</span>
             </h1>
           </template>
+          <template #header>
+            <custom-pagination
+              compact
+              v-if="count > pageSize"
+              v-model="pageNumber"
+              :per-page="pageSize"
+              :total-rows="count"
+            />
+          </template>
         </history-list>
+
       </history-fetcher>
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
- .history {
-    &__title{
-      color:$primary;
-      &--lately{
-        color:$danger;
-      }
-    }
- }
-</style>

@@ -33,14 +33,23 @@ export default {
 </script>
 
 <template>
-  <history-fetcher class="user-retrieve-history" :username="username" :page-number="pageNumber"
-                   :page-size="pageSize" #default="{actionIds, isFetching, count}">
-    <history-list :fetching="isFetching" :action-ids="actionIds"/>
-    <custom-pagination
-      compact
-      v-if="!isFetching && count > pageSize"
-      v-model="pageNumber"
-      :per-page="pageSize"
-      :total-rows="count" />
+  <history-fetcher
+    class="user-retrieve-history"
+    :username="username"
+    :page-number="pageNumber"
+    :page-size="pageSize"
+    #default="{ actionIds, isFetching, count }"
+  >
+    <history-list :fetching="isFetching" :action-ids="actionIds" >
+      <template #header>
+        <custom-pagination
+          compact
+          v-if="count > pageSize"
+          v-model="pageNumber"
+          :per-page="pageSize"
+          :total-rows="count"
+        />
+      </template>
+    </history-list>
   </history-fetcher>
 </template>

@@ -84,9 +84,6 @@ export default {
         default:
           return 'UserIcon'
       }
-    },
-    inDev () {
-      return process.env.NODE_ENV === "development"
     }
   },
   methods: {
