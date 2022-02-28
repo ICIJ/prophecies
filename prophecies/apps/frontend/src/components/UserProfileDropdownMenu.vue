@@ -55,7 +55,7 @@ export default {
       <bookmark-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveBookmarks.title.yours') }}
     </b-dropdown-item>
-    <b-dropdown-item :to="historyRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--history" v-if="inDev">
+    <b-dropdown-item :to="historyRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--history">
       <clock-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveHistory.title.yours') }}
     </b-dropdown-item>

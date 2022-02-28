@@ -146,7 +146,7 @@ export default {
           <bookmark-icon class="mr-3" />
           {{ bookmarksTitle }}
         </b-nav-item>
-        <b-nav-item :to="historyRoute" exact v-if="inDev">
+        <b-nav-item :to="historyRoute" exact>
           <clock-icon class="mr-3" />
           {{ historyTitle }}
         </b-nav-item>
