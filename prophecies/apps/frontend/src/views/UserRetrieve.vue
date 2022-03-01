@@ -28,6 +28,10 @@ export default {
       const params = { username: this.username }
       return { name: 'user-retrieve-profile', params }
     },
+    activityRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-activity', params }
+    },
     teamRoute () {
       const params = { username: this.username }
       return { name: 'user-retrieve-team', params }
@@ -53,6 +57,9 @@ export default {
     profileTitle () {
       return this.routeTitle(this.profileRoute.name)
     },
+    activityTitle () {
+      return this.routeTitle(this.activityRoute.name)
+    },
     teamTitle () {
       return this.routeTitle(this.teamRoute.name)
     },
@@ -75,6 +82,8 @@ export default {
       switch (this.title) {
         case this.teamTitle:
           return 'UsersIcon'
+        case this.activityTitle:
+          return 'ActivityIcon'
         case this.bookmarksTitle:
           return 'BookmarkIcon'
         case this.notificationsTitle:
@@ -84,6 +93,9 @@ export default {
         default:
           return 'UserIcon'
       }
+    },
+    inDev () {
+      return process.env.NODE_ENV === 'development'
     }
   },
   methods: {
@@ -131,9 +143,9 @@ export default {
           <user-icon class="mr-3" />
           {{ profileTitle }}
         </b-nav-item>
-        <b-nav-item :to="teamRoute" exact>
-          <users-icon class="mr-3" />
-          {{ teamTitle }}
+        <b-nav-item v-if='inDev' :to="activityRoute" exact>
+          <activity-icon class="mr-3" />
+          {{ activityTitle }}
         </b-nav-item>
         <b-nav-item :to="notificationsRoute" exact v-if="isMe">
           <bell-icon class="mr-3" />
@@ -146,6 +158,10 @@ export default {
         <b-nav-item :to="historyRoute" exact>
           <clock-icon class="mr-3" />
           {{ historyTitle }}
+        </b-nav-item>
+        <b-nav-item :to="teamRoute" exact>
+          <users-icon class="mr-3" />
+          {{ teamTitle }}
         </b-nav-item>
         <b-nav-item :href="$config.get('helpLink')">
           <truck-icon class="mr-3" />

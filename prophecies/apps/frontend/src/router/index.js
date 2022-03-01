@@ -10,6 +10,7 @@ import TipRetrieve from '@/views/TipRetrieve.vue'
 import StatsList from '@/views/StatsList.vue'
 import UserRetrieve from '@/views/UserRetrieve.vue'
 import UserRetrieveProfile from '@/views/UserRetrieveProfile.vue'
+import UserRetrieveActivity from '@/views/UserRetrieveActivity.vue'
 import UserRetrieveTeam from '@/views/UserRetrieveTeam.vue'
 import UserRetrieveBookmarks from '@/views/UserRetrieveBookmarks.vue'
 import UserRetrieveNotifications from '@/views/UserRetrieveNotifications.vue'
@@ -43,6 +44,12 @@ export const router = {
           path: '',
           props: true,
           component: UserRetrieveProfile
+        },
+        {
+          name: 'user-retrieve-activity',
+          path: 'activity',
+          component: UserRetrieveActivity,
+          props: (route) => ({ query: route.query, username: route.params.username })
         },
         {
           name: 'user-retrieve-team',

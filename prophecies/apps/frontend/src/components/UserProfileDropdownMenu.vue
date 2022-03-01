@@ -14,6 +14,10 @@ export default {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-profile', params }
     },
+    activityRoute () {
+      const params = { username: this.user.username }
+      return { name: 'user-retrieve-activity', params }
+    },
     notificationsRoute () {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-notifications', params }
@@ -31,7 +35,7 @@ export default {
       return { name: 'user-retrieve-history', params }
     },
     inDev () {
-      return process.env.NODE_ENV === "development"
+      return process.env.NODE_ENV === 'development'
     }
   }
 }
@@ -43,9 +47,9 @@ export default {
       <user-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveProfile.title.yours') }}
     </b-dropdown-item>
-    <b-dropdown-item :to="teamRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--team">
-      <users-icon class="user-profile-dropdown-menu__item__icon" />
-      {{ $t('userRetrieveTeam.title.yours') }}
+    <b-dropdown-item v-if='inDev' :to="activityRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--activity">
+      <activity-icon class="user-profile-dropdown-menu__item__icon" />
+      {{ $t('userRetrieveActivity.title.yours') }}
     </b-dropdown-item>
     <b-dropdown-item :to="notificationsRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--notifications">
       <bell-icon class="user-profile-dropdown-menu__item__icon" />
@@ -58,6 +62,10 @@ export default {
     <b-dropdown-item :to="historyRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--history">
       <clock-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveHistory.title.yours') }}
+    </b-dropdown-item>
+    <b-dropdown-item :to="teamRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--team">
+      <users-icon class="user-profile-dropdown-menu__item__icon" />
+      {{ $t('userRetrieveTeam.title.yours') }}
     </b-dropdown-item>
     <b-dropdown-item :href="$config.get('apiUrl')" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--api">
       <code-icon class="user-profile-dropdown-menu__item__icon" />

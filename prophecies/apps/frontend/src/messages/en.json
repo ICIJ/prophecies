@@ -151,6 +151,12 @@
     "lastLogin": "Last login",
     "notProvided": "Not provided"
   },
+  "userRetrieveActivity": {
+    "title": {
+      "yours": "Your activity",
+      "others": "Their activity"
+    }
+  },
   "userRetrieveTeam": {
     "title": {
       "yours": "Your team",
