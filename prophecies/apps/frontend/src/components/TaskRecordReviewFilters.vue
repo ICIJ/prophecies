@@ -34,6 +34,7 @@ export default {
         locked: [],
         hasNotes: [],
         bookmarkedBy: [],
+        hasAllRoundsReviewed: []
       }
     }
   },
@@ -137,6 +138,7 @@ export default {
                      multiple
                      :options="filters.bookmarkedBy.options" />
       </label>
+
       <label class="col-12 col-sm-6 col-lg">
         {{ filters.alternativeValues.name }}
         <multiselect class="mt-3 mb-3"
@@ -204,6 +206,15 @@ export default {
                     label="label"
                     track-by="label"
                     :options="filters.hasNotes.options" />
+      </div>
+      <div class="col-12 col-md-6 col-lg">
+        {{ filters.hasAllRoundsReviewed.name }}
+        <multiselect-buttons class="mt-3 mb-3 text-nowrap"
+                     placeholder="Type here..."
+                     v-model="selected.hasAllRoundsReviewed"
+                     label="label"
+                     track-by="name"
+                     :options="filters.hasAllRoundsReviewed.options" />
       </div>
     </div>
   </form>

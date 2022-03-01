@@ -1,7 +1,8 @@
 from django_filters import CharFilter, FilterSet
 from prophecies.core.models import TaskRecord, TaskRecordReview
 from prophecies.core.models.task_record_review import StatusType
-from actstream.models import Action, user_stream,actor_stream,target_stream
+from prophecies.core.models.task_record import StatusType as TRStatusType
+from actstream.models import Action, actor_stream, target_stream
 from django.contrib.auth.models import User
 
 
@@ -39,6 +40,7 @@ class TaskRecordReviewFilter(FilterSet):
     task_record__has_notes = CharFilter(method='has_notes_filter')
     task_record__has_disagreements = CharFilter(method='has_disagreements_filter')
     task_record__bookmarked_by = CharFilter(method='bookmarked_by_filter')
+    task_record__all_rounds_reviewed = CharFilter(method='all_rounds_reviewed_filter')
 
     class Meta:
         model = TaskRecordReview
@@ -59,12 +61,12 @@ class TaskRecordReviewFilter(FilterSet):
     @staticmethod
     def get_as_boolean(value):
         if value == '0' or value == '1':
-            return True, bool(int(value))
-        return False,
+            return bool(int(value))
+        return None
     
     def boolean_filter_on(self, queryset, filter_name, value):
-        is_param_valid, filter_value = self.get_as_boolean(value)
-        if is_param_valid:
+        filter_value = self.get_as_boolean(value)
+        if filter_value is not None:
             ftr = {filter_name: filter_value}
             return queryset \
                     .filter(**ftr)
@@ -89,8 +91,8 @@ class TaskRecordReviewFilter(FilterSet):
             return queryset.filter(task_record__bookmarked_by=value)
 
     def reviewed_filter(self, queryset, name, value):
-        is_param_valid, filter_value = self.get_as_boolean(value)
-        if not is_param_valid:
+        filter_value = self.get_as_boolean(value)
+        if filter_value is not None:
             return queryset       
         if filter_value:
             return queryset \
@@ -99,3 +101,13 @@ class TaskRecordReviewFilter(FilterSet):
             return queryset \
                 .filter(task_record__reviews__status=StatusType.DONE) \
                 .exclude(task_record__reviews__status=StatusType.PENDING)
+                
+    def all_rounds_reviewed_filter(self, queryset, name, value):
+        filter_value = self.get_as_boolean(value)
+        if filter_value is not None:
+            from prophecies.core.models import TaskRecord
+            status =  TRStatusType.DONE if filter_value else TRStatusType.ASSIGNED
+            tr = TaskRecord.objects.filter(status=status)
+            return queryset.filter(task_record_id__in=tr)
+            
+        return queryset

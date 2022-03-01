@@ -372,3 +372,26 @@ class TestTaskRecordReview(TestCase):
         request = self.client.get('/api/v1/task-record-reviews/?filter[checker]=2&filter[task_record__bookmarked_by]=%s,%s' % (self.olivia.id, self.django.id))
         data = request.json().get('data')
         self.assertEqual(len(data), 3)
+        
+        
+    def test_it_returns_reviews_from_records_with_all_rounds_reviewed(self):
+        choice = self.task.choice_group.choices.first()
+        TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django, round=1, choice=choice)
+        TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.olivia, round=2, choice=choice)
+        TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.olivia, round=3, choice=choice)
+        TaskRecordReview.objects.create(task_record=self.task_record_bar, checker=self.django, round=1)
+
+        self.client.login(username='django', password='django')
+        request = self.client.get('/api/v1/task-record-reviews/?filter[task_record__all_rounds_reviewed]=1')
+        data = request.json().get('data')
+        self.assertEqual(len(data), 3)
+        
+        
+        request = self.client.get('/api/v1/task-record-reviews/?filter[task_record__all_rounds_reviewed]=0')
+        data = request.json().get('data')
+        self.assertEqual(len(data), 1)
+        
+        
+        request = self.client.get('/api/v1/task-record-reviews/?filter[task_record__all_rounds_reviewed]=null')
+        data = request.json().get('data')
+        self.assertEqual(len(data), 4)

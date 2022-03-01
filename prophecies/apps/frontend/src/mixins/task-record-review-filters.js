@@ -27,6 +27,13 @@ export default {
           field: 'value',
           label: 'name'
         },
+        bookmarkedBy: {
+          name: 'Bookmarked by',
+          param: 'task_record__bookmarked_by',
+          options: task.checkers,
+          field: 'id',
+          label: 'displayName'
+        },
         choices: {
           name: 'My classifications',
           param: 'choice__in',
@@ -38,6 +45,16 @@ export default {
           ],
           field: 'id',
           label: 'name'
+        },
+        hasAllRoundsReviewed: {
+          name: 'All rounds reviewed',
+          param: 'task_record__all_rounds_reviewed',
+          field: 'value',
+          label: 'name',
+          options: [
+            { value: '1', label: 'yes', name: 'All rounds reviewed' },
+            { value: '0', label: 'no', name: 'Some rounds reviewed' }
+          ]
         },
         priorities: {
           name: 'Priority',
@@ -94,13 +111,6 @@ export default {
           param: 'search',
           label: 'name',
           field: 'value'
-        },
-        bookmarkedBy: {
-          name: 'Bookmarked by',
-          param: 'task_record__bookmarked_by',
-          options: task.checkers,
-          field: 'id',
-          label: 'displayName'
         }
       }
     },
