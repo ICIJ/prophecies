@@ -26,19 +26,7 @@
               </div>
             </div>
             <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-              <task-stats-card class="stats-list__task-card my-5" v-for="task in tasks" :key="task.id" :task-id="task.id" :team="teamTaskStats" extended>
-                <template v-if="fetchTaskUserStatsLoader" v-slot:taskStatsByRound="{stats}" >
-                  <stats-by-round
-                    v-for="(round,index) in stats.rounds"
-                    :key="round"
-                    :round="index+1"
-                    :progress="stats.progress[round]"
-                    :progress-by-user='taskUserStatistics(task.id,round)'
-                    :summary='taskUserChoiceStatistics(task.id,round)'
-                    extended
-                    class="stats-list__task-card__round mx-auto" />
-                </template>
-              </task-stats-card>
+              <task-stats-card-detailed class="stats-list__task-card my-5" v-for="task in tasks" :key="task.id" :task-id="task.id" :team="teamTaskStats"/>
             </app-waiter>
           </div>
         </div>
@@ -48,16 +36,15 @@
 </template>
 
 <script>
-import { cloneDeep, uniqueId, filter, orderBy } from 'lodash'
+import { uniqueId, filter, orderBy } from 'lodash'
 
 import AppHeader from '@/components/AppHeader.vue'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
 
-import TaskStatsCard from '@/components/TaskStatsCard'
+import TaskStatsCardDetailed from '@/components/TaskStatsCardDetailed'
 import Task, { TaskStatusEnum, TaskStatusOrder } from '@/models/Task'
 
-import StatsByRound from '@/components/StatsByRound.vue'
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
@@ -69,8 +56,7 @@ export default {
     AppHeader,
     AppSidebar,
     AppWaiter,
-    TaskStatsCard,
-    StatsByRound,
+    TaskStatsCardDetailed,
     TaskSortByDropdown
   },
   data () {
@@ -91,9 +77,8 @@ export default {
     return this.setup()
   },
   methods: {
-    async setup () {
-      await this.waitFor(this.fetchTaskLoader, [this.fetchTask])
-      await this.waitFor(this.fetchTaskUserStatsLoader, [this.fetchTaskUserStats, this.fetchTaskUserChoiceStats])
+    setup () {
+      return this.waitFor(this.fetchTaskLoader, [this.fetchTask])
     },
     fetchTask () {
       const params = { include: 'choiceGroup.choices' }
@@ -115,44 +100,6 @@ export default {
     },
     updateSortByCallback (cb) {
       this.sortByCb = cb
-    },
-    taskUserStatistics (taskId, round) {
-      let request = TaskUserStatistics.query().with('checker').where('taskId', taskId).where('round', round)
-      if (!this.teamTaskStats) {
-        request = request.where('checkerId', User.me().id)
-      }
-      return request.get()
-    },
-    taskUserChoiceStatistics (taskId, round) {
-      const stats = TaskUserChoiceStatistics.query().where('taskId', taskId).with('choice').where('round', round).get()
-      const defaultTaskChoices = this.defaultChoicesByTaskId[taskId]
-      const choiceGroups = Object.keys(defaultTaskChoices)
-      if (!choiceGroups.length) {
-        return []
-      }
-      const choiceGroupId = choiceGroups[0]
-      if (!stats.length) {
-        return Object.values(defaultTaskChoices[choiceGroupId])
-      }
-
-      const statsAcc = { stats: cloneDeep(defaultTaskChoices), count: 0 }
-      const cumulatedStats = stats.reduce((acc, checkerStat) => {
-        const cumulate = this.teamTaskStats || (!this.teamTaskStats && this.isMe({ id: checkerStat.checkerId }))
-        // check if stat choice group is consistent with task choice group
-        const statChoiceGroupId = acc.stats[checkerStat.choice.choiceGroupId]
-        if (cumulate && statChoiceGroupId) {
-          statChoiceGroupId[checkerStat.choiceId].progress += checkerStat.count
-          acc.count += checkerStat.count
-        }
-        return acc
-      }, statsAcc)
-
-      const statByChoiceGroup = cumulatedStats.stats[choiceGroupId]
-      const total = cumulatedStats.count !== 0 ? cumulatedStats.count : 1
-      for (const choice in statByChoiceGroup) {
-        statByChoiceGroup[choice].progress = statByChoiceGroup[choice].progress * 100 / total
-      }
-      return Object.values(statByChoiceGroup)
     }
   },
   computed: {
@@ -166,17 +113,6 @@ export default {
     tasks () {
       const sortedTasks = this.sortByCb(this.unorderedTasks)
       return this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatusEnum.OPEN || TaskStatusEnum.LOCKED]) : sortedTasks
-    },
-    defaultChoicesByTaskId () {
-      return this.tasks.reduce((acc, task) => {
-        const taskId = task.id
-        const choiceGroupId = task.choiceGroupId
-        const choices = task.choiceGroup.choices
-        const defaultChoices = choices.reduce((prev, choice) =>
-          ({ ...prev, [choice.id]: { id: choice.id, name: choice.name, value: choice.value, progress: 0 } }), {})
-        acc[taskId] = { [choiceGroupId]: { ...defaultChoices } }
-        return acc
-      }, {})
     },
     onlyOpenTasks: {
       get () {
@@ -193,9 +129,6 @@ export default {
     },
     fetchTaskLoader () {
       return uniqueId('load-stats-task-')
-    },
-    fetchTaskUserStatsLoader () {
-      return uniqueId('load-stats-task-user')
     }
   }
 }
