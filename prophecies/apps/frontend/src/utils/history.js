@@ -5,7 +5,7 @@ export const fetchHistoryItemsIds = async (userId, pageSize, pageNumber) => {
   const userFilterParam = userId ? { 'filter[user_stream]': userId } : undefined
   const paginationParam = pageSize ? { 'page[size]': pageSize, 'page[number]': pageNumber } : undefined
   const actionParams = {
-    'filter[verb__in]': 'mentioned,created,updated,closed,created-aggregate',
+    'filter[verb__in]': 'mentioned,created,closed,created-aggregate',
     ...userFilterParam,
     ...paginationParam
   }
