@@ -22,7 +22,7 @@ export default {
 
 <template>
 
-  <div class="task-stats-card-all-rounds d-flex flex-column mx-auto">
+  <div class="task-stats-card-all-rounds  mx-auto">
     <slot name="top"></slot>
     <b-row class="task-stats-card-all-rounds__card  card card-body rounded font-weight-bold mx-0">
       <div

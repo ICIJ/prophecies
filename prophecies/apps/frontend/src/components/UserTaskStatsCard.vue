@@ -140,7 +140,7 @@ export default {
 
 <template>
   <task-stats-card-all-rounds
-    class="user-task-stats-card"
+    class="user-task-stats-card d-flex flex-column"
     :done="statsAverageByOption.done"
     :pending="statsAverageByOption.pending"
     :progress="statsAverageByOption.progress"
