@@ -155,6 +155,10 @@
     "title": {
       "yours": "Your activity",
       "others": "Their activity"
+    },
+    "stats": {
+      "yours": "Your stats",
+      "others": "Their stats"
     }
   },
   "userRetrieveTeam": {
