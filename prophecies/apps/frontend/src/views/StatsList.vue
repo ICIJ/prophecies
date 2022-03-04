@@ -26,7 +26,11 @@
               </div>
             </div>
             <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-              <task-stats-card-detailed class="stats-list__task-card my-5" v-for="task in tasks" :key="task.id" :task-id="task.id" :team="teamTaskStats"/>
+              <task-stats-card-detailed
+              class="stats-list__task-card my-5"
+              v-for="task in displayedTasks" :key="task.id"
+              :task-id="task.id"
+              :checker-id="checkerId"/>
             </app-waiter>
           </div>
         </div>
@@ -95,32 +99,28 @@ export default {
       await Promise.all(fns.map(fn => fn()))
       this.$wait.end(loader)
     },
-    isMe ({ id = null } = {}) {
-      return id === User.me().id
-    },
     updateSortByCallback (cb) {
       this.sortByCb = cb
     }
   },
   computed: {
-    unorderedTasks () {
+    tasks () {
       return Task
         .query()
         .with('choiceGroup.choices')
         .where('taskRecordsCount', (value) => value > 0)
         .get()
     },
-    tasks () {
-      const sortedTasks = this.sortByCb(this.unorderedTasks)
+    displayedTasks () {
+      const sortedTasks = this.sortByCb(this.tasks)
       return this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatusEnum.OPEN || TaskStatusEnum.LOCKED]) : sortedTasks
+    },
+    checkerId () {
+      return this.teamTaskStats ? undefined : User.me().id
     },
     onlyOpenTasks: {
       get () {
-        const onlyOpenTasks = this.$route.query.only_open
-        if (onlyOpenTasks === 'true') {
-          return true
-        }
-        return false
+        return this.$route.query.only_open === 'true'
       },
       set (value) {
         const query = { ...this.$route.query, only_open: !!value }

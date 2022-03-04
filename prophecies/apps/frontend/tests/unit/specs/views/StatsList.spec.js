@@ -4,7 +4,6 @@ import {
 } from '@vue/test-utils'
 import Core from '@/core'
 import StatsList from '@/views/StatsList'
-import Task from '@/models/Task'
 
 describe('StatsList', () => {
   describe('Show the stat list page', () => {
