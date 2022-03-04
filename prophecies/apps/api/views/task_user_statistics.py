@@ -16,8 +16,8 @@ class TaskUserStatisticsSerializer(serializers.ModelSerializer):
         'task': TaskSerializer,
     }
     
-    class JSONAPIMeta:
-        included_resources = ['task', 'checker']
+    # class JSONAPIMeta:
+    #     included_resources = ['task', 'checker']
 
     class Meta:
         model = TaskUserStatistics
