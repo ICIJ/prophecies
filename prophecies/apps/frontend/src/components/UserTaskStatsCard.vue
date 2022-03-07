@@ -1,16 +1,17 @@
 <script>
-import { find, orderBy } from 'lodash'
+import { orderBy } from 'lodash'
 import User from '@/models/User'
 import Task from '@/models/Task'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
-import { directive as onClickaway } from 'vue-clickaway'
+import LightDropdown from '@/components/LightDropdown.vue'
 
 const ALL__OPEN_TASKS_ID = '0_all'
 export default {
   name: 'UserTaskStatsCard',
   components: {
-    TaskStatsCardAllRounds
+    TaskStatsCardAllRounds,
+    LightDropdown
   },
   props: {
     taskIds: {
@@ -25,9 +26,6 @@ export default {
       type: String,
       default: undefined
     }
-  },
-  directives: {
-    onClickaway
   },
   filters: {
     round (value) {
@@ -71,15 +69,16 @@ export default {
       }
       return this.statsAverageByTaskId[this.selectedTaskId]
     },
-    selectedTask () {
-      return find(this.dropdownTasks, { id: this.selectedTaskId })
-    },
     dropdownTasks () {
       return [{ id: ALL__OPEN_TASKS_ID, name: this.$t('userTaskStatsCard.allOpenTasks') }, ...this.openTasks]
     },
     openTasks () {
       return orderBy(
-        Task.query().where('status', 'OPEN').whereIdIn(this.taskIds).get(),
+        Task
+          .query()
+          .where('status', 'OPEN')
+          .where('taskRecordsCount', (value) => value > 0)
+          .whereIdIn(this.taskIds).get(),
         'name'
       )
     },
@@ -121,18 +120,6 @@ export default {
     getAverageByTaskId (taskId) {
       const stats = this.statsAllOpenTasks.filter(s => s.taskId === taskId)
       return this.getAverage(stats)
-    },
-    toggle () {
-      this.show = !this.show
-    },
-    close () {
-      this.show = false
-    },
-    select (e) {
-      this.selectedTaskId = e.target.dataset.taskid
-    },
-    isActive (taskId) {
-      return this.selectedTaskId === taskId
     }
   }
 }
@@ -147,38 +134,8 @@ export default {
   >
     <template #top>
       <div class="d-flex flex-row-reverse py-1">
-        <div
-          class="user-task-stats-card__dropdown dropdown"
-          :class="{ show: show }"
-        >
-          <span
-            class="user-task-stats-card__dropdown__selected text-primary dropdown-toggle font-weight-bold text-primary"
-            type="button"
-            id="dropdownMenuButton"
-            v-on-clickaway="close"
-            @click="toggle"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            {{ selectedTask.name }}
-          </span>
-          <ul
-            class="user-task-stats-card__dropdown__options dropdown-menu dropdown-menu-right"
-            :class="{ show: show }"
-            aria-labelledby="dropdownMenuButton"
-          >
-            <li
-              v-for="task in dropdownTasks"
-              :key="task.id"
-              @click="select"
-              class="dropdown-item"
-              :class="{ active: isActive(task.id) }"
-              :data-taskid="task.id"
-            >
-              {{ task.name }}
-            </li>
-          </ul>
-        </div>
+        <light-dropdown class="user-task-stats-card__dropdown" :items="dropdownTasks" :selected-id.sync="selectedTaskId"/>
+
       </div>
     </template>
     <template #title> {{ $t('userTaskStatsCard.allRecords') }} </template>

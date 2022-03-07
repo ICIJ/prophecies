@@ -213,7 +213,6 @@ export default {
           v-if="activityTab"
           :loader="fetchActivityLoader"
           waiter-class="my-5 mx-auto d-block "
-          class="user-retrieve-activity__chart"
         >
         <user-retrieve-activity-chart
           :activity-ids="activityIds"
@@ -221,7 +220,6 @@ export default {
           :range="15"
           selectedTask="all"
           />
-
         </app-waiter>
         <!--STATS -->
         <app-waiter
