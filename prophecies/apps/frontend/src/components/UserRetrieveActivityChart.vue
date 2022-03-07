@@ -8,8 +8,12 @@ import { TaskStatusOrder } from '@/models/Task'
 import User from '@/models/User'
 import ActionAggregate from '@/models/ActionAggregate'
 import { formatDate } from '@/utils/date'
+import LightDropdown from '@/components/LightDropdown.vue'
+
+const ALL__OPEN_TASKS_ID = '0_all'
 
 export default {
+  components: { LightDropdown },
   name: 'UserRetrieveActivityChart',
   props: {
     lastDate: {
@@ -17,10 +21,6 @@ export default {
     },
     range: {
       type: Number
-    },
-    selectedTask: {
-      type: String,
-      default: 'all'
     },
     activityIds: {
       type: Array,
@@ -35,7 +35,7 @@ export default {
           return TaskStatusOrder[task.status] === 1
         }),
       activityTab: true,
-      dayRange: 15
+      selectedTaskId: ALL__OPEN_TASKS_ID
     }
   },
   methods: {
@@ -54,26 +54,40 @@ export default {
     activityIsBeforeDay (activityIndex, date) {
       return this.activities[activityIndex] && moment(this.activities[activityIndex].date).isBefore(date)
     }
-
   },
   computed: {
     user () {
       return User.find(this.username)
     },
+    dropdownTasks () {
+      return [
+        {
+          id: ALL__OPEN_TASKS_ID,
+          name: this.$t('userTaskStatsCard.allOpenTasks')
+        },
+        ...this.tasks
+      ]
+    },
+    tasks () {
+      return Object.values(this.activities.reduce((prev, curr) => {
+        prev[curr.taskId] = curr.task
+        return prev
+      }, {}))
+    },
     activities () {
       return ActionAggregate.query()
         .whereIdIn(this.activityIds)
+        .with('task')
         .get()
     },
     chartMaxValue () {
-      const maxItem = maxBy(this.chartActivities, 'value')
+      const maxItem = maxBy(this.chartActivitiesByTaskId, 'value')
       if (maxItem) {
         return Math.round(maxItem.value * 1.2)
       }
       return 100
     },
-
-    chartActivities () {
+    chartActivitiesByTaskId () {
       if (!this.activities?.length) {
         return []
       }
@@ -91,8 +105,10 @@ export default {
       while (currDate.add(1, 'days').diff(lastDate) < 0) {
         const size = data.push({ date: currDate.clone(), value: 0 })
         while (this.activityIsSameDay(activityIndex, currDate)) {
-          const { count } = this.activities[activityIndex]
-          data[size - 1].value += count
+          const { count, taskId } = this.activities[activityIndex]
+          if (this.selectedTaskId === ALL__OPEN_TASKS_ID || this.selectedTaskId === taskId) {
+            data[size - 1].value += count
+          }
           ++activityIndex
         }
       }
@@ -107,13 +123,23 @@ export default {
   <div
     class="user-retrieve-activity__chart card p-5"
   >
+  <div class="d-flex">
+  <div class="col-6">
     <h2 class="text-primary">Reviewed record per day</h2>
     <p class="text-muted">
-      Number of classified records over the last 15 days on all tasks.
+      Number of classified records over the last {{range}} days on all tasks.
     </p>
+  </div>
+  <div class="col-6">
+    <light-dropdown class="d-flex flex-row-reverse"
+    :btnClassList="['btn', 'btn-lighter']"
+    :items="dropdownTasks"
+    :selectedId.sync="selectedTaskId"/>
+</div>
+  </div>
     <stacked-column-chart
-      v-if="chartActivities.length"
-      :data="chartActivities"
+      v-if="chartActivitiesByTaskId.length"
+      :data="chartActivitiesByTaskId"
       :barColors="['var(--column-color)']"
       :max-value="chartMaxValue"
       no-tooltips

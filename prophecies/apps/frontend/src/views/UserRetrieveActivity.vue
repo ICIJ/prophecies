@@ -218,7 +218,6 @@ export default {
           :activity-ids="activityIds"
           :last-date="lastDate"
           :range="15"
-          selectedTask="all"
           />
         </app-waiter>
         <!--STATS -->
