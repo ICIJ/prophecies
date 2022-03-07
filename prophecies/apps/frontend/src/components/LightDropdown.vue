@@ -35,8 +35,7 @@ export default {
       }
     },
     selectedItem () {
-      const newLocal = find(this.items, { id: this.selectedId_ })
-      return newLocal
+      return find(this.items, { id: this.selectedId_ })
     }
   },
   methods: {

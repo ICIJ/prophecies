@@ -1,6 +1,6 @@
 
 <script>
-import { orderBy, maxBy } from 'lodash'
+import { orderBy, maxBy, find } from 'lodash'
 import moment from 'moment'
 
 import { TaskStatusOrder } from '@/models/Task'
@@ -74,6 +74,9 @@ export default {
         return prev
       }, {}))
     },
+    taskLabel () {
+      return find(this.dropdownTasks, { id: this.selectedTaskId }).name
+    },
     activities () {
       return ActionAggregate.query()
         .whereIdIn(this.activityIds)
@@ -85,7 +88,7 @@ export default {
       if (maxItem) {
         return Math.round(maxItem.value * 1.2)
       }
-      return 100
+      return 10
     },
     chartActivitiesByTaskId () {
       if (!this.activities?.length) {
@@ -124,13 +127,13 @@ export default {
     class="user-retrieve-activity__chart card p-5"
   >
   <div class="d-flex">
-  <div class="col-6">
+  <div class="col-8">
     <h2 class="text-primary">Reviewed record per day</h2>
     <p class="text-muted">
-      Number of classified records over the last {{range}} days on all tasks.
+      Number of classified records over the last {{range}} days on {{taskLabel}}.
     </p>
   </div>
-  <div class="col-6">
+  <div class="col-4">
     <light-dropdown class="d-flex flex-row-reverse"
     :btnClassList="['btn', 'btn-lighter']"
     :items="dropdownTasks"
