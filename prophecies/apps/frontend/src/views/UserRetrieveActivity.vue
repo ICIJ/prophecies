@@ -1,6 +1,6 @@
 
 <script>
-import { uniqueId, filter, orderBy, maxBy } from 'lodash'
+import { uniqueId, filter, orderBy } from 'lodash'
 import moment from 'moment'
 
 import AppWaiter from '@/components/AppWaiter'
@@ -9,6 +9,7 @@ import TaskStatsCardDetailed from '@/components/TaskStatsCardDetailed'
 import Task, { TaskStatusEnum, TaskStatusOrder } from '@/models/Task'
 
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
+import UserRetrieveActivityChart from '@/components/UserRetrieveActivityChart.vue'
 
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
@@ -22,7 +23,8 @@ export default {
   components: {
     AppWaiter,
     TaskStatsCardDetailed,
-    TaskSortByDropdown
+    TaskSortByDropdown,
+    UserRetrieveActivityChart
   },
   props: {
     username: {
@@ -55,7 +57,7 @@ export default {
         }),
       activityTab: true,
       taskStatusFilter: true,
-      dayRange: 15
+      lastDate: new Date()
     }
   },
   methods: {
@@ -87,8 +89,11 @@ export default {
     updateSortByCallback (cb) {
       this.sortByCb = cb
     },
-    isSameDate (activityIndex, date) {
+    activityIsSameDay (activityIndex, date) {
       return this.activities[activityIndex] && moment(this.activities[activityIndex].date).isSame(date, 'day')
+    },
+    activityIsBeforeDay (activityIndex, date) {
+      return this.activities[activityIndex] && moment(this.activities[activityIndex].date).isBefore(date)
     }
 
   },
@@ -120,48 +125,8 @@ export default {
         .where('verb', 'reviewed')
         .get()
     },
-    chartMaxValue () {
-      const maxItem = maxBy(this.chartActivities, 'value')
-      if (maxItem) {
-        return Math.round(maxItem.value * 1.2)
-      }
-      return 100
-    },
-    chartActivities () {
-      if (!this.activities?.length) {
-        return []
-      }
-      const data = []
-
-      const lastDate = moment().add(1, 'days')
-      const currDate = lastDate.clone().add(-16, 'days')
-
-      let activityIndex = 0
-      // take the first activity in the time window
-      while (this.activities[activityIndex] && moment(this.activities[activityIndex].date).isBefore(currDate)) {
-        activityIndex++
-      }
-      while (currDate.add(1, 'days').diff(lastDate) < 0) {
-        if (!this.isSameDate(activityIndex, currDate)) {
-          data.push({ date: currDate.clone(), value: 0 })
-        } else {
-          let index
-          do {
-            const { count } = this.activities[activityIndex]
-            if (index) {
-              data[index].value += count
-            } else {
-              data.push({ date: currDate.clone(), value: count })
-              index = data.length - 1
-            }
-            activityIndex++
-          } while (this.isSameDate(activityIndex, currDate))
-        }
-      }
-
-      return data
-
-      // return this.activities?.map((a) => ({ value: a.count, date: a.date }))
+    activityIds () {
+      return this.activities.map(a => a.id)
     },
     unorderedTasks () {
       return Task.query()
@@ -248,26 +213,14 @@ export default {
           v-if="activityTab"
           :loader="fetchActivityLoader"
           waiter-class="my-5 mx-auto d-block "
-          class="user-retrieve-activity__chart card p-5"
+          class="user-retrieve-activity__chart"
         >
-          <h2 class="text-primary">Reviewed record per day</h2>
-          <p class="text-muted">
-            Number of classified records over the last 15 days on all tasks.
-          </p>
-          <stacked-column-chart
-            v-if="chartActivities.length"
-            :data="chartActivities"
-            :barColors="['var(--column-color)']"
-            :max-value="chartMaxValue"
-            no-tooltips
-
-            bar-max-width="30px"
-            :x-axis-tick-format="formatDate"
-            :fixedHeight="300"
-            no-direct-labeling
-            class="my-4"
-          >
-          </stacked-column-chart>
+        <user-retrieve-activity-chart
+          :activity-ids="activityIds"
+          :last-date="lastDate"
+          :range="15"
+          selectedTask="all"
+          />
 
         </app-waiter>
         <!--STATS -->
@@ -299,55 +252,5 @@ export default {
     }
   }
 
-  &__chart {
-    background: $primary-10;
-    --column-color: #{$primary};
-
-    & /deep/ .stacked-column-chart {
-
-      &__groups__item {
-
-          &__bars {
-            border-bottom: solid 2px $primary_70;
-
-            &__item__value {
-              transform: translateY(-100%);
-              color: $primary;
-              font-weight: bold;
-              display:block !important;
-            }
-
-          }
-
-          &__label {
-            color: $primary;
-          }
-
-          &:not(:hover) {
-            .stacked-column-chart__groups__item__bars__item{
-                filter: grayscale(100%) brightness(2);
-              }
-            &:not(:nth-child(7n+1)) .stacked-column-chart__groups__item__label
-             {
-                  visibility: hidden;
-                }
-
-          }
-
-      }
-
-      & svg {
-        width: 100%;
-        .tick {
-          text{
-            color:$primary;
-          }
-          line{
-            display: none;
-          }
-        }
-      }
-    }
-  }
 }
 </style>
