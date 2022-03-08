@@ -104,6 +104,9 @@ export default {
     fetchActivityLoader () {
       return uniqueId('load-activity-chart-')
     },
+    isLoadingStats () {
+      return this.$wait.waiting(this.fetchTaskUserStatsLoader)
+    },
     user () {
       return User.find(this.username)
     },
@@ -180,7 +183,7 @@ export default {
           </b-form-group>
           <!--STATS FILTER -->
           <div
-            v-if="!activityTab && !isLoading"
+            v-if="!activityTab && !isLoadingStats"
             class="
               user-retrieve-activity__stats__filters
               d-flex
