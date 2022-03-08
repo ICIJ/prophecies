@@ -5,6 +5,8 @@ import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import TaskStatsCardHeading from '@/components/TaskStatsCardHeading.vue'
 import TaskStatsCardStatus from './TaskStatsCardStatus.vue'
 import StatsByRound from '@/components/StatsByRound.vue'
+import TaskUserStatistics from '@/models/TaskUserStatistics'
+import User from '@/models/User'
 
 export default {
   name: 'TaskStatsCard',
@@ -18,8 +20,8 @@ export default {
     taskId: {
       type: [Number, String]
     },
-    team: {
-      type: Boolean
+    checkerId: {
+      type: String
     },
     extended: {
       type: Boolean,
@@ -35,6 +37,42 @@ export default {
     }
   },
   computed: {
+    team () {
+      return this.checkerId === undefined
+    },
+    user () {
+      return User.find(this.checkerId)
+    },
+    userStats () {
+      if (this.user && !this.user.isMe) {
+        const progressByRound = Object.keys(this.task.userProgressByRound)
+          .reduce((prev, k) => { prev[k] = 0; return prev }, {})
+
+        const stats = TaskUserStatistics.query()
+          .where('taskId', this.taskId)
+          .where('checkerId', this.checkerId).get()
+        const sumRounds = stats.reduce((prev, curr) => {
+          prev.count += curr.totalCount
+          prev.done += curr.doneCount
+          prev.progressByRound[curr.round] = curr.progress
+          return prev
+        }, {
+          count: 0,
+          done: 0,
+          progressByRound,
+          progress: 0
+        })
+
+        sumRounds.progress = sumRounds.count ? sumRounds.done * 100 / sumRounds.count : 0
+        return sumRounds
+      }
+      return {
+        count: this.task.userTaskRecordsCount,
+        done: this.task.userTaskRecordsDoneCount,
+        progressByRound: this.task.userProgressByRound,
+        progress: this.task.userProgress
+      }
+    },
     task () {
       return Task.query().with('project').find(this.taskId)
     },
@@ -42,7 +80,7 @@ export default {
       if (this.team) {
         return this.task.taskRecordsCount
       }
-      return this.task.userTaskRecordsCount
+      return this.userStats.count
     },
     taskRecordsPendingCount () {
       return this.taskRecordsCount - this.taskRecordsDoneCount
@@ -51,19 +89,19 @@ export default {
       if (this.team) {
         return this.task.taskRecordsDoneCount
       }
-      return this.task.userTaskRecordsDoneCount
+      return this.userStats.done
     },
     progress () {
       if (this.team) {
         return this.task.progress
       }
-      return this.task.userProgress
+      return this.userStats.progress
     },
     progressByRound () {
       if (this.team) {
         return this.task.progressByRound
       }
-      return this.task.userProgressByRound
+      return this.userStats.progressByRound
     }
   }
 }

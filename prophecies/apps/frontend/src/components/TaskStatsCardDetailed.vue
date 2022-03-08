@@ -113,7 +113,9 @@ export default {
 </script>
 
 <template>
-  <task-stats-card class="stats-list__task-card my-5" :task-id="taskId" :team="checkerId!==undefined" extended>
+  <task-stats-card class="stats-list__task-card my-5"
+  :task-id="taskId"
+  :checker-id="checkerId" extended>
     <template v-if="fetchTaskUserStatsLoader" v-slot:taskStatsByRound="{stats}" >
       <stats-by-round
         v-for="(round,index) in stats.rounds"
