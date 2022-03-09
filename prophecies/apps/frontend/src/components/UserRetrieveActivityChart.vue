@@ -10,7 +10,7 @@ import ActionAggregate from '@/models/ActionAggregate'
 import { formatDate } from '@/utils/date'
 import LightDropdown from '@/components/LightDropdown.vue'
 
-const ALL__OPEN_TASKS_ID = '0_all'
+const ALL__OPEN_TASKS_ID = 'all'
 
 export default {
   components: { LightDropdown },
@@ -33,9 +33,7 @@ export default {
       sortByCb: (tasks) =>
         orderBy(tasks, function (task) {
           return TaskStatusOrder[task.status] === 1
-        }),
-      activityTab: true,
-      selectedTaskId: ALL__OPEN_TASKS_ID
+        })
     }
   },
   methods: {
@@ -56,6 +54,19 @@ export default {
     }
   },
   computed: {
+    selectedTaskId: {
+      get () {
+        if (this.dropdownTasksIds.includes(this.$route.query.taskId)) {
+          return this.$route.query.taskId
+        } else {
+          return ALL__OPEN_TASKS_ID
+        }
+      },
+      set (value) {
+        const query = { ...this.$route.query, taskId: value }
+        this.$router.push({ path: this.$route.path, query }, null)
+      }
+    },
     user () {
       return User.find(this.username)
     },
@@ -73,6 +84,9 @@ export default {
         prev[curr.taskId] = curr.task
         return prev
       }, {}))
+    },
+    dropdownTasksIds () {
+      return this.dropdownTasks.map(t => t.id)
     },
     taskLabel () {
       return find(this.dropdownTasks, { id: this.selectedTaskId }).name

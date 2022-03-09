@@ -15,7 +15,6 @@ import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
 import User from '@/models/User'
 import ActionAggregate from '@/models/ActionAggregate'
-import { fetchActivityIds } from '@/utils/history'
 import { formatDate } from '@/utils/date'
 
 export default {
@@ -37,7 +36,7 @@ export default {
       handler (activityTab) {
         if (activityTab) {
           this.waitFor(this.fetchActivityLoader, [
-            fetchActivityIds(this.user.id)
+            this.fetchActivityIds(this.user.id)
           ])
         } else {
           this.waitFor(this.fetchActivityLoader, [
@@ -55,9 +54,9 @@ export default {
         orderBy(tasks, function (task) {
           return TaskStatusOrder[task.status] === 1
         }),
-      activityTab: true,
       taskStatusFilter: true,
-      lastDate: new Date()
+      lastDate: new Date(),
+      range: 15
     }
   },
   methods: {
@@ -69,6 +68,13 @@ export default {
         return ['userRetrieveActivity', optionName, 'yours'].join('.')
       }
       return ['userRetrieveActivity', optionName, 'others'].join('.')
+    },
+    fetchActivityIds (userId) {
+      const params = {
+        date_after: this.lastDateParam,
+        'filter[user]': userId
+      }
+      return ActionAggregate.api().get('', { params })
     },
     fetchTaskUserStats () {
       const params = { 'filter[checker]': this.user.id }
@@ -88,14 +94,7 @@ export default {
     },
     updateSortByCallback (cb) {
       this.sortByCb = cb
-    },
-    activityIsSameDay (activityIndex, date) {
-      return this.activities[activityIndex] && moment(this.activities[activityIndex].date).isSame(date, 'day')
-    },
-    activityIsBeforeDay (activityIndex, date) {
-      return this.activities[activityIndex] && moment(this.activities[activityIndex].date).isBefore(date)
     }
-
   },
   computed: {
     fetchTaskUserStatsLoader () {
@@ -106,6 +105,10 @@ export default {
     },
     isLoadingStats () {
       return this.$wait.waiting(this.fetchTaskUserStatsLoader)
+    },
+    lastDateParam () {
+      const range_ = this.range * -1
+      return moment(this.lastDate).clone().add(range_, 'days').format('YYYY-MM-DD').toString()
     },
     user () {
       return User.find(this.username)
@@ -146,6 +149,15 @@ export default {
         ])
       }
       return sortedTasks
+    },
+    activityTab: {
+      get () {
+        return this.$route.query.view !== 'stats'
+      },
+      set (value) {
+        const query = { view: value ? 'chart' : 'stats' }
+        this.$router.push({ path: this.$route.path, query }, null)
+      }
     },
     onlyOpenTasks: {
       get () {
@@ -220,7 +232,7 @@ export default {
         <user-retrieve-activity-chart
           :activity-ids="activityIds"
           :last-date="lastDate"
-          :range="15"
+          :range="range"
           />
         </app-waiter>
         <!--STATS -->

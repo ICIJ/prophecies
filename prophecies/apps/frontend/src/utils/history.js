@@ -1,4 +1,3 @@
-import ActionAggregate from '@/models/ActionAggregate'
 import Action from '@/models/Action'
 import Task from '@/models/Task'
 
@@ -15,11 +14,4 @@ export const fetchHistoryItemsIds = async (userId, pageSize, pageNumber) => {
   await Task.api().get('', { params: { include: 'project' } })
 
   return Action.api().get('', { params: actionParams })
-}
-
-export const fetchActivityIds = async (userId) => {
-  const params = {
-    'filter[user]': userId
-  }
-  return ActionAggregate.api().get('', { params })
 }
