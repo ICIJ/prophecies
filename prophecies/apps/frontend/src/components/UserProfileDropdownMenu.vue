@@ -33,9 +33,6 @@ export default {
     historyRoute () {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-history', params }
-    },
-    inDev () {
-      return process.env.NODE_ENV === 'development'
     }
   }
 }
@@ -47,7 +44,7 @@ export default {
       <user-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveProfile.title.yours') }}
     </b-dropdown-item>
-    <b-dropdown-item v-if='inDev' :to="activityRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--activity">
+    <b-dropdown-item :to="activityRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--activity">
       <activity-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveActivity.title.yours') }}
     </b-dropdown-item>
