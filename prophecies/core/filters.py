@@ -1,11 +1,10 @@
-from django_filters import CharFilter, FilterSet, DateRangeFilter
+from django_filters import CharFilter, FilterSet, DateFromToRangeFilter
 from prophecies.core.models import TaskRecord, TaskRecordReview
 from prophecies.core.models.action_aggregate import ActionAggregate
 from prophecies.core.models.task_record_review import StatusType
 from prophecies.core.models.task_record import StatusType as TRStatusType
 from actstream.models import Action, actor_stream, target_stream
 from django.contrib.auth.models import User
-from django.db import models
 
 
 
@@ -116,17 +115,13 @@ class TaskRecordReviewFilter(FilterSet):
         return queryset
     
 class ActionAggregateFilter(FilterSet):
-    date__range = DateRangeFilter(method='date_range_filter')
+    date = DateFromToRangeFilter()
     
     class Meta:
         model = ActionAggregate
+        
         fields = {
-            'verb': ('exact', 'in',),
             'user': ('exact', 'in',),
+            'verb': ('exact', 'in',),
+            'date': (),
         }
-
-    # filter_overrides = {
-    #     models.DateField: {
-    #         'filter_class': django_filters.IsoDateTimeFilter
-    #     },
-    # }

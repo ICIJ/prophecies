@@ -1,5 +1,6 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
+from django_filters.rest_framework import DjangoFilterBackend
 from prophecies.core.filters import ActionAggregateFilter
 from prophecies.core.models import ActionAggregate
 from prophecies.apps.api.views.user import UserSerializer
@@ -28,7 +29,7 @@ class ActionAggregateViewSet(views.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     ordering = ['-date']
     filterset_class= ActionAggregateFilter
-
+    filter_backends = [DjangoFilterBackend]
     queryset = ActionAggregate.objects.all()
             
     def get_queryset(self):

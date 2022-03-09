@@ -1,5 +1,6 @@
 from actstream import action
 from django.contrib.auth.models import User
+from prophecies.core.filters import ActionAggregateFilter
 from prophecies.core.models import Choice, ChoiceGroup, Project, Task, ActionAggregate
 
 from django.test import TestCase
@@ -151,3 +152,21 @@ class TestActionAggregate(TestCase):
         
         
        
+    def test_filters_on_date_range(self):
+        yesterday = dt.date.today() - dt.timedelta(days=1)
+        lastweek = dt.date.today() - dt.timedelta(days=7)
+        lastmonth = dt.date.today() - dt.timedelta(days=30)
+        action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id, timestamp=yesterday)
+        action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id, timestamp=lastweek)
+        action.send(self.olivia, verb='added', target=self.django, task_id=self.task_shops.id, timestamp=lastmonth)
+        f = ActionAggregateFilter({'date_after': lastweek,'date_before':yesterday})
+        self.assertEqual(len(f.qs),2)
+            
+        
+        self.client.login(username='olivia', password='olivia')
+        url = '/api/v1/action-aggregates/?date_after=%s&date_before=%s' % (str(lastweek),str(yesterday))
+        request = self.client.get(url)
+        action_aggregates = request.json().get('data')
+        self.assertEqual(len(action_aggregates),2)
+        
+        
