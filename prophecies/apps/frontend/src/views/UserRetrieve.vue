@@ -93,9 +93,6 @@ export default {
         default:
           return 'UserIcon'
       }
-    },
-    inDev () {
-      return process.env.NODE_ENV === 'development'
     }
   },
   methods: {
@@ -143,7 +140,7 @@ export default {
           <user-icon class="mr-3" />
           {{ profileTitle }}
         </b-nav-item>
-        <b-nav-item v-if='inDev' :to="activityRoute" exact>
+        <b-nav-item :to="activityRoute" exact>
           <activity-icon class="mr-3" />
           {{ activityTitle }}
         </b-nav-item>
