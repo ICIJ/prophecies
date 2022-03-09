@@ -47,10 +47,16 @@ export default {
       this.$wait.end(loader)
     },
     activityIsSameDay (activityIndex, date) {
-      return this.activities[activityIndex] && moment(this.activities[activityIndex].date).isSame(date, 'day')
+      return (
+        this.activities[activityIndex] &&
+        moment(this.activities[activityIndex].date).isSame(date, 'day')
+      )
     },
     activityIsBeforeDay (activityIndex, date) {
-      return this.activities[activityIndex] && moment(this.activities[activityIndex].date).isBefore(date)
+      return (
+        this.activities[activityIndex] &&
+        moment(this.activities[activityIndex].date).isBefore(date)
+      )
     }
   },
   computed: {
@@ -80,13 +86,15 @@ export default {
       ]
     },
     tasks () {
-      return Object.values(this.activities.reduce((prev, curr) => {
-        prev[curr.taskId] = curr.task
-        return prev
-      }, {}))
+      return Object.values(
+        this.activities.reduce((prev, curr) => {
+          prev[curr.taskId] = curr.task
+          return prev
+        }, {})
+      )
     },
     dropdownTasksIds () {
-      return this.dropdownTasks.map(t => t.id)
+      return this.dropdownTasks.map((t) => t.id)
     },
     taskLabel () {
       return find(this.dropdownTasks, { id: this.selectedTaskId }).name
@@ -123,7 +131,10 @@ export default {
         const size = data.push({ date: currDate.clone(), value: 0 })
         while (this.activityIsSameDay(activityIndex, currDate)) {
           const { count, taskId } = this.activities[activityIndex]
-          if (this.selectedTaskId === ALL__OPEN_TASKS_ID || this.selectedTaskId === taskId) {
+          if (
+            this.selectedTaskId === ALL__OPEN_TASKS_ID ||
+            this.selectedTaskId === taskId
+          ) {
             data[size - 1].value += count
           }
           ++activityIndex
@@ -137,23 +148,25 @@ export default {
 
 <template>
   <!--CHART -->
-  <div
-    class="user-retrieve-activity__chart card p-5"
-  >
-  <div class="d-flex">
-  <div class="col-8">
-    <h2 class="text-primary">Reviewed record per day</h2>
-    <p class="text-muted">
-      Number of classified records over the last {{range}} days on {{taskLabel}}.
-    </p>
-  </div>
-  <div class="col-4">
-    <light-dropdown class="d-flex flex-row-reverse"
-    :btnClassList="['btn', 'btn-lighter']"
-    :items="dropdownTasks"
-    :selectedId.sync="selectedTaskId"/>
-</div>
-  </div>
+  <div class="user-retrieve-activity__chart card p-5">
+    <div class="d-flex">
+      <div class="col-8">
+        <h2 class="text-primary">Reviewed record per day</h2>
+        <p class="text-muted">
+          Number of classified records over the last {{ range }} days<span  v-if="chartActivitiesByTaskId.length"> on
+          {{ taskLabel }}</span>.
+        </p>
+      </div>
+      <div class="col-4">
+        <light-dropdown
+         v-if="chartActivitiesByTaskId.length"
+          class="d-flex flex-row-reverse"
+          :btnClassList="['btn', 'btn-lighter']"
+          :items="dropdownTasks"
+          :selectedId.sync="selectedTaskId"
+        />
+      </div>
+    </div>
     <stacked-column-chart
       v-if="chartActivitiesByTaskId.length"
       :data="chartActivitiesByTaskId"
@@ -166,60 +179,53 @@ export default {
       :fixedHeight="300"
       no-direct-labeling
       class="my-4"
-    >
-    </stacked-column-chart>
+   />
+    <p class="p-5 text-center" v-else>No activity recorded over this period</p>
   </div>
 </template>
 <style lang="scss" scoped>
-
 .user-retrieve-activity__chart {
-    background: $primary-10;
-    --column-color: #{$primary};
+  background: $primary-10;
+  --column-color: #{$primary};
 
-    & /deep/ .stacked-column-chart {
+  & /deep/ .stacked-column-chart {
+    &__groups__item {
+      &__bars {
+        border-bottom: solid 2px $primary_70;
 
-      &__groups__item {
-
-          &__bars {
-            border-bottom: solid 2px $primary_70;
-
-            &__item__value {
-              transform: translateY(-100%);
-              color: $primary;
-              font-weight: bold;
-              display:block !important;
-            }
-
-          }
-
-          &__label {
-            color: $primary;
-          }
-
-          &:not(:hover) {
-            .stacked-column-chart__groups__item__bars__item{
-                filter: grayscale(100%) brightness(2);
-              }
-            &:not(:nth-child(7n+1)) .stacked-column-chart__groups__item__label
-             {
-                  visibility: hidden;
-                }
-
-          }
-
+        &__item__value {
+          transform: translateY(-100%);
+          color: $primary;
+          font-weight: bold;
+          display: block !important;
+        }
       }
 
-      & svg {
-        width: 100%;
-        .tick {
-          text{
-            color:$primary;
-          }
-          line{
-            display: none;
-          }
+      &__label {
+        color: $primary;
+      }
+
+      &:not(:hover) {
+        .stacked-column-chart__groups__item__bars__item {
+          filter: grayscale(100%) brightness(2);
+        }
+        &:not(:nth-child(7n + 1)) .stacked-column-chart__groups__item__label {
+          visibility: hidden;
         }
       }
     }
+
+    & svg {
+      width: 100%;
+      .tick {
+        text {
+          color: $primary;
+        }
+        line {
+          display: none;
+        }
+      }
+    }
+  }
 }
 </style>
