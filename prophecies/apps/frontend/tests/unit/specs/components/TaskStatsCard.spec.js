@@ -52,7 +52,7 @@ describe('TaskStatsCard', () => {
       const localVue = createLocalVue()
       // Configure the local vue with plugins
       const { i18n } = Core.init(localVue).useAll()
-      const propsData = { taskId: '1', checkerId: User.me().id }
+      const propsData = { taskId: '1', team: false }
       wrapper = shallowMount(TaskStatsCard, { localVue, propsData, i18n })
     })
 
@@ -60,7 +60,7 @@ describe('TaskStatsCard', () => {
       wrapper.destroy()
     })
     it('should show the team progress', async () => {
-      await wrapper.setProps({ checkerId: undefined })
+      await wrapper.setProps({ team: true })
       const element = wrapper.find('.task-stats-card__progress')
       expect(element.text()).toBe('40%')
     })
@@ -76,7 +76,7 @@ describe('TaskStatsCard', () => {
     })
 
     it('should show 50% progress at round 1 for the team', async () => {
-      await wrapper.setProps({ checkerId: undefined })
+      await wrapper.setProps({ team: true })
       const element = wrapper.findAll('stats-by-round-stub').at(0)
       expect(element.attributes('progress')).toBe('50')
     })
@@ -87,7 +87,7 @@ describe('TaskStatsCard', () => {
     })
 
     it('should show 25% progress at round 2 for the team', async () => {
-      await wrapper.setProps({ checkerId: undefined })
+      await wrapper.setProps({ team: true })
       const element = wrapper.findAll('stats-by-round-stub').at(1)
       expect(element.attributes('progress')).toBe('25')
     })
@@ -98,7 +98,7 @@ describe('TaskStatsCard', () => {
     })
 
     it('should show 30% progress at round 3 for the team', async () => {
-      await wrapper.setProps({ checkerId: undefined })
+      await wrapper.setProps({ team: true })
       const element = wrapper.findAll('stats-by-round-stub').at(2)
       expect(element.attributes('progress')).toBe('30')
     })

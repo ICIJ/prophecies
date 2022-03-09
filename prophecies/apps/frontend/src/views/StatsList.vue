@@ -30,7 +30,8 @@
               class="stats-list__task-card my-5"
               v-for="task in displayedTasks" :key="task.id"
               :task-id="task.id"
-              :checker-id="checkerId"/>
+              :team="teamTaskStats"
+              :checker-id="me"/>
             </app-waiter>
           </div>
         </div>
@@ -50,9 +51,9 @@ import TaskStatsCardDetailed from '@/components/TaskStatsCardDetailed'
 import Task, { TaskStatusEnum, TaskStatusOrder } from '@/models/Task'
 
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
+import User from '@/models/User'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
-import User from '@/models/User'
 
 export default {
   name: 'StatsList',
@@ -104,6 +105,9 @@ export default {
     }
   },
   computed: {
+    me () {
+      return User.me().id
+    },
     tasks () {
       return Task
         .query()
@@ -114,9 +118,6 @@ export default {
     displayedTasks () {
       const sortedTasks = this.sortByCb(this.tasks)
       return this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatusEnum.OPEN || TaskStatusEnum.LOCKED]) : sortedTasks
-    },
-    checkerId () {
-      return this.teamTaskStats ? undefined : User.me().id
     },
     onlyOpenTasks: {
       get () {

@@ -23,6 +23,9 @@ export default {
     checkerId: {
       type: String
     },
+    team: {
+      type: Boolean
+    },
     extended: {
       type: Boolean,
       default: false
@@ -37,14 +40,11 @@ export default {
     }
   },
   computed: {
-    team () {
-      return this.checkerId === undefined
-    },
     user () {
       return User.find(this.checkerId)
     },
     userStats () {
-      if (this.user && !this.user.isMe) {
+      if (!this.isMe) {
         const progressByRound = Object.keys(this.task.userProgressByRound)
           .reduce((prev, k) => { prev[k] = 0; return prev }, {})
 
@@ -76,8 +76,14 @@ export default {
     task () {
       return Task.query().with('project').find(this.taskId)
     },
+    isTeam () {
+      return this.team === true
+    },
+    isMe () {
+      return !this.user || this.user.isMe
+    },
     taskRecordsCount () {
-      if (this.team) {
+      if (this.isTeam) {
         return this.task.taskRecordsCount
       }
       return this.userStats.count
@@ -86,19 +92,19 @@ export default {
       return this.taskRecordsCount - this.taskRecordsDoneCount
     },
     taskRecordsDoneCount () {
-      if (this.team) {
+      if (this.isTeam) {
         return this.task.taskRecordsDoneCount
       }
       return this.userStats.done
     },
     progress () {
-      if (this.team) {
+      if (this.isTeam) {
         return this.task.progress
       }
       return this.userStats.progress
     },
     progressByRound () {
-      if (this.team) {
+      if (this.isTeam) {
         return this.task.progressByRound
       }
       return this.userStats.progressByRound

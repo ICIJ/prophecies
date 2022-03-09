@@ -18,6 +18,9 @@ export default {
     taskId: {
       type: String
     },
+    team: {
+      type: Boolean
+    },
     checkerId: {
       type: String
     }
@@ -33,7 +36,7 @@ export default {
       return TaskUserStatistics.api().get()
     },
     fetchTaskUserChoiceStats () {
-      const filterChecker = this.checkerId ? { 'filter[checker]': this.checkerId } : null
+      const filterChecker = (this.checkerId) ? { 'filter[checker]': this.checkerId } : null
       const params = { include: 'checker,task.choice_group.choices', ...filterChecker }
 
       return TaskUserChoiceStatistics.api('', { params }).get()
@@ -45,7 +48,7 @@ export default {
     },
     taskUserStatistics (taskId, round) {
       let request = TaskUserStatistics.query().with('checker').where('taskId', taskId).where('round', round)
-      if (this.checkerId) {
+      if (!this.team && this.checkerId) {
         request = request.where('checkerId', this.checkerId)
       }
       return request.get()
@@ -57,7 +60,7 @@ export default {
         .with('choice')
         .with('choice.choiceGroup')
         .where('round', round)
-      if (this.checkerId) {
+      if (!this.team && this.checkerId) {
         request = request.where('checkerId', this.checkerId)
       }
       const stats = request.get()
@@ -115,6 +118,7 @@ export default {
 <template>
   <task-stats-card class="stats-list__task-card my-5"
   :task-id="taskId"
+  :team="team"
   :checker-id="checkerId" extended>
     <template v-if="fetchTaskUserStatsLoader" v-slot:taskStatsByRound="{stats}" >
       <stats-by-round

@@ -89,7 +89,17 @@ describe('TaskStatsCardDetailed', () => {
         rounds = card.findAll('.stats-list__task-card__round')
         round = rounds.at(0)
       })
+      describe('show details of user 1', () => {
+        beforeEach(async () => {
+          await wrapper.setProps({ taskId: '3', checkerId: '1' })
+        })
+        it('should show the stats of 1 checkers', async () => {
+          const checkersRows = round.findAll('.stats-by-users__row')
 
+          expect(checkersRows).toHaveLength(1)
+          expect(checkersRows.at(0).text()).toContain('43%')
+        })
+      })
       it('should show the stats of 2 checkers', async () => {
         const checkersRows = round.findAll('.stats-by-users__row')
 
