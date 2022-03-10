@@ -14,10 +14,10 @@ export const ITEM_TYPES = {
 }
 
 const ITEM_TYPES_CONTENT = {
-  [ITEM_TYPES.TIP]: { prefix: '<span class="history-list-item__prefix history-list-item__prefix__tip"></span>', text: 'added a new tip' },
-  [ITEM_TYPES.CHECKED_RECORDS]: { prefix: '<span class="history-list-item__prefix "></span>', text: 'checked $value records' },
-  [ITEM_TYPES.CLOSED_TASK]: { prefix: '<span class="history-list-item__closed-task-prefix">🎉</span>', text: 'closed the task' },
-  [ITEM_TYPES.MENTIONED_USER]: { prefix: '<span class="history-list-item__prefix history-list-item__prefix__mention"></span>', text: 'mentioned $value in a note' }
+  [ITEM_TYPES.TIP]: { prefix: '<span class="history-list-item__prefix history-list-item__prefix__tip"></span>' },
+  [ITEM_TYPES.CHECKED_RECORDS]: { prefix: '<span class="history-list-item__prefix "></span>' },
+  [ITEM_TYPES.CLOSED_TASK]: { prefix: '<span class="history-list-item__closed-task-prefix">🎉</span>' },
+  [ITEM_TYPES.MENTIONED_USER]: { prefix: '<span class="history-list-item__prefix history-list-item__prefix__mention"></span>' }
 }
 
 export default {

@@ -1,20 +1,12 @@
 <script>
 import { get, noop, uniqueId } from 'lodash'
-import PageHeader from '@/components/PageHeader'
 import UserNotifications from '@/components/UserNotifications'
-import User from '@/models/User'
 import UserNotification from '@/models/UserNotification'
 
 export default {
   name: 'UserRetrieveBookmarks',
   components: {
-    PageHeader,
     UserNotifications
-  },
-  props: {
-    username: {
-      type: String
-    }
   },
   data () {
     return {
@@ -26,23 +18,13 @@ export default {
     return this.fetchWithLoader()
   },
   watch: {
-    pageNumber (value) {
+    pageNumber () {
       return this.fetchWithLoader()
     }
   },
   computed: {
-    user () {
-      return User.find(this.username)
-    },
-    notifications () {
-      return UserNotification
-        .query()
-        .whereIdIn(notificationIds)
-        .orderBy('createdAt', 'desc')
-        .get()
-    },
     loader () {
-      return uniqueId('user-retreive-notifications-')
+      return uniqueId('user-retrieve-notifications-')
     },
     fetching () {
       return this.$wait.is(this.loader)
@@ -91,11 +73,11 @@ export default {
 <template>
   <div class="user-retrieve-notifications">
     <user-notifications :notification-ids="notificationIds" :fetching="fetching" />
-    <custom-pagination 
-      compact 
+    <custom-pagination
+      compact
       v-if="showPagination"
-      v-model="pageNumber" 
-      :per-page="pageSize" 
+      v-model="pageNumber"
+      :per-page="pageSize"
       :total-rows="count" />
   </div>
 </template>

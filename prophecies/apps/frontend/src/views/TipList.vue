@@ -41,7 +41,6 @@ export default {
   data () {
     return {
       showLatestTips: true,
-      FILTER_TYPES: Object.freeze(FILTER_TYPES),
       projectFilter: this.query[FILTER_TYPES.PROJECT],
       taskFilter: this.query[FILTER_TYPES.TASK],
       creatorFilter: this.query[FILTER_TYPES.CREATOR],
