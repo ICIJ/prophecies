@@ -4,7 +4,7 @@ import UserNotifications from '@/components/UserNotifications'
 import UserNotification from '@/models/UserNotification'
 
 export default {
-  name: 'UserRetrieveBookmarks',
+  name: 'UserRetrieveNotifications',
   components: {
     UserNotifications
   },

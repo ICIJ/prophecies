@@ -7,7 +7,7 @@ import TipCard from '@/components/TipCard'
 import Tip from '@/models/Tip'
 
 export default {
-  name: 'Tips',
+  name: 'TipRetrieve',
   components: {
     AppSidebar,
     AppHeader,

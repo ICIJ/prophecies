@@ -10,6 +10,7 @@ import TaskRecordReview from '@/models/TaskRecordReview'
 import Tip from '@/models/Tip'
 
 export default {
+  name: 'AppSearchForm',
   props: {
     isNav: {
       type: Boolean
