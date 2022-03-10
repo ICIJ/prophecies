@@ -1,8 +1,9 @@
 
 <script>
 import { get, uniqueId } from 'lodash'
-import { fetchHistoryItemsIds } from '@/utils/history'
 import User from '@/models/User'
+import Action from '@/models/Action'
+import Task from '@/models/Task'
 
 export default {
   name: 'HistoryFetcher',
@@ -46,10 +47,24 @@ export default {
       if (this.username && !this.user?.id) {
         return Promise.reject(new Error('User not found'))
       }
-      const { response } = await fetchHistoryItemsIds(this.user?.id, this.pageSize, this.pageNumber)
+      const { response } = await this.fetchHistoryItemsIds(this.user?.id, this.pageSize, this.pageNumber)
       this.actionIds = get(response, 'data.data', []).map(a => a.id)
       this.count = get(response, 'data.meta.pagination.count', 0)
+    },
+    async fetchHistoryItemsIds (userId, pageSize, pageNumber) {
+      const userFilterParam = userId ? { 'filter[user_stream]': userId } : undefined
+      const paginationParam = pageSize ? { 'page[size]': pageSize, 'page[number]': pageNumber } : undefined
+      const actionParams = {
+        'filter[verb__in]': 'mentioned,created,closed,created-aggregate',
+        ...userFilterParam,
+        ...paginationParam
+      }
+
+      // TODO MV CD improve by retrieving only task actions. Maybe do the same for users
+      await Task.api().get('', { params: { include: 'project' } })
+      return Action.api().get('', { params: actionParams })
     }
+
   },
   computed: {
     fetchHistoryLoader () {
