@@ -8,11 +8,6 @@ export default {
     ShortcutListCard,
     TipListCard
   },
-  computed: {
-    taskId () {
-      return this.$route.params.taskId || null
-    }
-  },
   async created () {
     if (await this.$core.getUser()) {
       // Bind root events
@@ -76,7 +71,7 @@ export default {
       ref="modal-tips"
       hide-footer
       hide-header>
-      <tip-list-card :query="{ 'filter[task]': taskId }">
+      <tip-list-card >
         <template #header="{ taskAttributes }">
           <b-btn class="float-right px-2" variant="link" @click="$refs['modal-tips'].toggle()">
             <x-icon />

@@ -26,6 +26,7 @@
 import { uniqueId } from 'lodash'
 import AppWaiter from '@/components/AppWaiter'
 import Tip from '@/models/Tip'
+import Task from '@/models/Task'
 import TipCard from '@/components/TipCard'
 
 export default {
@@ -33,19 +34,6 @@ export default {
   components: {
     AppWaiter,
     TipCard
-  },
-  props: {
-    query: {
-      type: Object,
-      default: () => ({
-        'filter[task]': null
-      })
-    }
-  },
-  data () {
-    return {
-      taskFilter: 'filter[task]'
-    }
   },
   created () {
     return this.setup()
@@ -56,22 +44,20 @@ export default {
     },
     tips () {
       return Tip.query()
-        .with('project')
-        .with('task')
-        .where(({ taskId }) => {
-          return !this.query['filter[task]'] || taskId === this.query['filter[task]']
-        })
+        .where(({ taskId }) => !taskId || taskId === this.taskId)
         .get()
     },
+    taskId () {
+      return this.$route.params.taskId || null
+    },
+    task () {
+      return Task.query().with('project').find(this.taskId)
+    },
     taskName () {
-      if (this.tips.length) {
-        return this.tips[0].task.name
-      }
+      return this.task?.name
     },
     projectName () {
-      if (this.tips.length) {
-        return this.tips[0].project.name
-      }
+      return this.task?.project?.name
     }
   },
   methods: {
