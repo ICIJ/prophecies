@@ -10,7 +10,7 @@ import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
 describe('TaskRecordReviewChoiceForm', () => {
   let wrapper
 
-  function createContainer() {
+  function createContainer () {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -28,8 +28,8 @@ describe('TaskRecordReviewChoiceForm', () => {
       const localVue = createLocalVue()
       const propsData = { taskRecordReviewId: '36' }
       // Configure the local vue with plugins
-      const { store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(TaskRecordReviewChoiceForm, { attachTo, localVue, propsData, store, wait })
+      const { i18n, store, wait } = Core.init(localVue).useAll()
+      wrapper = mount(TaskRecordReviewChoiceForm, { attachTo, i18n, localVue, propsData, store, wait })
     })
 
     it('should show 3 choices items', () => {
@@ -70,8 +70,8 @@ describe('TaskRecordReviewChoiceForm', () => {
       const localVue = createLocalVue()
       const propsData = { taskRecordReviewId: '37' }
       // Configure the local vue with plugins
-      const { store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(TaskRecordReviewChoiceForm, { localVue, propsData, store, wait })
+      const { i18n, store, wait } = Core.init(localVue).useAll()
+      wrapper = mount(TaskRecordReviewChoiceForm, { i18n, localVue, propsData, store, wait })
     })
 
     it('should be in selected state', async () => {
@@ -85,8 +85,8 @@ describe('TaskRecordReviewChoiceForm', () => {
       const localVue = createLocalVue()
       const propsData = { taskRecordReviewId: '25' }
       // Configure the local vue with plugins
-      const { store, wait } = Core.init(localVue).useAll()
-      wrapper = shallowMount(TaskRecordReviewChoiceForm, { localVue, propsData, store, wait })
+      const { i18n, store, wait } = Core.init(localVue).useAll()
+      wrapper = shallowMount(TaskRecordReviewChoiceForm, { i18n, localVue, propsData, store, wait })
     })
 
     it('should be in enabled state when record is not locked and task is open ', () => {
@@ -114,8 +114,8 @@ describe('TaskRecordReviewChoiceForm', () => {
       await wrapper.setProps(propsData)
       const element = wrapper.find('.task-record-review-choice-form')
       expect(element.classes('task-record-review-choice-form--is-locked')).toBeTruthy()
-    })    
-    
+    })
+
     it('should not be in disabled state when record is not locked and task is open', async () => {
       const { taskId, taskRecordId } = TaskRecordReview.find('38')
       Task.update({ where: taskId, data: { status: 'OPEN' } })
@@ -127,5 +127,4 @@ describe('TaskRecordReviewChoiceForm', () => {
       expect(element.classes('task-record-review-choice-form--is-locked')).toBeFalsy()
     })
   })
-
 })

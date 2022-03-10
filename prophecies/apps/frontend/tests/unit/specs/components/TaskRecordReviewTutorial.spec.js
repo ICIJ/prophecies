@@ -17,10 +17,13 @@ describe('TaskRecordReviewTutorial', () => {
   beforeEach(() => {
     const attachTo = createContainer()
     const localVue = createLocalVue()
-    Core.init(localVue).useAll()
+    // Configure the local vue
+    const core = Core.init(localVue).useAll()
+    const { i18n } = core
     // Configure the local vue with plugins
     wrapper = mount(TaskRecordReviewTutorial, {
       attachTo,
+      i18n,
       localVue
     })
   })

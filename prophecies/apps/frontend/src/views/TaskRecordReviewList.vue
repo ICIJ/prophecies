@@ -269,7 +269,7 @@ export default {
         await this.waitFor(this.fetchAllLoader, this.fetchAll)
         this.$core.setPageTitle(this.task.name)
       } catch (error) {
-        const title = 'Unable to find this resource'
+        const title = this.$t('general.unableToFindThisResource')
         this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
@@ -408,7 +408,7 @@ export default {
              size="xl">
       <template #modal-header="{ close }">
         <b-button variant="link" class="p-0" @click="close()">
-          Back to list view
+          {{$t('taskRecordReviewList.backToListView')}}
         </b-button>
       </template>
       <cinematic-view @previousPage="goToPreviousPage"
@@ -471,7 +471,7 @@ export default {
                 <div class="ml-auto">
                   <b-btn :variant="filtersTogglerVariant" class="border font-weight-bold" @click="toggleFilters">
                     <filter-icon size="1x" class="mr-1" />
-                    Filters
+                    {{$t('taskRecordReviewList.filters')}}
                   </b-btn>
                 </div>
               </div>
@@ -534,7 +534,7 @@ export default {
             </app-waiter>
           </div>
           <div v-else class="text-center text-muted text-small mx-auto">
-            No records assigned yet.
+            {{$t('taskRecordReviewList.noRecordAssigned')}}
           </div>
         </app-waiter>
       </div>

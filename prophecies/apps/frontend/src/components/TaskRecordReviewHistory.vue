@@ -88,14 +88,14 @@ export default {
         <user-link class="text-truncate" :user-id="checker.id">
           {{ checker.displayName }}
           <template v-if="checker.isMe">
-            (you)
+            ({{$t('taskRecordReviewHistory.you')}})
           </template>
         </user-link>
       </div>
       <div v-if="choice!==null" class="task-record-review-history__checker__choice">
         <choice-badge :name="choice.name" :value="choice.value" class="task-record-review-history__checker__choice__badge">
           <template #afterTooltip v-if="checker.isMe">
-            |<b-btn size="sm" variant="link" class="text-white" @click="cancelReview(choice)">Cancel my choice</b-btn>
+            |<b-btn size="sm" variant="link" class="text-white" @click="cancelReview(choice)">{{$t('taskRecordReviewHistory.cancelMyChoice')}}</b-btn>
           </template>
         </choice-badge>
       </div>
@@ -107,7 +107,7 @@ export default {
             </span>
           </template>
           <template v-else>
-            <b-btn variant="link" class="p-0" @click="selectSameChoice({ alternativeValue, choice })" title="Use the same value" v-b-tooltip.hover>
+            <b-btn variant="link" class="p-0" @click="selectSameChoice({ alternativeValue, choice })" :title="$t('taskRecordReviewHistory.useTheSameValue')" v-b-tooltip.hover>
               <span class="text-truncate text-dark px-2">
                 {{ alternativeValue | alternativeValueName }}
               </span>
@@ -117,10 +117,10 @@ export default {
       </div>
       <b-btn variant="link" size="sm" class="task-record-review-history__checker__note" @click="emitToggleNotes(id)">
         <template v-if="!!note">
-          <message-square-icon size="1x" class="mr-1" />1 note
+          <message-square-icon size="1x" class="mr-1" />{{$t('taskRecordReviewHistory.oneNote')}}
         </template>
         <template v-else-if="checker.isMe">
-          <edit-3-icon size="1x" class="mr-1" />Comment
+          <edit-3-icon size="1x" class="mr-1" />{{$t('taskRecordReviewHistory.commentVerb')}}
         </template>
       </b-btn>
     </div>

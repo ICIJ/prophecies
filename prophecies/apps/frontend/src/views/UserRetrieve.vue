@@ -25,7 +25,7 @@ export default {
       await this.fetchUserWithLoader()
       this.$core.setPageTitle(this.title)
     } catch (error) {
-      const title = 'Unable to find this resource'
+      const title = this.$t('general.unableToFindThisResource')
       this.$router.replace({ name: 'error', params: { title, error } })
     }
   },

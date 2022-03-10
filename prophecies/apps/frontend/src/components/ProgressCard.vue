@@ -18,7 +18,7 @@
             <div class="flex-grow-1 pt-1 pb-4">
               <b-progress :value="meanProgress" :max="100" class="mb-1" />
               <span class="progress-card__items__item__name">
-                all open tasks
+                {{ $t("progressCard.allOpenTasks") }}
               </span>
             </div>
           </div>
@@ -44,7 +44,7 @@
       </div>
     </template>
     <div v-else class="progress-card__no-items text-center text-secondary text-small">
-      No open tasks
+      {{ $t("progressCard.noOpenTasks") }}
     </div>
   </div>
 </template>

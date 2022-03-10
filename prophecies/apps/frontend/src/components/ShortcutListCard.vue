@@ -4,10 +4,10 @@
       <slot name="header" />
       <div :class="contentClass" class="shortcut-list-card__content px-5 pt-4 pb-0">
         <h2 class="shortcut-list-card__content__title" v-if="!hideTitle">
-          Shortcuts
+          {{$t('shortcurListCard.shortcuts')}}
         </h2>
         <h3 class="text-primary mb-3">
-          For all tasks
+          {{$t('shortcurListCard.forAllTasks')}}
         </h3>
         <div class="row shortcut-list-card__content__row" v-for="(shortCut, i) in defaultShortcuts" :key="`general-shortcut-${i}`">
           <div class="col shortcut-list-card__content__row__name font-weight-bold">
@@ -91,7 +91,7 @@ export default {
         .get()
     }
   },
-  created() {
+  created () {
     return this.setup()
   },
   methods: {

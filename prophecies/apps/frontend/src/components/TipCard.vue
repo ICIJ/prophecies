@@ -53,9 +53,7 @@ export default {
       {{ $t("tips.lastModified") }}: <strong>
         <user-link class="text-truncate" :user-id="tip.creator.id" no-card>
           {{ tip.creator.displayName }}
-          <template v-if="tip.creator.isMe">
-            (you)
-          </template>
+          <template v-if="tip.creator.isMe">({{$t("tips.you")}})</template>
         </user-link>
         </strong>,
       <router-link

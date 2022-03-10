@@ -51,7 +51,9 @@ export default {
       try {
         await this.waitFor(this.fetchBookmarksLoader, this.fetchAll)
       } catch (error) {
-        const title = 'Unable to retrieve the bookmarks'
+        const title = this.$t(
+          'userRetrieveBookmarks.unableToRetrieveTheBookmarks'
+        )
         this.$router.replace({ name: 'error', params: { title, error } })
       }
     },

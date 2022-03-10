@@ -24,8 +24,8 @@ describe('TaskRecordReviewBulkChoiceForm', () => {
     const localVue = createLocalVue()
     const propsData = { taskId: '1' }
     // Configure the local vue with plugins
-    const { store, wait } = Core.init(localVue).useAll()
-    wrapper = mount(TaskRecordReviewBulkChoiceForm, { attachTo, localVue, propsData, store, wait })
+    const { i18n, store, wait } = Core.init(localVue).useAll()
+    wrapper = mount(TaskRecordReviewBulkChoiceForm, { attachTo, i18n, localVue, propsData, store, wait })
   })
 
   it('should show 3 choices items', () => {

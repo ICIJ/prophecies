@@ -63,7 +63,7 @@ export default {
         <template #header>
           <b-btn class="float-right px-2" variant="link" @click="$refs['modal-shortcuts'].toggle()">
             <x-icon />
-            <span class="sr-only">Close</span>
+            <span class="sr-only">{{$t('app.close')}}</span>
           </b-btn>
         </template>
       </shortcut-list-card>
@@ -80,12 +80,12 @@ export default {
         <template #header="{ taskAttributes }">
           <b-btn class="float-right px-2" variant="link" @click="$refs['modal-tips'].toggle()">
             <x-icon />
-            <span class="sr-only">Close</span>
+            <span class="sr-only">{{$t('app.close')}}</span>
           </b-btn>
 
           <ul class="app__breadcrumb list-inline mt-3 mb-5 pt-3 text-primary">
             <li class="list-inline-item app__breadcrumb__item app__item--dashboard mt-1">
-              <h3>Tips for {{ taskAttributes.projectName }} > {{ taskAttributes.taskName }} </h3>
+              <h3>{{$t('app.tipsFor')}} {{ taskAttributes.projectName }} > {{ taskAttributes.taskName }} </h3>
             </li>
           </ul>
         </template>

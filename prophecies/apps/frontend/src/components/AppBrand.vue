@@ -1,4 +1,4 @@
-<template>  
+<template>
   <router-link class="app-brand" :to="{ name: 'dashboard' }">
     <h1 class="app-brand__app-name mb-0 font-weight-bold">
       <img class="app-brand__app-name__logo" src="@/assets/images/name-and-logo.svg" :alt="$config.get('appName')" />

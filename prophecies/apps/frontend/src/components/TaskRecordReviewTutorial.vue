@@ -11,28 +11,28 @@ export default {
     return {
       stepNumber: 1,
       steps: [{
-        text: 'Read the content to be checked',
+        text: this.$t('tutorial.readTheContent'),
         class: 'offset-2 col-8 ',
         width: '130px'
       },
       {
-        text: 'Check whether the predicted value is correct',
+        text: this.$t('tutorial.checkPredictedValue'),
         class: 'ml-auto col-3',
         width: '180px'
       },
       {
-        text: 'Select (or type) your choice',
+        text: this.$t('tutorial.selectChoice'),
         class: 'col-xxl-6 ',
         width: '130px'
       },
       {
-        text: "Read others' choices (click another user's choice to select the same!)",
+        text: this.$t('tutorial.readOthersChoices'),
         class: 'col-lg-6 col-xxl-6 ',
         iconAlign: 'float-left',
         width: '250px'
       },
       {
-        text: 'Comment (you can mention other checkers with @username, or everyone with @project)',
+        text: this.$t('tutorial.comment'),
         class: 'offset-lg-6 col-lg-5 offset-xxl-6 col-xxl-5 p-0',
         iconAlign: 'float-right ',
         width: '320px'
@@ -84,7 +84,7 @@ export default {
         <div>
           <coffee-icon />
         </div>
-        <h2 class=" pl-3 pt-1 task-record-review-tutorial__first-time-question ">First time here?</h2>
+        <h2 class=" pl-3 pt-1 task-record-review-tutorial__first-time-question ">{{$t('tutorial.firstTimeHere')}}</h2>
       </div>
 
       <div class="col-auto task-record-review-tutorial-card__buttons">
@@ -94,14 +94,14 @@ export default {
         size="sm"
         v-if="!isLastStep"
         variant="link"
-        >Skip tutorial</b-btn>
+        >{{$t('tutorial.skip')}}</b-btn>
         <b-btn
           @click="previousTutorialStep()"
           class="mx-3 py-2 pr-3 task-record-review-tutorial-card__buttons__previous"
           v-if="!isFirstStep"
           variant="outline-primary"
         >
-          <arrow-left-icon size="0.8x" class="mr-3 align-baseline text-right task-record-review-tutorial-card__buttons__arrow" /> Previous
+          <arrow-left-icon size="0.8x" class="mr-3 align-baseline text-right task-record-review-tutorial-card__buttons__arrow" /> {{$t('tutorial.previous')}}
         </b-btn>
         <b-btn
           @click="nextTutorialStep()"
@@ -109,7 +109,7 @@ export default {
           v-if="!isLastStep"
           variant="warning"
         >
-          <span class="task-record-review-tutorial__right-button-width">Next
+          <span class="task-record-review-tutorial__right-button-width">{{$t('tutorial.next')}}
           </span>
             <arrow-right-icon size="0.8x" class="ml-3 align-baseline task-record-review-tutorial__right-button-icon" />
         </b-btn>
@@ -119,7 +119,7 @@ export default {
           v-else
           variant="warning"
         >
-          <span class="task-record-review-tutorial__right-button-width">Close
+          <span class="task-record-review-tutorial__right-button-width">{{$t('tutorial.close')}}
           </span>
             <XIcon size="1.2x" class="ml-3  task-record-review-tutorial__right-button-icon "/>
         </b-btn>

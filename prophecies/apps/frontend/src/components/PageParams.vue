@@ -2,24 +2,24 @@
   <div class="page-params">
     <div class="row">
       <label class="page-params__project col-lg-4 col-xl-3">
-        <div class="mb-3">Project</div>
+        <div class="mb-3">{{ $t('pageParams.project') }}</div>
         <multiselect :allow-empty ="true"
                      :show-labels="false"
                      :options="projectOptions"
                      :value="selectedProjectOption"
                      @input="$emit('update:projectId', idOrNull($event))"
-                     placeholder="Select a project"
+                     :placeholder="$t('pageParams.selectAProject')"
                      label="name"
                      track-by="id" />
       </label>
       <label class="page-params__task col-lg-4 col-xl-3">
-        <div class="mb-3">Task</div>
+        <div class="mb-3">{{ $t('pageParams.task') }}</div>
         <multiselect :allow-empty ="true"
                      :show-labels="false"
                      :options="taskOptions"
                      :value="selectedTaskOption"
                      @input="$emit('update:taskId', idOrNull($event))"
-                     placeholder="Select a task"
+                     :placeholder="$t('pageParams.selectATask')"
                      label="name"
                      track-by="id">
           <template slot="option" slot-scope="{ option }">
@@ -28,13 +28,13 @@
         </multiselect>
       </label>
       <label class="page-params__creator col-lg-4 col-xl-3" v-if="creatorId !== undefined">
-        <div class="mb-3">Author</div>
+        <div class="mb-3">{{ $t('pageParams.author') }}</div>
         <multiselect :allow-empty ="true"
                      :show-labels="false"
                      :options="creatorOptions"
                      :value="selectedCreatorOption"
                      @input="$emit('update:creatorId', idOrNull($event))"
-                     placeholder="Select an author"
+                     :placeholder="$t('pageParams.selectAnAuthor')"
                      label="displayName"
                      track-by="id" />
       </label>

@@ -70,7 +70,7 @@ export default {
         await this.waitFor(this.fetchAllLoader, this.fetchAll)
         this.$core.setPageTitle(this.task.name)
       } catch (error) {
-        const title = 'Unable to find this resource'
+        const title = this.$t('general.unableToFindThisResource')
         this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
@@ -140,7 +140,7 @@ export default {
               :task-record-review-id="resolvedTaskRecordReviewId" />
           </template>
           <div v-else class="text-center text-muted text-small mx-auto">
-            Unable to find this resource.
+            {{$t('general.unableToFindThisResource')}}
           </div>
         </app-waiter>
       </div>

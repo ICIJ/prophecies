@@ -241,7 +241,7 @@ export default {
         @keyup.down="activateNextItem"
         @keyup.esc="close"
         class="app-search-form__field__input flex-grow-1"
-        placeholder="Type your search"
+        :placeholder="$t('appSearchForm.typeYourSearch')"
         type="search"
         v-model="query" />
       <span class="app-search-form__field__placeholder">

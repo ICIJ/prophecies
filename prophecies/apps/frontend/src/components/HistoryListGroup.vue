@@ -197,7 +197,7 @@ export default {
     <slot name="footer">
       <div class="history-list-group__see-more d-flex justify-content-center py-3" v-if="hasMoreToSee">
         <button class="history-list-group__see-more__button btn btn-primary border font-weight-bold text-white" @click='loadMore'>
-        See more
+        {{$t('historyListGroup.seeMore')}}
         </button>
       </div>
     </slot>

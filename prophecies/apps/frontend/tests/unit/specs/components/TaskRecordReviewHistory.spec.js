@@ -28,8 +28,8 @@ describe('TaskRecordReviewHistory', () => {
     const localVue = createLocalVue()
     const propsData = { taskRecordReviewId: '38' }
     // Configure the local vue with plugins
-    const { store, router, wait } = Core.init(localVue).useAll()
-    wrapper = mount(TaskRecordReviewHistory, { attachTo, localVue, propsData, store, router, wait })
+    const { i18n, store, router, wait } = Core.init(localVue).useAll()
+    wrapper = mount(TaskRecordReviewHistory, { attachTo, i18n, localVue, propsData, store, router, wait })
   })
 
   it('should find the right task record review', () => {

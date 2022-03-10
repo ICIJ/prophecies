@@ -11,12 +11,13 @@ describe('HistoryListGroup', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
-    const { store } = Core.init(localVue).useAll()
+    const { store, i18n } = Core.init(localVue).useAll()
 
     const actionIds = get(await Action.api().get(), 'response.data.data', []).map(a => a.id)
     const propsData = { actionIds }
 
     wrapper = await shallowMount(HistoryListGroup, {
+      i18n,
       localVue,
       propsData,
       store

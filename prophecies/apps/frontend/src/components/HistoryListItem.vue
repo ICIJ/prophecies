@@ -83,7 +83,7 @@ export default {
     },
     userDisplayName (user, capitalize = false) {
       if (user.isMe) {
-        return capitalize ? 'You' : 'you'
+        return capitalize ? this.$t('historyListItem.youCapitalized') : this.$t('historyListItem.youLowercase')
       }
       return `${user.displayName}`
     },
@@ -98,12 +98,15 @@ export default {
     className () {
       return this.type === ITEM_TYPES.CHECKED_RECORDS ? '' : 'font-weight-bold'
     },
+    generalCategory () {
+      return this.$t('historyListItem.general')
+    },
     category () {
-      let category = 'General'
+      let category = this.generalCategory
       if (this.projectName) {
         category = this.projectName
-        const taskName = this.taskName ?? 'General'
-        category = taskName + ' | ' + category
+        const taskName = this.taskName ?? this.generalCategory
+        category = `${taskName} | ${category}`
       }
       return category
     },

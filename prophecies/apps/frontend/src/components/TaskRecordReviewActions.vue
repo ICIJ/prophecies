@@ -47,6 +47,9 @@ export default {
           taskRecordReviewId: this.taskRecordReviewId
         }
       }
+    },
+    unlock () {
+      return this.$t('taskRecordReviewActions.unlock')
     }
   },
   methods: {
@@ -91,6 +94,9 @@ export default {
        * @param TaskRecordReview
        */
       this.$emit('toggle-changes', this.taskRecordReview)
+    },
+    lockedBy (username) {
+      return this.$t('taskRecordReviewActions.lockedBy', { username })
     }
   }
 }
@@ -99,43 +105,43 @@ export default {
 <template>
   <div class="task-record-review-actions" :class="classList">
     <b-btn-group vertical size="sm">
-      <b-btn variant="link" class="text-dark" :to="taskRecordRoute" title="Open in a new window" v-b-tooltip.left target="_blank">
+      <b-btn variant="link" class="text-dark" :to="taskRecordRoute" :title="$t('taskRecordReviewActions.openInANewWindow')" v-b-tooltip.left target="_blank">
         <external-link-icon size="1.5x" />
-        <span class="sr-only">Link</span>
+        <span class="sr-only">{{$t('taskRecordReviewActions.link')}}</span>
       </b-btn>
-      <b-btn variant="link" v-if="!taskRecord.bookmarked" class="text-dark" title="Bookmark" v-b-tooltip.left @click="emitBookmark">
+       <b-btn variant="link" v-if="!taskRecord.bookmarked" class="text-dark" :title="$t('taskRecordReviewActions.bookmark')" v-b-tooltip.left @click="emitBookmark">
         <bookmark-icon size="1.5x"/>
-        <span class="sr-only">Bookmark</span>
+        <span class="sr-only">{{$t('taskRecordReviewActions.bookmark')}}</span>
       </b-btn>
-      <b-btn variant="link" v-else class="text-dark" title="Remove bookmark" v-b-tooltip.left @click="emitUnbookmark">
+     <b-btn variant="link" v-else class="text-dark" :title="$t('taskRecordReviewActions.removeBookmark')" v-b-tooltip.left @click="emitUnbookmark">
         <bookmark-icon size="1.5x" fill="currentColor"/>
-        <span class="sr-only">Remove bookmark</span>
+        <span class="sr-only">{{$t('taskRecordReviewActions.removeBookmark')}}</span>
       </b-btn>
-      <b-btn variant="link" disabled class="text-dark" title="Duplicate record" v-b-tooltip.left @click="emitCopy">
+     <b-btn variant="link" disabled class="text-dark" :title="$t('taskRecordReviewActions.duplicateRecord')" v-b-tooltip.left @click="emitCopy">
         <copy-icon size="1.5x" />
-        <span class="sr-only">Duplicate record</span>
+        <span class="sr-only">{{$t('taskRecordReviewActions.duplicateRecord')}}</span>
       </b-btn>
-      <b-btn variant="link" v-if="!taskIsOpen" class="text-danger task-record-review-actions__task_not_open" :title="`The admin must open the task to let you review this record`" v-b-tooltip.left>
+      <b-btn variant="link" v-if="!taskIsOpen" class="text-danger task-record-review-actions__task_not_open" :title="$t('taskRecordReviewActions.adminMustOpenTheTask')" v-b-tooltip.left>
         <lock-icon size="1.5x" />
-        <span class="sr-only">Unlock</span>
+        <span class="sr-only">{{unlock}}</span>
       </b-btn>
       <template v-else>
-        <b-btn variant="link" v-if="taskRecord.lockedByMe" class="text-dark" title="Unlock record" v-b-tooltip.left @click="emitUnlock">
+        <b-btn variant="link" v-if="taskRecord.lockedByMe" class="text-dark" :title="$t('taskRecordReviewActions.unlockRecord')" v-b-tooltip.left @click="emitUnlock">
           <lock-icon size="1.5x" />
-          <span class="sr-only">Unlock</span>
+          <span class="sr-only">{{unlock}}</span>
         </b-btn>
-        <b-btn variant="link" v-if="taskRecord.lockedByOther" class="text-danger" :title="`${taskRecord.lockedBy.displayName} must unlock this record to let you review it`" v-b-tooltip.left>
+        <b-btn variant="link" v-if="taskRecord.lockedByOther" class="text-danger" :title="lockedBy(taskRecord.lockedBy.displayName)" v-b-tooltip.left>
           <lock-icon size="1.5x" />
-          <span class="sr-only">Unlock</span>
+          <span class="sr-only">{{unlock}}</span>
         </b-btn>
-        <b-btn variant="link" v-if="!taskRecord.locked" class="text-dark" title="Lock record (nobody will be able to review it until you unlock it)" v-b-tooltip.left @click="emitLock">
+        <b-btn variant="link" v-if="!taskRecord.locked" class="text-dark" :title="$t('taskRecordReviewActions.lockRecord')" v-b-tooltip.left @click="emitLock">
           <unlock-icon size="1.5x" />
-          <span class="sr-only">Lock</span>
+          <span class="sr-only">{{$t('taskRecordReviewActions.lock')}}</span>
         </b-btn>
       </template>
-      <b-btn variant="link" class="text-dark" title="See history" v-b-tooltip.left @click="emitToggleChanges">
+      <b-btn variant="link" class="text-dark" :title="$t('taskRecordReviewActions.seeHistory')" v-b-tooltip.left @click="emitToggleChanges">
         <clock-icon size="1.5x" />
-        <span class="sr-only">See changes history</span>
+        <span class="sr-only">{{$t('taskRecordReviewActions.seeHistoryChanges')}}</span>
       </b-btn>
     </b-btn-group>
   </div>

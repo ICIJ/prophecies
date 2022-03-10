@@ -141,7 +141,7 @@ export default {
                     <div class="mx-auto">
                       <router-link
                         :to="{ name: 'tip-list' }"
-                        title="All tips"
+                        :title="$t('dashboard.allTips')"
                         v-b-tooltip.hover
                         class="text-secondary">
                         {{ $t('dashboard.moreNiceTips') }}
@@ -169,10 +169,10 @@ export default {
                   <button class="btn btn-primary border font-weight-bold">
                   <router-link
                     :to="{ name: 'history' }"
-                    title="All history"
+                    :title="$t('dashboard.allHistory')"
                     class="text-white"
                     >
-                    {{ $t('dashboard.allHistory') }}
+                    {{ $t('dashboard.showAllHistory') }}
                   </router-link>
                   </button>
                 </div>

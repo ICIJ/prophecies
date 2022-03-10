@@ -37,6 +37,17 @@
       }
     }
   },
+  "adminBadge": {
+    "admin": "Admin"
+  },
+  "alternativeValueSelect": {
+    "selectTheCorrectValue": "Select the correct value",
+    "useThisExactValue": "Use this exact value"
+  },
+  "app": {
+    "close": "Close",
+    "tipsFor": "Tips for"
+  },
   "appHeader": {
     "cinematicView": "Cinematic view",
     "tips": "Tips",
@@ -44,13 +55,28 @@
     "shortcuts": "Shortcuts",
     "tutorial": "Tutorial"
   },
+  "appSearchForm": {
+    "typeYourSearch": "Type your search"
+  },
+  "appSearchResults": {
+    "tips": "Tips"
+  },
+  "appSidebar": {
+    "dashboard": "Dashboard",
+    "shortcuts": "Shortcuts",
+    "tips": "Tips",
+    "history": "History",
+    "admin": "Admin"
+  },
   "appVersion": {
     "version": "Version {version}"
   },
   "dashboard": {
     "title": "Dashboard",
-    "allHistory": "Show me all history",
+    "allHistory": "All history",
+    "showAllHistory": "Show me all history",
     "allStats": "All stats",
+    "allTips": "All tips",
     "latestTips": "Latest tips",
     "moreNiceTips": "More nice tips",
     "noTask": "No tasks yet",
@@ -63,11 +89,25 @@
     "logout": "Sign out",
     "help": "Ask for help"
   },
+  "general": {
+    "unableToFindThisResource": "Unable to find this resource"
+  },
+  "historyListGroup": {
+    "seeMore": "See more"
+  },
   "historyListItem": {
-    "tip": "added a new tip: \"{value}\"",
     "checked-records": "checked {n} records",
     "closed-task": "closed the task",
-    "mentioned-user": "mentioned {value} in a note"
+    "general": "General",
+    "mentioned-user": "mentioned {value} in a note",
+    "tip": "added a new tip: \"{value}\"",
+    "youLowercase": "you",
+    "youCapitalized": "You"
+  },
+  "latestTipsCard": {
+    "closeLatestTips": "Close latest tips",
+    "inTaskAndProject": "in {task} | {project}",
+    "general": "General"
   },
   "login": {
     "title": "Login",
@@ -81,6 +121,7 @@
   },
   "notification": {
     "markAll": "Mark all as read",
+    "seeAllNotifications": "See all notifications",
     "actions": {
       "mentioned": {
         "user": {
@@ -90,12 +131,26 @@
       }
     }
   },
+  "pageParams": {
+    "project": "Project",
+    "task": "Task",
+    "author": "Author",
+    "selectAProject": "Select a project",
+    "selectATask": "Select a task",
+    "selectAnAuthor": "Select an author"
+  },
   "progressCard": {
     "title": {
       "yours": "Your progress",
       "team": "Team progress"
     },
-    "moreProgress": "More progress"
+    "allOpenTasks": "all open tasks",
+    "moreProgress": "More progress",
+    "noOpenTasks": "No open tasks"
+  },
+  "shortcurListCard": {
+    "shortcuts": "Shortcuts",
+    "forAllTasks": "For all tasks"
   },
   "statsList": {
     "title": {
@@ -104,11 +159,36 @@
     },
     "showOnlyOpenTasks": "Show only open tasks"
   },
+  "taskRecordReviewActions": {
+    "openInANewWindow": "Open in a new window",
+    "link": "Link",
+    "bookmark": "Bookmark",
+    "removeBookmark": "Remove bookmark",
+    "duplicateRecord": "Duplicate record",
+    "unlock": "Unlock",
+    "adminMustOpenTheTask": "The admin must open the task to let you review this record",
+    "unlockRecord": "Unlock record",
+    "lockedBy": "{username} must unlock this record to let you review it",
+    "lock": "Lock",
+    "lockRecord": "Lock record (nobody will be able to review it until you unlock it)",
+    "seeHistory": "See history",
+    "seeHistoryChanges": "See history changes"
+  },
+  "taskRecordReviewHistory": {
+    "cancelMyChoice": "Cancel my choice",
+    "commentVerb": "Comment",
+    "oneNote": "1 note",
+    "useTheSameValue": "Use the same value",
+    "you": "you"
+  },
   "taskRecordReviewList": {
     "clearFilters": "Clear filters",
     "selectAll": "Select {n} record | Select {n} records",
     "selectedResults": "{n} result selected | {n} results selected",
-    "lockedResults": "{n} of which is locked | {n} of which are locked"
+    "lockedResults": "{n} of which is locked | {n} of which are locked",
+    "noRecordAssigned": "No records assigned yet.",
+    "backToListView": "Back to list view",
+    "filters": "Filters"
   },
   "taskStatsCard": {
     "closed": "Closed!",
@@ -119,7 +199,8 @@
     "round": "Round"
   },
   "tips": {
-    "lastModified": "Last modified"
+    "lastModified": "Last modified",
+    "you": "you"
   },
   "taskStatus": {
     "open": "Open",
@@ -127,8 +208,26 @@
     "closed": "Closed",
     "done": "Done"
   },
+  "tipListCard": {
+    "seeTipsForAllTasks": "See tips for all tasks"
+  },
+  "tutorial": {
+    "readTheContent": "Read the content to be checked",
+    "checkPredictedValue": "Check whether the predicted value is correct",
+    "selectChoice": "Select (or type) your choice",
+    "readOthersChoices": "Read others' choices (click another user's choice to select the same!)",
+    "comment": "Comment (you can mention other checkers with @username, or everyone with @project)",
+    "previous": "Previous",
+    "next": "Next",
+    "close": "Close",
+    "firstTimeHere": "First time here?",
+    "skip": "Skip tutorial"
+  },
   "userCard": {
     "assignedTasks": "Assigned to {n} task: | Assigned to {n} tasks:"
+  },
+  "userNotifications": {
+    "noNotification": "You don't have any notification yet."
   },
   "userProfileDropdownMenu": {
     "api": "API",
@@ -141,7 +240,8 @@
       "yours": "Your bookmarks",
       "others": "Their bookmarks"
     },
-    "noBookmarks": "No bookmarks"
+    "noBookmarks": "No bookmarks",
+    "unableToRetrieveTheBookmarks": "Unable to retrieve the bookmarks"
   },
   "userRetrieveProfile": {
     "title": {
@@ -167,10 +267,6 @@
       "others": "Their team"
     }
   },
-  "userTaskStatsCard": {
-    "allOpenTasks": "All open tasks",
-    "allRecords": "All records"
-  },
   "userRetrieveNotifications": {
     "title": {
       "yours": "Your notifications",
@@ -182,5 +278,9 @@
       "yours": "Your history",
       "others": "Their history"
     }
+  },
+  "userTaskStatsCard": {
+    "allOpenTasks": "All open tasks",
+    "allRecords": "All records"
   }
 }

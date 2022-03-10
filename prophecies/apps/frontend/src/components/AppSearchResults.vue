@@ -184,7 +184,7 @@ export default {
         :active="isTipQuerysetActive()"
         @click="activateQueryset(tipQuerysetId())">
         <template #title>
-          Tips
+          {{$t('appSearchResults.tips')}}
           <span class="ml-auto pl-1 text-secondary">
             {{ tipCount() }}
           </span>

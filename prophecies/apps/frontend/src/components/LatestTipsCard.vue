@@ -2,7 +2,7 @@
   <div class="latest-tips-card card card-body py-4 px-5 shadow">
     <div class="d-flex">
       <div class="mt-2 order-2" v-if="showClose">
-        <a href="#" title="Close latest tips" @click="close">
+        <a href="#" :title="closeLatestTips" @click="close">
           <x-icon class="latest-tips-card__close text-secondary" />
         </a>
       </div>
@@ -24,10 +24,10 @@
             </router-link>
             <div class="negative-margin text-black-50">
               <small v-if="tip.task">
-                in {{ tip.task.name }} | {{ tip.project.name }}
+                {{ $t('latestTipsCard.inTaskAndProject', { task: tip.task.name, project: tip.project.name } )}}
               </small>
               <small v-else>
-                General
+                {{ $t('latestTipsCard.general') }}
               </small>
             </div>
           </div>
@@ -58,6 +58,9 @@ export default {
     }
   },
   computed: {
+    closeLatestTips () {
+      return this.$t('latestTipsCard.closeLatestTips')
+    },
     latestTips () {
       return this.tips.slice(0, this.limit - 1)
     },

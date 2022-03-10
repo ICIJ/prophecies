@@ -15,7 +15,7 @@ describe('AppSidebar', () => {
     // Load the settings
     await core.configure()
     // Those core properties must be available for each test
-    const { router, i18n } = core.i18n
+    const { router, i18n } = core
     wrapper = shallowMount(AppSidebar, { i18n, router, localVue })
   })
 

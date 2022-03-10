@@ -1,7 +1,7 @@
 <script>
-  export default {
-    name: 'AppBreadcrumb'
-  }
+export default {
+  name: 'AppBreadcrumb'
+}
 </script>
 
 <template>
