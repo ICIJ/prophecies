@@ -21,7 +21,13 @@ export default {
     }
   },
   async created () {
-    await this.fetchUserWithLoader()
+    try {
+      await this.fetchUserWithLoader()
+      this.$core.setPageTitle(this.title)
+    } catch (error) {
+      const title = 'Unable to find this resource'
+      this.$router.replace({ name: 'error', params: { title, error } })
+    }
   },
   computed: {
     profileRoute () {
