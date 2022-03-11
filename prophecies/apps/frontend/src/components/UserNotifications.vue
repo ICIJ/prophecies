@@ -20,7 +20,7 @@ export default {
     }
   },
   created () {
-    // If the notifications were not fetched yet, 
+    // If the notifications were not fetched yet,
     // we start the component loader
     if (this.fetching) {
       this.$wait.start(this.loader)
@@ -82,7 +82,7 @@ export default {
             <bell-icon size="3x" />
           </div>
           <p>
-            You don't have any notification yet.
+            {{$t('userNotifications.noNotification')}}
           </p>
         </div>
       </template>

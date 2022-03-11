@@ -1,78 +1,77 @@
 <script>
-  import { findIndex } from 'lodash'
+import { findIndex } from 'lodash'
 
-  export default {
-    name: 'MultiselectButtons',
-    model: {
-      prop: 'value',
-      event: 'update'
+export default {
+  name: 'MultiselectButtons',
+  model: {
+    prop: 'value',
+    event: 'update'
+  },
+  props: {
+    value: {
+      type: Array,
+      default: () => ([])
     },
-    props: {
-      value: {
-        type: Array,
-        default: () => ([])
-      },
-      options: {
-        type: Array,
-        default: () => ([])
-      },
-      label: {
-        type: String,
-        default: 'name'
-      },
-      multiple: {
-        type: Boolean
-      },
-      trackBy: {
-        type: String,
-        default: 'name'
-      }
+    options: {
+      type: Array,
+      default: () => ([])
     },
-    computed: {
-      noValues () {
-        return !this.value.length
-      }
+    label: {
+      type: String,
+      default: 'name'
     },
-    methods: {
-      findOptionIndex (option = null) {
-        if (option === null) {
-          return -1
-        }
-        const tracked = option[this.trackBy]
-        return findIndex(this.value, { [this.trackBy]: tracked })
-      },
-      isOptionSelected (option = null) {
-        return (option === null && this.noValues) || this.findOptionIndex(option) > -1
-      },
-      optionVariant (option = null) {
-        return this.isOptionSelected(option) ? 'primary' : 'outline-primary'
-      },
-      removeOptions () {
-        return this.$emit('update', [])
-      },
-      withOption (option) {
-        if (this.multiple) {
-          return [...this.value, option]
-        }
-        return [option]
-      },
-      withoutOption (option) {
-        if (this.multiple) {
-          const index = this.findOptionIndex(option)
-          return this.value.filter((_, i) => i !== index)
-        }
-        return []
-      },
-      toggleOption (option) {
-        const tracked = option[this.trackBy]
-        // The option already exist
-        if (this.findOptionIndex(option) === -1) {
-          return this.$emit('update', this.withOption(option))
-        }
-        return this.$emit('update', this.withoutOption(option))
+    multiple: {
+      type: Boolean
+    },
+    trackBy: {
+      type: String,
+      default: 'name'
+    }
+  },
+  computed: {
+    noValues () {
+      return !this.value.length
+    }
+  },
+  methods: {
+    findOptionIndex (option = null) {
+      if (option === null) {
+        return -1
       }
+      const tracked = option[this.trackBy]
+      return findIndex(this.value, { [this.trackBy]: tracked })
+    },
+    isOptionSelected (option = null) {
+      return (option === null && this.noValues) || this.findOptionIndex(option) > -1
+    },
+    optionVariant (option = null) {
+      return this.isOptionSelected(option) ? 'primary' : 'outline-primary'
+    },
+    removeOptions () {
+      return this.$emit('update', [])
+    },
+    withOption (option) {
+      if (this.multiple) {
+        return [...this.value, option]
+      }
+      return [option]
+    },
+    withoutOption (option) {
+      if (this.multiple) {
+        const index = this.findOptionIndex(option)
+        return this.value.filter((_, i) => i !== index)
+      }
+      return []
+    },
+    toggleOption (option) {
+      // The option already exist
+      if (this.findOptionIndex(option) === -1) {
+        return this.$emit('update', this.withOption(option))
+      }
+      return this.$emit('update', this.withoutOption(option))
     }
   }
+}
 </script>
 
 <template>

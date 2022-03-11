@@ -1,13 +1,3 @@
-<template>
-  <page-params
-    :values='tips'
-    :projectId.sync="projectId_"
-    :taskId.sync="taskId_"
-    :creatorId.sync="creatorId_"
-    class="tip-list-page-params"
-  />
-</template>
-
 <script>
 import Tip from '@/models/Tip'
 import PageParams from '@/components/PageParams'
@@ -66,6 +56,16 @@ export default {
   }
 }
 </script>
+
+<template>
+  <page-params
+    :values='tips'
+    :projectId.sync="projectId_"
+    :taskId.sync="taskId_"
+    :creatorId.sync="creatorId_"
+    class="tip-list-page-params"
+  />
+</template>
 
 <style lang="scss">
   .tip-list-page-params {

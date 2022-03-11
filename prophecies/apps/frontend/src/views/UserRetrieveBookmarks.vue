@@ -69,7 +69,9 @@ export default {
       }
       const { response } = await TaskRecordReview.api().get('', { params })
 
-      const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)
+      const taskRecordReviewIds = get(response, 'data.data', []).map(
+        (t) => t.id
+      )
       this.$set(this, 'taskRecordReviewIds', taskRecordReviewIds)
     },
     fetchChoiceGroup (taskId) {
@@ -77,13 +79,16 @@ export default {
       return ChoiceGroup.api().find(taskId, { params })
     },
     fetchChoiceGroups () {
-      const uniqueChoiceGroups = this.tasks?.reduce((acc, curr) => {
-        if (!acc.choiceGroupIds[curr.choiceGroupId]) {
-          acc.choiceGroupIds[curr.choiceGroupId] = true
-          acc.promises.push(this.fetchChoiceGroup(curr.choiceGroupId))
-        }
-        return acc
-      }, { choiceGroupIds: {}, promises: [] })
+      const uniqueChoiceGroups = this.tasks?.reduce(
+        (acc, curr) => {
+          if (!acc.choiceGroupIds[curr.choiceGroupId]) {
+            acc.choiceGroupIds[curr.choiceGroupId] = true
+            acc.promises.push(this.fetchChoiceGroup(curr.choiceGroupId))
+          }
+          return acc
+        },
+        { choiceGroupIds: {}, promises: [] }
+      )
 
       return Promise.all(uniqueChoiceGroups.promises)
     },
@@ -92,13 +97,16 @@ export default {
       return Task.api().find(taskId, { params })
     },
     fetchTasks () {
-      const uniqueTaskIds = this.taskRecordReviews.reduce((acc, curr) => {
-        if (!acc.taskIds[curr.taskId]) {
-          acc.taskIds[curr.taskId] = true
-          acc.promises.push(this.fetchTask(curr.taskId))
-        }
-        return acc
-      }, { taskIds: {}, promises: [] })
+      const uniqueTaskIds = this.taskRecordReviews.reduce(
+        (acc, curr) => {
+          if (!acc.taskIds[curr.taskId]) {
+            acc.taskIds[curr.taskId] = true
+            acc.promises.push(this.fetchTask(curr.taskId))
+          }
+          return acc
+        },
+        { taskIds: {}, promises: [] }
+      )
 
       this.$set(this, 'taskIds', Object.keys(uniqueTaskIds.taskIds))
       return Promise.all(uniqueTaskIds.promises)
@@ -122,7 +130,10 @@ export default {
       this.updateFilters()
     },
     setTaskFilter (val) {
-      const reviewsOfTask = TaskRecordReview.query().with('task').where('taskId', val).get()
+      const reviewsOfTask = TaskRecordReview.query()
+        .with('task')
+        .where('taskId', val)
+        .get()
       // keep the current project filter if no task is selected
       if (reviewsOfTask[0].task.projectId) {
         this.projectFilter = reviewsOfTask[0].task.projectId
@@ -131,15 +142,18 @@ export default {
       this.updateFilters()
     },
     updateFilters () {
-      return this.$router.push({ name: 'user-retrieve-bookmarks', query: this.bookmarksParams, username: this.username })
+      return this.$router.push({
+        name: 'user-retrieve-bookmarks',
+        query: this.bookmarksParams,
+        username: this.username
+      })
     },
     projectNotContainingTask (projectId, taskId) {
       const reviewsOfProject = Task.query().where('projectId', projectId).get()
-      return reviewsOfProject.filter(t => t.id === taskId).length === 0
+      return reviewsOfProject.filter((t) => t.id === taskId).length === 0
     },
     taskNotContainingUser (taskId) {
-      return TaskRecordReview.query()
-        .where('task.id', taskId)
+      return TaskRecordReview.query().where('task.id', taskId)
     }
   },
   computed: {
@@ -163,16 +177,14 @@ export default {
       return uniqueId('load-bookmarks-')
     },
     tasks () {
-      return Task
-        .query()
+      return Task.query()
         .with('project')
         .with('choiceGroup')
         .whereIdIn(this.taskIds)
         .get()
     },
     taskRecordReviews () {
-      return TaskRecordReview
-        .query()
+      return TaskRecordReview.query()
         .with('task.project')
         .with('task')
         .with('taskRecord')
@@ -182,10 +194,16 @@ export default {
     filteredBookmarks () {
       const bookmarks = this.taskRecordReviews.slice()
       if (this.query[FILTER_TYPES.PROJECT]) {
-        remove(bookmarks, trw => trw.task.project.id !== this.query[FILTER_TYPES.PROJECT])
+        remove(
+          bookmarks,
+          (trw) => trw.task.project.id !== this.query[FILTER_TYPES.PROJECT]
+        )
       }
       if (this.query[FILTER_TYPES.TASK]) {
-        remove(bookmarks, trw => trw.task.id !== this.query[FILTER_TYPES.TASK])
+        remove(
+          bookmarks,
+          (trw) => trw.task.id !== this.query[FILTER_TYPES.TASK]
+        )
       }
       return orderByProjectThenTask(bookmarks)
     },
@@ -209,28 +227,59 @@ export default {
 
 <template>
   <div class="user-retrieve-bookmarks">
-    <app-waiter :loader="fetchBookmarksLoader" waiter-class="my-5 mx-auto d-block">
+    <app-waiter
+      :loader="fetchBookmarksLoader"
+      waiter-class="my-5 mx-auto d-block"
+    >
       <template v-if="taskRecordReviewIds.length">
         <bookmarks-page-params
           :tasks="tasks"
           :project-id.sync="projectId"
-          :task-id.sync="taskId"/>
-        <div v-for="(projectValue, name) in bookmarksGroupedByProject" :key="name" class="user-retrieve-bookmarks__project mt-4 mb-4 border-bottom">
+          :task-id.sync="taskId"
+        />
+        <div
+          v-for="(projectValue, name) in bookmarksGroupedByProject"
+          :key="name"
+          class="user-retrieve-bookmarks__project mt-4 mb-4 border-bottom"
+        >
           <h1 class="mb-3 mt-4 text-primary">{{ name }}</h1>
-          <div v-for="(taskValue, taskName) in bookmarksGroupedByTask(projectValue)" :key="taskName" class="user-retrieve-bookmarks__project__task mb-4">
+          <div
+            v-for="(taskValue, taskName) in bookmarksGroupedByTask(
+              projectValue
+            )"
+            :key="taskName"
+            class="user-retrieve-bookmarks__project__task mb-4"
+          >
             <div class="d-flex flex-row mb-4 ml-4 mt-4">
-                <h2 class="text-tertiary">{{ taskName }}</h2>
+              <h2 class="text-tertiary">{{ taskName }}</h2>
             </div>
-            <b-list-group-item v-for="record in taskValue" class="user-retrieve-bookmarks__project__task__record flex-column align-items-start ml-4 border-0" :key="record.id">
+            <b-list-group-item
+              v-for="record in taskValue"
+              class="
+                user-retrieve-bookmarks__project__task__record
+                flex-column
+                align-items-start
+                ml-4
+                border-0
+              "
+              :key="record.id"
+            >
               <task-record-review-card
                 :task-record-review-id="record.id"
-                :active="true"/>
+                :active="true"
+              />
             </b-list-group-item>
           </div>
         </div>
       </template>
-      <div v-else class="user-retrieve-bookmarks__no-items text-center text-secondary text-small">
-        {{$t('userRetrieveBookmarks.noBookmarks')}}
+      <div
+        v-else
+        class="
+          user-retrieve-bookmarks__no-items
+          text-center text-secondary text-small
+        "
+      >
+        {{ $t("userRetrieveBookmarks.noBookmarks") }}
       </div>
     </app-waiter>
   </div>

@@ -1,4 +1,3 @@
-
 <script>
 import { noop } from 'lodash'
 import HistoryFetcher from '@/components/HistoryFetcher'

@@ -5,7 +5,7 @@ import * as icons from '@/utils/icons'
 export default {
   name: 'PageHeader',
   props: {
-    title: { 
+    title: {
       type: String
     },
     icon: {
@@ -39,7 +39,7 @@ export default {
   .page-header {
     display:flex;
 
-    &__icon { 
+    &__icon {
       margin-top: $spacer-xs;
       margin-right: $spacer-sm;
       max-width: 30px;
@@ -48,7 +48,7 @@ export default {
 
     &__title {
       padding-bottom: $spacer-xs;
-      border-bottom: 7px solid $warning;   
+      border-bottom: 7px solid $warning;
     }
   }
 </style>

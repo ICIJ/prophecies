@@ -1,44 +1,3 @@
-<template>
-  <div class="stats-list d-flex align-items-start">
-   <app-sidebar class="w-100 sticky-top" />
-    <div class="stats-list__container flex-grow-1">
-      <app-header hide-nav hide-search/>
-      <div class="container-fluid p-5">
-        <div class="row">
-          <div class="col-12">
-            <div class="d-flex flex-wrap justify-content-between">
-                <b-form-group class="stats-list__radio d-flex  mr-5">
-                  <b-form-radio-group
-                  v-model="teamTaskStats"
-                  buttons
-                  button-variant="outline-primary"
-                  :options="taskStatsOptions" />
-                </b-form-group>
-              <div class="stats-list__filters d-flex align-items-end ">
-                <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="onlyOpenTasks">
-                  <span class="text-nowrap text-primary">{{$t('statsList.showOnlyOpenTasks')}}</span>
-                </b-form-checkbox>
-                <task-sort-by-dropdown
-                  :sort.sync="sortField"
-                  @update:sort-by-cb="updateSortByCallback"
-                  class="mb-3 stats-list__filters__sort-by"
-                />
-              </div>
-            </div>
-            <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-              <task-stats-card-detailed
-              class="stats-list__task-card my-5"
-              v-for="task in displayedTasks" :key="task.id"
-              :task-id="task.id"
-              :team="teamTaskStats"
-              :checker-id="me"/>
-            </app-waiter>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
 
 <script>
 import { uniqueId, filter, orderBy } from 'lodash'
@@ -134,6 +93,49 @@ export default {
   }
 }
 </script>
+
+<template>
+  <div class="stats-list d-flex align-items-start">
+   <app-sidebar class="w-100 sticky-top" />
+    <div class="stats-list__container flex-grow-1">
+      <app-header hide-nav hide-search/>
+      <div class="container-fluid p-5">
+        <div class="row">
+          <div class="col-12">
+            <div class="d-flex flex-wrap justify-content-between">
+                <b-form-group class="stats-list__radio d-flex  mr-5">
+                  <b-form-radio-group
+                  v-model="teamTaskStats"
+                  buttons
+                  button-variant="outline-primary"
+                  :options="taskStatsOptions" />
+                </b-form-group>
+              <div class="stats-list__filters d-flex align-items-end ">
+                <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="onlyOpenTasks">
+                  <span class="text-nowrap text-primary">{{$t('statsList.showOnlyOpenTasks')}}</span>
+                </b-form-checkbox>
+                <task-sort-by-dropdown
+                  :sort.sync="sortField"
+                  @update:sort-by-cb="updateSortByCallback"
+                  class="mb-3 stats-list__filters__sort-by"
+                />
+              </div>
+            </div>
+            <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
+              <task-stats-card-detailed
+              class="stats-list__task-card my-5"
+              v-for="task in displayedTasks" :key="task.id"
+              :task-id="task.id"
+              :team="teamTaskStats"
+              :checker-id="me"/>
+            </app-waiter>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style lang="scss" scoped>
 .stats-list__filters__sort-by
 {

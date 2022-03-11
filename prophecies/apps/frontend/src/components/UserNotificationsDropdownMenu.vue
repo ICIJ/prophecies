@@ -47,7 +47,7 @@ export default {
 
 <template>
   <div class="user-notifications-dropdown-menu">
-    <user-notifications 
+    <user-notifications
       class="user-notifications-dropdown-menu__list dropdown"
       :notification-ids="notificationIds">
       <template #header>
@@ -77,7 +77,7 @@ export default {
     </user-notifications>
     <div class="user-notifications-dropdown-menu__footer border-top">
       <b-btn block variant="link" :to="userNotificationsRoute" :disabled="!notifications.length">
-        See all notifications
+        {{$t('notification.seeAllNotifications')}}
       </b-btn>
     </div>
   </div>

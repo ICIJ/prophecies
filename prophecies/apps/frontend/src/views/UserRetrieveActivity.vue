@@ -1,4 +1,3 @@
-
 <script>
 import { uniqueId, filter, orderBy } from 'lodash'
 import moment from 'moment'
