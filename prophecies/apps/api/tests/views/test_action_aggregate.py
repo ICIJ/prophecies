@@ -156,12 +156,16 @@ class TestActionAggregate(TestCase):
         yesterday = dt.date.today() - dt.timedelta(days=1)
         lastweek = dt.date.today() - dt.timedelta(days=7)
         lastmonth = dt.date.today() - dt.timedelta(days=30)
-        action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id, timestamp=yesterday)
-        action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id, timestamp=lastweek)
-        action.send(self.olivia, verb='added', target=self.django, task_id=self.task_shops.id, timestamp=lastmonth)
+        with time_machine.travel(dt.date.today(), tick=False) as traveller:
+            traveller.shift(dt.timedelta(days=-1)) # yesterday
+            action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
+            traveller.shift(dt.timedelta(days=-6)) # 7 days before
+            action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
+            traveller.shift(dt.timedelta(weeks=-3))
+            action.send(self.olivia, verb='added', target=self.django, task_id=self.task_shops.id)
+            
         f = ActionAggregateFilter({'date_after': lastweek,'date_before':yesterday})
         self.assertEqual(len(f.qs),2)
-            
         
         self.client.login(username='olivia', password='olivia')
         url = '/api/v1/action-aggregates/?date_after=%s&date_before=%s' % (str(lastweek),str(yesterday))

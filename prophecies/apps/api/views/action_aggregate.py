@@ -30,7 +30,7 @@ class ActionAggregateViewSet(views.ReadOnlyModelViewSet):
     ordering = ['-date']
     filterset_class= ActionAggregateFilter
     filter_backends = [DjangoFilterBackend]
-    queryset = ActionAggregate.objects.all()
+    queryset = ActionAggregate.objects.all().order_by('-date')
             
     def get_queryset(self):
         if not self.request.user.is_authenticated:
