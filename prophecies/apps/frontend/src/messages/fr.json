@@ -2,38 +2,38 @@
   "actions": {
     "cancelled": {
       "taskRecordReview": {
-        "*": "{actor} cancelled their record classification"
+        "*": "{actor} a annulé sa classification de cette donnée"
       }
     },
     "reviewed": {
       "taskRecordReview": {
-        "*": "{actor} classified their record with unknown choice",
-        "choice": "{actor} classified the record as <strong>\"{actionObject}\"</strong>"
+        "*": "{actor} a classifié cette donnée en \"inconnu\"",
+        "choice": "{actor} a classifié cette donnée en <strong>\"{actionObject}\"</strong>"
       }
     },
     "locked": {
       "taskRecord": {
-        "*": "{actor} <strong>locked</strong> the record"
+        "*": "{actor} <strong>a verrouillé</strong> cette donnée"
       }
     },
     "unlocked": {
       "taskRecord": {
-        "*": "{actor} <strong>unlocked</strong> the record"
+        "*": "{actor} <strong>a déverouillé</strong> cette donnée"
       }
     },
     "commented": {
       "taskRecordReview": {
-        "*": "{actor} wrote a note"
+        "*": "{actor} a écrit une note"
       }
     },
     "mentioned": {
       "user": {
-        "taskRecordReview": "{actor} mentioned <strong>{target}</strong> in a note"
+        "taskRecordReview": "{actor} a mentionné <strong>{target}</strong> dans une note"
       }
     },
     "selected": {
       "taskRecordReview": {
-        "*": "{actor} selected \"{alternative_value}\""
+        "*": "{actor} a sélectionné \"{alternative_value}\""
       }
     }
   },
@@ -41,246 +41,246 @@
     "admin": "Admin"
   },
   "alternativeValueSelect": {
-    "selectTheCorrectValue": "Select the correct value",
-    "useThisExactValue": "Use this exact value"
+    "selectTheCorrectValue": "Sélectionner la valeur correcte",
+    "useThisExactValue": "Utiliser cette valeur exacte"
   },
   "app": {
-    "close": "Close",
-    "tipsFor": "Tips for"
+    "close": "Fermer",
+    "tipsFor": "Conseils pour"
   },
   "appHeader": {
-    "cinematicView": "Cinematic view",
+    "cinematicView": "Vue cinéma",
     "tips": "Tips",
-    "search": "Search",
-    "shortcuts": "Shortcuts",
-    "tutorial": "Tutorial"
+    "search": "Rechercher",
+    "shortcuts": "Raccourcis",
+    "tutorial": "Tuto"
   },
   "appSearchForm": {
-    "typeYourSearch": "Type your search"
+    "typeYourSearch": "Taper votre recherche"
   },
   "appSearchResults": {
     "tips": "Tips"
   },
   "appSidebar": {
-    "dashboard": "Dashboard",
-    "shortcuts": "Shortcuts",
+    "dashboard": "Tableau de bord",
+    "shortcuts": "Raccourcis",
     "tips": "Tips",
-    "history": "History",
+    "history": "Historique",
     "admin": "Admin"
   },
   "appVersion": {
     "version": "Version {version}"
   },
   "dashboard": {
-    "title": "Dashboard",
-    "allHistory": "All history",
-    "showAllHistory": "Show me all history",
-    "allStats": "All stats",
-    "allTips": "All tips",
-    "latestTips": "Latest tips",
-    "moreNiceTips": "More nice tips",
-    "noTask": "No tasks yet",
-    "lately": "Lately"
+    "title": "Tableau de bord",
+    "allHistory": "Tout l'historique",
+    "showAllHistory": "Afficher tout l'historique",
+    "allStats": "Toutes les stats",
+    "allTips": "Tous les tips",
+    "latestTips": "Les derniers tips",
+    "moreNiceTips": "Plus de tips",
+    "noTask": "Il n'y a pas encore de tâches",
+    "lately": "Dernièrement"
   },
   "error": {
-    "title": "Something's wrong here",
-    "description": "An error has occurred. Please try again later or contact your administrator if the problem persists.",
-    "connectedAs": "Your are connected as {username}",
-    "logout": "Sign out",
-    "help": "Ask for help"
+    "title": "Quelque chose ne tourne pas rond ici",
+    "description": "Une erreur est survenue. Réessayer plus tard ou contacter l'admin si le problème persiste.",
+    "connectedAs": "Vous êtes connecté•e en tant que {username}",
+    "logout": "Se déconnecter",
+    "help": "Demander de l'aide"
   },
   "general": {
-    "unableToFindThisResource": "Unable to find this resource"
+    "unableToFindThisResource": "Impossible de trouver cette ressource"
   },
   "historyListGroup": {
-    "seeMore": "See more"
+    "seeMore": "Voir plus"
   },
   "historyListItem": {
-    "checked-records": "checked {n} records",
-    "closed-task": "closed the task",
-    "general": "General",
-    "mentioned-user": "mentioned {value} in a note",
-    "tip": "added a new tip: \"{value}\"",
-    "youLowercase": "you",
-    "youCapitalized": "You"
+    "checked-records": "a classifié {n} données",
+    "closed-task": "a fermé la tâche",
+    "general": "Général",
+    "mentioned-user": "a mentionné {value} dans une note",
+    "tip": "a ajouté un nouveau tip : \"{value}\"",
+    "youLowercase": "vous",
+    "youCapitalized": "Vous"
   },
   "latestTipsCard": {
-    "closeLatestTips": "Close latest tips",
-    "inTaskAndProject": "in {task} | {project}",
-    "general": "General"
+    "closeLatestTips": "Fermer les derniers tips",
+    "inTaskAndProject": "dans {task} | {project}",
+    "general": "Général"
   },
   "login": {
-    "title": "Login",
-    "welcome": "Welcome to Prophecies",
-    "sumUp": "<a href=\"https://icij.org\">ICIJ</a> data cleaning and validation platform.",
-    "accountDescription": "Use your account to continue:",
-    "account": "Login",
-    "askHelp": "Ask for help",
-    "logout": "You have been logged out.",
-    "login": "Login to continue"
+    "title": "Se connecter",
+    "welcome": "Bienvenue dans Prophecies",
+    "sumUp": "une plateforme de l'<a href=\"https://icij.org\">ICIJ</a> pour nettoyer et valider vos données.",
+    "accountDescription": "Utilisez votre compte pour continuer :",
+    "account": "Se connecter",
+    "askHelp": "Demander de l'aide",
+    "logout": "Vous avez été déconnecté•e.",
+    "login": "Connectez-vous pour continuer"
   },
   "notification": {
-    "markAll": "Mark all as read",
-    "seeAllNotifications": "See all notifications",
+    "markAll": "Tout marquer comme lu",
+    "seeAllNotifications": "Voir toutes les notifications",
     "actions": {
       "mentioned": {
         "user": {
-          "tip": "{actor} mentioned you in a <strong>tip</strong>",
-          "taskRecordReview": "{actor} mentioned you in a <strong>note</strong>"
+          "tip": "{actor} vous a mentionné•e dans un <strong>tip</strong>",
+          "taskRecordReview": "{actor} vous a mentionné•e dans une <strong>note</strong>"
         }
       }
     }
   },
   "pageParams": {
-    "project": "Project",
-    "task": "Task",
-    "author": "Author",
-    "selectAProject": "Select a project",
-    "selectATask": "Select a task",
-    "selectAnAuthor": "Select an author"
+    "project": "Projet",
+    "task": "Tâche",
+    "author": "Auteur•ice",
+    "selectAProject": "Sélectionnez un projet",
+    "selectATask": "Sélectionnez une tâche",
+    "selectAnAuthor": "Sélectionnez un•e auteur•ice"
   },
   "progressCard": {
     "title": {
-      "yours": "Your progress",
-      "team": "Team progress"
+      "yours": "Votre progression",
+      "team": "Progression de l'équipe"
     },
-    "allOpenTasks": "all open tasks",
-    "moreProgress": "More progress",
-    "noOpenTasks": "No open tasks"
+    "allOpenTasks": "toutes les tâches ouvertes",
+    "moreProgress": "Voir plus",
+    "noOpenTasks": "Aucune tâche ouverte"
   },
   "shortcurListCard": {
-    "shortcuts": "Shortcuts",
-    "forAllTasks": "For all tasks"
+    "shortcuts": "Raccourcis",
+    "forAllTasks": "Toutes les tâches"
   },
   "statsList": {
     "title": {
-      "yours": "Your stats",
-      "team": "Team stats"
+      "yours": "Vos stats",
+      "team": "Les stats de l'équipe"
     },
-    "showOnlyOpenTasks": "Show only open tasks"
+    "showOnlyOpenTasks": "Afficher uniquement les tâches ouvertes"
   },
   "taskRecordReviewActions": {
-    "openInANewWindow": "Open in a new window",
-    "link": "Link",
-    "bookmark": "Bookmark",
-    "removeBookmark": "Remove bookmark",
-    "duplicateRecord": "Duplicate record",
-    "unlock": "Unlock",
-    "adminMustOpenTheTask": "The admin must open the task to let you review this record",
-    "unlockRecord": "Unlock record",
-    "lockedBy": "{username} must unlock this record to let you review it",
-    "lock": "Lock",
-    "lockRecord": "Lock record (nobody will be able to review it until you unlock it)",
-    "seeHistory": "See history",
-    "seeHistoryChanges": "See history changes"
+    "openInANewWindow": "Ouvrir dans une nouvelle fenêtre",
+    "link": "Lien",
+    "bookmark": "Enregistrer comme favori",
+    "removeBookmark": "Supprimer des favoris",
+    "duplicateRecord": "Dupliquer cette donnée",
+    "unlock": "Déverrouiller",
+    "adminMustOpenTheTask": "L'admin doit ouvrir la tâche pour vous permettre de classifier cette donnée",
+    "unlockRecord": "Déverrouiller cette donnée",
+    "lockedBy": "{username} doit déverrouiller cette donnée pour vous permettre de la classifier",
+    "lock": "Verrouiller",
+    "lockRecord": "Verrouiller cette donnée (personne ne pourra la classifier jusqu'à ce que vous la déverouilliez)",
+    "seeHistory": "Voir l'historique",
+    "seeHistoryChanges": "Voir l'historique des modifications"
   },
   "taskRecordReviewHistory": {
-    "cancelMyChoice": "Cancel my choice",
-    "commentVerb": "Comment",
+    "cancelMyChoice": "Annuler ma classification",
+    "commentVerb": "Commenter",
     "oneNote": "1 note",
-    "useTheSameValue": "Use the same value",
-    "you": "you"
+    "useTheSameValue": "Choisir la même valeur",
+    "you": "vous"
   },
   "taskRecordReviewList": {
-    "clearFilters": "Clear filters",
-    "selectAll": "Select {n} record | Select {n} records",
-    "selectedResults": "{n} result selected | {n} results selected",
-    "lockedResults": "{n} of which is locked | {n} of which are locked",
-    "noRecordAssigned": "No records assigned yet.",
-    "backToListView": "Back to list view",
-    "filters": "Filters"
+    "clearFilters": "Effacer les filtres",
+    "selectAll": "Sélectionnez {n} donnée | Sélectionnez {n} données",
+    "selectedResults": "{n} résultat sélectionné | {n} résultats sélectionnés",
+    "lockedResults": "{n} d'entre eux est verrouillé | {n} d'entre eux sont verrouillés",
+    "noRecordAssigned": "Aucune donnée n'a encore été attribuée.",
+    "backToListView": "Retour à la vue liste",
+    "filters": "Filtres"
   },
   "taskStatsCard": {
-    "closed": "Closed!",
-    "createdOn": "Created on",
-    "locked": "Locked",
-    "fullyCheckedItems": "Fully checked record | Fully checked records",
-    "priority": "Priority",
-    "round": "Round"
+    "closed": "Fermé",
+    "createdOn": "Créé le",
+    "locked": "Verrouillé",
+    "fullyCheckedItems": "Donnée entièrement vérifiée | Données entièrement vérifiées",
+    "priority": "Priorité",
+    "round": "Tour"
   },
   "tips": {
-    "lastModified": "Last modified",
-    "you": "you"
+    "lastModified": "Dernière modification",
+    "you": "vous"
   },
   "taskStatus": {
-    "open": "Open",
-    "locked": "Locked",
-    "closed": "Closed",
-    "done": "Done"
+    "open": "Ouvert",
+    "locked": "Verrouillé",
+    "closed": "Fermé",
+    "done": "Terminé"
   },
   "tipListCard": {
-    "seeTipsForAllTasks": "See tips for all tasks"
+    "seeTipsForAllTasks": "Voir les tips pour toutes les tâches"
   },
   "tutorial": {
-    "readTheContent": "Read the content to be checked",
-    "checkPredictedValue": "Check whether the predicted value is correct",
-    "selectChoice": "Select (or type) your choice",
-    "readOthersChoices": "Read others' choices (click another user's choice to select the same!)",
-    "comment": "Comment (you can mention other checkers with @username, or everyone with @project)",
-    "previous": "Previous",
-    "next": "Next",
-    "close": "Close",
-    "firstTimeHere": "First time here?",
-    "skip": "Skip tutorial"
+    "readTheContent": "Lisez les données à vérifier",
+    "checkPredictedValue": "Vérifiez si la valeur prédite est correcte",
+    "selectChoice": "Sélectionnez (ou saisissez) votre choix",
+    "readOthersChoices": "Lisez les choix des autres (cliquez sur le choix d'un autre utilisateur pour enregistrer le même choix !)",
+    "comment": "Commentez (vous pouvez mentionner d'autres vérificateurs avec @username ou tout le monde avec @project)",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "close": "Fermer",
+    "firstTimeHere": "C'est votre première fois ici ?",
+    "skip": "Ignorer le tuto"
   },
   "userCard": {
-    "assignedTasks": "Assigned to {n} task: | Assigned to {n} tasks:"
+    "assignedTasks": "Assigné•e à {n} tâche : | Assigné•e à {n} tâches :"
   },
   "userNotifications": {
-    "noNotification": "You don't have any notification yet."
+    "noNotification": "Vous n'avez pas de notification."
   },
   "userProfileDropdownMenu": {
     "api": "API",
     "admin": "Admin",
-    "help": "Help",
-    "logOut": "Log out"
+    "help": "Aide",
+    "logOut": "Se déconnecter"
   },
   "userRetrieveBookmarks": {
     "title": {
-      "yours": "Your bookmarks",
-      "others": "Their bookmarks"
+      "yours": "Vos favoris",
+      "others": "Ses favoris"
     },
-    "noBookmarks": "No bookmarks",
-    "unableToRetrieveTheBookmarks": "Unable to retrieve the bookmarks"
+    "noBookmarks": "Aucun favoris",
+    "unableToRetrieveTheBookmarks": "Impossible d'afficher les favoris"
   },
   "userRetrieveProfile": {
     "title": {
-      "yours": "Your profile",
+      "yours": "Votre profil",
       "others": "{displayFullName}"
     },
-    "lastLogin": "Last login",
-    "notProvided": "Not provided"
+    "lastLogin": "Dernière connexion",
+    "notProvided": "Non fourni"
   },
   "userRetrieveActivity": {
     "title": {
-      "yours": "Your activity",
-      "others": "Their activity"
+      "yours": "Votre activité",
+      "others": "Son activité"
     },
     "stats": {
-      "yours": "Your stats",
-      "others": "Their stats"
+      "yours": "Vos stats",
+      "others": "Ses stats"
     }
   },
   "userRetrieveTeam": {
     "title": {
-      "yours": "Your team",
-      "others": "Their team"
+      "yours": "Votre équipe",
+      "others": "Son équipe"
     }
   },
   "userRetrieveNotifications": {
     "title": {
-      "yours": "Your notifications",
-      "others": "Their notifications"
+      "yours": "Vos notifications",
+      "others": "Ses notifications"
     }
   },
   "userRetrieveHistory": {
     "title": {
-      "yours": "Your history",
-      "others": "Their history"
+      "yours": "Votre historique",
+      "others": "Son historique"
     }
   },
   "userTaskStatsCard": {
-    "allOpenTasks": "All open tasks",
-    "allRecords": "All records"
+    "allOpenTasks": "Toutes les tâches ouvertes",
+    "allRecords": "Toutes les données"
   }
 }
