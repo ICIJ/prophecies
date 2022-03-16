@@ -1,0 +1,3 @@
+files:
+  - source: /prophecies/apps/frontend/src/messages/en.json
+    translation: /prophecies/apps/frontend/src/messages/%two_letters_code%.json
