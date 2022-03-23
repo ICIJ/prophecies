@@ -51,8 +51,8 @@
   "appHeader": {
     "cinematicView": "Cinematic view",
     "tips": "Tips",
-    "search": "Search",
-    "shortcuts": "Shortcuts",
+    "search": "Buscar",
+    "shortcuts": "Atajos",
     "tutorial": "Tutorial"
   },
   "appSearchForm": {
@@ -75,8 +75,8 @@
     "title": "Dashboard",
     "allHistory": "All history",
     "showAllHistory": "Show me all history",
-    "allStats": "All stats",
-    "allTips": "All tips",
+    "allStats": "Estadísticas",
+    "allTips": "Consejos",
     "latestTips": "Latest tips",
     "moreNiceTips": "More nice tips",
     "noTask": "No tasks yet",
