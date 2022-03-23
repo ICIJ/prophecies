@@ -56,57 +56,57 @@
     "tutorial": "Tutorial"
   },
   "appSearchForm": {
-    "typeYourSearch": "Type your search"
+    "typeYourSearch": "Escribe tu búsqueda"
   },
   "appSearchResults": {
-    "tips": "Tips"
+    "tips": "Consejos"
   },
   "appSidebar": {
     "dashboard": "Dashboard",
-    "shortcuts": "Shortcuts",
-    "tips": "Tips",
-    "history": "History",
-    "admin": "Admin"
+    "shortcuts": "Atajos",
+    "tips": "Consejos",
+    "history": "Historial",
+    "admin": "Panel de control"
   },
   "appVersion": {
-    "version": "Version {version}"
+    "version": "Versión {version}"
   },
   "dashboard": {
     "title": "Dashboard",
-    "allHistory": "All history",
-    "showAllHistory": "Show me all history",
+    "allHistory": "Historial completo",
+    "showAllHistory": "Mostrar todo el historial",
     "allStats": "Estadísticas",
-    "allTips": "Consejos",
-    "latestTips": "Latest tips",
-    "moreNiceTips": "More nice tips",
-    "noTask": "No tasks yet",
-    "lately": "Lately"
+    "allTips": "Todos los consejos",
+    "latestTips": "Últimos consejos",
+    "moreNiceTips": "Más consejos útiles",
+    "noTask": "Aún no hay tareas",
+    "lately": "Recientemente"
   },
   "error": {
-    "title": "Something's wrong here",
-    "description": "An error has occurred. Please try again later or contact your administrator if the problem persists.",
-    "connectedAs": "Your are connected as {username}",
-    "logout": "Sign out",
-    "help": "Ask for help"
+    "title": "Algo va mal aquí",
+    "description": "Ha ocurrido un error. Por favor, inténtelo de nuevo más tarde o póngase en contacto con su administrador si el problema persiste.",
+    "connectedAs": "Estás conectado como {username}",
+    "logout": "Cerrar sesión",
+    "help": "Solicitar ayuda"
   },
   "general": {
-    "unableToFindThisResource": "Unable to find this resource"
+    "unableToFindThisResource": "No se pudo encontrar este recurso"
   },
   "historyListGroup": {
-    "seeMore": "See more"
+    "seeMore": "Ver más"
   },
   "historyListItem": {
-    "checked-records": "checked {n} records",
-    "closed-task": "closed the task",
+    "checked-records": "comprobó {n} registros",
+    "closed-task": "ha cerrado la tarea",
     "general": "General",
-    "mentioned-user": "mentioned {value} in a note",
-    "tip": "added a new tip: \"{value}\"",
-    "youLowercase": "you",
-    "youCapitalized": "You"
+    "mentioned-user": "mencionado {value} en una nota",
+    "tip": "agregó un nuevo consejo: \"{value}\"",
+    "youLowercase": "tú",
+    "youCapitalized": "Tú"
   },
   "latestTipsCard": {
-    "closeLatestTips": "Close latest tips",
-    "inTaskAndProject": "in {task} | {project}",
+    "closeLatestTips": "Cerrar los últimos consejos",
+    "inTaskAndProject": "en {task} | {project}",
     "general": "General"
   },
   "login": {
@@ -166,34 +166,34 @@
     "removeBookmark": "Remove bookmark",
     "duplicateRecord": "Duplicate record",
     "unlock": "Unlock",
-    "adminMustOpenTheTask": "The admin must open the task to let you review this record",
-    "unlockRecord": "Unlock record",
-    "lockedBy": "{username} must unlock this record to let you review it",
-    "lock": "Lock",
-    "lockRecord": "Lock record (nobody will be able to review it until you unlock it)",
-    "seeHistory": "See history",
-    "seeHistoryChanges": "See history changes"
+    "adminMustOpenTheTask": "El administrador debe añadirle en la tarea para permitirle revisar este registro",
+    "unlockRecord": "Desbloquear registro",
+    "lockedBy": "{username} debe desbloquear este registro para permitirle revisarlo",
+    "lock": "Bloquear",
+    "lockRecord": "Bloquear registro (nadie podrá revisarlo hasta que lo desbloquee)",
+    "seeHistory": "Ver historial",
+    "seeHistoryChanges": "Ver historial de cambios"
   },
   "taskRecordReviewHistory": {
-    "cancelMyChoice": "Cancel my choice",
-    "commentVerb": "Comment",
-    "oneNote": "1 note",
-    "useTheSameValue": "Use the same value",
-    "you": "you"
+    "cancelMyChoice": "Cancelar mi selección",
+    "commentVerb": "Comentario",
+    "oneNote": "1 nota",
+    "useTheSameValue": "Usar el mismo valor",
+    "you": "tú"
   },
   "taskRecordReviewList": {
-    "clearFilters": "Clear filters",
-    "selectAll": "Select {n} record | Select {n} records",
-    "selectedResults": "{n} result selected | {n} results selected",
-    "lockedResults": "{n} of which is locked | {n} of which are locked",
-    "noRecordAssigned": "No records assigned yet.",
-    "backToListView": "Back to list view",
-    "filters": "Filters"
+    "clearFilters": "Quitar filtros",
+    "selectAll": "Seleccione {n} registro | Seleccione {n} registros",
+    "selectedResults": "{n} resultado seleccionado | {n} resultados seleccionados",
+    "lockedResults": "{n} de los cuales está bloqueado | {n} de los cuales están bloqueados",
+    "noRecordAssigned": "Aún no hay registros asignados.",
+    "backToListView": "Volver a la lista",
+    "filters": "Filtros"
   },
   "taskStatsCard": {
-    "closed": "Closed!",
-    "createdOn": "Created on",
-    "locked": "Locked",
+    "closed": "¡Cerrado!",
+    "createdOn": "Creado el",
+    "locked": "Bloqueado",
     "fullyCheckedItems": "Fully checked record | Fully checked records",
     "priority": "Priority",
     "round": "Round"
