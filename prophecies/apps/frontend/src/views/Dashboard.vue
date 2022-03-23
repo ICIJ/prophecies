@@ -113,7 +113,7 @@ export default {
                                    :task-id="task.id" >
                   </task-stats-card>
                   <div class="dashboard__container__left-panel__stats-link d-flex justify-content-center py-3 mt-3 mb-5">
-                    <router-link class="btn btn-primary font-weight-bold" :to="{name:'stats-list'}">{{ $t('dashboard.allStats') }}</router-link>
+                    <router-link class="btn btn-primary font-weight-bold" :to="{name:'stats-list'}">{{ $t('dashboard.allTasks') }}</router-link>
                   </div>
                 </template>
                 <div v-else class="card card-body shadow-sm text-center text-muted text-small">
