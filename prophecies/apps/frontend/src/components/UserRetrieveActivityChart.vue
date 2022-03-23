@@ -151,7 +151,7 @@ export default {
   <div class="user-retrieve-activity__chart card p-5">
     <div class="d-flex">
       <div class="col-8">
-        <h2 class="text-primary">Reviewed record per day</h2>
+        <h2 class="text-primary">Reviewed records per day</h2>
         <p class="text-muted">
           Number of classified records over the last {{ range }} days<span  v-if="chartActivitiesByTaskId.length"> on
           {{ taskLabel }}</span>.
