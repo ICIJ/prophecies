@@ -102,7 +102,7 @@ export default {
     text-underline-offset: 5px;
     line-height: 24px;
 
-    &:after {
+    & h3:after {
         content: "\00a0\00a0";
     }
 
