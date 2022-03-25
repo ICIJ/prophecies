@@ -11,13 +11,13 @@ export default {
   computed: {
     sortOptions () {
       return [
-        { value: 'task_record__id', label: 'ID (default)', $isDefault: true },
-        { value: 'task_record__predicted_value', label: 'Sorted by: predicted value (A - Z)' },
-        { value: '-task_record__predicted_value', label: 'Sorted by: predicted value (Z - A)' },
-        { value: 'task_record__original_value', label: 'Sorted by: original value (A - Z)' },
-        { value: '-task_record__original_value', label: 'Sorted by: original value (Z - A)' },
-        { value: 'task_record__priority', label: 'Sorted by: priority (low to high)', $isDisabled: true },
-        { value: '-task_record__priority', label: 'Sorted by: priority (high to low)', $isDisabled: true }
+        { value: 'task_record__id', label: this.$t('taskRecordReviewAppliedSorting.idDefault'), $isDefault: true },
+        { value: 'task_record__predicted_value', label: this.$t('taskRecordReviewAppliedSorting.predictedValueAZ') },
+        { value: '-task_record__predicted_value', label: this.$t('taskRecordReviewAppliedSorting.predictedValueZA') },
+        { value: 'task_record__original_value', label: this.$t('taskRecordReviewAppliedSorting.originalValueAZ') },
+        { value: '-task_record__original_value', label: this.$t('taskRecordReviewAppliedSorting.originalValueZA') },
+        { value: 'task_record__priority', label: this.$t('taskRecordReviewAppliedSorting.priorityValueLowHigh'), $isDisabled: true },
+        { value: '-task_record__priority', label: this.$t('taskRecordReviewAppliedSorting.priorityValueHighLow'), $isDisabled: true }
       ]
     },
     selectedSortOption () {

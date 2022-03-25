@@ -190,6 +190,15 @@
     "backToListView": "Back to list view",
     "filters": "Filters"
   },
+  "taskRecordReviewAppliedSorting": {
+    "idDefault": "ID (default)",
+    "predictedValueAZ": "Sorted by: predicted value (A - Z)",
+    "predictedValueZA": "Sorted by: predicted value (Z - A)",
+    "originalValueAZ": "Sorted by: original value (A - Z)",
+    "originalValueZA": "Sorted by: original value (Z - A)",
+    "priorityValueLowHigh": "Sorted by: priority (low to high)",
+    "priorityValueHighLow": "Sorted by: priority (high to low)"
+  },
   "taskStatsCard": {
     "closed": "Closed!",
     "createdOn": "Created on",
