@@ -26,9 +26,9 @@ export default {
           <b-nav-item :to="{ name: 'stats-list' }">
             <inbox-icon class="mr-3" />
             {{$t('appSidebar.myTasks')}}
-            <shortkey-badge :value="['Ctrl', 'g']" class="ml-2" />
+            <shortkey-badge :value="['Ctrl', 'm']" class="ml-2" />
           </b-nav-item>
-          <b-nav-item :to="{ name: 'shortcut-list' }">
+          <b-nav-item :to="{ name: 'shortcut-list' }" >
             <command-icon class="mr-3" />
             {{$t('appSidebar.shortcuts')}}
             <shortkey-badge :value="['Ctrl', 'k']" class="ml-2" />
