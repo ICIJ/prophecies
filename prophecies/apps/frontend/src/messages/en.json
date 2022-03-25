@@ -313,6 +313,7 @@
   },
   "userTaskStatsCard": {
     "allOpenTasks": "All open tasks",
-    "allRecords": "All records"
+    "allRecords": "All records",
+    "noActivity": "No activity recorded over this period"
   }
 }

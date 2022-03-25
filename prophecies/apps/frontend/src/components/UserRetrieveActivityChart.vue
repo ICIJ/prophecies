@@ -180,7 +180,7 @@ export default {
       no-direct-labeling
       class="my-4"
    />
-    <p class="p-5 text-center" v-else>No activity recorded over this period</p>
+    <p class="p-5 text-center" v-else>{{$t('userTaskStatsCard.noActivity')}}</p>
   </div>
 </template>
 <style lang="scss" scoped>
