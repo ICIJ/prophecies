@@ -3,6 +3,10 @@ import { formatDate } from '@/utils/date'
 import Task, { TaskStatusEnum } from '@/models/Task'
 import TaskStatus from '@/components/TaskStatus.vue'
 import { camelCase } from 'lodash'
+
+const priorities = {
+  1: '-top', 2: '-high', 3: '-medium'
+}
 export default {
   components: { TaskStatus },
   name: 'TaskStatsCardStatus',
@@ -29,6 +33,11 @@ export default {
     },
     round (value) {
       return Math.round(value)
+    }
+  },
+  methods: {
+    priorityColor (priority) {
+      return 'bg-priority' + priorities[priority] ?? '-low'
     }
   },
   computed: {
@@ -67,7 +76,7 @@ export default {
           <task-status :task-id="task.id" class="ml-2" />
           <template v-if="extended && celebrate"><span class="ml-2">🎉</span><span class="sr-only">{{taskLabel}}</span></template>
         </template>
-        <span v-else class="task-stats-card__status__top__priority bg-warning rounded py-1 px-2 text-nowrap">
+        <span v-else class="task-stats-card__status__top__priority rounded py-1 px-2 text-nowrap" :class="priorityColor(task.priority )">
           {{ $t('taskStatsCard.priority') }} {{ task.priority }}
         </span>
       </div>
@@ -85,14 +94,33 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .task-stats-card {
-    &__status{
+.task-stats-card {
+  &__status{
 
-      &--extended {
-        flex: 0 1 275px
+    &__top__priority{
+
+      &.bg-priority {
+
+        $colors: (
+          "top": $warning,
+          "high": $warning-70,
+          "medium": $warning-50,
+          "low": $warning-10
+        );
+
+        @each $name, $hex in $colors {
+          &-#{$name} {
+            background-color: $hex;
+          }
+        }
       }
 
     }
+    &--extended {
+      flex: 0 1 275px
+    }
+
+  }
 
   }
 </style>
