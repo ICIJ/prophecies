@@ -41,13 +41,13 @@ export default {
     },
     sortOptions () {
       return [
-        { value: 'task_record__id', label: 'ID (default)', $isDefault: true },
-        { value: 'task_record__predicted_value', label: 'Predicted value (A - Z)' },
-        { value: '-task_record__predicted_value', label: 'Predicted value (Z - A)' },
-        { value: 'task_record__original_value', label: 'Original value (A - Z)' },
-        { value: '-task_record__original_value', label: 'Original value (Z - A)' },
-        { value: 'task_record__priority', label: 'Priority (low to high)', $isDisabled: true },
-        { value: '-task_record__priority', label: 'Priority (high to low)', $isDisabled: true }
+        { value: 'task_record__id', label: this.$t('taskRecordReviewPageParams.idDefault'), $isDefault: true },
+        { value: 'task_record__predicted_value', label: this.$t('taskRecordReviewPageParams.predictedValueAZ') },
+        { value: '-task_record__predicted_value', label: this.$t('taskRecordReviewPageParams.predictedValueZA') },
+        { value: 'task_record__original_value', label: this.$t('taskRecordReviewPageParams.originalValueAZ') },
+        { value: '-task_record__original_value', label: this.$t('taskRecordReviewPageParams.originalValueZA') },
+        { value: 'task_record__priority', label: this.$t('taskRecordReviewPageParams.priorityValueLowHigh'), $isDisabled: true },
+        { value: '-task_record__priority', label: this.$t('taskRecordReviewPageParams.priorityValueHighLow'), $isDisabled: true }
       ]
     },
     selectedPageSizeOption () {
@@ -87,7 +87,7 @@ export default {
     </div>
     <div class="task-record-review-page-params__sort task-record-review-page-params__form-group" :class="{ 'task-record-review-page-params__sort--default': isDefaultSortOption }">
       <label class="task-record-review-page-params__form-group__label">
-        Sort by
+        {{$t('taskRecordReviewPageParams.sortBy')}}
       </label>
       <multiselect :allow-empty="false"
                    :show-labels="false"

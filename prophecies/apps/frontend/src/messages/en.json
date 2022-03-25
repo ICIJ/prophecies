@@ -199,6 +199,15 @@
     "priorityValueLowHigh": "Sorted by: priority (low to high)",
     "priorityValueHighLow": "Sorted by: priority (high to low)"
   },
+  "taskRecordReviewPageParams": {
+    "idDefault": "ID (default)",
+    "predictedValueAZ": "Predicted value (A - Z)",
+    "predictedValueZA": "Predicted value (Z - A)",
+    "originalValueAZ": "Original value (A - Z)",
+    "originalValueZA": "Original value (Z - A)",
+    "priorityValueLowHigh": "Priority (low to high)",
+    "priorityValueHighLow": "Priority (high to low)"
+  },
   "taskStatsCard": {
     "closed": "Closed!",
     "createdOn": "Created on",
