@@ -1,42 +1,41 @@
 <script>
-  import { find } from 'lodash'
-  import Task from '@/models/Task'
+import { find } from 'lodash'
 
-  export default {
-    name: 'TaskRecordReviewAppliedSorting',
-    props: {
-      sort: {
-        type: String
-      }
+export default {
+  name: 'TaskRecordReviewAppliedSorting',
+  props: {
+    sort: {
+      type: String
+    }
+  },
+  computed: {
+    sortOptions () {
+      return [
+        { value: 'task_record__id', label: 'ID (default)', $isDefault: true },
+        { value: 'task_record__predicted_value', label: 'Sorted by: predicted value (A - Z)' },
+        { value: '-task_record__predicted_value', label: 'Sorted by: predicted value (Z - A)' },
+        { value: 'task_record__original_value', label: 'Sorted by: original value (A - Z)' },
+        { value: '-task_record__original_value', label: 'Sorted by: original value (Z - A)' },
+        { value: 'task_record__priority', label: 'Sorted by: priority (low to high)', $isDisabled: true },
+        { value: '-task_record__priority', label: 'Sorted by: priority (high to low)', $isDisabled: true }
+      ]
     },
-    computed: {
-      sortOptions () {
-        return [
-          { value: 'task_record__id', label: 'ID (default)', $isDefault: true },
-          { value: 'task_record__predicted_value', label: 'Sorted by: predicted value (A - Z)' },
-          { value: '-task_record__predicted_value', label: 'Sorted by: predicted value (Z - A)' },
-          { value: 'task_record__original_value', label: 'Sorted by: original value (A - Z)' },
-          { value: '-task_record__original_value', label: 'Sorted by: original value (Z - A)' },
-          { value: 'task_record__priority', label: 'Sorted by: priority (low to high)', $isDisabled: true },
-          { value: '-task_record__priority', label: 'Sorted by: priority (high to low)', $isDisabled: true },
-        ]
-      },
-      selectedSortOption () {
-        return find(this.sortOptions, { value: this.sort })
-      },
-      defaultSortOption () {
-        return find(this.sortOptions, { $isDefault: true })
-      },
-      hasSorting () {
-        return  this.sort !== this.defaultSortOption.value
-      }
+    selectedSortOption () {
+      return find(this.sortOptions, { value: this.sort })
     },
-    methods: {
-      deleteSortOption (option) {
-        this.$emit('update:sort', option)
-      }
+    defaultSortOption () {
+      return find(this.sortOptions, { $isDefault: true })
+    },
+    hasSorting () {
+      return this.sort !== this.defaultSortOption.value
+    }
+  },
+  methods: {
+    deleteSortOption (option) {
+      this.$emit('update:sort', option)
     }
   }
+}
 </script>
 
 <template lang="html">
