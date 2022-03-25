@@ -109,7 +109,7 @@ export const router = {
     },
     {
       name: 'stats-list',
-      path: '/stats',
+      path: '/tasks',
       component: StatsList,
       props: true
     },
