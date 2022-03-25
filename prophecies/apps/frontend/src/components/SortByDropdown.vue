@@ -7,7 +7,7 @@
                     :searchable="false"
                     :options="options"
                     :value="selectedSortOption"
-                    placeholder="Sort by"
+                    :placeholder="$t('taskRecordReviewPageParams.sortBy')"
                     @input="intermediarySort = $event.value"
                     label="label"
                     track-by="value"

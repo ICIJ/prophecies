@@ -74,7 +74,7 @@ export default {
   <form class="task-record-review-page-params" @submit.prevent="submit">
     <div class="task-record-review-page-params__size task-record-review-page-params__form-group">
       <label class="task-record-review-page-params__form-group__label">
-        Page size
+        {{ $t('taskRecordReviewPageParams.pageSize')}}
       </label>
       <multiselect :allow-empty="false"
                    :show-labels="false"

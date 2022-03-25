@@ -200,6 +200,8 @@
     "priorityValueHighLow": "Sorted by: priority (high to low)"
   },
   "taskRecordReviewPageParams": {
+    "sortBy": "Sort by",
+    "pageSize": "Page size",
     "idDefault": "ID (default)",
     "predictedValueAZ": "Predicted value (A - Z)",
     "predictedValueZA": "Predicted value (Z - A)",
@@ -207,6 +209,16 @@
     "originalValueZA": "Original value (Z - A)",
     "priorityValueLowHigh": "Priority (low to high)",
     "priorityValueHighLow": "Priority (high to low)"
+  },
+  "taskSortByDropdown": {
+    "status": "Status (Open - Closed)",
+    "progress0_100": "Progress (0%-100%)",
+    "progress100_0": "Progress (100%-0%)",
+    "priority0_9": "Priority (0-9)",
+    "priority9_0": "Priority (9-0)",
+    "nameAZ": "Name (A-Z)",
+    "nameZA": "Name (Z-A)",
+    "recentlyCreated": "Recently created"
   },
   "taskStatsCard": {
     "closed": "Closed!",

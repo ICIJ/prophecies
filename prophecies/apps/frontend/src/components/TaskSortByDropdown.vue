@@ -36,15 +36,14 @@ export default {
   data () {
     return {
       sortOptions: [
-        { value: 'status_asc', label: 'Status (Open - Closed)', $isDefault: true, needStatus: true },
-        { value: 'progress_asc', label: 'Progress (0%-100%)' },
-        { value: 'progress_desc', label: 'Progress (100%-0%)' },
-        { value: 'priority_asc', label: 'Priority (0-9)', needStatus: true },
-        { value: 'priority_desc', label: 'Priority (9-0)', needStatus: true },
-        { value: 'name_asc', label: 'Name (A-Z)' },
-        { value: 'name_desc', label: 'Name (Z-A)' },
-        // { value: 'lastReviewed_desc', label: 'Recently reviewed' },
-        { value: 'createdAt_desc', label: 'Recently created' }
+        { value: 'status_asc', label: this.$t('taskSortByDropdown.status'), $isDefault: true, needStatus: true },
+        { value: 'progress_asc', label: this.$t('taskSortByDropdown.progress0_100') },
+        { value: 'progress_desc', label: this.$t('taskSortByDropdown.progress100_0') },
+        { value: 'priority_asc', label: this.$t('taskSortByDropdown.priority0_9'), needStatus: true },
+        { value: 'priority_desc', label: this.$t('taskSortByDropdown.priority9_0'), needStatus: true },
+        { value: 'name_asc', label: this.$t('taskSortByDropdown.nameAZ') },
+        { value: 'name_desc', label: this.$t('taskSortByDropdown.nameZA') },
+        { value: 'createdAt_desc', label: this.$t('taskSortByDropdown.recentlyCreated') }
       ]
     }
   },

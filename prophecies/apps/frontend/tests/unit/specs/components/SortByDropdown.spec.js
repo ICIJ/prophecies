@@ -13,7 +13,7 @@ describe('SortByDropdown', () => {
 
     // Configure the local vue with plugins
     const core = Core.init(localVue).useAll()
-    const { router } = core
+    const { router, i18n } = core
 
     const propsData = {
       sort: 'task_id',
@@ -25,6 +25,7 @@ describe('SortByDropdown', () => {
     await core.configure()
 
     const options = {
+      i18n,
       localVue,
       propsData,
       router
