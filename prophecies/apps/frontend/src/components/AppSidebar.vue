@@ -23,6 +23,11 @@ export default {
             <grid-icon class="mr-3" />
             {{$t('appSidebar.dashboard')}}
           </b-nav-item>
+          <b-nav-item :to="{ name: 'stats-list' }">
+            <inbox-icon class="mr-3" />
+            {{$t('appSidebar.myTasks')}}
+            <shortkey-badge :value="['Ctrl', 'g']" class="ml-2" />
+          </b-nav-item>
           <b-nav-item :to="{ name: 'shortcut-list' }">
             <command-icon class="mr-3" />
             {{$t('appSidebar.shortcuts')}}
@@ -63,6 +68,7 @@ export default {
         display: flex;
         align-items: center;
         padding: $spacer-lg;
+        white-space: nowrap;
 
         &.router-link-active {
           font-weight: 800;

@@ -62,6 +62,7 @@
   },
   "appSidebar": {
     "dashboard": "Dashboard",
+    "myTasks": "My Tasks",
     "shortcuts": "Shortcuts",
     "tips": "Tips",
     "history": "History",

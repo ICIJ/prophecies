@@ -25,6 +25,7 @@ export {
   GridIcon,
   HomeIcon,
   HelpCircleIcon,
+  InboxIcon,
   LifeBuoyIcon,
   LinkIcon,
   LockIcon,
