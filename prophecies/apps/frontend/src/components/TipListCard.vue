@@ -1,22 +1,44 @@
 <template>
   <div class="tip-list-card p-3">
-    <app-waiter :loader="fetchFilteredTipsLoader" waiter-class="my-5 mx-auto d-block">
-      <slot name="header" v-bind:taskAttributes="{ taskName, projectName }" />
-      <div class="tip-list-card__content pb-0">
-        <b-list-group-item v-for="tip in tips" class="tip-list-card__content__list-group-item flex-column align-items-start ml-4 border-0 mb-4" :key="tip.id">
-          <tip-card :tip-id="tip.id">
-            <template #tip-name>
-              <h3 class="mb-4">
-                {{ tip.name }}
-              </h3>
-            </template>
-          </tip-card>
-        </b-list-group-item>
-      </div>
-      <div class="d-flex justify-content-center">
-        <button class="btn btn-primary font-weight-bold mt-3 mb-5" @click="closeTips">
-          <span class="px-3">{{$t('tipListCard.seeTipsForAllTasks')}}</span>
-        </button>
+    <app-waiter
+      :loader="fetchFilteredTipsLoader"
+      waiter-class="my-5 mx-auto d-block"
+    >
+      <slot name="header" />
+      <div :class="contentClass" class="tip-list-card__content px-5 pt-4 pb-0">
+        <h2 class="tip-list-card__content__title">
+          <span class="tip-list-card__content__title__task"
+            >{{ $t("tipListCard.tipsFor") }} {{ taskName }}</span
+          >
+          <b-badge
+            class="
+              tip-list-card__content__title__project
+              font-weight-normal
+              bg-transparent
+              text-muted
+            "
+            >{{ projectName }}</b-badge
+          >
+        </h2>
+        <div class="tip-list-card__content__list pb-0 pr-2">
+          <div v-if="hasNoTips" class="text-center text-secondary">
+            {{$t("tipListCard.noTips")}}
+          </div>
+          <tip-card v-else
+            v-for="tip in tips"
+            :key="tip.id"
+            :tip-id="tip.id"
+            :content-class="{ tipNameMargin: 'mb-4', tipCardMargin: 'mb-5' }"
+          />
+        </div>
+        <div class="d-flex justify-content-center">
+          <button
+            class="btn btn-primary font-weight-bold mt-3 mb-5"
+            @click="closeTips"
+          >
+            <span class="px-3">{{ $t("tipListCard.seeTipsForAllTasks") }}</span>
+          </button>
+        </div>
       </div>
     </app-waiter>
   </div>
@@ -35,6 +57,17 @@ export default {
     AppWaiter,
     TipCard
   },
+  data () {
+    return {
+      task: null
+    }
+  },
+  props: {
+    contentClass: {
+      type: [String, Object, Array],
+      default: 'w-100'
+    }
+  },
   created () {
     return this.setup()
   },
@@ -47,11 +80,11 @@ export default {
         .where(({ taskId }) => !taskId || taskId === this.taskId)
         .get()
     },
+    hasNoTips () {
+      return this.tips.length === 0
+    },
     taskId () {
       return this.$route.params.taskId || null
-    },
-    task () {
-      return Task.query().with('project').find(this.taskId)
     },
     taskName () {
       return this.task?.name
@@ -63,16 +96,28 @@ export default {
   methods: {
     async setup () {
       try {
-        this.$wait.start(this.fetchFilteredTipsLoader)
-        await this.fetchTips()
-        this.$wait.end(this.fetchFilteredTipsLoader)
+        return this.waitFor(this.fetchFilteredTipsLoader, [this.fetchTips, this.fetchTask])
       } catch (error) {
         const title = 'Unable to retrieve tips'
         this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
+    async waitFor (loader, fns = []) {
+      this.$wait.start(loader)
+      await Promise.all(fns.map(fn => fn()))
+      this.$wait.end(loader)
+    },
     fetchTips () {
       return Tip.api().get()
+    },
+    async fetchTask () {
+      let task = Task.query().with('project').find(this.taskId)
+      if (!task) {
+        await Task.api().find(this.taskId)
+        task = Task.query().with('project').find(this.taskId)
+      }
+      this.task = task
+      return Promise.resolve()
     },
     closeTips () {
       this.$root.$emit('prophecies::closeTips')
@@ -82,48 +127,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @keyframes highlightRow {
-    from {
-      background: #fcf3c4;
-    }
-    to {
-      background: $primary-10;
-    }
+@keyframes highlightRow {
+  from {
+    background: #fcf3c4;
   }
+  to {
+    background: $primary-10;
+  }
+}
 
-  .tip-list-card {
-    background-color: $primary-10;
-    border-radius: $card-border-radius;
+.tip-list-card {
+  background-color: $primary-10;
+  border-radius: $card-border-radius;
 
-    &__content {
-      max-height: 700px;
+  &__content {
+    &__title {
+      color: $tertiary;
+      margin-bottom: $spacer-xxl;
+      position: relative;
+
+      &__task {
+        text-decoration: underline;
+        text-decoration-color: $warning;
+        text-decoration-thickness: 7px;
+        text-underline-offset: 5px;
+        line-height: 24px;
+
+        &:after {
+          content: "\00a0";
+        }
+      }
+    }
+
+    &__list {
+      min-height: 100px;
+      max-height: 65vh;
       overflow-y: scroll;
-
-      &__title {
-        color: $tertiary;
-        margin-bottom: $spacer-xxl;
-        position: relative;
-        padding-left: 2.65rem;
-      }
-
-      &__list-group-item {
-        background-color: $primary-10;
-      }
-    }
-
-        /* width */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-      background: $primary-10;
-    }
-
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-      background: $secondary;
     }
   }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: $primary-10;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: $secondary;
+  }
+}
 </style>

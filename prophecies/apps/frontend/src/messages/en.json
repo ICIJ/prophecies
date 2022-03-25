@@ -45,8 +45,7 @@
     "useThisExactValue": "Use this exact value"
   },
   "app": {
-    "close": "Close",
-    "tipsFor": "Tips for"
+    "close": "Close"
   },
   "appHeader": {
     "cinematicView": "Cinematic view",
@@ -209,7 +208,9 @@
     "done": "Done"
   },
   "tipListCard": {
-    "seeTipsForAllTasks": "See tips for all tasks"
+    "tipsFor": "Tips for",
+    "seeTipsForAllTasks": "See tips for all tasks",
+    "noTips": "There is no tips for this task"
   },
   "tutorial": {
     "readTheContent": "Read the content to be checked",

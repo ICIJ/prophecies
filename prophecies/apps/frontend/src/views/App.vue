@@ -72,17 +72,11 @@ export default {
       hide-footer
       hide-header>
       <tip-list-card >
-        <template #header="{ taskAttributes }">
+        <template #header>
           <b-btn class="float-right px-2" variant="link" @click="$refs['modal-tips'].toggle()">
             <x-icon />
             <span class="sr-only">{{$t('app.close')}}</span>
           </b-btn>
-
-          <ul class="app__breadcrumb list-inline mt-3 mb-5 pt-3 text-primary">
-            <li class="list-inline-item app__breadcrumb__item app__item--dashboard mt-1">
-              <h3>{{$t('app.tipsFor')}} {{ taskAttributes.projectName }} > {{ taskAttributes.taskName }} </h3>
-            </li>
-          </ul>
         </template>
       </tip-list-card>
     </b-modal>
@@ -102,7 +96,7 @@ export default {
     text-underline-offset: 5px;
     line-height: 24px;
 
-    & h3:after {
+    &:after {
         content: "\00a0\00a0";
     }
 
