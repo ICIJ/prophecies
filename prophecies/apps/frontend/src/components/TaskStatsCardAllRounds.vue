@@ -62,9 +62,9 @@ export default {
             </span>
           </div>
           <b-col class="px-1 text-center">
-            <check-icon size="1x" class="text-primary mr-2" /><span class="sr-only">Done</span>{{done}}</b-col>
+            <span class="sr-only">Done</span>{{done}}<check-icon size="1x" class="text-primary ml-2 mb-1" /></b-col>
           <b-col class="px-1 text-center">
-            <clock-icon size="1x" class="text-danger mr-2" /><span class="sr-only">Pending</span>{{pending}}</b-col>
+            <span class="sr-only">Pending</span>{{pending}}<clock-icon size="1x" class="text-danger ml-2 mb-1" /></b-col>
         </b-row>
       </b-col>
     </b-row>

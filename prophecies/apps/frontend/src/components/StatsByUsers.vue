@@ -1,20 +1,20 @@
 <template>
     <div class="stats-by-users d-flex flex-column flex-grow-1 py-3">
-      <div class="stats-by-users__row d-flex flex-row py-3" v-for="(user, index) in users" :key="index">
+su       <div class="stats-by-users__row d-flex flex-row py-2" v-for="(user, index) in users" :key="index">
         <div class="stats-by-users__row__username col-3 px-0 text-nowrap">
           {{ user.name }}
         </div>
         <div class="stats-by-users__row__progress text-right mx-3">
           <span class="stats-by-users__row__number">{{ user.progress | round}}</span>%
         </div>
-        <div class="stats-by-users__row__done" :class="tableClassList">
-          <check-icon size="1x" class="text-primary mr-2" /><span class="stats-by-users__row__number">{{user.done}}</span>
+        <div class="stats-by-users__row__done " :class="tableClassList">
+          <span class="stats-by-users__row__number">{{user.done}}</span><check-icon size="1x" class="text-primary ml-2" />
         </div>
         <div class="stats-by-users__row__pending" :class="tableClassList"  >
-          <clock-icon size="1x" class="text-danger mr-2" /><span class="stats-by-users__row__number">{{user.pending}}</span>
+          <span class="stats-by-users__row__number">{{user.pending}}</span><clock-icon size="1x" class="text-danger ml-2" />
         </div>
       </div>
-      <div class="stats-by-users__total d-flex flex-row py-2 font-weight-bold flex-grow-1 align-items-end" >
+      <div class="stats-by-users__total d-flex flex-row py-3 font-weight-bold flex-grow-1 align-items-end" >
         <div class="col-3 pl-0">
           Total
         </div>
@@ -22,10 +22,10 @@
         <span class="stats-by-users__row__number">{{ totalStats.progress | round}}</span>%
         </div>
         <div :class="tableClassList">
-          <check-icon size="1x" class="text-primary mr-2" /><span class="stats-by-users__row__number">{{ totalStats.done }}</span>
+          <span class="stats-by-users__row__number">{{ totalStats.done }}</span><check-icon size="1x" class="text-primary ml-2" />
         </div>
         <div :class="tableClassList"  >
-          <clock-icon size="1x" class="text-danger mr-2" /><span class="stats-by-users__row__number">{{ totalStats.pending }}</span>
+          <span class="stats-by-users__row__number">{{ totalStats.pending }}</span><clock-icon size="1x" class="text-danger ml-2" />
         </div>
       </div>
     </div>
@@ -77,8 +77,8 @@ export default {
   }
   &__cell__icon{
       align-items: center;
+      justify-content:right;
       flex : 0 1 7em;
     }
-
 }
 </style>
