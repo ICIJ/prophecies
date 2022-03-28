@@ -18,7 +18,7 @@
     },
     "unlocked": {
       "taskRecord": {
-        "*": "{actor} <strong>a déverouillé</strong> cette donnée"
+        "*": "{actor} <strong>a déverrouillé</strong> cette donnée"
       }
     },
     "commented": {
@@ -55,14 +55,14 @@
     "tutorial": "Tuto"
   },
   "appSearchForm": {
-    "typeYourSearch": "Taper votre recherche"
+    "typeYourSearch": "Entrez votre recherche"
   },
   "appSearchResults": {
     "tips": "Tips"
   },
   "appSidebar": {
     "dashboard": "Tableau de bord",
-    "myTasks": "My Tasks",
+    "myTasks": "Mes tâches",
     "shortcuts": "Raccourcis",
     "tips": "Tips",
     "history": "Historique",
@@ -74,8 +74,8 @@
   "dashboard": {
     "title": "Tableau de bord",
     "allHistory": "Tout l'historique",
-    "showAllHistory": "Afficher tout l'historique",
-    "allTasks": "All my tasks",
+    "showAllHistory": "Voir tout l'historique",
+    "allTasks": "Toutes mes tâches",
     "allTips": "Tous les tips",
     "latestTips": "Les derniers tips",
     "moreNiceTips": "Plus de tips",
@@ -83,7 +83,7 @@
     "lately": "Dernièrement"
   },
   "error": {
-    "title": "Quelque chose ne tourne pas rond ici",
+    "title": "Un problème est survenu ici",
     "description": "Une erreur est survenue. Réessayer plus tard ou contacter l'admin si le problème persiste.",
     "connectedAs": "Vous êtes connecté•e en tant que {username}",
     "logout": "Se déconnecter",
@@ -170,7 +170,7 @@
     "unlockRecord": "Déverrouiller cette donnée",
     "lockedBy": "{username} doit déverrouiller cette donnée pour vous permettre de la classifier",
     "lock": "Verrouiller",
-    "lockRecord": "Verrouiller cette donnée (personne ne pourra la classifier jusqu'à ce que vous la déverouilliez)",
+    "lockRecord": "Verrouiller cette donnée (personne ne pourra la classifier jusqu'à ce que vous la déverrouilliez)",
     "seeHistory": "Voir l'historique",
     "seeHistoryChanges": "Voir l'historique des modifications"
   },
@@ -191,39 +191,39 @@
     "filters": "Filtres"
   },
   "taskRecordReviewAppliedSorting": {
-    "idDefault": "ID (default)",
-    "predictedValueAZ": "Sorted by: predicted value (A - Z)",
-    "predictedValueZA": "Sorted by: predicted value (Z - A)",
-    "originalValueAZ": "Sorted by: original value (A - Z)",
-    "originalValueZA": "Sorted by: original value (Z - A)",
-    "priorityValueLowHigh": "Sorted by: priority (low to high)",
-    "priorityValueHighLow": "Sorted by: priority (high to low)"
+    "idDefault": "ID (par défaut)",
+    "predictedValueAZ": "Trié par: valeur prédite (A - Z)",
+    "predictedValueZA": "Trié par: valeur prédite (Z - A)",
+    "originalValueAZ": "Trié par: valeur originale (A - Z)",
+    "originalValueZA": "Tri par : valeur originale (Z - A)",
+    "priorityValueLowHigh": "Trié par: priorité (basse à haute)",
+    "priorityValueHighLow": "Trié par: priorité (haute à basse)"
   },
   "taskRecordReviewPageParams": {
-    "sortBy": "Sort by",
-    "pageSize": "Page size",
-    "idDefault": "ID (default)",
-    "predictedValueAZ": "Predicted value (A - Z)",
-    "predictedValueZA": "Predicted value (Z - A)",
-    "originalValueAZ": "Original value (A - Z)",
-    "originalValueZA": "Original value (Z - A)",
-    "priorityValueLowHigh": "Priority (low to high)",
-    "priorityValueHighLow": "Priority (high to low)"
+    "sortBy": "Trier par",
+    "pageSize": "Taille de page",
+    "idDefault": "ID (par défaut)",
+    "predictedValueAZ": "Valeur prédite (A - Z)",
+    "predictedValueZA": "Valeur prédite (Z - A)",
+    "originalValueAZ": "Valeur originale (A - Z)",
+    "originalValueZA": "Valeur originale (Z - A)",
+    "priorityValueLowHigh": "Priorité (basse à haute)",
+    "priorityValueHighLow": "Priorité (haute à basse)"
   },
   "taskSortByDropdown": {
-    "status": "Status (Open - Closed)",
-    "progress0_100": "Progress (0%-100%)",
-    "progress100_0": "Progress (100%-0%)",
-    "priority0_9": "Priority (0-9)",
-    "priority9_0": "Priority (9-0)",
-    "nameAZ": "Name (A-Z)",
-    "nameZA": "Name (Z-A)",
-    "recentlyCreated": "Recently created"
+    "status": "Statut (Ouverte - Fermée)",
+    "progress0_100": "Progression (0% - 100%)",
+    "progress100_0": "Progression (100% - 0%)",
+    "priority0_9": "Priorité (0 - 9)",
+    "priority9_0": "Priorité (9 - 0)",
+    "nameAZ": "Nom (A - Z)",
+    "nameZA": "Nom (Z - A)",
+    "recentlyCreated": "Créée récemment"
   },
   "taskStatsCard": {
     "closed": "Fermé",
-    "createdOn": "Créé le",
-    "locked": "Verrouillé",
+    "createdOn": "Créée le",
+    "locked": "Verrouillée",
     "fullyCheckedItems": "Donnée entièrement vérifiée | Données entièrement vérifiées",
     "priority": "Priorité",
     "round": "Tour"
@@ -233,22 +233,22 @@
     "you": "vous"
   },
   "taskStatus": {
-    "open": "Ouvert",
-    "locked": "Verrouillé",
-    "closed": "Fermé",
-    "done": "Terminé"
+    "open": "Ouverte",
+    "locked": "Verrouillée",
+    "closed": "Fermée",
+    "done": "Terminée"
   },
   "tipListCard": {
-    "tipsFor": "Tips for",
+    "tipsFor": "Tips pour",
     "seeTipsForAllTasks": "Voir les tips pour toutes les tâches",
-    "noTips": "There is no tips for this task"
+    "noTips": "Il n'y a pas de tips pour cette tâche"
   },
   "tutorial": {
-    "readTheContent": "Lisez les données à vérifier",
+    "readTheContent": "Lisez le contenu à vérifier",
     "checkPredictedValue": "Vérifiez si la valeur prédite est correcte",
     "selectChoice": "Sélectionnez (ou saisissez) votre choix",
-    "readOthersChoices": "Lisez les choix des autres (cliquez sur le choix d'un autre utilisateur pour enregistrer le même choix !)",
-    "comment": "Commentez (vous pouvez mentionner d'autres vérificateurs avec @username ou tout le monde avec @project)",
+    "readOthersChoices": "Lisez les choix des autres (cliquez sur le choix d'un•e autre utilisateur•ice pour enregistrer le même choix !)",
+    "comment": "Commentez (mentionnez d'autres vérificateur•ices avec @username ou tout le monde avec @project)",
     "previous": "Précédent",
     "next": "Suivant",
     "close": "Fermer",
@@ -272,7 +272,7 @@
       "yours": "Vos favoris",
       "others": "Ses favoris"
     },
-    "noBookmarks": "Aucun favoris",
+    "noBookmarks": "Aucun favori",
     "unableToRetrieveTheBookmarks": "Impossible d'afficher les favoris"
   },
   "userRetrieveProfile": {
@@ -314,6 +314,6 @@
   "userTaskStatsCard": {
     "allOpenTasks": "Toutes les tâches ouvertes",
     "allRecords": "Toutes les données",
-    "noActivity": "No activity recorded over this period"
+    "noActivity": "Aucune activité enregistrée sur cette période"
   }
 }
