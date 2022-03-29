@@ -5,7 +5,7 @@ import TaskStatus from '@/components/TaskStatus.vue'
 import { camelCase } from 'lodash'
 
 const priorities = {
-  1: '-top', 2: '-high', 3: '-medium'
+  0: '-top', 1: '-top', 2: '-high', 3: '-medium'
 }
 export default {
   components: { TaskStatus },
