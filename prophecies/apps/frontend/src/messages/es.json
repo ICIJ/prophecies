@@ -2,12 +2,12 @@
   "actions": {
     "cancelled": {
       "taskRecordReview": {
-        "*": "{actor} cancelled their record classification"
+        "*": "{actor} ha cancelado sus revisiones"
       }
     },
     "reviewed": {
       "taskRecordReview": {
-        "*": "{actor} classified their record with unknown choice",
+        "*": "{actor} clasificó el registro con opción desconocida",
         "choice": "{actor} classified the record as <strong>\"{actionObject}\"</strong>"
       }
     },
