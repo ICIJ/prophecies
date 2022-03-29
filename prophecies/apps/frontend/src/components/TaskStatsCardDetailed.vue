@@ -97,7 +97,8 @@ export default {
   computed: {
     task () {
       return Task.query()
-        .with('choiceGroup.choices').whereId(this.taskId).first()
+        .with('choiceGroup.choices')
+        .find(this.taskId)
     },
     defaultChoicesByTaskId () {
       const acc = {}
