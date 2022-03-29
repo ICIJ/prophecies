@@ -1,6 +1,6 @@
 <template>
     <div class="stats-by-users d-flex flex-column flex-grow-1 py-3">
-su       <div class="stats-by-users__row d-flex flex-row py-2" v-for="(user, index) in users" :key="index">
+        <div class="stats-by-users__row d-flex flex-row py-2" v-for="(user, index) in users" :key="index">
         <div class="stats-by-users__row__username col-3 px-0 text-nowrap">
           {{ user.name }}
         </div>
