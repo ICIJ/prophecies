@@ -88,6 +88,8 @@ export default {
       return Task.query()
         .with('choiceGroup')
         .with('choiceGroup.choices')
+        .where('choiceGroupId', (value) => value !== null)
+        .where('taskRecordsCount', (value) => value > 0)
         .get()
     }
   },

@@ -100,12 +100,18 @@ export default {
         .with('choiceGroup.choices').whereId(this.taskId).first()
     },
     defaultChoicesByTaskId () {
-      const choiceGroupId = this.task.choiceGroupId
-      const choices = this.task.choiceGroup.choices
-      const defaultChoices = choices.reduce((prev, choice) =>
-        ({ ...prev, [choice.id]: { id: choice.id, name: choice.name, value: choice.value, progress: 0 } }), {})
       const acc = {}
-      acc[this.taskId] = { [choiceGroupId]: { ...defaultChoices } }
+      acc[this.taskId] = { }
+
+      if (this.task.choiceGroup) {
+        const choiceGroupId = this.task.choiceGroupId
+        const choices = this.task.choiceGroup.choices
+        const defaultChoices = choices.reduce((prev, choice) =>
+          ({ ...prev, [choice.id]: { id: choice.id, name: choice.name, value: choice.value, progress: 0 } }), {})
+        acc[this.taskId][choiceGroupId] = { ...defaultChoices }
+        return acc
+      }
+
       return acc
     },
     fetchTaskUserStatsLoader () {
