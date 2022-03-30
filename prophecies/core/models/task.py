@@ -47,7 +47,7 @@ class Task(models.Model):
     allow_multiple_checks = models.BooleanField(default=False, verbose_name="Allow checkers to check several time the same item")    
     allow_items_addition = models.BooleanField(default=False, verbose_name="Allow checker to add items (not implemented yet)")
     priority = models.PositiveIntegerField(default=1, verbose_name="Priority")
-    choice_group = models.ForeignKey(ChoiceGroup, verbose_name="Choices", on_delete=models.SET_NULL, null=True, blank=True)
+    choice_group = models.ForeignKey(ChoiceGroup, verbose_name="Choices", on_delete=models.RESTRICT, null=True, blank=True)
     color = ColorField(default='#31807D')
     record_link_template = models.CharField(max_length=1000, null=True, blank=True, verbose_name="Record link template", help_text="A link template to build a link for each task record. Task record can override this value with their own link")
     embeddable_links = models.BooleanField(default=False, verbose_name="Allow end-users to preview links within an iframe (targeted website must allow it)")
