@@ -112,7 +112,7 @@
   "login": {
     "title": "Haz login",
     "welcome": "Bienvenido a Prophecies",
-    "sumUp": "<a href=\"https://icij.org\">ICIJ</a> plataforma de limpieza y validación de datos.",
+    "sumUp": "La plataforma de limpieza y validación de datos del <a href=\"https://icij.org\">ICIJ</a>.",
     "accountDescription": "Usa tu cuenta para continuar:",
     "account": "Haz login",
     "askHelp": "Solicita ayuda",
