@@ -99,7 +99,7 @@
     "checked-records": "comprobó {n} registros",
     "closed-task": "ha cerrado la tarea",
     "general": "General",
-    "mentioned-user": "mencionado {value} en una nota",
+    "mentioned-user": "mencionó {value} en una nota",
     "tip": "agregó un nuevo consejo: \"{value}\"",
     "youLowercase": "tú",
     "youCapitalized": "Tú"
@@ -111,7 +111,7 @@
   },
   "login": {
     "title": "Haz login",
-    "welcome": "Bienvenido a Profecías",
+    "welcome": "Bienvenido a Prophecies",
     "sumUp": "<a href=\"https://icij.org\">ICIJ</a> plataforma de limpieza y validación de datos.",
     "accountDescription": "Usa tu cuenta para continuar:",
     "account": "Haz login",
@@ -212,12 +212,12 @@
   },
   "taskSortByDropdown": {
     "status": "Estado (Abierto - Cerrado)",
-    "progress0_100": "Progreso (0%-100%)",
-    "progress100_0": "Progreso (100%-0%)",
-    "priority0_9": "Prioridad (0-9)",
-    "priority9_0": "Prioridad (9-0)",
-    "nameAZ": "Nombre (A-Z)",
-    "nameZA": "Nombre (Z-A)",
+    "progress0_100": "Progreso (0% - 100%)",
+    "progress100_0": "Progreso (100% - 0%)",
+    "priority0_9": "Prioridad (0 - 9)",
+    "priority9_0": "Prioridad (9 - 0)",
+    "nameAZ": "Nombre (A - Z)",
+    "nameZA": "Nombre (Z - A)",
     "recentlyCreated": "Creado recientemente"
   },
   "taskStatsCard": {
