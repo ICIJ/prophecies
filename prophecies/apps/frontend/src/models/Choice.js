@@ -8,6 +8,7 @@ export default class Choice extends Model {
     return {
       id: this.attr(null),
       name: this.string(),
+      color: this.string(),
       value: this.string(),
       requireAlternativeValue: this.boolean(),
       shortkeys: this.string(null).nullable(),

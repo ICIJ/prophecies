@@ -10,7 +10,7 @@ function hexToRgb (hex) {
 export function textContrast (n) {
   const rgb = hexToRgb(n)
   if (!rgb) {
-    return 'black'
+    return '#071111' // $body-color
   }
   const colorbrightness = Math.round((rgb.r * 299) + (rgb.g * 587) + (rgb.b * 114) / 1000)
   const col = 330
@@ -20,5 +20,5 @@ export function textContrast (n) {
     return 'white'
   }
 
-  return 'black'
+  return '#071111' // $body-color
 }
