@@ -1,5 +1,6 @@
 <script>
 import { toVariant } from '@/utils/variant'
+import { textContrast } from '@/utils/color'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
 
@@ -63,7 +64,12 @@ export default {
         return null
       }
       return shortkeys.split(',')
+    },
+    textColor (color) {
+      return `  background-color:${color};
+                color:${textContrast(color)}; `
     }
+
   }
 }
 </script>
@@ -80,7 +86,7 @@ export default {
              v-shortkey="choiceShortkeys(choice)"
              block
              class="choice-group-buttons__item__button text-nowrap"
-             :variant="choice.value | toVariant">
+             :style="textColor(choice.color)">
         {{ choice.name }}
         <template v-if="choiceShortkeys(choice)">
           <shortkey-badge class="ml-1" :value="choice.shortkeys" />
@@ -91,6 +97,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+
   .choice-group-buttons {
     margin: 0 -$spacer-xs;
     margin-bottom: 0;
