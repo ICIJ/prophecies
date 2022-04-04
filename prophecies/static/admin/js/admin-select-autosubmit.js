@@ -1,7 +1,11 @@
 'use strict';
 (function () {
+  if (!django) {
+    return
+  }
+
   const $ = django.jQuery
-  
+
   $.fn.adminSelectAutosubmit = function () {
     $.each(this, (i, element) => {
       $(element).on('change', function () {
@@ -11,7 +15,7 @@
     })
     return this
   }
-  
+
   $(function () {
     $('.admin-select-autosubmit').adminSelectAutosubmit()
   })
