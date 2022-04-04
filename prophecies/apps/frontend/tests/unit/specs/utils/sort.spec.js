@@ -62,7 +62,7 @@ describe('utils/sort', () => {
     afterAll(() => {
       Task.deleteAll()
     })
-    it('from open to close', () => {
+    it('from open to close by priority then names', () => {
       const sorted = orderTasks(Task.all())
       expect(sorted).toHaveLength(5)
 
@@ -71,13 +71,13 @@ describe('utils/sort', () => {
       expect(task.name).toEqual('Addresses')
       task = sorted[1]
       expect(task.status).toEqual('OPEN')
-      expect(task.name).toEqual('Cats')
+      expect(task.name).toEqual('Shops')
       task = sorted[2]
       expect(task.status).toEqual('OPEN')
-      expect(task.name).toEqual('Phones')
+      expect(task.name).toEqual('Cats')
       task = sorted[3]
       expect(task.status).toEqual('OPEN')
-      expect(task.name).toEqual('Shops')
+      expect(task.name).toEqual('Phones')
       task = sorted[4]
       expect(task.status).toEqual('CLOSED')
       expect(task.name).toEqual('Immatriculations')
