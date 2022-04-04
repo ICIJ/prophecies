@@ -161,8 +161,8 @@ export default {
         title-link-class="app-search-results__tabs__nav__item__link"
         v-for="task in tasks">
         <template #title>
-          {{ task.name }}
-          <span class="ml-auto pl-1 text-secondary">
+          <span class="app-search-results__tabs__nav__item__link__name" :title="task.name">{{ task.name }}</span>
+          <span class="ml-auto pl-2 text-secondary">
             {{ taskRecordReviewsCount(task.id) }}
           </span>
         </template>
@@ -185,7 +185,7 @@ export default {
         @click="activateQueryset(tipQuerysetId())">
         <template #title>
           {{$t('appSearchResults.tips')}}
-          <span class="ml-auto pl-1 text-secondary">
+          <span class="ml-auto pl-2 text-secondary">
             {{ tipCount() }}
           </span>
         </template>
@@ -217,6 +217,13 @@ export default {
             flex-grow: 1;
             display: block;
             text-transform: uppercase;
+
+            &__name{
+              white-space: nowrap;
+              max-width: 160px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
           }
         }
 
@@ -245,7 +252,23 @@ export default {
             background: $light;
             outline: none;
           }
+
         }
+      }
+
+      /* width */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: $primary-10;
+      }
+
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: $secondary;
       }
     }
   }
