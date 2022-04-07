@@ -26,7 +26,7 @@ export default {
   data () {
     return {
       sortField: 'name_asc',
-      teamTaskStats: true
+      teamTaskStats: false
     }
   },
   created () {
@@ -55,8 +55,8 @@ export default {
     },
     taskStatsOptions () {
       return [
-        { text: this.$t('statsList.title.team'), value: true },
-        { text: this.$t('statsList.title.yours'), value: false }
+        { text: this.$t('statsList.title.yours'), value: false },
+        { text: this.$t('statsList.title.team'), value: true }
       ]
     }
   },

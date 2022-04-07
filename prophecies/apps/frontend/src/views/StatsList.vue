@@ -29,11 +29,11 @@ export default {
       sortByCb: (tasks) => orderBy(tasks, function (task) {
         return TaskStatusOrder[task.status] === 1
       }),
-      teamTaskStats: true,
+      teamTaskStats: false,
       taskStatusFilter: true,
       taskStatsOptions: [
-        { text: this.$t('statsList.title.team'), value: true },
-        { text: this.$t('statsList.title.yours'), value: false }
+        { text: this.$t('statsList.title.yours'), value: false },
+        { text: this.$t('statsList.title.team'), value: true }
       ]
     }
   },

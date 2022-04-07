@@ -155,8 +155,8 @@
   },
   "statsList": {
     "title": {
-      "yours": "Your stats",
-      "team": "Team stats"
+      "yours": "Your tasks",
+      "team": "Team tasks"
     },
     "showOnlyOpenTasks": "Show only open tasks"
   },
@@ -290,8 +290,8 @@
       "others": "Their activity"
     },
     "stats": {
-      "yours": "Your stats",
-      "others": "Their stats"
+      "yours": "Your tasks",
+      "others": "Their tasks"
     }
   },
   "userRetrieveTeam": {

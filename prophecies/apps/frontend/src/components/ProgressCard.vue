@@ -71,7 +71,7 @@ export default {
   },
   data () {
     return {
-      team: true
+      team: false
     }
   },
   methods: {
@@ -108,8 +108,8 @@ export default {
     },
     progressOptions () {
       return [
-        { text: this.$t('progressCard.title.team'), value: true },
-        { text: this.$t('progressCard.title.yours'), value: false }
+        { text: this.$t('progressCard.title.yours'), value: false },
+        { text: this.$t('progressCard.title.team'), value: true }
       ]
     }
   }
