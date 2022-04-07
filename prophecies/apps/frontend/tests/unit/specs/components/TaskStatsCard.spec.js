@@ -61,8 +61,8 @@ describe('TaskStatsCard', () => {
     })
     it('should show the team progress', async () => {
       await wrapper.setProps({ team: true })
-      const element = wrapper.find('.task-stats-card__progress')
-      expect(element.text()).toBe('40%')
+      const element = wrapper.find('task-progress-stub')
+      expect(element.attributes('progress')).toBe('40')
     })
 
     it('should show 3 rounds', () => {

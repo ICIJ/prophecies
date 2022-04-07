@@ -17,7 +17,7 @@
             <div class="flex-grow-1 pt-1 pb-4">
               <b-progress :value="meanProgress" :max="100" class="mb-1" />
               <span class="progress-card__items__item__name">
-                {{ $t("progressCard.allOpenTasks") }}
+                {{ $tc("progressCard.allOpenTasks") }} ({{unorderedTasks.length}})
               </span>
             </div>
         </li>
@@ -50,8 +50,7 @@
 </template>
 
 <script>
-import { mean } from 'lodash'
-import { orderTasks } from '@/utils/sort'
+import { mean, orderBy, shuffle } from 'lodash'
 import Task from '@/models/Task'
 
 export default {
@@ -62,6 +61,12 @@ export default {
     },
     round (value) {
       return Math.round(value)
+    }
+  },
+  props: {
+    limit: {
+      type: Number,
+      default: 5
     }
   },
   data () {
@@ -84,8 +89,10 @@ export default {
         .where('status', (value) => value !== 'CLOSED')
         .where('taskRecordsCount', (value) => value > 0).get()
     },
+
     tasks () {
-      return orderTasks(this.unorderedTasks)
+      const randomTasks = shuffle(this.unorderedTasks).slice(0, Math.min(this.unorderedTasks.length, this.limit))
+      return orderBy(randomTasks, 'name')
     },
     nbClosedTasks () {
       // make stats on tasks with at least one record
@@ -94,10 +101,10 @@ export default {
         .where('taskRecordsCount', (value) => value > 0).get().length
     },
     meanProgress () {
-      if (!this.tasks.length) {
+      if (!this.unorderedTasks.length) {
         return 0
       }
-      return mean(this.tasks.map(this.taskProgress))
+      return mean(this.unorderedTasks.map(this.taskProgress))
     },
     progressOptions () {
       return [

@@ -18,7 +18,7 @@ describe('ProgressCard', () => {
     const core = Core.init(localVue).useAll()
     const { i18n, router } = core
     const stubs = ['router-link']
-    wrapper = mount(ProgressCard, { localVue, i18n, stubs, router })
+    wrapper = await mount(ProgressCard, { localVue, i18n, stubs, router })
   })
 
   it('should show 4 progress items', () => {
@@ -36,40 +36,44 @@ describe('ProgressCard', () => {
     expect(element.text()).toBe('Addresses')
   })
 
-  it('should show the "Shop" task third', () => {
-    const element = wrapper.findAll('.progress-card__items__item__name').at(2)
-    expect(element.text()).toBe('Shops')
+  it('should show 2 tasks', async () => {
+    let element = wrapper.findAll('.progress-card__items__item__name')
+    expect(element).toHaveLength(4)
+    await wrapper.setProps({ limit: 2 })
+    element = wrapper.findAll('.progress-card__items__item__name')
+    expect(element).toHaveLength(3)
   })
 
-  it('should show a 50% progess for the user on task "Adresses"', async () => {
-    await wrapper.setData({ team: false })
+  it('should show a 50% progess for the user on task "Adresses"', () => {
     const element = wrapper.findAll('.progress-card__items__item__value').at(1)
     expect(element.text()).toBe('50%')
   })
 
-  it('should show a 45% progess for the user on task "Shop"', async () => {
-    await wrapper.setData({ team: false })
+  it('should show a 45% progess for the user on task "Shop"', () => {
     const element = wrapper.findAll('.progress-card__items__item__value').at(2)
     expect(element.text()).toBe('45%')
   })
 
-  it('should show the average progess for the user', async () => {
-    await wrapper.setData({ team: false })
+  it('should show the average progess for the user', () => {
     const element = wrapper.findAll('.progress-card__items__item__value').at(0)
     expect(element.text()).toBe('47%')
   })
 
-  it('should show a 40% progess for the team on task "Adresses"', () => {
+  it('should show a 40% progess for the team on task "Adresses"', async () => {
+    await wrapper.setData({ team: true })
+
     const element = wrapper.findAll('.progress-card__items__item__value').at(1)
     expect(element.text()).toBe('40%')
   })
 
-  it('should show a 60% progess for the team on task "Shop"', () => {
+  it('should show a 60% progess for the team on task "Shop"', async () => {
+    await wrapper.setData({ team: true })
     const element = wrapper.findAll('.progress-card__items__item__value').at(2)
     expect(element.text()).toBe('60%')
   })
 
-  it('should show the average progess for the team', () => {
+  it('should show the average progess for the team', async () => {
+    await wrapper.setData({ team: true })
     const element = wrapper.findAll('.progress-card__items__item__value').at(0)
     expect(element.text()).toBe('53%')
   })
