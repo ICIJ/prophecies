@@ -78,6 +78,20 @@ describe('ProgressCard', () => {
     const element = wrapper.find('.progress-card__stats-link')
     expect(element.text()).toBe('More progress')
   })
+  it('should display the 1 closed task', async () => {
+    Task.update({ where: '3', data: { status: 'OPEN' } })
+    await wrapper.vm.$nextTick()
+
+    let element = wrapper.find('.progress-card__items__closed-tasks')
+    expect(element.exists()).toBeFalsy()
+
+    Task.update({ where: '3', data: { status: 'CLOSED' } })
+    await wrapper.vm.$nextTick()
+
+    element = wrapper.find('.progress-card__items__closed-tasks')
+    expect(element.exists()).toBeTruthy()
+    expect(element.text()).toBe('🎉 already 1 task closed')
+  })
 
   describe('No task opened', () => {
     beforeEach(async () => {

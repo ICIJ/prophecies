@@ -146,7 +146,8 @@
     },
     "allOpenTasks": "all open tasks",
     "moreProgress": "More progress",
-    "noOpenTasks": "No open tasks"
+    "noOpenTasks": "No open tasks",
+    "tasksClosed": "already {n} task closed | already {n} tasks closed"
   },
   "shortcurListCard": {
     "shortcuts": "Shortcuts",

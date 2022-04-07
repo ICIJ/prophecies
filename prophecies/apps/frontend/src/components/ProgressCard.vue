@@ -10,31 +10,31 @@
     </div>
     <template v-if="tasks.length">
       <ul class="list-unstyled progress-card__items">
-        <li class="font-weight-bold progress-card__items__item progress-card__items__item--mean">
-          <div class="d-flex align-items-start">
-            <div class="mr-1 progress-card__items__item__value">
+        <li class="font-weight-bold progress-card__items__item progress-card__items__item--mean d-flex">
+            <span class="mr-1 progress-card__items__item__value">
               {{ meanProgress | round }}%
-            </div>
+            </span>
             <div class="flex-grow-1 pt-1 pb-4">
               <b-progress :value="meanProgress" :max="100" class="mb-1" />
               <span class="progress-card__items__item__name">
                 {{ $t("progressCard.allOpenTasks") }}
               </span>
             </div>
-          </div>
         </li>
-        <li v-for="task in tasks" :key="task.id" class="progress-card__items__item">
-          <div class="d-flex align-items-start">
-            <div class="mr-1 progress-card__items__item__value">
+        <li v-for="task in tasks" :key="task.id" class="progress-card__items__item d-flex">
+            <span class="progress-card__items__item__value mr-1">
               {{ taskProgress(task) | round }}%
-            </div>
+            </span>
             <div class="flex-grow-1 pt-1 pb-4">
               <b-progress :value="taskProgress(task)" :style="task | taskProgressStyle" :max="100" class="mb-1" />
               <span class="progress-card__items__item__name">
                 {{ task.name }}
               </span>
             </div>
-          </div>
+        </li>
+        <li v-if='nbClosedTasks' class="progress-card__items__closed-tasks d-flex ">
+            <span class="progress-card__items__item__value mr-1 mt-1">🎉</span>
+            <div class="flex-grow-1 pt-1 pb-4 text-muted">{{$tc('progressCard.tasksClosed', nbClosedTasks)}}</div>
         </li>
       </ul>
       <div class="progress-card__stats-link d-flex justify-content-center">
@@ -51,6 +51,7 @@
 
 <script>
 import { mean } from 'lodash'
+import { orderTasks } from '@/utils/sort'
 import Task from '@/models/Task'
 
 export default {
@@ -77,11 +78,20 @@ export default {
     }
   },
   computed: {
-    tasks () {
+    unorderedTasks () {
       // make stats on tasks with at least one record
       return Task.query()
         .where('status', (value) => value !== 'CLOSED')
         .where('taskRecordsCount', (value) => value > 0).get()
+    },
+    tasks () {
+      return orderTasks(this.unorderedTasks)
+    },
+    nbClosedTasks () {
+      // make stats on tasks with at least one record
+      return Task.query()
+        .where('status', (value) => value === 'CLOSED')
+        .where('taskRecordsCount', (value) => value > 0).get().length
     },
     meanProgress () {
       if (!this.tasks.length) {
