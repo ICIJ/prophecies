@@ -23,7 +23,11 @@ export default {
     }
   },
   filters: {
-    toVariant
+    toVariant,
+
+    textColor (color) {
+      return `--choice-bg:${color}; --text-fg:${textContrast(color)}; `
+    }
   },
   components: {
     ShortkeyBadge
@@ -64,10 +68,6 @@ export default {
         return null
       }
       return shortkeys.split(',')
-    },
-    textColor (color) {
-      return `  background-color:${color};
-                color:${textContrast(color)}; `
     }
 
   }
@@ -81,17 +81,19 @@ export default {
         class="col choice-group-buttons__item pb-3"
         :class="choiceClassList(choice)"
         :key="choice.id">
+             <span :style="choice.color | textColor">
       <b-btn @click="selectChoice(choice)"
              @shortkey="selectChoice(choice)"
              v-shortkey="choiceShortkeys(choice)"
              block
              class="choice-group-buttons__item__button text-nowrap"
-             :style="textColor(choice.color)">
-        {{ choice.name }}
+             >
+            {{ choice.name }}
         <template v-if="choiceShortkeys(choice)">
           <shortkey-badge class="ml-1" :value="choice.shortkeys" />
         </template>
       </b-btn>
+             </span>
     </li>
   </ul>
 </template>
@@ -107,8 +109,13 @@ export default {
       padding: 0 $spacer-xs;
       transition: $transition-fade;
 
-      &__button /deep/ .shortkey-badge {
-        color: inherit;
+      &__button {
+
+        background: var(--choice-bg, $primary) !important;
+        color: var(--text-fg, $body-color) !important;
+        & /deep/ .shortkey-badge {
+          color: inherit;
+        }
       }
     }
 
