@@ -1,15 +1,16 @@
 <script>
-import { uniqueId, orderBy } from 'lodash'
+import { uniqueId } from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
 import LatestTipsCard from '@/components/LatestTipsCard'
 import ProgressCard from '@/components/ProgressCard'
 import TaskStatsCard from '@/components/TaskStatsCard'
-import Task, { TaskStatusOrder } from '@/models/Task'
+import Task, { TaskStatusEnum } from '@/models/Task'
 import Tip from '@/models/Tip'
 import HistoryList from '@/components/HistoryList.vue'
 import HistoryFetcher from '@/components/HistoryFetcher.vue'
+import { orderTasks } from '@/utils/sort'
 
 export default {
   name: 'Dashboard',
@@ -37,11 +38,11 @@ export default {
       return Task
         .query()
         .where('taskRecordsCount', (value) => value > 0)
+        .where('status', (value) => value !== TaskStatusEnum.CLOSED)
         .get()
     },
     tasks () {
-      const orderByStatus = task => TaskStatusOrder[task.status] === 1
-      return orderBy(this.unorderedTasks, [orderByStatus, 'priority', 'name'])
+      return orderTasks(this.unorderedTasks)
     },
     tips () {
       return Tip.query()

@@ -25,18 +25,17 @@ describe('Dashboard', () => {
     })
   })
 
-  it('should sort the task with the closed ones at the end', () => {
-    expect(wrapper.vm.tasks).toHaveLength(4)
-    expect(wrapper.vm.tasks[3].status).toEqual('CLOSED')
-    const element = wrapper.findAll('task-stats-card-stub')
-    expect(element).toHaveLength(4)
-    expect(element.at(3).attributes().taskid).toEqual('3')
+  it('should sort the task by priority and name without the closed ones', () => {
+    expect(wrapper.vm.tasks).toHaveLength(3)
+    expect(wrapper.vm.tasks[0].id).toBe('1')
+    expect(wrapper.vm.tasks[1].id).toBe('2')
+    expect(wrapper.vm.tasks[2].id).toBe('4')
   })
 
-  it('should not display tasks with no task record', async () => {
-    expect(wrapper.vm.tasks).toHaveLength(4)
+  it('should not display tasks with no task record or closed tasks', async () => {
+    expect(wrapper.vm.tasks).toHaveLength(3)
     const element = wrapper.findAll('task-stats-card-stub')
-    expect(element).toHaveLength(4)
+    expect(element).toHaveLength(3)
   })
 
   it('should show the link to the stats', () => {
