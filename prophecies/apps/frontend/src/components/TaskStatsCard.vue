@@ -3,8 +3,9 @@ import { formatDate } from '@/utils/date'
 import Task from '@/models/Task'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import TaskStatsCardHeading from '@/components/TaskStatsCardHeading.vue'
-import TaskStatsCardStatus from './TaskStatsCardStatus.vue'
+import TaskStatsCardStatus from '@/components/TaskStatsCardStatus.vue'
 import StatsByRound from '@/components/StatsByRound.vue'
+import TaskProgress from '@/components/TaskProgress.vue'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import User from '@/models/User'
 
@@ -14,7 +15,8 @@ export default {
     TaskStatsCardAllRounds,
     StatsByRound,
     TaskStatsCardHeading,
-    TaskStatsCardStatus
+    TaskStatsCardStatus,
+    TaskProgress
   },
   props: {
     taskId: {
@@ -108,6 +110,9 @@ export default {
         return this.task.progressByRound
       }
       return this.userStats.progressByRound
+    },
+    taskColor () {
+      return this.task.colors[1]
     }
   }
 }
@@ -127,6 +132,7 @@ export default {
           :progress="progress"
           :done="taskRecordsDoneCount"
           :pending="taskRecordsPendingCount"
+          :color="taskColor"
           class="mx-5 d-none d-lg-block"
         />
         <task-stats-card-status
@@ -141,6 +147,7 @@ export default {
             :progress="progress"
             :done="taskRecordsDoneCount"
             :pending="taskRecordsPendingCount"
+            :color="taskColor"
             class="mx-auto my-3 d-lg-none"
       />
       <div v-if="extended" class="d-flex flex-row flex-grow-1 pt-2">
@@ -158,9 +165,7 @@ export default {
               :progress="progressByRound[round]"
             />
          </div>
-          <span class="task-stats-card__progress bg-primary text-white font-weight-bold rounded py-1 px-2 ml-auto">
-            {{ progress | round }}%
-          </span>
+         <task-progress :progress="progress | round" :color="taskColor" />
       </div>
     </div>
 </template>

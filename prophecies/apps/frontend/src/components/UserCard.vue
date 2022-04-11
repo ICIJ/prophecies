@@ -4,7 +4,7 @@ import { formatDateLongAlt } from '@/utils/date'
 import AppWaiter from '@/components/AppWaiter'
 import TaskListItem from '@/components/TaskListItem'
 import UserAvatar from '@/components/UserAvatar'
-import Task from '@/models/Task'
+import Task, { TaskStatusEnum } from '@/models/Task'
 import User from '@/models/User'
 import { orderTasks } from '@/utils/sort'
 
@@ -66,7 +66,9 @@ export default {
       try {
         const { entities: { Task: tasks } } = await Task.api().get('', { params })
         this.errorMessage = ''
-        this.assignedTaskIds = orderTasks(tasks).map(t => t.id)
+        this.assignedTaskIds = orderTasks(tasks)
+          .filter(t => t.status !== TaskStatusEnum.CLOSED && t.taskRecordsCount > 0)
+          .map(t => t.id)
       } catch (error) {
         this.errorMessage = 'Sorry, this profile is no longer available.'
         this.assignedTaskIds = []

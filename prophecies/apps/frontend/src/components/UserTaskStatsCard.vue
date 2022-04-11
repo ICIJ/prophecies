@@ -1,7 +1,7 @@
 <script>
 import { orderBy } from 'lodash'
 import User from '@/models/User'
-import Task from '@/models/Task'
+import Task, { TaskStatusEnum } from '@/models/Task'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import LightDropdown from '@/components/LightDropdown.vue'
@@ -54,7 +54,7 @@ export default {
     },
     statsAverageAllStats () {
       const stats = this.getAverage(this.statsAllOpenTasks)
-      stats.progress /= this.openTasks.length
+      stats.progress /= (this.openTasks.length ?? 1)
       return stats
     },
     statsAverageByTaskId () {
@@ -69,6 +69,13 @@ export default {
       }
       return this.statsAverageByTaskId[this.selectedTaskId]
     },
+    progressColor () {
+      if (this.selectedTaskId === ALL__OPEN_TASKS_ID) {
+        return ''
+      }
+      const task = Task.find(this.selectedTaskId)
+      return task.colors[1]
+    },
     dropdownTasks () {
       return [{ id: ALL__OPEN_TASKS_ID, name: this.$t('userTaskStatsCard.allOpenTasks') }, ...this.openTasks]
     },
@@ -76,7 +83,7 @@ export default {
       return orderBy(
         Task
           .query()
-          .where('status', 'OPEN')
+          .where('status', status => status !== TaskStatusEnum.CLOSED)
           .where('taskRecordsCount', (value) => value > 0)
           .whereIdIn(this.taskIds).get(),
         'name'
@@ -106,9 +113,11 @@ export default {
         pending: 0,
         progress: 0
       })
-      counters.progress = stats.length
-        ? (counters.progress /= stats.length)
-        : 0
+      if (stats.length) {
+        counters.progress /= stats.length
+      } else {
+        counters.progress = 0
+      }
       return counters
     },
     getStatsByTaskId (taskId) {
@@ -127,15 +136,15 @@ export default {
 
 <template>
   <task-stats-card-all-rounds
-    class="user-task-stats-card d-flex flex-column"
+    class="user-task-stats-card d-flex flex-column mx-auto"
     :done="statsAverageByOption.done"
     :pending="statsAverageByOption.pending"
     :progress="statsAverageByOption.progress"
+    :color="progressColor"
   >
     <template #top>
       <div class="d-flex flex-row-reverse py-1">
         <light-dropdown class="user-task-stats-card__dropdown" :items="dropdownTasks" :selected-id.sync="selectedTaskId"/>
-
       </div>
     </template>
     <template #title> {{ $t('userTaskStatsCard.allRecords') }} </template>

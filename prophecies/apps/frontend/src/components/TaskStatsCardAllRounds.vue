@@ -1,6 +1,11 @@
 <script>
+import TaskProgress from '@/components/TaskProgress'
+
 export default {
   name: 'TaskStatsCardAllRounds',
+  components: {
+    TaskProgress
+  },
   props: {
     progress: {
       type: Number
@@ -10,6 +15,9 @@ export default {
     },
     pending: {
       type: Number
+    },
+    color: {
+      type: String
     }
   },
   filters: {
@@ -21,8 +29,7 @@ export default {
 </script>
 
 <template>
-
-  <div class="task-stats-card-all-rounds  mx-auto">
+  <div class="task-stats-card-all-rounds">
     <slot name="top"></slot>
     <b-row class="task-stats-card-all-rounds__card  card card-body rounded font-weight-bold mx-0">
       <div
@@ -48,18 +55,7 @@ export default {
         </b-row>
         <b-row class="mt-1">
           <div class="d-flex flex-shrink-1 px-3">
-            <span
-              class="
-                task-stats-card-all-rounds__stats__progress
-                bg-primary
-                text-white
-                text-center
-                rounded
-                d-inline-block
-              "
-            >
-              {{ progress | round }}%
-            </span>
+            <task-progress :progress="progress | round" :color="color" />
           </div>
           <b-col class="px-1 text-center">
             <span class="sr-only">Done</span>{{done}}<check-icon size="1x" class="text-primary ml-2 mb-1" /></b-col>
@@ -86,9 +82,11 @@ export default {
     &__progress-bar {
       height: 2em;
       width: 100%;
+
     }
     &__progress {
       width: 45px;
+      background: var(--progress-fg, $primary) !important;
     }
   }
 }
