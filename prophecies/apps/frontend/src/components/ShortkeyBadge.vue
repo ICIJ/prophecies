@@ -1,5 +1,5 @@
 <script>
-import { castArray, compact, flatten, trim } from 'lodash'
+import { castArray, flatten, trim } from 'lodash'
 import { toUpperCaseForSingleChar, metaKeyDisplay } from '@/utils/keys'
 
 export default {
@@ -14,9 +14,9 @@ export default {
     keys () {
       const keys = flatten(castArray(this.value).map(key => key.split('+')))
       return keys
-              .map(trim)
-              .map(toUpperCaseForSingleChar)
-              .map(metaKeyDisplay)
+        .map(trim)
+        .map(toUpperCaseForSingleChar)
+        .map(metaKeyDisplay)
     },
     keysAsString () {
       return this.keys.join(' + ')
