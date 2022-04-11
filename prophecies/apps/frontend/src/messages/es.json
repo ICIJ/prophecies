@@ -146,7 +146,8 @@
     },
     "allOpenTasks": "tareas abiertas",
     "moreProgress": "Más progresos",
-    "noOpenTasks": "No hay tareas abiertas"
+    "noOpenTasks": "No hay tareas abiertas",
+    "tasksClosed": "already {n} task closed | already {n} tasks closed"
   },
   "shortcurListCard": {
     "shortcuts": "Atajos",
@@ -154,8 +155,8 @@
   },
   "statsList": {
     "title": {
-      "yours": "Tus estadísticas",
-      "team": "Estadísticas del equipo"
+      "yours": "Your tasks",
+      "team": "Team tasks"
     },
     "showOnlyOpenTasks": "Mostrar sólo tareas abiertas"
   },
@@ -289,8 +290,8 @@
       "others": "Su actividad"
     },
     "stats": {
-      "yours": "Tus estadísticas",
-      "others": "Sus estadísticas"
+      "yours": "Your tasks",
+      "others": "Their tasks"
     }
   },
   "userRetrieveTeam": {
