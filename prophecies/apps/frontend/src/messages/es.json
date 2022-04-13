@@ -62,7 +62,7 @@
   },
   "appSidebar": {
     "dashboard": "Dashboard",
-    "myTasks": "Mis tareas",
+    "myTasks": "My tasks",
     "shortcuts": "Atajos",
     "tips": "Consejos",
     "history": "Historial",
@@ -158,6 +158,8 @@
       "yours": "Your tasks",
       "team": "Team tasks"
     },
+    "tasksWithRecordsLeftForMe": "tasks with records left <b>for me</b>",
+    "tasksWithRecordsLeftForUser": "tasks with records left <b>for the user</b>",
     "showOnlyOpenTasks": "Mostrar sólo tareas abiertas"
   },
   "taskRecordReviewActions": {
@@ -187,7 +189,7 @@
     "selectAll": "Seleccione {n} registro | Seleccione {n} registros",
     "selectedResults": "{n} resultado seleccionado | {n} resultados seleccionados",
     "lockedResults": "{n} de los cuales está bloqueado | {n} de los cuales están bloqueados",
-    "noRecordAssigned": "Aún no hay registros asignados.",
+    "noRecordsAssigned": "No records assigned yet. Ask your admin.",
     "backToListView": "Volver a la lista",
     "filters": "Filtros"
   },
@@ -214,11 +216,11 @@
   "taskSortByDropdown": {
     "status": "Estado (Abierto - Cerrado)",
     "progress0_100": "Progreso (0% - 100%)",
-    "progress100_0": "Progreso (100% - 0%)",
-    "priority0_9": "Prioridad (0 - 9)",
-    "priority9_0": "Prioridad (9 - 0)",
-    "nameAZ": "Nombre (A - Z)",
-    "nameZA": "Nombre (Z - A)",
+    "progress100_0": "Progress (100% - 0%)",
+    "priority0_9": "Priority (0 - 9)",
+    "priority9_0": "Priority (9 - 0)",
+    "nameAZ": "Name (A - Z)",
+    "nameZA": "Name (Z - A)",
     "recentlyCreated": "Creado recientemente"
   },
   "taskStatsCard": {
@@ -227,7 +229,15 @@
     "locked": "Bloqueado",
     "fullyCheckedItems": "Registro completamente verificado | Registros completamente verificados",
     "priority": "Prioridad",
-    "round": "Ronda"
+    "round": "Ronda",
+    "noRecordsAssigned": "No records assigned yet",
+    "pendingRecords": "Pending records",
+    "doneRecords": "Done records",
+    "done": "Done",
+    "pending": "Pending",
+    "taskProgression": "Task progression",
+    "userProgression": "User progression",
+    "roundProgression": "Round progression"
   },
   "tips": {
     "lastModified": "Última modificación",
