@@ -428,7 +428,7 @@ export default {
     <div class="task-record-review-list__container">
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
-          <div v-if="task && task.taskRecordsCount">
+          <div v-if="task && task.userTaskRecordsCount">
             <div class="row mb-4" v-if="pagination">
               <div class="d-none d-lg-block col-lg-3">
                 <b-btn variant="outline-dark" class="border" tag="label">
@@ -534,7 +534,7 @@ export default {
             </app-waiter>
           </div>
           <div v-else class="text-center text-muted text-small mx-auto">
-            {{$t('taskRecordReviewList.noRecordAssigned')}}
+            {{$t('taskRecordReviewList.noRecordsAssigned')}}
           </div>
         </app-waiter>
       </div>

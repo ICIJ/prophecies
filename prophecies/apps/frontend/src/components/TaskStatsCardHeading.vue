@@ -50,7 +50,7 @@ export default {
       {{ task.project.name }}
       </b-badge>
     </h2>
-    <span class="py-2 text-nowrap">
+    <span v-if="taskRecordsCount>0" class="py-2 text-nowrap">
       {{ $tc('taskStatsCard.fullyCheckedItems', taskRecordsCount) }}:
       <span
         class="text-danger font-weight-bold ml-2 task-stats-card__checked"
@@ -58,6 +58,7 @@ export default {
         {{ taskRecordsDoneCount }} / {{ taskRecordsCount }}
       </span>
     </span>
+    <span class="py-2 text-nowrap text-secondary " v-else>{{$t('taskStatsCard.noRecordsAssigned')}}</span>
     <span v-if="extended" class="text-secondary pt-2">
         {{$t("taskStatsCard.createdOn") }} {{ task.created_at | formatDate }}
     </span>

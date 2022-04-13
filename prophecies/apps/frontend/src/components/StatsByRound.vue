@@ -71,7 +71,7 @@ export default {
           <div v-if="hasUsers" class="py-2">
           <b-progress  :value="progress | round" :max="100" />
           </div>
-          <span class="stats-by-round__progress__value--no-record" v-else>{{$t('taskStatsCard.noRecordChecked')}}</span>
+          <span class="stats-by-round__progress__value--no-record" v-else>{{$t('taskStatsCard.noRecordsAssigned')}}</span>
         </div>
       </div>
       <template v-if="hasUsers">

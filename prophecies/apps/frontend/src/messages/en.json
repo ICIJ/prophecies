@@ -187,7 +187,7 @@
     "selectAll": "Select {n} record | Select {n} records",
     "selectedResults": "{n} result selected | {n} results selected",
     "lockedResults": "{n} of which is locked | {n} of which are locked",
-    "noRecordAssigned": "No records assigned yet.",
+    "noRecordsAssigned": "No records assigned yet. Ask your admin.",
     "backToListView": "Back to list view",
     "filters": "Filters"
   },
@@ -228,7 +228,7 @@
     "fullyCheckedItems": "Fully checked record | Fully checked records",
     "priority": "Priority",
     "round": "Round",
-    "noRecordChecked": "No record assigned"
+    "noRecordsAssigned": "No records assigned yet"
   },
   "tips": {
     "lastModified": "Last modified",
