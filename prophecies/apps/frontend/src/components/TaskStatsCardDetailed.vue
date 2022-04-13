@@ -147,7 +147,7 @@ export default {
 </script>
 
 <template>
-  <task-stats-card class="stats-list__task-card my-5"
+  <task-stats-card class="stats-list__task-card"
   :task-id="taskId"
   :team="team"
   :checker-id="checkerId" extended>

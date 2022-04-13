@@ -93,6 +93,16 @@ export default {
     },
     updateSortByCallback (cb) {
       this.sortByCb = cb
+    },
+    hasPendingRecordsForUser (task) {
+      const stats = TaskUserStatistics.query()
+        .where('taskId', task.id)
+        .where('checkerId', this.user.id).get()
+      const pending = stats.reduce((pending, curr) => {
+        pending += curr.totalCount - curr.doneCount
+        return pending
+      }, 0)
+      return pending > 0
     }
   },
   computed: {
@@ -141,13 +151,9 @@ export default {
     },
     tasks () {
       const sortedTasks = this.sortByCb(this.unorderedTasks)
-      if (this.onlyOpenTasks) {
-        return filter(sortedTasks, [
-          'status',
-          TaskStatusEnum.OPEN || TaskStatusEnum.LOCKED
-        ])
-      }
-      return sortedTasks
+      const onlyOpenTasks = this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatusEnum.OPEN || TaskStatusEnum.LOCKED]) : sortedTasks
+      const onlyForMe = this.onlyForUser ? onlyOpenTasks.filter(this.hasPendingRecordsForUser) : onlyOpenTasks
+      return onlyForMe
     },
     activityTab: {
       get () {
@@ -164,6 +170,15 @@ export default {
       },
       set (value) {
         const query = { ...this.$route.query, only_open: !!value }
+        this.$router.push({ path: this.$route.path, query }, null)
+      }
+    },
+    onlyForUser: {
+      get () {
+        return this.$route.query.only_for_user === 'true'
+      },
+      set (value) {
+        const query = { ...this.$route.query, only_for_user: !!value }
         this.$router.push({ path: this.$route.path, query }, null)
       }
     }
@@ -197,23 +212,28 @@ export default {
             v-if="!activityTab && !isLoadingStats"
             class="
               user-retrieve-activity__stats__filters
-              d-flex
-              align-items-end
+              d-flex align-items-lg-end align-items-center justify-content-end flex-grow-1 mt-2 mt-lg-0
             "
           >
-            <b-form-checkbox
-              class="
-                user-retrieve-activity__stats__filters--open-tasks-checkbox
-                mb-4
-                mr-5
-                pb-1
-              "
-              v-model="onlyOpenTasks"
-            >
-              <span class="text-nowrap text-primary">{{
-                $t("statsList.showOnlyOpenTasks")
-              }}</span>
-            </b-form-checkbox>
+            <div  class=" d-flex flex-lg-row flex-column">
+
+              <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="onlyForUser">
+                <span class="text-nowrap text-primary" v-html="$t('statsList.tasksWithRecordsLeftForUser')"></span>
+              </b-form-checkbox>
+              <b-form-checkbox
+                class="
+                  user-retrieve-activity__stats__filters--open-tasks-checkbox
+                  mb-4
+                  mr-5
+                  pb-1
+                "
+                v-model="onlyOpenTasks"
+              >
+                <span class="text-nowrap text-primary">{{
+                  $t("statsList.showOnlyOpenTasks")
+                }}</span>
+              </b-form-checkbox>
+            </div>
             <task-sort-by-dropdown
               :sort.sync="sortField"
               @update:sort-by-cb="updateSortByCallback"

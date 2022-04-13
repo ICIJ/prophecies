@@ -76,7 +76,9 @@ export default {
     },
     displayedTasks () {
       const sortedTasks = this.sortByCb(this.tasks)
-      return this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatusEnum.OPEN || TaskStatusEnum.LOCKED]) : sortedTasks
+      const onlyOpenTasks = this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatusEnum.OPEN || TaskStatusEnum.LOCKED]) : sortedTasks
+      const onlyForMe = this.tasksWithRecordsLeftForMe ? onlyOpenTasks.filter(t => t.userTaskRecordsCount - t.userTaskRecordsDoneCount > 0) : onlyOpenTasks
+      return onlyForMe
     },
     onlyOpenTasks: {
       get () {
@@ -84,6 +86,15 @@ export default {
       },
       set (value) {
         const query = { ...this.$route.query, only_open: !!value }
+        this.$router.push({ path: this.$route.path, query }, null)
+      }
+    },
+    tasksWithRecordsLeftForMe: {
+      get () {
+        return this.$route.query.only_for_me === 'true'
+      },
+      set (value) {
+        const query = { ...this.$route.query, only_for_me: !!value }
         this.$router.push({ path: this.$route.path, query }, null)
       }
     },
@@ -103,27 +114,35 @@ export default {
         <div class="row">
           <div class="col-12">
             <div class="d-flex flex-wrap justify-content-between">
-                <b-form-group class="stats-list__radio d-flex  mr-5">
+                <b-form-group class="stats-list__radio d-flex  mr-5 mr-auto">
                   <b-form-radio-group
                   v-model="teamTaskStats"
                   buttons
                   button-variant="outline-primary"
                   :options="taskStatsOptions" />
                 </b-form-group>
-              <div class="stats-list__filters d-flex align-items-end ">
-                <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="onlyOpenTasks">
-                  <span class="text-nowrap text-primary">{{$t('statsList.showOnlyOpenTasks')}}</span>
-                </b-form-checkbox>
-                <task-sort-by-dropdown
-                  :sort.sync="sortField"
-                  @update:sort-by-cb="updateSortByCallback"
-                  class="mb-3 stats-list__filters__sort-by"
-                />
-              </div>
+
+                <div  class=" d-flex align-items-lg-end align-items-center justify-content-end flex-grow-1 mt-2 mt-lg-0 ">
+                  <div  class=" d-flex flex-lg-row flex-column">
+                    <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="tasksWithRecordsLeftForMe">
+                      <span class="text-nowrap text-primary" v-html="$t('statsList.tasksWithRecordsLeftForMe')"></span>
+                    </b-form-checkbox>
+                    <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="onlyOpenTasks">
+                      <span class="text-nowrap text-primary">{{$t('statsList.showOnlyOpenTasks')}}</span>
+                    </b-form-checkbox>
+                  </div>
+                  <div class="stats-list__filters  d-flex ">
+                    <task-sort-by-dropdown
+                      :sort.sync="sortField"
+                      @update:sort-by-cb="updateSortByCallback"
+                      class="mb-3 stats-list__filters__sort-by"
+                    />
+                  </div>
+                </div>
             </div>
             <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
               <task-stats-card-detailed
-              class="stats-list__task-card my-5"
+              class="stats-list__task-card my-2 my-lg-5"
               v-for="task in displayedTasks" :key="task.id"
               :task-id="task.id"
               :team="teamTaskStats"

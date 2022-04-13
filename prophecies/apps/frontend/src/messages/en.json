@@ -158,6 +158,8 @@
       "yours": "Your tasks",
       "team": "Team tasks"
     },
+    "tasksWithRecordsLeftForMe": "tasks with records left <b>for me</b>",
+    "tasksWithRecordsLeftForUser": "tasks with records left <b>for the user</b>",
     "showOnlyOpenTasks": "Show only open tasks"
   },
   "taskRecordReviewActions": {
