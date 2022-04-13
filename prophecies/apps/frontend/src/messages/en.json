@@ -62,7 +62,7 @@
   },
   "appSidebar": {
     "dashboard": "Dashboard",
-    "myTasks": "My Tasks",
+    "myTasks": "My tasks",
     "shortcuts": "Shortcuts",
     "tips": "Tips",
     "history": "History",
@@ -213,12 +213,12 @@
   },
   "taskSortByDropdown": {
     "status": "Status (Open - Closed)",
-    "progress0_100": "Progress (0%-100%)",
-    "progress100_0": "Progress (100%-0%)",
-    "priority0_9": "Priority (0-9)",
-    "priority9_0": "Priority (9-0)",
-    "nameAZ": "Name (A-Z)",
-    "nameZA": "Name (Z-A)",
+    "progress0_100": "Progress (0% - 100%)",
+    "progress100_0": "Progress (100% - 0%)",
+    "priority0_9": "Priority (0 - 9)",
+    "priority9_0": "Priority (9 - 0)",
+    "nameAZ": "Name (A - Z)",
+    "nameZA": "Name (Z - A)",
     "recentlyCreated": "Recently created"
   },
   "taskStatsCard": {
@@ -228,7 +228,7 @@
     "fullyCheckedItems": "Fully checked record | Fully checked records",
     "priority": "Priority",
     "round": "Round",
-    "noRecordChecked": "No record checked or assigned"
+    "noRecordChecked": "No record assigned"
   },
   "tips": {
     "lastModified": "Last modified",

@@ -65,7 +65,7 @@ describe('TaskStatsCardDetailed', () => {
       expect(thirdStatsByUsers.exists()).toBeFalsy()
     })
 
-    it('should display "No record checked or assigned" message for round 3', () => {
+    it('should display "No record assigned" message for round 3', () => {
       const element = wrapper.findAll('.stats-by-round')
       expect(element).toHaveLength(3)
       const thirdStatsByUsers = element.at(2).find('.stats-by-round__progress__value--no-record')
