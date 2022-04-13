@@ -43,14 +43,12 @@ export default {
       return this.waitFor(this.fetchTaskUserStatsLoader, [this.fetchTaskUserStats, this.fetchTaskUserChoiceStats])
     },
     fetchTaskUserStats () {
-      const params = { include: 'checker', 'filter[task]': this.taskId }
+      const params = { 'filter[task]': this.taskId }
       return TaskUserStatistics.api().get('', { params })
     },
     fetchTaskUserChoiceStats () {
-      const filterChecker = (this.checkerId) ? { 'filter[checker]': this.checkerId } : null
-      const params = { include: 'checker,task.choice_group.choices', ...filterChecker }
-
-      return TaskUserChoiceStatistics.api('', { params }).get()
+      const params = { include: 'checker,task.choice_group.choices', 'filter[task]': this.taskId }
+      return TaskUserChoiceStatistics.api().get('', { params })
     },
     async waitFor (loader, fns = []) {
       this.$wait.start(loader)
