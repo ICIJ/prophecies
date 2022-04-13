@@ -164,7 +164,12 @@ class TaskRecord(models.Model):
         if instance.task_record:
             # Call the instance method
             instance.task_record.update_rounds_and_status()
-
+    @staticmethod
+    def signal_delete_review(sender, instance=None, created=False, **kwargs):
+        if instance.task_record:
+            # Call the instance method
+            instance.task_record.reviews.remove(instance)
+            instance.task_record.update_rounds_and_status()
 
     @staticmethod
     def signal_update_all_rounds_and_status(sender, instance=None, created=False, **kwargs):

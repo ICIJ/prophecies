@@ -287,8 +287,11 @@ class TaskRecordReview(models.Model):
             task_round_reviews = sender.objects.filter(task_record__task=task, checker=checker, round=round)
             stats_user.done_count = task_round_reviews.filter(status=StatusType.DONE).count()
             stats_user.pending_count = task_round_reviews.filter(status=StatusType.PENDING).count()
-            # Save the statistics
-            stats_user.save()
+            if(stats_user.pending_count == 0):
+                stats_user.delete()
+            else:
+                # Save the statistics
+                stats_user.save()
             
 
     @staticmethod
@@ -300,7 +303,6 @@ class TaskRecordReview(models.Model):
         round = instance.round
         # Avoid collecting statistics for uncomplete review
         if task and checker:
-            
             # Collect the statitics
             reviews_choice_counts = sender.objects \
                                         .filter(task_record__task=task, checker=checker, round=round) \
@@ -333,4 +335,6 @@ signals.pre_save.connect(TaskRecordReview.signal_fill_note_created_at_and_update
 signals.post_save.connect(TaskRecord.signal_update_has_notes, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecord.signal_update_has_disagreements, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecord.signal_update_rounds_and_status, sender=TaskRecordReview)
-signals.post_delete.connect(TaskRecord.signal_update_rounds_and_status, sender=TaskRecordReview)
+signals.post_delete.connect(TaskRecord.signal_delete_review, sender=TaskRecordReview)
+signals.post_delete.connect(TaskRecordReview.signal_save_task_user_statistics, sender=TaskRecordReview)
+signals.post_delete.connect(TaskRecordReview.signal_save_task_user_choice_statistics, sender=TaskRecordReview)

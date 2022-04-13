@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
-from prophecies.core.models import Choice, ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview, TaskUserStatistics
+from prophecies.core.models.task_record import StatusType
 
 
 class TestTaskRecordReview(TestCase):
@@ -395,3 +396,20 @@ class TestTaskRecordReview(TestCase):
         request = self.client.get('/api/v1/task-record-reviews/?filter[task_record__all_rounds_reviewed]=null')
         data = request.json().get('data')
         self.assertEqual(len(data), 4)
+        
+    def test_it_check_stat_deletion_on_task_record_review_delete(self):
+        choice = self.task.choice_group.choices.first()
+        trr = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django, round=1)
+        self.assertEqual(self.task_record_foo.reviews.count(),1)
+        self.assertEqual(len(self.task_record_foo.reviews.done()),0)
+        self.assertEqual(len(self.task_record_foo.reviews.pending()),1)
+        self.assertEqual(self.task_record_foo.status,StatusType.ASSIGNED)
+        self.assertEqual(len(TaskUserStatistics.objects.all()),1)
+        
+        
+        TaskRecordReview.delete(trr)
+        self.assertEqual(self.task_record_foo.reviews.count(),0)
+        self.assertEqual(len(self.task_record_foo.reviews.done()),0)
+        self.assertEqual(len(self.task_record_foo.reviews.pending()),0)
+        self.assertEqual(self.task_record_foo.status,StatusType.PENDING)
+        self.assertEqual(len(TaskUserStatistics.objects.all()),0)
