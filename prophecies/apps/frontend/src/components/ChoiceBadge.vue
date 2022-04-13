@@ -1,6 +1,6 @@
 <script>
-import { toVariant } from '@/utils/variant'
 import { uniqueId } from 'lodash'
+import { textContrast } from '@/utils/color'
 
 export default {
   name: 'ChoiceBadge',
@@ -10,10 +10,15 @@ export default {
     },
     value: {
       type: String
+    },
+    color: {
+      type: String
     }
   },
   filters: {
-    toVariant,
+    taskProgressStyle (color) {
+      return color ? `--progress-fg: ${color};--text-color:${textContrast(color)}` : ''
+    },
     firstLetter (str) {
       return String(str).slice(0, 1)
     },
@@ -34,7 +39,8 @@ export default {
 </script>
 
 <template>
-    <b-badge class="choice__badge mr-3 p-1" :variant="value | toVariant" :title="name" :id="id">
+  <span :style="color | taskProgressStyle">
+    <b-badge class="choice__badge mr-3 p-1" :title="name" :id="id">
       {{ name | firstLetter }}<span class="sr-only">{{ name | skipFirstLetter }}</span>
       <b-tooltip :target="id" triggers="hover" placement="right" >
          <div class="choice__tooltip d-flex align-items-center">
@@ -42,7 +48,7 @@ export default {
          </div>
       </b-tooltip>
     </b-badge>
-
+  </span>
 </template>
 
 <style lang="scss">
@@ -54,6 +60,9 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  background: var(--progress-fg, $primary) !important;
+  color: var(--text-color, $body-bg) !important;
 
 }
 

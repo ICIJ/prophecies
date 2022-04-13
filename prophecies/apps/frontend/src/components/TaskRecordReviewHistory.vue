@@ -93,7 +93,7 @@ export default {
         </user-link>
       </div>
       <div v-if="choice!==null" class="task-record-review-history__checker__choice">
-        <choice-badge :name="choice.name" :value="choice.value" class="task-record-review-history__checker__choice__badge">
+        <choice-badge :name="choice.name" :value="choice.value" :color="choice.color" class="task-record-review-history__checker__choice__badge">
           <template #afterTooltip v-if="checker.isMe">
             |<b-btn size="sm" variant="link" class="text-white" @click="cancelReview(choice)">{{$t('taskRecordReviewHistory.cancelMyChoice')}}</b-btn>
           </template>

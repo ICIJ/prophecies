@@ -18,12 +18,12 @@ describe('StatsByRound', () => {
         extended: true,
         round: 1,
         progress: 80,
-        summary: [
-          { name: 'Incorrect', value: 'incorrect', progress: 25 },
-          { name: 'Correct', value: 'correct', progress: 75 },
-          { name: 'Unknown', value: 'unknown', progress: 0 }
+        choiceStats: [
+          { name: 'Incorrect', value: 'incorrect', color: '#FFF', progress: 25 },
+          { name: 'Correct', value: 'correct', color: '#000', progress: 75 },
+          { name: 'Unknown', value: 'unknown', color: '#AAA', progress: 0 }
         ],
-        progressByUser: [{ checker: { username: 'django' }, done: 5, pending: 0, progress: 100 }, { checker: { username: 'olivia' }, done: 2, pending: 2, progress: 50 }]
+        usersStats: [{ checker: { username: 'django' }, done: 5, pending: 0, progress: 100 }, { checker: { username: 'olivia' }, done: 2, pending: 2, progress: 50 }]
       }
 
       // Configure the local vue
@@ -44,11 +44,11 @@ describe('StatsByRound', () => {
       const element = wrapper.find('b-progress-stub')
       expect(element.attributes('value')).toBe('80')
     })
-    it('should display stats by user component', () => {
-      const element = wrapper.findAll('stats-by-users-stub')
+    it('should display the "no record assigned" message when no user stats', async () => {
+      await wrapper.setProps({ usersStats: [] })
+      const element = wrapper.find('.stats-by-round__progress__value--no-record')
       expect(element.exists()).toBeTruthy()
     })
-
     it('should display the choice badges and their correctness', () => {
       const elements = wrapper.findAll('.stats-by-round__summary__choice')
       expect(elements).toHaveLength(3)

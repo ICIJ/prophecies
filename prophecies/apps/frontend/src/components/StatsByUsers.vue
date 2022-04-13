@@ -1,6 +1,6 @@
 <template>
     <div class="stats-by-users d-flex flex-column flex-grow-1 py-3">
-        <div class="stats-by-users__row d-flex flex-row py-2" v-for="(user, index) in users" :key="index">
+      <div class="stats-by-users__row d-flex flex-row py-2" v-for="(user, index) in users" :key="index">
         <div class="stats-by-users__row__username col-3 px-0 text-nowrap">
           {{ user.name }}
         </div>
@@ -14,7 +14,7 @@
           <span class="stats-by-users__row__number">{{user.pending}}</span><clock-icon size="1x" class="text-danger ml-2" />
         </div>
       </div>
-      <div class="stats-by-users__total d-flex flex-row py-3 font-weight-bold flex-grow-1 align-items-end" >
+      <div v-if="withTotal" class="stats-by-users__total d-flex flex-row py-3 font-weight-bold flex-grow-1 align-items-end" >
         <div class="col-3 pl-0">
           Total
         </div>
@@ -39,6 +39,10 @@ export default {
     users: {
       type: Array,
       default: () => ([])
+    },
+    withTotal: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {

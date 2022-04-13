@@ -12,11 +12,7 @@ export default {
   },
   filters: {
     taskProgressStyle (color) {
-      if (!color) {
-        return ''
-      }
-      const textColor = textContrast(color)
-      return `--progress-fg: ${color};--text-color:${textColor}`
+      return color ? `--progress-fg: ${color};--text-color:${textContrast(color)}` : ''
     },
     round (value) {
       return Math.round(value)

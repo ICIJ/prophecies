@@ -6,20 +6,24 @@ import TaskStatsCard from '@/components/TaskStatsCard'
 import StatsByRound from '@/components/StatsByRound.vue'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
+import StatsByUsers from '@/components/StatsByUsers.vue'
+
 import Task from '@/models/Task'
 
 export default {
   name: 'TaskStatsCardDetailed',
   components: {
     TaskStatsCard,
-    StatsByRound
+    StatsByRound,
+    StatsByUsers
   },
   props: {
     taskId: {
       type: String
     },
     team: {
-      type: Boolean
+      type: Boolean,
+      required: true
     },
     checkerId: {
       type: String
@@ -28,12 +32,19 @@ export default {
   created () {
     return this.setup()
   },
+
+  filters: {
+    round (value) {
+      return Math.round(value)
+    }
+  },
   methods: {
     setup () {
       return this.waitFor(this.fetchTaskUserStatsLoader, [this.fetchTaskUserStats, this.fetchTaskUserChoiceStats])
     },
     fetchTaskUserStats () {
-      return TaskUserStatistics.api().get()
+      const params = { include: 'checker', 'filter[task]': this.taskId }
+      return TaskUserStatistics.api().get('', { params })
     },
     fetchTaskUserChoiceStats () {
       const filterChecker = (this.checkerId) ? { 'filter[checker]': this.checkerId } : null
@@ -46,26 +57,32 @@ export default {
       await Promise.all(fns.map(fn => fn()))
       this.$wait.end(loader)
     },
-    taskUserStatistics (taskId, round) {
-      let request = TaskUserStatistics.query().with('checker').where('taskId', taskId).where('round', round)
+    taskUserStatisticsQuery (round) {
+      let request = TaskUserStatistics.query()
+        .with('checker')
+        .where('taskId', this.taskId)
+        .where('round', round)
       if (!this.team && this.checkerId) {
         request = request.where('checkerId', this.checkerId)
       }
       return request.get()
     },
-    taskUserChoiceStatistics (taskId, round) {
+    taskUserChoiceStatisticsQuery (round) {
       let request = TaskUserChoiceStatistics
         .query()
-        .where('taskId', taskId)
+        .where('taskId', this.taskId)
         .with('choice')
         .with('choice.choiceGroup')
         .where('round', round)
       if (!this.team && this.checkerId) {
         request = request.where('checkerId', this.checkerId)
       }
-      const stats = request.get()
+      return request.get()
+    },
+    summary (round) {
+      const stats = this.taskUserChoiceStatisticsQuery(round)
 
-      const defaultTaskChoices = this.defaultChoicesByTaskId[taskId]
+      const defaultTaskChoices = this.defaultChoicesByTaskId[this.taskId]
       const choiceGroups = Object.keys(defaultTaskChoices)
       if (!choiceGroups.length) {
         return []
@@ -92,6 +109,15 @@ export default {
         statByChoiceGroup[choice].progress = statByChoiceGroup[choice].progress * 100 / total
       }
       return Object.values(statByChoiceGroup)
+    },
+    users (round) {
+      return this.taskUserStatisticsQuery(round)
+        .map(elem => ({
+          name: elem.checker.username,
+          pending: elem.pendingCount,
+          done: elem.doneCount,
+          progress: elem.progress
+        }))
     }
   },
   computed: {
@@ -108,7 +134,7 @@ export default {
         const choiceGroupId = this.task.choiceGroupId
         const choices = this.task.choiceGroup.choices
         const defaultChoices = choices.reduce((prev, choice) =>
-          ({ ...prev, [choice.id]: { id: choice.id, name: choice.name, value: choice.value, progress: 0 } }), {})
+          ({ ...prev, [choice.id]: { id: choice.id, name: choice.name, value: choice.value, color: choice.color, progress: 0 } }), {})
         acc[this.taskId][choiceGroupId] = { ...defaultChoices }
         return acc
       }
@@ -132,11 +158,17 @@ export default {
         v-for="(round,index) in stats.rounds"
         :key="round"
         :round="index+1"
+        :users-stats="users(round)"
+        :choice-stats="summary(round)"
         :progress="stats.progress[round]"
-        :progress-by-user='taskUserStatistics(taskId,round)'
-        :summary='taskUserChoiceStatistics(taskId,round)'
         extended
-        class="stats-list__task-card__round mx-auto" />
+        class="stats-list__task-card__round mx-auto"
+        >
+        <template #users={users} >
+          <stats-by-users :users="users" :with-total="team"/>
+        </template>
+
+      </stats-by-round>
     </template>
   </task-stats-card>
 </template>

@@ -227,7 +227,8 @@
     "locked": "Locked",
     "fullyCheckedItems": "Fully checked record | Fully checked records",
     "priority": "Priority",
-    "round": "Round"
+    "round": "Round",
+    "noRecordChecked": "No record checked or assigned"
   },
   "tips": {
     "lastModified": "Last modified",
