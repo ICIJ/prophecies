@@ -228,7 +228,14 @@
     "fullyCheckedItems": "Fully checked record | Fully checked records",
     "priority": "Priority",
     "round": "Round",
-    "noRecordsAssigned": "No records assigned yet"
+    "noRecordsAssigned": "No records assigned yet",
+    "pendingRecords": "Pending records",
+    "doneRecords": "Done records",
+    "done": "Done",
+    "pending": "Pending",
+    "taskProgression": "Task progression",
+    "userProgression": "User progression",
+    "roundProgression": "Round progression"
   },
   "tips": {
     "lastModified": "Last modified",

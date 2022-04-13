@@ -4,13 +4,13 @@
         <div class="stats-by-users__row__username col-3 px-0 text-nowrap">
           {{ user.name }}
         </div>
-        <div class="stats-by-users__row__progress text-right mx-3">
+        <div class="stats-by-users__row__progress text-right mx-3" :title="$t('taskStatsCard.userProgression')">
           <span class="stats-by-users__row__number">{{ user.progress | round}}</span>%
         </div>
-        <div class="stats-by-users__row__done " :class="tableClassList">
+        <div class="stats-by-users__row__done " :class="tableClassList" :title="$t('taskStatsCard.doneRecords')">
           <span class="stats-by-users__row__number">{{user.done}}</span><check-icon size="1x" class="text-primary ml-2" />
         </div>
-        <div class="stats-by-users__row__pending" :class="tableClassList"  >
+        <div class="stats-by-users__row__pending" :class="tableClassList" :title="$t('taskStatsCard.pendingRecords')" >
           <span class="stats-by-users__row__number">{{user.pending}}</span><clock-icon size="1x" class="text-danger ml-2" />
         </div>
       </div>
@@ -18,13 +18,13 @@
         <div class="col-3 pl-0">
           Total
         </div>
-        <div class="stats-by-users__row__progress text-right mx-3" >
+        <div class="stats-by-users__row__progress text-right mx-3" :title="$t('taskStatsCard.roundProgression')">
         <span class="stats-by-users__row__number">{{ totalStats.progress | round}}</span>%
         </div>
-        <div :class="tableClassList">
+        <div :class="tableClassList" :title="$t('taskStatsCard.doneRecords')">
           <span class="stats-by-users__row__number">{{ totalStats.done }}</span><check-icon size="1x" class="text-primary ml-2" />
         </div>
-        <div :class="tableClassList"  >
+        <div :class="tableClassList" :title="$t('taskStatsCard.pendingRecords')">
           <span class="stats-by-users__row__number">{{ totalStats.pending }}</span><clock-icon size="1x" class="text-danger ml-2" />
         </div>
       </div>

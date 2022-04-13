@@ -54,13 +54,13 @@ export default {
           <b-progress class="col-12 p-0" :value="progress | round" :max="100" />
         </b-row>
         <b-row class="mt-1">
-          <div class="d-flex flex-shrink-1 px-3">
+          <div class="d-flex flex-shrink-1 px-3" :title="$t('taskStatsCard.taskProgression')">
             <task-progress :progress="progress | round" :color="color" />
           </div>
-          <b-col class="px-1 text-center">
-            <span class="sr-only">Done</span>{{done}}<check-icon size="1x" class="text-primary ml-2 mb-1" /></b-col>
-          <b-col class="px-1 text-center">
-            <span class="sr-only">Pending</span>{{pending}}<clock-icon size="1x" class="text-danger ml-2 mb-1" /></b-col>
+          <b-col class="px-1 text-center" :title="$t('taskStatsCard.doneRecords')">
+            <span class="sr-only">{{$t('taskStatsCard.done')}}</span>{{done}}<check-icon size="1x" class="text-primary ml-2 mb-1" /></b-col>
+          <b-col class="px-1 text-center" :title="$t('taskStatsCard.pendingRecords')">
+            <span class="sr-only">{{$t('taskStatsCard.pending')}}</span>{{pending}}<clock-icon size="1x" class="text-danger ml-2 mb-1" /></b-col>
         </b-row>
       </b-col>
     </b-row>

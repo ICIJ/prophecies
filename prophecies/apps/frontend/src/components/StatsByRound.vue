@@ -39,6 +39,9 @@ export default {
   methods: {
     isNotLastRound (round) {
       return Number(round) !== Number(this.nbRounds)
+    },
+    roundProgression (value) {
+      return `${this.$t('taskStatsCard.roundProgression')}: ${value}%`
     }
   },
   computed: {
@@ -68,8 +71,8 @@ export default {
       <div class="stats-by-round__progress d-flex py-3" :class="hasUsers?'text-primary':'text-secondary'">
         <div class="col-3 pl-0 font-weight-bold  text-nowrap">{{ label }} {{ round }}</div>
         <div class="stats-by-round__progress__value col-9" >
-          <div v-if="hasUsers" class="py-2">
-          <b-progress  :value="progress | round" :max="100" />
+          <div v-if="hasUsers" class="py-2" >
+            <b-progress :value="progress | round" :max="100" :title="roundProgression(progress | round)"/>
           </div>
           <span class="stats-by-round__progress__value--no-record" v-else>{{$t('taskStatsCard.noRecordsAssigned')}}</span>
         </div>
