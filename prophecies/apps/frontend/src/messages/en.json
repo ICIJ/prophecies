@@ -96,7 +96,7 @@
     "seeMore": "See more"
   },
   "historyListItem": {
-    "checked-records": "checked {n} records",
+    "checked-records": "checked {n} record | checked {n} records",
     "closed-task": "closed the task",
     "general": "General",
     "mentioned-user": "mentioned {value} in a note",
@@ -122,7 +122,6 @@
   "notification": {
     "markAll": "Mark all as read",
     "seeAllNotifications": "See all notifications",
-    "actions": {
       "mentioned": {
         "user": {
           "tip": "{actor} mentioned you in a <strong>tip</strong>",
