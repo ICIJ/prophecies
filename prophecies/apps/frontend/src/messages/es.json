@@ -96,7 +96,7 @@
     "seeMore": "Ver más"
   },
   "historyListItem": {
-    "checked-records": "comprobó {n} registros",
+    "checked-records": "checked {n} record | checked {n} records",
     "closed-task": "ha cerrado la tarea",
     "general": "General",
     "mentioned-user": "mencionó {value} en una nota",
