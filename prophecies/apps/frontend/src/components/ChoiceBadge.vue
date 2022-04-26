@@ -17,7 +17,9 @@ export default {
   },
   filters: {
     taskProgressStyle (color) {
-      return color ? `--progress-fg: ${color};--text-color:${textContrast(color)}` : ''
+      const textColor = textContrast(color)
+      const borderColor = textColor !== 'white' ? '--border-color:#DFDFDF' : `--border-color:${color}`
+      return color ? `--progress-fg: ${color};--text-color:${textContrast(color)};${borderColor}` : ''
     },
     firstLetter (str) {
       return String(str).slice(0, 1)
@@ -40,7 +42,7 @@ export default {
 
 <template>
   <span :style="color | taskProgressStyle">
-    <b-badge class="choice__badge mr-3 p-1" :title="name" :id="id">
+    <b-badge class="choice__badge mr-3 p-1 font-weight-normal" :title="name" :id="id">
       {{ name | firstLetter }}<span class="sr-only">{{ name | skipFirstLetter }}</span>
       <b-tooltip :target="id" triggers="hover" placement="right" >
          <div class="choice__tooltip d-flex align-items-center">
@@ -55,14 +57,14 @@ export default {
 
 .choice__badge {
 
-  width: 1.6em;
-  height: 1.6em;
+  min-width: 1.8em;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
   background: var(--progress-fg, $primary) !important;
   color: var(--text-color, $body-bg) !important;
+  border: 1px solid var(--border-color, currentColor) !important;
 
 }
 
