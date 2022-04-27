@@ -5,6 +5,7 @@ import AppWaiter from '@/components/AppWaiter'
 
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import BookmarksPageParams from '@/components/BookmarksPageParams'
+import TaskStatus from '@/components/TaskStatus'
 import User from '@/models/User'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import Task from '@/models/Task'
@@ -20,7 +21,8 @@ export default {
   components: {
     AppWaiter,
     TaskRecordReviewCard,
-    BookmarksPageParams
+    BookmarksPageParams,
+    TaskStatus
   },
   props: {
     username: {
@@ -115,10 +117,8 @@ export default {
       await fn()
       this.$wait.end(loader)
     },
-    bookmarksGroupedByTask (records) {
-      return groupBy(records, (record) => {
-        return record.task ? record.task.name : ''
-      })
+    bookmarksGroupedByTaskId (records) {
+      return groupBy(records, (record) => record.task ? record.task.id : '')
     },
     setProjectFilter (val) {
       if (this.projectNotContainingTask(val, this.taskFilter)) {
@@ -153,6 +153,12 @@ export default {
     },
     taskNotContainingUser (taskId) {
       return TaskRecordReview.query().where('task.id', taskId)
+    },
+    taskName (taskId) {
+      return Task.find(taskId).name
+    },
+    taskClosed (taskId) {
+      return Task.find(taskId).closed === true
     }
   },
   computed: {
@@ -207,9 +213,7 @@ export default {
       return orderByProjectThenTask(bookmarks)
     },
     bookmarksGroupedByProject () {
-      return groupBy(this.filteredBookmarks, (record) => {
-        return record.task.project ? record.task.project.name : ''
-      })
+      return groupBy(this.filteredBookmarks, (record) => record.task.project ? record.task.project.name : '')
     },
     bookmarksParams () {
       return {
@@ -239,35 +243,33 @@ export default {
         <div
           v-for="(projectValue, name) in bookmarksGroupedByProject"
           :key="name"
-          class="user-retrieve-bookmarks__project mt-4 mb-4 border-bottom"
+          class="user-retrieve-bookmarks__project my-4 border-bottom"
         >
           <h1 class="mb-3 mt-4 text-primary">{{ name }}</h1>
           <div
-            v-for="(taskValue, taskName) in bookmarksGroupedByTask(
+            v-for="(taskRecordReviews, taskId) in bookmarksGroupedByTaskId(
               projectValue
             )"
-            :key="taskName"
+            :key="taskId"
             class="user-retrieve-bookmarks__project__task mb-4"
           >
-            <div class="d-flex flex-row mb-4 ml-4 mt-4">
-              <h2 class="text-tertiary">{{ taskName }}</h2>
-            </div>
-            <b-list-group-item
-              v-for="record in taskValue"
+          <div class="d-flex flex-row my-4 ml-4">
+            <h2 class="text-tertiary">{{ taskName(taskId) }}</h2>
+            <task-status class="mt-0 ml-2" :task-id="taskId" v-if="taskId && taskClosed(taskId)" />
+          </div>
+            <div
+              v-for="record in taskRecordReviews"
               class="
                 user-retrieve-bookmarks__project__task__record
-                flex-column
-                align-items-start
                 ml-4
-                border-0
+                mb-5
               "
               :key="record.id"
             >
               <task-record-review-card
                 :task-record-review-id="record.id"
-                :active="true"
               />
-            </b-list-group-item>
+            </div>
           </div>
         </div>
       </template>
