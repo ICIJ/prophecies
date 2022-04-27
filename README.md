@@ -68,6 +68,16 @@ make webpack-serve
 
 Then visit [http://0.0.0.0:9009](http://0.0.0.0:9009)
 
+### Run tests 
+
+To run the back end tests
+```
+make test
+```
+To run the front end tests
+```
+yarn test:unit
+```
 ## Publishing a new Docker image
 
 Run **one** of these commands depending on the kind of version you need to publish:
