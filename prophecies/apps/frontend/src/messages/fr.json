@@ -99,8 +99,8 @@
     "checked-records": "checked {n} record | checked {n} records",
     "closed-task": "a fermé la tâche",
     "general": "Général",
-    "mentioned-user": "a mentionné {value} dans une note",
-    "tip": "a ajouté un nouveau tip : \"{value}\"",
+    "mentioned-user": "mentioned {value} in <a href='{link}'>a note</a>",
+    "tip": "added a new tip: <a href='{link}'>\"{value}\"</a>",
     "youLowercase": "vous",
     "youCapitalized": "Vous"
   },
@@ -159,8 +159,9 @@
       "team": "Team tasks"
     },
     "tasksWithRecordsLeftForMe": "tasks with records left <b>for me</b>",
-    "tasksWithRecordsLeftForUser": "tasks with records left <b>for the user</b>",
-    "showOnlyOpenTasks": "Afficher uniquement les tâches ouvertes"
+    "tasksWithRecordsLeftForUser": "tasks with records left <b>for them</b>",
+    "openTasks": "open tasks",
+    "showOnly": "Show only"
   },
   "taskRecordReviewActions": {
     "openInANewWindow": "Ouvrir dans une nouvelle fenêtre",
@@ -249,6 +250,9 @@
     "closed": "Fermée",
     "done": "Terminée"
   },
+  "tipList": {
+    "noTips": "There is no tips"
+  },
   "tipListCard": {
     "tipsFor": "Tips pour",
     "seeTipsForAllTasks": "Voir les tips pour toutes les tâches",
@@ -270,7 +274,7 @@
     "assignedTasks": "Assigné•e à {n} tâche : | Assigné•e à {n} tâches :"
   },
   "userNotifications": {
-    "noNotification": "Vous n'avez pas de notification."
+    "noNotification": "No notifications received yet"
   },
   "userProfileDropdownMenu": {
     "api": "API",
@@ -283,7 +287,7 @@
       "yours": "Vos favoris",
       "others": "Ses favoris"
     },
-    "noBookmarks": "Aucun favori",
+    "noBookmarks": "No records bookmarked yet",
     "unableToRetrieveTheBookmarks": "Impossible d'afficher les favoris"
   },
   "userRetrieveProfile": {
@@ -320,11 +324,13 @@
     "title": {
       "yours": "Votre historique",
       "others": "Son historique"
-    }
+    },
+    "noHistory": "Empty history"
   },
   "userTaskStatsCard": {
     "allOpenTasks": "Toutes les tâches ouvertes",
     "allRecords": "Toutes les données",
-    "noActivity": "Aucune activité enregistrée sur cette période"
+    "noActivity": "Aucune activité enregistrée sur cette période",
+    "noTask": "No tasks assigned yet"
   }
 }
