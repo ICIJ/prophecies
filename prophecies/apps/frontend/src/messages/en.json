@@ -99,8 +99,8 @@
     "checked-records": "checked {n} record | checked {n} records",
     "closed-task": "closed the task",
     "general": "General",
-    "mentioned-user": "mentioned {value} in a note",
-    "tip": "added a new tip: \"{value}\"",
+    "mentioned-user": "mentioned {value} in <a href='{link}'>a note</a>",
+    "tip": "added a new tip: <a href='{link}'>\"{value}\"</a>",
     "youLowercase": "you",
     "youCapitalized": "You"
   },
