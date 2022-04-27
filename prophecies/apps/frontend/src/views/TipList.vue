@@ -220,7 +220,7 @@ export default {
       <app-header hide-nav />
       <div class="container-fluid px-4">
         <app-waiter :loader="fetchTipsLoader" waiter-class="my-5 mx-auto d-block">
-          <b-collapse :visible="showLatestTips">
+          <b-collapse v-if='latestTips.length'  :visible="showLatestTips">
             <latest-tips-card :tips="latestTips" :show-close="true" @close="showLatestTips = false" class="mb-5">
               <template v-slot:title>
                 <h1 class="latest-tips-card__title-tips text-primary mb-0 font-weight-bold">
@@ -233,7 +233,16 @@ export default {
             :project-id.sync="projectId"
             :task-id.sync="taskId"
             :creator-id.sync="creatorId"/>
-          <div v-for="(tasksObject, projectName) in tipsGroupedByProjectThenTask" :key="projectName" class="tip-list__container__list my-4 border-bottom">
+          <div
+            v-if="tips.length"
+            class="
+              latest-tips-card__no-tips
+              text-center text-secondary text-small mt-5
+            "
+          >
+            {{ $t("tipList.noTips") }}
+          </div>
+          <div v-else v-for="(tasksObject, projectName) in tipsGroupedByProjectThenTask" :key="projectName" class="tip-list__container__list my-4 border-bottom">
             <h1 class="mb-3 mt-4 text-primary">{{ projectName }}</h1>
             <div v-for="(taskTips, taskIdVal) in tasksObject" :key="taskIdVal" class="mb-4">
               <div class="d-flex flex-row my-4 ml-4">

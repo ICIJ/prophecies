@@ -250,6 +250,9 @@
     "closed": "Closed",
     "done": "Done"
   },
+  "tipList": {
+    "noTips": "There is no tips"
+  },
   "tipListCard": {
     "tipsFor": "Tips for",
     "seeTipsForAllTasks": "See tips for all tasks",

@@ -127,7 +127,7 @@ export default {
             <div class="dashboard__container__right-panel ml-xl-auto">
               <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
                 <progress-card class="mb-5" v-if="tasks.length" />
-                <latest-tips-card :tips="tips">
+                <latest-tips-card :tips="tips" v-if="tips.length">
                   <template v-slot:title>
                     <h2 class="title-dashboard mb-0 font-weight-bold">
                       {{ $t('dashboard.latestTips') }}
