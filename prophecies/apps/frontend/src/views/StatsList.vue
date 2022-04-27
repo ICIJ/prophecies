@@ -123,12 +123,13 @@ export default {
                 </b-form-group>
 
                 <div  class=" d-flex align-items-lg-end align-items-center justify-content-end flex-grow-1 mt-2 mt-lg-0 ">
-                  <div  class=" d-flex flex-lg-row flex-column">
-                    <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="tasksWithRecordsLeftForMe">
-                      <span class="text-nowrap text-primary" v-html="$t('statsList.tasksWithRecordsLeftForMe')"></span>
+                  <div  class=" d-flex flex-lg-row flex-column ">
+                    <label class="text-nowrap text-primary  mr-4">{{$t('statsList.showOnly')}} </label>
+                    <b-form-checkbox id="tasksForMe" class="stats-list__filters__checkbox--tasks-for-me mr-4 " v-model="tasksWithRecordsLeftForMe">
+                      <label for="tasksForMe" class="text-nowrap text-primary" v-html="$t('statsList.tasksWithRecordsLeftForMe')"></label>
                     </b-form-checkbox>
-                    <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="onlyOpenTasks">
-                      <span class="text-nowrap text-primary">{{$t('statsList.showOnlyOpenTasks')}}</span>
+                    <b-form-checkbox id="openTasks" class="stats-list__filters__checkbox--open-tasks mb-3 mr-5 " v-model="onlyOpenTasks">
+                      <label for="openTasks" class="text-nowrap text-primary">{{$t('statsList.openTasks')}}</label>
                     </b-form-checkbox>
                   </div>
                   <div class="stats-list__filters  d-flex ">

@@ -216,22 +216,22 @@ export default {
             "
           >
             <div  class=" d-flex flex-lg-row flex-column">
-
-              <b-form-checkbox class="stats-list__filters__only-open-tasks__checkbox  mb-4 mr-5 pb-1" v-model="onlyForUser">
-                <span class="text-nowrap text-primary" v-html="$t('statsList.tasksWithRecordsLeftForUser')"></span>
+              <label class="text-nowrap text-primary  mr-4">{{$t('statsList.showOnly')}} </label>
+              <b-form-checkbox id="tasksForMe" class="user-retrieve-activity__stats__filters__checkbox--tasks-for-user  mr-4 " v-model="onlyForUser">
+                <label for="tasksForMe" class="text-nowrap text-primary" v-html="$t('statsList.tasksWithRecordsLeftForUser')"></label>
               </b-form-checkbox>
               <b-form-checkbox
+               id="openTasks"
                 class="
-                  user-retrieve-activity__stats__filters--open-tasks-checkbox
-                  mb-4
+                  user-retrieve-activity__stats__filters__checkbox--open-tasks
+                  mb-3
                   mr-5
-                  pb-1
                 "
                 v-model="onlyOpenTasks"
               >
-                <span class="text-nowrap text-primary">{{
-                  $t("statsList.showOnlyOpenTasks")
-                }}</span>
+                <label for="openTasks" class="text-nowrap text-primary">{{
+                  $t("statsList.openTasks")
+                }}</label>
               </b-form-checkbox>
             </div>
             <task-sort-by-dropdown
@@ -263,6 +263,7 @@ export default {
         >
           <task-stats-card-detailed
             class="user-retrieve-activity__stats__task-card my-5"
+            :team="false"
             v-for="task in tasks"
             :key="task.id"
             :task-id="task.id"
