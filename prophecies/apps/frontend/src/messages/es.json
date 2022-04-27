@@ -99,8 +99,8 @@
     "checked-records": "checked {n} record | checked {n} records",
     "closed-task": "ha cerrado la tarea",
     "general": "General",
-    "mentioned-user": "mencionó {value} en una nota",
-    "tip": "agregó un nuevo consejo: \"{value}\"",
+    "mentioned-user": "mentioned {value} in <a href='{link}'>a note</a>",
+    "tip": "added a new tip: <a href='{link}'>\"{value}\"</a>",
     "youLowercase": "tú",
     "youCapitalized": "Tú"
   },
@@ -159,8 +159,9 @@
       "team": "Team tasks"
     },
     "tasksWithRecordsLeftForMe": "tasks with records left <b>for me</b>",
-    "tasksWithRecordsLeftForUser": "tasks with records left <b>for the user</b>",
-    "showOnlyOpenTasks": "Mostrar sólo tareas abiertas"
+    "tasksWithRecordsLeftForUser": "tasks with records left <b>for them</b>",
+    "openTasks": "open tasks",
+    "showOnly": "Show only"
   },
   "taskRecordReviewActions": {
     "openInANewWindow": "Abrir en una ventana nueva",
@@ -249,6 +250,9 @@
     "closed": "Cerrado",
     "done": "Hecho"
   },
+  "tipList": {
+    "noTips": "There is no tips"
+  },
   "tipListCard": {
     "tipsFor": "Consejos para",
     "seeTipsForAllTasks": "Ver consejos para todas las tareas",
@@ -270,7 +274,7 @@
     "assignedTasks": "Asignado a {n} area: | Asignado a {n} tareas:"
   },
   "userNotifications": {
-    "noNotification": "Aún no tienes notificaciones."
+    "noNotification": "No notifications received yet"
   },
   "userProfileDropdownMenu": {
     "api": "API",
@@ -283,7 +287,7 @@
       "yours": "Tus marcadores",
       "others": "Sus marcadores"
     },
-    "noBookmarks": "No hay marcadores",
+    "noBookmarks": "No records bookmarked yet",
     "unableToRetrieveTheBookmarks": "No se pudo recuperar los marcadores"
   },
   "userRetrieveProfile": {
@@ -320,11 +324,13 @@
     "title": {
       "yours": "Tu historial",
       "others": "Su historial"
-    }
+    },
+    "noHistory": "Empty history"
   },
   "userTaskStatsCard": {
     "allOpenTasks": "Todas las tareas abiertas",
     "allRecords": "Todos los registros",
-    "noActivity": "Ninguna actividad registrada durante este período"
+    "noActivity": "Ninguna actividad registrada durante este período",
+    "noTask": "No tasks assigned yet"
   }
 }
