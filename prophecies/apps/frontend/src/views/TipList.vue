@@ -71,14 +71,12 @@ export default {
         .get()
     },
     tasks () {
-      const tasks = { }
-      for (const tipId in this.tips) {
-        const tip = this.tips[tipId]
+      return this.tips.reduce((tip, tasks) => {
         if (tip.task && !tasks[tip.task.id]) {
           tasks[tip.task.id] = tip.task
         }
-      }
-      return tasks
+        return tasks
+      }, {})
     },
     projectId: {
       get () {
@@ -235,13 +233,13 @@ export default {
             :project-id.sync="projectId"
             :task-id.sync="taskId"
             :creator-id.sync="creatorId"/>
-          <div v-for="(tasksObject, projectName) in tipsGroupedByProjectThenTask" :key="projectName" class="tip-list__container__list mt-4 mb-4 border-bottom">
+          <div v-for="(tasksObject, projectName) in tipsGroupedByProjectThenTask" :key="projectName" class="tip-list__container__list my-4 border-bottom">
             <h1 class="mb-3 mt-4 text-primary">{{ projectName }}</h1>
             <div v-for="(taskTips, taskIdVal) in tasksObject" :key="taskIdVal" class="mb-4">
               <div class="d-flex flex-row my-4 ml-4">
                 <template v-if="tasks[taskIdVal]">
                   <h2 class="text-tertiary">{{ tasks[taskIdVal].name }}</h2>
-                  <task-status class="mt-0 ml-2" :task-id="taskIdVal" v-if=" taskClosed(taskIdVal)" />
+                  <task-status class="mt-0 ml-2" :task-id="taskIdVal" v-if="taskClosed(taskIdVal)" />
                 </template>
               </div>
               <b-list-group-item v-for="tip in taskTips" class="flex-column align-items-start ml-4 border-0" :key="tip.id">
