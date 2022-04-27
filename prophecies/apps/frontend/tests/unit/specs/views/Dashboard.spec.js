@@ -25,6 +25,13 @@ describe('Dashboard', () => {
     })
   })
 
+  afterEach(async () => {
+    // Prevent a Vue warning in the next tick when the parentNode doesnt exist:
+    // > TypeError: Cannot read property 'createElement' of null
+    // @see https://stackoverflow.com/a/62262333
+    wrapper.destroy()
+  })
+
   it('should sort the task by priority and name without the closed ones', () => {
     expect(wrapper.vm.tasks).toHaveLength(3)
     expect(wrapper.vm.tasks[0].id).toBe('1')

@@ -1,5 +1,4 @@
 import { createLocalVue, mount } from '@vue/test-utils'
-import { server, rest } from '../../mocks/server'
 
 import '@/store'
 import Core from '@/core'
@@ -9,7 +8,7 @@ import UserNotification from '@/models/UserNotification'
 jest.useFakeTimers()
 
 describe('UserNotifications', () => {
-  function createContainer() {
+  function createContainer () {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -31,7 +30,6 @@ describe('UserNotifications', () => {
 
       wrapper = mount(UserNotifications, { attachTo, localVue, i18n, propsData, store, stubs, wait })
     })
-
 
     it('should NOT show the "no notifications" message', () => {
       const message = wrapper.find('.user-notifications__empty')

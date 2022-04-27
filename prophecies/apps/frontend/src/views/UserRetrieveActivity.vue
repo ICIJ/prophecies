@@ -9,6 +9,7 @@ import Task, { TaskStatusEnum, TaskStatusOrder } from '@/models/Task'
 
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
 import UserRetrieveActivityChart from '@/components/UserRetrieveActivityChart.vue'
+import EmptyPlaceholder from '@/components/EmptyPlaceholder.vue'
 
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
@@ -22,7 +23,8 @@ export default {
     AppWaiter,
     TaskStatsCardDetailed,
     TaskSortByDropdown,
-    UserRetrieveActivityChart
+    UserRetrieveActivityChart,
+    EmptyPlaceholder
   },
   props: {
     username: {
@@ -261,7 +263,9 @@ export default {
           waiter-class="my-5 mx-auto d-block "
           class="user-retrieve-activity__stats"
         >
+          <empty-placeholder v-if='!tasks.length' :title="$t('userTaskStatsCard.noTask')"/>
           <task-stats-card-detailed
+            v-else
             class="user-retrieve-activity__stats__task-card my-5"
             :team="false"
             v-for="task in tasks"

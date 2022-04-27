@@ -2,12 +2,14 @@
 import { noop } from 'lodash'
 import HistoryFetcher from '@/components/HistoryFetcher'
 import HistoryList from '@/components/HistoryList'
+import EmptyPlaceholder from '@/components/EmptyPlaceholder'
 
 export default {
   name: 'UserRetrieveHistory',
   components: {
     HistoryFetcher,
-    HistoryList
+    HistoryList,
+    EmptyPlaceholder
   },
   props: {
     username: {
@@ -48,6 +50,9 @@ export default {
           :per-page="pageSize"
           :total-rows="count"
         />
+      </template>
+      <template #empty>
+        <empty-placeholder icon="ClockIcon" :title="$t('userRetrieveHistory.noHistory')"/>
       </template>
     </history-list>
   </history-fetcher>

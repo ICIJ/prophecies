@@ -2,13 +2,15 @@
 import { uniqueId } from 'lodash'
 import AppWaiter from '@/components/AppWaiter'
 import UserNotificationLink from '@/components/UserNotificationLink'
+import EmptyPlaceholder from '@/components/EmptyPlaceholder'
 import UserNotification from '@/models/UserNotification'
 
 export default {
   name: 'UserNotifications',
   components: {
     AppWaiter,
-    UserNotificationLink
+    UserNotificationLink,
+    EmptyPlaceholder
   },
   props: {
     notificationIds: {
@@ -77,14 +79,7 @@ export default {
         </div>
       </template>
       <template v-else>
-        <div  class="user-notifications__empty text-muted text-center">
-          <div class="text-center p-3 text-muted">
-            <bell-icon size="3x" />
-          </div>
-          <p>
-            {{$t('userNotifications.noNotification')}}
-          </p>
-        </div>
+        <empty-placeholder class="user-notifications__empty" icon="BellIcon" :title="$t('userNotifications.noNotification')"/>
       </template>
       <slot name="footer" />
     </app-waiter>

@@ -3,6 +3,7 @@ import { remove, groupBy, uniqueId } from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
+import EmptyPlaceholder from '@/components/EmptyPlaceholder'
 import LatestTipsCard from '@/components/LatestTipsCard'
 import TaskStatus from '@/components/TaskStatus'
 import Tip from '@/models/Tip'
@@ -23,6 +24,7 @@ export default {
     AppSidebar,
     AppHeader,
     AppWaiter,
+    EmptyPlaceholder,
     LatestTipsCard,
     TaskStatus,
     TipCard,
@@ -233,15 +235,7 @@ export default {
             :project-id.sync="projectId"
             :task-id.sync="taskId"
             :creator-id.sync="creatorId"/>
-          <div
-            v-if="tips.length"
-            class="
-              latest-tips-card__no-tips
-              text-center text-secondary text-small mt-5
-            "
-          >
-            {{ $t("tipList.noTips") }}
-          </div>
+          <empty-placeholder v-if="!tips.length" class="mt-5" :title="$t('tipList.noTips')"/>
           <div v-else v-for="(tasksObject, projectName) in tipsGroupedByProjectThenTask" :key="projectName" class="tip-list__container__list my-4 border-bottom">
             <h1 class="mb-3 mt-4 text-primary">{{ projectName }}</h1>
             <div v-for="(taskTips, taskIdVal) in tasksObject" :key="taskIdVal" class="mb-4">

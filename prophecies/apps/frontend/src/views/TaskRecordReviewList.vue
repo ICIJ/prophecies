@@ -13,6 +13,7 @@ import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import TaskRecordReviewFilters from '@/components/TaskRecordReviewFilters'
 import TaskRecordReviewPageParams from '@/components/TaskRecordReviewPageParams'
 import TaskRecordReviewTutorial from '@/components/TaskRecordReviewTutorial'
+import EmptyPlaceholder from '@/components/EmptyPlaceholder'
 import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Task from '@/models/Task'
@@ -27,6 +28,7 @@ export default {
     AppHeader,
     AppWaiter,
     CinematicView,
+    EmptyPlaceholder,
     ShortkeyBadge,
     TaskRecordReviewBulkChoiceForm,
     TaskRecordReviewCard,
@@ -533,9 +535,7 @@ export default {
                 :per-page="Number(pageSize)" />
             </app-waiter>
           </div>
-          <div v-else class="text-center text-muted text-small mx-auto">
-            {{$t('taskRecordReviewList.noRecordsAssigned')}}
-          </div>
+          <empty-placeholder v-else :title="$t('taskRecordReviewList.noRecordsAssigned')" />
         </app-waiter>
       </div>
     </div>

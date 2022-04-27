@@ -1,16 +1,18 @@
 <script>
 import { uniqueId } from 'lodash'
+import { orderTasks } from '@/utils/sort'
+import Task, { TaskStatusEnum } from '@/models/Task'
+import Tip from '@/models/Tip'
+
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
+import EmptyPlaceholder from '@/components/EmptyPlaceholder.vue'
+import HistoryList from '@/components/HistoryList.vue'
+import HistoryFetcher from '@/components/HistoryFetcher.vue'
 import LatestTipsCard from '@/components/LatestTipsCard'
 import ProgressCard from '@/components/ProgressCard'
 import TaskStatsCard from '@/components/TaskStatsCard'
-import Task, { TaskStatusEnum } from '@/models/Task'
-import Tip from '@/models/Tip'
-import HistoryList from '@/components/HistoryList.vue'
-import HistoryFetcher from '@/components/HistoryFetcher.vue'
-import { orderTasks } from '@/utils/sort'
 
 export default {
   name: 'Dashboard',
@@ -22,7 +24,8 @@ export default {
     ProgressCard,
     TaskStatsCard,
     HistoryList,
-    HistoryFetcher
+    HistoryFetcher,
+    EmptyPlaceholder
   },
   data () {
     return {
@@ -117,8 +120,8 @@ export default {
                     <router-link class="btn btn-primary font-weight-bold" :to="{name:'stats-list'}">{{ $t('dashboard.allTasks') }}</router-link>
                   </div>
                 </template>
-                <div v-else class="card card-body shadow-sm text-center text-muted text-small">
-                  {{ $t('dashboard.noTask') }}.
+                <div v-else class="card card-body shadow-sm ">
+                  <empty-placeholder :title="$t('dashboard.noTask')"/>
                 </div>
               </app-waiter>
             </div>

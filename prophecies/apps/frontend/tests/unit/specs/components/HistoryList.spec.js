@@ -8,10 +8,11 @@ describe('HistoryList', () => {
 
   const localVue = createLocalVue()
   // Configure the local vue with plugins
-  const { wait, store } = Core.init(localVue).useAll()
+  const { i18n, store, wait } = Core.init(localVue).useAll()
 
   it('should display a title if available slot', async () => {
     wrapper = await shallowMount(HistoryList, {
+      i18n,
       wait,
       localVue,
       store,
@@ -27,6 +28,7 @@ describe('HistoryList', () => {
 
   it('shouldn\'t display a title if unavailable slot', async () => {
     wrapper = await shallowMount(HistoryList, {
+      i18n,
       wait,
       localVue,
       store

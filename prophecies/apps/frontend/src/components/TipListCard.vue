@@ -21,9 +21,7 @@
           >
         </h2>
         <div class="tip-list-card__content__list pb-0 pr-2">
-          <div v-if="hasNoTips" class="text-center text-secondary">
-            {{$t("tipListCard.noTips")}}
-          </div>
+          <empty-placeholder v-if="hasNoTips" :title='$t("tipListCard.noTips")'/>
           <tip-card v-else
             v-for="tip in tips"
             :key="tip.id"

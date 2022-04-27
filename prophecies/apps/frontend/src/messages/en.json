@@ -274,7 +274,7 @@
     "assignedTasks": "Assigned to {n} task: | Assigned to {n} tasks:"
   },
   "userNotifications": {
-    "noNotification": "You don't have any notification yet."
+    "noNotification": "No notifications received yet"
   },
   "userProfileDropdownMenu": {
     "api": "API",
@@ -287,7 +287,7 @@
       "yours": "Your bookmarks",
       "others": "Their bookmarks"
     },
-    "noBookmarks": "No bookmarks",
+    "noBookmarks": "No records bookmarked yet",
     "unableToRetrieveTheBookmarks": "Unable to retrieve the bookmarks"
   },
   "userRetrieveProfile": {
@@ -324,11 +324,13 @@
     "title": {
       "yours": "Your history",
       "others": "Their history"
-    }
+    },
+    "noHistory": "Empty history"
   },
   "userTaskStatsCard": {
     "allOpenTasks": "All open tasks",
     "allRecords": "All records",
-    "noActivity": "No activity recorded over this period"
+    "noActivity": "No activity recorded over this period",
+    "noTask": "No tasks assigned yet"
   }
 }

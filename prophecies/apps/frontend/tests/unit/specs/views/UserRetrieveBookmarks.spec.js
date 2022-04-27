@@ -71,8 +71,8 @@ describe('Bookmarks', () => {
   it('should show the message "No bookmarks" when list is empty', async () => {
     await wrapper.setData({ taskRecordReviewIds: [] })
     expect(wrapper.vm.taskRecordReviewIds).toHaveLength(0)
-    const element = wrapper.find('.user-retrieve-bookmarks__no-items')
+    const element = wrapper.find('.user-retrieve-bookmarks__empty')
     expect(element.exists()).toBeTruthy()
-    expect(element.text()).toBe('No bookmarks')
+    expect(element.attributes().title).toBe('No records bookmarked yet')
   })
 })

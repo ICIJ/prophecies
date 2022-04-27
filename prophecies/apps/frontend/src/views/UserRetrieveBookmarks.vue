@@ -5,6 +5,7 @@ import AppWaiter from '@/components/AppWaiter'
 
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import BookmarksPageParams from '@/components/BookmarksPageParams'
+import EmptyPlaceholder from '@/components/EmptyPlaceholder'
 import TaskStatus from '@/components/TaskStatus'
 import User from '@/models/User'
 import TaskRecordReview from '@/models/TaskRecordReview'
@@ -22,6 +23,7 @@ export default {
     AppWaiter,
     TaskRecordReviewCard,
     BookmarksPageParams,
+    EmptyPlaceholder,
     TaskStatus
   },
   props: {
@@ -273,15 +275,7 @@ export default {
           </div>
         </div>
       </template>
-      <div
-        v-else
-        class="
-          user-retrieve-bookmarks__no-items
-          text-center text-secondary text-small
-        "
-      >
-        {{ $t("userRetrieveBookmarks.noBookmarks") }}
-      </div>
+      <empty-placeholder v-else class="user-retrieve-bookmarks__empty" icon="BookmarkIcon" :title="$t('userRetrieveBookmarks.noBookmarks')"/>
     </app-waiter>
   </div>
 </template>

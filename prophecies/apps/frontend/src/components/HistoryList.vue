@@ -2,12 +2,14 @@
 import { uniqueId } from 'lodash'
 import AppWaiter from '@/components/AppWaiter'
 import HistoryListGroup from '@/components/HistoryListGroup.vue'
+import EmptyPlaceholder from '@/components/EmptyPlaceholder.vue'
 
 export default {
   name: 'HistoryList',
   components: {
     AppWaiter,
-    HistoryListGroup
+    HistoryListGroup,
+    EmptyPlaceholder
   },
   props: {
     limit: {
@@ -67,12 +69,13 @@ export default {
 </script>
 
 <template>
-    <app-waiter :loader="loaderAll" waiter-class="my-5 mx-auto d-block">
-      <h1 class="font-weight-bold mt-3 mb-5 history-list__title" v-if="hasTitleSlot">
-        <slot name="title">
-          What happened <span class="text-danger">lately</span>
-        </slot>
-      </h1>
+  <app-waiter :loader="loaderAll" waiter-class="my-5 mx-auto d-block" class="history-list">
+    <h1 class="font-weight-bold mt-3 mb-5 history-list__title" v-if="hasTitleSlot">
+      <slot name="title">
+        What happened <span class="text-danger">lately</span>
+      </slot>
+    </h1>
+    <template v-if="actionIds.length">
       <slot name="header"/>
       <app-waiter :loader="loader" waiter-class="my-5 mx-auto d-block">
         <history-list-group :limit="limit" :fluid="fluid" :action-ids="actionIds">
@@ -81,7 +84,11 @@ export default {
           </template>
         </history-list-group>
       </app-waiter>
-    </app-waiter>
+    </template>
+    <slot v-else name="empty">
+      <empty-placeholder :title="$t('userRetrieveHistory.noHistory')"/>
+    </slot>
+  </app-waiter>
 </template>
 
 <style lang="scss">
