@@ -217,18 +217,18 @@ export default {
               d-flex align-items-lg-end align-items-center justify-content-end flex-grow-1 mt-2 mt-lg-0
             "
           >
-            <div  class=" d-flex flex-lg-row flex-column">
-              <label class="text-nowrap text-primary  mr-4">{{$t('statsList.showOnly')}} </label>
-              <b-form-checkbox id="tasksForMe" class="user-retrieve-activity__stats__filters__checkbox--tasks-for-user  mr-4 " v-model="onlyForUser">
+            <div  class=" d-flex flex-lg-row flex-column my-auto">
+              <label class="text-nowrap text-primary mr-4">{{$t('statsList.showOnly')}} </label>
+              <b-form-checkbox
+                id="tasksForMe"
+                class="user-retrieve-activity__stats__filters__checkbox--tasks-for-user mr-4"
+                v-model="onlyForUser"
+              >
                 <label for="tasksForMe" class="text-nowrap text-primary" v-html="$t('statsList.tasksWithRecordsLeftForUser')"></label>
               </b-form-checkbox>
               <b-form-checkbox
-               id="openTasks"
-                class="
-                  user-retrieve-activity__stats__filters__checkbox--open-tasks
-                  mb-3
-                  mr-5
-                "
+                id="openTasks"
+                class="user-retrieve-activity__stats__filters__checkbox--open-tasks mr-5"
                 v-model="onlyOpenTasks"
               >
                 <label for="openTasks" class="text-nowrap text-primary">{{

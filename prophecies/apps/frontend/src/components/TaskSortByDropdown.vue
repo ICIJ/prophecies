@@ -2,7 +2,7 @@
     <sort-by-dropdown
       :sort.sync="sortField"
       :options="sortOptions"
-      class="mb-3 task-sort-by-dropdown"
+      class="task-sort-by-dropdown"
       >
       <template #label>
       </template>

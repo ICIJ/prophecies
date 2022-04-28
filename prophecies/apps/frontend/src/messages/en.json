@@ -161,7 +161,7 @@
     "tasksWithRecordsLeftForMe": "tasks with records left <b>for me</b>",
     "tasksWithRecordsLeftForUser": "tasks with records left <b>for them</b>",
     "openTasks": "open tasks",
-    "showOnly": "Show only"
+    "showOnly": "Show only:"
   },
   "taskRecordReviewActions": {
     "openInANewWindow": "Open in a new window",
