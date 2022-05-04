@@ -236,9 +236,9 @@
     "doneRecords": "Done records",
     "done": "Hecho",
     "pending": "Pendiente",
-    "taskProgression": "Task progression",
-    "userProgression": "User progression",
-    "roundProgression": "Round progression"
+    "taskProgression": "Progreso de la tarea",
+    "userProgression": "Progreso del usuario",
+    "roundProgression": "Progreso de la ronda"
   },
   "tips": {
     "lastModified": "Última modificación",
@@ -304,8 +304,8 @@
       "others": "Su actividad"
     },
     "stats": {
-      "yours": "Your tasks",
-      "others": "Their tasks"
+      "yours": "Tus tareas",
+      "others": "Sus tareas"
     }
   },
   "userRetrieveTeam": {
@@ -325,12 +325,12 @@
       "yours": "Tu historial",
       "others": "Su historial"
     },
-    "noHistory": "Empty history"
+    "noHistory": "Historia vacía"
   },
   "userTaskStatsCard": {
     "allOpenTasks": "Todas las tareas abiertas",
     "allRecords": "Todos los registros",
     "noActivity": "Ninguna actividad registrada durante este período",
-    "noTask": "No tasks assigned yet"
+    "noTask": "No hay tareas asignadas"
   }
 }
