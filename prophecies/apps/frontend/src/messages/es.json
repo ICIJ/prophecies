@@ -62,7 +62,7 @@
   },
   "appSidebar": {
     "dashboard": "Dashboard",
-    "myTasks": "My tasks",
+    "myTasks": "Mis tareas",
     "shortcuts": "Atajos",
     "tips": "Consejos",
     "history": "Historial",
@@ -155,13 +155,13 @@
   },
   "statsList": {
     "title": {
-      "yours": "Your tasks",
-      "team": "Team tasks"
+      "yours": "Tus tareas",
+      "team": "Tareas del equipo"
     },
     "tasksWithRecordsLeftForMe": "tasks with records left <b>for me</b>",
     "tasksWithRecordsLeftForUser": "tasks with records left <b>for them</b>",
-    "openTasks": "open tasks",
-    "showOnly": "Show only:"
+    "openTasks": "tareas abiertas",
+    "showOnly": "Mostrar solo:"
   },
   "taskRecordReviewActions": {
     "openInANewWindow": "Abrir en una ventana nueva",
@@ -217,11 +217,11 @@
   "taskSortByDropdown": {
     "status": "Estado (Abierto - Cerrado)",
     "progress0_100": "Progreso (0% - 100%)",
-    "progress100_0": "Progress (100% - 0%)",
-    "priority0_9": "Priority (0 - 9)",
-    "priority9_0": "Priority (9 - 0)",
-    "nameAZ": "Name (A - Z)",
-    "nameZA": "Name (Z - A)",
+    "progress100_0": "Progreso (100% - 0%)",
+    "priority0_9": "Prioridad (0 - 9)",
+    "priority9_0": "Prioridad (9 - 0)",
+    "nameAZ": "Nombre (A - Z)",
+    "nameZA": "Nombre (Z - A)",
     "recentlyCreated": "Creado recientemente"
   },
   "taskStatsCard": {
@@ -234,8 +234,8 @@
     "noRecordsAssigned": "No records assigned yet",
     "pendingRecords": "Pending records",
     "doneRecords": "Done records",
-    "done": "Done",
-    "pending": "Pending",
+    "done": "Hecho",
+    "pending": "Pendiente",
     "taskProgression": "Task progression",
     "userProgression": "User progression",
     "roundProgression": "Round progression"
