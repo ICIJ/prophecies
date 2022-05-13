@@ -274,7 +274,7 @@
     "assignedTasks": "Asignado a {n} area: | Asignado a {n} tareas:"
   },
   "userNotifications": {
-    "noNotification": "No notifications received yet"
+    "noNotification": "No hay notificaciones recibidas aún"
   },
   "userProfileDropdownMenu": {
     "api": "API",
