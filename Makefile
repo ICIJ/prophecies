@@ -29,8 +29,18 @@ makemigrations:
 run:
 		pipenv run python manage.py runserver 0.0.0.0:8008
 
-test:
+update:
+	  pipenv update
+		yarn upgrade
+
+test: test-back test-front
+
+test-back:
 		pipenv run python manage.py test --settings=prophecies.settings.test
+
+test-front:
+		yarn test:unit
+
 
 # Requires the `entr` binary (can be installed with apt)
 entr-test:
