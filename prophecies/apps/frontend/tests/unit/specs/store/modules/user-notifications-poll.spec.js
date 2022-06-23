@@ -118,14 +118,13 @@ describe('userNotificationsPoll', () => {
     store.dispatch('userNotificationsPoll/startPollAndFetch')
   })
 
-  it('should fetch only the latest notification after a while when starting the poll', async done => {
+  it('should fetch only the latest notification after a while when starting the poll', done => {
     store.subscribeAction(async (action) => {
       if (action.type === 'userNotificationsPoll/fetchLatest') {
-        await advanceTimersByTimeAndFlushPromises()
-        done()
+        advanceTimersByTimeAndFlushPromises().then(done)
       }
     })
     store.dispatch('userNotificationsPoll/startPollAndFetch')
-    await advanceTimersByTimeAndFlushPromises(1e3 * 10)
+    advanceTimersByTimeAndFlushPromises(1e3 * 10)
   })
 })
