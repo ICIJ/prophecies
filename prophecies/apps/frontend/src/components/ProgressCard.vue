@@ -125,7 +125,7 @@ export default {
 
       &__item {
 
-        & /deep/ .progress-bar {
+        & >>> .progress-bar {
           background: var(--progress-fg, $primary) !important;
         }
 

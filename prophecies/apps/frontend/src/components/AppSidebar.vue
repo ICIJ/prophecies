@@ -64,7 +64,7 @@ export default {
 
     &__container {
 
-      & /deep/ .nav-item > * {
+      & >>> .nav-item > * {
         display: flex;
         align-items: center;
         padding: $spacer-lg;

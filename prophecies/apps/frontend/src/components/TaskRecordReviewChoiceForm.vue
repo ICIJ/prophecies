@@ -131,11 +131,11 @@ export default {
 <style lang="scss" scoped>
   .task-record-review-choice-form {
 
-    &__alternative-value /deep/ .multiselect {
+    &__alternative-value >>> .multiselect {
       transition: $transition-fade;
     }
 
-    &--has-choice:not(:hover):not(&--has-alternative-value) &__alternative-value /deep/ .multiselect:not(.multiselect--active) {
+    &--has-choice:not(:hover):not(&--has-alternative-value) &__alternative-value >>> .multiselect:not(.multiselect--active) {
       opacity: 0.25;
     }
   }

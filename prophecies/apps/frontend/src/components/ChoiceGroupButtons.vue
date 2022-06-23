@@ -113,7 +113,7 @@ export default {
 
         background: var(--choice-bg, $primary) !important;
         color: var(--text-fg, $body-color) !important;
-        & /deep/ .shortkey-badge {
+        & >>> .shortkey-badge {
           color: inherit;
         }
       }

@@ -23,10 +23,10 @@ workflows:
             tags:
               only: /.*/
       - docker/publish:
-          docker-password: DOCKER_PASS 
+          docker-password: DOCKER_PASS
           docker-username: DOCKER_USER
-          image: icij/prophecies 
-          tag: "${CIRCLE_TAG/#v},latest" 
+          image: icij/prophecies
+          tag: "${CIRCLE_TAG/#v},latest"
           registry: registry.hub.docker.com
           requires:
             - test-frontend
@@ -36,11 +36,11 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
-          
+
 jobs:
   checkout:
     docker:
-      - image: circleci/node:14.15.5
+      - image: circleci/node:16-bullseye
     working_directory: ~/repository/
     steps:
       - checkout
@@ -52,7 +52,7 @@ jobs:
 
   test-frontend:
     docker:
-      - image: circleci/node:14.15.5
+      - image: circleci/node:16-bullseye
     working_directory: ~/repository/
     steps:
       - restore_cache:
