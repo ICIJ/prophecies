@@ -38,7 +38,7 @@ export default {
 }
 </script>
 
-<template lang="html">
+<template>
   <div class="task-record-review-applied-sort">
     <b-btn variant="default" class="task-record-review-applied-sort__item" :title="selectedSortOption['label']"  v-b-tooltip.hover @click="deleteSortOption(selectedSortOption['value'])" v-if="hasSorting">
       {{ selectedSortOption['label'] }} <x-icon class="ml-3" size="1x" />
