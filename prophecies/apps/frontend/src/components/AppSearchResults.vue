@@ -207,7 +207,7 @@ export default {
 <style lang="scss" scoped>
   .app-search-results {
     &__tabs {
-      & /deep/ &__nav {
+      & >>> &__nav {
         min-width: 200px;
 
         &__item {
@@ -233,7 +233,7 @@ export default {
         }
       }
 
-      & /deep/ &__content {
+      & >>> &__content {
         max-height: 70vh;
         overflow: auto;
 

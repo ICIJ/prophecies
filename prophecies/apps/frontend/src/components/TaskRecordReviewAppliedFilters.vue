@@ -76,7 +76,7 @@ export default {
       margin-right: $spacer;
     }
 
-    & /deep/ &__item.btn:hover {
+    & >>> &__item.btn:hover {
       background-color: $warning;
       border-color: $warning;
       color: text-contrast($warning);
