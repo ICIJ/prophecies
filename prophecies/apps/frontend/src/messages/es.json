@@ -96,11 +96,11 @@
     "seeMore": "Ver más"
   },
   "historyListItem": {
-    "checked-records": "checked {n} record | checked {n} records",
+    "checked-records": "verificado registro {n} | {n} registros verificados",
     "closed-task": "ha cerrado la tarea",
     "general": "General",
-    "mentioned-user": "mentioned {value} in <a href='{link}'>a note</a>",
-    "tip": "added a new tip: <a href='{link}'>\"{value}\"</a>",
+    "mentioned-user": "mencionó a {value} en <a href='{link}'>una nota</a>",
+    "tip": "añadió un nuevo consejo: <a href='{link}'>\"{value}\"</a>",
     "youLowercase": "tú",
     "youCapitalized": "Tú"
   },
@@ -147,7 +147,7 @@
     "allOpenTasks": "tareas abiertas",
     "moreProgress": "Más progresos",
     "noOpenTasks": "No hay tareas abiertas",
-    "tasksClosed": "already {n} task closed | already {n} tasks closed"
+    "tasksClosed": "la tarea {n} ya está cerrada | las tareas {n} ya están cerradas"
   },
   "shortcurListCard": {
     "shortcuts": "Atajos",
@@ -158,8 +158,8 @@
       "yours": "Tus tareas",
       "team": "Tareas del equipo"
     },
-    "tasksWithRecordsLeftForMe": "tasks with records left <b>for me</b>",
-    "tasksWithRecordsLeftForUser": "tasks with records left <b>for them</b>",
+    "tasksWithRecordsLeftForMe": "tareas con registros pendientes <b>para mi</b>",
+    "tasksWithRecordsLeftForUser": "tareas con registros pendientes <b>para el resto del equipo</b>",
     "openTasks": "tareas abiertas",
     "showOnly": "Mostrar solo:"
   },
@@ -190,7 +190,7 @@
     "selectAll": "Seleccione {n} registro | Seleccione {n} registros",
     "selectedResults": "{n} resultado seleccionado | {n} resultados seleccionados",
     "lockedResults": "{n} de los cuales está bloqueado | {n} de los cuales están bloqueados",
-    "noRecordsAssigned": "No records assigned yet. Ask your admin.",
+    "noRecordsAssigned": "No tienes registros asignados aún. Pregunta a tu administradora.",
     "backToListView": "Volver a la lista",
     "filters": "Filtros"
   },
@@ -231,9 +231,9 @@
     "fullyCheckedItems": "Registro completamente verificado | Registros completamente verificados",
     "priority": "Prioridad",
     "round": "Ronda",
-    "noRecordsAssigned": "No records assigned yet",
-    "pendingRecords": "Pending records",
-    "doneRecords": "Done records",
+    "noRecordsAssigned": "No tienes registros asignados aún",
+    "pendingRecords": "Registros pendientes",
+    "doneRecords": "Registros hechos",
     "done": "Hecho",
     "pending": "Pendiente",
     "taskProgression": "Progreso de la tarea",
@@ -251,7 +251,7 @@
     "done": "Hecho"
   },
   "tipList": {
-    "noTips": "There is no tips"
+    "noTips": "No hay consejos"
   },
   "tipListCard": {
     "tipsFor": "Consejos para",
@@ -287,7 +287,7 @@
       "yours": "Tus marcadores",
       "others": "Sus marcadores"
     },
-    "noBookmarks": "No records bookmarked yet",
+    "noBookmarks": "No hay registros marcados aún",
     "unableToRetrieveTheBookmarks": "No se pudo recuperar los marcadores"
   },
   "userRetrieveProfile": {
