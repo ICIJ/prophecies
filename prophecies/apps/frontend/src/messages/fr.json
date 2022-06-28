@@ -62,7 +62,7 @@
   },
   "appSidebar": {
     "dashboard": "Tableau de bord",
-    "myTasks": "My tasks",
+    "myTasks": "Mes tâches",
     "shortcuts": "Raccourcis",
     "tips": "Tips",
     "history": "Historique",
@@ -96,11 +96,11 @@
     "seeMore": "Voir plus"
   },
   "historyListItem": {
-    "checked-records": "checked {n} record | checked {n} records",
+    "checked-records": "sélectionnez {n} donnée | sélectionnez {n} données",
     "closed-task": "a fermé la tâche",
     "general": "Général",
-    "mentioned-user": "mentioned {value} in <a href='{link}'>a note</a>",
-    "tip": "added a new tip: <a href='{link}'>\"{value}\"</a>",
+    "mentioned-user": "a mentionné {value} dans <a href='{link}'>une note</a>",
+    "tip": "a ajouté un nouveau tip : <a href='{link}'>\"{value}\"</a>",
     "youLowercase": "vous",
     "youCapitalized": "Vous"
   },
@@ -147,7 +147,7 @@
     "allOpenTasks": "toutes les tâches ouvertes",
     "moreProgress": "Voir plus",
     "noOpenTasks": "Aucune tâche ouverte",
-    "tasksClosed": "already {n} task closed | already {n} tasks closed"
+    "tasksClosed": "déjà {n} tâche fermée | déjà {n} tâches fermées"
   },
   "shortcurListCard": {
     "shortcuts": "Raccourcis",
@@ -155,13 +155,13 @@
   },
   "statsList": {
     "title": {
-      "yours": "Your tasks",
-      "team": "Team tasks"
+      "yours": "Vos tâches",
+      "team": "Tâches de l'équipe"
     },
-    "tasksWithRecordsLeftForMe": "tasks with records left <b>for me</b>",
-    "tasksWithRecordsLeftForUser": "tasks with records left <b>for them</b>",
-    "openTasks": "open tasks",
-    "showOnly": "Show only:"
+    "tasksWithRecordsLeftForMe": "tâches avec des données restantes <b>pour moi</b>",
+    "tasksWithRecordsLeftForUser": "tâches avec des données restantes <b>pour eux</b>",
+    "openTasks": "tâches ouvertes",
+    "showOnly": "Afficher seulement:"
   },
   "taskRecordReviewActions": {
     "openInANewWindow": "Ouvrir dans une nouvelle fenêtre",
@@ -190,7 +190,7 @@
     "selectAll": "Sélectionnez {n} donnée | Sélectionnez {n} données",
     "selectedResults": "{n} résultat sélectionné | {n} résultats sélectionnés",
     "lockedResults": "{n} d'entre eux est verrouillé | {n} d'entre eux sont verrouillés",
-    "noRecordsAssigned": "No records assigned yet. Ask your admin.",
+    "noRecordsAssigned": "Aucune donnée assignée. Demandez à votre administrateur•ice.",
     "backToListView": "Retour à la vue liste",
     "filters": "Filtres"
   },
@@ -217,11 +217,11 @@
   "taskSortByDropdown": {
     "status": "Statut (Ouverte - Fermée)",
     "progress0_100": "Progression (0% - 100%)",
-    "progress100_0": "Progress (100% - 0%)",
-    "priority0_9": "Priority (0 - 9)",
-    "priority9_0": "Priority (9 - 0)",
-    "nameAZ": "Name (A - Z)",
-    "nameZA": "Name (Z - A)",
+    "progress100_0": "Progression (100% - 0%)",
+    "priority0_9": "Priorité (0 - 9)",
+    "priority9_0": "Priorité (9 - 0)",
+    "nameAZ": "Nom (A - Z)",
+    "nameZA": "Nom (Z - A)",
     "recentlyCreated": "Créée récemment"
   },
   "taskStatsCard": {
@@ -231,14 +231,14 @@
     "fullyCheckedItems": "Donnée entièrement vérifiée | Données entièrement vérifiées",
     "priority": "Priorité",
     "round": "Tour",
-    "noRecordsAssigned": "No records assigned yet",
-    "pendingRecords": "Pending records",
-    "doneRecords": "Done records",
-    "done": "Done",
-    "pending": "Pending",
-    "taskProgression": "Task progression",
-    "userProgression": "User progression",
-    "roundProgression": "Round progression"
+    "noRecordsAssigned": "Aucune donnée n'a encore été attribuée",
+    "pendingRecords": "Données en attente",
+    "doneRecords": "Données vérifiées",
+    "done": "Terminée",
+    "pending": "En attente",
+    "taskProgression": "Progression de la tâche",
+    "userProgression": "Progression de l'utilisateur•ice",
+    "roundProgression": "Progression du tour"
   },
   "tips": {
     "lastModified": "Dernière modification",
@@ -251,7 +251,7 @@
     "done": "Terminée"
   },
   "tipList": {
-    "noTips": "There is no tips"
+    "noTips": "Il n'y a pas de tip"
   },
   "tipListCard": {
     "tipsFor": "Tips pour",
@@ -274,7 +274,7 @@
     "assignedTasks": "Assigné•e à {n} tâche : | Assigné•e à {n} tâches :"
   },
   "userNotifications": {
-    "noNotification": "No notifications received yet"
+    "noNotification": "Aucune notification reçue encore"
   },
   "userProfileDropdownMenu": {
     "api": "API",
@@ -287,7 +287,7 @@
       "yours": "Vos favoris",
       "others": "Ses favoris"
     },
-    "noBookmarks": "No records bookmarked yet",
+    "noBookmarks": "Aucune donnée favorite encore",
     "unableToRetrieveTheBookmarks": "Impossible d'afficher les favoris"
   },
   "userRetrieveProfile": {
@@ -304,8 +304,8 @@
       "others": "Son activité"
     },
     "stats": {
-      "yours": "Your tasks",
-      "others": "Their tasks"
+      "yours": "Vos tâches",
+      "others": "Ses tâches"
     }
   },
   "userRetrieveTeam": {
@@ -325,12 +325,12 @@
       "yours": "Votre historique",
       "others": "Son historique"
     },
-    "noHistory": "Empty history"
+    "noHistory": "Historique vide"
   },
   "userTaskStatsCard": {
     "allOpenTasks": "Toutes les tâches ouvertes",
     "allRecords": "Toutes les données",
     "noActivity": "Aucune activité enregistrée sur cette période",
-    "noTask": "No tasks assigned yet"
+    "noTask": "Aucune tâche ne vous a été assignée encore"
   }
 }
