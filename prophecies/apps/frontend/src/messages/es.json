@@ -84,7 +84,7 @@
   },
   "error": {
     "title": "Algo va mal aquí",
-    "description": "Ha ocurrido un error. Por favor, inténtelo de nuevo más tarde o póngase en contacto con su administrador si el problema persiste.",
+    "description": "Ha ocurrido un error. Por favor, inténtelo de nuevo más tarde o póngase en contacto con su administradora si el problema persiste.",
     "connectedAs": "Estás conectado como {username}",
     "logout": "Cerrar sesión",
     "help": "Solicitar ayuda"
@@ -160,7 +160,7 @@
     },
     "tasksWithRecordsLeftForMe": "tareas con registros pendientes <b>para mi</b>",
     "tasksWithRecordsLeftForUser": "tareas con registros pendientes <b>para el resto del equipo</b>",
-    "openTasks": "tareas abiertas",
+    "openTasks": "tareas pendientes",
     "showOnly": "Mostrar solo:"
   },
   "taskRecordReviewActions": {
@@ -170,7 +170,7 @@
     "removeBookmark": "Eliminar marcador",
     "duplicateRecord": "Duplicar registro",
     "unlock": "Desbloquear",
-    "adminMustOpenTheTask": "El administrador debe añadirle en la tarea para permitirle revisar este registro",
+    "adminMustOpenTheTask": "La administradora debe añadirte en la tarea para permitirte revisar este registro",
     "unlockRecord": "Desbloquear registro",
     "lockedBy": "{username} debe desbloquear este registro para permitirle revisarlo",
     "lock": "Bloquear",
@@ -274,7 +274,7 @@
     "assignedTasks": "Asignado a {n} area: | Asignado a {n} tareas:"
   },
   "userNotifications": {
-    "noNotification": "No hay notificaciones recibidas aún"
+    "noNotification": "No hay nuevas notificaciones"
   },
   "userProfileDropdownMenu": {
     "api": "API",
@@ -325,7 +325,7 @@
       "yours": "Tu historial",
       "others": "Su historial"
     },
-    "noHistory": "Historia vacía"
+    "noHistory": "Historial vacío"
   },
   "userTaskStatsCard": {
     "allOpenTasks": "Todas las tareas abiertas",
