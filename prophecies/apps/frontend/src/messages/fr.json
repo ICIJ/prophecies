@@ -1,0 +1,336 @@
+{
+  "actions": {
+    "cancelled": {
+      "taskRecordReview": {
+        "*": "{actor} a annulé sa classification de cette donnée"
+      }
+    },
+    "reviewed": {
+      "taskRecordReview": {
+        "*": "{actor} a classifié cette donnée en \"inconnu\"",
+        "choice": "{actor} a classifié cette donnée en <strong>\"{actionObject}\"</strong>"
+      }
+    },
+    "locked": {
+      "taskRecord": {
+        "*": "{actor} <strong>a verrouillé</strong> cette donnée"
+      }
+    },
+    "unlocked": {
+      "taskRecord": {
+        "*": "{actor} <strong>a déverrouillé</strong> cette donnée"
+      }
+    },
+    "commented": {
+      "taskRecordReview": {
+        "*": "{actor} a écrit une note"
+      }
+    },
+    "mentioned": {
+      "user": {
+        "taskRecordReview": "{actor} a mentionné <strong>{target}</strong> dans une note"
+      }
+    },
+    "selected": {
+      "taskRecordReview": {
+        "*": "{actor} a sélectionné \"{alternative_value}\""
+      }
+    }
+  },
+  "adminBadge": {
+    "admin": "Admin"
+  },
+  "alternativeValueSelect": {
+    "selectTheCorrectValue": "Sélectionner la valeur correcte",
+    "useThisExactValue": "Utiliser cette valeur exacte"
+  },
+  "app": {
+    "close": "Fermer"
+  },
+  "appHeader": {
+    "cinematicView": "Vue cinéma",
+    "tips": "Tips",
+    "search": "Rechercher",
+    "shortcuts": "Raccourcis",
+    "tutorial": "Tuto"
+  },
+  "appSearchForm": {
+    "typeYourSearch": "Entrez votre recherche"
+  },
+  "appSearchResults": {
+    "tips": "Tips"
+  },
+  "appSidebar": {
+    "dashboard": "Tableau de bord",
+    "myTasks": "Mes tâches",
+    "shortcuts": "Raccourcis",
+    "tips": "Tips",
+    "history": "Historique",
+    "admin": "Admin"
+  },
+  "appVersion": {
+    "version": "Version {version}"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "allHistory": "Tout l'historique",
+    "showAllHistory": "Voir tout l'historique",
+    "allTasks": "Toutes mes tâches",
+    "allTips": "Tous les tips",
+    "latestTips": "Les derniers tips",
+    "moreNiceTips": "Plus de tips",
+    "noTask": "Il n'y a pas encore de tâches",
+    "lately": "Dernièrement"
+  },
+  "error": {
+    "title": "Un problème est survenu ici",
+    "description": "Une erreur est survenue. Réessayer plus tard ou contacter l'admin si le problème persiste.",
+    "connectedAs": "Vous êtes connecté•e en tant que {username}",
+    "logout": "Se déconnecter",
+    "help": "Demander de l'aide"
+  },
+  "general": {
+    "unableToFindThisResource": "Impossible de trouver cette ressource"
+  },
+  "historyListGroup": {
+    "seeMore": "Voir plus"
+  },
+  "historyListItem": {
+    "checked-records": "sélectionnez {n} donnée | sélectionnez {n} données",
+    "closed-task": "a fermé la tâche",
+    "general": "Général",
+    "mentioned-user": "a mentionné {value} dans <a href='{link}'>une note</a>",
+    "tip": "a ajouté un nouveau tip : <a href='{link}'>\"{value}\"</a>",
+    "youLowercase": "vous",
+    "youCapitalized": "Vous"
+  },
+  "latestTipsCard": {
+    "closeLatestTips": "Fermer les derniers tips",
+    "inTaskAndProject": "dans {task} | {project}",
+    "general": "Général"
+  },
+  "login": {
+    "title": "Se connecter",
+    "welcome": "Bienvenue dans Prophecies",
+    "sumUp": "une plateforme de l'<a href=\"https://icij.org\">ICIJ</a> pour nettoyer et valider vos données.",
+    "accountDescription": "Utilisez votre compte pour continuer :",
+    "account": "Se connecter",
+    "askHelp": "Demander de l'aide",
+    "logout": "Vous avez été déconnecté•e.",
+    "login": "Connectez-vous pour continuer"
+  },
+  "notification": {
+    "markAll": "Tout marquer comme lu",
+    "seeAllNotifications": "Voir toutes les notifications",
+    "actions": {
+      "mentioned": {
+        "user": {
+          "tip": "{actor} vous a mentionné•e dans un <strong>tip</strong>",
+          "taskRecordReview": "{actor} vous a mentionné•e dans une <strong>note</strong>"
+        }
+      }
+    }
+  },
+  "pageParams": {
+    "project": "Projet",
+    "task": "Tâche",
+    "author": "Auteur•ice",
+    "selectAProject": "Sélectionnez un projet",
+    "selectATask": "Sélectionnez une tâche",
+    "selectAnAuthor": "Sélectionnez un•e auteur•ice"
+  },
+  "progressCard": {
+    "title": {
+      "yours": "Votre progression",
+      "team": "Progression de l'équipe"
+    },
+    "allOpenTasks": "toutes les tâches ouvertes",
+    "moreProgress": "Voir plus",
+    "noOpenTasks": "Aucune tâche ouverte",
+    "tasksClosed": "déjà {n} tâche fermée | déjà {n} tâches fermées"
+  },
+  "shortcurListCard": {
+    "shortcuts": "Raccourcis",
+    "forAllTasks": "Toutes les tâches"
+  },
+  "statsList": {
+    "title": {
+      "yours": "Vos tâches",
+      "team": "Tâches de l'équipe"
+    },
+    "tasksWithRecordsLeftForMe": "tâches avec des données restantes <b>pour moi</b>",
+    "tasksWithRecordsLeftForUser": "tâches avec des données restantes <b>pour eux</b>",
+    "openTasks": "tâches ouvertes",
+    "showOnly": "Afficher seulement:"
+  },
+  "taskRecordReviewActions": {
+    "openInANewWindow": "Ouvrir dans une nouvelle fenêtre",
+    "link": "Lien",
+    "bookmark": "Enregistrer comme favori",
+    "removeBookmark": "Supprimer des favoris",
+    "duplicateRecord": "Dupliquer cette donnée",
+    "unlock": "Déverrouiller",
+    "adminMustOpenTheTask": "L'admin doit ouvrir la tâche pour vous permettre de classifier cette donnée",
+    "unlockRecord": "Déverrouiller cette donnée",
+    "lockedBy": "{username} doit déverrouiller cette donnée pour vous permettre de la classifier",
+    "lock": "Verrouiller",
+    "lockRecord": "Verrouiller cette donnée (personne ne pourra la classifier jusqu'à ce que vous la déverrouilliez)",
+    "seeHistory": "Voir l'historique",
+    "seeHistoryChanges": "Voir l'historique des modifications"
+  },
+  "taskRecordReviewHistory": {
+    "cancelMyChoice": "Annuler ma classification",
+    "commentVerb": "Commenter",
+    "oneNote": "1 note",
+    "useTheSameValue": "Choisir la même valeur",
+    "you": "vous"
+  },
+  "taskRecordReviewList": {
+    "clearFilters": "Effacer les filtres",
+    "selectAll": "Sélectionnez {n} donnée | Sélectionnez {n} données",
+    "selectedResults": "{n} résultat sélectionné | {n} résultats sélectionnés",
+    "lockedResults": "{n} d'entre eux est verrouillé | {n} d'entre eux sont verrouillés",
+    "noRecordsAssigned": "Aucune donnée assignée. Demandez à votre administrateur•ice.",
+    "backToListView": "Retour à la vue liste",
+    "filters": "Filtres"
+  },
+  "taskRecordReviewAppliedSorting": {
+    "idDefault": "ID (par défaut)",
+    "predictedValueAZ": "Trié par: valeur prédite (A - Z)",
+    "predictedValueZA": "Trié par: valeur prédite (Z - A)",
+    "originalValueAZ": "Trié par: valeur originale (A - Z)",
+    "originalValueZA": "Tri par : valeur originale (Z - A)",
+    "priorityValueLowHigh": "Trié par: priorité (basse à haute)",
+    "priorityValueHighLow": "Trié par: priorité (haute à basse)"
+  },
+  "taskRecordReviewPageParams": {
+    "sortBy": "Trier par",
+    "pageSize": "Taille de page",
+    "idDefault": "ID (par défaut)",
+    "predictedValueAZ": "Valeur prédite (A - Z)",
+    "predictedValueZA": "Valeur prédite (Z - A)",
+    "originalValueAZ": "Valeur originale (A - Z)",
+    "originalValueZA": "Valeur originale (Z - A)",
+    "priorityValueLowHigh": "Priorité (basse à haute)",
+    "priorityValueHighLow": "Priorité (haute à basse)"
+  },
+  "taskSortByDropdown": {
+    "status": "Statut (Ouverte - Fermée)",
+    "progress0_100": "Progression (0% - 100%)",
+    "progress100_0": "Progression (100% - 0%)",
+    "priority0_9": "Priorité (0 - 9)",
+    "priority9_0": "Priorité (9 - 0)",
+    "nameAZ": "Nom (A - Z)",
+    "nameZA": "Nom (Z - A)",
+    "recentlyCreated": "Créée récemment"
+  },
+  "taskStatsCard": {
+    "closed": "Fermé",
+    "createdOn": "Créée le",
+    "locked": "Verrouillée",
+    "fullyCheckedItems": "Donnée entièrement vérifiée | Données entièrement vérifiées",
+    "priority": "Priorité",
+    "round": "Tour",
+    "noRecordsAssigned": "Aucune donnée n'a encore été attribuée",
+    "pendingRecords": "Données en attente",
+    "doneRecords": "Données vérifiées",
+    "done": "Terminée",
+    "pending": "En attente",
+    "taskProgression": "Progression de la tâche",
+    "userProgression": "Progression de l'utilisateur•ice",
+    "roundProgression": "Progression du tour"
+  },
+  "tips": {
+    "lastModified": "Dernière modification",
+    "you": "vous"
+  },
+  "taskStatus": {
+    "open": "Ouverte",
+    "locked": "Verrouillée",
+    "closed": "Fermée",
+    "done": "Terminée"
+  },
+  "tipList": {
+    "noTips": "Il n'y a pas de tip"
+  },
+  "tipListCard": {
+    "tipsFor": "Tips pour",
+    "seeTipsForAllTasks": "Voir les tips pour toutes les tâches",
+    "noTips": "Il n'y a pas de tips pour cette tâche"
+  },
+  "tutorial": {
+    "readTheContent": "Lisez le contenu à vérifier",
+    "checkPredictedValue": "Vérifiez si la valeur prédite est correcte",
+    "selectChoice": "Sélectionnez (ou saisissez) votre choix",
+    "readOthersChoices": "Lisez les choix des autres (cliquez sur le choix d'un•e autre utilisateur•ice pour enregistrer le même choix !)",
+    "comment": "Commentez (mentionnez d'autres vérificateur•ices avec @username ou tout le monde avec @project)",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "close": "Fermer",
+    "firstTimeHere": "C'est votre première fois ici ?",
+    "skip": "Ignorer le tuto"
+  },
+  "userCard": {
+    "assignedTasks": "Assigné•e à {n} tâche : | Assigné•e à {n} tâches :"
+  },
+  "userNotifications": {
+    "noNotification": "Aucune notification reçue encore"
+  },
+  "userProfileDropdownMenu": {
+    "api": "API",
+    "admin": "Admin",
+    "help": "Aide",
+    "logOut": "Se déconnecter"
+  },
+  "userRetrieveBookmarks": {
+    "title": {
+      "yours": "Vos favoris",
+      "others": "Ses favoris"
+    },
+    "noBookmarks": "Aucune donnée favorite encore",
+    "unableToRetrieveTheBookmarks": "Impossible d'afficher les favoris"
+  },
+  "userRetrieveProfile": {
+    "title": {
+      "yours": "Votre profil",
+      "others": "{displayFullName}"
+    },
+    "lastLogin": "Dernière connexion",
+    "notProvided": "Non fourni"
+  },
+  "userRetrieveActivity": {
+    "title": {
+      "yours": "Votre activité",
+      "others": "Son activité"
+    },
+    "stats": {
+      "yours": "Vos tâches",
+      "others": "Ses tâches"
+    }
+  },
+  "userRetrieveTeam": {
+    "title": {
+      "yours": "Votre équipe",
+      "others": "Son équipe"
+    }
+  },
+  "userRetrieveNotifications": {
+    "title": {
+      "yours": "Vos notifications",
+      "others": "Ses notifications"
+    }
+  },
+  "userRetrieveHistory": {
+    "title": {
+      "yours": "Votre historique",
+      "others": "Son historique"
+    },
+    "noHistory": "Historique vide"
+  },
+  "userTaskStatsCard": {
+    "allOpenTasks": "Toutes les tâches ouvertes",
+    "allRecords": "Toutes les données",
+    "noActivity": "Aucune activité enregistrée sur cette période",
+    "noTask": "Aucune tâche ne vous a été assignée encore"
+  }
+}
