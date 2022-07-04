@@ -179,7 +179,7 @@ export default {
     <div class="user-retrieve__container flex-grow-1">
       <app-header hide-nav hide-search />
       <div class="container-fluid">
-        <page-header :title="title" class="mb-5" />
+        <page-header :title="title" :icon="icon" class="mb-5" />
         <app-waiter :loader="fetchUserLoader" waiter-class="my-5 mx-auto d-block">
           <router-view />
         </app-waiter>
