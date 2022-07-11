@@ -188,7 +188,7 @@ export default {
   background: $primary-10;
   --column-color: #{$primary};
 
-  & >>> .stacked-column-chart {
+  & ::v-deep .stacked-column-chart {
     &__groups__item {
       &__bars {
         border-bottom: solid 2px $primary_70;

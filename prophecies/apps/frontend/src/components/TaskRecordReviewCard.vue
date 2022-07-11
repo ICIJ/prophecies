@@ -383,21 +383,21 @@ export default {
       &__checkbox {
         padding: 0;
 
-        & >>> label {
+        & ::v-deep label {
           width: 100%;
           padding: $spacer 0;
         }
 
-        & >>> label:before,
-        & >>> label:after {
+        & ::v-deep label:before,
+        & ::v-deep label:after {
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
         }
       }
 
-      &:hover &__checkbox >>> label,
-      .task-record-review-card--selected & &__checkbox >>> label {
+      &:hover &__checkbox ::v-deep label,
+      .task-record-review-card--selected & &__checkbox ::v-deep label {
         text-indent: -1000px;
 
         &:after, &:before {
@@ -405,7 +405,7 @@ export default {
         }
       }
 
-      &__checkbox >>> label {
+      &__checkbox ::v-deep label {
         text-indent: 0px;
 
         &:after, &:before {

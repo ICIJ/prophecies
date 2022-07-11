@@ -125,7 +125,7 @@ export default {
 
       &__item {
 
-        & >>> .progress-bar {
+        & ::v-deep .progress-bar {
           background: var(--progress-fg, $primary) !important;
         }
 

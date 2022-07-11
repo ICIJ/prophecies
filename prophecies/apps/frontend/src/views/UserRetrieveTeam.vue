@@ -102,7 +102,7 @@ export default {
       margin-top: $spacer;
     }
 
-    & >>> .user-card__assigned-tasks__list {
+    & ::v-deep .user-card__assigned-tasks__list {
       height: 5rem;
       overflow-y: auto;
       margin-bottom: $spacer-xl;

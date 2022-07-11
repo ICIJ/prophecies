@@ -153,7 +153,7 @@ export default {
 
 <style lang="scss" scoped>
 .user-task-stats-card {
-  & >>> .task-stats-card-all-rounds {
+  & ::v-deep .task-stats-card-all-rounds {
     width: unset;
     max-width: 360px;
     min-width: unset;

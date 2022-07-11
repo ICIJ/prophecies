@@ -146,48 +146,48 @@ export default {
     &__nav-left {
       width: 100%;
 
-      & >>> &__search-form {
+      & ::v-deep &__search-form {
         width: 100%;
       }
     }
 
-    & >>> .nav-item .nav-link .feather,
-    & >>> .navbar-text .feather,
-    & >>> .dropdown-item .feather {
+    & ::v-deep .nav-item .nav-link .feather,
+    & ::v-deep .navbar-text .feather,
+    & ::v-deep .dropdown-item .feather {
       height: 20px;
       width: 20px
     }
 
-    & >>> .nav-item,
-    & >>> .nav-item .nav-link,
-    & >>> .nav-item .dropdown-toggle {
+    & ::v-deep .nav-item,
+    & ::v-deep .nav-item .nav-link,
+    & ::v-deep .nav-item .dropdown-toggle {
       display: flex;
       align-items: center;
     }
 
-    & >>> &__nav-right .nav-link {
+    & ::v-deep &__nav-right .nav-link {
       white-space: nowrap;
     }
 
-    & >>> &__nav-right__notifications__menu {
+    & ::v-deep &__nav-right__notifications__menu {
       width: 360px;
     }
 
-    & >>> &__nav-right__notifications__toggler {
+    & ::v-deep &__nav-right__notifications__toggler {
       position: relative;
     }
 
-    & >>> &__nav-right__notifications--unread &__nav-right__notifications__toggler {
+    & ::v-deep &__nav-right__notifications--unread &__nav-right__notifications__toggler {
       color: $danger;
     }
 
-    & >>> &__nav-right__notifications__toggler__count {
+    & ::v-deep &__nav-right__notifications__toggler__count {
       position: absolute;
       top: 0;
       right: $spacer;
     }
 
-    & >>> &__nav-right__tutorial  {
+    & ::v-deep &__nav-right__tutorial  {
       &--show.nav-item .nav-link {
         color: $primary;
         margin-left: -3px; /* hack to prevent layout shift when the fond is bold */
