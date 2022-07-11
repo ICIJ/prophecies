@@ -54,6 +54,10 @@ export default {
       const params = { username: this.username }
       return { name: 'user-retrieve-history', params }
     },
+    languageRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-language', params }
+    },
     fetchUserLoader () {
       return uniqueId('load-user-')
     },
@@ -78,6 +82,9 @@ export default {
     historyTitle () {
       return this.routeTitle(this.historyRoute.name)
     },
+    languageTitle () {
+      return this.routeTitle(this.languageRoute.name)
+    },
     user () {
       return User.find(this.username)
     },
@@ -96,6 +103,8 @@ export default {
           return 'BellIcon'
         case this.historyTitle:
           return 'ClockIcon'
+        case this.languageTitle:
+          return 'GlobeIcon'
         default:
           return 'UserIcon'
       }
@@ -142,33 +151,65 @@ export default {
   <div class="user-retrieve d-flex align-items-start">
     <app-sidebar class="w-100 sticky-top">
       <template #items>
-        <b-nav-item :to="profileRoute" exact>
+        <b-nav-item
+          :to="profileRoute"
+          exact
+          :class="{'font-weight-bold': title === profileTitle}"
+        >
           <user-icon class="mr-3" />
           {{ profileTitle }}
         </b-nav-item>
-        <b-nav-item :to="activityRoute" exact>
+        <b-nav-item
+          :to="activityRoute"
+          exact
+          :class="{'font-weight-bold': title === activityTitle}"
+        >
           <activity-icon class="mr-3" />
           {{ activityTitle }}
         </b-nav-item>
-        <b-nav-item :to="notificationsRoute" exact v-if="isMe">
+        <b-nav-item
+          :to="notificationsRoute"
+          exact v-if="isMe"
+          :class="{'font-weight-bold': title === notificationsTitle}"
+        >
           <bell-icon class="mr-3" />
           {{ notificationsTitle }}
         </b-nav-item>
-        <b-nav-item :to="bookmarksRoute" exact>
+        <b-nav-item
+          :to="bookmarksRoute"
+          exact
+          :class="{'font-weight-bold': title === bookmarksTitle}"
+        >
           <bookmark-icon class="mr-3" />
           {{ bookmarksTitle }}
         </b-nav-item>
-        <b-nav-item :to="historyRoute" exact>
+        <b-nav-item
+          :to="historyRoute"
+          exact
+          :class="{'font-weight-bold': title === historyTitle}"
+        >
           <clock-icon class="mr-3" />
           {{ historyTitle }}
         </b-nav-item>
-        <b-nav-item :to="teamRoute" exact>
+        <b-nav-item
+          :to="teamRoute"
+          exact
+          :class="{'font-weight-bold': title === teamTitle}"
+        >
           <users-icon class="mr-3" />
           {{ teamTitle }}
         </b-nav-item>
         <b-nav-item :href="$config.get('helpLink')">
           <truck-icon class="mr-3" />
           {{ $t('userProfileDropdownMenu.help') }}
+        </b-nav-item>
+        <b-nav-item
+          :to="languageRoute"
+          exact
+          :class="{'font-weight-bold': title === languageTitle}"
+        >
+          <globe-icon class="mr-3" />
+          {{ languageTitle + ' (' + $i18n.locale.toUpperCase() + ')'}}
         </b-nav-item>
         <b-nav-item :href="$config.get('logoutUrl')">
           <log-out-icon class="mr-3" />
@@ -181,7 +222,7 @@ export default {
       <div class="container-fluid">
         <page-header :title="title" :icon="icon" class="mb-5" />
         <app-waiter :loader="fetchUserLoader" waiter-class="my-5 mx-auto d-block">
-          <router-view />
+          <router-view :class="{'px-5': title === languageTitle}"/>
         </app-waiter>
       </div>
     </div>

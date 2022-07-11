@@ -40,8 +40,8 @@ describe('UserProfileDropdownMenu', () => {
       await core.configure()
       wrapper = shallowMount(UserProfileDropdownMenu, { localVue, i18n })
     })
-    it('should have 9 entries', async () => {
-      expect(wrapper.findAll('b-dropdown-item-stub')).toHaveLength(9)
+    it('should have 10 entries', async () => {
+      expect(wrapper.findAll('b-dropdown-item-stub')).toHaveLength(10)
     })
   })
   describe('User is a staff member', () => {
@@ -76,9 +76,9 @@ describe('UserProfileDropdownMenu', () => {
       expect(wrapper.vm.user.username).toBe('olivia')
       expect(wrapper.vm.user.isStaff).toBe(true)
     })
-    it('should have 10 entries', () => {
+    it('should have 11 entries', () => {
       expect(wrapper.vm.user.isStaff).toBe(true)
-      expect(wrapper.findAll('b-dropdown-item-stub')).toHaveLength(10)
+      expect(wrapper.findAll('b-dropdown-item-stub')).toHaveLength(11)
     })
   })
 })

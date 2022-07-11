@@ -29,7 +29,8 @@ export function createStore () {
       createPersistedState({
         paths: [
           'app.redirectAfterLogin',
-          'app.showTutorial'
+          'app.showTutorial',
+          'app.locale'
         ],
         filter (mutation) {
           // Only for some mutations

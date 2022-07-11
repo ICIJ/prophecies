@@ -327,6 +327,12 @@
     },
     "noHistory": "Empty history"
   },
+  "userRetrieveLanguage": {
+    "title": {
+      "yours": "Language",
+      "others": "Language"
+    }
+  },
   "userTaskStatsCard": {
     "allOpenTasks": "All open tasks",
     "allRecords": "All records",

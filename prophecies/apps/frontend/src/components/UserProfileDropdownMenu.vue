@@ -4,7 +4,7 @@ import AppVersion from './AppVersion.vue'
 export default {
   name: 'UserProfileDropdownMenu',
   components: {
-    AppVersion
+    AppVersion,
   },
   computed: {
     user () {
@@ -29,6 +29,10 @@ export default {
     bookmarksRoute () {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-bookmarks', params }
+    },
+    languageRoute () {
+      const params = { username: this.user.username }
+      return { name: 'user-retrieve-language', params }
     },
     historyRoute () {
       const params = { username: this.user.username }
@@ -78,6 +82,14 @@ export default {
       <truck-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userProfileDropdownMenu.help') }}
     </b-dropdown-item>
+    <b-dropdown-item
+      id="user-profile-dropdown-menu__item--language"
+      :to="languageRoute"
+      class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--language"
+    >
+      <globe-icon class="user-profile-dropdown-menu__item__icon" />
+      {{ $t('userRetrieveLanguage.title.yours') + ' (' + $i18n.locale.toUpperCase() + ')' }}
+    </b-dropdown-item>
     <b-dropdown-item :href="$config.get('logoutUrl')" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--logout">
       <log-out-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userProfileDropdownMenu.logOut') }}
@@ -101,6 +113,7 @@ export default {
       &__icon {
         margin-right: $spacer;
       }
+
     }
   }
 </style>

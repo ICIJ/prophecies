@@ -1,6 +1,7 @@
 // BootstrapVue recommends using this
 import 'mutationobserver-shim'
 
+import compose from 'lodash/fp/compose'
 import Murmur from '@icij/murmur'
 import BootstrapVue from 'bootstrap-vue'
 import Vue from 'vue'
@@ -8,6 +9,8 @@ import VueI18n from 'vue-i18n'
 import VueRouter from 'vue-router'
 import VueScrollTo from 'vue-scrollto'
 import VueWait from 'vue-wait'
+
+import LocaleMixin from './LocaleMixin'
 
 import Setting from '@/models/Setting'
 import User from '@/models/User'
@@ -21,16 +24,22 @@ import App from '@/views/App'
 import vShortkey from '@/directives/shortkey'
 import Shortkey from '@/plugins/Shortkey'
 
+class Base {}
+const Behaviors = compose(LocaleMixin)(Base)
+
 /**
   @class
   @classdesc Class representing the core application.
+  @mixes LocaleMixin
+  @typicalname prophecies
 */
-class Core {
+class Core extends Behaviors {
   /**
    * Create an application
    * @param {Object} LocalVue - The Vue class to instantiate the application with.
    */
   constructor (LocalVue = Vue) {
+    super(LocalVue)
     this.LocalVue = LocalVue
     // Disable production tip when not in production
     this.LocalVue.config.productionTip = process.env.NODE_ENV === 'development'
@@ -171,6 +180,8 @@ class Core {
       this.config.merge(await this.getSettings())
       // Finally, load the user into a specific attribute.
       this.config.set('user', await this.getUser())
+      // Load the locale
+      this.loadLocale(this.store.state.app.locale ?? 'en')
       // Old a promise that is resolved when the core is configured
       return this.ready && this._readyResolve(this)
     } catch (error) {

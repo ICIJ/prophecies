@@ -1,6 +1,7 @@
 export const state = () => ({
   redirectAfterLogin: null,
-  showTutorial: true
+  showTutorial: true,
+  locale: 'en'
 })
 
 export const mutations = {
@@ -11,6 +12,9 @@ export const mutations = {
   },
   setShowTutorial (state, showTutorial) {
     state.showTutorial = showTutorial
+  },
+  setLocale (state, locale) {
+    state.locale = locale
   }
 }
 
@@ -22,6 +26,9 @@ export const actions = {
   showTutorial ({ state: { showTutorial }, commit }, isShown) {
     commit('setShowTutorial', isShown)
     return showTutorial
+  },
+  locale ({ commit }, locale) {
+    commit('setLocale', locale)
   }
 }
 

@@ -10,6 +10,7 @@ import TipRetrieve from '@/views/TipRetrieve.vue'
 import StatsList from '@/views/StatsList.vue'
 import UserRetrieve from '@/views/UserRetrieve.vue'
 import UserRetrieveProfile from '@/views/UserRetrieveProfile.vue'
+import UserRetrieveLanguage from '@/views/UserRetrieveLanguage.vue'
 import UserRetrieveActivity from '@/views/UserRetrieveActivity.vue'
 import UserRetrieveTeam from '@/views/UserRetrieveTeam.vue'
 import UserRetrieveBookmarks from '@/views/UserRetrieveBookmarks.vue'
@@ -73,6 +74,12 @@ export const router = {
           name: 'user-retrieve-history',
           path: 'history',
           component: UserRetrieveHistory,
+          props: true
+        },
+        {
+          name: 'user-retrieve-language',
+          path: 'language',
+          component: UserRetrieveLanguage,
           props: true
         }
       ]

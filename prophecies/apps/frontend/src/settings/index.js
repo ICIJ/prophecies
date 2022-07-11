@@ -8,6 +8,14 @@ export default {
     {
       key: 'en',
       label: 'English'
+    },
+    {
+      key: 'es',
+      label: 'Español'
+    },
+    {
+      key: 'fr',
+      label: 'Français'
     }
   ],
   loginUrl: '/login/provider/?next=/',

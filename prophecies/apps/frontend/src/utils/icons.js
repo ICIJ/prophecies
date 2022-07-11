@@ -22,6 +22,7 @@ export {
   FilmIcon,
   FilterIcon,
   FrownIcon,
+  GlobeIcon,
   GridIcon,
   HomeIcon,
   HelpCircleIcon,
