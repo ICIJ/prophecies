@@ -72,6 +72,9 @@ jobs:
       - run:
           name: Run unit tests
           command: yarn test:unit --maxWorkers 2
+      - run:
+          name: Build the frontend
+          command: yarn build
 
   test-backend:
     docker:
