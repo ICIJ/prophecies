@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==3.2.9"
-djangorestframework = "==3.12.4"
+django = "*"
+djangorestframework = "*"
 django-cors-headers = "*"
 django-debug-toolbar = "*"
 django-environ = "*"
@@ -18,17 +18,17 @@ django-colorfield = "*"
 django-constance = {extras = [ "database",], version = "*"}
 django-filter = "*"
 django-crispy-forms = "*"
-djangorestframework-jsonapi = {extras = ["django-polymorphic"], version = "==5.0.0"}
-django-activity-stream = "==0.10.0"
+djangorestframework-jsonapi = {extras = ["django-polymorphic"], version = "*"}
+django-activity-stream = "*"
 django-jsonfield = "*"
 markdown = "*"
 django-admin-autocomplete-filter = "*"
 django-import-export = "*"
-bump2version = "==1.0.1"
 
 [dev-packages]
 time-machine = "*"
 pytest-django = "*"
+bump2version = "==1.0.1"
 
 [requires]
 python_version = "3.8"
