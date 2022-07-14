@@ -31,4 +31,4 @@ pytest-django = "*"
 bump2version = "==1.0.1"
 
 [requires]
-python_version = "3.8"
+python_version = "3.9"

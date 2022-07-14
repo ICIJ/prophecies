@@ -7,7 +7,7 @@ COPY ./prophecies/apps/frontend/ /frontend/
 RUN yarn
 RUN yarn build
 
-FROM python:3.8
+FROM python:3.9
 
 ENV PYTHONUNBUFFERED 1
 ENV PORT 8008

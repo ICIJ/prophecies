@@ -1,3 +1,4 @@
+---
 version: 2.1
 
 orbs:
@@ -26,7 +27,7 @@ workflows:
           docker-password: DOCKER_PASS
           docker-username: DOCKER_USER
           image: icij/prophecies
-          tag: "${CIRCLE_TAG/#v},latest"
+          tag: ${CIRCLE_TAG/#v},latest
           registry: registry.hub.docker.com
           requires:
             - test-frontend
@@ -60,13 +61,15 @@ jobs:
           key: repository-cache-{{ .Branch }}-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           name: Restore node dependencies from previous builds
-          key: node-dependencies-cache-{{ .Branch }}-{{ checksum "prophecies/apps/frontend/package.json" }}
+          key: node-dependencies-cache-{{ .Branch }}-{{ checksum "prophecies/apps/frontend/package.json"
+            }}
       - run:
           name: Install node dependencies with yarn
           command: yarn
       - save_cache:
           name: Save dependencies cache for future builds
-          key: node-dependencies-cache-{{ .Branch }}-{{ checksum "prophecies/apps/frontend/package.json" }}
+          key: node-dependencies-cache-{{ .Branch }}-{{ checksum "prophecies/apps/frontend/package.json"
+            }}
           paths:
             - ./prophecies/apps/frontend/node_modules/
       - run:
@@ -78,7 +81,7 @@ jobs:
 
   test-backend:
     docker:
-      - image: circleci/python:3.8
+      - image: circleci/python:3.9
     working_directory: ~/repository/
     steps:
       - restore_cache:
@@ -86,7 +89,8 @@ jobs:
           key: repository-cache-{{ .Branch }}-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           name: Restore virtualenvs from previous builds
-          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock"
+            }}
       - run:
           name: Install pipenv and project's pip packages
           command: |
@@ -94,9 +98,10 @@ jobs:
             pipenv install --dev
       - save_cache:
           name: Save virtualenvs cache for future builds
-          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock"
+            }}
           paths:
-            - "~/.local/share/virtualenvs/"
+            - ~/.local/share/virtualenvs/
       - run:
           name: Run unit tests
           command: pipenv run python manage.py test --settings=prophecies.settings.test
