@@ -35,8 +35,6 @@ INTERNAL_IPS = ('127.0.0.1', )
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
-CSRF_COOKIE_DOMAIN = env.list('CSRF_COOKIE_DOMAIN', default=None)
-
 # Application definition
 
 INSTALLED_APPS = [

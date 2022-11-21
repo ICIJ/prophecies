@@ -1,6 +1,5 @@
 from prophecies.apps.api.contrib.strings import to_camel_case
 from constance.backends.database.models import Constance
-from django.conf import settings
 from django.db import models
 from django.db.models import signals
 import os
