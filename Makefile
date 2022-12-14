@@ -59,19 +59,19 @@ createsuperuser:
 		poetry run python manage.py createsuperuser
 
 minor:
-		poetry run bumpversion minor
+		poetry version minor -n
 
 major:
-		poetry run bumpversion major
+		poetry version major -n
 
 patch:
-		poetry run bumpversion patch
+		poetry version patch -n
 
 release:
 		poetry run bumpversion release
 
 build:
-		poetry run bumpversion build
+		poetry build
 
 docker-build:
 		docker build -t $(DOCKER_NAME) .

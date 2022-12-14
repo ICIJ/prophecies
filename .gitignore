@@ -48,6 +48,7 @@ venv
 .env
 .cache
 Pipfile.graph
+dist
 
 # Generated files
 prophecies/static/components
