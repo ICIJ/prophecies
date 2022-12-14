@@ -14,10 +14,10 @@ Required:
 
 * Python 3.8
 * Node 16.x
-* Pipenv 11.x
+* Poetry >= 1.2
 * Yarn 1.x
 
-To setup a virtualenv with `Pipenv` and to install required packages:
+To setup a virtualenv with `poetry` and to install required packages:
 
 ```bash
 make install
@@ -86,16 +86,16 @@ To run all tests
 make test
 ```
 
-## Publishing a new Docker image
+## Publishing a new Docker image manually
 
 Run **one** of these commands depending on the kind of version you need to publish:
 
 ```
-pipenv run bumpversion build # will increment the build number (x.y.z-build0 →  x.y.z-build1)
-pipenv run bumpversion release # will increment to the next release part (alpha →  beta →  rc)
-pipenv run bumpversion patch
-pipenv run bumpversion minor
-pipenv run bumpversion major
+make build # will build the pip deliverables (.egg, .tgz)
+make patch # will increment to the next release part (alpha →  beta →  rc)
+make minor
+make major
+make publish # will publish on pypi
 ```
 
 Then the new tag on Github. The CI will take care of shipping the new version on Docker Hub:

@@ -67,8 +67,8 @@ major:
 patch:
 		poetry version patch -n
 
-release:
-		poetry run bumpversion release
+publish:
+		poetry publish
 
 build:
 		poetry build
