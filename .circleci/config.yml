@@ -7,19 +7,11 @@ orbs:
 workflows:
   test:
     jobs:
-      - checkout:
-          filters:
-            tags:
-              only: /.*/
       - test-frontend:
-          requires:
-            - checkout
           filters:
             tags:
               only: /.*/
       - test-backend:
-          requires:
-            - checkout
           filters:
             tags:
               only: /.*/
@@ -39,29 +31,21 @@ workflows:
               ignore: /.*/
 
 jobs:
-  checkout:
-    docker:
-      - image: circleci/node:16-bullseye
-    working_directory: ~/repository/
-    steps:
-      - checkout
-
   test-frontend:
     docker:
       - image: circleci/node:16-bullseye
     working_directory: ~/repository/
     steps:
+      - checkout
       - restore_cache:
           name: Restore node dependencies from previous builds
-          key: node-dependencies-cache-{{ .Branch }}-{{ checksum "prophecies/apps/frontend/yarn.lock"
-            }}
+          key: node-dependencies-cache-{{ .Branch }}-{{ checksum "prophecies/apps/frontend/yarn.lock" }}
       - run:
           name: Install node dependencies with yarn
           command: yarn
       - save_cache:
           name: Save dependencies cache for future builds
-          key: node-dependencies-cache-{{ .Branch }}-{{ checksum "prophecies/apps/frontend/yarn.lock"
-            }}
+          key: node-dependencies-cache-{{ .Branch }}-{{ checksum "prophecies/apps/frontend/yarn.lock" }}
           paths:
             - ./prophecies/apps/frontend/node_modules/
       - run:
@@ -76,10 +60,10 @@ jobs:
       - image: circleci/python:3.9
     working_directory: ~/repository/
     steps:
+      - checkout
       - restore_cache:
           name: Restore virtualenvs from previous builds
-          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock"
-            }}
+          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
           name: Install pipenv and project's pip packages
           command: |
@@ -87,8 +71,7 @@ jobs:
             pipenv install --dev
       - save_cache:
           name: Save virtualenvs cache for future builds
-          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock"
-            }}
+          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
           paths:
             - ~/.local/share/virtualenvs/
       - run:
