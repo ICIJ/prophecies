@@ -1,7 +1,7 @@
 DOCKER_REGISTRY := registry.hub.docker.com
 DOCKER_NAME := icij/prophecies
 PWD := `pwd`
-CURRENT_VERSION ?= `poetry 		`
+CURRENT_VERSION ?= `poetry version -s`
 
 clean:
 		find . -name "*.pyc" -exec rm -rf {} \;
