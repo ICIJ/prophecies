@@ -63,17 +63,17 @@ jobs:
       - checkout
       - restore_cache:
           name: Restore virtualenvs from previous builds
-          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "poetry.lock" }}
       - run:
-          name: Install pipenv and project's pip packages
+          name: Install poetry and project's pip packages
           command: |
-            sudo pip install pipenv
-            pipenv install --dev
+            curl -sSL https://install.python-poetry.org | python3 -
+            poetry install --with dev
       - save_cache:
           name: Save virtualenvs cache for future builds
-          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "poetry.lock" }}
           paths:
             - ~/.local/share/virtualenvs/
       - run:
           name: Run unit tests
-          command: pipenv run python manage.py test --settings=prophecies.settings.test
+          command: poetry run python manage.py test --settings=prophecies.settings.test

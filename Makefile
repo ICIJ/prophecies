@@ -1,7 +1,7 @@
 DOCKER_REGISTRY := registry.hub.docker.com
 DOCKER_NAME := icij/prophecies
 PWD := `pwd`
-CURRENT_VERSION ?= `python -c "from prophecies import __version__ ; print(__version__)"`
+CURRENT_VERSION ?= `poetry 		`
 
 clean:
 		find . -name "*.pyc" -exec rm -rf {} \;
@@ -12,31 +12,31 @@ install: install-pip install-yarn
 install-dev: install-pip-dev install-yarn
 
 install-pip-dev:
-		pipenv install --dev
+		poetry install --with dev
 
 install-pip:
-		pipenv install
+		poetry install
 
 install-yarn:
 		yarn
 
 migrate:
-		pipenv run python manage.py migrate
+		poetry run python manage.py migrate
 
 makemigrations:
-		pipenv run python manage.py makemigrations
+		poetry run python manage.py makemigrations
 
 run:
-		pipenv run python manage.py runserver 0.0.0.0:8008
+		poetry run python manage.py runserver 0.0.0.0:8008
 
 update:
-	  pipenv update
+	  poetry update
 		yarn upgrade
 
 test: test-back test-front
 
 test-back:
-		pipenv run python manage.py test --settings=prophecies.settings.test
+		poetry run python manage.py test --settings=prophecies.settings.test
 
 test-front:
 		yarn test:unit
@@ -44,7 +44,7 @@ test-front:
 
 # Requires the `entr` binary (can be installed with apt)
 entr-test:
-		find . -name '*.py' | entr pipenv run python manage.py test --settings=prophecies.settings.test
+		find . -name '*.py' | entr poetry run python manage.py test --settings=prophecies.settings.test
 
 webpack-build:
 		yarn build
@@ -53,25 +53,25 @@ webpack-serve:
 		yarn serve
 
 shell:
-		pipenv run python manage.py shell
+		poetry run python manage.py shell
 
 createsuperuser:
-		pipenv run python manage.py createsuperuser
+		poetry run python manage.py createsuperuser
 
 minor:
-		pipenv run bumpversion minor
+		poetry run bumpversion minor
 
 major:
-		pipenv run bumpversion major
+		poetry run bumpversion major
 
 patch:
-		pipenv run bumpversion patch
+		poetry run bumpversion patch
 
 release:
-		pipenv run bumpversion release
+		poetry run bumpversion release
 
 build:
-		pipenv run bumpversion build
+		poetry run bumpversion build
 
 docker-build:
 		docker build -t $(DOCKER_NAME) .
