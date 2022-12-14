@@ -67,13 +67,15 @@ jobs:
       - run:
           name: Install poetry and project's pip packages
           command: |
+            export TERM=xterm-256color
+            export COLUMNS=150
             curl -sSL https://install.python-poetry.org | python3 -
             poetry install --with dev
       - save_cache:
           name: Save virtualenvs cache for future builds
           key: virtualenvs-dependencies-cache-{{ .Branch }}-{{ checksum "poetry.lock" }}
           paths:
-            - ~/.local/share/virtualenvs/
+            - ~/.cache/pypoetry/virtualenvs
       - run:
           name: Run unit tests
           command: poetry run python manage.py test --settings=prophecies.settings.test
