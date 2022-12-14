@@ -1,2 +1,3 @@
-__version__ = '0.3.4-alpha0'
+import pkg_resources
+__version__ = pkg_resources.get_distribution('prophecies').version
 VERSION = __version__

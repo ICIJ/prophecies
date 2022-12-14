@@ -27,7 +27,6 @@ django-jsonfield = "*"
 markdown = "*"
 django-admin-autocomplete-filter = "*"
 django-import-export = "*"
-importlib = "^1.0.4"
 
 [tool.poetry.group.dev.dependencies]
 time-machine = "*"
