@@ -2,6 +2,8 @@ DOCKER_REGISTRY := registry.hub.docker.com
 DOCKER_NAME := icij/prophecies
 PWD := `pwd`
 CURRENT_VERSION ?= `poetry version -s`
+SEMVERS := major minor patch
+FRONT_PREFIX := prophecies/apps/frontend
 
 clean:
 		find . -name "*.pyc" -exec rm -rf {} \;
@@ -58,14 +60,19 @@ shell:
 createsuperuser:
 		poetry run python manage.py createsuperuser
 
-minor:
-		poetry version minor -n
+$(SEMVERS):
+		poetry version $@
+		npm version --prefix ${FRONT_PREFIX} $@
+		$(MAKE) tag_version
 
-major:
-		poetry version major -n
+set_version:
+		poetry version ${CURRENT_VERSION}
+		npm version ${CURRENT_VERSION} --prefix ${FRONT_PREFIX}
+		$(MAKE) tag_version
 
-patch:
-		poetry version patch -n
+tag_version:
+		git commit -m "build: bump to ${CURRENT_VERSION}" pyproject.toml ${FRONT_PREFIX}/package.json
+		git tag ${CURRENT_VERSION}
 
 publish:
 		poetry publish
