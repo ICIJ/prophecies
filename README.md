@@ -57,8 +57,9 @@ SOCIAL_AUTH_PROVIDER_STAFF_GROUP=icijstaff
 To run app inside its virtualenv, use the following command:
 
 ```bash
+make webpack-build
 make run
-```
+``` 
 
 Then in a separated terminal, build and serve assets with Webpack:
 
