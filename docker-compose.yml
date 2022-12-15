@@ -37,7 +37,7 @@ services:
   migration:
     build: .
     image: prophecies
-    command: sh -c "/usr/bin/wait && pipenv run python manage.py migrate --noinput"
+    command: sh -c "/usr/bin/wait && poetry run python manage.py migrate --noinput"
     environment:
       - WAIT_HOSTS=db:5432
       - WAIT_HOSTS_TIMEOUT=60
@@ -48,7 +48,7 @@ services:
   collectstatic:
     build: .
     image: prophecies
-    command: sh -c "/usr/bin/wait && pipenv run python manage.py collectstatic --noinput"
+    command: sh -c "/usr/bin/wait && poetry run python manage.py collectstatic --noinput"
     volumes:
       - shared_static:/code/prophecies/run/static
 
