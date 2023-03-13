@@ -2,7 +2,7 @@ import {createLocalVue, shallowMount} from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
-import {server, rest} from '../../mocks/server'
+import {rest, server} from '../../mocks/server'
 import User from '@/models/User'
 
 import UserProfileDropdownMenu from '@/components/UserProfileDropdownMenu'

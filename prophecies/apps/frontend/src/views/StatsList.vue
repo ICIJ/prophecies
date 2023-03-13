@@ -1,5 +1,5 @@
 <script>
-import {uniqueId, filter, orderBy} from 'lodash'
+import {filter, orderBy, uniqueId} from 'lodash'
 
 import AppHeader from '@/components/AppHeader.vue'
 import AppSidebar from '@/components/AppSidebar'

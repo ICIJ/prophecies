@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+
 from prophecies.core.models import Project, Task, TaskChecker
-from prophecies.core.models.task_record_review import StatusType
 
 
 class TestProject(TestCase):

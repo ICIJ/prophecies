@@ -1,6 +1,6 @@
 from colorfield.fields import ColorField
-from django.contrib.auth.models import User
 from django.db import models
+
 from prophecies.core.models.choice_group import ChoiceGroup
 
 

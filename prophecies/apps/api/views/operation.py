@@ -1,9 +1,9 @@
 import json
-
 from io import BytesIO
+
 from rest_framework import exceptions, serializers, viewsets
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework_json_api.parsers import JSONParser
 
 from prophecies.apps.api.views.task_record_review import TaskRecordReviewViewSet

@@ -1,6 +1,7 @@
 from django.contrib import admin
-from prophecies.core.models import Tip
+
 from prophecies.core.contrib.display import display_task_addon
+from prophecies.core.models import Tip
 
 
 @admin.register(Tip)

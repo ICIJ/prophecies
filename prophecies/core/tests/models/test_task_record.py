@@ -1,7 +1,8 @@
 from actstream import action
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Choice, ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview
+
+from prophecies.core.models import Choice, ChoiceGroup, Project, TaskRecord, TaskRecordReview
 from prophecies.core.models.task import Task
 
 

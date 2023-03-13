@@ -1,3 +1,5 @@
+from textwrap import shorten
+
 from admin_auto_filters.filters import AutocompleteFilterFactory
 from django.contrib import admin, messages
 from django.contrib.admin.helpers import AdminForm
@@ -5,13 +7,12 @@ from django.shortcuts import redirect, render
 from django.urls import path
 from django.utils.html import format_html
 from import_export.resources import ModelResource
-from textwrap import shorten
 
+from prophecies.core.admin.filters import DistinctValuesDropdownFilter, ReviewedTaskRecordFilter
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon, display_task_record_link
 from prophecies.core.forms import TaskRecordAssignForm, TaskRecordUploadForm
-from prophecies.core.models import TaskRecord, TaskRecordReview
-from prophecies.core.admin.filters import DistinctValuesDropdownFilter, ReviewedTaskRecordFilter
 from prophecies.core.mixins import ExportWithCsvStreamMixin, ExportCsvGeneratorMixin
+from prophecies.core.models import TaskRecord, TaskRecordReview
 
 
 class TaskRecordResource(ExportCsvGeneratorMixin, ModelResource):

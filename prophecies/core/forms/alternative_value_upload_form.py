@@ -1,6 +1,7 @@
 from django import forms
-from prophecies.core.models import ChoiceGroup, AlternativeValue
+
 from prophecies.core.forms import AbstractUploadForm
+from prophecies.core.models import ChoiceGroup, AlternativeValue
 
 
 class AlternativeValueUploadForm(AbstractUploadForm):

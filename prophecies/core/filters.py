@@ -1,10 +1,11 @@
-from django_filters import CharFilter, FilterSet, DateFromToRangeFilter
-from prophecies.core.models import TaskRecord, TaskRecordReview
-from prophecies.core.models.action_aggregate import ActionAggregate
-from prophecies.core.models.task_record_review import StatusType
-from prophecies.core.models.task_record import StatusType as TRStatusType
 from actstream.models import Action, actor_stream, target_stream
 from django.contrib.auth.models import User
+from django_filters import CharFilter, FilterSet, DateFromToRangeFilter
+
+from prophecies.core.models import TaskRecord, TaskRecordReview
+from prophecies.core.models.action_aggregate import ActionAggregate
+from prophecies.core.models.task_record import StatusType as TRStatusType
+from prophecies.core.models.task_record_review import StatusType
 
 
 class ActionFilter(FilterSet):

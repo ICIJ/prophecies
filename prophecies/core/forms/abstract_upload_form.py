@@ -1,10 +1,10 @@
 import csv
 import io
+from functools import lru_cache
 
 from django import forms
-from django.db.models import Model
 from django.core.exceptions import ValidationError
-from functools import lru_cache
+from django.db.models import Model
 
 
 class AbstractUploadForm(forms.Form):

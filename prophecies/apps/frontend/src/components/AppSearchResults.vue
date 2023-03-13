@@ -1,5 +1,5 @@
 <script>
-import {escapeRegExp, find, filter, get} from 'lodash'
+import {escapeRegExp, filter, find, get} from 'lodash'
 import Task, {TaskStatusEnum} from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import Tip from '@/models/Tip'

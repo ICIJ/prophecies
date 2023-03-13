@@ -1,4 +1,4 @@
-import {toUpperCaseForSingleChar, metaKeyDisplay} from '@/utils/keys'
+import {metaKeyDisplay, toUpperCaseForSingleChar} from '@/utils/keys'
 
 describe('utils/keys', () => {
   describe('toUpperCaseForSingleChar', () => {
