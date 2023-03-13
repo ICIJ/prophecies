@@ -4,11 +4,11 @@
       :loader="fetchFilteredTipsLoader"
       waiter-class="my-5 mx-auto d-block"
     >
-      <slot name="header" />
+      <slot name="header"/>
       <div :class="contentClass" class="tip-list-card__content px-5 pt-4 pb-0">
         <h2 class="tip-list-card__content__title">
           <span class="tip-list-card__content__title__task"
-            >{{ $t("tipListCard.tipsFor") }} {{ taskName }}</span
+          >{{ $t("tipListCard.tipsFor") }} {{ taskName }}</span
           >
           <b-badge
             class="
@@ -17,16 +17,17 @@
               bg-transparent
               text-muted
             "
-            >{{ projectName }}</b-badge
+          >{{ projectName }}
+          </b-badge
           >
         </h2>
         <div class="tip-list-card__content__list pb-0 pr-2">
           <empty-placeholder v-if="hasNoTips" :title='$t("tipListCard.noTips")'/>
           <tip-card v-else
-            v-for="tip in tips"
-            :key="tip.id"
-            :tip-id="tip.id"
-            :content-class="{ tipNameMargin: 'mb-4', tipCardMargin: 'mb-5' }"
+                    v-for="tip in tips"
+                    :key="tip.id"
+                    :tip-id="tip.id"
+                    :content-class="{ tipNameMargin: 'mb-4', tipCardMargin: 'mb-5' }"
           />
         </div>
         <div class="d-flex justify-content-center">
@@ -43,7 +44,7 @@
 </template>
 
 <script>
-import { uniqueId } from 'lodash'
+import {uniqueId} from 'lodash'
 import AppWaiter from '@/components/AppWaiter'
 import Tip from '@/models/Tip'
 import Task from '@/models/Task'
@@ -55,7 +56,7 @@ export default {
     AppWaiter,
     TipCard
   },
-  data () {
+  data() {
     return {
       task: null
     }
@@ -66,49 +67,49 @@ export default {
       default: 'w-100'
     }
   },
-  created () {
+  created() {
     return this.setup()
   },
   computed: {
-    fetchFilteredTipsLoader () {
+    fetchFilteredTipsLoader() {
       return uniqueId('load-filtered-tips-')
     },
-    tips () {
+    tips() {
       return Tip.query()
-        .where(({ taskId }) => !taskId || taskId === this.taskId)
+        .where(({taskId}) => !taskId || taskId === this.taskId)
         .get()
     },
-    hasNoTips () {
+    hasNoTips() {
       return this.tips.length === 0
     },
-    taskId () {
+    taskId() {
       return this.$route.params.taskId || null
     },
-    taskName () {
+    taskName() {
       return this.task?.name
     },
-    projectName () {
+    projectName() {
       return this.task?.project?.name
     }
   },
   methods: {
-    async setup () {
+    async setup() {
       try {
         return this.waitFor(this.fetchFilteredTipsLoader, [this.fetchTips, this.fetchTask])
       } catch (error) {
         const title = 'Unable to retrieve tips'
-        this.$router.replace({ name: 'error', params: { title, error } })
+        this.$router.replace({name: 'error', params: {title, error}})
       }
     },
-    async waitFor (loader, fns = []) {
+    async waitFor(loader, fns = []) {
       this.$wait.start(loader)
       await Promise.all(fns.map(fn => fn()))
       this.$wait.end(loader)
     },
-    fetchTips () {
+    fetchTips() {
       return Tip.api().get()
     },
-    async fetchTask () {
+    async fetchTask() {
       let task = Task.query().with('project').find(this.taskId)
       if (!task) {
         await Task.api().find(this.taskId)
@@ -117,7 +118,7 @@ export default {
       this.task = task
       return Promise.resolve()
     },
-    closeTips () {
+    closeTips() {
       this.$root.$emit('prophecies::closeTips')
     }
   }

@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 from prophecies.core.models import Project, Task, Tip, TaskChecker
 
+
 class TestTip(TestCase):
     client = APIClient()
     fixtures = ['users.json']
@@ -11,8 +12,10 @@ class TestTip(TestCase):
         self.olivia = User.objects.get(username='olivia')
         self.project_foo = Project.objects.create(name='foo')
         self.task_paintings = Task.objects.create(name='paintings', project=self.project_foo)
-        self.tip_bar = Tip.objects.create(name='bar', description='@user try this', task=self.task_paintings, project=self.project_foo)
-        self.tip_top = Tip.objects.create(name='top', description='@user try this instead', task=self.task_paintings, project=self.project_foo)
+        self.tip_bar = Tip.objects.create(name='bar', description='@user try this', task=self.task_paintings,
+                                          project=self.project_foo)
+        self.tip_top = Tip.objects.create(name='top', description='@user try this instead', task=self.task_paintings,
+                                          project=self.project_foo)
         self.tip_fuzz = Tip.objects.create(name='fuzz', description='hello', project=self.project_foo)
         TaskChecker.objects.create(task=self.task_paintings, checker=self.olivia)
         self.task_paintings.checkers.add(self.olivia)
@@ -58,13 +61,14 @@ class TestTip(TestCase):
         request = self.client.get('/api/v1/actions/?filter[verb]=created')
         data = request.json().get('data')
         self.assertEqual(len(data), 0)
-        new_tip =  Tip.objects.create(name='bar', creator=self.olivia, description='@user try this', task=self.task_paintings, project=self.project_foo)
+        new_tip = Tip.objects.create(name='bar', creator=self.olivia, description='@user try this',
+                                     task=self.task_paintings, project=self.project_foo)
         request = self.client.get('/api/v1/actions/?filter[verb]=created')
         data = request.json().get('data')
         self.assertEqual(len(data), 1)
         self.assertEqual(data[0]['relationships']['target']['data']['id'], str(new_tip.id))
 
-        new_tip.name="hello world"
+        new_tip.name = "hello world"
         new_tip.save()
         request = self.client.get('/api/v1/actions/?filter[verb]=updated')
         data = request.json().get('data')

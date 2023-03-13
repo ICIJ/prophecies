@@ -1,4 +1,4 @@
-import { createLocalVue, mount } from '@vue/test-utils'
+import {createLocalVue, mount} from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
@@ -8,7 +8,7 @@ import TaskRecordReviewBulkChoiceForm from '@/components/TaskRecordReviewBulkCho
 describe('TaskRecordReviewBulkChoiceForm', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -22,10 +22,10 @@ describe('TaskRecordReviewBulkChoiceForm', () => {
   beforeEach(() => {
     const attachTo = createContainer()
     const localVue = createLocalVue()
-    const propsData = { taskId: '1' }
+    const propsData = {taskId: '1'}
     // Configure the local vue with plugins
-    const { i18n, store, wait } = Core.init(localVue).useAll()
-    wrapper = mount(TaskRecordReviewBulkChoiceForm, { attachTo, i18n, localVue, propsData, store, wait })
+    const {i18n, store, wait} = Core.init(localVue).useAll()
+    wrapper = mount(TaskRecordReviewBulkChoiceForm, {attachTo, i18n, localVue, propsData, store, wait})
   })
 
   it('should show 3 choices items', () => {

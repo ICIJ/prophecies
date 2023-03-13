@@ -1,9 +1,8 @@
-
 /**
-  Mixin class extending the core to add helpers to manage the internationalization.
-  @mixin LocaleMixin
-  @typicalname prophecies
-*/
+ Mixin class extending the core to add helpers to manage the internationalization.
+ @mixin LocaleMixin
+ @typicalname prophecies
+ */
 
 const LocaleMixin = superclass => class extends superclass {
   /**
@@ -11,16 +10,17 @@ const LocaleMixin = superclass => class extends superclass {
    * @param {String} locale - Locale code to load
    * @memberof LocaleMixin.prototype
    */
-  setI18nLanguage (locale) {
+  setI18nLanguage(locale) {
     this.i18n.locale = locale
     return locale
   }
+
   /**
    * Load the application language from the locale
    * @param {String} locale - Locale code to load
    * @memberof LocaleMixin.prototype
    */
-  loadLocale (locale) {
+  loadLocale(locale) {
     if (this.loadedLocales === undefined) {
       this.loadedLocales = []
     }

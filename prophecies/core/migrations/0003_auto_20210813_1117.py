@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('core', '0002_taskrecord_priority'),
@@ -31,6 +30,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='taskrecord',
             name='locked_by',
-            field=models.ForeignKey(blank=True, help_text='User who locked this task record', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='locked_task_records', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, help_text='User who locked this task record', null=True,
+                                    on_delete=django.db.models.deletion.SET_NULL, related_name='locked_task_records',
+                                    to=settings.AUTH_USER_MODEL),
         ),
     ]

@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('core', '0021_taskuserchoicestatistics'),
@@ -16,11 +15,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='taskrecord',
             name='bookmarked_by',
-            field=models.ManyToManyField(blank=True, help_text='Users who bookmarked this task record', related_name='bookmarked_task_records', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(blank=True, help_text='Users who bookmarked this task record',
+                                         related_name='bookmarked_task_records', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='taskrecordreview',
             name='checker',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='reviewer', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='reviewer',
+                                    to=settings.AUTH_USER_MODEL),
         ),
     ]

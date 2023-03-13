@@ -16,48 +16,59 @@ class StatusType(models.TextChoices):
     OPEN = 'OPEN', _('Open')
     CLOSED = 'CLOSED', _('Closed')
     LOCKED = 'LOCKED', _('Locked')
-    
+
 
 class TaskQuerySet(models.QuerySet):
 
     def user_scope(self, user):
         projects = self.filter(checkers=user).values('project')
         return self.filter(project__in=projects)
-    
-    
+
+
 class TaskManager(models.Manager):
-    
+
     def user_scope(self, user):
         return self.get_queryset().user_scope(user)
-    
+
     def get_queryset(self) -> TaskQuerySet:
         return TaskQuerySet(model=self.model, using=self._db, hints=self._hints)
 
 
 class Task(models.Model):
     objects = TaskManager()
-    
+
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks", help_text="Project this task belong to")
-    checkers = models.ManyToManyField(User, through='TaskChecker', through_fields=('task', 'checker'), verbose_name="User in charge of checking this task's data", related_name='task')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks",
+                                help_text="Project this task belong to")
+    checkers = models.ManyToManyField(User, through='TaskChecker', through_fields=('task', 'checker'),
+                                      verbose_name="User in charge of checking this task's data", related_name='task')
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='tasks')
     rounds = models.PositiveIntegerField(default=3, verbose_name="Number of rounds")
-    automatic_round_attributions = models.BooleanField(default=False, verbose_name="Attribute rounds (if not checked, all checkers will participate in all rounds)")
-    allow_multiple_checks = models.BooleanField(default=False, verbose_name="Allow checkers to check several time the same item")    
-    allow_items_addition = models.BooleanField(default=False, verbose_name="Allow checker to add items (not implemented yet)")
+    automatic_round_attributions = models.BooleanField(default=False,
+                                                       verbose_name="Attribute rounds (if not checked, all checkers will participate in all rounds)")
+    allow_multiple_checks = models.BooleanField(default=False,
+                                                verbose_name="Allow checkers to check several time the same item")
+    allow_items_addition = models.BooleanField(default=False,
+                                               verbose_name="Allow checker to add items (not implemented yet)")
     priority = models.PositiveIntegerField(default=1, verbose_name="Priority")
-    choice_group = models.ForeignKey(ChoiceGroup, verbose_name="Choices", on_delete=models.RESTRICT, null=True, blank=True)
+    choice_group = models.ForeignKey(ChoiceGroup, verbose_name="Choices", on_delete=models.RESTRICT, null=True,
+                                     blank=True)
     color = ColorField(default='#31807D')
-    record_link_template = models.CharField(max_length=1000, null=True, blank=True, verbose_name="Record link template", help_text="A link template to build a link for each task record. Task record can override this value with their own link")
-    embeddable_links = models.BooleanField(default=False, verbose_name="Allow end-users to preview links within an iframe (targeted website must allow it)")
-    embeddable_record_link_template = models.CharField(max_length=1000, null=True, blank=True, verbose_name="Embeddable record link template", help_text="An optional alternative link template to use within the link preview.")
-    status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.OPEN, max_length=6, help_text="Status of the task. Set to closed or locked will prevent any update of the records.")
+    record_link_template = models.CharField(max_length=1000, null=True, blank=True, verbose_name="Record link template",
+                                            help_text="A link template to build a link for each task record. Task record can override this value with their own link")
+    embeddable_links = models.BooleanField(default=False,
+                                           verbose_name="Allow end-users to preview links within an iframe (targeted website must allow it)")
+    embeddable_record_link_template = models.CharField(max_length=1000, null=True, blank=True,
+                                                       verbose_name="Embeddable record link template",
+                                                       help_text="An optional alternative link template to use within the link preview.")
+    status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.OPEN, max_length=6,
+                              help_text="Status of the task. Set to closed or locked will prevent any update of the records.")
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
-    
+
     @property
     def cache_key(self):
         app_label = self._meta.app_label
@@ -71,16 +82,16 @@ class Task(models.Model):
         if progress is None:
             from prophecies.core.models.task_record_review import TaskRecordReview, StatusType as st
             tasks_reviews = TaskRecordReview.objects.filter(task_record__task_id=self.id)
-            done_reviews= tasks_reviews.filter(status=st.DONE)
+            done_reviews = tasks_reviews.filter(status=st.DONE)
             all_reviews = len(tasks_reviews)
             done_reviews = len(done_reviews)
             progress = 100 if all_reviews == 0 else done_reviews / all_reviews * 100
             cache.set(cache_key, progress, timeout=300)
         return progress
-    
+
     def progress_cache_key(self):
         return "%s:progress" % self.cache_key
-    
+
     def progress_by_round(self, **task_record_review_filter):
         cache_key = self.progress_by_round_cache_key(**task_record_review_filter)
         progress = cache.get(cache_key)
@@ -90,14 +101,14 @@ class Task(models.Model):
             progress = TaskRecordReview.objects.progress_by_round(**filter)
             # Get all task's rounds to only display the progress by existing rounds
             rounds = range(1, self.rounds + 1)
-            progress = { round: progress.get(round, 0) for round in rounds }
+            progress = {round: progress.get(round, 0) for round in rounds}
             cache.set(cache_key, progress, timeout=300)
         return progress
-    
+
     def progress_by_round_cache_key(self, **task_record_review_filter):
         hash_key = hash(frozenset(task_record_review_filter.items()))
         return "%s:progress_by_round:%s" % (self.cache_key, hash_key)
-    
+
     @property
     def records_done_count(self):
         cache_key = "%s:records_done_count" % self.cache_key
@@ -146,20 +157,20 @@ class Task(models.Model):
     def has_attribute_changed(current_instance, attribute_name):
         if current_instance.pk is not None:
             instance = Task.objects.get(pk=current_instance.pk)
-            return getattr(current_instance,attribute_name) != getattr(instance,attribute_name)
+            return getattr(current_instance, attribute_name) != getattr(instance, attribute_name)
         return False
-    
+
     @property
     def is_open_changed(self):
-        return Task.has_attribute_changed(self,'is_open')
-    
+        return Task.has_attribute_changed(self, 'is_open')
+
     @property
     def is_closed_changed(self):
-        return Task.has_attribute_changed(self,'is_closed')
-    
+        return Task.has_attribute_changed(self, 'is_closed')
+
     @property
     def is_locked_changed(self):
-        return Task.has_attribute_changed(self,'is_locked')
+        return Task.has_attribute_changed(self, 'is_locked')
 
     @cached_property
     def colors(self):

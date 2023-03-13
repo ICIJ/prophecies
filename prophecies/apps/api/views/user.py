@@ -23,7 +23,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'url', 'first_name', 'last_name', 'username', 'email',
-                    'email_md5', 'is_staff', 'is_superuser', 'csrf_token', 'last_login']
+                  'email_md5', 'is_staff', 'is_superuser', 'csrf_token', 'last_login']
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -33,8 +33,8 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ['-id']
     ordering_fields = ['id', 'first_name', 'last_name', 'username']
     filterset_fields = {
-       'username': ('icontains', 'exact', 'iexact', 'contains', 'in'),
-       'is_staff': ('exact',)
+        'username': ('icontains', 'exact', 'iexact', 'contains', 'in'),
+        'is_staff': ('exact',)
     }
 
     def get_object(self):
@@ -42,7 +42,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             pk = self.kwargs['pk']
             if str(pk).isdigit():
                 return User.objects.get(pk=pk)
-            return  User.objects.get(username=pk)
+            return User.objects.get(username=pk)
         except User.DoesNotExist:
             raise exceptions.NotFound()
 

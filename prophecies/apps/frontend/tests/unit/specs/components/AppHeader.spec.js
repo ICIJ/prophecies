@@ -1,5 +1,5 @@
-import { createLocalVue, mount } from '@vue/test-utils'
-import { server, rest } from '../../mocks/server'
+import {createLocalVue, mount} from '@vue/test-utils'
+import {server, rest} from '../../mocks/server'
 import AppHeader from '@/components/AppHeader'
 import Core from '@/core'
 import User from '@/models/User'
@@ -11,6 +11,7 @@ describe('AppHeader', () => {
     document.body.appendChild(div)
     return div
   }
+
   describe('for a staff user', () => {
     let localVue
     let wrapper
@@ -36,11 +37,11 @@ describe('AppHeader', () => {
       }))
       // Configure the local vue
       const core = Core.init(localVue).useAll()
-      const { i18n, store, wait, router } = core
+      const {i18n, store, wait, router} = core
       const stubs = ['router-link', 'app-waiter']
       await core.configure()
       // Finally, instanciate the component
-      wrapper = mount(AppHeader, { attachTo, i18n, localVue, stubs, store, wait, router })
+      wrapper = mount(AppHeader, {attachTo, i18n, localVue, stubs, store, wait, router})
     })
 
     afterEach(async () => {
@@ -82,11 +83,11 @@ describe('AppHeader', () => {
       }))
       // Configure the local vue
       const core = Core.init(localVue).useAll()
-      const { i18n, store, wait } = core
+      const {i18n, store, wait} = core
       const stubs = ['router-link', 'app-waiter']
       await core.configure()
       // Finally, instanciate the component
-      wrapper = mount(AppHeader, { attachTo, i18n, localVue, stubs, store, wait })
+      wrapper = mount(AppHeader, {attachTo, i18n, localVue, stubs, store, wait})
     })
 
     afterEach(() => {

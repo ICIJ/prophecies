@@ -24,7 +24,7 @@ import settings from '@/settings'
 
 // Configure VuexORM to use VuexORMAxios and the correct baseUrl
 export const baseURL = settings.apiUrl
-VuexORM.use(VuexORMAxios, { axios, baseURL })
+VuexORM.use(VuexORMAxios, {axios, baseURL})
 
 // Initialize the database
 export const database = new VuexORM.Database()

@@ -1,8 +1,8 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
+import {createLocalVue, shallowMount} from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 
-import HistoryListItem, { ITEM_TYPES } from '@/components/HistoryListItem'
+import HistoryListItem, {ITEM_TYPES} from '@/components/HistoryListItem'
 
 describe('HistoryListItem', () => {
   let wrapper
@@ -10,7 +10,7 @@ describe('HistoryListItem', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
-    const { store, i18n } = Core.init(localVue).useAll()
+    const {store, i18n} = Core.init(localVue).useAll()
     const propsData = {
       type: ITEM_TYPES.MENTIONED_USER,
       timestamp: '2021-10-14T15:10:53.364880Z',
@@ -48,12 +48,12 @@ describe('HistoryListItem', () => {
   })
 
   it('should display the category format  "General | project" when no task is set', async () => {
-    await wrapper.setProps({ taskName: null })
+    await wrapper.setProps({taskName: null})
     expect(wrapper.vm.category).toBe('General | Chronos')
   })
 
   it('should display the category format  "General" when no project is set', async () => {
-    await wrapper.setProps({ projectName: null })
+    await wrapper.setProps({projectName: null})
     expect(wrapper.vm.category).toBe('General')
   })
 

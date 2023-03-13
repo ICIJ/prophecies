@@ -5,9 +5,8 @@ from prophecies.apps.api.views.user import UserSerializer
 from prophecies.apps.api.views.task import TaskSerializer
 from prophecies.core.models import TaskUserStatistics
 
-   
-class TaskUserStatisticsSerializer(serializers.ModelSerializer):
 
+class TaskUserStatisticsSerializer(serializers.ModelSerializer):
     checker = ResourceRelatedField(many=False, read_only=True)
     task = ResourceRelatedField(many=False, read_only=True)
 
@@ -15,7 +14,7 @@ class TaskUserStatisticsSerializer(serializers.ModelSerializer):
         'checker': UserSerializer,
         'task': TaskSerializer,
     }
-    
+
     # class JSONAPIMeta:
     #     included_resources = ['task', 'checker']
 
@@ -23,15 +22,16 @@ class TaskUserStatisticsSerializer(serializers.ModelSerializer):
         model = TaskUserStatistics
         resource_name = 'TaskUserStatistics'
         fields = [
-                    'task',
-                    'checker',
-                    'round',
-                    'done_count',
-                    'pending_count',
-                    'total_count',
-                    'progress',
-                ]
-        
+            'task',
+            'checker',
+            'round',
+            'done_count',
+            'pending_count',
+            'total_count',
+            'progress',
+        ]
+
+
 class TaskUserStatisticsViewSet(views.ReadOnlyModelViewSet):
     queryset = TaskUserStatistics.objects.all()
     serializer_class = TaskUserStatisticsSerializer
@@ -39,11 +39,10 @@ class TaskUserStatisticsViewSet(views.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     pagination_class = None
     filterset_fields = ['task',
-                        'checker', 
+                        'checker',
                         'round']
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return TaskUserStatistics.objects.none()
         return super().get_queryset().user_scope(self.request.user)
-    

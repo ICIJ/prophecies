@@ -1,5 +1,5 @@
 import '@/store'
-import { orderTasks, orderByProjectThenTask } from '@/utils/sort'
+import {orderTasks, orderByProjectThenTask} from '@/utils/sort'
 import Tip from '@/models/Tip'
 import Task from '@/models/Task'
 

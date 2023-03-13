@@ -1,9 +1,9 @@
-import { createLocalVue, mount } from '@vue/test-utils'
+import {createLocalVue, mount} from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
 import ProgressCard from '@/components/ProgressCard'
-import { server, rest } from '../../mocks/server'
+import {server, rest} from '../../mocks/server'
 
 describe('ProgressCard', () => {
   let wrapper
@@ -16,9 +16,9 @@ describe('ProgressCard', () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
     const core = Core.init(localVue).useAll()
-    const { i18n, router } = core
+    const {i18n, router} = core
     const stubs = ['router-link']
-    wrapper = await mount(ProgressCard, { localVue, i18n, stubs, router })
+    wrapper = await mount(ProgressCard, {localVue, i18n, stubs, router})
   })
 
   it('should show 4 progress items', () => {
@@ -39,7 +39,7 @@ describe('ProgressCard', () => {
   it('should show 2 tasks', async () => {
     let element = wrapper.findAll('.progress-card__items__item__name')
     expect(element).toHaveLength(4)
-    await wrapper.setProps({ limit: 2 })
+    await wrapper.setProps({limit: 2})
     element = wrapper.findAll('.progress-card__items__item__name')
     expect(element).toHaveLength(3)
   })
@@ -60,20 +60,20 @@ describe('ProgressCard', () => {
   })
 
   it('should show a 40% progess for the team on task "Adresses"', async () => {
-    await wrapper.setData({ team: true })
+    await wrapper.setData({team: true})
 
     const element = wrapper.findAll('.progress-card__items__item__value').at(1)
     expect(element.text()).toBe('40%')
   })
 
   it('should show a 60% progess for the team on task "Shop"', async () => {
-    await wrapper.setData({ team: true })
+    await wrapper.setData({team: true})
     const element = wrapper.findAll('.progress-card__items__item__value').at(2)
     expect(element.text()).toBe('60%')
   })
 
   it('should show the average progess for the team', async () => {
-    await wrapper.setData({ team: true })
+    await wrapper.setData({team: true})
     const element = wrapper.findAll('.progress-card__items__item__value').at(0)
     expect(element.text()).toBe('53%')
   })
@@ -83,13 +83,13 @@ describe('ProgressCard', () => {
     expect(element.text()).toBe('More progress')
   })
   it('should display the 1 closed task', async () => {
-    Task.update({ where: '3', data: { status: 'OPEN' } })
+    Task.update({where: '3', data: {status: 'OPEN'}})
     await wrapper.vm.$nextTick()
 
     let element = wrapper.find('.progress-card__items__closed-tasks')
     expect(element.exists()).toBeFalsy()
 
-    Task.update({ where: '3', data: { status: 'CLOSED' } })
+    Task.update({where: '3', data: {status: 'CLOSED'}})
     await wrapper.vm.$nextTick()
 
     element = wrapper.find('.progress-card__items__closed-tasks')

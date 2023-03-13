@@ -1,4 +1,4 @@
-import { createLocalVue, mount } from '@vue/test-utils'
+import {createLocalVue, mount} from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
@@ -15,12 +15,12 @@ describe('LightDropdown', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
-    const { i18n } = Core.init(localVue).useAll()
-    const all_ = { id: '0_all', name: 'All open tasks' }
+    const {i18n} = Core.init(localVue).useAll()
+    const all_ = {id: '0_all', name: 'All open tasks'}
     const [t1, t2] = Task.query().whereIdIn(['1', '2']).get()
     const items = [all_, t1, t2]
-    const propsData = { items: items, selectedId: all_.id }
-    wrapper = mount(LightDropdown, { localVue, propsData, i18n })
+    const propsData = {items: items, selectedId: all_.id}
+    wrapper = mount(LightDropdown, {localVue, propsData, i18n})
   })
   it('should show All open task selected', () => {
     const element = wrapper.find('.light-dropdown__selected')
@@ -39,7 +39,7 @@ describe('LightDropdown', () => {
     expect(element).toHaveLength(1)
     expect(element.at(0).text()).toEqual('All open tasks')
     expect(element.at(0).attributes('data-itemid')).toEqual('0_all')
-    await wrapper.setProps({ selectedId: '1' })
+    await wrapper.setProps({selectedId: '1'})
     const element2 = wrapper.findAll('.dropdown-item.active')
     expect(element2).toHaveLength(1)
     expect(element2.at(0).text()).toEqual('Addresses')

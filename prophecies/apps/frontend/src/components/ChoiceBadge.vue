@@ -1,6 +1,6 @@
 <script>
-import { uniqueId } from 'lodash'
-import { textContrast } from '@/utils/color'
+import {uniqueId} from 'lodash'
+import {textContrast} from '@/utils/color'
 
 export default {
   name: 'ChoiceBadge',
@@ -16,24 +16,24 @@ export default {
     }
   },
   filters: {
-    taskProgressStyle (color) {
+    taskProgressStyle(color) {
       const textColor = textContrast(color)
       const borderColor = textColor !== 'white' ? '--border-color:#DFDFDF' : `--border-color:${color}`
       return color ? `--progress-fg: ${color};--text-color:${textContrast(color)};${borderColor}` : ''
     },
-    firstLetter (str) {
+    firstLetter(str) {
       return String(str).slice(0, 1)
     },
-    skipFirstLetter (str) {
+    skipFirstLetter(str) {
       return String(str).slice(1)
     }
   },
-  data () {
+  data() {
     return {
       id: null
     }
   },
-  created () {
+  created() {
     this.id = uniqueId('choice-tooltip-')
   }
 
@@ -44,7 +44,7 @@ export default {
   <span :style="color | taskProgressStyle">
     <b-badge class="choice__badge mr-3 p-1 font-weight-normal" :title="name" :id="id">
       {{ name | firstLetter }}<span class="sr-only">{{ name | skipFirstLetter }}</span>
-      <b-tooltip :target="id" triggers="hover" placement="right" >
+      <b-tooltip :target="id" triggers="hover" placement="right">
          <div class="choice__tooltip d-flex align-items-center">
             <span class="py-1 px-2 font-weight-bold ">{{name}}</span><slot name="afterTooltip"/>
          </div>

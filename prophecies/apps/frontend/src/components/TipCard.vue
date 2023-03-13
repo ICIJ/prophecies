@@ -1,6 +1,5 @@
-
 <script>
-import { formatDateFromNow, formatDateLong } from '@/utils/date'
+import {formatDateFromNow, formatDateLong} from '@/utils/date'
 import Tip from '@/models/Tip'
 import UserLink from '@/components/UserLink'
 
@@ -23,7 +22,7 @@ export default {
     }
   },
   computed: {
-    tip () {
+    tip() {
       return Tip
         .query()
         .with('creator')
@@ -31,10 +30,10 @@ export default {
     }
   },
   filters: {
-    formatDateLong (d) {
+    formatDateLong(d) {
       return formatDateLong(d)
     },
-    formatDateFromNow (d) {
+    formatDateFromNow(d) {
       return formatDateFromNow(d)
     }
   }
@@ -51,11 +50,11 @@ export default {
     <div :class="contentClass['tipDescriptionPadding']" v-html="tip.descriptionHTML"></div>
     <div class="text-right text-secondary">
       {{ $t("tips.lastModified") }}: <strong>
-        <user-link class="text-truncate" :user-id="tip.creator.id" no-card>
-          {{ tip.creator.displayName }}
-          <template v-if="tip.creator.isMe">({{$t("tips.you")}})</template>
-        </user-link>
-        </strong>,
+      <user-link class="text-truncate" :user-id="tip.creator.id" no-card>
+        {{ tip.creator.displayName }}
+        <template v-if="tip.creator.isMe">({{$t("tips.you")}})</template>
+      </user-link>
+    </strong>,
       <router-link
         :to="{ name: 'tip-retrieve', params: { tipId } }"
         :title="tip.updatedAt | formatDateLong"

@@ -4,6 +4,7 @@ from prophecies.core.models.task import Task
 from prophecies.core.models.choice import Choice
 from prophecies.core.models.choice_group import ChoiceGroup
 
+
 class TestChoiceGroup(TestCase):
     def test_instance_to_string_display_choices(self):
         choice_group = ChoiceGroup.objects.create(name='Which option?')

@@ -1,6 +1,6 @@
-import { find } from 'lodash'
-import { createLocalVue, mount } from '@vue/test-utils'
-import { server, rest } from '../../mocks/server'
+import {find} from 'lodash'
+import {createLocalVue, mount} from '@vue/test-utils'
+import {server, rest} from '../../mocks/server'
 
 import AppSearchForm from '@/components/AppSearchForm'
 import Core from '@/core'
@@ -72,32 +72,32 @@ describe('AppSearchForm', () => {
                 }
               }
             }, {
-              type: 'Tip',
-              id: '2',
-              attributes: {
-                name: 'tip for test 2',
-                description: 'test description 2',
-                createdAt: '2021-09-02T12:58:16.113007Z',
-                updatedAt: '2021-09-02T12:58:16.113038Z'
-              },
-              relationships: {
-                project: {
-                  data: {
-                    type: 'Project',
-                    id: '1'
-                  }
-                },
-                creator: {
-                  data: {
-                    type: 'User',
-                    id: '1'
-                  }
-                },
-                task: {
-                  data: null
+            type: 'Tip',
+            id: '2',
+            attributes: {
+              name: 'tip for test 2',
+              description: 'test description 2',
+              createdAt: '2021-09-02T12:58:16.113007Z',
+              updatedAt: '2021-09-02T12:58:16.113038Z'
+            },
+            relationships: {
+              project: {
+                data: {
+                  type: 'Project',
+                  id: '1'
                 }
+              },
+              creator: {
+                data: {
+                  type: 'User',
+                  id: '1'
+                }
+              },
+              task: {
+                data: null
               }
             }
+          }
           ],
         included: [
           {
@@ -140,7 +140,7 @@ describe('AppSearchForm', () => {
   describe('with 2 tasks', () => {
     let wrapper
 
-    function createContainer () {
+    function createContainer() {
       const div = document.createElement('div')
       document.body.appendChild(div)
       return div
@@ -154,11 +154,11 @@ describe('AppSearchForm', () => {
       const attachTo = createContainer()
       const localVue = createLocalVue()
       const core = Core.init(localVue).useAll()
-      const { i18n, store, wait } = core
+      const {i18n, store, wait} = core
       const stubs = ['router-link', 'app-waiter']
       await core.configure()
       // Finally, instantiate the component
-      wrapper = mount(AppSearchForm, { attachTo, i18n, localVue, stubs, store, wait })
+      wrapper = mount(AppSearchForm, {attachTo, i18n, localVue, stubs, store, wait})
     })
 
     it('should search tips', async () => {
@@ -189,41 +189,41 @@ describe('AppSearchForm', () => {
     })
 
     it('should return a queryset of 2 tips and 15 reviews', async () => {
-      await wrapper.setData({ query: 'buz' })
+      await wrapper.setData({query: 'buz'})
       await wrapper.vm.search('buz')
       expect(wrapper.vm.queryset).toHaveLength(23)
 
       expect(wrapper.vm.queryset).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ id: '2', type: 'Tip' }),
-          expect.objectContaining({ id: '3', type: 'Tip' }),
-          expect.objectContaining({ id: '4', type: 'Tip' }),
-          expect.objectContaining({ id: '36', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '37', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '38', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '25', type: 'TaskRecordReview' }),
-          expect.objectContaining({ id: '24', type: 'TaskRecordReview' })
+          expect.objectContaining({id: '2', type: 'Tip'}),
+          expect.objectContaining({id: '3', type: 'Tip'}),
+          expect.objectContaining({id: '4', type: 'Tip'}),
+          expect.objectContaining({id: '36', type: 'TaskRecordReview'}),
+          expect.objectContaining({id: '37', type: 'TaskRecordReview'}),
+          expect.objectContaining({id: '38', type: 'TaskRecordReview'}),
+          expect.objectContaining({id: '25', type: 'TaskRecordReview'}),
+          expect.objectContaining({id: '24', type: 'TaskRecordReview'})
         ])
       )
     })
 
     it('should deactivate item after a search', async () => {
-      await wrapper.setData({ activeItem: 1 })
-      await wrapper.setData({ query: 'buz' })
+      await wrapper.setData({activeItem: 1})
+      await wrapper.setData({query: 'buz'})
       await wrapper.vm.search('buz')
       expect(wrapper.vm.activeItem).toBe(-1)
     })
 
     it('should not be able to activate item bellow -1', async () => {
-      await wrapper.setData({ activeItem: -1 })
+      await wrapper.setData({activeItem: -1})
       wrapper.vm.activatePreviousItem()
       expect(wrapper.vm.activeItem).toBe(-1)
     })
 
     it('should not be able to activate item above the current queryset size', async () => {
-      await wrapper.setData({ query: 'buz' })
+      await wrapper.setData({query: 'buz'})
       await wrapper.vm.search('buz')
-      await wrapper.setData({ activeItem: 2 })
+      await wrapper.setData({activeItem: 2})
       wrapper.vm.activateNextItem()
       expect(wrapper.vm.activeItem).toBe(2)
     })
@@ -244,7 +244,7 @@ describe('AppSearchForm', () => {
     })
 
     it('should focus on the search input when reaching item -1', async () => {
-      await wrapper.setData({ query: 'buz' })
+      await wrapper.setData({query: 'buz'})
       await wrapper.vm.search('buz')
       wrapper.vm.activateNextItem()
       wrapper.vm.activatePreviousItem()
@@ -254,25 +254,25 @@ describe('AppSearchForm', () => {
     })
 
     it('should activate the queryset with more results by default', async () => {
-      await wrapper.setData({ query: 'buz' })
+      await wrapper.setData({query: 'buz'})
       await wrapper.vm.search('buz')
       const querysetId = wrapper.vm.activeQuerysetId
-      const firstQuerysetMatch = find(wrapper.vm.queryset, { querysetId })
+      const firstQuerysetMatch = find(wrapper.vm.queryset, {querysetId})
       expect(firstQuerysetMatch.type).toBe('Tip')
       expect(wrapper.vm.activeQueryset).toHaveLength(3)
     })
 
     it('should count tips 3 tips and 3 reviews for each tasks having at least one record', async () => {
-      await wrapper.setData({ query: 'buz' })
+      await wrapper.setData({query: 'buz'})
       await wrapper.vm.search('buz')
       expect(wrapper.vm.counts).toHaveLength(5)
       expect(wrapper.vm.counts).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ count: 3, querysetId: expect.anything() }),
-          expect.objectContaining({ count: 3, querysetId: expect.anything() }),
-          expect.objectContaining({ count: 3, querysetId: expect.anything() }),
-          expect.objectContaining({ count: 3, querysetId: expect.anything() }),
-          expect.objectContaining({ count: 3, querysetId: expect.anything() })
+          expect.objectContaining({count: 3, querysetId: expect.anything()}),
+          expect.objectContaining({count: 3, querysetId: expect.anything()}),
+          expect.objectContaining({count: 3, querysetId: expect.anything()}),
+          expect.objectContaining({count: 3, querysetId: expect.anything()}),
+          expect.objectContaining({count: 3, querysetId: expect.anything()})
         ])
       )
     })
@@ -285,10 +285,10 @@ describe('AppSearchForm', () => {
       Task.deleteAll()
       const localVue = createLocalVue()
       const core = Core.init(localVue).useAll()
-      const { i18n, store, wait } = core
+      const {i18n, store, wait} = core
       await core.configure()
       // Finally, instantiate the component
-      wrapper = mount(AppSearchForm, { i18n, localVue, store, wait })
+      wrapper = mount(AppSearchForm, {i18n, localVue, store, wait})
     })
 
     afterEach(async () => {
@@ -305,20 +305,20 @@ describe('AppSearchForm', () => {
     })
 
     it('should return a queryset of 3 tips', async () => {
-      await wrapper.setData({ query: 'foo' })
+      await wrapper.setData({query: 'foo'})
       await wrapper.vm.search('foo')
       expect(wrapper.vm.queryset).toHaveLength(3)
       expect(wrapper.vm.queryset).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ id: '2', type: 'Tip' }),
-          expect.objectContaining({ id: '3', type: 'Tip' }),
-          expect.objectContaining({ id: '4', type: 'Tip' })
+          expect.objectContaining({id: '2', type: 'Tip'}),
+          expect.objectContaining({id: '3', type: 'Tip'}),
+          expect.objectContaining({id: '4', type: 'Tip'})
         ])
       )
     })
 
     it('should only search for tips with no task or with task containing records ', async () => {
-      await wrapper.setData({ query: 'foo' })
+      await wrapper.setData({query: 'foo'})
       await wrapper.vm.search('foo')
       expect(wrapper.vm.tipsToSearch).toEqual(['2', '3', '4', '7', '8'])
       expect(wrapper.vm.queryset).toHaveLength(3)

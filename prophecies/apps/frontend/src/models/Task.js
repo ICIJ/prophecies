@@ -1,5 +1,5 @@
-import { Model } from '@vuex-orm/core'
-import { responseNormalizer } from '@/utils/jsonapi'
+import {Model} from '@vuex-orm/core'
+import {responseNormalizer} from '@/utils/jsonapi'
 import settings from '@/settings'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Project from '@/models/Project'
@@ -19,7 +19,7 @@ export const TaskStatusOrder = {
 export default class Task extends Model {
   static entity = 'Task'
 
-  static fields () {
+  static fields() {
     return {
       id: this.attr(null),
       url: this.string(),
@@ -51,21 +51,21 @@ export default class Task extends Model {
     baseURL: `${settings.apiUrl}/tasks/`,
     dataTransformer: responseNormalizer,
     actions: {
-      find (id, config = {}) {
+      find(id, config = {}) {
         return this.get(`${id}/`, config)
       }
     }
   }
 
-  get open () {
+  get open() {
     return this.status === TaskStatusEnum.OPEN
   }
 
-  get close () {
+  get close() {
     return this.status === TaskStatusEnum.CLOSED
   }
 
-  get locked () {
+  get locked() {
     return this.status === TaskStatusEnum.LOCKED
   }
 }

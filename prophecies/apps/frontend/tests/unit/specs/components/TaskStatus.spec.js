@@ -1,4 +1,4 @@
-import { createLocalVue, mount } from '@vue/test-utils'
+import {createLocalVue, mount} from '@vue/test-utils'
 import TaskStatus from '@/components/TaskStatus'
 import Task from '@/models/Task'
 import Core from '@/core'
@@ -8,7 +8,7 @@ describe('TaskStatus', () => {
 
   beforeAll(() => {
     Task.insert({
-      data: { id: '1000', name: 'foo', status: 'OPEN' }
+      data: {id: '1000', name: 'foo', status: 'OPEN'}
     })
   })
 
@@ -19,9 +19,9 @@ describe('TaskStatus', () => {
     // Load the settings
     await core.configure()
     // Those core properties must be available for each test
-    const { i18n, store } = core
-    const propsData = { taskId: '1000' }
-    wrapper = mount(TaskStatus, { i18n, store, localVue, propsData })
+    const {i18n, store} = core
+    const propsData = {taskId: '1000'}
+    wrapper = mount(TaskStatus, {i18n, store, localVue, propsData})
   })
 
   describe('with an open task', () => {

@@ -1,6 +1,7 @@
 from django.test import TestCase
 from prophecies.apps.api.contrib.strings import to_camel_case
 
+
 class TestStrings(TestCase):
 
     def test_it_convert_snake_case_to_camel_case(self):

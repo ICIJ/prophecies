@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from prophecies.core.filters import ActionFilter
 from prophecies.core.models import ActionAggregate, Choice, TaskRecord, TaskRecordReview, Tip
 
+
 class GenericModelSerializer(serializers.ModelSerializer):
     MODEL_SERIALIZERS_MAPPING = {
         ActionAggregate: 'prophecies.apps.api.views.action_aggregate.ActionAggregateSerializer',
@@ -24,7 +25,7 @@ class GenericModelSerializer(serializers.ModelSerializer):
             return locate(serializer)
         return serializer
 
-    def __new__(self, instance = None, *args, **kwargs):
+    def __new__(self, instance=None, *args, **kwargs):
         if instance is not None:
             serializer = self.get_instance_serializer(instance)
             if serializer is not None:
@@ -52,7 +53,7 @@ class ActionSerializer(serializers.HyperlinkedModelSerializer):
         model = Action
         resource_name = 'Action'
         fields = ['id', 'url', 'verb', 'actor', 'action_object', 'target',
-                    'data', 'public', 'description', 'timestamp']
+                  'data', 'public', 'description', 'timestamp']
 
     class JSONAPIMeta:
         included_resources = ['actor', 'action_object', 'target']
@@ -63,7 +64,7 @@ class ActionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ActionSerializer
     filterset_class = ActionFilter
     ordering = ['-timestamp']
-    
+
     prefetch_for_includes = {
         'action': ['action', 'action__actor', 'action__target', 'action__action_object'],
         'action.actionObject': ['action', 'action__action_object']

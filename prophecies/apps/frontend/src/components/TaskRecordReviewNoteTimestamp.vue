@@ -1,5 +1,5 @@
 <script>
-import { formatDateFromNow, formatDateLong } from '@/utils/date'
+import {formatDateFromNow, formatDateLong} from '@/utils/date'
 import TaskRecordReview from '@/models/TaskRecordReview'
 
 export default {
@@ -10,10 +10,10 @@ export default {
     }
   },
   computed: {
-    taskRecordReview () {
+    taskRecordReview() {
       return TaskRecordReview.find(this.taskRecordReviewId)
     },
-    route () {
+    route() {
       return {
         name: 'task-record-review-retrieve',
         params: {
@@ -25,20 +25,20 @@ export default {
         }
       }
     },
-    noteCreatedAtTitle () {
+    noteCreatedAtTitle() {
       const noteCreatedAt = this.taskRecordReview.noteCreatedAt
       return this.$options.filters.formatDateLong(noteCreatedAt)
     },
-    noteUpdatedAtTitle () {
+    noteUpdatedAtTitle() {
       const noteUpdatedAt = this.taskRecordReview.noteUpdatedAt
       return this.$options.filters.formatDateLong(noteUpdatedAt)
     }
   },
   filters: {
-    formatDateLong (d) {
+    formatDateLong(d) {
       return formatDateLong(d)
     },
-    formatDateFromNow (d) {
+    formatDateFromNow(d) {
       return formatDateFromNow(d)
     }
   }
@@ -48,12 +48,14 @@ export default {
 <template>
   <span class="task-record-review-note-timestamp">
     <template v-if="taskRecordReview.noteUpdatedAt">
-      <router-link :to="this.route" :title="noteUpdatedAtTitle" v-b-tooltip.hover class="task-record-review-note-timestamp__link">
+      <router-link :to="this.route" :title="noteUpdatedAtTitle" v-b-tooltip.hover
+                   class="task-record-review-note-timestamp__link">
         {{ taskRecordReview.noteUpdatedAt | formatDateFromNow }} (edited)
       </router-link>
     </template>
     <template v-else-if="taskRecordReview.noteCreatedAt">
-      <router-link :to="this.route" :title="noteCreatedAtTitle" v-b-tooltip.hover class="task-record-review-note-timestamp__link">
+      <router-link :to="this.route" :title="noteCreatedAtTitle" v-b-tooltip.hover
+                   class="task-record-review-note-timestamp__link">
         {{ taskRecordReview.noteCreatedAt | formatDateFromNow }}
       </router-link>
     </template>
@@ -61,7 +63,7 @@ export default {
 </template>
 
 <style scoped>
-  .task-record-review-note-timestamp__link {
-    color: inherit;
-  }
+.task-record-review-note-timestamp__link {
+  color: inherit;
+}
 </style>

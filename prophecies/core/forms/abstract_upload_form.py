@@ -14,27 +14,21 @@ class AbstractUploadForm(forms.Form):
         model = Model
         csv_columns = []
 
-
     def __init__(self, *args, **kwargs):
-        super().__init__ (*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._meta = self.Meta()
-
 
     def get_model(self):
         return self._meta.model
 
-
     def get_csv_columns(self):
         return self._meta.csv_columns
-
 
     def get_model_fields(self):
         return self.get_model()._meta.get_fields()
 
-
     def csv_valid_fieldnames(self):
-        return [ f.name for f in self.get_model_fields() ]
-
+        return [f.name for f in self.get_model_fields()]
 
     def clean_csv_file(self):
         csv_fieldnames = self.csv_file_reader().fieldnames or []
@@ -43,13 +37,11 @@ class AbstractUploadForm(forms.Form):
                 raise ValidationError('Your CSV contains a column "%s" which is not a valid' % fieldname)
         return self.cleaned_data['csv_file']
 
-
     @lru_cache(maxsize=None)
     def csv_file_reader(self):
         csv_file = self.cleaned_data["csv_file"]
         stream = io.StringIO(csv_file.read().decode("UTF8"), newline=None)
         return csv.DictReader(stream)
-
 
     def save(self, commit=True):
         raise NotImplementedError('You must implement a `save` method')

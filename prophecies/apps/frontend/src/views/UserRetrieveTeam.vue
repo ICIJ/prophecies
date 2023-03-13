@@ -1,6 +1,6 @@
 <script>
-import { orderBy } from 'lodash'
-import { formatDateLongAlt } from '@/utils/date'
+import {orderBy} from 'lodash'
+import {formatDateLongAlt} from '@/utils/date'
 import UserTaskStatsCard from '@/components/UserTaskStatsCard'
 import UserCard from '@/components/UserCard'
 import Task from '@/models/Task'
@@ -22,37 +22,37 @@ export default {
     }
   },
   filters: {
-    formatDate (d) {
+    formatDate(d) {
       return formatDateLongAlt(d)
     },
-    isTaskOpen (taskId) {
+    isTaskOpen(taskId) {
       return Task.find(taskId)?.open
     }
   },
-  data () {
+  data() {
     return {
       teammateIds: []
     }
   },
-  created () {
+  created() {
     this.setup()
   },
   computed: {
-    user () {
+    user() {
       return User.find(this.username)
     }
   },
   methods: {
-    async setup () {
+    async setup() {
       const tms = await this.fetchUserTasks()
       this.teammateIds = orderBy(tms, ['isSuperuser'], 'desc').map((tm) => tm.id)
     },
-    async fetchUserTasks () {
+    async fetchUserTasks() {
       const params = {
         'filter[checkers]': this.user.id,
         include: 'project,checkers'
       }
-      const { entities: { User: users } } = await Task.api().get('', { params })
+      const {entities: {User: users}} = await Task.api().get('', {params})
       return users.filter((u) => u.id !== this.user.id)
     }
   }
@@ -73,19 +73,19 @@ export default {
               <div>
                 <h2 class="user-card__fullname">{{ user.displayFullName }}</h2>
                 <p class="user-card__link font-weight-bold text-muted">
-                  <user-link no-card :user-id="user.id" />
+                  <user-link no-card :user-id="user.id"/>
                 </p>
               </div>
               <div
                 v-if="user.isSuperuser"
                 class="user-retrieve-profile__super-user mb-3"
               >
-                <admin-badge />
+                <admin-badge/>
               </div>
             </div>
           </template>
           <template #footer="{ assignedTaskIds }">
-            <user-task-stats-card :user-id="id" :task-ids="assignedTaskIds" />
+            <user-task-stats-card :user-id="id" :task-ids="assignedTaskIds"/>
           </template>
         </user-card>
       </div>

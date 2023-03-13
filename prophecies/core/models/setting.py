@@ -38,7 +38,7 @@ class SettingManager(models.Manager):
 
 
 class Setting(Constance):
-    objects = SettingManager()    
+    objects = SettingManager()
 
     class Meta:
         proxy = True
@@ -48,27 +48,25 @@ class Setting(Constance):
         if hasattr(self, 'visibility'):
             return self.visibility.public
         return False
-    
+
     @public.setter
-    def public(self, value):        
+    def public(self, value):
         self.visibility, created = SettingVisibility.objects.get_or_create(setting=self)
         self.visibility.public = value
-        
 
     @property
     def private(self):
         return not self.public
 
-    def publish(self):        
+    def publish(self):
         self.visibility, created = SettingVisibility.objects.get_or_create(setting=self)
         self.visibility.public = True
         self.visibility.save()
 
-    def unpublish(self):        
+    def unpublish(self):
         self.visibility, created = SettingVisibility.objects.get_or_create(setting=self)
         self.visibility.public = False
         self.visibility.save()
-
 
     @staticmethod
     def signal_save_visibility(sender, instance, **kwargs):

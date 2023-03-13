@@ -13,7 +13,6 @@ def create_aggregates(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('core', '0011_auto_20211104_1712'),
@@ -27,9 +26,11 @@ class Migration(migrations.Migration):
                 ('verb', models.CharField(max_length=100)),
                 ('date', models.DateField(blank=True, null=True)),
                 ('count', models.IntegerField(default=0)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
-                ('task', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='core.task')),
-                
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                           to=settings.AUTH_USER_MODEL)),
+                ('task', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                           to='core.task')),
+
             ],
         ),
         migrations.RunPython(create_aggregates, migrations.RunPython.noop)

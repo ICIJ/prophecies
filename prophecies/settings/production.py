@@ -10,7 +10,6 @@ env_root = root.path('.env').root
 if exists(env_root):
     env.read_env(env_root)
 
-
 DEBUG = env.bool('DEBUG', default=False)
 TEMPLATE_DEBUG = env.bool('DEBUG', default=False)
 USE_X_FORWARDED_HOST = False

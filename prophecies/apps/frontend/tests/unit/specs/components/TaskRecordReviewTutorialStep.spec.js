@@ -5,10 +5,11 @@ import {
 import Core from '@/core'
 
 import TaskRecordReviewTutorialStep from '@/components/TaskRecordReviewTutorialStep'
+
 describe('TaskRecordReviewTutorialStep', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

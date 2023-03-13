@@ -7,7 +7,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -28,7 +27,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100, verbose_name='Project name')),
-                ('creator', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ('creator', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                              to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -38,26 +38,41 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=100)),
                 ('description', models.CharField(max_length=100)),
                 ('rounds', models.PositiveIntegerField(default=3, verbose_name='Number of rounds')),
-                ('automatic_round_attributions', models.BooleanField(default=True, verbose_name='Attribute rounds (if not checked, all checkers will participate in all rounds)')),
-                ('allow_multiple_checks', models.BooleanField(default=True, verbose_name='Allow checkers to check several time the same item')),
+                ('automatic_round_attributions', models.BooleanField(default=True,
+                                                                     verbose_name='Attribute rounds (if not checked, all checkers will participate in all rounds)')),
+                ('allow_multiple_checks',
+                 models.BooleanField(default=True, verbose_name='Allow checkers to check several time the same item')),
                 ('priority', models.PositiveIntegerField(default=1, verbose_name='Priority')),
                 ('allow_items_addition', models.BooleanField(default=False, verbose_name='Allow checker to add items')),
                 ('color', colorfield.fields.ColorField(default='#31807D', max_length=18)),
-                ('recordLinkTemplate', models.CharField(blank=True, help_text='A link template to build a link for each task record. Task record can override this value with their own link', max_length=1000, null=True, verbose_name='Record link template')),
+                ('recordLinkTemplate', models.CharField(blank=True,
+                                                        help_text='A link template to build a link for each task record. Task record can override this value with their own link',
+                                                        max_length=1000, null=True,
+                                                        verbose_name='Record link template')),
             ],
         ),
         migrations.CreateModel(
             name='TaskRecord',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('uid', models.CharField(blank=True, help_text='An optional unique identifier used to update task records in bulk', max_length=50, null=True, verbose_name='UID')),
+                ('uid', models.CharField(blank=True,
+                                         help_text='An optional unique identifier used to update task records in bulk',
+                                         max_length=50, null=True, verbose_name='UID')),
                 ('original_value', models.TextField(blank=True, help_text='Original value of the record', null=True)),
-                ('predicted_value', models.TextField(blank=True, help_text='Suggested value to be reviewed', null=True)),
-                ('metadata', models.JSONField(blank=True, help_text='Optional metadata for this record (in JSON)', null=True)),
-                ('status', models.CharField(blank=True, choices=[('PENDING', 'Pending'), ('ASSIGNED', 'Assigned'), ('DONE', 'Done')], default='PENDING', help_text="Status of the record. Set to done after it passes all task's rounds", max_length=8)),
-                ('rounds', models.PositiveIntegerField(default=0, help_text='Number of rounds this record was submitted to')),
-                ('link', models.CharField(blank=True, help_text='An optional link to the record', max_length=1000, null=True)),
-                ('task', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='task_records', to='core.task')),
+                (
+                'predicted_value', models.TextField(blank=True, help_text='Suggested value to be reviewed', null=True)),
+                ('metadata',
+                 models.JSONField(blank=True, help_text='Optional metadata for this record (in JSON)', null=True)),
+                ('status', models.CharField(blank=True, choices=[('PENDING', 'Pending'), ('ASSIGNED', 'Assigned'),
+                                                                 ('DONE', 'Done')], default='PENDING',
+                                            help_text="Status of the record. Set to done after it passes all task's rounds",
+                                            max_length=8)),
+                ('rounds',
+                 models.PositiveIntegerField(default=0, help_text='Number of rounds this record was submitted to')),
+                ('link',
+                 models.CharField(blank=True, help_text='An optional link to the record', max_length=1000, null=True)),
+                ('task', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='task_records',
+                                           to='core.task')),
             ],
         ),
         migrations.CreateModel(
@@ -75,7 +90,8 @@ class Migration(migrations.Migration):
             name='TaskChecker',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('checker', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                'checker', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('task', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.task')),
             ],
             options={
@@ -85,22 +101,27 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='task',
             name='checkers',
-            field=models.ManyToManyField(related_name='task', through='core.TaskChecker', to=settings.AUTH_USER_MODEL, verbose_name="User in charge of checking this task's data"),
+            field=models.ManyToManyField(related_name='task', through='core.TaskChecker', to=settings.AUTH_USER_MODEL,
+                                         verbose_name="User in charge of checking this task's data"),
         ),
         migrations.AddField(
             model_name='task',
             name='choice_group',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='core.choicegroup', verbose_name='Choices'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                    to='core.choicegroup', verbose_name='Choices'),
         ),
         migrations.AddField(
             model_name='task',
             name='creator',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='tasks', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                    related_name='tasks', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='task',
             name='project',
-            field=models.ForeignKey(help_text='Project this task belong to', on_delete=django.db.models.deletion.CASCADE, related_name='tasks', to='core.project'),
+            field=models.ForeignKey(help_text='Project this task belong to',
+                                    on_delete=django.db.models.deletion.CASCADE, related_name='tasks',
+                                    to='core.project'),
         ),
         migrations.CreateModel(
             name='Choice',
@@ -108,9 +129,13 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
                 ('value', models.CharField(blank=True, max_length=100)),
-                ('shortkeys', models.CharField(blank=True, help_text='Commat separated list of shortkeys to pick this choice', max_length=100, null=True)),
-                ('require_alternative_value', models.BooleanField(default=False, verbose_name='Requires an alternative value?')),
-                ('choice_group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='choices', to='core.choicegroup')),
+                ('shortkeys',
+                 models.CharField(blank=True, help_text='Commat separated list of shortkeys to pick this choice',
+                                  max_length=100, null=True)),
+                ('require_alternative_value',
+                 models.BooleanField(default=False, verbose_name='Requires an alternative value?')),
+                ('choice_group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='choices',
+                                                   to='core.choicegroup')),
             ],
         ),
         migrations.CreateModel(
@@ -119,7 +144,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
                 ('value', models.CharField(blank=True, max_length=100)),
-                ('choice_group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='alternative_values', to='core.choicegroup')),
+                ('choice_group',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='alternative_values',
+                                   to='core.choicegroup')),
             ],
         ),
         migrations.CreateModel(
@@ -127,14 +154,21 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('round', models.PositiveIntegerField(default=None, null=True, verbose_name='Attribution round')),
-                ('status', models.CharField(blank=True, choices=[('PENDING', 'Pending'), ('DONE', 'Done')], default='PENDING', max_length=7)),
+                ('status',
+                 models.CharField(blank=True, choices=[('PENDING', 'Pending'), ('DONE', 'Done')], default='PENDING',
+                                  max_length=7)),
                 ('note', models.CharField(blank=True, max_length=100, null=True, verbose_name='Checker note')),
                 ('alternative_value', models.TextField(blank=True, null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('checker', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='reviews', to=settings.AUTH_USER_MODEL)),
-                ('choice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='core.choice')),
-                ('task_record', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='reviews', to='core.taskrecord')),
+                ('checker',
+                 models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='reviews',
+                                   to=settings.AUTH_USER_MODEL)),
+                ('choice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                             to='core.choice')),
+                ('task_record',
+                 models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='reviews',
+                                   to='core.taskrecord')),
             ],
             options={
                 'get_latest_by': 'round',

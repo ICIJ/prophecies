@@ -7,8 +7,11 @@ from prophecies.core.contrib.display import display_task_addon
 from prophecies.core.forms.task_form import TaskForm
 from prophecies.core.models import Task
 
+
 class TaskAdminForm(TaskForm):
-    checkers = forms.ModelMultipleChoiceField(required=True, queryset=User.objects.all(), widget=forms.CheckboxSelectMultiple)
+    checkers = forms.ModelMultipleChoiceField(required=True, queryset=User.objects.all(),
+                                              widget=forms.CheckboxSelectMultiple)
+
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
@@ -25,7 +28,7 @@ class TaskAdmin(admin.ModelAdmin):
     task_actions.short_description = 'Actions'
 
     def task_status(self, task):
-        return task.status.capitalize() 
+        return task.status.capitalize()
 
     task_status.short_description = "Status"
 
@@ -33,7 +36,6 @@ class TaskAdmin(admin.ModelAdmin):
         return display_task_addon(task)
 
     task_with_addon.short_description = "Task Name"
-
 
     def save_model(self, request, obj, form, change):
         if not obj.creator:

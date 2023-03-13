@@ -35,6 +35,7 @@ router.register(r'user-notifications', UserNotificationViewSet)
 urlpatterns = [
     path('', RedirectView.as_view(url='v1/')),
     path('v1/', include(router.urls)),
-    path('v1/task-records/<pk>/relationships/actions/', view=TaskRecordViewSet.as_view({ 'get': 'actions' }), name='task-record-actions'),
-    path('v1/users/<pk>/relationships/actions/', view=UserViewSet.as_view({ 'get': 'actions' }), name='user-actions'),
+    path('v1/task-records/<pk>/relationships/actions/', view=TaskRecordViewSet.as_view({'get': 'actions'}),
+         name='task-record-actions'),
+    path('v1/users/<pk>/relationships/actions/', view=UserViewSet.as_view({'get': 'actions'}), name='user-actions'),
 ]

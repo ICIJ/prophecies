@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('core', '0012_actionaggregate'),
@@ -24,7 +23,8 @@ class Migration(migrations.Migration):
                 ('round', models.IntegerField(help_text='Round number of the static entry')),
                 ('done_count', models.IntegerField(default=0, help_text='Count of done records')),
                 ('pending_count', models.IntegerField(default=0, help_text='Count of pending records')),
-                ('checker', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                'checker', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('task', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.task')),
             ],
             options={

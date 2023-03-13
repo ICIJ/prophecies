@@ -6,7 +6,7 @@ import VuexORM from '@vuex-orm/core'
 
 import createPersistedState from 'vuex-persistedstate'
 
-import { database } from '@/store/orm'
+import {database} from '@/store/orm'
 import app from './modules/app'
 import userNotificationsPoll from './modules/user-notifications-poll'
 
@@ -15,7 +15,7 @@ Vue.use(Vuex)
 Vue.config.productionTip = process.env.NODE_ENV === 'development'
 Vue.config.devtools = process.env.NODE_ENV === 'development'
 
-export function createStore () {
+export function createStore() {
   return new Vuex.Store({
     modules: {
       app,
@@ -32,7 +32,7 @@ export function createStore () {
           'app.showTutorial',
           'app.locale'
         ],
-        filter (mutation) {
+        filter(mutation) {
           // Only for some mutations
           return some(['app/'], k => mutation.type.indexOf(k) === 0)
         }

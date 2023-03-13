@@ -1,7 +1,7 @@
 <script>
-import { uniqueId } from 'lodash'
-import { orderTasks } from '@/utils/sort'
-import Task, { TaskStatusEnum } from '@/models/Task'
+import {uniqueId} from 'lodash'
+import {orderTasks} from '@/utils/sort'
+import Task, {TaskStatusEnum} from '@/models/Task'
 import Tip from '@/models/Tip'
 
 import AppHeader from '@/components/AppHeader'
@@ -27,58 +27,58 @@ export default {
     HistoryFetcher,
     EmptyPlaceholder
   },
-  data () {
+  data() {
     return {
       sortField: 'name_asc',
       teamTaskStats: false
     }
   },
-  created () {
+  created() {
     return this.setup()
   },
   computed: {
-    unorderedTasks () {
+    unorderedTasks() {
       return Task
         .query()
         .where('taskRecordsCount', (value) => value > 0)
         .where('status', (value) => value !== TaskStatusEnum.CLOSED)
         .get()
     },
-    tasks () {
+    tasks() {
       return orderTasks(this.unorderedTasks)
     },
-    tips () {
+    tips() {
       return Tip.query()
         .with('project')
         .with('task')
         .orderBy('createdAt', 'desc')
         .get()
     },
-    fetchTaskLoader () {
+    fetchTaskLoader() {
       return uniqueId('load-dashboard-task-')
     },
-    taskStatsOptions () {
+    taskStatsOptions() {
       return [
-        { text: this.$t('statsList.title.yours'), value: false },
-        { text: this.$t('statsList.title.team'), value: true }
+        {text: this.$t('statsList.title.yours'), value: false},
+        {text: this.$t('statsList.title.team'), value: true}
       ]
     }
   },
   methods: {
-    async setup () {
+    async setup() {
       await this.waitFor(this.fetchTaskLoader, [this.fetchTask, this.fetchTips])
     },
-    fetchTask () {
+    fetchTask() {
       return Task.api().get()
     },
-    fetchTips () {
+    fetchTips() {
       const include = 'project,task'
       const pageSize = '1'
       const sort = '-created_at'
-      const params = { include, 'page[size]': pageSize, sort }
-      return Tip.api().get('', { params })
+      const params = {include, 'page[size]': pageSize, sort}
+      return Tip.api().get('', {params})
     },
-    async waitFor (loader, fns = []) {
+    async waitFor(loader, fns = []) {
       this.$wait.start(loader)
       await Promise.all(fns.map(fn => fn()))
       this.$wait.end(loader)
@@ -89,9 +89,9 @@ export default {
 
 <template>
   <div class="dashboard d-flex align-items-start">
-    <app-sidebar class="w-100 sticky-top" />
+    <app-sidebar class="w-100 sticky-top"/>
     <div class="dashboard__container flex-grow-1">
-      <app-header hide-nav />
+      <app-header hide-nav/>
       <div class="container-fluid p-5">
         <div class="row justify-content-between">
           <div class="col-12 col-xl-6">
@@ -99,13 +99,13 @@ export default {
               <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
                 <template v-if="tasks.length">
                   <div class="d-flex flex-row justify-content-between ">
-                    <div class="d-flex flex-row align-items-end" >
+                    <div class="d-flex flex-row align-items-end">
                       <b-form-group>
                         <b-form-radio-group
                           v-model="teamTaskStats"
                           buttons
                           button-variant="outline-primary"
-                          :options="taskStatsOptions" />
+                          :options="taskStatsOptions"/>
                       </b-form-group>
                     </div>
 
@@ -114,10 +114,13 @@ export default {
                                    v-for="task in tasks"
                                    :key="task.id"
                                    :team="teamTaskStats"
-                                   :task-id="task.id" >
+                                   :task-id="task.id">
                   </task-stats-card>
-                  <div class="dashboard__container__left-panel__stats-link d-flex justify-content-center py-3 mt-3 mb-5">
-                    <router-link class="btn btn-primary font-weight-bold" :to="{name:'stats-list'}">{{ $t('dashboard.allTasks') }}</router-link>
+                  <div
+                    class="dashboard__container__left-panel__stats-link d-flex justify-content-center py-3 mt-3 mb-5">
+                    <router-link class="btn btn-primary font-weight-bold" :to="{name:'stats-list'}">{{
+                      $t('dashboard.allTasks') }}
+                    </router-link>
                   </div>
                 </template>
                 <div v-else class="card card-body shadow-sm ">
@@ -129,7 +132,7 @@ export default {
           <div class="col-12 col-xl-6">
             <div class="dashboard__container__right-panel ml-xl-auto">
               <app-waiter :loader="fetchTaskLoader" waiter-class="my-5 mx-auto d-block">
-                <progress-card class="mb-5" v-if="tasks.length" />
+                <progress-card class="mb-5" v-if="tasks.length"/>
                 <latest-tips-card :tips="tips" v-if="tips.length">
                   <template v-slot:title>
                     <h2 class="title-dashboard mb-0 font-weight-bold">
@@ -171,13 +174,13 @@ export default {
               <template v-slot:footer>
                 <div class="d-flex justify-content-center pt-3">
                   <button class="btn btn-primary border font-weight-bold">
-                  <router-link
-                    :to="{ name: 'history' }"
-                    :title="$t('dashboard.allHistory')"
-                    class="text-white"
+                    <router-link
+                      :to="{ name: 'history' }"
+                      :title="$t('dashboard.allHistory')"
+                      class="text-white"
                     >
-                    {{ $t('dashboard.showAllHistory') }}
-                  </router-link>
+                      {{ $t('dashboard.showAllHistory') }}
+                    </router-link>
                   </button>
                 </div>
               </template>
@@ -190,43 +193,44 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .dashboard {
-    &__container {
-      &__left-panel {
-        max-width: 460px;
-        &__tasks__sort-by{
-          flex:0 1 200px;
-        }
+.dashboard {
+  &__container {
+    &__left-panel {
+      max-width: 460px;
+
+      &__tasks__sort-by {
+        flex: 0 1 200px;
       }
+    }
 
-      &__right-panel {
-        max-width: 460px;
-      }
+    &__right-panel {
+      max-width: 460px;
+    }
 
-      .tip-item-title-dashboard {
-        line-height: 16.94px;
-        font-size: 14px;
-        color: $body-color;
-        margin-bottom: $spacer-lg;
-      }
+    .tip-item-title-dashboard {
+      line-height: 16.94px;
+      font-size: 14px;
+      color: $body-color;
+      margin-bottom: $spacer-lg;
+    }
 
-      .title-dashboard {
-        position: relative;
-        padding-bottom: $spacer;
-        color: $primary;
+    .title-dashboard {
+      position: relative;
+      padding-bottom: $spacer;
+      color: $primary;
 
-        &:after {
-          content: "";
-          width: 170%;
-          max-width: 115px;
-          position: absolute;
-          bottom: 0%;
-          left: 0;
-          height: 7px;
-          background: $warning;
-          font-weight: 600;
-        }
+      &:after {
+        content: "";
+        width: 170%;
+        max-width: 115px;
+        position: absolute;
+        bottom: 0%;
+        left: 0;
+        height: 7px;
+        background: $warning;
+        font-weight: 600;
       }
     }
   }
+}
 </style>

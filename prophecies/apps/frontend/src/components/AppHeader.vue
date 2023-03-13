@@ -25,47 +25,48 @@ export default {
     },
     tipQueryParams: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
-  created () {
+  created() {
     const showTutorial = this.showTutorial !== false
     if (showTutorial !== this.showTutorial) {
       store.dispatch('app/showTutorial', showTutorial)
     }
   },
   methods: {
-    toggleTutorial () {
+    toggleTutorial() {
       this.showTutorial = !this.showTutorial
     },
-    toggleCinematicView () {
+    toggleCinematicView() {
       this.$root.$emit('prophecies::toggleCinematicView')
     },
-    toggleShortcuts () {
+    toggleShortcuts() {
       this.$root.$emit('prophecies::toggleShortcuts')
     },
-    toggleTips () {
+    toggleTips() {
       this.$root.$emit('prophecies::toggleTips')
     }
   },
   computed: {
-    user () {
+    user() {
       return this.$config.get('user')
     },
-    hasCinematicView () {
+    hasCinematicView() {
       return this.$route?.name === 'task-record-review-list'
     },
-    hasUnreadNotifications () {
+    hasUnreadNotifications() {
       return this.unreadNotifications > 0
     },
-    unreadNotifications () {
+    unreadNotifications() {
       return UserNotification.query().where('read', false).count()
     },
     showTutorial: {
-      get () {
+      get() {
         return store.state.app.showTutorial
       },
-      set (isVisible) {
+      set(isVisible) {
         store.dispatch('app/showTutorial', isVisible)
       }
     }
@@ -75,37 +76,37 @@ export default {
 
 <template>
   <b-navbar toggleable="lg" class="app-header py-3">
-    <b-navbar-toggle target="nav-collapse" class="ml-auto" />
+    <b-navbar-toggle target="nav-collapse" class="ml-auto"/>
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="app-header__nav-left flex-grow-1">
-        <slot name="nav-left" />
+        <slot name="nav-left"/>
         <template v-if="!hideSearch">
-          <app-search-form is-nav class="app-header__nav-left__search-form" />
+          <app-search-form is-nav class="app-header__nav-left__search-form"/>
         </template>
       </b-navbar-nav>
       <div class="ml-auto">
         <b-navbar-nav class="app-header__nav-right">
-          <slot name="nav-right" />
+          <slot name="nav-right"/>
           <template v-if="!hideNav">
             <b-nav-item @click.prevent="toggleCinematicView" v-if="hasCinematicView">
-              <film-icon class="mr-2" />
+              <film-icon class="mr-2"/>
               {{ $t('appHeader.cinematicView') }}
             </b-nav-item>
             <b-nav-item @click.prevent="toggleShortcuts">
-              <command-icon class="mr-2" />
+              <command-icon class="mr-2"/>
               {{ $t('appHeader.shortcuts') }}
-              <shortkey-badge :value="['Ctrl', 'k']" class="ml-2" />
+              <shortkey-badge :value="['Ctrl', 'k']" class="ml-2"/>
             </b-nav-item>
             <b-nav-item @click.prevent="toggleTips">
-              <smile-icon class="app-header__nav-right__tips mr-2" />
+              <smile-icon class="app-header__nav-right__tips mr-2"/>
               {{ $t('appHeader.tips') }}
-              <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2" />
+              <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2"/>
             </b-nav-item>
             <b-nav-item
               :class="{ 'font-weight-bold app-header__nav-right__tutorial--show': showTutorial }"
               @click="toggleTutorial"
               href="#">
-              <help-circle-icon class="mr-2" />
+              <help-circle-icon class="mr-2"/>
               {{ $t('appHeader.tutorial') }}
             </b-nav-item>
           </template>
@@ -117,12 +118,13 @@ export default {
             toggle-class="app-header__nav-right__notifications__toggler"
             menu-class="app-header__nav-right__notifications__menu">
             <template #button-content>
-              <bell-icon />
-              <b-badge variant="danger" v-if="hasUnreadNotifications" pill class="app-header__nav-right__notifications__toggler__count">
+              <bell-icon/>
+              <b-badge variant="danger" v-if="hasUnreadNotifications" pill
+                       class="app-header__nav-right__notifications__toggler__count">
                 {{ unreadNotifications }}
               </b-badge>
             </template>
-            <user-notifications-dropdown-menu />
+            <user-notifications-dropdown-menu/>
           </b-nav-item-dropdown>
           <b-nav-item-dropdown right no-caret class="app-header__nav-right__user" toggle-class="pl-1">
             <!-- Using 'button-content' slot -->
@@ -130,9 +132,9 @@ export default {
               <span class="app-header__nav-right__user__display-name">
                 {{ user.displayFullName }}
               </span>
-              <user-avatar :user-id="user.id" class="app-header__nav-right__user__avatar ml-2 d-none d-lg-inline" />
+              <user-avatar :user-id="user.id" class="app-header__nav-right__user__avatar ml-2 d-none d-lg-inline"/>
             </template>
-            <user-profile-dropdown-menu />
+            <user-profile-dropdown-menu/>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </div>
@@ -141,57 +143,57 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .app-header {
+.app-header {
 
-    &__nav-left {
+  &__nav-left {
+    width: 100%;
+
+    & ::v-deep &__search-form {
       width: 100%;
-
-      & ::v-deep &__search-form {
-        width: 100%;
-      }
-    }
-
-    & ::v-deep .nav-item .nav-link .feather,
-    & ::v-deep .navbar-text .feather,
-    & ::v-deep .dropdown-item .feather {
-      height: 20px;
-      width: 20px
-    }
-
-    & ::v-deep .nav-item,
-    & ::v-deep .nav-item .nav-link,
-    & ::v-deep .nav-item .dropdown-toggle {
-      display: flex;
-      align-items: center;
-    }
-
-    & ::v-deep &__nav-right .nav-link {
-      white-space: nowrap;
-    }
-
-    & ::v-deep &__nav-right__notifications__menu {
-      width: 360px;
-    }
-
-    & ::v-deep &__nav-right__notifications__toggler {
-      position: relative;
-    }
-
-    & ::v-deep &__nav-right__notifications--unread &__nav-right__notifications__toggler {
-      color: $danger;
-    }
-
-    & ::v-deep &__nav-right__notifications__toggler__count {
-      position: absolute;
-      top: 0;
-      right: $spacer;
-    }
-
-    & ::v-deep &__nav-right__tutorial  {
-      &--show.nav-item .nav-link {
-        color: $primary;
-        margin-left: -3px; /* hack to prevent layout shift when the fond is bold */
-      }
     }
   }
+
+  & ::v-deep .nav-item .nav-link .feather,
+  & ::v-deep .navbar-text .feather,
+  & ::v-deep .dropdown-item .feather {
+    height: 20px;
+    width: 20px
+  }
+
+  & ::v-deep .nav-item,
+  & ::v-deep .nav-item .nav-link,
+  & ::v-deep .nav-item .dropdown-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  & ::v-deep &__nav-right .nav-link {
+    white-space: nowrap;
+  }
+
+  & ::v-deep &__nav-right__notifications__menu {
+    width: 360px;
+  }
+
+  & ::v-deep &__nav-right__notifications__toggler {
+    position: relative;
+  }
+
+  & ::v-deep &__nav-right__notifications--unread &__nav-right__notifications__toggler {
+    color: $danger;
+  }
+
+  & ::v-deep &__nav-right__notifications__toggler__count {
+    position: absolute;
+    top: 0;
+    right: $spacer;
+  }
+
+  & ::v-deep &__nav-right__tutorial {
+    &--show.nav-item .nav-link {
+      color: $primary;
+      margin-left: -3px; /* hack to prevent layout shift when the fond is bold */
+    }
+  }
+}
 </style>

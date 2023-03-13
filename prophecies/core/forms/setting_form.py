@@ -23,7 +23,6 @@ class SettingForm(ConstanceForm):
     def visibility_field_name(name):
         return '%s_visibility' % name
 
-
     def save(self):
         for name in settings.CONFIG:
             setting, created = Setting.objects.get_or_create(key=name)

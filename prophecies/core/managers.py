@@ -1,6 +1,7 @@
 from actstream.managers import ActionManager, stream
 from django.contrib.contenttypes.models import ContentType
 
+
 class ExtendedActionManager(ActionManager):
 
     def filter_actor_params(self, actor):

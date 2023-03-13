@@ -7,12 +7,12 @@ export default {
   components: {
     UserCard
   },
-  data () {
+  data() {
     return {
       mounted: false
     }
   },
-  async mounted () {
+  async mounted() {
     this.mounted = !!await this.$nextTick()
   },
   props: {
@@ -21,7 +21,7 @@ export default {
     },
     params: {
       type: Object,
-      default: () => ({ })
+      default: () => ({})
     },
     useDisplayName: {
       type: Boolean,
@@ -32,15 +32,15 @@ export default {
     }
   },
   computed: {
-    user () {
+    user() {
       return User.find(this.userId)
     },
-    to () {
+    to() {
       const username = this.user.username
-      const params = { username, ...this.params }
-      return { name: 'user-retrieve-profile', params }
+      const params = {username, ...this.params}
+      return {name: 'user-retrieve-profile', params}
     },
-    label () {
+    label() {
       if (this.useDisplayName) {
         return this.user.displayName
       }
@@ -64,12 +64,12 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .user-link {
-    &__card{
-      font-size: 1rem;
-      min-width: 100%;
-      width: 530px;
-      max-width: 90vw;
-    }
+.user-link {
+  &__card {
+    font-size: 1rem;
+    min-width: 100%;
+    width: 530px;
+    max-width: 90vw;
   }
+}
 </style>

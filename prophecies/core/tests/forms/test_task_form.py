@@ -5,7 +5,7 @@ from prophecies.core.forms.task_form import TaskForm
 
 
 class TaskFormTests(TestCase):
-    
+
     def setUp(self):
         self.olivia = User.objects.create(username='olivia')
         self.project = Project.objects.create(name='Pencil Papers')
@@ -21,7 +21,6 @@ class TaskFormTests(TestCase):
         form = TaskForm(data=data, instance=self.task)
         self.assertEqual(form.instance, self.task)
         self.assertTrue(form.is_valid())
-        
 
     def test_select_choice_group_for_the_first_time(self):
         self.task.choice_group = None
@@ -29,29 +28,28 @@ class TaskFormTests(TestCase):
         form = TaskForm(data=data, instance=self.task)
         self.assertTrue(form.is_valid())
         form.save()
-        
+
         data['choice_group'] = self.correctness
-        form = TaskForm(data,instance=self.task)
+        form = TaskForm(data, instance=self.task)
         self.assertTrue(form.is_valid())
-    
 
     def test_allow_change_choice_group_when_the_task_has_no_review(self):
         self.task.choice_group = self.correctness
         data = TaskForm(instance=self.task).initial
-        form = TaskForm(data,instance=self.task)
+        form = TaskForm(data, instance=self.task)
         self.assertTrue(form.is_valid())
         form.save()
-        
+
         data['choice_group'] = self.colorness
-        form = TaskForm(data,instance=self.task)
+        form = TaskForm(data, instance=self.task)
         self.assertTrue(form.is_valid())
         form.save()
-        
+
         data['choice_group'] = self.correctness
-        form = TaskForm(data,instance=self.task)
+        form = TaskForm(data, instance=self.task)
         self.assertTrue(form.is_valid())
         form.save()
-        
+
     def test_prevent_change_choice_group_when_the_task_has_reviews(self):
         TaskRecordReview.objects.create(task_record=self.task_record_blue)
         self.task.choice_group = self.correctness
@@ -59,15 +57,13 @@ class TaskFormTests(TestCase):
         form = TaskForm(data, instance=self.task)
         self.assertTrue(form.is_valid())
         form.save()
-        
+
         data['choice_group'] = self.colorness
         form = TaskForm(data, instance=self.task)
         self.assertTrue(form.fields['choice_group'].disabled)
         self.assertTrue(form.is_valid())
-        
-        
+
         data['choice_group'] = self.correctness
         form = TaskForm(data, instance=self.task)
         self.assertTrue(form.is_valid())
         form.save()
-    

@@ -25,14 +25,11 @@ class TaskRecordManager(models.Manager):
             return None
         return self.filter(uid=uid, task=task).first()
 
-
     def pending(self):
         return self.filter(status=StatusType.PENDING)
 
-
     def assigned(self):
         return self.filter(status=StatusType.ASSIGNED)
-
 
     def done(self):
         return self.filter(status=StatusType.DONE)
@@ -42,34 +39,37 @@ class TaskRecord(models.Model):
     objects = TaskRecordManager()
 
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='task_records')
-    uid = models.CharField(max_length=50, blank=True, null=True, verbose_name='UID', help_text="An optional unique identifier used to update task records in bulk")
+    uid = models.CharField(max_length=50, blank=True, null=True, verbose_name='UID',
+                           help_text="An optional unique identifier used to update task records in bulk")
     original_value = models.TextField(blank=True, null=True, help_text="Original value of the record")
     predicted_value = models.TextField(blank=True, null=True, help_text="Suggested value to be reviewed")
     metadata = models.JSONField(blank=True, null=True, help_text="Optional metadata for this record (in JSON)")
-    status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.PENDING, max_length=8, help_text="Status of the record. Set to done after it passes all task's rounds")
+    status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.PENDING, max_length=8,
+                              help_text="Status of the record. Set to done after it passes all task's rounds")
     rounds = models.PositiveIntegerField(default=0, help_text="Number of rounds this record was submitted to")
     priority = models.PositiveIntegerField(default=1, verbose_name="Priority")
     link = models.CharField(max_length=1000, null=True, blank=True, help_text="An optional link to the record")
-    embeddable_link = models.CharField(max_length=1000, null=True, blank=True, help_text="An optional alternative link to preview the record in an iframe")
+    embeddable_link = models.CharField(max_length=1000, null=True, blank=True,
+                                       help_text="An optional alternative link to preview the record in an iframe")
     locked = models.BooleanField(default=False, help_text="A user locked this task record")
-    locked_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, help_text="User who locked this task record", related_name="locked_task_records")
+    locked_by = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True,
+                                  help_text="User who locked this task record", related_name="locked_task_records")
     has_notes = models.BooleanField(default=False, help_text="One or more reviews have notes")
     has_disagreements = models.BooleanField(default=False, help_text="Reviews are different")
-    bookmarked_by = models.ManyToManyField(User, help_text="Users who bookmarked this task record", related_name='bookmarked_task_records', blank=True)
+    bookmarked_by = models.ManyToManyField(User, help_text="Users who bookmarked this task record",
+                                           related_name='bookmarked_task_records', blank=True)
 
     def __str__(self):
         return f'Record #{self.id} to be review in {self.task.name}'
 
-
     @cached_property
     def checkers(self):
-        return [ review.checker for review in self.reviews.all() ]
-
+        return [review.checker for review in self.reviews.all()]
 
     @cached_property
     def checkers_pretty(self):
         # Extract only the usernames
-        usernames = [checker.username for checker in self.checkers]        
+        usernames = [checker.username for checker in self.checkers]
         count = len(usernames)
         # Create a lambda for each case
         zero = lambda u: 'nobody'
@@ -77,8 +77,7 @@ class TaskRecord(models.Model):
         two = lambda u: ' and '.join(u)
         many = lambda u: ', '.join(u[0:-2]) + ', ' + ' and '.join(u[-2:])
         # Use the correct lambda depending on the count or use `many`
-        return { 0: zero, 1: one, 2: two, }.get(count, many)(usernames)
-
+        return {0: zero, 1: one, 2: two, }.get(count, many)(usernames)
 
     @cached_property
     def reviews_actions_query(self):
@@ -90,7 +89,6 @@ class TaskRecord(models.Model):
             query |= Q(action_object_content_type=ctype, action_object_object_id=id)
         return query
 
-
     @cached_property
     def actions_query(self):
         ctype = ContentType.objects.get_for_model(self)
@@ -101,20 +99,16 @@ class TaskRecord(models.Model):
         )
         return query
 
-
     @cached_property
     def actions(self):
         return Action.objects.public(self.actions_query | self.reviews_actions_query)
 
-
     def can_lock(self, user):
-        checkers_ids = [checker.id for checker in self.checkers ]
+        checkers_ids = [checker.id for checker in self.checkers]
         return not self.locked and user.id in checkers_ids
-
 
     def can_unlock(self, user):
         return self.locked and user.id is self.locked_by.id
-
 
     def computed_status(self):
         if self.reviews.count() == 0:
@@ -124,25 +118,21 @@ class TaskRecord(models.Model):
         else:
             return StatusType.ASSIGNED
 
-
     def computed_rounds(self):
         return self.reviews.latest_round(self)
-
 
     def computed_link(self):
         if self.link:
             return self.link
         elif self.task.record_link_template:
             return self.format_link_template(self.task.record_link_template)
-        
-        
+
     def computed_embeddable_link(self):
         if self.embeddable_link:
             return self.embeddable_link
         elif self.task.embeddable_record_link_template:
             return self.format_link_template(self.task.embeddable_record_link_template)
         return self.computed_link()
-    
 
     def format_link_template(self, link_template):
         opts = deepcopy(self.__dict__)
@@ -151,19 +141,18 @@ class TaskRecord(models.Model):
             opts['metadata'] = ExtendedNamespace(opts.get('metadata', {}))
         formatter = URLEncodedFormatter()
         return formatter.format(link_template, **opts)
-        
 
     def update_rounds_and_status(self):
         self.status = self.computed_status()
         self.rounds = self.computed_rounds()
         self.save(update_fields=['rounds', 'status'])
 
-
     @staticmethod
     def signal_update_rounds_and_status(sender, instance=None, created=False, **kwargs):
         if instance.task_record:
             # Call the instance method
             instance.task_record.update_rounds_and_status()
+
     @staticmethod
     def signal_delete_review(sender, instance=None, created=False, **kwargs):
         if instance.task_record:

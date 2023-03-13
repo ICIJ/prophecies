@@ -13,7 +13,7 @@ class OAuth2Provider(BaseOAuth2):
     SCOPE_SEPARATOR = ','
 
     def user_data(self, access_token, *args, **kwargs):
-        params = urlencode({ 'access_token': access_token })
+        params = urlencode({'access_token': access_token})
         url = settings.SOCIAL_AUTH_PROVIDER_PROFILE_URL + params
         return self.get_json(url)
 

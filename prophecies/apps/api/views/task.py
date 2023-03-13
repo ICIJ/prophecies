@@ -8,6 +8,7 @@ from prophecies.apps.api.views.choice_group import ChoiceGroupSerializer
 from prophecies.apps.api.views.project import ProjectSerializer
 from prophecies.apps.api.views.user import UserSerializer
 
+
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     project = ResourceRelatedField(many=False, read_only=True)
     checkers = ResourceRelatedField(many=True, read_only=True)
@@ -30,11 +31,11 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
         fields = ['id', 'url', 'choice_group', 'checkers', 'colors', 'created_at',
-            'description', 'name', 'project', 'priority', 'rounds',  'embeddable_links',
-            'task_records_count',  'task_records_done_count',
-            'user_task_records_count', 'user_task_records_done_count',
-            'user_progress_by_round', 'user_progress','status',
-            'progress', 'progress_by_round']
+                  'description', 'name', 'project', 'priority', 'rounds', 'embeddable_links',
+                  'task_records_count', 'task_records_done_count',
+                  'user_task_records_count', 'user_task_records_done_count',
+                  'user_progress_by_round', 'user_progress', 'status',
+                  'progress', 'progress_by_round']
 
     @lru_cache(maxsize=None)
     def get_user_progress_by_round(self, task):
@@ -84,7 +85,7 @@ class TaskViewSet(views.ReadOnlyModelViewSet):
     ordering = ['-id']
     # Queryset is overridden within the `get_queryset` method
     queryset = Task.objects.all()
-        
+
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Task.objects.none()

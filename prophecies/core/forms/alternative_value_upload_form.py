@@ -11,14 +11,12 @@ class AlternativeValueUploadForm(AbstractUploadForm):
         model = AlternativeValue
         csv_columns = ['name', 'value']
 
-
     def row_to_alternative_value(self, choice_group, row={}):
-        opts = { 'choice_group': choice_group }
+        opts = {'choice_group': choice_group}
         # collect allowed model field
         for field_name in self.get_csv_columns():
             opts[field_name] = row.get(field_name, None)
         return AlternativeValue(**opts)
-
 
     def save(self, commit=True):
         self.full_clean()

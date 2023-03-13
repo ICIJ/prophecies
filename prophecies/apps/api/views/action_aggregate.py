@@ -6,21 +6,21 @@ from prophecies.core.models import ActionAggregate
 from prophecies.apps.api.views.user import UserSerializer
 from prophecies.apps.api.views.task import TaskSerializer
 
+
 class ActionAggregateSerializer(serializers.ModelSerializer):
-    
     included_serializers = {
         'user': UserSerializer,
         'task': TaskSerializer,
     }
-    
+
     class JSONAPIMeta:
-        included_resources = ['user','task']
+        included_resources = ['user', 'task']
 
     class Meta:
         model = ActionAggregate
         resource_name = 'ActionAggregate'
-        fields = ('verb','date','user','task','count')
-    
+        fields = ('verb', 'date', 'user', 'task', 'count')
+
 
 class ActionAggregateViewSet(views.ReadOnlyModelViewSet):
     serializer_class = ActionAggregateSerializer
@@ -28,10 +28,10 @@ class ActionAggregateViewSet(views.ReadOnlyModelViewSet):
     http_method_names = ['get', 'head']
     permission_classes = [IsAuthenticated]
     ordering = ['-date']
-    filterset_class= ActionAggregateFilter
+    filterset_class = ActionAggregateFilter
     filter_backends = [DjangoFilterBackend]
     queryset = ActionAggregate.objects.all().order_by('-date')
-            
+
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return ActionAggregate.objects.none()

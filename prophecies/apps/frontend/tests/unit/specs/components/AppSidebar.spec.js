@@ -1,4 +1,4 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
+import {createLocalVue, shallowMount} from '@vue/test-utils'
 import AppBrand from '@/components/AppBrand'
 import AppSidebar from '@/components/AppSidebar'
 import AppVersion from '@/components/AppVersion'
@@ -15,8 +15,8 @@ describe('AppSidebar', () => {
     // Load the settings
     await core.configure()
     // Those core properties must be available for each test
-    const { router, i18n } = core
-    wrapper = shallowMount(AppSidebar, { i18n, router, localVue })
+    const {router, i18n} = core
+    wrapper = shallowMount(AppSidebar, {i18n, router, localVue})
   })
 
   it('should display an AppBrand component', () => {

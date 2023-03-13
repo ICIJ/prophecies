@@ -1,5 +1,5 @@
 <script>
-import { template } from 'lodash'
+import {template} from 'lodash'
 import User from '@/models/User'
 
 export default {
@@ -14,13 +14,13 @@ export default {
     }
   },
   computed: {
-    user () {
+    user() {
       return User.find(this.userId)
     },
-    userAvatarUrl () {
+    userAvatarUrl() {
       const interpolate = this.$config.get('templateInterpolate')
       const avatarUrlTemplate = this.$config.get('avatarUrlTemplate')
-      const compiled = template(avatarUrlTemplate, { interpolate })
+      const compiled = template(avatarUrlTemplate, {interpolate})
       try {
         return compiled(this.user)
       } catch (_) {
@@ -32,5 +32,5 @@ export default {
 </script>
 
 <template>
-  <img :src="userAvatarUrl" class="user-avatar rounded-circle" :height="size" :width="size" />
+  <img :src="userAvatarUrl" class="user-avatar rounded-circle" :height="size" :width="size"/>
 </template>

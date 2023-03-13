@@ -1,4 +1,4 @@
-import { createStore, default as defaultStore } from '@/store'
+import {createStore, default as defaultStore} from '@/store'
 
 describe('store', () => {
   describe('default', () => {

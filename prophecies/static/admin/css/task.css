@@ -1,42 +1,42 @@
 a.task-addon {
-  display: inline-flex;
-  align-items: center;
-  box-shadow: 0 0 0 1px var(--task-addon-bg);
-  padding: .10em .25em;
-  border-radius: .25em;
-  color: inherit;
-  font-weight: bold;
-  white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 0 0 1px var(--task-addon-bg);
+    padding: .10em .25em;
+    border-radius: .25em;
+    color: inherit;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
 a.task-addon:hover {
-  color: var(--link-hover-color);
-  box-shadow: 0 0 0 1px var(--link-hover-color);
-  text-decoration: none;
+    color: var(--link-hover-color);
+    box-shadow: 0 0 0 1px var(--link-hover-color);
+    text-decoration: none;
 }
 
 a.task-addon:active,
 a.task-addon:focus {
-  color: var(--link-selected-fg);
-  box-shadow: 0 0 0 1px var(--link-selected-fg);
-  text-decoration: none;
+    color: var(--link-selected-fg);
+    box-shadow: 0 0 0 1px var(--link-selected-fg);
+    text-decoration: none;
 }
 
 a.task-addon:before {
-  content: "";
-  height: 1em;
-  width: 1em;
-  border-radius: .25em;
-  display: block;
-  background: var(--task-addon-bg);
-  margin-right: .25em;
+    content: "";
+    height: 1em;
+    width: 1em;
+    border-radius: .25em;
+    display: block;
+    background: var(--task-addon-bg);
+    margin-right: .25em;
 }
 
 .task-record-display__checkers:empty {
-  display: none;
+    display: none;
 }
 
 .task-record-display__checkers:before {
-  content: "Assigned to ";
-  font-weight: 300;
+    content: "Assigned to ";
+    font-weight: 300;
 }

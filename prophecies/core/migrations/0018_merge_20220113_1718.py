@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0015_taskrecord_saved_by'),
         ('core', '0017_auto_20220113_1634'),

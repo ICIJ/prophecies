@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+
 class LevelType(models.TextChoices):
     INFO = 'INFO', _('Info')
     ERROR = 'ERROR', _('Error')
@@ -12,7 +13,7 @@ class LevelType(models.TextChoices):
 
 
 class UserNotificationQuerySet(models.QuerySet):
-  
+
     def read(self):
         """
         Return only read items.
@@ -30,11 +31,11 @@ class UserNotificationQuerySet(models.QuerySet):
         Mark as read any unread messages in the current queryset.
         """
         return self.unread().update(read=True)
-    
+
     def user_scope(self, user):
         return self.filter(recipient=user)
-    
-    
+
+
 class UserNotificationManager(models.Manager):
 
     def read(self):
@@ -54,13 +55,13 @@ class UserNotificationManager(models.Manager):
         Mark as read any unread messages in the current queryset.
         """
         return self.get_queryset().mark_as_read()
-    
+
     def user_scope(self, user):
         return self.get_queryset().user_scope(user)
-    
+
     def get_queryset(self) -> UserNotificationQuerySet:
         return UserNotificationQuerySet(model=self.model, using=self._db, hints=self._hints)
-    
+
 
 class UserNotification(models.Model):
     objects = UserNotificationManager()

@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0008_auto_20210907_1216'),
     ]
@@ -13,6 +12,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='task',
             name='status',
-            field=models.CharField(blank=True, choices=[('OPEN', 'Open'), ('CLOSED', 'Closed'), ('LOCKED', 'Locked')], default='OPEN', help_text='Status of the task. Set to closed or locked will prevent any update of the records.', max_length=6),
+            field=models.CharField(blank=True, choices=[('OPEN', 'Open'), ('CLOSED', 'Closed'), ('LOCKED', 'Locked')],
+                                   default='OPEN',
+                                   help_text='Status of the task. Set to closed or locked will prevent any update of the records.',
+                                   max_length=6),
         ),
     ]

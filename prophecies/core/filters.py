@@ -7,17 +7,18 @@ from actstream.models import Action, actor_stream, target_stream
 from django.contrib.auth.models import User
 
 
-
 class ActionFilter(FilterSet):
     user_stream = CharFilter(method='user_stream_filter')
+
     class Meta:
         model = Action
-        fields = {'verb':['exact', 'in']}
-        
+        fields = {'verb': ['exact', 'in']}
+
     def user_stream_filter(self, queryset, name, value):
         user = User.objects.get(pk=value)
-        return queryset & (actor_stream(user) |  target_stream(user))
-    
+        return queryset & (actor_stream(user) | target_stream(user))
+
+
 class TaskRecordFilter(FilterSet):
     reviewed = CharFilter(method='reviewed_filter')
 
@@ -47,36 +48,36 @@ class TaskRecordReviewFilter(FilterSet):
     class Meta:
         model = TaskRecordReview
         fields = {
-          'checker': ('exact', 'in', 'isnull'),
-          'choice': ('exact', 'in', 'isnull'),
-          'alternative_value': ('icontains', 'exact', 'iexact', 'contains', 'in', 'iregex'),
-          'task_record__priority': ('exact', 'in'),
-          'task_record__rounds': ('exact', 'in'),
-          'task_record__task': ('exact', 'in'),
-          'task_record__predicted_value': ('icontains', 'exact', 'iexact', 'contains', 'in', 'iregex'),
-          'task_record__original_value': ('icontains', 'exact', 'iexact', 'contains', 'in'),
-          'task_record__reviews__checker': ('exact', 'in'),
-          'task_record__reviews__choice': ('exact', 'in'),
-          'task_record__reviews__id': ('exact', 'in'),
+            'checker': ('exact', 'in', 'isnull'),
+            'choice': ('exact', 'in', 'isnull'),
+            'alternative_value': ('icontains', 'exact', 'iexact', 'contains', 'in', 'iregex'),
+            'task_record__priority': ('exact', 'in'),
+            'task_record__rounds': ('exact', 'in'),
+            'task_record__task': ('exact', 'in'),
+            'task_record__predicted_value': ('icontains', 'exact', 'iexact', 'contains', 'in', 'iregex'),
+            'task_record__original_value': ('icontains', 'exact', 'iexact', 'contains', 'in'),
+            'task_record__reviews__checker': ('exact', 'in'),
+            'task_record__reviews__choice': ('exact', 'in'),
+            'task_record__reviews__id': ('exact', 'in'),
         }
-    
+
     @staticmethod
     def get_as_boolean(value):
         if value == '0' or value == '1':
             return bool(int(value))
         return None
-    
+
     def boolean_filter_on(self, queryset, filter_name, value):
         filter_value = self.get_as_boolean(value)
         if filter_value is not None:
             ftr = {filter_name: filter_value}
             return queryset \
-                    .filter(**ftr)
+                .filter(**ftr)
         return queryset
-    
+
     def has_disagreements_filter(self, queryset, name, value):
         return self.boolean_filter_on(queryset, "task_record__has_disagreements", value)
-        
+
     def has_notes_filter(self, queryset, name, value):
         return self.boolean_filter_on(queryset, "task_record__has_notes", value)
 
@@ -95,7 +96,7 @@ class TaskRecordReviewFilter(FilterSet):
     def reviewed_filter(self, queryset, name, value):
         filter_value = self.get_as_boolean(value)
         if filter_value is not None:
-            return queryset       
+            return queryset
         if filter_value:
             return queryset \
                 .filter(task_record__reviews__status=StatusType.PENDING)
@@ -103,23 +104,24 @@ class TaskRecordReviewFilter(FilterSet):
             return queryset \
                 .filter(task_record__reviews__status=StatusType.DONE) \
                 .exclude(task_record__reviews__status=StatusType.PENDING)
-                
+
     def all_rounds_reviewed_filter(self, queryset, name, value):
         filter_value = self.get_as_boolean(value)
         if filter_value is not None:
             from prophecies.core.models import TaskRecord
-            status =  TRStatusType.DONE if filter_value else TRStatusType.ASSIGNED
+            status = TRStatusType.DONE if filter_value else TRStatusType.ASSIGNED
             tr = TaskRecord.objects.filter(status=status)
             return queryset.filter(task_record_id__in=tr)
-            
+
         return queryset
-    
+
+
 class ActionAggregateFilter(FilterSet):
     date = DateFromToRangeFilter()
-    
+
     class Meta:
         model = ActionAggregate
-        
+
         fields = {
             'user': ('exact', 'in',),
             'verb': ('exact', 'in',),

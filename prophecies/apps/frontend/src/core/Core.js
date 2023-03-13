@@ -24,21 +24,23 @@ import App from '@/views/App'
 import vShortkey from '@/directives/shortkey'
 import Shortkey from '@/plugins/Shortkey'
 
-class Base {}
+class Base {
+}
+
 const Behaviors = compose(LocaleMixin)(Base)
 
 /**
-  @class
-  @classdesc Class representing the core application.
-  @mixes LocaleMixin
-  @typicalname prophecies
-*/
+ @class
+ @classdesc Class representing the core application.
+ @mixes LocaleMixin
+ @typicalname prophecies
+ */
 class Core extends Behaviors {
   /**
    * Create an application
    * @param {Object} LocalVue - The Vue class to instantiate the application with.
    */
-  constructor (LocalVue = Vue) {
+  constructor(LocalVue = Vue) {
     super(LocalVue)
     this.LocalVue = LocalVue
     // Disable production tip when not in production
@@ -53,8 +55,8 @@ class Core extends Behaviors {
    * Register all icons components
    * @returns {Array} icons components
    */
-  registerIcons () {
-    Object.values(icons).forEach(({ name, ...icon }) => {
+  registerIcons() {
+    Object.values(icons).forEach(({name, ...icon}) => {
       if (name) {
         this.LocalVue.component(name, icon)
       }
@@ -67,7 +69,7 @@ class Core extends Behaviors {
    * @param {Object} options - Option to pass to the plugin
    * @returns {Core} the current instance of Core
    */
-  use (Plugin, options) {
+  use(Plugin, options) {
     this.LocalVue.use(Plugin, options)
     return this
   }
@@ -76,7 +78,7 @@ class Core extends Behaviors {
    * Configure all default Vue plugins for this application
    * @returns {Core} the current instance of Core
    */
-  useAll () {
+  useAll() {
     this.useI18n()
     this.useBootstrapVue()
     this.useCommons()
@@ -90,7 +92,7 @@ class Core extends Behaviors {
    * Configure vue-i18n plugin
    * @returns {Core} the current instance of Core
    */
-  useI18n () {
+  useI18n() {
     this.use(VueI18n)
     this.i18n = new VueI18n({
       locale: settings.defaultLocale,
@@ -106,7 +108,7 @@ class Core extends Behaviors {
    * Configure bootstrap-vue plugin
    * @returns {Core} the current instance of Core
    */
-  useBootstrapVue () {
+  useBootstrapVue() {
     this.use(BootstrapVue, {
       BPopover: {
         boundaryPadding: 14
@@ -119,7 +121,7 @@ class Core extends Behaviors {
    * Configure vue-router plugin
    * @returns {Core} the current instance of Core
    */
-  useRouter () {
+  useRouter() {
     this.use(VueRouter)
     this.router = new VueRouter(router)
     guards(this)
@@ -130,7 +132,7 @@ class Core extends Behaviors {
    * Configure most common Vue plugins (Murmur, VueScrollTo)
    * @returns {Core} the current instance of Core
    */
-  useCommons () {
+  useCommons() {
     // Common plugins
     this.use(Murmur)
     this.use(VueScrollTo)
@@ -143,9 +145,9 @@ class Core extends Behaviors {
    * Configure vue-wait plugin
    * @returns {Core} the current instance of Core
    */
-  useWait () {
+  useWait() {
     this.use(VueWait)
-    this.wait = new VueWait({ useVuex: true })
+    this.wait = new VueWait({useVuex: true})
     return this
   }
 
@@ -153,10 +155,10 @@ class Core extends Behaviors {
    * Add a $core property to the instance's Vue
    * @returns {Core} the current instance of Core
    */
-  useCore () {
+  useCore() {
     const core = this
     this.use(class VueCore {
-      static install (Vue) {
+      static install(Vue) {
         Vue.prototype.$core = core
       }
     })
@@ -170,7 +172,7 @@ class Core extends Behaviors {
    * @reject {Object} - The Error object
    * @returns {Promise<Object>}
    */
-  async configure () {
+  async configure() {
     try {
       // Murmur exposes a config attribute which share a Config object
       // with the current vue instance.
@@ -194,7 +196,7 @@ class Core extends Behaviors {
    * @param {String} [selector=#app] - Query selector to the mounting point
    * @returns {Vue} The instantiated Vue
    */
-  mount (selector = '#app') {
+  mount(selector = '#app') {
     // Render function returns a router-view component by default
     const render = h => h(App)
     // We do not necessarily use the default Vue so we can use this function
@@ -213,7 +215,7 @@ class Core extends Behaviors {
   /**
    * Build a promise to be resolved when the application is configured.
    */
-  defer () {
+  defer() {
     this._ready = new Promise((resolve, reject) => {
       this._readyResolve = resolve
       this._readyReject = reject
@@ -227,7 +229,7 @@ class Core extends Behaviors {
    * @fullfil {Object} Current user
    * @type {Promise<Object>}
    */
-  async getUser (cache = true) {
+  async getUser(cache = true) {
     if (!User.exists() || !cache) {
       await User.api().me()
     }
@@ -241,7 +243,7 @@ class Core extends Behaviors {
    * @fullfil {Object} Current user
    * @type {Promise<Object>}
    */
-  async getSettings (cache = true) {
+  async getSettings(cache = true) {
     if (!Setting.exists() || !cache) {
       await Setting.api().get()
     }
@@ -253,7 +255,7 @@ class Core extends Behaviors {
    * @param {String} title - Title to append to the page
    * @param {String} [suffix=Prophecies] - Suffix to the title
    */
-  setPageTitle (title = null, suffix = 'Prophecies') {
+  setPageTitle(title = null, suffix = 'Prophecies') {
     if (document && document.title) {
       document.title = title ? `${title} - ${suffix}` : suffix
     }
@@ -264,7 +266,7 @@ class Core extends Behaviors {
    * @fullfil {Object} The actual application core instance.
    * @type {Promise<Object>}
    */
-  get ready () {
+  get ready() {
     if (!this._ready) {
       this.defer()
     }
@@ -275,7 +277,7 @@ class Core extends Behaviors {
    * The application core instance
    * @type {Core}
    */
-  get core () {
+  get core() {
     return this
   }
 
@@ -283,7 +285,7 @@ class Core extends Behaviors {
    * The Vue class to instantiate the application with
    * @type {Vue}
    */
-  get localVue () {
+  get localVue() {
     return this.LocalVue
   }
 
@@ -291,7 +293,7 @@ class Core extends Behaviors {
    * The Vuex instance
    * @type {Vuex.Store}
    */
-  get store () {
+  get store() {
     return store
   }
 
@@ -299,7 +301,7 @@ class Core extends Behaviors {
    * The configuration object provided by Murmur
    * @type {Object}
    */
-  get config () {
+  get config() {
     return Murmur.config
   }
 
@@ -308,7 +310,7 @@ class Core extends Behaviors {
    * @param {...Mixed} options - Options to pass to the Core constructor
    * @returns {Core}
    */
-  static init (...options) {
+  static init(...options) {
     return new Core(...options)
   }
 }

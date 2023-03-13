@@ -1,4 +1,4 @@
-import { textContrast } from '@/utils/color'
+import {textContrast} from '@/utils/color'
 
 describe('utils/color', () => {
   describe('textContrast', () => {

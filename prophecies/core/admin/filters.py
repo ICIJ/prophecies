@@ -17,7 +17,7 @@ class ReviewedTaskRecordFilter(admin.SimpleListFilter):
             ('1', 'Reviewed'),
             ('0', 'Not reviewed'),
         )
-    
+
     def queryset(self, request, queryset):
-        params = { 'reviewed': self.value() }
+        params = {'reviewed': self.value()}
         return TaskRecordFilter(params, queryset=queryset).qs

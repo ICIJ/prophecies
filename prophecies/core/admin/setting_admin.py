@@ -12,7 +12,7 @@ class SettingAdmin(ConstanceAdmin):
         config_value = super().get_config_value(name, options, form, initial)
         config_value['visibility_field'] = form['%s_visibility' % name]
         return config_value
-    
+
 
 Config._meta.app_label = 'core'
 Config._meta.object_name = 'Setting'

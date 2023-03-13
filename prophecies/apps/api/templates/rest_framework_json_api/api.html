@@ -5,63 +5,63 @@
 {% block style %}
   {{ block.super }}
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
 
-    body {
-      background: #fff;
-      font-family: "Inter", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      body {
+          background: #fff;
+          font-family: "Inter", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
-      --quiet: #515858;
-      --primary: #235B59;
-    }
+          --quiet: #515858;
+          --primary: #235B59;
+      }
 
-    h1, h2, h3, h4, h5 {
-      font-family: inherit;
-      font-weight: 600;
-    }
+      h1, h2, h3, h4, h5 {
+          font-family: inherit;
+          font-weight: 600;
+      }
 
-    .navbar-inverse {
-      background: black;
-      border-top: 0;
-    }
+      .navbar-inverse {
+          background: black;
+          border-top: 0;
+      }
 
-    .navbar-inverse  a.navbar-brand {
-      font-weight: 800;
-      font-size: 24px;
-      position: relative;
-      color: #fff;
-    }
+      .navbar-inverse a.navbar-brand {
+          font-weight: 800;
+          font-size: 24px;
+          position: relative;
+          color: #fff;
+      }
 
-    .navbar-brand sup {
-      text-transform: uppercase;
-      font-size: 10px;
-      color: var(--quiet);
-      top: -1.2em;
-    }
+      .navbar-brand sup {
+          text-transform: uppercase;
+          font-size: 10px;
+          color: var(--quiet);
+          top: -1.2em;
+      }
 
-    .btn .glyphicon {
-      font-size: 0.9em;
-    }
+      .btn .glyphicon {
+          font-size: 0.9em;
+      }
 
-    body a, body a:hover,
-    .pagination > li > a, .pagination > li > span {
-      color: var(--primary);
-    }
+      body a, body a:hover,
+      .pagination > li > a, .pagination > li > span {
+          color: var(--primary);
+      }
 
-    .btn-primary,
-    .btn-primary:hover,
-    .pagination > .active > a,
-    .pagination > .active > span,
-    .pagination > .active > a:hover,
-    .pagination > .active > span:hover,
-    .pagination > .active > a:focus,
-    .pagination > .active > span:focus,
-    .list-group-item.active,
-    .list-group-item.active:hover,
-    .list-group-item.active:focus {
-      background: var(--primary);
-      border-color: var(--primary);
-    }
+      .btn-primary,
+      .btn-primary:hover,
+      .pagination > .active > a,
+      .pagination > .active > span,
+      .pagination > .active > a:hover,
+      .pagination > .active > span:hover,
+      .pagination > .active > a:focus,
+      .pagination > .active > span:focus,
+      .list-group-item.active,
+      .list-group-item.active:hover,
+      .list-group-item.active:focus {
+          background: var(--primary);
+          border-color: var(--primary);
+      }
   </style>
 {% endblock %}
 

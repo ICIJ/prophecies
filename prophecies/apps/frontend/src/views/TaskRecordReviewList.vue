@@ -1,5 +1,5 @@
 <script>
-import { compact, get, filter, isEqual, keys, noop, uniqueId, values } from 'lodash'
+import {compact, get, filter, isEqual, keys, noop, uniqueId, values} from 'lodash'
 
 import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
@@ -43,7 +43,7 @@ export default {
       type: [Number, String]
     }
   },
-  data () {
+  data() {
     return {
       countBy: [],
       pagination: null,
@@ -54,23 +54,23 @@ export default {
     }
   },
   watch: {
-    pageNumber (value) {
+    pageNumber(value) {
       if (this.pagination && this.pagination.page !== value) {
         return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
       }
     },
-    pageSize () {
+    pageSize() {
       return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
     },
-    sort () {
+    sort() {
       return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
     },
-    routeFilters (value, previousValue) {
+    routeFilters(value, previousValue) {
       if (!isEqual(value, previousValue)) {
         return this.waitFor(this.fetchTaskRecordReviewsLoader, this.fetchTaskRecordReviews)
       }
     },
-    taskRecordReviewIds (value) {
+    taskRecordReviewIds(value) {
       // Maintain a clean list of selected ids
       Object.entries(this.selectedIds).forEach(([id]) => {
         // The task record review is not present on the page anymore...
@@ -81,7 +81,7 @@ export default {
       })
     }
   },
-  created () {
+  created() {
     this.$root.$on('prophecies::toggleCinematicView', () => {
       this.showCinematicView = !this.showCinematicView
     })
@@ -89,64 +89,64 @@ export default {
   },
   computed: {
     selectAll: {
-      set (checked) {
-        this.taskRecordReviews.forEach(({ id }) => {
+      set(checked) {
+        this.taskRecordReviews.forEach(({id}) => {
           this.$set(this.selectedIds, id, checked)
         })
       },
-      get () {
+      get() {
         const selectedIds = values(this.selectedIds)
         return this.taskRecordReviews.length > 0 && compact(selectedIds).length === this.taskRecordReviews.length
       }
     },
-    pageNumber () {
+    pageNumber() {
       return Number(this.$route.query['page[number]']) || 1
     },
     pageSize: {
-      get () {
+      get() {
         return String(this.$route.query['page[size]'] || '10')
       },
-      set (pageSize) {
-        const query = { ...this.$route.query, 'page[size]': pageSize }
-        this.$router.push({ path: this.$route.path, query }, noop)
+      set(pageSize) {
+        const query = {...this.$route.query, 'page[size]': pageSize}
+        this.$router.push({path: this.$route.path, query}, noop)
       }
     },
     sort: {
-      get () {
+      get() {
         return this.$route.query.sort || 'task_record__id'
       },
-      set (sort) {
-        if (isEqual({ ...this.$route.query, sort }, this.$route.query)) {
-          const query = { 'page[size]': this.pageSize, ...this.routeFiltersQueryParams }
-          this.$router.push({ path: this.$route.path, query }, noop)
+      set(sort) {
+        if (isEqual({...this.$route.query, sort}, this.$route.query)) {
+          const query = {'page[size]': this.pageSize, ...this.routeFiltersQueryParams}
+          this.$router.push({path: this.$route.path, query}, noop)
         }
       }
     },
-    hasSorting () {
+    hasSorting() {
       return this.sort !== 'task_record__id'
     },
-    hasFilters () {
+    hasFilters() {
       return !!keys(this.routeFilters).length
     },
-    hasSelectedAndLockedRecords () {
+    hasSelectedAndLockedRecords() {
       return this.selectedAndLockedIdsCount > 0
     },
-    hasSelectedRecords () {
+    hasSelectedRecords() {
       return this.selectedIdsCount > 0
     },
-    showAppliedFilters () {
+    showAppliedFilters() {
       return !this.showFilters && (this.hasFilters || this.hasSorting)
     },
-    isBulkSelectChoiceFormDisabled () {
+    isBulkSelectChoiceFormDisabled() {
       return !this.isTaskOpen || !this.hasSelectedRecords || this.$wait.is(this.bulkSelectChoiceLoader)
     },
-    selectedIdsCount () {
+    selectedIdsCount() {
       return this.selectedIdsList.length
     },
-    selectedAndLockedIdsCount () {
+    selectedAndLockedIdsCount() {
       return this.selectedAndLockedIdsList.length
     },
-    selectedIdsList () {
+    selectedIdsList() {
       return Object.entries(this.selectedIds).reduce((list, [id, selected]) => {
         if (selected) {
           list.push(id)
@@ -154,57 +154,57 @@ export default {
         return list
       }, [])
     },
-    selectedAndLockedIdsList () {
+    selectedAndLockedIdsList() {
       return filter(this.selectedIdsList, id => {
         return this.isTaskRecordReviewLocked(id)
       })
     },
-    selectedAndUnlockedIdsList () {
+    selectedAndUnlockedIdsList() {
       return filter(this.selectedIdsList, id => {
         return !this.isTaskRecordReviewLocked(id)
       })
     },
-    filters () {
+    filters() {
       // Method from the mixins
       return this.getTaskFilters(this.task)
     },
-    otherQueryParams () {
+    otherQueryParams() {
       return Object.entries(this.$route.query).reduce((all, [key, value]) => {
-        if (!this.isFiltersParam(this.filters, { key })) {
+        if (!this.isFiltersParam(this.filters, {key})) {
           all[key] = value
         }
         return all
       }, {})
     },
-    routeFiltersQueryParams () {
+    routeFiltersQueryParams() {
       return Object.entries(this.$route.query).reduce((all, [key, value]) => {
-        if (this.isFiltersParam(this.filters, { key })) {
+        if (this.isFiltersParam(this.filters, {key})) {
           all[key] = value
         }
         return all
       }, {})
     },
     routeFilters: {
-      get () {
+      get() {
         return Object.entries(this.$route.query).reduce((all, [key, value]) => {
-          if (this.isFiltersParam(this.filters, { key })) {
+          if (this.isFiltersParam(this.filters, {key})) {
             all[key] = value
           }
           return all
         }, {})
       },
-      set (routeFiltersQueryParams) {
+      set(routeFiltersQueryParams) {
         if (!isEqual(routeFiltersQueryParams, this.routeFiltersQueryParams)) {
           const otherQueryParams = this.otherQueryParams
-          const query = { ...otherQueryParams, ...routeFiltersQueryParams, 'page[number]': 1 }
-          return this.$router.push({ path: this.$route.path, query }, noop)
+          const query = {...otherQueryParams, ...routeFiltersQueryParams, 'page[number]': 1}
+          return this.$router.push({path: this.$route.path, query}, noop)
         }
       }
     },
-    appliedRouteFiltersQueryParams () {
+    appliedRouteFiltersQueryParams() {
       return this.mapRouteFiltersToAppliedQueryParams(this.routeFilters, this.task)
     },
-    task () {
+    task() {
       return Task
         .query()
         .with('checkers')
@@ -213,16 +213,16 @@ export default {
         .with('choiceGroup.choices')
         .find(this.taskId)
     },
-    taskIsNotOpened () {
+    taskIsNotOpened() {
       return this.task.status !== 'OPEN'
     },
-    taskRecordReviews () {
+    taskRecordReviews() {
       return TaskRecordReview
         .query()
         .whereIdIn(this.taskRecordReviewIds)
         .get()
     },
-    taskRecordReviewsParams () {
+    taskRecordReviewsParams() {
       return {
         ...this.appliedRouteFiltersQueryParams,
         'filter[task_record__task]': this.taskId,
@@ -233,70 +233,70 @@ export default {
         sort: this.sort
       }
     },
-    isTaskOpen () {
+    isTaskOpen() {
       return this.task && this.task.status === 'OPEN'
     },
-    trailingTaskRecordReview () {
+    trailingTaskRecordReview() {
       return this.taskRecordReviews[this.taskRecordReviews.length - 1]
     },
-    fetchAllLoader () {
+    fetchAllLoader() {
       return uniqueId('load-all-task-record-review-')
     },
-    fetchTaskRecordReviewsLoader () {
+    fetchTaskRecordReviewsLoader() {
       return uniqueId('load-task-record-review-')
     },
-    bulkSelectChoiceLoader () {
+    bulkSelectChoiceLoader() {
       return uniqueId('bulk-select-choice-')
     },
-    firstPendingTaskRecordReview () {
+    firstPendingTaskRecordReview() {
       return TaskRecordReview.query()
         .whereIdIn(this.taskRecordReviewIds)
         .where('status', 'PENDING')
         .where('locked', false)
         .first()
     },
-    firstPendingTaskRecordReviewId () {
+    firstPendingTaskRecordReviewId() {
       return get(this, 'firstPendingTaskRecordReview.id')
     },
-    filtersTogglerVariant () {
+    filtersTogglerVariant() {
       return this.showFilters ? 'primary' : 'outline-primary'
     },
-    tipQueryParams () {
-      return { 'filter[task]': this.task?.id, 'filter[project]': this.task?.projectId }
+    tipQueryParams() {
+      return {'filter[task]': this.task?.id, 'filter[project]': this.task?.projectId}
     }
   },
   methods: {
-    async setup () {
+    async setup() {
       try {
         await this.waitFor(this.fetchAllLoader, this.fetchAll)
         this.$core.setPageTitle(this.task.name)
       } catch (error) {
         const title = this.$t('general.unableToFindThisResource')
-        this.$router.replace({ name: 'error', params: { title, error } })
+        this.$router.replace({name: 'error', params: {title, error}})
       }
     },
-    applyFilters (query) {
-      return this.$router.push({ path: this.$route.path, query }, noop)
+    applyFilters(query) {
+      return this.$router.push({path: this.$route.path, query}, noop)
     },
-    applyPageParams ({ pageSize, sort }) {
+    applyPageParams({pageSize, sort}) {
       this.$bvModal.hide('modal-page-params')
-      const query = { ...this.$route.query, 'page[size]': pageSize, sort }
-      return this.$router.push({ path: this.$route.path, query }, noop)
+      const query = {...this.$route.query, 'page[size]': pageSize, sort}
+      return this.$router.push({path: this.$route.path, query}, noop)
     },
-    clearFilters () {
+    clearFilters() {
       this.$set(this, 'routeFilters', {})
     },
-    async fetchTask () {
-      const params = { include: 'project,checkers' }
-      return Task.api().find(this.taskId, { params })
+    async fetchTask() {
+      const params = {include: 'project,checkers'}
+      return Task.api().find(this.taskId, {params})
     },
-    async fetchChoiceGroup () {
-      const params = { include: 'alternative_values,choices' }
-      return ChoiceGroup.api().find(this.task.choiceGroupId, { params })
+    async fetchChoiceGroup() {
+      const params = {include: 'alternative_values,choices'}
+      return ChoiceGroup.api().find(this.task.choiceGroupId, {params})
     },
-    async fetchTaskRecordReviews () {
+    async fetchTaskRecordReviews() {
       const params = this.taskRecordReviewsParams
-      const { response } = await TaskRecordReview.api().get('', { params })
+      const {response} = await TaskRecordReview.api().get('', {params})
       const countBy = get(response, 'data.meta.countBy', null)
       const pagination = get(response, 'data.meta.pagination', null)
       const taskRecordReviewIds = get(response, 'data.data', []).map(t => t.id)
@@ -304,63 +304,63 @@ export default {
       this.$set(this, 'pagination', pagination)
       this.$set(this, 'taskRecordReviewIds', taskRecordReviewIds)
     },
-    async goToPage (pageNumber) {
-      const query = { ...this.$route.query, 'page[number]': pageNumber }
-      await this.$router.push({ path: this.$route.path, query }, noop)
+    async goToPage(pageNumber) {
+      const query = {...this.$route.query, 'page[number]': pageNumber}
+      await this.$router.push({path: this.$route.path, query}, noop)
     },
-    async goToNextPage () {
+    async goToNextPage() {
       const currentPage = parseInt(this.pageNumber)
       // Don't go to a page if it doesn't exist
       if (currentPage < parseInt(this.pagination.pages)) {
         return this.goToPage(currentPage + 1)
       }
     },
-    async goToPreviousPage () {
+    async goToPreviousPage() {
       const currentPage = parseInt(this.pageNumber)
       // Don't go to a page if it doesn't exist
       if (currentPage > 1) {
         return this.goToPage(currentPage - 1)
       }
     },
-    async scrollToActiveTaskRecordReviewCard ({ id }) {
+    async scrollToActiveTaskRecordReviewCard({id}) {
       if (!this.firstPendingTaskRecordReview && this.isTrailingTaskRecordReview(id)) {
         return this.goToNextPage()
       }
       const selector = '.task-record-review-card--active'
       const element = this.$el.querySelector(selector)
-      const options = { behavior: 'smooth', block: 'center' }
+      const options = {behavior: 'smooth', block: 'center'}
       if (element) {
         element.scrollIntoView(options)
       }
     },
-    isTaskRecordReviewActive (id) {
+    isTaskRecordReviewActive(id) {
       const isSelected = this.isTaskRecordReviewSelected(id)
       return !this.showCinematicView && !isSelected && this.firstPendingTaskRecordReviewId === id
     },
-    isTrailingTaskRecordReview (id) {
+    isTrailingTaskRecordReview(id) {
       return this.trailingTaskRecordReview.id === id
     },
-    isTaskRecordReviewSelected (id) {
+    isTaskRecordReviewSelected(id) {
       return !!this.selectedIds[id]
     },
-    isTaskRecordReviewLocked (id) {
+    isTaskRecordReviewLocked(id) {
       const review = TaskRecordReview.query().with('taskRecord').find(id)
       // When task record is not found, we assume the review is not locked
       return get(review, 'taskRecord.locked', false)
     },
-    isTaskRecordReviewFrozen (id) {
+    isTaskRecordReviewFrozen(id) {
       const isLoading = this.$wait.is(this.bulkSelectChoiceLoader)
       return isLoading && this.isTaskRecordReviewSelected(id)
     },
-    selectTaskRecordReview (id, toggler) {
+    selectTaskRecordReview(id, toggler) {
       this.$set(this.selectedIds, id, toggler)
     },
-    async bulkSelectChoiceWithLoader (data) {
+    async bulkSelectChoiceWithLoader(data) {
       this.$wait.start(this.bulkSelectChoiceLoader)
       await this.bulkSelectChoice(data)
       this.$wait.end(this.bulkSelectChoiceLoader)
     },
-    async bulkSelectChoice (data) {
+    async bulkSelectChoice(data) {
       // Avoid trying to update locked reviews
       const ids = this.selectedAndUnlockedIdsList
       // We use a dedicated method that will format the data for the JSONAPI spec
@@ -373,20 +373,20 @@ export default {
       // so we need to fetch them ourselves
       await this.fetchTaskRecordReviews()
     },
-    async fetchAll () {
+    async fetchAll() {
       await this.fetchTask()
       await this.fetchChoiceGroup()
       await this.fetchTaskRecordReviews()
     },
-    async waitFor (loader, fn) {
+    async waitFor(loader, fn) {
       this.$wait.start(loader)
       await fn()
       this.$wait.end(loader)
     },
-    toggleFilters () {
+    toggleFilters() {
       this.showFilters = !this.showFilters
     },
-    toggleSelectAll () {
+    toggleSelectAll() {
       this.selectAll = !this.selectAll
     }
   }
@@ -419,7 +419,7 @@ export default {
                       :page-number="Number(pageNumber)"
                       :total-rows="pagination.count"
                       :per-page="Number(pageSize)"
-                      :task-record-review-ids="taskRecordReviewIds" />
+                      :task-record-review-ids="taskRecordReviewIds"/>
     </b-modal>
     <div class="d-flex align-items-center">
       <app-breadcrumb v-if="task">
@@ -435,14 +435,15 @@ export default {
               <div class="d-none d-lg-block col-lg-3">
                 <b-btn variant="outline-dark" class="border" tag="label">
                   <span class="custom-control custom-checkbox">
-                    <input class="custom-control-input" v-model="selectAll" type="checkbox" id="select-all-input" />
-                    <div class="task-record-review-list__container__select-all custom-control-label" for="select-all-input">
+                    <input class="custom-control-input" v-model="selectAll" type="checkbox" id="select-all-input"/>
+                    <div class="task-record-review-list__container__select-all custom-control-label"
+                         for="select-all-input">
                       {{ $tc('taskRecordReviewList.selectAll',  taskRecordReviews.length ) }}
                       <shortkey-badge
                         @shortkey.native="toggleSelectAll()"
                         :value="['Ctrl', 'a']"
                         class="ml-2"
-                        v-shortkey="['ctrl', 'a']" />
+                        v-shortkey="['ctrl', 'a']"/>
                     </div>
                   </span>
                 </b-btn>
@@ -455,9 +456,10 @@ export default {
                     @input="goToPage"
                     :value="Number(pageNumber)"
                     :total-rows="pagination.count"
-                    :per-page="Number(pageSize)" />
-                  <b-button v-b-modal.modal-page-params variant="link" class="task-record-review-list__container__pagination__toggler text-secondary px-2">
-                    <settings-icon size="1.5x" />
+                    :per-page="Number(pageSize)"/>
+                  <b-button v-b-modal.modal-page-params variant="link"
+                            class="task-record-review-list__container__pagination__toggler text-secondary px-2">
+                    <settings-icon size="1.5x"/>
                   </b-button>
                   <b-modal id="modal-page-params" hide-header hide-footer>
                     <task-record-review-page-params
@@ -465,14 +467,14 @@ export default {
                       :page-size="pageSize"
                       :sort="sort"
                       @submit="applyPageParams"
-                      @cancel="$bvModal.hide('modal-page-params')" />
+                      @cancel="$bvModal.hide('modal-page-params')"/>
                   </b-modal>
                 </div>
               </div>
               <div class="col-4 col-lg-3 d-flex">
                 <div class="ml-auto">
                   <b-btn :variant="filtersTogglerVariant" class="border font-weight-bold" @click="toggleFilters">
-                    <filter-icon size="1x" class="mr-1" />
+                    <filter-icon size="1x" class="mr-1"/>
                     {{$t('taskRecordReviewList.filters')}}
                   </b-btn>
                 </div>
@@ -481,7 +483,7 @@ export default {
             <b-collapse :visible="showFilters">
               <task-record-review-filters
                 :route-filters.sync="routeFilters"
-                :task-id="taskId" />
+                :task-id="taskId"/>
             </b-collapse>
             <ul class="list-inline d-flex align-items-center" v-if="pagination">
               <li class="list-inline-item font-weight-bold">
@@ -495,17 +497,23 @@ export default {
               <li class="list-inline-item">
                 <task-record-review-applied-sorting
                   :sort.sync="sort"
-                  class="d-inline-block" />
+                  class="d-inline-block"/>
               </li>
-              <li class="task-record-review-list__container__selected-results list-inline-item font-weight-bold" v-if="hasSelectedRecords">
-                {{ $tc('taskRecordReviewList.selectedResults',  selectedIdsCount ) }} <template v-if="taskIsNotOpened">({{ $tc('taskRecordReviewList.lockedResults',  selectedIdsCount ) }})</template><template v-else-if="hasSelectedAndLockedRecords">({{ $tc('taskRecordReviewList.lockedResults',  selectedAndLockedIdsCount ) }})</template>
+              <li class="task-record-review-list__container__selected-results list-inline-item font-weight-bold"
+                  v-if="hasSelectedRecords">
+                {{ $tc('taskRecordReviewList.selectedResults', selectedIdsCount ) }}
+                <template v-if="taskIsNotOpened">({{ $tc('taskRecordReviewList.lockedResults', selectedIdsCount ) }})
+                </template>
+                <template v-else-if="hasSelectedAndLockedRecords">({{ $tc('taskRecordReviewList.lockedResults',
+                  selectedAndLockedIdsCount ) }})
+                </template>
               </li>
             </ul>
             <b-collapse :visible="showAppliedFilters">
               <task-record-review-applied-filters
                 :route-filters.sync="routeFilters"
                 :task-id="taskId"
-                class="d-inline-block" />
+                class="d-inline-block"/>
             </b-collapse>
             <b-collapse :visible="hasSelectedRecords">
               <task-record-review-bulk-choice-form
@@ -513,9 +521,9 @@ export default {
                 :disabled="isBulkSelectChoiceFormDisabled"
                 :task-id="taskId"
                 activate-shortkeys
-                @submit="bulkSelectChoiceWithLoader" />
+                @submit="bulkSelectChoiceWithLoader"/>
             </b-collapse>
-            <task-record-review-tutorial />
+            <task-record-review-tutorial/>
             <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
               <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
                 <task-record-review-card
@@ -524,7 +532,7 @@ export default {
                   :task-record-review-id="id"
                   :active="isTaskRecordReviewActive(id)"
                   :selected="isTaskRecordReviewSelected(id)"
-                  :frozen="isTaskRecordReviewFrozen(id)" />
+                  :frozen="isTaskRecordReviewFrozen(id)"/>
               </div>
               <custom-pagination
                 compact
@@ -532,10 +540,10 @@ export default {
                 @input="goToPage"
                 :value="Number(pageNumber)"
                 :total-rows="pagination.count"
-                :per-page="Number(pageSize)" />
+                :per-page="Number(pageSize)"/>
             </app-waiter>
           </div>
-          <empty-placeholder v-else :title="$t('taskRecordReviewList.noRecordsAssigned')" />
+          <empty-placeholder v-else :title="$t('taskRecordReviewList.noRecordsAssigned')"/>
         </app-waiter>
       </div>
     </div>
@@ -543,23 +551,23 @@ export default {
 </template>
 
 <style lang="scss">
-  .task-record-review-list {
+.task-record-review-list {
 
-    &__cinematic-view {
-      background: $primary-10;
-    }
-
-    &__container {
-
-      &__pagination {
-        display: inline-flex;
-        align-items: center;
-      }
-
-      &__selected-results {
-        text-decoration: underline;
-      }
-
-    }
+  &__cinematic-view {
+    background: $primary-10;
   }
+
+  &__container {
+
+    &__pagination {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    &__selected-results {
+      text-decoration: underline;
+    }
+
+  }
+}
 </style>
