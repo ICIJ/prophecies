@@ -1,5 +1,5 @@
 <script>
-import {get, find, uniqueId} from 'lodash'
+import {find, get, uniqueId} from 'lodash'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
 import UserLink from '@/components/UserLink'
 import TaskRecordReviewNoteTimestamp from '@/components/TaskRecordReviewNoteTimestamp'

@@ -3,7 +3,7 @@ import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
 import ProgressCard from '@/components/ProgressCard'
-import {server, rest} from '../../mocks/server'
+import {rest, server} from '../../mocks/server'
 
 describe('ProgressCard', () => {
   let wrapper

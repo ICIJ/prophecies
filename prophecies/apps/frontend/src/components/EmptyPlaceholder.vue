@@ -1,5 +1,5 @@
 <script>
-import {isObject, find} from 'lodash'
+import {find, isObject} from 'lodash'
 import * as icons from '@/utils/icons'
 
 export default {

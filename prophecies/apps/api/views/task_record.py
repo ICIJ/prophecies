@@ -1,14 +1,15 @@
 from actstream import action
-from rest_framework import exceptions, viewsets
 from rest_framework import decorators
-from rest_framework_json_api import serializers
-from rest_framework_json_api.relations import ResourceRelatedField
+from rest_framework import exceptions, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from prophecies.core.models import TaskRecord
+from rest_framework_json_api import serializers
+from rest_framework_json_api.relations import ResourceRelatedField
+
 from prophecies.apps.api.views.action import ActionSerializer
 from prophecies.apps.api.views.task import TaskSerializer
 from prophecies.apps.api.views.user import UserSerializer
+from prophecies.core.models import TaskRecord
 
 
 class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):

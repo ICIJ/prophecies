@@ -1,12 +1,14 @@
 from functools import lru_cache
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
-from prophecies.core.models import Task, TaskRecordReview
-from prophecies.core.models.task_record import StatusType
+
 from prophecies.apps.api.views.choice_group import ChoiceGroupSerializer
 from prophecies.apps.api.views.project import ProjectSerializer
 from prophecies.apps.api.views.user import UserSerializer
+from prophecies.core.models import Task, TaskRecordReview
+from prophecies.core.models.task_record import StatusType
 
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):

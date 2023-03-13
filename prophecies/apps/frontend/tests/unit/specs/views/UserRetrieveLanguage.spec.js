@@ -2,8 +2,7 @@ import {createLocalVue, mount} from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
-import {server, rest} from '../../mocks/server'
-import User from '@/models/User'
+import {rest, server} from '../../mocks/server'
 
 import UserRetrieveLanguage from '@/views/UserRetrieveLanguage'
 

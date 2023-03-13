@@ -1,14 +1,15 @@
-from actstream.models import Action
 from copy import deepcopy
+
+from actstream.models import Action
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models import signals, Q
+from django.db.models import Q
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-from types import SimpleNamespace
-from prophecies.core.contrib.namespace import ExtendedNamespace
+
 from prophecies.core.contrib.formatter import URLEncodedFormatter
+from prophecies.core.contrib.namespace import ExtendedNamespace
 from prophecies.core.models.task import Task
 
 

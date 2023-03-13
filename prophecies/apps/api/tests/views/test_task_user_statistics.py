@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
+
 from prophecies.core.models import Project, Task, TaskRecord, TaskRecordReview
 
 

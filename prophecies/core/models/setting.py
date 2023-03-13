@@ -1,8 +1,10 @@
-from prophecies.apps.api.contrib.strings import to_camel_case
+import os
+
 from constance.backends.database.models import Constance
 from django.db import models
 from django.db.models import signals
-import os
+
+from prophecies.apps.api.contrib.strings import to_camel_case
 
 
 class SettingManager(models.Manager):

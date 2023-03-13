@@ -1,13 +1,14 @@
+import datetime as dt
+
+import time_machine
 from actstream import action
 from django.contrib.auth.models import User
+from django.test import TestCase
+from django.utils import timezone
+from rest_framework.test import APIClient
+
 from prophecies.core.filters import ActionAggregateFilter
 from prophecies.core.models import Choice, ChoiceGroup, Project, Task, ActionAggregate
-
-from django.test import TestCase
-from rest_framework.test import APIClient
-from django.utils import timezone
-import time_machine
-import datetime as dt
 
 action_aggregates_url = '/api/v1/action-aggregates/'
 

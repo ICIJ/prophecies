@@ -2,8 +2,9 @@ from django.contrib import admin, messages
 from django.contrib.admin.helpers import AdminForm
 from django.shortcuts import redirect, render
 from django.urls import path
-from prophecies.core.models import AlternativeValue
+
 from prophecies.core.forms import AlternativeValueUploadForm
+from prophecies.core.models import AlternativeValue
 
 
 @admin.register(AlternativeValue)

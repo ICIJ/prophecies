@@ -1,4 +1,4 @@
-import {get, keys, noop, set, union, unset} from 'lodash'
+import {get, keys, noop, set, unset} from 'lodash'
 import hotkeys from 'hotkeys-js'
 
 export default class Shortkey {

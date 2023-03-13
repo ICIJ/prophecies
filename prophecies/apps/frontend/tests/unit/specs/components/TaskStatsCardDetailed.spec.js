@@ -1,7 +1,4 @@
-import {
-  createLocalVue,
-  mount
-} from '@vue/test-utils'
+import {createLocalVue, mount} from '@vue/test-utils'
 import Core from '@/core'
 import TaskStatsCardDetailed from '@/components/TaskStatsCardDetailed'
 import Task from '@/models/Task'

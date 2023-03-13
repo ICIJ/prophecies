@@ -1,12 +1,13 @@
+from textwrap import shorten
+
 from admin_auto_filters.filters import AutocompleteFilterFactory
 from django.contrib import admin
 from django.utils.html import format_html
 from import_export.resources import ModelResource
-from textwrap import shorten
 
-from prophecies.core.models import TaskRecordReview
 from prophecies.core.contrib.display import display_status, display_task_addon, display_choice
 from prophecies.core.mixins import ExportWithCsvStreamMixin, ExportCsvGeneratorMixin
+from prophecies.core.models import TaskRecordReview
 
 
 class TaskRecordReviewResource(ExportCsvGeneratorMixin, ModelResource):

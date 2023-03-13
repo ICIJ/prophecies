@@ -1,6 +1,6 @@
-import environ
-from .base import *
 from os.path import exists
+
+from .base import *
 
 root = environ.Path(__file__) - 3
 # Read .env from the root path and load environment variables

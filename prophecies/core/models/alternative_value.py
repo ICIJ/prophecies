@@ -1,4 +1,5 @@
 from django.db import models
+
 from prophecies.core.models.choice_group import ChoiceGroup
 
 
