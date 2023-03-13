@@ -28,25 +28,27 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TaskRecord
         resource_name = 'TaskRecord'
-        fields = ['id', 'url', 'task', 'original_value', 'predicted_value', 'link', 'embeddable_link', 'locked', 'locked_by', 'metadata', 'rounds', 'status', 'bookmarked']
-        read_only_fields = ['url',  'original_value', 'predicted_value', 'link', 'embeddable_link', 'metadata', 'rounds', 'status']
+        fields = ['id', 'url', 'task', 'original_value', 'predicted_value', 'link', 'embeddable_link', 'locked',
+                  'locked_by', 'metadata', 'rounds', 'status', 'bookmarked']
+        read_only_fields = ['url', 'original_value', 'predicted_value', 'link', 'embeddable_link', 'metadata', 'rounds',
+                            'status']
 
     def get_link(self, task_record):
         return task_record.computed_link()
-    
+
     def get_embeddable_link(self, task_record):
         return task_record.computed_embeddable_link()
-    
+
     def get_bookmarked(self, task_record):
         user = self.context.get('request').user
         return task_record.bookmarked_by.filter(id=user.id).exists()
-                
+
     def update(self, instance, validated_data):
         self.update_locked(instance, validated_data)
         self.update_bookmarked(instance, validated_data)
         instance.save()
         return instance
-    
+
     def update_locked(self, instance, validated_data):
         user = self.context.get('request').user
         locked = validated_data.get('locked')
@@ -82,7 +84,6 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
         elif not value and not self.instance.can_unlock(user):
             raise serializers.ValidationError('Cannot unlock this task record')
         return value
-    
 
 
 class TaskRecordViewSet(viewsets.ModelViewSet):
@@ -118,4 +119,5 @@ class TaskRecordViewSet(viewsets.ModelViewSet):
         if not request.user in obj.checkers:
             raise exceptions.PermissionDenied(detail='You do not have permission to update this resource')
         if not obj.task.is_open:
-            raise exceptions.PermissionDenied(detail='You do not have permission to update a resource from a locked or closed task')
+            raise exceptions.PermissionDenied(
+                detail='You do not have permission to update a resource from a locked or closed task')

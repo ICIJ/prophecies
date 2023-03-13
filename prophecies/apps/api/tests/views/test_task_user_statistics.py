@@ -8,7 +8,6 @@ class TestTaskUserStatistics(TestCase):
     client = APIClient()
     fixtures = ['users.json']
 
-
     def setUp(self):
         # Get our two users (from the fixtures)
         self.olivia = User.objects.get(username='olivia')
@@ -25,7 +24,6 @@ class TestTaskUserStatistics(TestCase):
         # Add a record
         self.task_record_of_paintings = TaskRecord.objects.create(original_value="foo", task=self.paintings)
         self.task_record_of_shops = TaskRecord.objects.create(original_value="bar", task=self.shops)
-
 
     def test_it_returns_two_users_statistics(self):
         TaskRecordReview.objects.create(task_record=self.task_record_of_paintings, checker=self.olivia, round=1)
@@ -47,5 +45,3 @@ class TestTaskUserStatistics(TestCase):
         self.client.login(username='django', password='django')
         request = self.client.get('/api/v1/task-user-statistics/')
         self.assertEqual(len(request.json().get('data')), 3)
-        
-        

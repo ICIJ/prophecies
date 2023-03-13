@@ -1,4 +1,4 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
+import {createLocalVue, shallowMount} from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
@@ -15,7 +15,7 @@ describe('Dashboard', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
-    const { i18n, wait, store } = Core.init(localVue).useAll()
+    const {i18n, wait, store} = Core.init(localVue).useAll()
 
     wrapper = await shallowMount(Dashboard, {
       i18n,

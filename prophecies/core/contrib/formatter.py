@@ -1,8 +1,8 @@
 import string
 import urllib.parse
 
-class URLEncodedFormatter(string.Formatter):
 
+class URLEncodedFormatter(string.Formatter):
 
     def format_field(self, value, spec):
         if spec.endswith('u'):
@@ -20,4 +20,4 @@ class URLEncodedFormatter(string.Formatter):
         try:
             return super().get_field(*kwarg)
         except AttributeError:
-            return ('','')
+            return ('', '')

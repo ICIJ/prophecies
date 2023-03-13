@@ -1,6 +1,6 @@
-import { camelCase, get, template } from 'lodash'
-import { Model } from '@vuex-orm/core'
-import { responseNormalizer } from '@/utils/jsonapi'
+import {camelCase, get, template} from 'lodash'
+import {Model} from '@vuex-orm/core'
+import {responseNormalizer} from '@/utils/jsonapi'
 import TaskRecord from '@/models/TaskRecord'
 import User from '@/models/User'
 import settings from '@/settings'
@@ -16,7 +16,7 @@ export default class Action extends Model {
     }
   }
 
-  static fields () {
+  static fields() {
     return {
       id: this.attr(null),
       actorId: this.attr(null),
@@ -28,7 +28,8 @@ export default class Action extends Model {
       actionObjectId: this.attr(null),
       actionObjectType: this.attr(null),
       actionObject: this.morphTo('actionObjectId', 'actionObjectType'),
-      data: this.attr(() => {}),
+      data: this.attr(() => {
+      }),
       timestamp: this.attr(null)
     }
   }
@@ -37,26 +38,26 @@ export default class Action extends Model {
     baseURL: `${settings.apiUrl}/actions/`,
     dataTransformer: responseNormalizer,
     actions: {
-      forTaskRecord (id) {
-        const { apiConfig } = TaskRecord
-        const params = { 'page[size]': 50 }
-        return this.get(`${id}/relationships/actions/`, { ...apiConfig, params })
+      forTaskRecord(id) {
+        const {apiConfig} = TaskRecord
+        const params = {'page[size]': 50}
+        return this.get(`${id}/relationships/actions/`, {...apiConfig, params})
       }
     }
   }
 
-  get i18n () {
+  get i18n() {
     const path = ['actions', this.verb, this.targetType, this.actionObjectType]
     return path.map(p => p ? camelCase(p) : '*').join('.')
   }
 
-  get link () {
+  get link() {
     const interpolate = settings.templateInterpolate
-    const compiled = template(this.linkTemplate, { interpolate })
+    const compiled = template(this.linkTemplate, {interpolate})
     return compiled(this)
   }
 
-  get linkTemplate () {
+  get linkTemplate() {
     const path = [this.verb, this.targetType, this.actionObjectType]
     const key = path.map(p => p ? camelCase(p) : '*').join('.')
     return get(Action.links, key, null)

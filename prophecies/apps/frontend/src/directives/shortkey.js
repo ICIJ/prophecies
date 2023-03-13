@@ -1,4 +1,4 @@
-import { castArray, get, isArray, isString, noop, set, unset } from 'lodash'
+import {castArray, get, isArray, isString, noop, set, unset} from 'lodash'
 import hotkeys from 'hotkeys-js'
 
 const callbacks = {}
@@ -9,7 +9,7 @@ const parseValue = value => {
   } else if (isString(value)) {
     return parseValue(JSON.parse(value.replace(/\'/gi, '"')))
   } else if (isArray(value) && value.length) {
-    return { '': castArray(value).join('+') }
+    return {'': castArray(value).join('+')}
   }
   return value
 }
@@ -19,47 +19,47 @@ class VNodeHotkey {
     this.el = el
     this.binding = binding
     this.vnode = vnode
-  }  
+  }
 
-  get value () {
+  get value() {
     return parseValue(this.binding.value)
   }
-  
-  get valueEntries () {
+
+  get valueEntries() {
     return Object.entries(this.value)
   }
 
-  get valueKeys () {
+  get valueKeys() {
     return Object.values(this.value)
   }
 
-  get oldValue () {
+  get oldValue() {
     return parseValue(this.binding.oldValue)
   }
 
-  get oldValueKeys () {
+  get oldValueKeys() {
     return Object.values(this.oldValue)
   }
 
-  get propagate () {
+  get propagate() {
     return this.binding.modifiers.propagate === true
   }
 
-  get uid () {
+  get uid() {
     return this.vnode.context._uid
   }
 
-  get uidKey () {
+  get uidKey() {
     return `v-${this.uid}`
   }
 
-  buildCallback (detail = null) {
+  buildCallback(detail = null) {
     return e => {
       if (!this.propagate) {
         e.preventDefault()
         e.stopPropagation()
       }
-      const event = new CustomEvent('shortkey', { detail })
+      const event = new CustomEvent('shortkey', {detail})
       this.el.dispatchEvent(event)
     }
   }
@@ -69,12 +69,12 @@ class VNodeHotkey {
   }
 
   getOrBuildCallback(keysAsStr, srcKey) {
-    const callback = this.getCallback(keysAsStr) || this.buildCallback({ srcKey })
+    const callback = this.getCallback(keysAsStr) || this.buildCallback({srcKey})
     set(callbacks, [keysAsStr, this.uidKey], callback)
     return callback
   }
 
-  bind () {
+  bind() {
     this.valueEntries.forEach(([srcKey, keysAsStr]) => {
       const callback = this.getOrBuildCallback(keysAsStr, srcKey)
       // Avoid binding hotkeys after the document is detroyed
@@ -86,26 +86,26 @@ class VNodeHotkey {
     })
   }
 
-  unbind () {
+  unbind() {
     this.valueKeys.forEach(this.unbindKeys.bind(this))
   }
-  
-  unbindOldValue () {
+
+  unbindOldValue() {
     this.oldValueKeys.forEach(this.unbindKeys.bind(this))
   }
-  
+
   unbindKeys(keysAsStr) {
     const callback = this.getCallback(keysAsStr, noop)
     hotkeys.unbind(keysAsStr, callback)
     unset(callbacks, [keysAsStr, this.uidKey])
   }
-  
-  update () {
+
+  update() {
     this.unbindOldValue()
     this.bind()
   }
 
-  static create (...args) {
+  static create(...args) {
     return new VNodeHotkey(...args)
   }
 }

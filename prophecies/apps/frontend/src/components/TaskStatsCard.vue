@@ -1,5 +1,5 @@
 <script>
-import { formatDate } from '@/utils/date'
+import {formatDate} from '@/utils/date'
 import Task from '@/models/Task'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
 import TaskStatsCardHeading from '@/components/TaskStatsCardHeading.vue'
@@ -34,21 +34,24 @@ export default {
     }
   },
   filters: {
-    formatDate (d) {
+    formatDate(d) {
       return formatDate(d)
     },
-    round (value) {
+    round(value) {
       return Math.round(value)
     }
   },
   computed: {
-    user () {
+    user() {
       return User.find(this.checkerId)
     },
-    userStats () {
+    userStats() {
       if (!this.isMe) {
         const progressByRound = Object.keys(this.task.userProgressByRound)
-          .reduce((prev, k) => { prev[k] = 0; return prev }, {})
+          .reduce((prev, k) => {
+            prev[k] = 0;
+            return prev
+          }, {})
 
         const stats = TaskUserStatistics.query()
           .where('taskId', this.taskId)
@@ -75,43 +78,43 @@ export default {
         progress: this.task.userProgress
       }
     },
-    task () {
+    task() {
       return Task.query().with('project').find(this.taskId)
     },
-    isTeam () {
+    isTeam() {
       return this.team === true
     },
-    isMe () {
+    isMe() {
       return !this.user || this.user.isMe
     },
-    taskRecordsCount () {
+    taskRecordsCount() {
       if (this.isTeam) {
         return this.task.taskRecordsCount
       }
       return this.userStats.count
     },
-    taskRecordsPendingCount () {
+    taskRecordsPendingCount() {
       return this.taskRecordsCount - this.taskRecordsDoneCount
     },
-    taskRecordsDoneCount () {
+    taskRecordsDoneCount() {
       if (this.isTeam) {
         return this.task.taskRecordsDoneCount
       }
       return this.userStats.done
     },
-    progress () {
+    progress() {
       if (this.isTeam) {
         return this.task.progress
       }
       return this.userStats.progress
     },
-    progressByRound () {
+    progressByRound() {
       if (this.isTeam) {
         return this.task.progressByRound
       }
       return this.userStats.progressByRound
     },
-    taskColor () {
+    taskColor() {
       return this.task.colors[1]
     }
   }
@@ -119,53 +122,53 @@ export default {
 </script>
 
 <template>
-    <div class="task-stats-card card card-body shadow-sm d-flex">
-      <div class="d-flex justify-content-between ">
-        <task-stats-card-heading
-          :extended="extended"
-          :taskId="task.id"
-          :taskRecordsDoneCount="taskRecordsDoneCount"
-          :taskRecordsCount="taskRecordsCount"
-        />
-        <task-stats-card-all-rounds
-          v-if="extended"
-          :progress="progress"
-          :done="taskRecordsDoneCount"
-          :pending="taskRecordsPendingCount"
-          :color="taskColor"
-          class="mx-5 d-none d-lg-block"
-        />
-        <task-stats-card-status
-          :extended="extended"
-          :taskId="task.id"
-          :taskRecordsDoneCount="taskRecordsDoneCount"
-          :taskRecordsCount="taskRecordsCount"
-        />
-      </div>
-      <task-stats-card-all-rounds
-            v-if="extended"
-            :progress="progress"
-            :done="taskRecordsDoneCount"
-            :pending="taskRecordsPendingCount"
-            :color="taskColor"
-            class="mx-auto my-3 d-lg-none"
+  <div class="task-stats-card card card-body shadow-sm d-flex">
+    <div class="d-flex justify-content-between ">
+      <task-stats-card-heading
+        :extended="extended"
+        :taskId="task.id"
+        :taskRecordsDoneCount="taskRecordsDoneCount"
+        :taskRecordsCount="taskRecordsCount"
       />
-      <div v-if="extended" class="d-flex flex-row flex-grow-1 pt-2">
-         <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 mx-auto">
-          <slot name="taskStatsByRound" v-bind:stats="{rounds:task.rounds,progress:progressByRound}" />
-         </div>
-      </div>
-      <div v-else class="d-flex flex-row flex-grow-1 pt-2 align-items-center">
-         <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 ">
-            <stats-by-round
-              v-for="round in task.rounds"
-              :key="round"
-              :round="round"
-              :nbRounds="task.rounds"
-              :progress="progressByRound[round]"
-            />
-         </div>
-         <task-progress :progress="progress | round" :color="taskColor" />
+      <task-stats-card-all-rounds
+        v-if="extended"
+        :progress="progress"
+        :done="taskRecordsDoneCount"
+        :pending="taskRecordsPendingCount"
+        :color="taskColor"
+        class="mx-5 d-none d-lg-block"
+      />
+      <task-stats-card-status
+        :extended="extended"
+        :taskId="task.id"
+        :taskRecordsDoneCount="taskRecordsDoneCount"
+        :taskRecordsCount="taskRecordsCount"
+      />
+    </div>
+    <task-stats-card-all-rounds
+      v-if="extended"
+      :progress="progress"
+      :done="taskRecordsDoneCount"
+      :pending="taskRecordsPendingCount"
+      :color="taskColor"
+      class="mx-auto my-3 d-lg-none"
+    />
+    <div v-if="extended" class="d-flex flex-row flex-grow-1 pt-2">
+      <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 mx-auto">
+        <slot name="taskStatsByRound" v-bind:stats="{rounds:task.rounds,progress:progressByRound}"/>
       </div>
     </div>
+    <div v-else class="d-flex flex-row flex-grow-1 pt-2 align-items-center">
+      <div class=" task-stats-card__progress-by-round d-flex flex-row flex-wrap flex-grow-1 ">
+        <stats-by-round
+          v-for="round in task.rounds"
+          :key="round"
+          :round="round"
+          :nbRounds="task.rounds"
+          :progress="progressByRound[round]"
+        />
+      </div>
+      <task-progress :progress="progress | round" :color="taskColor"/>
+    </div>
+  </div>
 </template>

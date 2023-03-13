@@ -8,15 +8,15 @@
 {% endblock %}
 
 {% block content %}
-    <form action="{% url opts|admin_urlname:'upload' %}" method="post" id="upload_form" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div>
-        {% for fieldset in adminform %}
-            {% include "admin/includes/fieldset.html" %}
-        {% endfor %}
-      </div>
-      <div class="submit-row">
-        <input class="button" type="submit" value="Upload" name="_save" />
-      </div>
-    </form>
+  <form action="{% url opts|admin_urlname:'upload' %}" method="post" id="upload_form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+      {% for fieldset in adminform %}
+        {% include "admin/includes/fieldset.html" %}
+      {% endfor %}
+    </div>
+    <div class="submit-row">
+      <input class="button" type="submit" value="Upload" name="_save"/>
+    </div>
+  </form>
 {% endblock %}

@@ -3,18 +3,18 @@
     <div class="row">
       <label class="page-params__project col-lg-4 col-xl-3">
         <div class="mb-3">{{ $t('pageParams.project') }}</div>
-        <multiselect :allow-empty ="true"
+        <multiselect :allow-empty="true"
                      :show-labels="false"
                      :options="projectOptions"
                      :value="selectedProjectOption"
                      @input="$emit('update:projectId', idOrNull($event))"
                      :placeholder="$t('pageParams.selectAProject')"
                      label="name"
-                     track-by="id" />
+                     track-by="id"/>
       </label>
       <label class="page-params__task col-lg-4 col-xl-3">
         <div class="mb-3">{{ $t('pageParams.task') }}</div>
-        <multiselect :allow-empty ="true"
+        <multiselect :allow-empty="true"
                      :show-labels="false"
                      :options="taskOptions"
                      :value="selectedTaskOption"
@@ -23,27 +23,28 @@
                      label="name"
                      track-by="id">
           <template slot="option" slot-scope="{ option }">
-            {{ option.name }} <span v-if="option.status !== 'OPEN'" class='page-params__task__show-status float-right text-capitalize font-weight-normal'>{{ option.status}}</span>
+            {{ option.name }} <span v-if="option.status !== 'OPEN'"
+                                    class='page-params__task__show-status float-right text-capitalize font-weight-normal'>{{ option.status}}</span>
           </template>
         </multiselect>
       </label>
       <label class="page-params__creator col-lg-4 col-xl-3" v-if="creatorId !== undefined">
         <div class="mb-3">{{ $t('pageParams.author') }}</div>
-        <multiselect :allow-empty ="true"
+        <multiselect :allow-empty="true"
                      :show-labels="false"
                      :options="creatorOptions"
                      :value="selectedCreatorOption"
                      @input="$emit('update:creatorId', idOrNull($event))"
                      :placeholder="$t('pageParams.selectAnAuthor')"
                      label="displayName"
-                     track-by="id" />
+                     track-by="id"/>
       </label>
     </div>
   </div>
 </template>
 
 <script>
-import { find } from 'lodash'
+import {find} from 'lodash'
 import Multiselect from 'vue-multiselect'
 
 export default {
@@ -70,30 +71,30 @@ export default {
     }
   },
   computed: {
-    projectOptions () {
+    projectOptions() {
       return this.retrieveUniqueAssociatedEntity('project', 'projectId', 'name')
     },
-    taskOptions () {
+    taskOptions() {
       return this.retrieveUniqueAssociatedEntity('task', 'taskId', 'name')
     },
-    creatorOptions () {
+    creatorOptions() {
       return this.retrieveUniqueAssociatedEntity('creator', 'creatorId', 'displayName')
     },
-    selectedProjectOption () {
-      return find(this.projectOptions, { id: this.projectId })
+    selectedProjectOption() {
+      return find(this.projectOptions, {id: this.projectId})
     },
-    selectedTaskOption () {
-      return find(this.taskOptions, { id: this.taskId })
+    selectedTaskOption() {
+      return find(this.taskOptions, {id: this.taskId})
     },
-    selectedCreatorOption () {
-      return find(this.creatorOptions, { id: this.creatorId })
+    selectedCreatorOption() {
+      return find(this.creatorOptions, {id: this.creatorId})
     }
   },
   methods: {
-    idOrNull (obj = null) {
+    idOrNull(obj = null) {
       return obj && 'id' in obj ? obj.id : null
     },
-    retrieveUniqueAssociatedEntity (elType, elId, elValue) {
+    retrieveUniqueAssociatedEntity(elType, elId, elValue) {
       const elements = this.values.reduce((options, currentObject) => {
         const elementId = currentObject[elId] ?? currentObject.id
         const elementType = currentObject[elType] === undefined ? currentObject : currentObject[elType]
@@ -119,11 +120,11 @@ export default {
 </script>
 
 <style lang="scss">
-  .page-params {
-    &__task {
-      &__show-status {
-        font-size: smaller;
-      }
+.page-params {
+  &__task {
+    &__show-status {
+      font-size: smaller;
     }
   }
+}
 </style>

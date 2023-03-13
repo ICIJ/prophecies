@@ -1,8 +1,8 @@
-import { createLocalVue, mount } from '@vue/test-utils'
+import {createLocalVue, mount} from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
-import { server, rest } from '../../mocks/server'
+import {server, rest} from '../../mocks/server'
 import User from '@/models/User'
 
 import UserRetrieveProfile from '@/views/UserRetrieveProfile'
@@ -34,9 +34,9 @@ describe('UserRetrieveProfile', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     const core = Core.init(localVue).useAll()
-    const { i18n, wait, store, router } = core
+    const {i18n, wait, store, router} = core
     const stubs = ['router-link', 'app-waiter']
-    const propsData = { username: 'olivia' }
+    const propsData = {username: 'olivia'}
     const options = {
       i18n,
       localVue,
@@ -65,7 +65,7 @@ describe('UserRetrieveProfile', () => {
 
   it('should show super user badge', async () => {
     expect(wrapper.find('.user-retrieve-profile__super-user').exists()).toBeTruthy()
-    User.update({ where: 20, data: { isSuperuser: false } })
+    User.update({where: 20, data: {isSuperuser: false}})
     await wrapper.vm.$nextTick()
     expect(wrapper.find('.user-retrieve-profile__super-user').exists()).toBeFalsy()
   })

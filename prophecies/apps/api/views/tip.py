@@ -6,6 +6,7 @@ from prophecies.apps.api.views.project import ProjectSerializer
 from prophecies.apps.api.views.user import UserSerializer
 from prophecies.apps.api.views.task import TaskSerializer
 
+
 class TipSerializer(serializers.HyperlinkedModelSerializer):
     project = ResourceRelatedField(many=False, read_only=True)
     creator = ResourceRelatedField(many=False, read_only=True)
@@ -39,7 +40,7 @@ class TipViewSet(views.ReadOnlyModelViewSet):
         'project': ('exact',),
         'task': ('exact',),
         'creator': ('exact',),
-        'id': ('exact','in',),
+        'id': ('exact', 'in',),
     }
     pagination_class = None
     ordering = ['-created_at']
@@ -50,4 +51,3 @@ class TipViewSet(views.ReadOnlyModelViewSet):
         if not self.request.user.is_authenticated:
             return Tip.objects.none()
         return super().get_queryset().user_scope(self.request.user)
-

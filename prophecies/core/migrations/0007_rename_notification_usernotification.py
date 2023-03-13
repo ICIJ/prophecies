@@ -5,7 +5,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('actstream', '0003_add_follow_flag'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),

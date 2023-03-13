@@ -27,8 +27,8 @@ class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TaskRecordReview
         fields = ['id', 'url', 'checker', 'choice', 'status',
-                    'note', 'note_created_at', 'note_updated_at',
-                    'task_id', 'task_record_id', 'alternative_value']
+                  'note', 'note_created_at', 'note_updated_at',
+                  'task_id', 'task_record_id', 'alternative_value']
 
 
 class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
@@ -50,9 +50,9 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TaskRecordReview
         fields = ['id', 'url', 'checker', 'choice', 'choice_id', 'status',
-                    'note', 'note_created_at', 'note_updated_at',
-                    'alternative_value', 'task_record', 'task_id', 'history']
-        read_only_fields = ['status',]
+                  'note', 'note_created_at', 'note_updated_at',
+                  'alternative_value', 'task_record', 'task_id', 'history']
+        read_only_fields = ['status', ]
         meta_fields = ['stats']
 
     def __init__(self, *args, **kwargs):
@@ -76,42 +76,44 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
 
     @lru_cache(maxsize=None)
     def get_collaborators(self, instance):
-        return [ i.checker for i in instance.history if i.checker != instance.checker ]
+        return [i.checker for i in instance.history if i.checker != instance.checker]
 
     # For some reason the validator require the choice to be set.
     # This is a workaround to allow empty value for the choice relationship.
     @lru_cache(maxsize=None)
     def get_validation_exclusions(self):
         exclusions = super(TaskRecordReviewSerializer, self).get_validation_exclusions()
-        return exclusions + ['choice',]
+        return exclusions + ['choice', ]
 
     def save(self):
         user = self.context.get('request').user
         if 'choice' in self.validated_data:
             choice = self.validated_data.get('choice', None)
             has_choice = not choice is None
-            if has_choice: 
-                action.send(user, verb='reviewed', target=self.instance, action_object=self.validated_data.get('choice'), task_id=self.instance.task_record.task_id)
+            if has_choice:
+                action.send(user, verb='reviewed', target=self.instance,
+                            action_object=self.validated_data.get('choice'), task_id=self.instance.task_record.task_id)
             else:
                 action.send(user, verb='cancelled', target=self.instance, task_id=self.instance.task_record.task_id)
         if self.validated_data.get('alternative_value', None):
-            action.send(user, verb='selected', target=self.instance, alternative_value=self.validated_data.get('alternative_value'), task_id=self.instance.task_record.task_id)
+            action.send(user, verb='selected', target=self.instance,
+                        alternative_value=self.validated_data.get('alternative_value'),
+                        task_id=self.instance.task_record.task_id)
         if 'note' in self.validated_data:
-            action.send(user, verb='commented', target=self.instance, note=self.validated_data.get('note'), task_id=self.instance.task_record.task_id)
+            action.send(user, verb='commented', target=self.instance, note=self.validated_data.get('note'),
+                        task_id=self.instance.task_record.task_id)
         return super(TaskRecordReviewSerializer, self).save()
-
 
     def get_root_meta(self, resource, many):
         if many:
             view = self.context['view']
             queryset = view.filter_queryset(view.get_queryset())
             count_by_task = queryset.count_by_task(task_field='taskId')
-            count_by_choice = queryset.count_by_choice(choice_field='choiceId') 
+            count_by_choice = queryset.count_by_choice(choice_field='choiceId')
             return {
                 'countBy': list(count_by_task) + list(count_by_choice)
             }
-        return { }
-
+        return {}
 
 
 class TaskRecordReviewViewSet(views.ModelViewSet):
@@ -124,7 +126,7 @@ class TaskRecordReviewViewSet(views.ModelViewSet):
     ordering = ['-id']
     ordering_fields = ['task_record__original_value', 'task_record__predicted_value',
                        'task_record__id']
-    filterset_class = TaskRecordReviewFilter    
+    filterset_class = TaskRecordReviewFilter
     # Queryset is overridden within the `get_queryset` method
     queryset = TaskRecordReview.objects.none()
 
@@ -140,7 +142,6 @@ class TaskRecordReviewViewSet(views.ModelViewSet):
             .select_related('task_record') \
             .select_related('task_record__task') \
             .select_related('task_record__task__project')
-
 
     def check_object_permissions(self, request, obj):
         if obj.checker != request.user:

@@ -15,8 +15,8 @@ describe('StatsList', () => {
 
       // Configure the local vue
       const core = await Core.init(localVue).useAll()
-      const { i18n, wait, store, router } = core
-      const propsData = { teamTaskStats: true }
+      const {i18n, wait, store, router} = core
+      const propsData = {teamTaskStats: true}
       const stubs = ['router-link', 'router-view', 'app-waiter']
       // Finally, instanciate the component
       options = {

@@ -10,11 +10,12 @@ import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 
 describe('TaskStatsCardDetailed', () => {
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
   }
+
   describe('Show the task card with round details', () => {
     let wrapper
     beforeAll(async () => {
@@ -30,8 +31,8 @@ describe('TaskStatsCardDetailed', () => {
 
       // Configure the local vue
       const core = await Core.init(localVue).useAll()
-      const { i18n, wait, store } = core
-      const propsData = { taskId: '1', team: false }
+      const {i18n, wait, store} = core
+      const propsData = {taskId: '1', team: false}
       const stubs = ['router-link', 'app-waiter']
       // Finally, instanciate the component
       const options = {
@@ -81,7 +82,7 @@ describe('TaskStatsCardDetailed', () => {
     describe('first round of task 1', () => {
       let card, rounds, round
       beforeEach(async () => {
-        await wrapper.setProps({ team: true })
+        await wrapper.setProps({team: true})
         card = wrapper.find('.stats-list__task-card')
         rounds = card.findAll('.stats-list__task-card__round')
         round = rounds.at(0)
@@ -108,14 +109,14 @@ describe('TaskStatsCardDetailed', () => {
         */
       let card, rounds, round
       beforeEach(async () => {
-        await wrapper.setProps({ taskId: '3' })
+        await wrapper.setProps({taskId: '3'})
         card = wrapper.find('.stats-list__task-card')
         rounds = card.findAll('.stats-list__task-card__round')
         round = rounds.at(0)
       })
       describe('show details of team', () => {
         beforeEach(async () => {
-          await wrapper.setProps({ team: true })
+          await wrapper.setProps({team: true})
         })
         it('should show the stats of 2 checkers', async () => {
           const checkersRows = round.findAll('.stats-by-users__row')
@@ -153,7 +154,7 @@ describe('TaskStatsCardDetailed', () => {
         it('should row total only on team tab ', async () => {
           let totalRow = round.find('.stats-by-users__total')
           expect(totalRow.exists()).toBeTruthy()
-          await wrapper.setProps({ team: false })
+          await wrapper.setProps({team: false})
           totalRow = round.find('.stats-by-users__total')
           expect(totalRow.exists()).toBeFalsy()
         })
@@ -161,7 +162,7 @@ describe('TaskStatsCardDetailed', () => {
 
       describe('user stats', () => {
         it('should show the stats of checker with id 1 ', async () => {
-          await wrapper.setProps({ checkerId: '1' })
+          await wrapper.setProps({checkerId: '1'})
           const checkersRows = round.findAll('.stats-by-users__row')
 
           expect(checkersRows).toHaveLength(1)
@@ -169,26 +170,26 @@ describe('TaskStatsCardDetailed', () => {
         })
 
         it('should display the checker 2 progress on this round', async () => {
-          await wrapper.setProps({ checkerId: '2' })
+          await wrapper.setProps({checkerId: '2'})
 
           const totalProgress = round.find('.stats-by-users__row__progress')
           expect(totalProgress.text()).toBe('5%')
         })
         it('should display the user 2 choice percentage for the first choice Correct 60%', async () => {
-          await wrapper.setProps({ checkerId: '1' })
+          await wrapper.setProps({checkerId: '1'})
           const user1 = round.findAll('.stats-by-round__summary__choice').at(0)
           expect(user1.text()).toBe('Correct 91%')
-          await wrapper.setProps({ checkerId: '2' })
+          await wrapper.setProps({checkerId: '2'})
           const user2 = round.findAll('.stats-by-round__summary__choice').at(0)
           expect(user2.text()).toBe('Correct 60%')
         })
         it('should display the user 1 choice percentage for the first choice Correct 91%', async () => {
-          await wrapper.setProps({ checkerId: '1' })
+          await wrapper.setProps({checkerId: '1'})
           const user1 = round.findAll('.stats-by-round__summary__choice').at(0)
           expect(user1.text()).toBe('Correct 91%')
         })
         it('should display the total user progress of 5% on this round', async () => {
-          await wrapper.setProps({ checkerId: '2' })
+          await wrapper.setProps({checkerId: '2'})
           const checkersRows = round.findAll('.stats-by-users__row')
           expect(checkersRows).toHaveLength(1)
           expect(checkersRows.at(0).text()).toContain('django')

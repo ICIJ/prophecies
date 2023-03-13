@@ -1,11 +1,11 @@
-import { createLocalVue, mount } from '@vue/test-utils'
+import {createLocalVue, mount} from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import Action from '@/models/Action'
 import TaskRecordChanges from '@/components/TaskRecordChanges'
 
 describe('TaskRecordChanges', () => {
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -16,10 +16,10 @@ describe('TaskRecordChanges', () => {
 
     beforeEach(() => {
       const localVue = createLocalVue()
-      const propsData = { actionIds: [] }
+      const propsData = {actionIds: []}
       // Configure the local vue with plugins
-      const { i18n, store, router, wait } = Core.init(localVue).useAll()
-      wrapper = mount(TaskRecordChanges, { localVue, propsData, i18n, store, router, wait })
+      const {i18n, store, router, wait} = Core.init(localVue).useAll()
+      wrapper = mount(TaskRecordChanges, {localVue, propsData, i18n, store, router, wait})
     })
 
     it('should show no chnages message', () => {
@@ -42,10 +42,10 @@ describe('TaskRecordChanges', () => {
     beforeEach(() => {
       const attachTo = createContainer()
       const localVue = createLocalVue()
-      const propsData = { actionIds: ['13'] }
+      const propsData = {actionIds: ['13']}
       // Configure the local vue with plugins
-      const { i18n, store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(TaskRecordChanges, { attachTo, localVue, propsData, i18n, store, wait })
+      const {i18n, store, wait} = Core.init(localVue).useAll()
+      wrapper = mount(TaskRecordChanges, {attachTo, localVue, propsData, i18n, store, wait})
     })
 
     it('should NOT show no chnages message', () => {

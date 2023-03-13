@@ -6,7 +6,7 @@ from prophecies.apps.api.views.user import UserSerializer
 from prophecies.apps.api.views.task import TaskSerializer
 from prophecies.core.models import TaskUserChoiceStatistics
 
-   
+
 class TaskUserChoiceStatisticsSerializer(serializers.ModelSerializer):
     choice = ResourceRelatedField(many=False, read_only=True)
     checker = ResourceRelatedField(many=False, read_only=True)
@@ -17,21 +17,22 @@ class TaskUserChoiceStatisticsSerializer(serializers.ModelSerializer):
         'choice': ChoiceSerializer,
         'task': TaskSerializer,
     }
-    
+
     class JSONAPIMeta:
-        included_resources = ['task', 'choice','checker']
+        included_resources = ['task', 'choice', 'checker']
 
     class Meta:
         model = TaskUserChoiceStatistics
         resource_name = 'TaskChoiceStatistics'
         fields = [
-                    'task',
-                    'checker',
-                    'choice',
-                    'round',
-                    'count',
-                ]
-        
+            'task',
+            'checker',
+            'choice',
+            'round',
+            'count',
+        ]
+
+
 class TaskUserChoiceStatisticsViewSet(views.ReadOnlyModelViewSet):
     queryset = TaskUserChoiceStatistics.objects.all()
     serializer_class = TaskUserChoiceStatisticsSerializer
@@ -40,11 +41,10 @@ class TaskUserChoiceStatisticsViewSet(views.ReadOnlyModelViewSet):
     pagination_class = None
     filterset_fields = ['task',
                         'checker',
-                        'choice', 
+                        'choice',
                         'round']
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return TaskUserChoiceStatistics.objects.none()
         return super().get_queryset().user_scope(self.request.user)
-    

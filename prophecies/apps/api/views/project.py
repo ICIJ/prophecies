@@ -14,7 +14,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     included_serializers = {
         'creator': UserSerializer,
     }
-    
+
     class Meta:
         model = Project
         fields = ['id', 'url', 'creator', 'name']
@@ -32,7 +32,7 @@ class ProjectViewSet(views.ReadOnlyModelViewSet):
     ordering_fields = ['name']
     filterset_fields = ['name']
     pagination_class = None
-        
+
     @action(detail=True, methods=['get'])
     def tasks(self, request, pk=None, **kwarg):
         from prophecies.apps.api.views.task import TaskSerializer

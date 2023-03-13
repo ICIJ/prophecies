@@ -24,7 +24,7 @@ export const router = {
       path: '/',
       component: Dashboard,
       meta: {
-        title: ({ i18n }) => i18n.t('dashboard.title')
+        title: ({i18n}) => i18n.t('dashboard.title')
       }
     },
     {
@@ -32,7 +32,7 @@ export const router = {
       path: '/login',
       component: Login,
       meta: {
-        title: ({ i18n }) => i18n.t('login.title')
+        title: ({i18n}) => i18n.t('login.title')
       }
     },
     {
@@ -50,7 +50,7 @@ export const router = {
           name: 'user-retrieve-activity',
           path: 'activity',
           component: UserRetrieveActivity,
-          props: (route) => ({ query: route.query, username: route.params.username })
+          props: (route) => ({query: route.query, username: route.params.username})
         },
         {
           name: 'user-retrieve-team',
@@ -62,7 +62,7 @@ export const router = {
           name: 'user-retrieve-bookmarks',
           path: 'bookmarks',
           component: UserRetrieveBookmarks,
-          props: (route) => ({ query: route.query, username: route.params.username })
+          props: (route) => ({query: route.query, username: route.params.username})
         },
         {
           name: 'user-retrieve-notifications',
@@ -112,7 +112,7 @@ export const router = {
       name: 'tip-list',
       path: '/tips',
       component: TipList,
-      props: (route) => ({ query: route.query })
+      props: (route) => ({query: route.query})
     },
     {
       name: 'stats-list',
@@ -132,7 +132,7 @@ export const router = {
       props: true,
       component: Error,
       meta: {
-        title: ({ i18n }) => i18n.t('error.title')
+        title: ({i18n}) => i18n.t('error.title')
       }
     }
   ]

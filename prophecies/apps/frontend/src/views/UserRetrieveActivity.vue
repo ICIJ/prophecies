@@ -1,11 +1,11 @@
 <script>
-import { uniqueId, filter, orderBy } from 'lodash'
+import {uniqueId, filter, orderBy} from 'lodash'
 import moment from 'moment'
 
 import AppWaiter from '@/components/AppWaiter'
 
 import TaskStatsCardDetailed from '@/components/TaskStatsCardDetailed'
-import Task, { TaskStatusEnum, TaskStatusOrder } from '@/models/Task'
+import Task, {TaskStatusEnum, TaskStatusOrder} from '@/models/Task'
 
 import TaskSortByDropdown from '@/components/TaskSortByDropdown.vue'
 import UserRetrieveActivityChart from '@/components/UserRetrieveActivityChart.vue'
@@ -15,7 +15,7 @@ import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
 import User from '@/models/User'
 import ActionAggregate from '@/models/ActionAggregate'
-import { formatDate } from '@/utils/date'
+import {formatDate} from '@/utils/date'
 
 export default {
   name: 'UserRetrieveActivity',
@@ -34,7 +34,7 @@ export default {
   watch: {
     activityTab: {
       immediate: true,
-      handler (activityTab) {
+      handler(activityTab) {
         if (activityTab) {
           this.waitFor(this.fetchActivityLoader, [
             this.fetchActivityIds(this.user.id)
@@ -48,7 +48,7 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       sortField: 'status_asc',
       sortByCb: (tasks) =>
@@ -61,42 +61,42 @@ export default {
     }
   },
   methods: {
-    formatDate (d) {
+    formatDate(d) {
       return formatDate(d)
     },
-    getOptionKeyPath (optionName) {
+    getOptionKeyPath(optionName) {
       if (this.user?.isMe) {
         return ['userRetrieveActivity', optionName, 'yours'].join('.')
       }
       return ['userRetrieveActivity', optionName, 'others'].join('.')
     },
-    fetchActivityIds (userId) {
+    fetchActivityIds(userId) {
       const params = {
         date_after: this.lastDateParam,
         'filter[user]': userId
       }
-      return ActionAggregate.api().get('', { params })
+      return ActionAggregate.api().get('', {params})
     },
-    fetchTaskUserStats () {
-      const params = { 'filter[checker]': this.user.id }
-      return TaskUserStatistics.api().get('', { params })
+    fetchTaskUserStats() {
+      const params = {'filter[checker]': this.user.id}
+      return TaskUserStatistics.api().get('', {params})
     },
-    fetchTaskUserChoiceStats () {
+    fetchTaskUserChoiceStats() {
       const params = {
         include: 'checker,task.choice_group.choices',
         'filter[checker]': this.user.id
       }
-      return TaskUserChoiceStatistics.api().get('', { params })
+      return TaskUserChoiceStatistics.api().get('', {params})
     },
-    async waitFor (loader, fns = []) {
+    async waitFor(loader, fns = []) {
       this.$wait.start(loader)
       await Promise.all(fns)
       this.$wait.end(loader)
     },
-    updateSortByCallback (cb) {
+    updateSortByCallback(cb) {
       this.sortByCb = cb
     },
-    hasPendingRecordsForUser (task) {
+    hasPendingRecordsForUser(task) {
       const stats = TaskUserStatistics.query()
         .where('taskId', task.id)
         .where('checkerId', this.user.id).get()
@@ -108,80 +108,80 @@ export default {
     }
   },
   computed: {
-    fetchTaskUserStatsLoader () {
+    fetchTaskUserStatsLoader() {
       return uniqueId('load-stats-task-user')
     },
-    fetchActivityLoader () {
+    fetchActivityLoader() {
       return uniqueId('load-activity-chart-')
     },
-    isLoadingStats () {
+    isLoadingStats() {
       return this.$wait.waiting(this.fetchTaskUserStatsLoader)
     },
-    lastDateParam () {
+    lastDateParam() {
       const range_ = this.range * -1
       return moment(this.lastDate).clone().add(range_, 'days').format('YYYY-MM-DD').toString()
     },
-    user () {
+    user() {
       return User.find(this.username)
     },
-    activityOption () {
+    activityOption() {
       return this.$t(this.getOptionKeyPath('title'))
     },
-    statsOption () {
+    statsOption() {
       return this.$t(this.getOptionKeyPath('stats'))
     },
-    tabOptions () {
+    tabOptions() {
       return [
-        { text: this.activityOption, value: true },
-        { text: this.statsOption, value: false }
+        {text: this.activityOption, value: true},
+        {text: this.statsOption, value: false}
       ]
     },
-    activities () {
+    activities() {
       return ActionAggregate.query()
         .where('userId', this.user.id)
         .where('verb', 'reviewed')
         .get()
     },
-    activityIds () {
+    activityIds() {
       return this.activities.map(a => a.id)
     },
-    unorderedTasks () {
+    unorderedTasks() {
       return Task.query()
         .with('choiceGroup.choices')
         .where('taskRecordsCount', (value) => value > 0)
         .get()
     },
-    tasks () {
+    tasks() {
       const sortedTasks = this.sortByCb(this.unorderedTasks)
       const onlyOpenTasks = this.onlyOpenTasks ? filter(sortedTasks, ['status', TaskStatusEnum.OPEN || TaskStatusEnum.LOCKED]) : sortedTasks
       const onlyForMe = this.onlyForUser ? onlyOpenTasks.filter(this.hasPendingRecordsForUser) : onlyOpenTasks
       return onlyForMe
     },
     activityTab: {
-      get () {
+      get() {
         return this.$route.query.view !== 'stats'
       },
-      set (value) {
-        const query = { view: value ? 'chart' : 'stats' }
-        this.$router.push({ path: this.$route.path, query }, null)
+      set(value) {
+        const query = {view: value ? 'chart' : 'stats'}
+        this.$router.push({path: this.$route.path, query}, null)
       }
     },
     onlyOpenTasks: {
-      get () {
+      get() {
         return this.$route.query.only_open === 'true'
       },
-      set (value) {
-        const query = { ...this.$route.query, only_open: !!value }
-        this.$router.push({ path: this.$route.path, query }, null)
+      set(value) {
+        const query = {...this.$route.query, only_open: !!value}
+        this.$router.push({path: this.$route.path, query}, null)
       }
     },
     onlyForUser: {
-      get () {
+      get() {
         return this.$route.query.only_for_user === 'true'
       },
-      set (value) {
-        const query = { ...this.$route.query, only_for_user: !!value }
-        this.$router.push({ path: this.$route.path, query }, null)
+      set(value) {
+        const query = {...this.$route.query, only_for_user: !!value}
+        this.$router.push({path: this.$route.path, query}, null)
       }
     }
   }
@@ -217,14 +217,15 @@ export default {
               d-flex align-items-lg-end align-items-center justify-content-end flex-grow-1 mt-2 mt-lg-0
             "
           >
-            <div  class=" d-flex flex-lg-row flex-column my-auto">
+            <div class=" d-flex flex-lg-row flex-column my-auto">
               <label class="text-nowrap text-primary mr-4">{{$t('statsList.showOnly')}} </label>
               <b-form-checkbox
                 id="tasksForMe"
                 class="user-retrieve-activity__stats__filters__checkbox--tasks-for-user mr-4"
                 v-model="onlyForUser"
               >
-                <label for="tasksForMe" class="text-nowrap text-primary" v-html="$t('statsList.tasksWithRecordsLeftForUser')"></label>
+                <label for="tasksForMe" class="text-nowrap text-primary"
+                       v-html="$t('statsList.tasksWithRecordsLeftForUser')"></label>
               </b-form-checkbox>
               <b-form-checkbox
                 id="openTasks"
@@ -233,7 +234,7 @@ export default {
               >
                 <label for="openTasks" class="text-nowrap text-primary">{{
                   $t("statsList.openTasks")
-                }}</label>
+                  }}</label>
               </b-form-checkbox>
             </div>
             <task-sort-by-dropdown
@@ -250,10 +251,10 @@ export default {
           :loader="fetchActivityLoader"
           waiter-class="my-5 mx-auto d-block "
         >
-        <user-retrieve-activity-chart
-          :activity-ids="activityIds"
-          :last-date="lastDate"
-          :range="range"
+          <user-retrieve-activity-chart
+            :activity-ids="activityIds"
+            :last-date="lastDate"
+            :range="range"
           />
         </app-waiter>
         <!--STATS -->

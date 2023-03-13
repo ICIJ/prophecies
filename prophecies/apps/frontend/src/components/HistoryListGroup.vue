@@ -1,7 +1,7 @@
 <script>
-import { uniqueId } from 'lodash'
+import {uniqueId} from 'lodash'
 import Action from '@/models/Action'
-import HistoryListItem, { ITEM_TYPES } from '@/components/HistoryListItem.vue'
+import HistoryListItem, {ITEM_TYPES} from '@/components/HistoryListItem.vue'
 import Task from '@/models/Task'
 import User from '@/models/User'
 
@@ -24,7 +24,7 @@ export default {
       default: () => ([])
     }
   },
-  data () {
+  data() {
     return {
       more: 5,
       nbTimesMore: 0,
@@ -32,13 +32,13 @@ export default {
     }
   },
   methods: {
-    loadMore () {
+    loadMore() {
       this.nbTimesMore++
     },
-    sortByTimestamp (a, b) {
+    sortByTimestamp(a, b) {
       return -a.timestamp.localeCompare(b.timestamp)
     },
-    countCheckedReviewsByDateUserIdTaskId (acc, checkedItem) { // compute checked reviews (reviewed - cancelled)
+    countCheckedReviewsByDateUserIdTaskId(acc, checkedItem) { // compute checked reviews (reviewed - cancelled)
       const date = new Date(checkedItem.date).toISOString()
       const id = `${date}_${checkedItem.userId}_${checkedItem.taskId}`
       const count = checkedItem.verb === 'reviewed' ? checkedItem.count : -checkedItem.count
@@ -64,10 +64,10 @@ export default {
     }
   },
   computed: {
-    fetchHistoryLoader () {
+    fetchHistoryLoader() {
       return uniqueId('load-history-item-')
     },
-    closedTasks () {
+    closedTasks() {
       return Action
         .query()
         .with('actor')
@@ -86,7 +86,7 @@ export default {
           taskName: task.target.name
         }))
     },
-    mentions () {
+    mentions() {
       return Action
         .query()
         .with('actor')
@@ -107,7 +107,7 @@ export default {
           link: mention.link
         }))
     },
-    tips () {
+    tips() {
       return Action
         .query()
         .with('actor')
@@ -128,7 +128,7 @@ export default {
           link: `#/tips/${tip.target.id}`
         }))
     },
-    reviewedOrCancelledItems () {
+    reviewedOrCancelledItems() {
       return Action
         .query()
         .with('actor')
@@ -146,34 +146,36 @@ export default {
           return prev
         }, [])
     },
-    reviewedItems () {
+    reviewedItems() {
       return Object.values(this.reviewedOrCancelledItems.reduce(this.countCheckedReviewsByDateUserIdTaskId, {}))
     },
 
-    items () {
+    items() {
       return [...this.mentions,
         ...this.closedTasks,
         ...this.tips,
         ...this.reviewedItems]
-        .map((item, i) => { return { ...item, id: `history-item-${i}` } })
+        .map((item, i) => {
+          return {...item, id: `history-item-${i}`}
+        })
     },
-    sortedByTimestampItems () {
+    sortedByTimestampItems() {
       return this.items.slice().sort(this.sortByTimestamp)
     },
-    nbVisibleItems () {
+    nbVisibleItems() {
       const limitAndMore = this.limit + this.more * this.nbTimesMore
       return this.limit > 0 ? limitAndMore : this.sortedByTimestampItems.length
     },
-    nbTotalItems () {
+    nbTotalItems() {
       return this.sortedByTimestampItems.length
     },
-    hasMoreToSee () {
+    hasMoreToSee() {
       return this.nbVisibleItems < this.nbTotalItems
     },
-    visibleItems () {
+    visibleItems() {
       return this.sortedByTimestampItems.slice(0, this.nbVisibleItems)
     },
-    isFluidClass () {
+    isFluidClass() {
       return this.fluid ? 'container-fluid' : 'container'
     }
   }
@@ -183,21 +185,22 @@ export default {
 <template>
   <div v-if="visibleItems.length" class="history-list-group px-0 history-list-group" :class="isFluidClass">
     <ul class="history-list-group__list list-unstyled pb-3">
-        <history-list-item v-for="(item) in visibleItems" :key="item.id" :id="item.id"
-        :project-name="item.projectName"
-        :task-name="item.taskName"
-        :link="item.link"
-        :timestamp="item.timestamp"
-        :type="item.type"
-        :creator="item.user"
-        :value="item.content"
-        />
+      <history-list-item v-for="(item) in visibleItems" :key="item.id" :id="item.id"
+                         :project-name="item.projectName"
+                         :task-name="item.taskName"
+                         :link="item.link"
+                         :timestamp="item.timestamp"
+                         :type="item.type"
+                         :creator="item.user"
+                         :value="item.content"
+      />
     </ul>
 
     <slot name="footer">
       <div class="history-list-group__see-more d-flex justify-content-center py-3" v-if="hasMoreToSee">
-        <button class="history-list-group__see-more__button btn btn-primary border font-weight-bold text-white" @click='loadMore'>
-        {{$t('historyListGroup.seeMore')}}
+        <button class="history-list-group__see-more__button btn btn-primary border font-weight-bold text-white"
+                @click='loadMore'>
+          {{$t('historyListGroup.seeMore')}}
         </button>
       </div>
     </slot>

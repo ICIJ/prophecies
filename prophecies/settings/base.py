@@ -31,7 +31,7 @@ TEMPLATE_DEBUG = DEBUG
 
 SITE_ID = 1
 
-INTERNAL_IPS = ('127.0.0.1', )
+INTERNAL_IPS = ('127.0.0.1',)
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
@@ -109,7 +109,6 @@ WEBPACK_LOADER = {
 
 WSGI_APPLICATION = 'prophecies.wsgi.application'
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -150,12 +149,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 AUTHENTICATION_BACKENDS = (
     'prophecies.core.oauth2_provider.OAuth2Provider',
     'django.contrib.auth.backends.ModelBackend',
 )
-
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -164,7 +161,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.DjangoModelPermissions',
     ],
-    'DEFAULT_PAGINATION_CLASS':'rest_framework_json_api.pagination.JsonApiPageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework_json_api.pagination.JsonApiPageNumberPagination',
     'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
     'PAGE_SIZE': 10,
     'DEFAULT_PARSER_CLASSES': (
@@ -199,7 +196,7 @@ USE_X_FORWARDED_HOST = DEBUG
 # https://python-social-auth.readthedocs.io
 
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'last_name', 'email']
-SOCIAL_AUTH_IMMUTABLE_USER_FIELDS = ['username', 'email',]
+SOCIAL_AUTH_IMMUTABLE_USER_FIELDS = ['username', 'email', ]
 SOCIAL_AUTH_URL_NAMESPACE = env.str('SOCIAL_AUTH_URL_NAMESPACE', default='sso')
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_SANITIZE_REDIRECTS = not DEBUG
@@ -209,9 +206,12 @@ SOCIAL_AUTH_LOGIN_URL = '/login/provider'
 SOCIAL_AUTH_PROVIDER_HOSTNAME = env.str('SOCIAL_AUTH_PROVIDER_HOSTNAME', default='')
 SOCIAL_AUTH_PROVIDER_KEY = env.str('SOCIAL_AUTH_PROVIDER_KEY', default='')
 SOCIAL_AUTH_PROVIDER_SECRET = env.str('SOCIAL_AUTH_PROVIDER_SECRET', default='')
-SOCIAL_AUTH_PROVIDER_PROFILE_URL = env.str('SOCIAL_AUTH_PROVIDER_PROFILE_URL', default='%s/api/v1/me.json?' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
-SOCIAL_AUTH_PROVIDER_AUTHORIZATION_URL = env.str('SOCIAL_AUTH_PROVIDER_AUTHORIZATION_URL', default='%s/oauth/authorize' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
-SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_URL = env.str('SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_URL', default='%s/oauth/token' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
+SOCIAL_AUTH_PROVIDER_PROFILE_URL = env.str('SOCIAL_AUTH_PROVIDER_PROFILE_URL',
+                                           default='%s/api/v1/me.json?' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
+SOCIAL_AUTH_PROVIDER_AUTHORIZATION_URL = env.str('SOCIAL_AUTH_PROVIDER_AUTHORIZATION_URL',
+                                                 default='%s/oauth/authorize' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
+SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_URL = env.str('SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_URL',
+                                                default='%s/oauth/token' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
 SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_METHOD = env.str('SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_METHOD', default='POST')
 SOCIAL_AUTH_PROVIDER_USERNAME_FIELD = env.str('SOCIAL_AUTH_PROVIDER_USERNAME_FIELD', default='username')
 SOCIAL_AUTH_PROVIDER_GROUPS_FIELD = env.str('SOCIAL_AUTH_PROVIDER_GROUPS_FIELD', default='groups')
@@ -292,7 +292,8 @@ CONSTANCE_CONFIG = {
     'helpDescription': ('Any trouble logging in?', 'Help text for the login page. Must be public.'),
     'loginUrl': ('%s?next=/' % SOCIAL_AUTH_LOGIN_URL, 'Link to create a user session'),
     'loginWelcome': ('Welcome to Prophecies', 'Title for the login page. Must be public.'),
-    'loginAccountDescription': ('Use your account to continue:', 'Account description for the login page. Must be public.'),
+    'loginAccountDescription': (
+    'Use your account to continue:', 'Account description for the login page. Must be public.'),
     'loginAccountButton': ('Login', 'Login button for the login page. Must be public.'),
     'logoutUrl': ('/admin/logout/?next=/', 'Link to logout'),
     'orgName': ('ICIJ', 'Name of the organization deploying this app')

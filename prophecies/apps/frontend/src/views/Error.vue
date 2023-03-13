@@ -1,5 +1,5 @@
 <script>
-import { get } from 'lodash'
+import {get} from 'lodash'
 import AppVersion from '@/components/AppVersion'
 import User from '@/models/User'
 
@@ -27,32 +27,32 @@ export default {
     }
   },
   computed: {
-    codeAsString () {
+    codeAsString() {
       return this.code || get(this, 'error.response.status')
     },
-    username () {
-      const { username = null } = User.me() || {}
+    username() {
+      const {username = null} = User.me() || {}
       return username
     },
-    titleAsString () {
+    titleAsString() {
       if (!this.title) {
         return get(this, 'error.response.statusText', this.error)
       }
       return this.title
     },
-    descriptionAsString () {
+    descriptionAsString() {
       if (!this.description) {
         return get(this, 'error.message')
       }
       return this.description
     },
-    helpLink () {
+    helpLink() {
       return this.$config.get('helpLink')
     },
-    logoutLink () {
+    logoutLink() {
       return this.$config.get('logoutUrl')
     },
-    showHeader () {
+    showHeader() {
       return !!this.username
     }
   }
@@ -73,7 +73,7 @@ export default {
       <div class="error__container container">
         <h1 class="mb-3 error__container__heading">
           <span class="error__container__heading__code mr-3">
-            <frown-icon class="error__container__heading__code__icon" />
+            <frown-icon class="error__container__heading__code__icon"/>
             <span class="px-2 error__container__heading__code__value">{{ codeAsString }}</span>
           </span>
           {{ titleAsString || $t('error.title') }}
@@ -83,11 +83,11 @@ export default {
         </p>
         <ul class="error__container__links list-inline text-capitalize">
           <li class="list-inline-item error__container__links__item">
-            <app-version />
+            <app-version/>
           </li>
           <li class="list-inline-item error__container__links__item">
             <a :href="helpLink" target="_blank">
-              <life-buoy-icon />
+              <life-buoy-icon/>
               {{ $t('error.help') }}
             </a>
           </li>
@@ -98,63 +98,63 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .error {
-    background: $primary no-repeat right bottom;
-    color: text-contrast($primary);
-    width: 100%;
-    min-height: 100vh;
+.error {
+  background: $primary no-repeat right bottom;
+  color: text-contrast($primary);
+  width: 100%;
+  min-height: 100vh;
 
-    &__container {
-      margin: $spacer auto;
-      text-align: center;
+  &__container {
+    margin: $spacer auto;
+    text-align: center;
 
-      &__heading {
-        display: flex;
+    &__heading {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      &__code {
+        display: inline-flex;
         flex-direction: row;
         align-items: center;
         justify-content: center;
+        background: $danger;
+        border-radius: 1em;
 
-        &__code {
-          display: inline-flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-          background: $danger;
-          border-radius: 1em;
-
-          &__icon {
-            transform: scale(1.1);
-          }
-
-          &__value {
-            font-size: 0.8rem;
-
-            &:empty {
-              display: none;
-            }
-          }
+        &__icon {
+          transform: scale(1.1);
         }
-      }
 
-      &__description {
-        margin-bottom: $spacer * 5;
-      }
+        &__value {
+          font-size: 0.8rem;
 
-      &__links {
-
-        &__item {
-
-          &:not(:last-of-type):after {
-            content: "|";
-            margin: 0 $spacer;
-            color: $light;
-          }
-
-          &, a {
-            color: $light;
+          &:empty {
+            display: none;
           }
         }
       }
     }
+
+    &__description {
+      margin-bottom: $spacer * 5;
+    }
+
+    &__links {
+
+      &__item {
+
+        &:not(:last-of-type):after {
+          content: "|";
+          margin: 0 $spacer;
+          color: $light;
+        }
+
+        &, a {
+          color: $light;
+        }
+      }
+    }
   }
+}
 </style>

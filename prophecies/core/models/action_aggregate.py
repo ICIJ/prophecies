@@ -10,13 +10,13 @@ class ActionAggregateQuerySet(models.QuerySet):
     def user_scope(self, user):
         projects = self.filter(task__checkers=user).values('task__project')
         return self.filter(task__project__in=projects)
-    
-    
+
+
 class ActionAggregateManager(models.Manager):
-    
+
     def user_scope(self, user):
         return self.get_queryset().user_scope(user)
-    
+
     def get_queryset(self) -> ActionAggregateQuerySet:
         return ActionAggregateQuerySet(model=self.model, using=self._db, hints=self._hints)
 
@@ -29,11 +29,11 @@ class ActionAggregate(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     task = models.ForeignKey(Task, on_delete=models.SET_NULL, null=True, blank=True)
     count = models.IntegerField(default=0)
-    
+
     @staticmethod
-    def signal_action_aggregate_creation(sender, instance, created,**kwargs):
+    def signal_action_aggregate_creation(sender, instance, created, **kwargs):
         if instance.user and created:
             action.send(instance.user, verb='created-aggregate', target=instance)
 
-    
+
 signals.post_save.connect(ActionAggregate.signal_action_aggregate_creation, sender=ActionAggregate)

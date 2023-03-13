@@ -9,13 +9,12 @@ from django.utils import timezone
 import time_machine
 import datetime as dt
 
-
 action_aggregates_url = '/api/v1/action-aggregates/'
+
 
 class TestActionAggregate(TestCase):
     client = APIClient()
     fixtures = ['users.json']
-
 
     def setUp(self):
         # Create choices
@@ -34,8 +33,6 @@ class TestActionAggregate(TestCase):
         self.task_shops.checkers.add(self.ruby)
         self.task_shops.checkers.add(self.olivia)
         self.task.checkers.add(self.olivia)
-        
-        
 
     def test_create_aggregated_action_post_save_on_action(self):
         action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
@@ -43,10 +40,10 @@ class TestActionAggregate(TestCase):
 
         request = self.client.get(action_aggregates_url)
         action_aggregates = request.json().get('data')
-        self.assertEqual(len(action_aggregates),1)
+        self.assertEqual(len(action_aggregates), 1)
 
-        first_aggregate_attributes= action_aggregates[0].get('attributes')
-        self.assertEqual(first_aggregate_attributes.get('count'),1)
+        first_aggregate_attributes = action_aggregates[0].get('attributes')
+        self.assertEqual(first_aggregate_attributes.get('count'), 1)
 
     def test_update_aggregated_action_using_streams(self):
         action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
@@ -55,9 +52,9 @@ class TestActionAggregate(TestCase):
 
         request = self.client.get(action_aggregates_url)
         action_aggregates = request.json().get('data')
-        self.assertEqual(len(action_aggregates),1)
-        first_aggregate_attributes= action_aggregates[0].get('attributes')
-        self.assertEqual(first_aggregate_attributes.get('count'),2)
+        self.assertEqual(len(action_aggregates), 1)
+        first_aggregate_attributes = action_aggregates[0].get('attributes')
+        self.assertEqual(first_aggregate_attributes.get('count'), 2)
 
     def test_aggregation_by_task(self):
         action.send(self.olivia, verb='follow', target=self.django, task_id=self.task.id)
@@ -78,7 +75,6 @@ class TestActionAggregate(TestCase):
         relationships = data[0].get('relationships')
         self.assertEqual(relationships['user']['data']['id'], str(self.olivia.id))
         self.assertEqual(relationships['task']['data']['id'], str(self.task.id))
-
 
     def test_the_relationships_user_and_task_exists(self):
         action.send(self.olivia, verb='follow', target=self.django, task_id=self.task.id)
@@ -104,73 +100,70 @@ class TestActionAggregate(TestCase):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get(action_aggregates_url)
         action_aggregates = request.json().get('data')
-        self.assertEqual(len(action_aggregates),2)
-        
+        self.assertEqual(len(action_aggregates), 2)
+
         self.client.login(username='ruby', password='ruby')
         request = self.client.get(action_aggregates_url)
         action_aggregates = request.json().get('data')
-        self.assertEqual(len(action_aggregates),1)
-       
+        self.assertEqual(len(action_aggregates), 1)
+
     def test_send_only_one_action_when_aggregate_is_updated(self):
         self.client.login(username=self.olivia, password='olivia')
         request = self.client.get('/api/v1/actions/?filter[verb]=created-aggregate')
         data = request.json().get('data')
         self.assertEqual(len(data), 0)
-        my_agg = ActionAggregate.objects.create( verb='reviewed',date=timezone.now(),user=self.olivia, task=self.task,count=50 )
+        my_agg = ActionAggregate.objects.create(verb='reviewed', date=timezone.now(), user=self.olivia, task=self.task,
+                                                count=50)
         request = self.client.get(action_aggregates_url)
         action_aggregates = request.json().get('data')
-        self.assertEqual(len(action_aggregates),1)
-        
+        self.assertEqual(len(action_aggregates), 1)
+
         request = self.client.get('/api/v1/actions/?filter[verb]=created-aggregate')
         data = request.json().get('data')
         self.assertEqual(len(data), 1)
-        
-        my_agg.count= 60
+
+        my_agg.count = 60
         my_agg.save()
-        
+
         request = self.client.get(action_aggregates_url)
         action_aggregates = request.json().get('data')
-        self.assertEqual(len(action_aggregates),1)
-        
+        self.assertEqual(len(action_aggregates), 1)
+
         request = self.client.get('/api/v1/actions/?filter[verb]=created-aggregate')
         data = request.json().get('data')
-        self.assertEqual(len(data), 1) 
-        
+        self.assertEqual(len(data), 1)
+
     def test_send_two_actions_created_aggregate_when_two_aggregates_are_created(self):
         action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
         action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
         action.send(self.olivia, verb='added', target=self.django, task_id=self.task_shops.id)
         self.client.login(username='olivia', password='olivia')
-        
+
         request = self.client.get(action_aggregates_url)
         action_aggregates = request.json().get('data')
-        self.assertEqual(len(action_aggregates),2)
-        
+        self.assertEqual(len(action_aggregates), 2)
+
         request = self.client.get('/api/v1/actions/?filter[verb]=created-aggregate')
         data = request.json().get('data')
         self.assertEqual(len(data), 2)
-        
-        
-       
+
     def test_filters_on_date_range(self):
         yesterday = dt.date.today() - dt.timedelta(days=1)
         lastweek = dt.date.today() - dt.timedelta(days=7)
         lastmonth = dt.date.today() - dt.timedelta(days=30)
         with time_machine.travel(dt.date.today(), tick=False) as traveller:
-            traveller.shift(dt.timedelta(days=-1)) # yesterday
+            traveller.shift(dt.timedelta(days=-1))  # yesterday
             action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
-            traveller.shift(dt.timedelta(days=-6)) # 7 days before
+            traveller.shift(dt.timedelta(days=-6))  # 7 days before
             action.send(self.olivia, verb='added', target=self.django, task_id=self.task.id)
             traveller.shift(dt.timedelta(weeks=-3))
             action.send(self.olivia, verb='added', target=self.django, task_id=self.task_shops.id)
-            
-        f = ActionAggregateFilter({'date_after': lastweek,'date_before':yesterday})
-        self.assertEqual(len(f.qs),2)
-        
+
+        f = ActionAggregateFilter({'date_after': lastweek, 'date_before': yesterday})
+        self.assertEqual(len(f.qs), 2)
+
         self.client.login(username='olivia', password='olivia')
-        url = '/api/v1/action-aggregates/?date_after=%s&date_before=%s' % (str(lastweek),str(yesterday))
+        url = '/api/v1/action-aggregates/?date_after=%s&date_before=%s' % (str(lastweek), str(yesterday))
         request = self.client.get(url)
         action_aggregates = request.json().get('data')
-        self.assertEqual(len(action_aggregates),2)
-        
-        
+        self.assertEqual(len(action_aggregates), 2)

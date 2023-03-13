@@ -13,7 +13,6 @@ admin.site.unregister(UserSocialAuth)
 admin.site.unregister(Nonce)
 admin.site.unregister(Association)
 
-
 urlpatterns = [
     path('', include('social_django.urls', namespace='sso')),
     path('', TemplateView.as_view(template_name="index.html"), name="home"),
@@ -24,8 +23,9 @@ urlpatterns = [
 if not settings.DJANGO_ADMIN_LOGIN:
     redirect_login_view = RedirectView.as_view(url=reverse_lazy('home'), permanent=True, query_string=True)
     redirect_login_path = path('admin/login/', redirect_login_view)
-    urlpatterns =  [ redirect_login_path ] + urlpatterns
+    urlpatterns = [redirect_login_path] + urlpatterns
 
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns = [ path('__debug__/', include(debug_toolbar.urls)), ] + urlpatterns
+
+    urlpatterns = [path('__debug__/', include(debug_toolbar.urls)), ] + urlpatterns

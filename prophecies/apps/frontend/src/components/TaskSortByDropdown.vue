@@ -1,18 +1,18 @@
 <template>
-    <sort-by-dropdown
-      :sort.sync="sortField"
-      :options="sortOptions"
-      class="task-sort-by-dropdown"
-      >
-      <template #label>
-      </template>
-    </sort-by-dropdown>
+  <sort-by-dropdown
+    :sort.sync="sortField"
+    :options="sortOptions"
+    class="task-sort-by-dropdown"
+  >
+    <template #label>
+    </template>
+  </sort-by-dropdown>
 </template>
 
 <script>
-import { find, orderBy } from 'lodash'
+import {find, orderBy} from 'lodash'
 import SortByDropdown from '@/components/SortByDropdown.vue'
-import { TaskStatusOrder } from '@/models/Task'
+import {TaskStatusOrder} from '@/models/Task'
 
 export default {
   name: 'TaskSortByDropdown',
@@ -33,48 +33,48 @@ export default {
       default: () => ([])
     }
   },
-  data () {
+  data() {
     return {
       sortOptions: [
-        { value: 'status_asc', label: this.$t('taskSortByDropdown.status'), $isDefault: true, needStatus: true },
-        { value: 'progress_asc', label: this.$t('taskSortByDropdown.progress0_100') },
-        { value: 'progress_desc', label: this.$t('taskSortByDropdown.progress100_0') },
-        { value: 'priority_asc', label: this.$t('taskSortByDropdown.priority0_9'), needStatus: true },
-        { value: 'priority_desc', label: this.$t('taskSortByDropdown.priority9_0'), needStatus: true },
-        { value: 'name_asc', label: this.$t('taskSortByDropdown.nameAZ') },
-        { value: 'name_desc', label: this.$t('taskSortByDropdown.nameZA') },
-        { value: 'createdAt_desc', label: this.$t('taskSortByDropdown.recentlyCreated') }
+        {value: 'status_asc', label: this.$t('taskSortByDropdown.status'), $isDefault: true, needStatus: true},
+        {value: 'progress_asc', label: this.$t('taskSortByDropdown.progress0_100')},
+        {value: 'progress_desc', label: this.$t('taskSortByDropdown.progress100_0')},
+        {value: 'priority_asc', label: this.$t('taskSortByDropdown.priority0_9'), needStatus: true},
+        {value: 'priority_desc', label: this.$t('taskSortByDropdown.priority9_0'), needStatus: true},
+        {value: 'name_asc', label: this.$t('taskSortByDropdown.nameAZ')},
+        {value: 'name_desc', label: this.$t('taskSortByDropdown.nameZA')},
+        {value: 'createdAt_desc', label: this.$t('taskSortByDropdown.recentlyCreated')}
       ]
     }
   },
   computed: {
-    selectedSortOption () {
-      return find(this.sortOptions, { value: this.sortField })
+    selectedSortOption() {
+      return find(this.sortOptions, {value: this.sortField})
     },
-    selectedSortName () {
+    selectedSortName() {
       return this.selectedSortOption.value.split('_')[0]
     },
-    selectedSortOptionOrder () {
+    selectedSortOptionOrder() {
       return this.selectedSortOption.value.split('_')[1]
     },
-    sortByStatus () {
+    sortByStatus() {
       return function (task) {
         return TaskStatusOrder[task.status] === 1
       }
     },
     sortField: {
-      get () {
-        const isParamValid = find(this.sortOptions, { value: this.$route.query.sort })
+      get() {
+        const isParamValid = find(this.sortOptions, {value: this.$route.query.sort})
         return isParamValid ? this.$route.query.sort : this.sort
       },
-      set (value) {
-        const query = { ...this.$route.query, sort: value }
-        this.$router.push({ path: this.$route.path, query }, null)
+      set(value) {
+        const query = {...this.$route.query, sort: value}
+        this.$router.push({path: this.$route.path, query}, null)
         this.$emit('update:sort', value)
         this.$emit('update:sort-by-cb', this.callbackOrderBy.bind(this))
       }
     },
-    callbackOrderBy () {
+    callbackOrderBy() {
       return (tasks) => {
         if (this.selectedSortName === 'status') {
           return orderBy(tasks, [this.sortByStatus, 'name'], ['asc', 'asc'])

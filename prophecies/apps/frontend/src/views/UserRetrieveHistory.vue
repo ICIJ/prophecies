@@ -1,5 +1,5 @@
 <script>
-import { noop } from 'lodash'
+import {noop} from 'lodash'
 import HistoryFetcher from '@/components/HistoryFetcher'
 import HistoryList from '@/components/HistoryList'
 import EmptyPlaceholder from '@/components/EmptyPlaceholder'
@@ -17,16 +17,16 @@ export default {
     }
   },
   computed: {
-    pageSize () {
+    pageSize() {
       return 50
     },
     pageNumber: {
-      get () {
+      get() {
         return Number(this.$route.query['page[number]']) || 1
       },
-      set (pageNumber) {
-        const query = { ...this.$route.query, 'page[number]': pageNumber }
-        this.$router.push({ path: this.$route.path, query }, noop)
+      set(pageNumber) {
+        const query = {...this.$route.query, 'page[number]': pageNumber}
+        this.$router.push({path: this.$route.path, query}, noop)
       }
     }
   }
@@ -41,7 +41,7 @@ export default {
     :page-size="pageSize"
     #default="{ actionIds, isFetching, count }"
   >
-    <history-list :fetching="isFetching" :action-ids="actionIds" >
+    <history-list :fetching="isFetching" :action-ids="actionIds">
       <template #header>
         <custom-pagination
           compact

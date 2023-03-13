@@ -8,16 +8,16 @@ from prophecies.core.models import TaskRecordReview
 from prophecies.core.contrib.display import display_status, display_task_addon, display_choice
 from prophecies.core.mixins import ExportWithCsvStreamMixin, ExportCsvGeneratorMixin
 
-class TaskRecordReviewResource(ExportCsvGeneratorMixin, ModelResource):
 
+class TaskRecordReviewResource(ExportCsvGeneratorMixin, ModelResource):
     class Meta:
         model = TaskRecordReview
-        fields = ('id', 'status', 'checker__username', 'round', 'choice__value', 
-                    'note', 'alternative_value', 'task_record__id', 'task_record__uid', )
+        fields = ('id', 'status', 'checker__username', 'round', 'choice__value',
+                  'note', 'alternative_value', 'task_record__id', 'task_record__uid',)
 
 
 @admin.register(TaskRecordReview)
-class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):    
+class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     resource_class = TaskRecordReviewResource
     list_display = ['review_with_details', 'task_with_addon', 'round', 'status_badge']
     list_filter = [
@@ -28,13 +28,12 @@ class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
         'status',
         'round',
     ]
-    
+
     # By default, we deactivate adding review to force users to
     # assign them through the "task record" admin page.
     def has_add_permission(self, request, obj=None):
         return False
-    
-    
+
     def get_queryset(self, request):
         return super().get_queryset(request) \
             .prefetch_related('checker') \
@@ -42,7 +41,6 @@ class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
             .prefetch_related('task_record') \
             .prefetch_related('task_record__task') \
             .prefetch_related('task_record__task__project')
-            
 
     def review_with_details(self, review):
         review_title = str(review)
@@ -60,12 +58,10 @@ class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
 
     review_with_details.short_description = "Review"
 
-
     def status_badge(self, review):
         return display_status(review.get_status_display())
 
     status_badge.short_description = "Status"
-
 
     def task_with_addon(self, review):
         if review.task_record:

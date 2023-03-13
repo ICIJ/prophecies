@@ -14,6 +14,7 @@ MODEL_VIEWS_MAPPING = {
     'UserNotification': UserNotificationViewSet
 }
 
+
 class PayloadValueFieldSerializer(serializers.Serializer):
     data = serializers.DictField()
 
@@ -41,7 +42,6 @@ class OperationSerializer(serializers.Serializer):
     operations = OperationFieldSerializer(many=True, required=True)
     payloads = PayloadFieldSerializer(many=True, required=True)
 
-
     def validate_operations(self, value):
         for operation in value:
             payload_id = operation['payload']
@@ -54,14 +54,12 @@ class OperationSerializer(serializers.Serializer):
             serializer.is_valid(raise_exception=True)
         return value
 
-
     def find_payload(self, id):
         try:
             payloads = self.get_initial().get('payloads', [])
             return next(p for p in payloads if p['id'] == id)
         except StopIteration:
             return None
-
 
     def find_payload_view(self, id):
         payload = self.find_payload(id)
@@ -71,15 +69,13 @@ class OperationSerializer(serializers.Serializer):
                 return MODEL_VIEWS_MAPPING[type]
         return None
 
-
-    def parse_payload_value(self, payload, pk = None):
+    def parse_payload_value(self, payload, pk=None):
         payload_value = payload['value']
         payload_view = self.find_payload_view(payload['id'])
         payload_value['data']['id'] = pk
-        context = { 'request': self.context['request'], 'view': payload_view }
+        context = {'request': self.context['request'], 'view': payload_view}
         stream = BytesIO(json.dumps(payload_value).encode("utf-8"))
         return JSONParser().parse(stream, None, context)
-
 
     def payload_instance(self, payload, pk, raise_exception=False):
         payload_id = payload['id']
@@ -97,7 +93,7 @@ class OperationSerializer(serializers.Serializer):
         payload_view = self.find_payload_view(operation['payload'])
 
         request = self.context['request']
-        context = { 'request': request, 'view': payload_view }
+        context = {'request': request, 'view': payload_view}
         instance_pk = operation['id']
 
         payload_data = self.parse_payload_value(payload, instance_pk)
@@ -112,6 +108,7 @@ class OperationSerializer(serializers.Serializer):
             serializer.save()
         return {}
 
+
 class OperationViewSet(viewsets.GenericViewSet):
     """
     To create bulk operations. Each operation is defined by a list of
@@ -125,7 +122,6 @@ class OperationViewSet(viewsets.GenericViewSet):
     resource_name = 'Operation'
     http_method_names = ['post', 'head']
     permission_classes = [IsAuthenticated]
-
 
     def create(self, request):
         context = {'request': request, 'view': self}

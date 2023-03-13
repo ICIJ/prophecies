@@ -3,6 +3,7 @@ from django.test import TestCase
 from prophecies.core.models import Project, Task, TaskChecker
 from prophecies.core.models.task_record_review import StatusType
 
+
 class TestProject(TestCase):
     def setUp(self):
         self.project = Project.objects.create(name='Pencil Papers')

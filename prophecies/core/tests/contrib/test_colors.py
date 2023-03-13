@@ -1,8 +1,8 @@
 from django.test import TestCase
 from prophecies.core.contrib.colors import hex_to_rgb, rgb_to_hex, hex_scale_brightness
 
-class TestColors(TestCase):
 
+class TestColors(TestCase):
 
     def test_it_convert_black_hex_to_rgb(self):
         rgb = hex_to_rgb('#000000')
@@ -15,7 +15,6 @@ class TestColors(TestCase):
     def test_it_convert_blue_hex_to_rgb(self):
         rgb = hex_to_rgb('#0000ff')
         self.assertEqual(rgb, (0, 0, 1.0,))
-
 
     def test_it_convert_pink_hex_to_rgb(self):
         rgb = hex_to_rgb('#ff00ff')

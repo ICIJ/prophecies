@@ -17,7 +17,6 @@ class TipAdmin(admin.ModelAdmin):
 
     task_with_addon.short_description = "Task"
 
-
     def save_model(self, request, obj, form, change):
         if not obj.creator:
             obj.creator = request.user

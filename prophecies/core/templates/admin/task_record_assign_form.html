@@ -8,16 +8,17 @@
 {% endblock %}
 
 {% block content %}
-    <form action="{% url opts|admin_urlname:'assign' %}" method="post" id="task_record_assign_form" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div>
-        {{ adminform.non_field_errors }}
-        {% for fieldset in adminform %}
-            {% include "admin/includes/fieldset.html" %}
-        {% endfor %}
-      </div>
-      <div class="submit-row">
-        <input class="button" type="submit" value="Assign" name="_save" />
-      </div>
-    </form>
+  <form action="{% url opts|admin_urlname:'assign' %}" method="post" id="task_record_assign_form"
+        enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+      {{ adminform.non_field_errors }}
+      {% for fieldset in adminform %}
+        {% include "admin/includes/fieldset.html" %}
+      {% endfor %}
+    </div>
+    <div class="submit-row">
+      <input class="button" type="submit" value="Assign" name="_save"/>
+    </div>
+  </form>
 {% endblock %}

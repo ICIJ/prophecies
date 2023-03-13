@@ -7,7 +7,6 @@ class ProjectAdmin(admin.ModelAdmin):
     exclude = ['creator']
     search_fields = ['name']
 
-
     def save_model(self, request, obj, form, change):
         if not obj.creator:
             obj.creator = request.user

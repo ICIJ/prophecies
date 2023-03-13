@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0015_task_embeddable_links'),
     ]
@@ -13,7 +12,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='task',
             name='embeddable_record_link_template',
-            field=models.CharField(blank=True, help_text='An option link template to use within the link preview.', max_length=1000, null=True, verbose_name='Record link template'),
+            field=models.CharField(blank=True, help_text='An option link template to use within the link preview.',
+                                   max_length=1000, null=True, verbose_name='Record link template'),
         ),
         migrations.AlterField(
             model_name='task',

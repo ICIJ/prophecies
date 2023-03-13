@@ -1,5 +1,5 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-import { BTab } from 'bootstrap-vue'
+import {createLocalVue, shallowMount} from '@vue/test-utils'
+import {BTab} from 'bootstrap-vue'
 import AppSearchResults from '@/components/AppSearchResults'
 import Core from '@/core'
 import Task from '@/models/Task'
@@ -19,24 +19,24 @@ describe('AppSearchResults', () => {
     beforeEach(async () => {
       const localVue = createLocalVue()
       const core = Core.init(localVue).useAll()
-      const { i18n, store, wait } = core
+      const {i18n, store, wait} = core
       const stubs = ['router-link']
       await core.configure()
       const propsData = {
         query: 'test',
         queryset: [
-          { id: '38', type: 'TaskRecordReview', querysetId: 'qs-1' },
-          { id: '37', type: 'TaskRecordReview', querysetId: 'qs-1' },
-          { id: '36', type: 'TaskRecordReview', querysetId: 'qs-1' },
-          { id: '4', type: 'Tip', querysetId: 'qs-2' }
+          {id: '38', type: 'TaskRecordReview', querysetId: 'qs-1'},
+          {id: '37', type: 'TaskRecordReview', querysetId: 'qs-1'},
+          {id: '36', type: 'TaskRecordReview', querysetId: 'qs-1'},
+          {id: '4', type: 'Tip', querysetId: 'qs-2'}
         ],
         counts: [
-          { count: 3, querysetId: 'qs-1' },
-          { count: 1, querysetId: 'qs-2' }
+          {count: 3, querysetId: 'qs-1'},
+          {count: 1, querysetId: 'qs-2'}
         ]
       }
       // Finally, instantiate the component
-      wrapper = shallowMount(AppSearchResults, { i18n, localVue, propsData, stubs, store, wait })
+      wrapper = shallowMount(AppSearchResults, {i18n, localVue, propsData, stubs, store, wait})
     })
 
     it('should have 4 tabs', () => {
@@ -50,8 +50,8 @@ describe('AppSearchResults', () => {
     it('should have 1 item for task 1', async () => {
       await wrapper.setProps({
         queryset: [
-          { id: '37', type: 'TaskRecordReview', querysetId: 'qs-1' },
-          { id: '36', type: 'TaskRecordReview', querysetId: 'qs-1' }
+          {id: '37', type: 'TaskRecordReview', querysetId: 'qs-1'},
+          {id: '36', type: 'TaskRecordReview', querysetId: 'qs-1'}
         ]
       })
       expect(wrapper.vm.querysetTaskRecordReviews('1')).toHaveLength(1)

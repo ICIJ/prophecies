@@ -7,7 +7,9 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
 from prophecies.core.models import Choice, TaskRecord, UserNotification, TaskUserStatistics, TaskUserChoiceStatistics
-from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action, mentioned, notify_mentioned_users
+from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action, mentioned, \
+    notify_mentioned_users
+
 
 class StatusType(models.TextChoices):
     PENDING = 'PENDING', _('Pending')
@@ -18,41 +20,43 @@ class TaskRecordReviewQuerySet(models.QuerySet):
 
     def count_by_task(self, task_field='task', count_field='count'):
         count = Count('pk', distinct=True)
-        annotate = { task_field: F('task_record__task_id'), count_field: count }
+        annotate = {task_field: F('task_record__task_id'), count_field: count}
         return self.exclude(task_record=None) \
             .values('task_record__task_id') \
             .annotate(**annotate) \
             .values(task_field, count_field) \
             .order_by()
-            
+
     def count_by_choice(self, choice_field='choice', count_field='count'):
         count = Count('pk', distinct=True)
-        annotate = { choice_field: F('choice_id'), count_field: count }
+        annotate = {choice_field: F('choice_id'), count_field: count}
         return self \
             .values('choice_id') \
             .annotate(**annotate) \
             .values(choice_field, count_field) \
             .order_by()
-            
-    def count_by_checker_by_choice_by_round(self, checker_field='checker', choice_field='choice', round_field='roundNumber', count_field='count'):
+
+    def count_by_checker_by_choice_by_round(self, checker_field='checker', choice_field='choice',
+                                            round_field='roundNumber', count_field='count'):
         count = Count('pk', distinct=True)
-        
-        annotate = { checker_field: F('checker_id'), choice_field: F('choice_id'), round_field:F('round'), count_field: count }
+
+        annotate = {checker_field: F('checker_id'), choice_field: F('choice_id'), round_field: F('round'),
+                    count_field: count}
         return self \
-            .values('checker_id','choice_id','round') \
+            .values('checker_id', 'choice_id', 'round') \
             .annotate(**annotate) \
             .values(checker_field, choice_field, round_field, count_field) \
             .order_by()
+
 
 class TaskRecordReviewManager(models.Manager):
 
     def get_queryset(self) -> TaskRecordReviewQuerySet:
         return TaskRecordReviewQuerySet(model=self.model,
-            using=self._db, hints=self._hints)
+                                        using=self._db, hints=self._hints)
 
     def user_scope(self, user):
         return self.filter(task_record__task__in=user.task.all())
-
 
     def latest_round(self, task_record):
         if self.filter(task_record=task_record).exists():
@@ -60,14 +64,11 @@ class TaskRecordReviewManager(models.Manager):
             return latest.round
         return 0
 
-
     def pending(self):
         return self.filter(status=StatusType.PENDING)
 
-
     def done(self):
         return self.filter(status=StatusType.DONE)
-
 
     def all_by_round(self, **filter):
         buckets = self.all() \
@@ -75,8 +76,7 @@ class TaskRecordReviewManager(models.Manager):
             .values('round') \
             .annotate(count=models.Count('round')) \
             .order_by('count')
-        return { i['round']: i['count'] for i in buckets }
-
+        return {i['round']: i['count'] for i in buckets}
 
     def done_by_round(self, **filter):
         buckets = self.done() \
@@ -84,15 +84,15 @@ class TaskRecordReviewManager(models.Manager):
             .values('round') \
             .annotate(count=models.Count('round')) \
             .order_by('count')
-        return { i['round']: i['count'] for i in buckets }
-    
+        return {i['round']: i['count'] for i in buckets}
+
     def pending_by_round(self, **filter):
         buckets = self.pending() \
             .filter(**filter) \
             .values('round') \
             .annotate(count=models.Count('round')) \
             .order_by('count')
-        return { i['round']: i['count'] for i in buckets }
+        return {i['round']: i['count'] for i in buckets}
 
     def progress_by_round(self, **filter):
         all = self.all_by_round(**filter)
@@ -100,11 +100,11 @@ class TaskRecordReviewManager(models.Manager):
         # A lambda to calculate the progression for a given round
         progress = lambda round, total: done.get(round, 0) / total * 100
         # Return a dictionnary combinings both aggregations dict
-        return { round: progress(round, count) for (round, count) in all.items() }
+        return {round: progress(round, count) for (round, count) in all.items()}
+
 
 class TaskRecordReview(models.Model):
     objects = TaskRecordReviewManager()
-
 
     class Meta:
         unique_together = ('task_record_id', 'checker_id', 'round')
@@ -113,7 +113,6 @@ class TaskRecordReview(models.Model):
             ('checker_id', 'round', 'status'),
         ]
         get_latest_by = 'round'
-
 
     task_record = models.ForeignKey(TaskRecord, null=True, on_delete=models.SET_NULL, related_name='reviews')
     checker = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='reviewer')
@@ -127,21 +126,17 @@ class TaskRecordReview(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.round is None:
             self.round = TaskRecordReview.objects.latest_round(self.task_record) + 1
 
-
     def __str__(self):
         if self.task_record and self.checker:
             if self.choice:
                 return f'Record #{self.task_record.id} reviewed by {self.checker}'
-            return f'Record #{self.task_record.id} pending review by {self.checker}'            
+            return f'Record #{self.task_record.id} pending review by {self.checker}'
         return super().__str__()
-
-
 
     @property
     def project(self):
@@ -150,14 +145,12 @@ class TaskRecordReview(models.Model):
         except AttributeError:
             return None
 
-
     @property
     def task(self):
         try:
             return self.task_record.task
         except AttributeError:
             return None
-
 
     @property
     def task_id(self):
@@ -166,7 +159,7 @@ class TaskRecordReview(models.Model):
         except AttributeError:
             return None
 
-    @cached_property 
+    @cached_property
     def history(self):
         try:
             return self.task_record.reviews.all()
@@ -180,36 +173,33 @@ class TaskRecordReview(models.Model):
         """
         return list_mentions(self.note)
 
-
     def save(self, *args, **kwargs):
-        if not self.choice is None :
+        if not self.choice is None:
             self.status = StatusType.DONE
-        elif self.choice_cancelled : # on cancel the status goes from DONE to PENDING
+        elif self.choice_cancelled:  # on cancel the status goes from DONE to PENDING
             self.status = StatusType.PENDING
         super().save(*args, **kwargs)
-
 
     def check_user_is_authorized(self, **kwargs):
         if not self.task_record.task.checkers.filter(pk=self.checker.pk).exists():
             raise ValidationError(f'{self.checker} is not a checker for the task "{self.task_record.task}"')
-
 
     def check_unique_constraints(self, ignored_fields=[], **kwargs):
         for fields in self._meta.unique_together:
             # Remove ignored field
             fields = [field for field in fields if field not in ignored_fields]
             # Collect values for the field that must be unique together
-            opts = { field: getattr(self, field) for field in fields }
+            opts = {field: getattr(self, field) for field in fields}
             if TaskRecordReview.objects.filter(**opts).exists():
-                raise ValidationError(f'Task record #{self.task_record.id} was already attributed to {self.checker} before')
-
+                raise ValidationError(
+                    f'Task record #{self.task_record.id} was already attributed to {self.checker} before')
 
     def check_round_upper_bound(self, **kwarg):
         if self.task_record:
             max_round = self.task_record.task.rounds
             if self.task_record.reviews.count() >= max_round:
                 raise ValidationError(f'Task record #{self.task_record.id} cannot get more than {max_round} reviews')
-    
+
     @property
     def choice_cancelled(self):
         if self.pk is not None:
@@ -230,7 +220,6 @@ class TaskRecordReview(models.Model):
             return self.note != instance.note
         return False
 
-
     @staticmethod
     def signal_notify_mentioned_users(sender, instance, **kwargs):
         for mention in instance.mentions:
@@ -240,7 +229,6 @@ class TaskRecordReview(models.Model):
                 if created:
                     UserNotification.objects.create(recipient=user, action=action)
 
-
     @staticmethod
     def signal_fill_note_created_at_and_updated_at(sender, instance, **kwargs):
         if instance.already_has_note and instance.note_changed:
@@ -248,25 +236,21 @@ class TaskRecordReview(models.Model):
         if instance.note and not instance.already_has_note:
             instance.note_created_at = timezone.now()
 
-
     @property
     def mentioned_project(self):
         if mentioned(self.note, 'project'):
             return self.project
-
 
     @property
     def mentioned_task(self):
         if mentioned(self.note, 'task'):
             return self.task
 
-
     @staticmethod
     def signal_notify_members_in_mentioned_project(sender, instance, **kwargs):
         project = instance.mentioned_project
         if project is not None:
             notify_mentioned_users(instance.checker, project.members, instance)
-
 
     @staticmethod
     def signal_notify_task_checkers_in_mentioned_task(sender, instance, **kwargs):
@@ -275,7 +259,7 @@ class TaskRecordReview(models.Model):
             notify_mentioned_users(instance.checker, task.checkers.all(), instance)
 
     @staticmethod
-    def signal_save_task_user_statistics(sender, instance, **kwargs) :
+    def signal_save_task_user_statistics(sender, instance, **kwargs):
         # Find or create the relevant TaskUserStatistics
         task = instance.task
         checker = instance.checker
@@ -287,15 +271,14 @@ class TaskRecordReview(models.Model):
             task_round_reviews = sender.objects.filter(task_record__task=task, checker=checker, round=round)
             stats_user.done_count = task_round_reviews.filter(status=StatusType.DONE).count()
             stats_user.pending_count = task_round_reviews.filter(status=StatusType.PENDING).count()
-            if(stats_user.pending_count == 0):
+            if (stats_user.pending_count == 0):
                 stats_user.delete()
             else:
                 # Save the statistics
                 stats_user.save()
-            
 
     @staticmethod
-    def signal_save_task_user_choice_statistics(sender, instance, **kwargs) :
+    def signal_save_task_user_choice_statistics(sender, instance, **kwargs):
         # Find or create the relevant TaskUserStatistics
         task = instance.task
         checker = instance.checker
@@ -305,24 +288,24 @@ class TaskRecordReview(models.Model):
         if task and checker:
             # Collect the statitics
             reviews_choice_counts = sender.objects \
-                                        .filter(task_record__task=task, checker=checker, round=round) \
-                                        .exclude(choice=None) \
-                                        .count_by_checker_by_choice_by_round()
-            
+                .filter(task_record__task=task, checker=checker, round=round) \
+                .exclude(choice=None) \
+                .count_by_checker_by_choice_by_round()
+
             # because it's hard to guess the previous value of the review and
             # the count value of another choice can be staled
             # we remove all existing stats for the task/checker/round 
-            TaskUserChoiceStatistics.objects.filter(task=task, checker=checker, round=round ).delete()
-             
+            TaskUserChoiceStatistics.objects.filter(task=task, checker=checker, round=round).delete()
+
             # create all the necessary stats for all of the choices
             taskUserChoiceStatisticsList = []
             for row in reviews_choice_counts:
-                tucs = TaskUserChoiceStatistics(task=task, choice_id=row['choice'], checker=checker, round=round, count=row['count'])
+                tucs = TaskUserChoiceStatistics(task=task, choice_id=row['choice'], checker=checker, round=round,
+                                                count=row['count'])
                 taskUserChoiceStatisticsList.append(tucs)
-            
+
             TaskUserChoiceStatistics.objects.bulk_create(taskUserChoiceStatisticsList)
-            
-            
+
 
 signals.post_save.connect(TaskRecordReview.signal_save_task_user_choice_statistics, sender=TaskRecordReview)
 signals.post_save.connect(TaskRecordReview.signal_save_task_user_statistics, sender=TaskRecordReview)

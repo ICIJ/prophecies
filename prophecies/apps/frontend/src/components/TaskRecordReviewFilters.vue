@@ -1,5 +1,5 @@
 <script>
-import { keys } from 'lodash'
+import {keys} from 'lodash'
 import Multiselect from 'vue-multiselect'
 import MultiselectButtons from '@/components/MultiselectButtons'
 import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
@@ -21,7 +21,7 @@ export default {
       default: () => ({})
     }
   },
-  data () {
+  data() {
     return {
       selected: {
         predictedValues: [],
@@ -38,15 +38,15 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.readRouteFilters()
   },
   computed: {
-    filters () {
+    filters() {
       // Method from the mixins
       return this.getTaskFilters(this.task)
     },
-    task () {
+    task() {
       return Task
         .query()
         .with('checkers')
@@ -55,23 +55,23 @@ export default {
         .with('choiceGroup.choices')
         .find(this.taskId)
     },
-    filtersAsQueryParams () {
+    filtersAsQueryParams() {
       // Method from the mixins
       return this.getSelectedFiltersAsRouteFilters(this.filters, this.selected)
     }
   },
   methods: {
-    addArbitraryPredictedValue (value) {
+    addArbitraryPredictedValue(value) {
       // Method from the mixins
       const option = this.toSerializableOption(value)
       this.selected.predictedValues.push(option)
     },
-    addAlternativeValues (value) {
+    addAlternativeValues(value) {
       // Method from the mixins
       const option = this.toSerializableOption(value)
       this.selected.alternativeValues.push(option)
     },
-    readRouteFilters () {
+    readRouteFilters() {
       // Clear all keys
       keys(this.selected).forEach(key => this.$set(this.selected, key, []))
       // Method from the mixins
@@ -83,17 +83,17 @@ export default {
   watch: {
     routeFilters: {
       deep: true,
-      handler () {
+      handler() {
         this.readRouteFilters()
       }
     },
     selected: {
       deep: true,
-      handler (u) {
+      handler(u) {
         /**
-           * @event update:routeFilters
-           * @param routes query params after updating filters
-           */
+         * @event update:routeFilters
+         * @param routes query params after updating filters
+         */
         this.$emit('update:routeFilters', this.filtersAsQueryParams)
       }
     }
@@ -116,7 +116,7 @@ export default {
                      tag-placeholder="Search for this exact value"
                      tag-position="bottom"
                      @tag="addArbitraryPredictedValue"
-                     :options="filters.predictedValues.options" />
+                     :options="filters.predictedValues.options"/>
       </label>
       <label class="col-12 col-sm-6 col-lg">
         {{ filters.assignedTo.name }}
@@ -126,7 +126,7 @@ export default {
                      :label="filters.assignedTo.label"
                      track-by="id"
                      multiple
-                     :options="filters.assignedTo.options" />
+                     :options="filters.assignedTo.options"/>
       </label>
       <label class="col-12 col-sm-6 col-lg">
         {{ filters.bookmarkedBy.name }}
@@ -136,7 +136,7 @@ export default {
                      :label="filters.bookmarkedBy.label"
                      track-by="id"
                      multiple
-                     :options="filters.bookmarkedBy.options" />
+                     :options="filters.bookmarkedBy.options"/>
       </label>
 
       <label class="col-12 col-sm-6 col-lg">
@@ -151,7 +151,7 @@ export default {
                      tag-placeholder="Search for this exact value"
                      tag-position="bottom"
                      @tag="addAlternativeValues"
-                     :options="filters.alternativeValues.options" />
+                     :options="filters.alternativeValues.options"/>
       </label>
       <label class="col-12 col-sm-6 col-lg">
         {{ filters.choices.name }}
@@ -161,60 +161,60 @@ export default {
                      :label="filters.choices.label"
                      track-by="id"
                      multiple
-                     :options="filters.choices.options" />
+                     :options="filters.choices.options"/>
       </label>
     </div>
     <div class="row">
       <div class="col-12 col-md-6 col-lg">
         {{ filters.priorities.name }}
         <multiselect-buttons class="mt-3 mb-3 text-nowrap"
-                     multiple
-                     v-model="selected.priorities"
-                     label="label"
-                     track-by="label"
-                     :options="filters.priorities.options" />
+                             multiple
+                             v-model="selected.priorities"
+                             label="label"
+                             track-by="label"
+                             :options="filters.priorities.options"/>
       </div>
       <div class="col-12 col-md-6 col-lg">
         {{ filters.rounds.name }}
         <multiselect-buttons class="mt-3 mb-3 text-nowrap"
-                     multiple
-                     v-model="selected.rounds"
-                     label="label"
-                     track-by="label"
-                     :options="filters.rounds.options" />
+                             multiple
+                             v-model="selected.rounds"
+                             label="label"
+                             track-by="label"
+                             :options="filters.rounds.options"/>
       </div>
       <div class="col-12 col-md-6 col-lg">
         {{ filters.hasDisagreements.name }}
         <multiselect-buttons class="mt-3 mb-3 text-nowrap"
-                     v-model="selected.hasDisagreements"
-                     label="label"
-                     track-by="label"
-                     :options="filters.hasDisagreements.options" />
+                             v-model="selected.hasDisagreements"
+                             label="label"
+                             track-by="label"
+                             :options="filters.hasDisagreements.options"/>
       </div>
       <div class="col-12 col-md-6 col-lg">
         {{ filters.locked.name }}
         <multiselect-buttons class="mt-3 mb-3 text-nowrap"
-                    v-model="selected.locked"
-                    label="label"
-                    track-by="label"
-                    :options="filters.locked.options" />
+                             v-model="selected.locked"
+                             label="label"
+                             track-by="label"
+                             :options="filters.locked.options"/>
       </div>
       <div class="col-12 col-md-6 col-lg">
         {{ filters.hasNotes.name }}
         <multiselect-buttons class="mt-3 mb-3 text-nowrap"
-                    v-model="selected.hasNotes"
-                    label="label"
-                    track-by="label"
-                    :options="filters.hasNotes.options" />
+                             v-model="selected.hasNotes"
+                             label="label"
+                             track-by="label"
+                             :options="filters.hasNotes.options"/>
       </div>
       <div class="col-12 col-md-6 col-lg">
         {{ filters.hasAllRoundsReviewed.name }}
         <multiselect-buttons class="mt-3 mb-3 text-nowrap"
-                     placeholder="Type here..."
-                     v-model="selected.hasAllRoundsReviewed"
-                     label="label"
-                     track-by="name"
-                     :options="filters.hasAllRoundsReviewed.options" />
+                             placeholder="Type here..."
+                             v-model="selected.hasAllRoundsReviewed"
+                             label="label"
+                             track-by="name"
+                             :options="filters.hasAllRoundsReviewed.options"/>
       </div>
     </div>
   </form>

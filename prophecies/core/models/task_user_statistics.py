@@ -4,23 +4,23 @@ from prophecies.core.models import Task
 
 
 class TaskUserStatisticsQuerySet(models.QuerySet):
-    
+
     def user_scope(self, user):
         return self.filter(task__in=user.task.all())
-    
-    
+
+
 class TaskUserStatisticsManager(models.Manager):
-    
+
     def user_scope(self, user):
         return self.get_queryset().user_scope(user)
-    
+
     def get_queryset(self) -> TaskUserStatisticsQuerySet:
         return TaskUserStatisticsQuerySet(model=self.model, using=self._db, hints=self._hints)
-    
+
 
 class TaskUserStatistics(models.Model):
     objects = TaskUserStatisticsManager()
-    
+
     task = models.ForeignKey(Task, null=False, blank=False, on_delete=models.CASCADE)
     checker = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
     round = models.IntegerField(null=False, blank=False, help_text='Round number of the static entry')

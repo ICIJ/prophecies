@@ -7,9 +7,9 @@ from import_export.forms import ExportForm
 
 import tablib
 
-class ExportCsvGeneratorMixin:  
-  
-  
+
+class ExportCsvGeneratorMixin:
+
     def export_csv_as_generator(self, queryset=None, *args, **kwargs):
         self.before_export(queryset, *args, **kwargs)
         queryset = self.get_queryset() if queryset is None else queryset
@@ -25,20 +25,18 @@ class ExportCsvGeneratorMixin:
             yield data.csv
         self.after_export(queryset, data, *args, **kwargs)
         yield
-        
-        
+
+
 class ExportWithCsvStreamMixin(ExportMixin):
-  
-    
     export_template_name = 'admin/import_export/export_with_csv_note.html'
 
     def export_action(self, request, *args, **kwargs):
         if not self.has_export_permission(request):
             raise PermissionDenied
-        
+
         formats = self.get_export_formats()
         form = ExportForm(formats, request.POST or None)
-        
+
         if form.is_valid():
             # Get the current file format
             file_format_idx = int(form.cleaned_data['file_format'])
@@ -52,5 +50,5 @@ class ExportWithCsvStreamMixin(ExportMixin):
                 response = StreamingHttpResponse(dataset, content_type=file_content_type)
                 response['Content-Disposition'] = 'attachment; filename="%s"' % filename
                 return response
-              
+
         return super().export_action(request, *args, **kwargs)

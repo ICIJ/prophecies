@@ -1,5 +1,5 @@
-import { createLocalVue, mount } from '@vue/test-utils'
-import { server, rest } from '../../mocks/server'
+import {createLocalVue, mount} from '@vue/test-utils'
+import {server, rest} from '../../mocks/server'
 import '@/store'
 import Core from '@/core'
 import User from '@/models/User'
@@ -36,8 +36,8 @@ describe('UserNotificationsDropdownMenu', () => {
       server.use(rest.get('/api/v1/user-notifications', (req, res, ctx) => {
         return res(ctx.json({
           data: [
-            { id: '13', attributes: { read: true } },
-            { id: '14', attributes: { read: true } }
+            {id: '13', attributes: {read: true}},
+            {id: '14', attributes: {read: true}}
           ]
         }))
       }))
@@ -45,8 +45,8 @@ describe('UserNotificationsDropdownMenu', () => {
       const localVue = createLocalVue()
       const stubs = ['app-waiter']
       // Configure the local vue with plugins
-      const { i18n, store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(UserNotificationsDropdownMenu, { attachTo, localVue, i18n, store, stubs, wait })
+      const {i18n, store, wait} = Core.init(localVue).useAll()
+      wrapper = mount(UserNotificationsDropdownMenu, {attachTo, localVue, i18n, store, stubs, wait})
       await advanceTimersByTimeAndFlushPromises(1e4)
     })
 
@@ -81,14 +81,14 @@ describe('UserNotificationsDropdownMenu', () => {
     beforeEach(async () => {
       // Mock notifications endpoint to return nothing
       server.use(rest.get('/api/v1/user-notifications', (req, res, ctx) => {
-        return res(ctx.json({ data: [] }))
+        return res(ctx.json({data: []}))
       }))
       const attachTo = createContainer()
       const localVue = createLocalVue()
       const stubs = ['app-waiter']
       // Configure the local vue with plugins
-      const { i18n, store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(UserNotificationsDropdownMenu, { attachTo, localVue, i18n, store, stubs, wait })
+      const {i18n, store, wait} = Core.init(localVue).useAll()
+      wrapper = mount(UserNotificationsDropdownMenu, {attachTo, localVue, i18n, store, stubs, wait})
       await advanceTimersByTimeAndFlushPromises(1e4)
     })
 
@@ -120,19 +120,19 @@ describe('UserNotificationsDropdownMenu', () => {
     beforeEach(async () => {
       // Mock notifications endpoint to return nothing
       server.use(rest.get('/api/v1/user-notifications', (req, res, ctx) => {
-        return res(ctx.json({ 
+        return res(ctx.json({
           data: [
-            { id: '15', attributes: { read: false } },
-            { id: '16', attributes: { read: false } }
-          ] 
+            {id: '15', attributes: {read: false}},
+            {id: '16', attributes: {read: false}}
+          ]
         }))
       }))
       const attachTo = createContainer()
       const localVue = createLocalVue()
       const stubs = ['app-waiter']
       // Configure the local vue with plugins
-      const { i18n, store, wait } = Core.init(localVue).useAll()
-      wrapper = mount(UserNotificationsDropdownMenu, { attachTo, localVue, i18n, store, stubs, wait })
+      const {i18n, store, wait} = Core.init(localVue).useAll()
+      wrapper = mount(UserNotificationsDropdownMenu, {attachTo, localVue, i18n, store, stubs, wait})
       await advanceTimersByTimeAndFlushPromises(1e4)
     })
 
@@ -148,7 +148,7 @@ describe('UserNotificationsDropdownMenu', () => {
     })
 
     it('should enable the button to mark all notifications as read', () => {
-      const markAllButton = wrapper.find('.user-notifications-dropdown-menu__mark-all')      
+      const markAllButton = wrapper.find('.user-notifications-dropdown-menu__mark-all')
       expect(markAllButton.attributes('disabled')).toBeFalsy()
     })
   })

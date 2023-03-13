@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('core', '0014_rename_recordlinktemplate_task_record_link_template'),
@@ -15,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='taskrecord',
             name='saved_by',
-            field=models.ManyToManyField(help_text='Users who saved this task record', related_name='saved_task_records', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(help_text='Users who saved this task record',
+                                         related_name='saved_task_records', to=settings.AUTH_USER_MODEL),
         ),
     ]

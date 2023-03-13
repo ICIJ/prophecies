@@ -1,5 +1,5 @@
 <script>
-import { find, get } from 'lodash'
+import {find, get} from 'lodash'
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Task from '@/models/Task'
@@ -28,13 +28,13 @@ export default {
     ChoiceGroupButtons
   },
   methods: {
-    focusOnAlternativeValueInput () {
+    focusOnAlternativeValueInput() {
       const input = this.$el.querySelector(this.alternativeValueInputSelector)
       if (input) {
         input.focus()
       }
     },
-    selectChoice (choice, alternativeValue = null) {
+    selectChoice(choice, alternativeValue = null) {
       if (choice.requireAlternativeValue && !alternativeValue) {
         return this.focusOnAlternativeValueInput()
       }
@@ -44,42 +44,42 @@ export default {
        * @event submit
        * @param The changed attributes and relationships
        */
-      this.$emit('submit', { alternativeValue, choice })
+      this.$emit('submit', {alternativeValue, choice})
     }
   },
   computed: {
     alternativeValue: {
-      get () {
+      get() {
         return get(this, 'taskRecordReview.alternativeValue', null)
       },
-      set (alternativeValue) {
+      set(alternativeValue) {
         return this.selectChoice(this.alternativeValueChoice, alternativeValue)
       }
     },
     choiceId: {
-      get () {
+      get() {
         return get(this, 'taskRecordReview.choiceId', null)
       },
-      set (choiceId) {
+      set(choiceId) {
         const choice = Choice.find(choiceId)
         return this.selectChoice(choice)
       }
     },
-    choiceGroupId () {
+    choiceGroupId() {
       return get(this, 'choiceGroup.id', null)
     },
-    choiceGroup () {
+    choiceGroup() {
       return ChoiceGroup
         .query()
         .with('choices')
         .find(this.task.choiceGroupId)
     },
-    task () {
+    task() {
       return Task.find(this.taskId)
     },
-    alternativeValueChoice () {
+    alternativeValueChoice() {
       const choices = get(this, 'choiceGroup.choices', [])
-      return find(choices, { requireAlternativeValue: true })
+      return find(choices, {requireAlternativeValue: true})
     }
   }
 }
@@ -91,36 +91,36 @@ export default {
       class="task-record-review-bulk-choice-form__choices"
       v-model="choiceId"
       :activate-shortkeys="activateShortkeys"
-      :choice-group-id="choiceGroupId" />
+      :choice-group-id="choiceGroupId"/>
     <alternative-value-select
       class="task-record-review-bulk-choice-form__alternative-value"
       ref="alternativeValueInput"
       small
       v-if="alternativeValueChoice"
       v-model="alternativeValue"
-      :choice-group-id="choiceGroupId" />
+      :choice-group-id="choiceGroupId"/>
   </fieldset>
 </template>
 
 <style lang="scss" scoped>
-  .task-record-review-bulk-choice-form {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
+.task-record-review-bulk-choice-form {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
 
-    &__choices, &__alternative-value {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-
-    &__choices {
-      margin-right: $spacer-xs;
-    }
-
-    &__alternative-value {
-      max-width: 400px;
-      width: 100%;
-    }
+  &__choices, &__alternative-value {
+    margin-top: 0;
+    margin-bottom: 0;
   }
+
+  &__choices {
+    margin-right: $spacer-xs;
+  }
+
+  &__alternative-value {
+    max-width: 400px;
+    width: 100%;
+  }
+}
 </style>

@@ -1,4 +1,4 @@
-import { createLocalVue, shallowMount } from '@vue/test-utils'
+import {createLocalVue, shallowMount} from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import ChoiceBadge from '@/components/ChoiceBadge'
@@ -6,7 +6,7 @@ import ChoiceBadge from '@/components/ChoiceBadge'
 describe('ChoiceBadge', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -15,10 +15,10 @@ describe('ChoiceBadge', () => {
   beforeEach(() => {
     const attachTo = createContainer()
     const localVue = createLocalVue()
-    const propsData = { name: 'Unknown', value: 'unknown' }
+    const propsData = {name: 'Unknown', value: 'unknown'}
     // Configure the local vue with plugins
     Core.init(localVue).useAll()
-    wrapper = shallowMount(ChoiceBadge, { attachTo, localVue, propsData })
+    wrapper = shallowMount(ChoiceBadge, {attachTo, localVue, propsData})
   })
 
   it('should only show the first letter of the status', () => {

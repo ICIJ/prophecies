@@ -1,5 +1,5 @@
 <script>
-import { uniqueId } from 'lodash'
+import {uniqueId} from 'lodash'
 import AppWaiter from '@/components/AppWaiter'
 import HistoryListGroup from '@/components/HistoryListGroup.vue'
 import EmptyPlaceholder from '@/components/EmptyPlaceholder.vue'
@@ -28,7 +28,7 @@ export default {
       default: () => ([])
     }
   },
-  data () {
+  data() {
     return {
       more: 5,
       nbTimesMore: 0,
@@ -39,7 +39,7 @@ export default {
   watch: {
     fetching: {
       immediate: true,
-      handler (isFetching) {
+      handler(isFetching) {
         if (isFetching) {
           if (!this.useLoader) {
             this.useLoader = this.loaderAll
@@ -55,13 +55,13 @@ export default {
     }
   },
   computed: {
-    loaderAll () {
+    loaderAll() {
       return uniqueId('load-all-history-list-')
     },
-    loader () {
+    loader() {
       return uniqueId('load-history-list-item-')
     },
-    hasTitleSlot () {
+    hasTitleSlot() {
       return !!this.$slots.title
     }
   }
@@ -92,10 +92,10 @@ export default {
 </template>
 
 <style lang="scss">
- .history-list {
-    &__title{
-      color:$primary;
-        letter-spacing: -0.03em;
-    }
- }
+.history-list {
+  &__title {
+    color: $primary;
+    letter-spacing: -0.03em;
+  }
+}
 </style>

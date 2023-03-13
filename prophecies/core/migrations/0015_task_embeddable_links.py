@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0014_rename_recordlinktemplate_task_record_link_template'),
     ]
@@ -13,6 +12,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='task',
             name='embeddable_links',
-            field=models.BooleanField(default=False, verbose_name='Allow end-users to preview links within an iframe (targeted website must allow it)'),
+            field=models.BooleanField(default=False,
+                                      verbose_name='Allow end-users to preview links within an iframe (targeted website must allow it)'),
         ),
     ]

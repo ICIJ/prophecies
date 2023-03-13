@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('core', '0012_actionaggregate'),
@@ -20,7 +19,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='task',
             name='automatic_round_attributions',
-            field=models.BooleanField(default=False, verbose_name='Attribute rounds (if not checked, all checkers will participate in all rounds)'),
+            field=models.BooleanField(default=False,
+                                      verbose_name='Attribute rounds (if not checked, all checkers will participate in all rounds)'),
         ),
         migrations.AlterUniqueTogether(
             name='taskrecordreview',

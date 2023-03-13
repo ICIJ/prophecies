@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0009_task_status'),
     ]
@@ -14,13 +13,15 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='choice',
             name='shortkeys',
-            field=models.CharField(blank=True, help_text='Comma separated list of shortkeys to pick this choice', max_length=100, null=True),
+            field=models.CharField(blank=True, help_text='Comma separated list of shortkeys to pick this choice',
+                                   max_length=100, null=True),
         ),
         migrations.CreateModel(
             name='SettingVisibility',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('public', models.BooleanField(default=False, verbose_name='Make a setting public (visible without authentication)')),
+                ('public', models.BooleanField(default=False,
+                                               verbose_name='Make a setting public (visible without authentication)')),
                 ('setting', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='core.setting')),
             ],
         ),

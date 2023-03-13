@@ -11,20 +11,18 @@ class TaskRecordUploadForm(AbstractUploadForm):
         model = TaskRecord
         csv_columns = ['original_value', 'predicted_value', 'uid', 'metadata']
 
-
     def row_to_task_record(self, task, row={}):
-        opts = { 'task': task }
+        opts = {'task': task}
         # collect allowed model field
         for field_name in self._meta.csv_columns:
             opts[field_name] = row.get(field_name, None)
         return TaskRecord(**opts)
 
-
     def save(self, commit=True):
         self.full_clean()
         task = self.cleaned_data["task"]
         # This list will contain all records to be created
-        queues = { 'bulk_update': [], 'bulk_create': [] }
+        queues = {'bulk_update': [], 'bulk_create': []}
         # This list will contain all records to be update
         existing_task_records = []
         # Iterate over all CSV line

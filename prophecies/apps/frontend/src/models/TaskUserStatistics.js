@@ -1,5 +1,5 @@
-import { Model } from '@vuex-orm/core'
-import { responseNormalizer } from '@/utils/jsonapi'
+import {Model} from '@vuex-orm/core'
+import {responseNormalizer} from '@/utils/jsonapi'
 import settings from '@/settings'
 import User from '@/models/User'
 import Task from './Task'
@@ -7,7 +7,7 @@ import Task from './Task'
 export default class TaskUserStatistics extends Model {
   static entity = 'TaskUserStatistics'
 
-  static fields () {
+  static fields() {
     return {
       id: this.attr(null),
       taskId: this.attr(null),

@@ -6,7 +6,6 @@ import django.utils.timezone
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0010_auto_20211001_0921'),
     ]
@@ -20,6 +19,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='settingvisibility',
             name='setting',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='visibility', to='core.setting'),
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='visibility',
+                                       to='core.setting'),
         ),
     ]

@@ -5,7 +5,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0023_alter_task_choice_group'),
     ]
@@ -14,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='choice',
             name='color',
-            field=colorfield.fields.ColorField(default='#FFFFFF', image_field=None, max_length=18, samples=[('#73B782', 'Correct'), ('#FE6565', 'Incorrect'), ('#FFE980', 'Warning'), ('#BEBFBF', "Don't know")]),
+            field=colorfield.fields.ColorField(default='#FFFFFF', image_field=None, max_length=18,
+                                               samples=[('#73B782', 'Correct'), ('#FE6565', 'Incorrect'),
+                                                        ('#FFE980', 'Warning'), ('#BEBFBF', "Don't know")]),
         ),
     ]

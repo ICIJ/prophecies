@@ -1,5 +1,6 @@
 <script>
-import { textContrast } from '@/utils/color'
+import {textContrast} from '@/utils/color'
+
 export default {
   name: 'TaskProgress',
   props: {
@@ -11,10 +12,10 @@ export default {
     }
   },
   filters: {
-    taskProgressStyle (color) {
+    taskProgressStyle(color) {
       return color ? `--progress-fg: ${color};--text-color:${textContrast(color)}` : ''
     },
-    round (value) {
+    round(value) {
       return Math.round(value)
     }
   }
@@ -37,8 +38,8 @@ export default {
 
 <style lang="scss" scoped>
 .task-progress {
-      width: 50px;
-      background: var(--progress-fg, $primary) !important;
-      color: var(--text-color, $body-bg) !important;
+  width: 50px;
+  background: var(--progress-fg, $primary) !important;
+  color: var(--text-color, $body-bg) !important;
 }
 </style>

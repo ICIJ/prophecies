@@ -32,18 +32,18 @@ export default {
   },
   computed: {
     projectId_: {
-      get () {
+      get() {
         return this.projectId
       },
-      set (value) {
+      set(value) {
         this.$emit('update:projectId', value)
       }
     },
     taskId_: {
-      get () {
+      get() {
         return this.taskId
       },
-      set (value) {
+      set(value) {
         this.$emit('update:taskId', value)
       }
     }
@@ -52,11 +52,11 @@ export default {
 </script>
 
 <style lang="scss">
-  .bookmarks-page-params {
-    &__task {
-      &__show-status {
-        font-size: smaller;
-      }
+.bookmarks-page-params {
+  &__task {
+    &__show-status {
+      font-size: smaller;
     }
   }
+}
 </style>

@@ -1,5 +1,5 @@
 <script>
-import { find, get, uniqueId } from 'lodash'
+import {find, get, uniqueId} from 'lodash'
 import Multiselect from 'vue-multiselect'
 import ChoiceGroup from '@/models/ChoiceGroup'
 
@@ -22,45 +22,45 @@ export default {
     Multiselect
   },
   methods: {
-    selectAlternativeValue ({ value = null }) {
+    selectAlternativeValue({value = null}) {
       /**
-         * Fired when the user selected an alternative value
-         * @event update:alternativeValue
-         * @param The alternative value
-         */
+       * Fired when the user selected an alternative value
+       * @event update:alternativeValue
+       * @param The alternative value
+       */
       this.$emit('update:alternativeValue', value)
     },
-    findAlternativeValue (predicate = {}) {
+    findAlternativeValue(predicate = {}) {
       return find(this.alternativeValues, predicate)
     },
-    toSerializableOption (value) {
+    toSerializableOption(value) {
       const id = uniqueId('arbitrary-')
       const name = value
-      return { id, name, value }
+      return {id, name, value}
     }
   },
   computed: {
     alternativeValueOption: {
-      get () {
+      get() {
         if (this.isCanonical) {
-          return this.findAlternativeValue({ value: this.alternativeValue })
+          return this.findAlternativeValue({value: this.alternativeValue})
         } else if (this.alternativeValue !== null) {
           return this.toSerializableOption(this.alternativeValue)
         }
         return null
       },
-      set (option = null) {
-        this.selectAlternativeValue(option === null ? { value: null } : option)
+      set(option = null) {
+        this.selectAlternativeValue(option === null ? {value: null} : option)
       }
     },
-    alternativeValues () {
+    alternativeValues() {
       return get(this, 'choiceGroup.alternativeValues', [])
     },
-    isCanonical () {
+    isCanonical() {
       const value = this.alternativeValue
-      return !!this.findAlternativeValue({ value })
+      return !!this.findAlternativeValue({value})
     },
-    choiceGroup () {
+    choiceGroup() {
       return ChoiceGroup
         .query()
         .with('alternativeValues')
@@ -82,6 +82,6 @@ export default {
       :tag-placeholder="$t('alternativeValueSelect.useThisExactValue')"
       tag-position="bottom"
       @tag="selectAlternativeValue({ value: $event })"
-      :options="alternativeValues" />
+      :options="alternativeValues"/>
   </div>
 </template>
