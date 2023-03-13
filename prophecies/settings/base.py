@@ -128,7 +128,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000
 # https://github.com/jacobian/dj-database-url#url-schema
 
 DATABASES = {
-    'default': env.db(default='sqlite:///%s' % root.path('db.sqlite3')()),
+    'default': env.db(default=f'sqlite:///{root.path("db.sqlite3")()}'),
 }
 
 # Password validation
@@ -207,11 +207,11 @@ SOCIAL_AUTH_PROVIDER_HOSTNAME = env.str('SOCIAL_AUTH_PROVIDER_HOSTNAME', default
 SOCIAL_AUTH_PROVIDER_KEY = env.str('SOCIAL_AUTH_PROVIDER_KEY', default='')
 SOCIAL_AUTH_PROVIDER_SECRET = env.str('SOCIAL_AUTH_PROVIDER_SECRET', default='')
 SOCIAL_AUTH_PROVIDER_PROFILE_URL = env.str('SOCIAL_AUTH_PROVIDER_PROFILE_URL',
-                                           default='%s/api/v1/me.json?' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
+                                           default=f'{SOCIAL_AUTH_PROVIDER_HOSTNAME}/api/v1/me.json?')
 SOCIAL_AUTH_PROVIDER_AUTHORIZATION_URL = env.str('SOCIAL_AUTH_PROVIDER_AUTHORIZATION_URL',
-                                                 default='%s/oauth/authorize' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
+                                                 default=f'{SOCIAL_AUTH_PROVIDER_HOSTNAME}/oauth/authorize')
 SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_URL = env.str('SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_URL',
-                                                default='%s/oauth/token' % SOCIAL_AUTH_PROVIDER_HOSTNAME)
+                                                default=f'{SOCIAL_AUTH_PROVIDER_HOSTNAME}/oauth/token')
 SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_METHOD = env.str('SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_METHOD', default='POST')
 SOCIAL_AUTH_PROVIDER_USERNAME_FIELD = env.str('SOCIAL_AUTH_PROVIDER_USERNAME_FIELD', default='username')
 SOCIAL_AUTH_PROVIDER_GROUPS_FIELD = env.str('SOCIAL_AUTH_PROVIDER_GROUPS_FIELD', default='groups')
@@ -290,7 +290,7 @@ CONSTANCE_CONFIG = {
     'defaultLocale': ('en', 'Define locale code (ie. "en", "fr", "jp", ...)'),
     'helpLink': ('https://github.com/ICIJ/prophecies/issues/new', 'Link to the support'),
     'helpDescription': ('Any trouble logging in?', 'Help text for the login page. Must be public.'),
-    'loginUrl': ('%s?next=/' % SOCIAL_AUTH_LOGIN_URL, 'Link to create a user session'),
+    'loginUrl': (f'{SOCIAL_AUTH_LOGIN_URL}?next=/', 'Link to create a user session'),
     'loginWelcome': ('Welcome to Prophecies', 'Title for the login page. Must be public.'),
     'loginAccountDescription': (
     'Use your account to continue:', 'Account description for the login page. Must be public.'),
