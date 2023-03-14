@@ -14,6 +14,7 @@ class TipAdmin(admin.ModelAdmin):
     def task_with_addon(self, task_record):
         if task_record.task:
             return display_task_addon(task_record.task)
+        return None
 
     task_with_addon.short_description = "Task"
 
