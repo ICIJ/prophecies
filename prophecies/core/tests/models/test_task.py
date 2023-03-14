@@ -1,10 +1,9 @@
 from actstream.models import Action
 from django.contrib.auth.models import User
 from django.test import TestCase
-
-from prophecies.core.contrib.colors import hex_scale_brightness
 from prophecies.core.models import Task, TaskRecord, TaskRecordReview, Project
 from prophecies.core.models.task_record_review import StatusType
+from prophecies.core.contrib.colors import hex_scale_brightness
 
 
 class TestTask(TestCase):

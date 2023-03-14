@@ -1,8 +1,7 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
-
-from prophecies.core.forms import TaskRecordUploadForm
 from prophecies.core.models import Project, Task, TaskRecord
+from prophecies.core.forms import TaskRecordUploadForm
 
 
 class TaskRecordUploadFormTests(TestCase):

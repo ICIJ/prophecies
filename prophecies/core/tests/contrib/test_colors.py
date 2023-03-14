@@ -1,5 +1,4 @@
 from django.test import TestCase
-
 from prophecies.core.contrib.colors import hex_to_rgb, rgb_to_hex, hex_scale_brightness
 
 

@@ -1,4 +1,5 @@
-from .base import *   # pylint: disable=wildcard-import,unused-wildcard-import
+from .base import * # pylint: disable=wildcard-import,unused-wildcard-import
+from os.path import exists
 
 root = environ.Path(__file__) - 3
 # Read .env from the root path and load environment variables

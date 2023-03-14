@@ -1,4 +1,7 @@
-import {createLocalVue, mount} from '@vue/test-utils'
+import {
+  createLocalVue,
+  mount
+} from '@vue/test-utils'
 import Core from '@/core'
 
 import TaskRecordReviewTutorial from '@/components/TaskRecordReviewTutorial'

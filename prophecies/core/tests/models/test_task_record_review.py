@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-
 from prophecies.core.models import Choice, ChoiceGroup, UserNotification, Project, Task, TaskRecord, TaskRecordReview, \
     TaskUserStatistics
 from prophecies.core.models.task_record_review import StatusType

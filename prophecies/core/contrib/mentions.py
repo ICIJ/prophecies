@@ -1,8 +1,7 @@
 import re
-
 from actstream.models import Action
 from django.contrib.auth.models import User
-
+from django.db.models import Q
 from prophecies.core.models import UserNotification
 
 

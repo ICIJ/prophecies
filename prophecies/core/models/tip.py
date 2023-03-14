@@ -2,10 +2,9 @@ from actstream import action
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import signals
-
+from prophecies.core.models import Project, Task, UserNotification
 from prophecies.core.contrib.mentions import list_mentions, get_or_create_mention_action, mentioned, \
     notify_mentioned_users
-from prophecies.core.models import Project, Task, UserNotification
 
 
 class TipQuerySet(models.QuerySet):

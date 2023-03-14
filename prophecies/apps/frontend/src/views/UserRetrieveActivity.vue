@@ -1,5 +1,5 @@
 <script>
-import {filter, orderBy, uniqueId} from 'lodash'
+import {uniqueId, filter, orderBy} from 'lodash'
 import moment from 'moment'
 
 import AppWaiter from '@/components/AppWaiter'

@@ -1,11 +1,9 @@
 from pydoc import locate
-
-from actstream.models import Action
-from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import PolymorphicResourceRelatedField
-
+from actstream.models import Action
+from django.contrib.auth.models import User
 from prophecies.core.filters import ActionFilter
 from prophecies.core.models import ActionAggregate, Choice, TaskRecord, TaskRecordReview, Tip
 

@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-
 from prophecies.core.models import Task, TaskRecordReview
 
 

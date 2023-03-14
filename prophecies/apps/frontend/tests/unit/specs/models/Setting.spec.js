@@ -1,5 +1,5 @@
 import '@/store'
-import {rest, server} from '../../mocks/server'
+import {server, rest} from '../../mocks/server'
 import Setting from '@/models/Setting'
 
 describe('Setting', () => {

@@ -1,4 +1,7 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import {
+  createLocalVue,
+  shallowMount
+} from '@vue/test-utils'
 import Core from '@/core'
 import TaskRecordReviewList from '@/views/TaskRecordReviewList'
 import Task from '@/models/Task'

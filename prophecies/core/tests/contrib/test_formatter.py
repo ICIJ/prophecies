@@ -1,5 +1,4 @@
 from django.test import TestCase
-
 from prophecies.core.contrib.formatter import URLEncodedFormatter
 
 

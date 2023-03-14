@@ -1,6 +1,6 @@
 import {find} from 'lodash'
 import {createLocalVue, mount} from '@vue/test-utils'
-import {rest, server} from '../../mocks/server'
+import {server, rest} from '../../mocks/server'
 
 import AppSearchForm from '@/components/AppSearchForm'
 import Core from '@/core'

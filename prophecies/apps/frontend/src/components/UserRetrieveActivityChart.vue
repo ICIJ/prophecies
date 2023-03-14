@@ -1,5 +1,5 @@
 <script>
-import {find, maxBy, orderBy} from 'lodash'
+import {orderBy, maxBy, find} from 'lodash'
 import moment from 'moment'
 
 import {TaskStatusOrder} from '@/models/Task'

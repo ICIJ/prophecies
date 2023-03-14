@@ -1,6 +1,7 @@
-from constance import settings
-from constance.admin import ConstanceForm
 from django import forms
+from django.forms import fields
+from constance.admin import ConstanceForm
+from constance import settings
 
 from prophecies.core.models import Setting
 

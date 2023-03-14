@@ -1,5 +1,5 @@
 <script>
-import {compact, filter, get, isEqual, keys, noop, uniqueId, values} from 'lodash'
+import {compact, get, filter, isEqual, keys, noop, uniqueId, values} from 'lodash'
 
 import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'

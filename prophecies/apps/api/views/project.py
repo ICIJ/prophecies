@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User
-from rest_framework.decorators import action
-from rest_framework.response import Response
 from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
-
+from rest_framework.response import Response
+from rest_framework.decorators import action
 from prophecies.apps.api.views.user import UserSerializer
 from prophecies.core.models.project import Project
+
+from rest_framework_json_api.utils import get_included_resources
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):

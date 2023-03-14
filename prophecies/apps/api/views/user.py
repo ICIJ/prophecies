@@ -1,13 +1,11 @@
 from hashlib import md5
-
 from django.contrib.auth.models import User
 from django.template.context_processors import csrf
+from prophecies.apps.api.views.action import ActionSerializer
 from rest_framework import exceptions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_json_api import serializers
-
-from prophecies.apps.api.views.action import ActionSerializer
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

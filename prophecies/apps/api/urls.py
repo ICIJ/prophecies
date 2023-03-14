@@ -1,21 +1,20 @@
 from django.urls import include, path
 from django.views.generic import RedirectView
 from rest_framework import routers
-
 from prophecies.apps.api.views.action import ActionViewSet
 from prophecies.apps.api.views.action_aggregate import ActionAggregateViewSet
+from prophecies.apps.api.views.task_user_statistics import TaskUserStatisticsViewSet
+from prophecies.apps.api.views.task_user_choice_statistics import TaskUserChoiceStatisticsViewSet
 from prophecies.apps.api.views.choice_group import ChoiceGroupViewSet
-from prophecies.apps.api.views.operation import OperationViewSet
+from prophecies.apps.api.views.user_notification import UserNotificationViewSet
 from prophecies.apps.api.views.project import ProjectViewSet
 from prophecies.apps.api.views.setting import SettingViewSet
-from prophecies.apps.api.views.task import TaskViewSet
+from prophecies.apps.api.views.operation import OperationViewSet
 from prophecies.apps.api.views.task_record import TaskRecordViewSet
 from prophecies.apps.api.views.task_record_review import TaskRecordReviewViewSet
-from prophecies.apps.api.views.task_user_choice_statistics import TaskUserChoiceStatisticsViewSet
-from prophecies.apps.api.views.task_user_statistics import TaskUserStatisticsViewSet
-from prophecies.apps.api.views.tip import TipViewSet
+from prophecies.apps.api.views.task import TaskViewSet
 from prophecies.apps.api.views.user import UserViewSet
-from prophecies.apps.api.views.user_notification import UserNotificationViewSet
+from prophecies.apps.api.views.tip import TipViewSet
 
 router = routers.DefaultRouter()
 router.register(r'actions', ActionViewSet)

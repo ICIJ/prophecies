@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.utils.http import urlencode
 from social_core.backends.oauth import BaseOAuth2
-
 from prophecies.core.contrib.namespace import get_path
 
 
