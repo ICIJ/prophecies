@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from prophecies.core.models import TaskRecord, TaskRecordReview
 
 
@@ -9,7 +8,8 @@ class TaskRecordAssignForm(forms.Form):
                                                   widget=forms.MultipleHiddenInput())
     checker = forms.ModelChoiceField(required=True, queryset=User.objects.all())
     round = forms.IntegerField(required=False, min_value=1,
-                               help_text="Leave empty to select the round automaticaly based on the latest record's attribution.")
+                               help_text="Leave empty to select the round automatically "
+                                         "based on the latest record's attribution.")
 
     def clean(self):
         super().clean()

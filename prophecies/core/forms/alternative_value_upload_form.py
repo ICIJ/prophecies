@@ -11,7 +11,8 @@ class AlternativeValueUploadForm(AbstractUploadForm):
         model = AlternativeValue
         csv_columns = ['name', 'value']
 
-    def row_to_alternative_value(self, choice_group, row={}):
+    def row_to_alternative_value(self, choice_group, row):
+        row = {} if row is None else row
         opts = {'choice_group': choice_group}
         # collect allowed model field
         for field_name in self.get_csv_columns():
