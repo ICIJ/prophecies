@@ -11,7 +11,8 @@ class TaskRecordUploadForm(AbstractUploadForm):
         model = TaskRecord
         csv_columns = ['original_value', 'predicted_value', 'uid', 'metadata']
 
-    def row_to_task_record(self, task, row={}):
+    def row_to_task_record(self, task, row=None):
+        row = {} if row is None else row
         opts = {'task': task}
         # collect allowed model field
         for field_name in self._meta.csv_columns:
@@ -24,7 +25,6 @@ class TaskRecordUploadForm(AbstractUploadForm):
         # This list will contain all records to be created
         queues = {'bulk_update': [], 'bulk_create': []}
         # This list will contain all records to be update
-        existing_task_records = []
         # Iterate over all CSV line
         for row in self.csv_file_reader():
             # Convert the row to a task record

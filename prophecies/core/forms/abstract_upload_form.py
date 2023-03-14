@@ -1,10 +1,9 @@
 import csv
 import io
-
+from functools import lru_cache
 from django import forms
 from django.db.models import Model
 from django.core.exceptions import ValidationError
-from functools import lru_cache
 
 
 class AbstractUploadForm(forms.Form):
@@ -25,7 +24,7 @@ class AbstractUploadForm(forms.Form):
         return self._meta.csv_columns
 
     def get_model_fields(self):
-        return self.get_model()._meta.get_fields()
+        return self.get_model()._meta.get_fields() # pylint: disable=protected-access
 
     def csv_valid_fieldnames(self):
         return [f.name for f in self.get_model_fields()]
@@ -34,9 +33,10 @@ class AbstractUploadForm(forms.Form):
         csv_fieldnames = self.csv_file_reader().fieldnames or []
         for fieldname in csv_fieldnames:
             if fieldname not in self.csv_valid_fieldnames():
-                raise ValidationError('Your CSV contains a column "%s" which is not a valid' % fieldname)
+                raise ValidationError(f'Your CSV contains a column "{fieldname}" which is not a valid')
         return self.cleaned_data['csv_file']
 
+    # pylint: disable=method-cache-max-size-none
     @lru_cache(maxsize=None)
     def csv_file_reader(self):
         csv_file = self.cleaned_data["csv_file"]
