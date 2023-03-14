@@ -1,7 +1,6 @@
 from django import forms
-
-from prophecies.core.forms import AbstractUploadForm
 from prophecies.core.models import Task, TaskRecord
+from prophecies.core.forms import AbstractUploadForm
 
 
 class TaskRecordUploadForm(AbstractUploadForm):

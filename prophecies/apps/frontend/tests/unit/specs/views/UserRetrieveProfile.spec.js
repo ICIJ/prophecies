@@ -2,7 +2,7 @@ import {createLocalVue, mount} from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
-import {rest, server} from '../../mocks/server'
+import {server, rest} from '../../mocks/server'
 import User from '@/models/User'
 
 import UserRetrieveProfile from '@/views/UserRetrieveProfile'

@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.admin.filters import AllValuesFieldListFilter
-
 from prophecies.core.filters import TaskRecordFilter
 
 

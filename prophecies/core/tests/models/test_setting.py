@@ -1,5 +1,4 @@
 from django.test import TestCase
-
 from prophecies.core.models.setting import Setting, SettingVisibility
 
 

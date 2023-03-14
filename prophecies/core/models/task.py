@@ -1,16 +1,15 @@
 from actstream import action
 from colorfield.fields import ColorField
-from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import signals
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-
-from prophecies.core.contrib.colors import hex_scale_brightness
-from prophecies.core.models.choice_group import ChoiceGroup
 from prophecies.core.models.project import Project
+from prophecies.core.models.choice_group import ChoiceGroup
+from prophecies.core.contrib.colors import hex_scale_brightness
 
 
 class StatusType(models.TextChoices):

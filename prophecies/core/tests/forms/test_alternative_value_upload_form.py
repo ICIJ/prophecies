@@ -1,8 +1,7 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
-
-from prophecies.core.forms import AlternativeValueUploadForm
 from prophecies.core.models import AlternativeValue, ChoiceGroup
+from prophecies.core.forms import AlternativeValueUploadForm
 
 
 class AlternativeValueUploadFormTests(TestCase):

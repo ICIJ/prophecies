@@ -1,10 +1,10 @@
-from constance import config
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.urls import include, path, reverse_lazy
 from django.views.generic import TemplateView, RedirectView
 from social_django.models import UserSocialAuth, Nonce, Association
+from constance import config
 
 admin.site.site_header = config.appName
 admin.site.site_title = config.appName

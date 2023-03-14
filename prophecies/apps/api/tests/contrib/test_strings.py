@@ -1,5 +1,4 @@
 from django.test import TestCase
-
 from prophecies.apps.api.contrib.strings import to_camel_case
 
 

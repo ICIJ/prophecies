@@ -1,7 +1,6 @@
 from rest_framework import viewsets, serializers
-from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
-
+from rest_framework.exceptions import NotFound
 from prophecies.core.models.setting import Setting
 
 

@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.html import format_html
-
 from prophecies.core.contrib.display import display_task_addon
 from prophecies.core.forms.task_form import TaskForm
 from prophecies.core.models import Task

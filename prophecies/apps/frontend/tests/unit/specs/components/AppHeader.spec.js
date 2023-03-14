@@ -1,5 +1,5 @@
 import {createLocalVue, mount} from '@vue/test-utils'
-import {rest, server} from '../../mocks/server'
+import {server, rest} from '../../mocks/server'
 import AppHeader from '@/components/AppHeader'
 import Core from '@/core'
 import User from '@/models/User'

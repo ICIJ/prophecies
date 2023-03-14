@@ -1,11 +1,10 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
-
-from prophecies.apps.api.views.task import TaskSerializer
-from prophecies.apps.api.views.user import UserSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 from prophecies.core.filters import ActionAggregateFilter
 from prophecies.core.models import ActionAggregate
+from prophecies.apps.api.views.user import UserSerializer
+from prophecies.apps.api.views.task import TaskSerializer
 
 
 class ActionAggregateSerializer(serializers.ModelSerializer):

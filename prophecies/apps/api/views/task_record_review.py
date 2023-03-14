@@ -1,16 +1,14 @@
-from functools import lru_cache
-
 from actstream import action
+from functools import lru_cache
+from prophecies.core.filters import TaskRecordReviewFilter
 from rest_framework import exceptions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField, SerializerMethodResourceRelatedField
-
+from prophecies.core.models import Choice, TaskRecordReview
 from prophecies.apps.api.views.choice import ChoiceSerializer
 from prophecies.apps.api.views.task_record import TaskRecordSerializer
 from prophecies.apps.api.views.user import UserSerializer
-from prophecies.core.filters import TaskRecordReviewFilter
-from prophecies.core.models import Choice, TaskRecordReview
 
 
 class FlatTaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):

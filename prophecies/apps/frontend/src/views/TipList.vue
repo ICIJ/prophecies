@@ -1,5 +1,5 @@
 <script>
-import {groupBy, remove, uniqueId} from 'lodash'
+import {remove, groupBy, uniqueId} from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'

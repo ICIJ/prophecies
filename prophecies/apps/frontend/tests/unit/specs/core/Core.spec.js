@@ -5,7 +5,7 @@ import VueI18n from 'vue-i18n'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 
-import {rest, server} from '../../mocks/server'
+import {server, rest} from '../../mocks/server'
 import Core from '@/core'
 import Setting from '@/models/Setting'
 

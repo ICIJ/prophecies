@@ -1,5 +1,6 @@
 from django.test import TestCase
-
+from prophecies.core.models.project import Project
+from prophecies.core.models.task import Task
 from prophecies.core.models.choice import Choice
 from prophecies.core.models.choice_group import ChoiceGroup
 

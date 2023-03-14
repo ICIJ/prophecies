@@ -1,6 +1,6 @@
 <script>
 import {castArray, flatten, trim} from 'lodash'
-import {metaKeyDisplay, toUpperCaseForSingleChar} from '@/utils/keys'
+import {toUpperCaseForSingleChar, metaKeyDisplay} from '@/utils/keys'
 
 export default {
   name: 'ShortkeyBadge',

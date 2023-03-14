@@ -1,8 +1,6 @@
 import json
-
 from django.urls import reverse
 from django.utils.html import format_html
-
 from prophecies.core.contrib.variant import to_variant
 
 

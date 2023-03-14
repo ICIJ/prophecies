@@ -1,8 +1,7 @@
-from rest_framework import exceptions
-from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
-
+from rest_framework import exceptions
+from rest_framework.permissions import IsAuthenticated
 from prophecies.apps.api.views.action import ActionSerializer
 from prophecies.core.models import UserNotification
 

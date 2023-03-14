@@ -1,4 +1,4 @@
-import {find, isArray, isPlainObject, mapValues, reduce} from 'lodash'
+import {isArray, isPlainObject, find, mapValues, reduce} from 'lodash'
 import User from '@/models/User'
 
 const MAX_RELATIONSHIP_DEPTH = 10

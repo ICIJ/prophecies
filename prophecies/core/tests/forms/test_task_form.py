@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-
-from prophecies.core.forms.task_form import TaskForm
 from prophecies.core.models import Project, Task, ChoiceGroup, TaskRecord, TaskRecordReview
+from prophecies.core.forms.task_form import TaskForm
 
 
 class TaskFormTests(TestCase):

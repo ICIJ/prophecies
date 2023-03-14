@@ -1,11 +1,10 @@
 from rest_framework import viewsets
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField
-
-from prophecies.apps.api.views.alternative_value import AlternativeValue
-from prophecies.apps.api.views.alternative_value import AlternativeValueSerializer
-from prophecies.apps.api.views.choice import ChoiceSerializer
 from prophecies.core.models import Choice, ChoiceGroup
+from prophecies.apps.api.views.choice import ChoiceSerializer
+from prophecies.apps.api.views.alternative_value import AlternativeValueSerializer
+from prophecies.apps.api.views.alternative_value import AlternativeValue
 
 
 class ChoiceGroupSerializer(serializers.ModelSerializer):
