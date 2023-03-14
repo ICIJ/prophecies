@@ -85,10 +85,6 @@ contextmanager-decorators=contextlib.contextmanager,contextlib2.contextmanager
 # Tells whether we should check for unused import in __init__ files.
 init-import=no
 
-# A regular expression matching the beginning of the name of dummy variables
-# (i.e. not used).
-dummy-variables-rgx=^\*{0,2}(_$|unused_|dummy_)
-
 # List of additional names supposed to be defined in builtins. Remember that
 # you should avoid to define new builtins when possible.
 additional-builtins=
@@ -123,7 +119,7 @@ attr-rgx=^_{0,2}[a-z][a-z0-9_]*$
 argument-rgx=^[a-z][a-z0-9_]*$
 
 # Regular expression which should only match correct variable names
-variable-rgx=^[a-z][a-z0-9_]*$
+variable-rgx=^[a-z_][a-z0-9_]*$
 
 # Regular expression which should only match correct attribute names in class
 # bodies
