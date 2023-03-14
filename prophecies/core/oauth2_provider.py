@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.db import IntegrityError
 from django.utils.http import urlencode
 from social_core.backends.oauth import BaseOAuth2
 from prophecies.core.contrib.namespace import get_path
@@ -7,10 +8,14 @@ from prophecies.core.contrib.namespace import get_path
 
 class OAuth2Provider(BaseOAuth2):
     name = 'provider'
+
     AUTHORIZATION_URL = settings.SOCIAL_AUTH_PROVIDER_AUTHORIZATION_URL
     ACCESS_TOKEN_URL = settings.SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_URL
     ACCESS_TOKEN_METHOD = settings.SOCIAL_AUTH_PROVIDER_ACCESS_TOKEN_METHOD
     SCOPE_SEPARATOR = ','
+
+    def auth_html(self):
+        pass
 
     def user_data(self, access_token, *args, **kwargs):
         params = urlencode({'access_token': access_token})
@@ -32,7 +37,8 @@ class OAuth2Provider(BaseOAuth2):
         }
 
 
-def map_provider_groups(strategy, details, user=None, *args, **kwargs):
+# pylint: disable=unused-argument
+def map_provider_groups(strategy, details, user, *args, **kwargs):
     if not user:
         return
     user.is_staff = settings.SOCIAL_AUTH_PROVIDER_STAFF_GROUP in details['provider_groups']
@@ -44,5 +50,5 @@ def map_provider_groups(strategy, details, user=None, *args, **kwargs):
     for gid in group_ids:
         try:
             user.groups.add(gid)
-        except Exception as e:
-            print("Trying to add group {} to user {} failed.".format(gid, user))
+        except IntegrityError:
+            print(f'Trying to add group {gid} to user {user} failed.')
