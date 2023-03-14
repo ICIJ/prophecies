@@ -1,11 +1,10 @@
 from actstream.models import Action, actor_stream, target_stream
-from django.contrib.auth.models import User
 from django_filters import CharFilter, FilterSet, DateFromToRangeFilter
-
+from django.contrib.auth.models import User
 from prophecies.core.models import TaskRecord, TaskRecordReview
 from prophecies.core.models.action_aggregate import ActionAggregate
-from prophecies.core.models.task_record import StatusType as TRStatusType
 from prophecies.core.models.task_record_review import StatusType
+from prophecies.core.models.task_record import StatusType as TRStatusType
 
 
 class ActionFilter(FilterSet):
@@ -15,6 +14,7 @@ class ActionFilter(FilterSet):
         model = Action
         fields = {'verb': ['exact', 'in']}
 
+    # pylint: disable=unused-argument
     def user_stream_filter(self, queryset, name, value):
         user = User.objects.get(pk=value)
         return queryset & (actor_stream(user) | target_stream(user))
@@ -27,6 +27,7 @@ class TaskRecordFilter(FilterSet):
         model = TaskRecord
         fields = ['reviewed']
 
+    # pylint: disable=unused-argument
     def reviewed_filter(self, queryset, name, value):
         if value == '0':
             return queryset \
@@ -64,7 +65,7 @@ class TaskRecordReviewFilter(FilterSet):
 
     @staticmethod
     def get_as_boolean(value):
-        if value == '0' or value == '1':
+        if value in ('0', '1'):
             return bool(int(value))
         return None
 
@@ -76,12 +77,15 @@ class TaskRecordReviewFilter(FilterSet):
                 .filter(**ftr)
         return queryset
 
+    # pylint: disable=unused-argument
     def has_disagreements_filter(self, queryset, name, value):
         return self.boolean_filter_on(queryset, "task_record__has_disagreements", value)
 
+    # pylint: disable=unused-argument
     def has_notes_filter(self, queryset, name, value):
         return self.boolean_filter_on(queryset, "task_record__has_notes", value)
 
+    # pylint: disable=unused-argument
     def locked_filter(self, queryset, name, value):
         return self.boolean_filter_on(queryset, "task_record__locked", value)
 
@@ -91,8 +95,7 @@ class TaskRecordReviewFilter(FilterSet):
             for user in value.split(','):
                 union = union | queryset.filter(task_record__bookmarked_by=user)
             return union
-        else:
-            return queryset.filter(task_record__bookmarked_by=value)
+        return queryset.filter(task_record__bookmarked_by=value)
 
     def reviewed_filter(self, queryset, name, value):
         filter_value = self.get_as_boolean(value)
@@ -101,15 +104,13 @@ class TaskRecordReviewFilter(FilterSet):
         if filter_value:
             return queryset \
                 .filter(task_record__reviews__status=StatusType.PENDING)
-        else:
-            return queryset \
+        return queryset \
                 .filter(task_record__reviews__status=StatusType.DONE) \
                 .exclude(task_record__reviews__status=StatusType.PENDING)
 
     def all_rounds_reviewed_filter(self, queryset, name, value):
         filter_value = self.get_as_boolean(value)
         if filter_value is not None:
-            from prophecies.core.models import TaskRecord
             status = TRStatusType.DONE if filter_value else TRStatusType.ASSIGNED
             tr = TaskRecord.objects.filter(status=status)
             return queryset.filter(task_record_id__in=tr)
