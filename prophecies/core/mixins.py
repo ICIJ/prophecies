@@ -8,6 +8,7 @@ from import_export.forms import ExportForm
 
 class ExportCsvGeneratorMixin:
 
+    # pylint: disable=keyword-arg-before-vararg
     def export_csv_as_generator(self, queryset=None, *args, **kwargs):
         self.before_export(queryset, *args, **kwargs)
         queryset = self.get_queryset() if queryset is None else queryset
@@ -42,11 +43,11 @@ class ExportWithCsvStreamMixin(ExportMixin):
             file_content_type = file_format.get_content_type()
             # Stream response only with CSV
             if file_content_type == 'text/csv':
-                dataset = self.resource_class().export_csv_as_generator()
+                dataset = self.resource_class().export_csv_as_generator() # pylint: disable=not-callable
                 queryset = self.get_export_queryset(request)
                 filename = self.get_export_filename(request, queryset, file_format)
                 response = StreamingHttpResponse(dataset, content_type=file_content_type)
-                response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+                response['Content-Disposition'] = f'attachment; filename="{filename}"'
                 return response
 
         return super().export_action(request, *args, **kwargs)
