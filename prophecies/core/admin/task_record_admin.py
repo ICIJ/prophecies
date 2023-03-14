@@ -1,3 +1,4 @@
+from textwrap import shorten
 from admin_auto_filters.filters import AutocompleteFilterFactory
 from django.contrib import admin, messages
 from django.contrib.admin.helpers import AdminForm
@@ -5,7 +6,6 @@ from django.shortcuts import redirect, render
 from django.urls import path
 from django.utils.html import format_html
 from import_export.resources import ModelResource
-from textwrap import shorten
 
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon, display_task_record_link
 from prophecies.core.forms import TaskRecordAssignForm, TaskRecordUploadForm
@@ -29,7 +29,7 @@ class TaskRecordReviewInline(admin.TabularInline):
 
     status_badge.short_description = "Status"
 
-    def has_add_permission(self, request, obj=None):
+    def has_add_permission(self, request, _obj=None):
         return False
 
 
@@ -121,7 +121,7 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
         adminform = self.form_as_adminform(form, request)
         return dict(self.admin_site.each_context(request),
                     form=form, adminform=adminform,
-                    opts=TaskRecord._meta,
+                    opts=TaskRecord._meta, # pylint: disable=protected-access
                     original=title, title=title,
                     has_change_permission=self.has_change_permission(request),
                     has_view_permission=self.has_view_permission(request))
@@ -154,10 +154,9 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
             self.message_user(request, f"{n} task record(s) assignd to {checker}.", messages.INFO)
             # Everything is fine, go back to the list of task records
             return redirect("..")
-        else:
-            self.message_user(request, "Unable to assign the task records", messages.ERROR)
-            # Call the same view with the received form
-            return self.assign_form_view(request, extra_context={'form': form})
+        self.message_user(request, "Unable to assign the task records", messages.ERROR)
+        # Call the same view with the received form
+        return self.assign_form_view(request, extra_context={'form': form})
 
     def upload_view(self, request):
         if request.method == "POST":
@@ -182,7 +181,6 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
             self.message_user(request, "Your csv file has been imported", messages.INFO)
             # Everything is fine, go back to the list of task records
             return redirect("..")
-        else:
-            self.message_user(request, "Unable to import the task records", messages.ERROR)
-            # Call the same view with the received form
-            return self.upload_form_view(request, extra_context={'form': form})
+        self.message_user(request, "Unable to import the task records", messages.ERROR)
+       # Call the same view with the received form
+        return self.upload_form_view(request, extra_context={'form': form})

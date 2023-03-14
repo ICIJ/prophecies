@@ -29,7 +29,7 @@ class AlternativeValueAdmin(admin.ModelAdmin):
         adminform = self.form_as_adminform(form, request)
         return dict(self.admin_site.each_context(request),
                     form=form, adminform=adminform,
-                    opts=AlternativeValue._meta,
+                    opts=AlternativeValue._meta, # pylint: disable=protected-access
                     original=title, title=title,
                     has_change_permission=self.has_change_permission(request),
                     has_view_permission=self.has_view_permission(request))
@@ -57,7 +57,6 @@ class AlternativeValueAdmin(admin.ModelAdmin):
             self.message_user(request, "Your csv file has been imported", messages.INFO)
             # Everything is fine, go back to the list of alternative values
             return redirect("..")
-        else:
-            self.message_user(request, "Unable to import the alternative values", messages.ERROR)
-            # Call the same view with the received form
-            return self.upload_form_view(request, extra_context={'form': form})
+        self.message_user(request, "Unable to import the alternative values", messages.ERROR)
+        # Call the same view with the received form
+        return self.upload_form_view(request, extra_context={'form': form})

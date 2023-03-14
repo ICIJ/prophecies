@@ -1,8 +1,8 @@
+from textwrap import shorten
 from admin_auto_filters.filters import AutocompleteFilterFactory
 from django.contrib import admin
 from django.utils.html import format_html
 from import_export.resources import ModelResource
-from textwrap import shorten
 
 from prophecies.core.models import TaskRecordReview
 from prophecies.core.contrib.display import display_status, display_task_addon, display_choice
@@ -31,7 +31,7 @@ class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
 
     # By default, we deactivate adding review to force users to
     # assign them through the "task record" admin page.
-    def has_add_permission(self, request, obj=None):
+    def has_add_permission(self, request, _obj=None):
         return False
 
     def get_queryset(self, request):
