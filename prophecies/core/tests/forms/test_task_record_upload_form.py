@@ -49,8 +49,8 @@ class TaskRecordUploadFormTests(TestCase):
         data = {"task": self.task.id}
         csv_content = '\n'.join([
             'task,original_value',
-            '%s,foo' % self.task.id,
-            '%s,bar' % self.task.id,
+            f'{self.task.id},foo',
+            f'{self.task.id},bar',
         ])
         files = {'csv_file': self.build_csv_file(csv_content)}
         form = TaskRecordUploadForm(data, files)
@@ -65,8 +65,8 @@ class TaskRecordUploadFormTests(TestCase):
         data = {"task": self.task.id}
         csv_content = '\n'.join([
             'task,uid,original_value',
-            '%s,painting-1,green' % self.task.id,
-            '%s,painting-2,red' % self.task.id,
+            f'{self.task.id},painting-1,green',
+            f'{self.task.id},painting-2,red',
         ])
         files = {'csv_file': self.build_csv_file(csv_content)}
         form = TaskRecordUploadForm(data, files)
@@ -80,9 +80,9 @@ class TaskRecordUploadFormTests(TestCase):
         data = {"task": self.task.id}
         csv_content = '\n'.join([
             'task,uid,original_value',
-            '%s,painting-1,green' % self.task.id,
-            '%s,painting-2,red' % self.task.id,
-            '%s,painting-3,yellow' % self.task.id,
+            f'{self.task.id},painting-1,green',
+            f'{self.task.id},painting-2,red',
+            f'{self.task.id},painting-3,yellow',
         ])
         files = {'csv_file': self.build_csv_file(csv_content)}
         form = TaskRecordUploadForm(data, files)

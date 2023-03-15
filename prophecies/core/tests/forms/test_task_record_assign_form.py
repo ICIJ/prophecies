@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Project, Task, TaskRecord, TaskRecordReview, task_record
+from prophecies.core.models import Project, Task, TaskRecord, TaskRecordReview
 from prophecies.core.forms import TaskRecordAssignForm
 
 

@@ -1,7 +1,7 @@
 from actstream import action
 from django.contrib.auth.models import User
 from django.test import TestCase
-from prophecies.core.models import Choice, ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview
+from prophecies.core.models import Choice, ChoiceGroup, Project, TaskRecord, TaskRecordReview
 from prophecies.core.models.task import Task
 
 
@@ -44,7 +44,8 @@ class TestTaskRecord(TestCase):
 
     def test_it_should_use_task_link_template_with_nested_list(self):
         task = Task.objects.create(name='Addresses', project=self.project,
-                                   record_link_template='https://www.openstreetmap.org/search?query={metadata.foo.bar[1]}')
+                                   record_link_template='https://www.openstreetmap.org/search?'
+                                                        'query={metadata.foo.bar[1]}')
         task_record = TaskRecord.objects.create(task=task, metadata={"foo": {"bar": ["Paris", "London"]}})
         self.assertEqual(task_record.computed_link(), 'https://www.openstreetmap.org/search?query=London')
 

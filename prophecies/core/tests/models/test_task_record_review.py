@@ -210,19 +210,22 @@ class TestTaskRecordReview(TestCase):
 
     def test_it_should_returns_no_mentions(self):
         review = TaskRecordReview(
-            note="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+            note="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt "
+                 "ut labore et dolore magna aliqua.")
         self.assertEqual(len(review.mentions), 0)
 
     def test_it_should_returns_one_mention_with_user(self):
         review = TaskRecordReview(
-            note="Hi @django, lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+            note="Hi @django, lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor "
+                 "incididunt ut labore et dolore magna aliqua.")
         self.assertEqual(len(review.mentions), 1)
         self.assertEqual(review.mentions[0].get('mention'), 'django')
         self.assertEqual(review.mentions[0].get('user'), self.django)
 
     def test_it_should_returns_one_mention_with_user_and_one_without_user(self):
         review = TaskRecordReview(
-            note="Hi @django, lorem @ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+            note="Hi @django, lorem @ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor "
+                 "incididunt ut labore et dolore magna aliqua.")
         self.assertEqual(len(review.mentions), 2)
         #  First mention "@django"
         self.assertEqual(review.mentions[0].get('mention'), 'django')
@@ -233,7 +236,11 @@ class TestTaskRecordReview(TestCase):
 
     def test_it_should_returns_two_mentions(self):
         review = TaskRecordReview(
-            note="Hi @django, it's @olivia lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.")
+            note="Hi @django, it's @olivia lorem ipsum dolor sit amet, consectetur adipisicing elit, "
+                 "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+                 "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+                 "Duis aute irure dolor in reprehenderit in voluptate velit esse "
+                 "cillum dolore eu fugiat nulla pariatur.")
         self.assertEqual(len(review.mentions), 2)
         #  First mention "@django"
         self.assertEqual(review.mentions[0].get('mention'), 'django')
@@ -349,7 +356,7 @@ class TestTaskRecordReview(TestCase):
 
     def test_it_notifies_all_project_members_except_for_note_author_not_just_specific_task_checkers(self):
         task_science = Task.objects.create(name='Science', project=self.project, color='#fe6565', rounds=2)
-        record_buz = TaskRecord.objects.create(original_value='foo', task=task_science)
+        TaskRecord.objects.create(original_value='foo', task=task_science)
         TaskRecordReview.objects.create(task_record=self.record_foo, note="Hi @project!", checker=self.django)
         self.assertEqual(UserNotification.objects.filter(recipient=self.django).count(), 0)
         self.assertEqual(UserNotification.objects.filter(recipient=self.olivia).count(), 1)

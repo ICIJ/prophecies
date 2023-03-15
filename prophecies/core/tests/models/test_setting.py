@@ -17,7 +17,7 @@ class TestSetting(TestCase):
 
     def test_a_setting_can_be_unpublished(self):
         foo = Setting.objects.create(key='fuz')
-        visibility = SettingVisibility.objects.create(setting=foo, public=True)
+        SettingVisibility.objects.create(setting=foo, public=True)
         self.assertTrue(foo.public)
         foo.unpublish()
         self.assertFalse(foo.public)
@@ -29,7 +29,7 @@ class TestSetting(TestCase):
 
     def test_a_setting_can_be_unpublished_using_a_setter(self):
         foo = Setting.objects.create(key='fuz')
-        visibility = SettingVisibility.objects.create(setting=foo, public=True)
+        SettingVisibility.objects.create(setting=foo, public=True)
         foo.public = False
         self.assertFalse(foo.public)
 
