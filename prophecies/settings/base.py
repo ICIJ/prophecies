@@ -1,7 +1,7 @@
 import sys
+from os.path import normpath, exists
 import environ
 
-from os.path import normpath, exists
 
 root = environ.Path(__file__) - 3
 project_root = root.path('prophecies')
