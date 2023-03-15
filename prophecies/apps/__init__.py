@@ -26,8 +26,8 @@ class PropheciesConfig(AppConfig):
         signals.post_save.connect(create_aggregate_on_action_save, sender=Action)
 
 
-def create_aggregate_on_action_save(sender, instance, **kwargs):
-    if (instance.actor_content_type.model == 'user'):
+def create_aggregate_on_action_save(sender, instance, **kwargs):   # pylint: disable=unused-argument
+    if instance.actor_content_type.model == 'user':
         if not (instance.data and 'task_id' in instance.data and instance.data['task_id']):
             return
 

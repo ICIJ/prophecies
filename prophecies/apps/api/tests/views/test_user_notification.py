@@ -50,7 +50,7 @@ class TestUserNotification(TestCase):
         with self.assertRaises(StopIteration):
             next(i for i in included if i['type'] == 'User' and i['id'] == '2')
 
-    def test_list_returns_mentioned_action_in_included_objects_for_olivia(self):
+    def test_list_returns_mentioned_action_in_included_objects_for_olivia_for_user(self):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/user-notifications/', {'include': 'action.actor'})
         self.assertEqual(request.status_code, 200)
@@ -66,7 +66,7 @@ class TestUserNotification(TestCase):
         with self.assertRaises(StopIteration):
             next(i for i in included if i['type'] == 'Action' and i['attributes']['verb'] == 'mentioned')
 
-    def test_list_returns_mentioned_action_in_included_objects_for_olivia(self):
+    def test_list_returns_mentioned_action_in_included_objects_for_olivia_for_action(self):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/user-notifications/', {'include': 'action.actor'})
         self.assertEqual(request.status_code, 200)
@@ -102,7 +102,7 @@ class TestUserNotification(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/user-notifications/%s/' % self.followed.id, payload,
+        request = self.client.put(f'/api/v1/user-notifications/{self.followed.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 404)
 
@@ -117,7 +117,7 @@ class TestUserNotification(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/user-notifications/%s/' % self.followed.id, payload,
+        request = self.client.put(f'/api/v1/user-notifications/{self.followed.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)
 
@@ -132,7 +132,7 @@ class TestUserNotification(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/user-notifications/%s/' % self.followed_back.id, payload,
+        request = self.client.put(f'/api/v1/user-notifications/{self.followed_back.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 404)
 
@@ -147,7 +147,7 @@ class TestUserNotification(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/user-notifications/%s/' % self.followed_back.id, payload,
+        request = self.client.put(f'/api/v1/user-notifications/{self.followed_back.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)
 
@@ -162,7 +162,7 @@ class TestUserNotification(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/user-notifications/%s/' % self.followed.id, payload,
+        self.client.put(f'/api/v1/user-notifications/{self.followed.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.followed.refresh_from_db()
         self.assertTrue(self.followed.read)
@@ -179,7 +179,7 @@ class TestUserNotification(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/user-notifications/%s/' % self.followed.id, payload,
+        self.client.put(f'/api/v1/user-notifications/{self.followed.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.followed.refresh_from_db()
         self.assertTrue(self.followed.read_at is None)

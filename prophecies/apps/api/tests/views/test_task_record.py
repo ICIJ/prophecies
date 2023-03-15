@@ -34,13 +34,13 @@ class TestTaskRecord(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload,
+        request = self.client.put(f'/api/v1/task-records/{task_record.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 403)
 
     def test_he_can_lock_assigned_record(self):
         task_record = TaskRecord.objects.create(task=self.task)
-        review = TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
         self.client.login(username='django', password='django')
         payload = {
             'data': {
@@ -51,13 +51,13 @@ class TestTaskRecord(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload,
+        request = self.client.put(f'/api/v1/task-records/{task_record.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)
 
     def test_record_is_locked_by_user_automaticaly(self):
         task_record = TaskRecord.objects.create(task=self.task)
-        review = TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
         self.client.login(username='django', password='django')
         payload = {
             'data': {
@@ -68,15 +68,15 @@ class TestTaskRecord(TestCase):
                 }
             }
         }
-        self.client.put('/api/v1/task-records/%s/' % task_record.id, payload, content_type='application/vnd.api+json')
-        request = self.client.get('/api/v1/task-records/%s/' % task_record.id)
+        self.client.put(f'/api/v1/task-records/{task_record.id}/', payload, content_type='application/vnd.api+json')
+        request = self.client.get(f'/api/v1/task-records/{task_record.id}/')
         data = request.json().get('data')
         self.assertTrue(data.get('attributes').get('locked'))
         self.assertEqual(data.get('relationships').get('lockedBy').get('data').get('id'), str(self.django.id))
 
     def test_he_cannot_lock_already_locked_record(self):
         task_record = TaskRecord.objects.create(task=self.task, locked=True)
-        review = TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
         self.client.login(username='django', password='django')
         payload = {
             'data': {
@@ -87,13 +87,13 @@ class TestTaskRecord(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload,
+        request = self.client.put(f'/api/v1/task-records/{task_record.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 400)
 
     def test_she_cannot_unlock_record_she_didnt_lock(self):
         task_record = TaskRecord.objects.create(task=self.task, locked_by=self.django, locked=True)
-        review = TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
         self.client.login(username='olivia', password='olivia')
         payload = {
             'data': {
@@ -104,13 +104,13 @@ class TestTaskRecord(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload,
+        request = self.client.put(f'/api/v1/task-records/{task_record.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 400)
 
     def test_she_can_unlock_record_she_locked(self):
         task_record = TaskRecord.objects.create(task=self.task, locked_by=self.olivia, locked=True)
-        review = TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
         self.client.login(username='olivia', password='olivia')
         payload = {
             'data': {
@@ -121,13 +121,13 @@ class TestTaskRecord(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload,
+        request = self.client.put(f'/api/v1/task-records/{task_record.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)
 
     def test_she_cannot_unlock_already_unlocked_record(self):
         task_record = TaskRecord.objects.create(task=self.task, locked_by=None, locked=False)
-        review = TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
         self.client.login(username='olivia', password='olivia')
         payload = {
             'data': {
@@ -138,14 +138,14 @@ class TestTaskRecord(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload,
+        request = self.client.put(f'/api/v1/task-records/{task_record.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 400)
 
     def test_he_cannot_lock_record_from_locked_task(self):
         task_record = TaskRecord.objects.create(task=self.task)
         self.task.lock()
-        review = TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
         self.client.login(username='django', password='django')
         payload = {
             'data': {
@@ -156,7 +156,7 @@ class TestTaskRecord(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload,
+        request = self.client.put(f'/api/v1/task-records/{task_record.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 403)
 
@@ -167,7 +167,7 @@ class TestTaskRecord(TestCase):
         TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
 
         self.client.login(username='olivia', password='olivia')
-        request = self.client.get('/api/v1/task-records/%s/' % task_record.id)
+        request = self.client.get(f'/api/v1/task-records/{task_record.id}/')
         data = request.json().get('data')
         self.assertTrue(data.get('attributes').get('bookmarked'))
 
@@ -178,11 +178,11 @@ class TestTaskRecord(TestCase):
         TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
 
         self.client.login(username='django', password='django')
-        request = self.client.get('/api/v1/task-records/%s/' % task_record.id)
+        request = self.client.get(f'/api/v1/task-records/{task_record.id}/')
         data = request.json().get('data')
         self.assertFalse(data.get('attributes').get('bookmarked'))
 
-    def test_he_can_unbookmark_a_record(self):
+    def test_he_can_unbookmark_a_record_bookmarked_true(self):
         task_record = TaskRecord.objects.create(task=self.task)
         TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
         self.client.login(username='django', password='django')
@@ -195,12 +195,12 @@ class TestTaskRecord(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload,
+        request = self.client.put(f'/api/v1/task-records/{task_record.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)
         self.assertTrue(task_record.bookmarked_by.filter(id=self.django.id).exists())
 
-    def test_he_can_unbookmark_a_record(self):
+    def test_he_can_unbookmark_a_record_bookmarked_false(self):
         task_record = TaskRecord.objects.create(task=self.task)
         task_record.bookmarked_by.add(self.django)
         TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
@@ -214,7 +214,7 @@ class TestTaskRecord(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-records/%s/' % task_record.id, payload,
+        request = self.client.put(f'/api/v1/task-records/{task_record.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)
         self.assertFalse(task_record.bookmarked_by.filter(id=self.django.id).exists())
