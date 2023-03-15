@@ -6,5 +6,5 @@ class DjangoFilterBackendWithoutForm(DjangoFilterBackend):
     A simple class to disable filter form in the DRF Browsable API
     """
 
-    def to_html(self, *args, **kwargs):
+    def to_html(self, *args, **kwargs):  # pylint: disable=unused-argument
         return None

@@ -1,9 +1,8 @@
-from django.contrib.auth.models import User
-from django.test import TestCase
-from prophecies.core.models.setting import Setting
-from rest_framework.test import APIClient
 from unittest import mock
 import os
+from django.test import TestCase
+from rest_framework.test import APIClient
+from prophecies.core.models.setting import Setting
 
 
 class TestSetting(TestCase):

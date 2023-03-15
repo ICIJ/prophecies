@@ -74,7 +74,7 @@ class TestTaskRecordReview(TestCase):
     def test_it_returns_django_task_record_review(self):
         attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django)
         self.client.login(username='django', password='django')
-        request = self.client.get('/api/v1/task-record-reviews/%s/' % attribution.id)
+        request = self.client.get(f'/api/v1/task-record-reviews/{attribution.id}/')
         self.assertEqual(request.status_code, 200)
         data = request.json().get('data')
         relationships = data.get('relationships')
@@ -85,11 +85,11 @@ class TestTaskRecordReview(TestCase):
         self.task.save()
         attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django)
         self.client.login(username='django', password='django')
-        request = self.client.get('/api/v1/task-record-reviews/%s/' % attribution.id)
+        request = self.client.get(f'/api/v1/task-record-reviews/{attribution.id}/')
         self.assertEqual(request.status_code, 200)
         data = request.json().get('data')
         included = request.json().get('included')
-        relationships = data.get('relationships')
+        data.get('relationships')
         task_record_entity = next(entity for entity in included if
                                   entity['type'] == 'TaskRecord' and entity['id'] == str(self.task_record_foo.id))
         self.assertEqual(task_record_entity['attributes']['link'], 'https://icij.org/foo.json')
@@ -97,7 +97,7 @@ class TestTaskRecordReview(TestCase):
     def test_it_returns_task_record_with_a_choice_field(self):
         attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django)
         self.client.login(username='django', password='django')
-        request = self.client.get('/api/v1/task-record-reviews/%s/' % attribution.id)
+        request = self.client.get(f'/api/v1/task-record-reviews/{attribution.id}/')
         data = request.json().get('data')
         relationships = data.get('relationships')
         self.assertTrue('choice' in relationships)
@@ -108,7 +108,7 @@ class TestTaskRecordReview(TestCase):
         attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django,
                                                       choice=choice)
         self.client.login(username='django', password='django')
-        request = self.client.get('/api/v1/task-record-reviews/%s/' % attribution.id)
+        request = self.client.get(f'/api/v1/task-record-reviews/{attribution.id}/')
         data = request.json().get('data')
         self.assertEqual(data.get('relationships').get('choice').get('data').get('id'), str(choice.id))
         self.assertEqual(data.get('attributes').get('status'), 'DONE')
@@ -116,7 +116,7 @@ class TestTaskRecordReview(TestCase):
     def test_it_cannot_found_task_record_with_normal_user(self):
         attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo)
         self.client.login(username='django', password='django')
-        request = self.client.get('/api/v1/task-record-reviews/%s/' % attribution.id)
+        request = self.client.get(f'/api/v1/task-record-reviews/{attribution.id}/')
         self.assertEqual(request.status_code, 403)
 
     def test_it_returns_number_of_task_record_reviews_for_olivia_by_task(self):
@@ -125,10 +125,10 @@ class TestTaskRecordReview(TestCase):
         self.client.login(username='olivia', password='olivia')
         request = self.client.get('/api/v1/task-record-reviews/')
         self.assertEqual(request.status_code, 200)
-        countBy = request.json().get('meta').get('countBy')
-        self.assertEqual(len(countBy), 2)
-        self.assertEqual(countBy[0]['taskId'], 1)
-        self.assertEqual(countBy[0]['count'], 2)
+        count_by = request.json().get('meta').get('countBy')
+        self.assertEqual(len(count_by), 2)
+        self.assertEqual(count_by[0]['taskId'], 1)
+        self.assertEqual(count_by[0]['count'], 2)
 
     def test_it_cannot_set_task_record_choice_with_normal_user(self):
         attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo)
@@ -147,7 +147,7 @@ class TestTaskRecordReview(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload,
+        request = self.client.put(f'/api/v1/task-record-reviews/{attribution.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 403)
 
@@ -168,7 +168,7 @@ class TestTaskRecordReview(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload,
+        request = self.client.put(f'/api/v1/task-record-reviews/{attribution.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 403)
 
@@ -189,10 +189,10 @@ class TestTaskRecordReview(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload,
+        request = self.client.put(f'/api/v1/task-record-reviews/{attribution.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)
-        request = self.client.get('/api/v1/task-record-reviews/%s/' % attribution.id)
+        request = self.client.get(f'/api/v1/task-record-reviews/{attribution.id}/')
         data = request.json().get('data')
         self.assertTrue(data.get('relationships').get('choice') is not None)
         self.assertEqual(data.get('attributes').get('status'), 'DONE')
@@ -214,10 +214,10 @@ class TestTaskRecordReview(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload,
+        request = self.client.put(f'/api/v1/task-record-reviews/{attribution.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)
-        request = self.client.get('/api/v1/task-record-reviews/%s/' % attribution.id)
+        request = self.client.get(f'/api/v1/task-record-reviews/{attribution.id}/')
         data = request.json().get('data')
         self.assertTrue(data.get('relationships').get('choice') is not None)
         self.assertEqual(data.get('attributes').get('status'), 'DONE')
@@ -243,7 +243,7 @@ class TestTaskRecordReview(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload,
+        request = self.client.put(f'/api/v1/task-record-reviews/{attribution.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 403)
 
@@ -263,7 +263,7 @@ class TestTaskRecordReview(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload,
+        request = self.client.put(f'/api/v1/task-record-reviews/{attribution.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 200)
 
@@ -272,8 +272,8 @@ class TestTaskRecordReview(TestCase):
         task_record_with_note.locked = True
         task_record_with_note.save()
         choice_group = ChoiceGroup.objects.create(name='Is it correct?')
-        choice_yes = Choice.objects.create(name='Yes', choice_group=choice_group)
-        choice_no = Choice.objects.create(name='No', choice_group=choice_group)
+        Choice.objects.create(name='Yes', choice_group=choice_group)
+        Choice.objects.create(name='No', choice_group=choice_group)
         attribution = TaskRecordReview.objects.create(task_record=task_record_with_note, checker=self.django,
                                                       note='this is a note')
         self.client.login(username='django', password='django')
@@ -294,7 +294,7 @@ class TestTaskRecordReview(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload,
+        request = self.client.put(f'/api/v1/task-record-reviews/{attribution.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 403)
 
@@ -316,7 +316,7 @@ class TestTaskRecordReview(TestCase):
                 }
             }
         }
-        request = self.client.put('/api/v1/task-record-reviews/%s/' % attribution.id, payload,
+        request = self.client.put(f'/api/v1/task-record-reviews/{attribution.id}/', payload,
                                   content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 403)
 
@@ -326,13 +326,13 @@ class TestTaskRecordReview(TestCase):
         self.task_record_foo.bookmarked_by.add(self.django)
 
         self.client.login(username='django', password='django')
-        request = self.client.get('/api/v1/task-record-reviews/?filter[task_record__bookmarked_by]=%s' % self.django.id)
+        request = self.client.get(f'/api/v1/task-record-reviews/?filter[task_record__bookmarked_by]={self.django.id}')
         data = request.json().get('data')
         self.assertEqual(len(data), 2)
 
         self.task_record_foo.bookmarked_by.remove(self.django)
 
-        request = self.client.get('/api/v1/task-record-reviews/?filter[task_record__bookmarked_by]=%s' % self.django.id)
+        request = self.client.get(f'/api/v1/task-record-reviews/?filter[task_record__bookmarked_by]={self.django.id}')
         data = request.json().get('data')
         self.assertEqual(len(data), 0)
 
@@ -347,15 +347,15 @@ class TestTaskRecordReview(TestCase):
 
         self.client.login(username='django', password='django')
         request = self.client.get(
-            '/api/v1/task-record-reviews/?filter[checker]=%s&filter[task_record__bookmarked_by]=%s' % (
-            self.django.id, self.django.id))
+            f'/api/v1/task-record-reviews/?filter[checker]='
+            f'{self.django.id}&filter[task_record__bookmarked_by]={self.django.id}')
         data = request.json().get('data')
         self.assertEqual(len(data), 2)
 
         self.client.login(username='olivia', password='olivia')
         request = self.client.get(
-            '/api/v1/task-record-reviews/?filter[checker]=%s&filter[task_record__bookmarked_by]=%s' % (
-            self.olivia.id, self.olivia.id))
+            f'/api/v1/task-record-reviews/?filter[checker]='
+            f'{self.olivia.id}&filter[task_record__bookmarked_by]={self.olivia.id}')
         data = request.json().get('data')
         self.assertEqual(len(data), 1)
 
@@ -369,8 +369,8 @@ class TestTaskRecordReview(TestCase):
 
         self.client.login(username='django', password='django')
         request = self.client.get(
-            '/api/v1/task-record-reviews/?filter[checker]=2&filter[task_record__bookmarked_by]=%s,%s' % (
-            self.olivia.id, self.django.id))
+            f'/api/v1/task-record-reviews/?'
+            f'filter[checker]=2&filter[task_record__bookmarked_by]={self.olivia.id},{self.django.id}')
         data = request.json().get('data')
         self.assertEqual(len(data), 3)
 
@@ -395,7 +395,7 @@ class TestTaskRecordReview(TestCase):
         self.assertEqual(len(data), 4)
 
     def test_it_check_stat_deletion_on_task_record_review_delete(self):
-        choice = self.task.choice_group.choices.first()
+        self.task.choice_group.choices.first()
         trr = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django, round=1)
         self.assertEqual(self.task_record_foo.reviews.count(), 1)
         self.assertEqual(len(self.task_record_foo.reviews.done()), 0)

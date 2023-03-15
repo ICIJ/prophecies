@@ -21,14 +21,14 @@ class TestProject(TestCase):
     def test_details_returns_project_foo(self):
         self.client.login(username='olivia', password='olivia')
         id = self.project_foo.id
-        request = self.client.get('/api/v1/projects/%s/' % id)
+        request = self.client.get(f'/api/v1/projects/{id}/')
         self.assertEqual(request.status_code, 200)
         self.assertEqual(request.json().get('data').get('attributes').get('name'), 'foo')
 
     def test_details_returns_project_bar(self):
         self.client.login(username='olivia', password='olivia')
         id = self.project_bar.id
-        request = self.client.get('/api/v1/projects/%s/' % id)
+        request = self.client.get(f'/api/v1/projects/{id}/')
         self.assertEqual(request.status_code, 200)
         self.assertEqual(request.json().get('data').get('attributes').get('name'), 'bar')
 
@@ -36,7 +36,7 @@ class TestProject(TestCase):
         self.client.login(username='olivia', password='olivia')
         Task.objects.create(name="paintings", project=self.project_foo)
         id = self.project_foo.id
-        request = self.client.get('/api/v1/projects/%s/tasks/' % id)
+        request = self.client.get(f'/api/v1/projects/{id}/tasks/')
         self.assertEqual(request.status_code, 200)
         self.assertEqual(len(request.json().get('data')), 1)
 
@@ -45,7 +45,7 @@ class TestProject(TestCase):
         Task.objects.create(name="addresses", project=self.project_bar)
         Task.objects.create(name="transactions", project=self.project_bar)
         id = self.project_bar.id
-        request = self.client.get('/api/v1/projects/%s/tasks/' % id)
+        request = self.client.get(f'/api/v1/projects/{id}/tasks/')
         self.assertEqual(request.status_code, 200)
         self.assertEqual(len(request.json().get('data')), 2)
 

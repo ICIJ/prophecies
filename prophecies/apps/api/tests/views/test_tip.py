@@ -1,6 +1,6 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
-from django.contrib.auth.models import User
 from prophecies.core.models import Project, Task, Tip, TaskChecker
 
 
@@ -38,7 +38,7 @@ class TestTip(TestCase):
     def test_details_returns_bar_tip(self):
         self.client.login(username=self.olivia, password='olivia')
         id = self.tip_bar.id
-        request = self.client.get('/api/v1/tips/%s/' % id)
+        request = self.client.get(f'/api/v1/tips/{id}/')
         self.assertEqual(request.status_code, 200)
         data = request.json().get('data')
         self.assertEqual(data['attributes']['name'], 'bar')
@@ -46,7 +46,7 @@ class TestTip(TestCase):
     def test_details_returns_top_tip(self):
         self.client.login(username=self.olivia, password='olivia')
         id = self.tip_top.id
-        request = self.client.get('/api/v1/tips/%s/' % id)
+        request = self.client.get(f'/api/v1/tips/{id}/')
         self.assertEqual(request.status_code, 200)
         data = request.json().get('data')
         self.assertEqual(data['attributes']['name'], 'top')

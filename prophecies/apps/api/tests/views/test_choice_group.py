@@ -20,7 +20,7 @@ class TestChoiceGroup(TestCase):
     def test_details_returns_choice_group_foo(self):
         self.client.login(username='olivia', password='olivia')
         id = self.choice_group_foo.id
-        request = self.client.get('/api/v1/choice-groups/%s/' % id)
+        request = self.client.get(f'/api/v1/choice-groups/{id}/')
         self.assertEqual(request.status_code, 200)
         self.assertEqual(request.json().get('data').get('attributes').get('name'), 'foo')
 
