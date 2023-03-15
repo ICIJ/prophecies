@@ -1,4 +1,4 @@
-import {createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import UserAvatar from '@/components/UserAvatar'
 import User from '@/models/User'
 import Core from '@/core'
@@ -22,11 +22,11 @@ describe('UserAvatar', () => {
 
   beforeEach(async () => {
     const localVue = createLocalVue()
-    const propsData = {userId: '2000'}
+    const propsData = { userId: '2000' }
     // Configure the local vue
     Core.init(localVue).useAll().configure()
     // Finally, instanciate the component
-    wrapper = mount(UserAvatar, {localVue, propsData})
+    wrapper = mount(UserAvatar, { localVue, propsData })
   })
 
   it('should build an avatar URL using the emailMd5', () => {

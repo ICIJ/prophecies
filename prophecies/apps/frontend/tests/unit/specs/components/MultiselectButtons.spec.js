@@ -1,5 +1,5 @@
-import {BButton} from 'bootstrap-vue'
-import {createLocalVue, mount} from '@vue/test-utils'
+import { BButton } from 'bootstrap-vue'
+import { createLocalVue, mount } from '@vue/test-utils'
 import MultiselectButtons from '@/components/MultiselectButtons'
 
 describe('MultiselectButtons', () => {
@@ -9,14 +9,14 @@ describe('MultiselectButtons', () => {
   describe('a form with Correct/Incorrect/Unknown buttons', () => {
     beforeEach(() => {
       const options = [
-        {id: 1, name: 'Correct'},
-        {id: 2, name: 'Incorrect'},
-        {id: 3, name: 'Unknown'}
+        { id: 1, name: 'Correct' },
+        { id: 2, name: 'Incorrect' },
+        { id: 3, name: 'Unknown' }
       ]
-      const propsData = {multiple: false, options, trackBy: 'id'}
+      const propsData = { multiple: false, options, trackBy: 'id' }
       localVue = createLocalVue()
       localVue.component('b-btn', BButton)
-      wrapper = mount(MultiselectButtons, {localVue, propsData})
+      wrapper = mount(MultiselectButtons, { localVue, propsData })
     })
 
     it('should creates 4 buttons', () => {
@@ -30,7 +30,7 @@ describe('MultiselectButtons', () => {
       expect(wrapper.emitted().update[0][0]).toHaveLength(1)
       expect(wrapper.emitted().update[0][0]).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({id: 1, name: 'Correct'})
+          expect.objectContaining({ id: 1, name: 'Correct' })
         ])
       )
     })
@@ -65,16 +65,16 @@ describe('MultiselectButtons', () => {
   describe('a form with Babka/Croissant/Muffin/Cookie buttons', () => {
     beforeEach(() => {
       const options = [
-        {id: 1, name: 'Babka'},
-        {id: 2, name: 'Croissant'},
-        {id: 3, name: 'Muffin'},
-        {id: 4, name: 'Cookie'}
+        { id: 1, name: 'Babka' },
+        { id: 2, name: 'Croissant' },
+        { id: 3, name: 'Muffin' },
+        { id: 4, name: 'Cookie' }
       ]
-      const value = [{id: 2, name: 'Croissant'}]
-      const propsData = {multiple: true, options, value}
+      const value = [{ id: 2, name: 'Croissant' }]
+      const propsData = { multiple: true, options, value }
       localVue = createLocalVue()
       localVue.component('b-btn', BButton)
-      wrapper = mount(MultiselectButtons, {localVue, propsData})
+      wrapper = mount(MultiselectButtons, { localVue, propsData })
     })
 
     it('should show the names in each button', () => {
@@ -105,8 +105,8 @@ describe('MultiselectButtons', () => {
       expect(wrapper.emitted().update[0][0]).toHaveLength(2)
       expect(wrapper.emitted().update[0][0]).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({id: 2, name: 'Croissant'}),
-          expect.objectContaining({id: 4, name: 'Cookie'})
+          expect.objectContaining({ id: 2, name: 'Croissant' }),
+          expect.objectContaining({ id: 4, name: 'Cookie' })
         ])
       )
     })

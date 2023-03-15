@@ -1,5 +1,5 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
-import {BButton} from 'bootstrap-vue'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
+import { BButton } from 'bootstrap-vue'
 import '@/store'
 import Core from '@/core'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -10,7 +10,7 @@ import TaskRecordReviewAppliedFilters from '@/components/TaskRecordReviewApplied
 describe('TaskRecordReviewAppliedFilters', () => {
   let wrapper
 
-  function createContainer() {
+  function createContainer () {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -25,11 +25,11 @@ describe('TaskRecordReviewAppliedFilters', () => {
   beforeEach(() => {
     const attachTo = createContainer()
     const localVue = createLocalVue()
-    const routeFilters = {choice__in: '1,2', task_record__predicted_value__iregex: '(FRA|DZA)'}
-    const propsData = {taskId: '1', routeFilters}
+    const routeFilters = { choice__in: '1,2', task_record__predicted_value__iregex: '(FRA|DZA)' }
+    const propsData = { taskId: '1', routeFilters }
     // Configure the local vue with plugins
-    const {store, wait} = Core.init(localVue).useAll()
-    wrapper = shallowMount(TaskRecordReviewAppliedFilters, {attachTo, localVue, propsData, store, wait})
+    const { store, wait } = Core.init(localVue).useAll()
+    wrapper = shallowMount(TaskRecordReviewAppliedFilters, { attachTo, localVue, propsData, store, wait })
   })
 
   it('should return filters with selected option for the `predictedValues` filter', () => {

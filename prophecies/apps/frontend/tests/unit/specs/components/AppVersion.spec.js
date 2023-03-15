@@ -1,4 +1,4 @@
-import {createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import AppVersion from '@/components/AppVersion'
 import Core from '@/core'
 
@@ -20,19 +20,19 @@ describe('AppVersion', () => {
   })
 
   it('should display the backend version using the `version` config value', () => {
-    wrapper = mount(AppVersion, {i18n, localVue})
+    wrapper = mount(AppVersion, { i18n, localVue })
     expect(wrapper.text()).toBe('Version 0.4.6')
   })
 
   it('should display the version "CANARY" using the `version` config value', () => {
     config.set('version', 'CANARY')
-    wrapper = mount(AppVersion, {i18n, localVue})
+    wrapper = mount(AppVersion, { i18n, localVue })
     expect(wrapper.text()).toBe('Version CANARY')
   })
 
   it('should display the version "0.0.1" using the `version` config value', () => {
     config.set('version', '0.0.1')
-    wrapper = mount(AppVersion, {i18n, localVue})
+    wrapper = mount(AppVersion, { i18n, localVue })
     expect(wrapper.text()).toBe('Version 0.0.1')
   })
 })

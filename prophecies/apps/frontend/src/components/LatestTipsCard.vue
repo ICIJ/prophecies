@@ -3,11 +3,11 @@
     <div class="d-flex">
       <div class="mt-2 order-2" v-if="showClose">
         <a href="#" :title="closeLatestTips" @click="close">
-          <x-icon class="latest-tips-card__close text-secondary"/>
+          <x-icon class="latest-tips-card__close text-secondary" />
         </a>
       </div>
       <div class="d-flex flex-grow-1 align-items-center mt-3 mb-5">
-        <smile-icon class="text-primary mr-4"/>
+        <smile-icon class="text-primary mr-4" />
         <slot name="title"></slot>
       </div>
     </div>
@@ -34,7 +34,7 @@
         </div>
       </li>
     </ul>
-    <slot name="footer"/>
+    <slot name="footer" />
   </div>
 </template>
 
@@ -58,18 +58,18 @@ export default {
     }
   },
   computed: {
-    closeLatestTips() {
+    closeLatestTips () {
       return this.$t('latestTipsCard.closeLatestTips')
     },
-    latestTips() {
+    latestTips () {
       return this.tips.slice(0, this.limit - 1)
     },
-    hasLatestTips() {
+    hasLatestTips () {
       return this.latestTips.length > 0
     }
   },
   methods: {
-    close() {
+    close () {
       /**
        * Emitted when the user clicked on the "close" button
        * @event close
@@ -82,38 +82,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.latest-tips-card {
-  &__title-tips {
-    position: relative;
-    padding-bottom: $spacer;
+  .latest-tips-card {
+    &__title-tips {
+      position: relative;
+      padding-bottom: $spacer;
 
-    &:after {
-      content: "";
-      width: 170%;
-      max-width: 210px;
-      position: absolute;
-      bottom: 0%;
-      left: 0;
-      height: 7px;
-      background: $warning;
-      font-weight: 600;
+      &:after {
+        content: "";
+        width: 170%;
+        max-width: 210px;
+        position: absolute;
+        bottom: 0%;
+        left: 0;
+        height: 7px;
+        background: $warning;
+        font-weight: 600;
+      }
     }
-  }
 
-  &__tips {
+    &__tips {
 
-    &__item {
-      margin-bottom: $spacer-lg;
-
-      &__title-tips {
-        color: $body-color;
+      &__item {
         margin-bottom: $spacer-lg;
-      }
 
-      .negative-margin {
-        margin-top: -15px
+        &__title-tips {
+          color: $body-color;
+          margin-bottom: $spacer-lg;
+        }
+
+        .negative-margin {
+          margin-top: -15px
+        }
       }
     }
   }
-}
 </style>

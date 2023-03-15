@@ -35,9 +35,9 @@
       &:before {
         animation: rotateLogo 4s linear infinite;
         background-image: linear-gradient($tertiary, $tertiary),
-        linear-gradient($light, $light),
-        linear-gradient($tertiary, $tertiary),
-        linear-gradient($light, $light);
+                          linear-gradient($light, $light),
+                          linear-gradient($tertiary, $tertiary),
+                          linear-gradient($light, $light);
         background-position: 0 0, 100% 0, 100% 100%, 0 100%;
         background-repeat: no-repeat;
         background-size: 50% 50%, 50% 50%;

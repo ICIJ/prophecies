@@ -1,5 +1,5 @@
 const BundleTracker = require('webpack-bundle-tracker')
-const {join} = require('path')
+const { join } = require('path')
 
 const resolve = filepath => join(__dirname, filepath)
 
@@ -55,6 +55,6 @@ module.exports = {
     // This file is required by django-webpack-loader.
     config
       .plugin('BundleTracker')
-      .use(BundleTracker, [{filename: './dist/webpack-stats.json'}])
+      .use(BundleTracker, [{ filename: './dist/webpack-stats.json' }])
   }
 }

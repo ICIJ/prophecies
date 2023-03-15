@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
@@ -17,9 +17,9 @@ describe('TaskStatsCard', () => {
     beforeEach(async () => {
       const localVue = createLocalVue()
       // Configure the local vue with plugins
-      const {i18n} = Core.init(localVue).useAll()
-      const propsData = {taskId: '1', checkerId: '1'}
-      wrapper = shallowMount(TaskStatsCard, {localVue, propsData, i18n})
+      const { i18n } = Core.init(localVue).useAll()
+      const propsData = { taskId: '1', checkerId: '1' }
+      wrapper = shallowMount(TaskStatsCard, { localVue, propsData, i18n })
     })
     it('should show 3 rounds', () => {
       const elements = wrapper.findAll('stats-by-round-stub')
@@ -51,16 +51,16 @@ describe('TaskStatsCard', () => {
     beforeEach(() => {
       const localVue = createLocalVue()
       // Configure the local vue with plugins
-      const {i18n} = Core.init(localVue).useAll()
-      const propsData = {taskId: '1', team: false}
-      wrapper = shallowMount(TaskStatsCard, {localVue, propsData, i18n})
+      const { i18n } = Core.init(localVue).useAll()
+      const propsData = { taskId: '1', team: false }
+      wrapper = shallowMount(TaskStatsCard, { localVue, propsData, i18n })
     })
 
     afterAll(async () => {
       wrapper.destroy()
     })
     it('should show the team progress', async () => {
-      await wrapper.setProps({team: true})
+      await wrapper.setProps({ team: true })
       const element = wrapper.find('task-progress-stub')
       expect(element.attributes('progress')).toBe('40')
     })
@@ -76,7 +76,7 @@ describe('TaskStatsCard', () => {
     })
 
     it('should show 50% progress at round 1 for the team', async () => {
-      await wrapper.setProps({team: true})
+      await wrapper.setProps({ team: true })
       const element = wrapper.findAll('stats-by-round-stub').at(0)
       expect(element.attributes('progress')).toBe('50')
     })
@@ -87,7 +87,7 @@ describe('TaskStatsCard', () => {
     })
 
     it('should show 25% progress at round 2 for the team', async () => {
-      await wrapper.setProps({team: true})
+      await wrapper.setProps({ team: true })
       const element = wrapper.findAll('stats-by-round-stub').at(1)
       expect(element.attributes('progress')).toBe('25')
     })
@@ -98,7 +98,7 @@ describe('TaskStatsCard', () => {
     })
 
     it('should show 30% progress at round 3 for the team', async () => {
-      await wrapper.setProps({team: true})
+      await wrapper.setProps({ team: true })
       const element = wrapper.findAll('stats-by-round-stub').at(2)
       expect(element.attributes('progress')).toBe('30')
     })

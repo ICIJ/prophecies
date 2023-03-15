@@ -1,5 +1,4 @@
-import {rest} from 'msw'
-
+import { rest } from 'msw'
 export default [
   rest.get('/api/v1/action-aggregates', (req, res, ctx) => {
     return res(

@@ -13,16 +13,16 @@ export default {
     HistoryFetcher
   },
   computed: {
-    pageSize() {
+    pageSize () {
       return 50
     },
     pageNumber: {
-      get() {
+      get () {
         return Number(this.$route.query['page[number]']) || 1
       },
-      set(pageNumber) {
-        const query = {...this.$route.query, 'page[number]': pageNumber}
-        this.$router.push({path: this.$route.path, query}, undefined)
+      set (pageNumber) {
+        const query = { ...this.$route.query, 'page[number]': pageNumber }
+        this.$router.push({ path: this.$route.path, query }, undefined)
       }
     }
   }
@@ -32,16 +32,16 @@ export default {
 
 <template>
   <div class="history d-flex align-items-start">
-    <app-sidebar class="w-100 sticky-top"/>
+    <app-sidebar class="w-100 sticky-top" />
     <div class="history__container flex-grow-1">
-      <app-header hide-nav/>
+      <app-header hide-nav />
       <history-fetcher
         class="container-fluid p-5"
         :page-size="pageSize"
         :page-number="pageNumber"
-        #default="{actionIds, isFetching, count}">
+        #default="{actionIds, isFetching, count}" >
 
-        <history-list :fetching="isFetching" :action-ids="actionIds">
+        <history-list :fetching="isFetching" :action-ids="actionIds"  >
           <template v-slot:title>
             <h1 class="font-weight-bold mb-5 history__title">
               What happened <span class="history__title--lately text-danger">lately</span>

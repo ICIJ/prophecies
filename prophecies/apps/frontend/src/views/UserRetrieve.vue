@@ -1,5 +1,5 @@
 <script>
-import {camelCase, uniqueId} from 'lodash'
+import { camelCase, uniqueId } from 'lodash'
 
 import User from '@/models/User'
 import AppHeader from '@/components/AppHeader'
@@ -20,78 +20,78 @@ export default {
       type: String
     }
   },
-  async created() {
+  async created () {
     try {
       await this.fetchUserWithLoader()
       this.$core.setPageTitle(this.title)
     } catch (error) {
       const title = this.$t('general.unableToFindThisResource')
-      this.$router.replace({name: 'error', params: {title, error}})
+      this.$router.replace({ name: 'error', params: { title, error } })
     }
   },
   computed: {
-    profileRoute() {
-      const params = {username: this.username}
-      return {name: 'user-retrieve-profile', params}
+    profileRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-profile', params }
     },
-    activityRoute() {
-      const params = {username: this.username}
-      return {name: 'user-retrieve-activity', params}
+    activityRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-activity', params }
     },
-    teamRoute() {
-      const params = {username: this.username}
-      return {name: 'user-retrieve-team', params}
+    teamRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-team', params }
     },
-    bookmarksRoute() {
-      const params = {username: this.username}
-      return {name: 'user-retrieve-bookmarks', params}
+    bookmarksRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-bookmarks', params }
     },
-    notificationsRoute() {
-      const params = {username: this.username}
-      return {name: 'user-retrieve-notifications', params}
+    notificationsRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-notifications', params }
     },
-    historyRoute() {
-      const params = {username: this.username}
-      return {name: 'user-retrieve-history', params}
+    historyRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-history', params }
     },
-    languageRoute() {
-      const params = {username: this.username}
-      return {name: 'user-retrieve-language', params}
+    languageRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-language', params }
     },
-    fetchUserLoader() {
+    fetchUserLoader () {
       return uniqueId('load-user-')
     },
-    title() {
+    title () {
       return this.routeTitle(this.$route.name)
     },
-    profileTitle() {
+    profileTitle () {
       return this.routeTitle(this.profileRoute.name)
     },
-    activityTitle() {
+    activityTitle () {
       return this.routeTitle(this.activityRoute.name)
     },
-    teamTitle() {
+    teamTitle () {
       return this.routeTitle(this.teamRoute.name)
     },
-    bookmarksTitle() {
+    bookmarksTitle () {
       return this.routeTitle(this.bookmarksRoute.name)
     },
-    notificationsTitle() {
+    notificationsTitle () {
       return this.routeTitle(this.notificationsRoute.name)
     },
-    historyTitle() {
+    historyTitle () {
       return this.routeTitle(this.historyRoute.name)
     },
-    languageTitle() {
+    languageTitle () {
       return this.routeTitle(this.languageRoute.name)
     },
-    user() {
+    user () {
       return User.find(this.username)
     },
-    isMe() {
+    isMe () {
       return this.username === User.me()?.username
     },
-    icon() {
+    icon () {
       switch (this.title) {
         case this.teamTitle:
           return 'UsersIcon'
@@ -111,36 +111,36 @@ export default {
     }
   },
   methods: {
-    getRouteKey(route) {
+    getRouteKey (route) {
       return camelCase(route)
     },
-    getRouteKeyPath(routeKey) {
+    getRouteKeyPath (routeKey) {
       if (this.user?.isMe) {
         return [routeKey, 'title', 'yours'].join('.')
       }
       return [routeKey, 'title', 'others'].join('.')
     },
-    routeTitle(routeName) {
+    routeTitle (routeName) {
       const routeKey = this.getRouteKey(routeName)
       const path = this.getRouteKeyPath(routeKey)
       return this.$t(path, this.user)
     },
-    fetchUser() {
+    fetchUser () {
       return User.api().get(this.username)
     },
-    async fetchUserWithLoader() {
+    async fetchUserWithLoader () {
       this.$wait.start(this.fetchUserLoader)
       await this.fetchUser()
       this.$wait.end(this.fetchUserLoader)
     }
   },
   watch: {
-    title() {
+    title () {
       if (this.user) {
         this.$core.setPageTitle(this.title)
       }
     },
-    async username() {
+    async username () {
       await this.fetchUserWithLoader()
     }
   }
@@ -156,7 +156,7 @@ export default {
           exact
           :class="{'font-weight-bold': title === profileTitle}"
         >
-          <user-icon class="mr-3"/>
+          <user-icon class="mr-3" />
           {{ profileTitle }}
         </b-nav-item>
         <b-nav-item
@@ -164,7 +164,7 @@ export default {
           exact
           :class="{'font-weight-bold': title === activityTitle}"
         >
-          <activity-icon class="mr-3"/>
+          <activity-icon class="mr-3" />
           {{ activityTitle }}
         </b-nav-item>
         <b-nav-item
@@ -172,7 +172,7 @@ export default {
           exact v-if="isMe"
           :class="{'font-weight-bold': title === notificationsTitle}"
         >
-          <bell-icon class="mr-3"/>
+          <bell-icon class="mr-3" />
           {{ notificationsTitle }}
         </b-nav-item>
         <b-nav-item
@@ -180,7 +180,7 @@ export default {
           exact
           :class="{'font-weight-bold': title === bookmarksTitle}"
         >
-          <bookmark-icon class="mr-3"/>
+          <bookmark-icon class="mr-3" />
           {{ bookmarksTitle }}
         </b-nav-item>
         <b-nav-item
@@ -188,7 +188,7 @@ export default {
           exact
           :class="{'font-weight-bold': title === historyTitle}"
         >
-          <clock-icon class="mr-3"/>
+          <clock-icon class="mr-3" />
           {{ historyTitle }}
         </b-nav-item>
         <b-nav-item
@@ -196,11 +196,11 @@ export default {
           exact
           :class="{'font-weight-bold': title === teamTitle}"
         >
-          <users-icon class="mr-3"/>
+          <users-icon class="mr-3" />
           {{ teamTitle }}
         </b-nav-item>
         <b-nav-item :href="$config.get('helpLink')">
-          <truck-icon class="mr-3"/>
+          <truck-icon class="mr-3" />
           {{ $t('userProfileDropdownMenu.help') }}
         </b-nav-item>
         <b-nav-item
@@ -208,19 +208,19 @@ export default {
           exact
           :class="{'font-weight-bold': title === languageTitle}"
         >
-          <globe-icon class="mr-3"/>
+          <globe-icon class="mr-3" />
           {{ languageTitle + ' (' + $i18n.locale.toUpperCase() + ')'}}
         </b-nav-item>
         <b-nav-item :href="$config.get('logoutUrl')">
-          <log-out-icon class="mr-3"/>
+          <log-out-icon class="mr-3" />
           {{ $t('userProfileDropdownMenu.logOut') }}
         </b-nav-item>
       </template>
     </app-sidebar>
     <div class="user-retrieve__container flex-grow-1">
-      <app-header hide-nav hide-search/>
+      <app-header hide-nav hide-search />
       <div class="container-fluid">
-        <page-header :title="title" :icon="icon" class="mb-5"/>
+        <page-header :title="title" :icon="icon" class="mb-5" />
         <app-waiter :loader="fetchUserLoader" waiter-class="my-5 mx-auto d-block">
           <router-view :class="{'px-5': title === languageTitle}"/>
         </app-waiter>

@@ -1,17 +1,17 @@
 import UserNotification from '@/models/UserNotification'
-import {createStore} from '@/store'
+import { createStore } from '@/store'
 
 
 describe('userNotificationsPoll', () => {
-  let store
+  let store 
 
   // Ensure we advance timers and run all pending job
   // in the PromiseJobs queue.
-  function advanceTimersByTimeAndFlushPromises(ms = 0) {
+  function advanceTimersByTimeAndFlushPromises (ms = 0) {
     jest.advanceTimersByTime(ms)
     return new Promise(done => jest.requireActual("timers").setTimeout(done, 200))
   }
-
+  
   beforeEach(() => {
     jest.useFakeTimers()
     store = createStore()
@@ -59,7 +59,7 @@ describe('userNotificationsPoll', () => {
     await advanceTimersByTimeAndFlushPromises(1e3 * 15)
     expect(store.state.userNotificationsPoll.fetchs).toBe(1)
   })
-
+  
   it('should fetch notifications 2 times in 25 secondes', async () => {
     store.dispatch('userNotificationsPoll/startPoll')
     await advanceTimersByTimeAndFlushPromises(1e3 * 25)

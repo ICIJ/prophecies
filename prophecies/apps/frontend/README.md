@@ -1,7 +1,6 @@
 # Prophecus Frontend
 
 ## Project setup
-
 ```
 yarn install
 ```

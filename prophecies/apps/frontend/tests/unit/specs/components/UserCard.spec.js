@@ -1,4 +1,4 @@
-import {createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import UserAvatar from '@/components/UserAvatar'
 import UserCard from '@/components/UserCard'
 import UserLink from '@/components/UserLink'
@@ -24,17 +24,17 @@ describe('UserCard', () => {
 
   beforeEach(async () => {
     const localVue = createLocalVue()
-    const propsData = {userId: '2000'}
+    const propsData = { userId: '2000' }
     // Configure the local vue
     const core = Core.init(localVue).useAll()
     // Configure the core
     await core.configure()
     // Get router from core
-    const {i18n, store, router, wait} = core
+    const { i18n, store, router, wait } = core
     // Mock fetch method to avoid loading data
     UserCard.methods.fetchUserTasks = () => (null)
     // Finally, instanciate the component
-    wrapper = mount(UserCard, {localVue, propsData, i18n, store, router, wait})
+    wrapper = mount(UserCard, { localVue, propsData, i18n, store, router, wait })
   })
 
   it('should build a card with an avatar', () => {

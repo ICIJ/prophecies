@@ -2,32 +2,32 @@
 export default {
   name: 'Login',
   computed: {
-    loginUrl() {
+    loginUrl () {
       return this.$core.config.get('loginUrl')
     },
-    loginWelcome() {
+    loginWelcome () {
       return this.$core.config.get('loginWelcome') || this.$t('login.welcome')
     },
-    loginAccountDescription() {
+    loginAccountDescription () {
       return this.$core.config.get('loginAccountDescription') || this.$t('login.accountDescription')
     },
-    loginAccountButton() {
+    loginAccountButton () {
       return this.$core.config.get('loginAccountButton') || this.$t('login.account')
     },
-    helpDescription() {
+    helpDescription  () {
       return this.$core.config.get('helpDescription')
     },
-    helpLink() {
+    helpLink () {
       return this.$core.config.get('helpLink')
     }
   },
-  async mounted() {
+  async mounted () {
     if (await this.hasUser()) {
       return this.$router.push('/')
     }
   },
   methods: {
-    async hasUser() {
+    async hasUser () {
       try {
         return !!await this.$core.getUser()
       } catch (_) {
@@ -50,7 +50,7 @@ export default {
           <li class="list-group-item bg-muted border-top border-bottom border-left-0 border-right-0 rounded-0">
             <p>{{ loginAccountDescription }}</p>
             <a class="btn btn-dark btn-lg font-weight-bold" :href="loginUrl">
-              <shield-icon size="1x" class="mr-1"/>
+              <shield-icon size="1x" class="mr-1" />
               {{ loginAccountButton }}
             </a>
           </li>
@@ -68,22 +68,22 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-.login {
-  background: theme-color('primary');
-  min-height: 100vh;
-  padding: 10vh;
+  .login {
+    background: theme-color('primary');
+    min-height: 100vh;
+    padding: 10vh;
 
-  &__card {
-    margin: 0 auto;
-    max-width: 660px;
+    &__card {
+      margin:0 auto;
+      max-width: 660px;
 
-    &__heading h2 {
-      font-size: 2.5rem;
-    }
+      &__heading h2 {
+        font-size: 2.5rem;
+      }
 
-    p:empty {
-      display: none;
+      p:empty {
+        display: none;
+      }
     }
   }
-}
 </style>

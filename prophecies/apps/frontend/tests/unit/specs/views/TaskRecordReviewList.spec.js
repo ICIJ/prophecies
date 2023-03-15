@@ -7,7 +7,7 @@ import TaskRecordReviewList from '@/views/TaskRecordReviewList'
 import Task from '@/models/Task'
 
 describe('TaskRecordReviewList', () => {
-  function createContainer() {
+  function createContainer () {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -22,8 +22,8 @@ describe('TaskRecordReviewList', () => {
       const localVue = createLocalVue()
 
       // Configure the local vue
-      const {i18n, wait, store, router} = await Core.init(localVue).useAll()
-      const propsData = {taskId: '1'}
+      const { i18n, wait, store, router } = await Core.init(localVue).useAll()
+      const propsData = { taskId: '1' }
       const stubs = ['router-link', 'app-waiter']
       // Finally, instanciate the component
       options = {
@@ -45,7 +45,7 @@ describe('TaskRecordReviewList', () => {
     })
     describe('Selection on opened task', () => {
       beforeEach(async () => {
-        await Task.update({where: '1', data: {status: 'OPEN'}})
+        await Task.update({ where: '1', data: { status: 'OPEN' } })
       })
       it('should display "Select all records" or "Select 1 record" according to the number of records', async () => {
         await wrapper.setData({
@@ -142,8 +142,8 @@ describe('TaskRecordReviewList', () => {
 
       // Configure the local vue
       const core = await Core.init(localVue).useAll()
-      const {i18n, wait, store, router} = core
-      const propsData = {taskId: '1'}
+      const { i18n, wait, store, router } = core
+      const propsData = { taskId: '1' }
       const stubs = ['router-link', 'app-waiter']
       // Finally, instanciate the component
       const options = {
@@ -158,14 +158,14 @@ describe('TaskRecordReviewList', () => {
       }
       wrapper = await shallowMount(TaskRecordReviewList, options)
       await wrapper.vm.setup()
-      await wrapper.setData({selectedIds: {1: {}}}) // to have selected data
+      await wrapper.setData({ selectedIds: { 1: {} } }) // to have selected data
     })
     afterEach(async () => {
       Task.deleteAll()
     })
 
     it('should enable bulk choice form when task is opened', async () => {
-      await Task.update({where: '1', data: {status: 'OPEN'}})
+      await Task.update({ where: '1', data: { status: 'OPEN' } })
 
       // bulk form
       expect(wrapper.vm.isBulkSelectChoiceFormDisabled).toBeFalsy()
@@ -185,7 +185,7 @@ describe('TaskRecordReviewList', () => {
     })
 
     it('should disable bulk choice form when task is closed ', async () => {
-      await Task.update({where: '1', data: {status: 'CLOSED'}})
+      await Task.update({ where: '1', data: { status: 'CLOSED' } })
 
       // bulk form
       expect(wrapper.vm.isBulkSelectChoiceFormDisabled).toBeTruthy()

@@ -1,10 +1,10 @@
-import {createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import UserLink from '@/components/UserLink'
 import User from '@/models/User'
 import Core from '@/core'
 
 describe('UserLink', () => {
-  function createContainer() {
+  function createContainer () {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -30,15 +30,15 @@ describe('UserLink', () => {
     beforeEach(async () => {
       const localVue = createLocalVue()
       const attachTo = createContainer()
-      const propsData = {userId: '2000'}
+      const propsData = { userId: '2000' }
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       // Configure the core
       await core.configure()
       // Get router from core
-      const {i18n, store, router} = core
+      const { i18n, store, router } = core
       // Finally, instanciate the component
-      wrapper = mount(UserLink, {attachTo, localVue, propsData, i18n, store, router})
+      wrapper = mount(UserLink, { attachTo, localVue, propsData, i18n, store, router })
     })
 
     it('should build a link to the user profile', () => {
@@ -52,7 +52,7 @@ describe('UserLink', () => {
     })
 
     it('should show the display name instead of the username', async () => {
-      await wrapper.setProps({useDisplayName: true})
+      await wrapper.setProps({ useDisplayName: true })
       const text = wrapper.text()
       expect(text).toBe('Fátima')
     })
@@ -64,16 +64,16 @@ describe('UserLink', () => {
     beforeEach(async () => {
       const localVue = createLocalVue()
       const attachTo = createContainer()
-      const propsData = {userId: 'fatima'}
+      const propsData = { userId: 'fatima' }
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       // Configure the core
       await core.configure()
       // Get router from core
-      const {i18n, store, router} = core
-      const scopedSlots = {default: '<template slot-scope="{ user }">{{ user.email }}</template>'}
+      const { i18n, store, router } = core
+      const scopedSlots = { default: '<template slot-scope="{ user }">{{ user.email }}</template>' }
       // Finally, instanciate the component
-      wrapper = mount(UserLink, {attachTo, localVue, propsData, i18n, store, router, scopedSlots})
+      wrapper = mount(UserLink, { attachTo, localVue, propsData, i18n, store, router, scopedSlots })
     })
 
     it('should show the email instead of the username', () => {
@@ -88,15 +88,15 @@ describe('UserLink', () => {
     beforeEach(async () => {
       const localVue = createLocalVue()
       const attachTo = createContainer()
-      const propsData = {userId: 'edmond'}
+      const propsData = { userId: 'edmond' }
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       // Configure the core
       await core.configure()
       // Get router from core
-      const {i18n, store, router} = core
+      const { i18n, store, router } = core
       // Finally, instanciate the component
-      wrapper = mount(UserLink, {attachTo, localVue, propsData, i18n, store, router})
+      wrapper = mount(UserLink, { attachTo, localVue, propsData, i18n, store, router })
     })
 
     it('should show nothing when the user is unknown', () => {

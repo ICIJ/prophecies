@@ -1,5 +1,6 @@
+
 <script>
-import {get, uniqueId} from 'lodash'
+import { get, uniqueId } from 'lodash'
 import User from '@/models/User'
 import Action from '@/models/Action'
 import Task from '@/models/Task'
@@ -20,39 +21,39 @@ export default {
       default: null
     }
   },
-  data() {
+  data () {
     return {
       isFetching: false,
       actionIds: [],
       count: 0
     }
   },
-  async created() {
+  async created () {
     await this.setup()
   },
   methods: {
-    async setup() {
+    async setup () {
       try {
         this.isFetching = true
         await this.fetchAll()
       } catch (error) {
         const title = 'Unable to retrieve history'
-        this.$router.replace({name: 'error', params: {title, error}})
+        this.$router.replace({ name: 'error', params: { title, error } })
       } finally {
         this.isFetching = false
       }
     },
-    async fetchAll() {
+    async fetchAll () {
       if (this.username && !this.user?.id) {
         return Promise.reject(new Error('User not found'))
       }
-      const {response} = await this.fetchHistoryItemsIds(this.user?.id, this.pageSize, this.pageNumber)
+      const { response } = await this.fetchHistoryItemsIds(this.user?.id, this.pageSize, this.pageNumber)
       this.actionIds = get(response, 'data.data', []).map(a => a.id)
       this.count = get(response, 'data.meta.pagination.count', 0)
     },
-    async fetchHistoryItemsIds(userId, pageSize, pageNumber) {
-      const userFilterParam = userId ? {'filter[user_stream]': userId} : undefined
-      const paginationParam = pageSize ? {'page[size]': pageSize, 'page[number]': pageNumber} : undefined
+    async fetchHistoryItemsIds (userId, pageSize, pageNumber) {
+      const userFilterParam = userId ? { 'filter[user_stream]': userId } : undefined
+      const paginationParam = pageSize ? { 'page[size]': pageSize, 'page[number]': pageNumber } : undefined
       const actionParams = {
         'filter[verb__in]': 'mentioned,created,closed,created-aggregate',
         ...userFilterParam,
@@ -60,21 +61,21 @@ export default {
       }
 
       // TODO MV CD improve by retrieving only task actions. Maybe do the same for users
-      await Task.api().get('', {params: {include: 'project'}})
-      return Action.api().get('', {params: actionParams})
+      await Task.api().get('', { params: { include: 'project' } })
+      return Action.api().get('', { params: actionParams })
     }
 
   },
   computed: {
-    fetchHistoryLoader() {
+    fetchHistoryLoader () {
       return uniqueId('fetch-history-')
     },
-    user() {
+    user () {
       return User.find(this.username)
     }
   },
   watch: {
-    pageNumber(value) {
+    pageNumber (value) {
       return this.setup()
     }
   }

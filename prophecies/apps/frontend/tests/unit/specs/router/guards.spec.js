@@ -1,7 +1,7 @@
-import {createLocalVue} from '@vue/test-utils'
+import { createLocalVue } from '@vue/test-utils'
 
-import {server, rest} from '../../mocks/server'
-import {Core} from '@/core'
+import { server, rest } from '../../mocks/server'
+import { Core } from '@/core'
 import User from '@/models/User'
 
 // Mock the router's configuration
@@ -27,7 +27,7 @@ jest.mock('@/router', () => ({
 }))
 
 describe('router/guards', () => {
-  const {localVue} = createLocalVue()
+  const { localVue } = createLocalVue()
   let core
 
   beforeEach(async () => {
@@ -44,7 +44,7 @@ describe('router/guards', () => {
     // Mock reject promise for the user endpoint
     server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => res(ctx.status(403))))
     // The navigation is going to throw an exception
-    await expect(core.router.push({name: 'dashboard'})).rejects.toBeInstanceOf(Error)
+    await expect(core.router.push({ name: 'dashboard' })).rejects.toBeInstanceOf(Error)
     // The router should now be on the login page
     expect(core.router.currentRoute.name).toBe('login')
   })
@@ -53,7 +53,7 @@ describe('router/guards', () => {
     // Mock reject promise for the user endpoint
     server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => res(ctx.status(403))))
     // The navigation is not going to throw an exception
-    await core.router.push({name: 'login'})
+    await core.router.push({ name: 'login' })
     // The router should now be on the login page
     expect(core.router.currentRoute.name).toBe('login')
   })
@@ -62,16 +62,16 @@ describe('router/guards', () => {
     // Mock reject promise for the user endpoint
     server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => res(ctx.status(403))))
     // The navigation is not going to throw an exception
-    await core.router.push({name: 'error'})
+    await core.router.push({ name: 'error' })
     // The router should now be on the error page
     expect(core.router.currentRoute.name).toBe('error')
   })
 
   it('should not redirect to "login" if the user is authenticated', async () => {
-    const me = {data: {id: 20, username: 'bar'}}
+    const me = { data: { id: 20, username: 'bar' } }
     server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => res.once(ctx.json(me))))
     // The navigation is not going to throw an exception
-    await core.router.push({name: 'dashboard'})
+    await core.router.push({ name: 'dashboard' })
     // The router should now be on the dashboard page
     expect(core.router.currentRoute.name).toBe('dashboard')
   })

@@ -50,7 +50,7 @@ html {
 
 .custom-pagination--compact {
   .custom-pagination__form {
-    max-width: 108px !important; // to see the third point in Jump to... placeholder
+    max-width:108px !important; // to see the third point in Jump to... placeholder
     & input {
       border-radius: 0 $input-border-radius $input-border-radius 0;
     }

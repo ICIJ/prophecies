@@ -1,4 +1,4 @@
-import {createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import TaskListItem from '@/components/TaskListItem'
 import Task from '@/models/Task'
 import Core from '@/core'
@@ -14,15 +14,15 @@ describe('TaskListItem', () => {
 
     beforeEach(async () => {
       const localVue = createLocalVue()
-      const propsData = {taskId: '1'}
+      const propsData = { taskId: '1' }
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       // Configure the core
       await core.configure()
       // Get router from core
-      const {i18n, store, router} = core
+      const { i18n, store, router } = core
       // Finally, instanciate the component
-      wrapper = mount(TaskListItem, {localVue, propsData, i18n, store, router})
+      wrapper = mount(TaskListItem, { localVue, propsData, i18n, store, router })
     })
 
     it('should show the link by default', () => {
@@ -43,15 +43,15 @@ describe('TaskListItem', () => {
 
     beforeEach(async () => {
       const localVue = createLocalVue()
-      const propsData = {taskId: '1', noStatus: true, noProject: true}
+      const propsData = { taskId: '1', noStatus: true, noProject: true }
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       // Configure the core
       await core.configure()
       // Get router from core
-      const {i18n, store, router} = core
+      const { i18n, store, router } = core
       // Finally, instanciate the component
-      wrapper = mount(TaskListItem, {localVue, propsData, i18n, store, router})
+      wrapper = mount(TaskListItem, { localVue, propsData, i18n, store, router })
     })
 
     it('should show the name by default', () => {
@@ -72,15 +72,15 @@ describe('TaskListItem', () => {
 
     beforeEach(async () => {
       const localVue = createLocalVue()
-      const propsData = {taskId: '404'}
+      const propsData = { taskId: '404' }
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       // Configure the core
       await core.configure()
       // Get router from core
-      const {i18n, store, router} = core
+      const { i18n, store, router } = core
       // Finally, instanciate the component
-      wrapper = mount(TaskListItem, {localVue, propsData, i18n, store, router})
+      wrapper = mount(TaskListItem, { localVue, propsData, i18n, store, router })
     })
 
     it('should show nothing when the task is unknown', () => {

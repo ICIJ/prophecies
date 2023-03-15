@@ -1,5 +1,5 @@
-import {Model} from '@vuex-orm/core'
-import {defaultHeaders, responseNormalizer} from '@/utils/jsonapi'
+import { Model } from '@vuex-orm/core'
+import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import User from '@/models/User'
 import Task from '@/models/Task'
@@ -7,7 +7,7 @@ import Task from '@/models/Task'
 export default class TaskRecord extends Model {
   static entity = 'TaskRecord'
 
-  static fields() {
+  static fields () {
     return {
       id: this.attr(null),
       url: this.string(),
@@ -31,35 +31,35 @@ export default class TaskRecord extends Model {
     baseURL: `${settings.apiUrl}/task-records/`,
     dataTransformer: responseNormalizer,
     actions: {
-      save(id, {attributes = {}, relationships = {}} = {}) {
+      save (id, { attributes = { }, relationships = { } } = { }) {
         const type = 'TaskRecord'
-        const data = {type, id, attributes, relationships}
-        return this.put(`${id}/`, {data}, {headers: defaultHeaders()})
+        const data = { type, id, attributes, relationships }
+        return this.put(`${id}/`, { data }, { headers: defaultHeaders() })
       },
-      lock(id) {
-        const attributes = {locked: true}
-        return this.save(id, {attributes})
+      lock (id) {
+        const attributes = { locked: true }
+        return this.save(id, { attributes })
       },
-      unlock(id) {
-        const attributes = {locked: false}
-        return this.save(id, {attributes})
+      unlock (id) {
+        const attributes = { locked: false }
+        return this.save(id, { attributes })
       },
-      bookmark(id) {
-        const attributes = {bookmarked: true}
-        return this.save(id, {attributes})
+      bookmark (id) {
+        const attributes = { bookmarked: true }
+        return this.save(id, { attributes })
       },
-      unbookmark(id) {
-        const attributes = {bookmarked: false}
-        return this.save(id, {attributes})
+      unbookmark (id) {
+        const attributes = { bookmarked: false }
+        return this.save(id, { attributes })
       }
     }
   }
 
-  get lockedByMe() {
+  get lockedByMe () {
     return this.locked && this.lockedById === User.me().id
   }
 
-  get lockedByOther() {
+  get lockedByOther () {
     return this.locked && this.lockedById !== User.me().id
   }
 }
