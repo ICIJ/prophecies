@@ -1,4 +1,3 @@
-from actstream.models import Action
 from django.contrib.auth.models import User
 from django.test import TestCase
 from prophecies.core.models import UserNotification, Tip, Task, TaskRecordReview, Project, TaskRecord, TaskChecker
@@ -14,19 +13,22 @@ class TestTip(TestCase):
 
     def test_it_should_returns_no_mentions(self):
         tip = Tip(
-            description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+            description="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor "
+                        "incididunt ut labore et dolore magna aliqua.")
         self.assertEqual(len(tip.mentions), 0)
 
     def test_it_should_returns_one_mention_with_user(self):
         tip = Tip(
-            description="Hi @django, lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+            description="Hi @django, lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor "
+                        "incididunt ut labore et dolore magna aliqua.")
         self.assertEqual(len(tip.mentions), 1)
         self.assertEqual(tip.mentions[0].get('mention'), 'django')
         self.assertEqual(tip.mentions[0].get('user'), self.django)
 
     def test_it_should_returns_one_mention_with_user_and_one_without_user(self):
         tip = Tip(
-            description="Hi @django, lorem @ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
+            description="Hi @django, lorem @ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor "
+                        "incididunt ut labore et dolore magna aliqua.")
         self.assertEqual(len(tip.mentions), 2)
         #  First mention "@django"
         self.assertEqual(tip.mentions[0].get('mention'), 'django')
@@ -37,7 +39,11 @@ class TestTip(TestCase):
 
     def test_it_should_returns_two_mentions(self):
         tip = Tip(
-            description="Hi @django, it's @olivia lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.")
+            description="Hi @django, it's @olivia lorem ipsum dolor sit amet, consectetur adipisicing elit, "
+                        "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, "
+                        "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+                        "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum "
+                        "dolore eu fugiat nulla pariatur.")
         self.assertEqual(len(tip.mentions), 2)
         #  First mention "@django"
         self.assertEqual(tip.mentions[0].get('mention'), 'django')
