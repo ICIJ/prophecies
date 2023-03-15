@@ -1,5 +1,4 @@
 from colorfield.fields import ColorField
-from django.contrib.auth.models import User
 from django.db import models
 from prophecies.core.models.choice_group import ChoiceGroup
 
@@ -20,7 +19,7 @@ class Choice(models.Model):
     require_alternative_value = models.BooleanField(default=False, verbose_name='Requires an alternative value?')
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def save(self, *args, **kwargs):
         if not self.value:

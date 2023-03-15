@@ -1,8 +1,8 @@
-from prophecies.apps.api.contrib.strings import to_camel_case
+import os
 from constance.backends.database.models import Constance
 from django.db import models
 from django.db.models import signals
-import os
+from prophecies.apps.api.contrib.strings import to_camel_case
 
 
 class SettingManager(models.Manager):
@@ -51,7 +51,7 @@ class Setting(Constance):
 
     @public.setter
     def public(self, value):
-        self.visibility, created = SettingVisibility.objects.get_or_create(setting=self)
+        self.visibility, _created = SettingVisibility.objects.get_or_create(setting=self)
         self.visibility.public = value
 
     @property
@@ -59,17 +59,17 @@ class Setting(Constance):
         return not self.public
 
     def publish(self):
-        self.visibility, created = SettingVisibility.objects.get_or_create(setting=self)
+        self.visibility, _created = SettingVisibility.objects.get_or_create(setting=self)
         self.visibility.public = True
         self.visibility.save()
 
     def unpublish(self):
-        self.visibility, created = SettingVisibility.objects.get_or_create(setting=self)
+        self.visibility, _created = SettingVisibility.objects.get_or_create(setting=self)
         self.visibility.public = False
         self.visibility.save()
 
     @staticmethod
-    def signal_save_visibility(sender, instance, **kwargs):
+    def signal_save_visibility(sender, instance, **kwargs):  # pylint: disable=unused-argument
         if hasattr(instance, 'visibility'):
             instance.visibility.save()
 
