@@ -31,7 +31,7 @@ class ActionAggregate(models.Model):
     count = models.IntegerField(default=0)
 
     @staticmethod
-    def signal_action_aggregate_creation(sender, instance, created, **kwargs):
+    def signal_action_aggregate_creation(sender, instance, created, **kwargs):  # pylint: disable=unused-argument
         if instance.user and created:
             action.send(instance.user, verb='created-aggregate', target=instance)
 

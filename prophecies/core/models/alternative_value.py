@@ -8,7 +8,7 @@ class AlternativeValue(models.Model):
     choice_group = models.ForeignKey(ChoiceGroup, on_delete=models.CASCADE, related_name='alternative_values')
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def save(self, *args, **kwargs):
         if not self.value:

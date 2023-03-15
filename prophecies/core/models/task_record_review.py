@@ -1,4 +1,3 @@
-from secrets import choice
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Count, F, signals
@@ -97,8 +96,10 @@ class TaskRecordReviewManager(models.Manager):
     def progress_by_round(self, **filter):
         all = self.all_by_round(**filter)
         done = self.done_by_round(**filter)
-        # A lambda to calculate the progression for a given round
-        progress = lambda round, total: done.get(round, 0) / total * 100
+
+        def progress(round, total):
+            return done.get(round, 0) / total * 100
+
         # Return a dictionnary combinings both aggregations dict
         return {round: progress(round, count) for (round, count) in all.items()}
 
@@ -180,11 +181,12 @@ class TaskRecordReview(models.Model):
             self.status = StatusType.PENDING
         super().save(*args, **kwargs)
 
-    def check_user_is_authorized(self, **kwargs):
+    def check_user_is_authorized(self, **kwargs):   # pylint: disable=unused-argument
         if not self.task_record.task.checkers.filter(pk=self.checker.pk).exists():
             raise ValidationError(f'{self.checker} is not a checker for the task "{self.task_record.task}"')
 
-    def check_unique_constraints(self, ignored_fields=[], **kwargs):
+    def check_unique_constraints(self, ignored_fields=None, **kwargs):  # pylint: disable=unused-argument
+        ignored_fields = [] if ignored_fields is None else ignored_fields
         for fields in self._meta.unique_together:
             # Remove ignored field
             fields = [field for field in fields if field not in ignored_fields]
@@ -194,7 +196,7 @@ class TaskRecordReview(models.Model):
                 raise ValidationError(
                     f'Task record #{self.task_record.id} was already attributed to {self.checker} before')
 
-    def check_round_upper_bound(self, **kwarg):
+    def check_round_upper_bound(self, **kwarg):  # pylint: disable=unused-argument
         if self.task_record:
             max_round = self.task_record.task.rounds
             if self.task_record.reviews.count() >= max_round:
@@ -221,7 +223,7 @@ class TaskRecordReview(models.Model):
         return False
 
     @staticmethod
-    def signal_notify_mentioned_users(sender, instance, **kwargs):
+    def signal_notify_mentioned_users(sender, instance, **kwargs):  # pylint: disable=unused-argument
         for mention in instance.mentions:
             user = mention.get('user')
             if user is not None:
@@ -230,7 +232,7 @@ class TaskRecordReview(models.Model):
                     UserNotification.objects.create(recipient=user, action=action)
 
     @staticmethod
-    def signal_fill_note_created_at_and_updated_at(sender, instance, **kwargs):
+    def signal_fill_note_created_at_and_updated_at(sender, instance, **kwargs):  # pylint: disable=unused-argument
         if instance.already_has_note and instance.note_changed:
             instance.note_updated_at = timezone.now()
         if instance.note and not instance.already_has_note:
@@ -240,26 +242,28 @@ class TaskRecordReview(models.Model):
     def mentioned_project(self):
         if mentioned(self.note, 'project'):
             return self.project
+        return None
 
     @property
     def mentioned_task(self):
         if mentioned(self.note, 'task'):
             return self.task
+        return None
 
     @staticmethod
-    def signal_notify_members_in_mentioned_project(sender, instance, **kwargs):
+    def signal_notify_members_in_mentioned_project(sender, instance, **kwargs):  # pylint: disable=unused-argument
         project = instance.mentioned_project
         if project is not None:
             notify_mentioned_users(instance.checker, project.members, instance)
 
     @staticmethod
-    def signal_notify_task_checkers_in_mentioned_task(sender, instance, **kwargs):
+    def signal_notify_task_checkers_in_mentioned_task(sender, instance, **kwargs):  # pylint: disable=unused-argument
         task = instance.mentioned_task
         if task is not None:
             notify_mentioned_users(instance.checker, task.checkers.all(), instance)
 
     @staticmethod
-    def signal_save_task_user_statistics(sender, instance, **kwargs):
+    def signal_save_task_user_statistics(sender, instance, **kwargs):  # pylint: disable=unused-argument
         # Find or create the relevant TaskUserStatistics
         task = instance.task
         checker = instance.checker
@@ -271,18 +275,17 @@ class TaskRecordReview(models.Model):
             task_round_reviews = sender.objects.filter(task_record__task=task, checker=checker, round=round)
             stats_user.done_count = task_round_reviews.filter(status=StatusType.DONE).count()
             stats_user.pending_count = task_round_reviews.filter(status=StatusType.PENDING).count()
-            if (stats_user.pending_count == 0):
+            if stats_user.pending_count == 0:
                 stats_user.delete()
             else:
                 # Save the statistics
                 stats_user.save()
 
     @staticmethod
-    def signal_save_task_user_choice_statistics(sender, instance, **kwargs):
+    def signal_save_task_user_choice_statistics(sender, instance, **kwargs):  # pylint: disable=unused-argument
         # Find or create the relevant TaskUserStatistics
         task = instance.task
         checker = instance.checker
-        my_choice = instance.choice
         round = instance.round
         # Avoid collecting statistics for uncomplete review
         if task and checker:
@@ -294,17 +297,17 @@ class TaskRecordReview(models.Model):
 
             # because it's hard to guess the previous value of the review and
             # the count value of another choice can be staled
-            # we remove all existing stats for the task/checker/round 
+            # we remove all existing stats for the task/checker/round
             TaskUserChoiceStatistics.objects.filter(task=task, checker=checker, round=round).delete()
 
             # create all the necessary stats for all of the choices
-            taskUserChoiceStatisticsList = []
+            task_user_choice_statistics_list = []
             for row in reviews_choice_counts:
                 tucs = TaskUserChoiceStatistics(task=task, choice_id=row['choice'], checker=checker, round=round,
                                                 count=row['count'])
-                taskUserChoiceStatisticsList.append(tucs)
+                task_user_choice_statistics_list.append(tucs)
 
-            TaskUserChoiceStatistics.objects.bulk_create(taskUserChoiceStatisticsList)
+            TaskUserChoiceStatistics.objects.bulk_create(task_user_choice_statistics_list)
 
 
 signals.post_save.connect(TaskRecordReview.signal_save_task_user_choice_statistics, sender=TaskRecordReview)

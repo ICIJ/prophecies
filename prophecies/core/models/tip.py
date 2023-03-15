@@ -64,6 +64,7 @@ class Tip(models.Model):
                 return self.project
             except AttributeError:
                 return None
+        return None
 
     @property
     def mentioned_task(self):
@@ -72,40 +73,41 @@ class Tip(models.Model):
                 return self.task
             except AttributeError:
                 return None
+        return None
 
     @staticmethod
-    def signal_notify_mentioned_users(sender, instance, **kwargs):
+    def signal_notify_mentioned_users(sender, instance, **kwargs):  # pylint: disable=unused-argument
         for mention in instance.mentions:
             user = mention.get('user')
             if user is not None:
-                action, created = get_or_create_mention_action(instance.creator, user, instance)
+                act, created = get_or_create_mention_action(instance.creator, user, instance)
                 if created:
-                    UserNotification.objects.create(recipient=user, action=action)
+                    UserNotification.objects.create(recipient=user, action=act)
 
     @staticmethod
-    def signal_notify_members_in_mentioned_project(sender, instance, **kwargs):
+    def signal_notify_members_in_mentioned_project(sender, instance, **kwargs):  # pylint: disable=unused-argument
         project = instance.mentioned_project
         if project is not None:
             notify_mentioned_users(instance.creator, project.members, instance)
 
     @staticmethod
-    def signal_notify_task_checkers_in_mentioned_task(sender, instance, **kwargs):
+    def signal_notify_task_checkers_in_mentioned_task(sender, instance, **kwargs):  # pylint: disable=unused-argument
         task = instance.mentioned_task
         if task is not None:
             notify_mentioned_users(instance.creator, task.checkers.all(), instance)
 
     @staticmethod
-    def signal_fill_project_from_task(sender, instance, **kwargs):
+    def signal_fill_project_from_task(sender, instance, **kwargs):  # pylint: disable=unused-argument
         if not instance.project and instance.task:
             instance.project = instance.task.project
 
     @staticmethod
-    def signal_constraint_task_relationship_to_project(sender, instance, **kwargs):
+    def signal_constraint_task_relationship_to_project(sender, instance, **kwargs):  # pylint: disable=unused-argument
         if instance.project and instance.task and instance.project != instance.task.project:
             instance.task = None
 
     @staticmethod
-    def signal_tip_creation(sender, instance, created, **kwargs):
+    def signal_tip_creation(sender, instance, created, **kwargs):  # pylint: disable=unused-argument
         if instance.creator:
             if created:
                 action.send(instance.creator, verb='created', target=instance)
