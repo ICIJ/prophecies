@@ -77,5 +77,8 @@ jobs:
           paths:
             - ~/.cache/pypoetry/virtualenvs
       - run:
+          name: Run linter
+          command: poetry run pylint prophecies
+      - run:
           name: Run unit tests
           command: poetry run python manage.py test --settings=prophecies.settings.test
