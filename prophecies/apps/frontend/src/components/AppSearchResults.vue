@@ -1,6 +1,6 @@
 <script>
-import {escapeRegExp, find, filter, get} from 'lodash'
-import Task, {TaskStatusEnum} from '@/models/Task'
+import { escapeRegExp, find, filter, get } from 'lodash'
+import Task, { TaskStatusEnum } from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import Tip from '@/models/Tip'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
@@ -39,7 +39,7 @@ export default {
     }
   },
   watch: {
-    async activeItem() {
+    async activeItem () {
       await this.$nextTick()
       const link = this.$el.querySelector(this.activeItemSelector)
       // Don't try to focus if there is no active link
@@ -49,32 +49,32 @@ export default {
     }
   },
   computed: {
-    taskRecordReviewIds() {
+    taskRecordReviewIds () {
       const type = TaskRecordReview.entity
-      return filter(this.queryset, {type}).map(({id}) => id)
+      return filter(this.queryset, { type }).map(({ id }) => id)
     },
-    tipIds() {
+    tipIds () {
       const type = Tip.entity
-      return filter(this.queryset, {type}).map(({id}) => id)
+      return filter(this.queryset, { type }).map(({ id }) => id)
     },
-    tasks() {
+    tasks () {
       // retrieve tasks that are not closed and with at least one record
       return Task.query()
         .where('status', (value) => value !== TaskStatusEnum.CLOSED)
         .where('taskRecordsCount', (value) => value > 0).get()
     }
   },
-  created() {
+  created () {
     this.$shortkey.bind('enter', () => {
       this.$emit('shortkey:enter')
     })
   },
 
   methods: {
-    isActive(index) {
+    isActive (index) {
       return index === this.activeItem
     },
-    activateQueryset(querysetId) {
+    activateQueryset (querysetId) {
       /**
        * Update `active-queryset-id` model value
        * @event update:active-queryset-id
@@ -86,16 +86,16 @@ export default {
        */
       this.$emit('update:active-item', -1)
     },
-    highlight(text) {
+    highlight (text) {
       const regex = new RegExp('(' + escapeRegExp(this.query) + ')', 'gi')
       return text.replace(regex, '<mark class="p-0">$1</mark>')
     },
-    tipQuerysetId() {
-      const firstMatch = find(this.queryset, {type: Tip.entity})
+    tipQuerysetId () {
+      const firstMatch = find(this.queryset, { type: Tip.entity })
       return get(firstMatch, 'querysetId', null)
     },
-    taskQuerysetId(taskId) {
-      const firstMatch = find(this.queryset, ({id, type}) => {
+    taskQuerysetId (taskId) {
+      const firstMatch = find(this.queryset, ({ id, type }) => {
         const sameType = type === TaskRecordReview.entity
         const sameTaskAndId = TaskRecordReview.query()
           .where('id', id)
@@ -105,25 +105,25 @@ export default {
       })
       return get(firstMatch, 'querysetId', null)
     },
-    querysetCount(querysetId) {
-      const match = find(this.counts, {querysetId})
+    querysetCount (querysetId) {
+      const match = find(this.counts, { querysetId })
       return get(match, 'count', 0)
     },
-    tipCount() {
+    tipCount () {
       const querysetId = this.tipQuerysetId()
       return this.querysetCount(querysetId)
     },
-    isTaskQuerysetActive(taskId) {
+    isTaskQuerysetActive (taskId) {
       return this.querysetId === this.taskQuerysetId(taskId)
     },
-    isTipQuerysetActive() {
+    isTipQuerysetActive () {
       return this.querysetId === this.tipQuerysetId()
     },
-    taskRecordReviewsCount(taskId) {
+    taskRecordReviewsCount (taskId) {
       const querysetId = this.taskQuerysetId(taskId)
       return this.querysetCount(querysetId)
     },
-    querysetTaskRecordReviews(taskId) {
+    querysetTaskRecordReviews (taskId) {
       return TaskRecordReview
         .query()
         .where('taskId', taskId)
@@ -131,7 +131,7 @@ export default {
         .with('taskRecord')
         .get()
     },
-    querysetTips() {
+    querysetTips () {
       return Tip.query().whereIdIn(this.tipIds).get()
     }
   }
@@ -141,8 +141,7 @@ export default {
 <template>
   <div class="app-search-results card card-body rounded-sm border-primary shadow-sm">
     <div class="text-right text-secondary px-4 "><span class="align-middle">Search</span>
-      <shortkey-badge :value="['Enter']" class="ml-2"/>
-    </div>
+          <shortkey-badge :value="['Enter']" class="ml-2" /></div>
     <b-tabs
       active-nav-item-class="app-search-results__tabs__nav__active"
       class="app-search-results__tabs mt-3"
@@ -206,71 +205,71 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-.app-search-results {
-  &__tabs {
-    & ::v-deep &__nav {
-      min-width: 200px;
+  .app-search-results {
+    &__tabs {
+      & ::v-deep &__nav {
+        min-width: 200px;
 
-      &__item {
-        margin-bottom: $spacer;
+        &__item {
+          margin-bottom: $spacer;
 
-        &__link {
-          flex-grow: 1;
-          display: block;
-          text-transform: uppercase;
+          &__link {
+            flex-grow: 1;
+            display: block;
+            text-transform: uppercase;
 
-          &__name {
-            white-space: nowrap;
-            max-width: 160px;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            &__name{
+              white-space: nowrap;
+              max-width: 160px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
           }
         }
-      }
 
-      &__active {
-        font-weight: bolder;
-        border-left: 7px solid $warning;
-      }
-    }
-
-    & ::v-deep &__content {
-      max-height: 70vh;
-      overflow: auto;
-
-      &__link {
-        padding: $spacer-sm;
-        display: block;
-        margin-bottom: $spacer;
-        border-radius: $border-radius-sm;
-        color: $body-color;
-
-        &:hover {
-          background: $lighter;
+        &__active {
+          font-weight: bolder;
+          border-left: 7px solid $warning;
         }
-
-        &:focus, &:focus:hover {
-          background: $light;
-          outline: none;
-        }
-
       }
-    }
 
-    /* width */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
+      & ::v-deep &__content {
+        max-height: 70vh;
+        overflow: auto;
 
-    /* Track */
-    ::-webkit-scrollbar-track {
-      background: $primary-10;
-    }
+        &__link {
+          padding: $spacer-sm;
+          display: block;
+          margin-bottom: $spacer;
+          border-radius: $border-radius-sm;
+          color: $body-color;
 
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-      background: $secondary;
+          &:hover {
+            background: $lighter;
+          }
+
+          &:focus, &:focus:hover {
+            background: $light;
+            outline: none;
+          }
+
+        }
+      }
+
+      /* width */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: $primary-10;
+      }
+
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: $secondary;
+      }
     }
   }
-}
 </style>

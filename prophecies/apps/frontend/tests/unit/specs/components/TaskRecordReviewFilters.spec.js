@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -18,10 +18,10 @@ describe('TaskRecordReviewFilters', () => {
   describe('without route filters', () => {
     beforeEach(() => {
       const localVue = createLocalVue()
-      const propsData = {taskId: '1'}
+      const propsData = { taskId: '1' }
       // Configure the local vue with plugins
-      const {store, wait} = Core.init(localVue).useAll()
-      wrapper = shallowMount(TaskRecordReviewFilters, {localVue, propsData, store, wait})
+      const { store, wait } = Core.init(localVue).useAll()
+      wrapper = shallowMount(TaskRecordReviewFilters, { localVue, propsData, store, wait })
     })
 
     it('should find the right task', () => {
@@ -91,15 +91,15 @@ describe('TaskRecordReviewFilters', () => {
 
     it('should return filters as query params for the `predictedValues` filter', () => {
       wrapper.vm.addArbitraryPredictedValue('foo')
-      wrapper.vm.selected.predictedValues.push({id: '100', value: 'bar'})
+      wrapper.vm.selected.predictedValues.push({ id: '100', value: 'bar' })
       const queryParams = wrapper.vm.filtersAsQueryParams
       expect(queryParams['filter[task_record__predicted_value__iregex]']).toBeDefined()
       expect(queryParams['filter[task_record__predicted_value__iregex]']).toBe('(foo|bar)')
     })
 
     it('should return filters as query params for the `choices` filter', () => {
-      wrapper.vm.selected.choices.push({id: '1', value: 'foo'})
-      wrapper.vm.selected.choices.push({id: '2', value: 'bar'})
+      wrapper.vm.selected.choices.push({ id: '1', value: 'foo' })
+      wrapper.vm.selected.choices.push({ id: '2', value: 'bar' })
       const queryParams = wrapper.vm.filtersAsQueryParams
       expect(queryParams['filter[choice__in]']).toBeDefined()
       expect(queryParams['filter[choice__in]']).toBe('1,2')
@@ -109,15 +109,11 @@ describe('TaskRecordReviewFilters', () => {
   describe('with route filters', () => {
     beforeEach(() => {
       const localVue = createLocalVue()
-      const routeFilters = {
-        choice__in: '1,2',
-        task_record__predicted_value__iregex: '(FRA|DZA)',
-        alternative_value__iregex: '(ALA|ALB)'
-      }
-      const propsData = {taskId: '1', routeFilters}
+      const routeFilters = { choice__in: '1,2', task_record__predicted_value__iregex: '(FRA|DZA)', alternative_value__iregex: '(ALA|ALB)' }
+      const propsData = { taskId: '1', routeFilters }
       // Configure the local vue with plugins
-      const {store, wait} = Core.init(localVue).useAll()
-      wrapper = shallowMount(TaskRecordReviewFilters, {localVue, propsData, store, wait})
+      const { store, wait } = Core.init(localVue).useAll()
+      wrapper = shallowMount(TaskRecordReviewFilters, { localVue, propsData, store, wait })
     })
 
     it('should return filters as query params for the `predictedValues` filter', () => {

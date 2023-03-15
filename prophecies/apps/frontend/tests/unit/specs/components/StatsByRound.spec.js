@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 import StatsByRound from '@/components/StatsByRound'
 import Core from '@/core'
 
@@ -6,12 +6,11 @@ describe('StatsByRound', () => {
   describe('Show stats by round', () => {
     let wrapper
 
-    function createContainer() {
+    function createContainer () {
       const div = document.createElement('div')
       document.body.appendChild(div)
       return div
     }
-
     beforeEach(async () => {
       const attachTo = createContainer()
       const localVue = createLocalVue()
@@ -20,16 +19,11 @@ describe('StatsByRound', () => {
         round: 1,
         progress: 80,
         choiceStats: [
-          {name: 'Incorrect', value: 'incorrect', color: '#FFF', progress: 25},
-          {name: 'Correct', value: 'correct', color: '#000', progress: 75},
-          {name: 'Unknown', value: 'unknown', color: '#AAA', progress: 0}
+          { name: 'Incorrect', value: 'incorrect', color: '#FFF', progress: 25 },
+          { name: 'Correct', value: 'correct', color: '#000', progress: 75 },
+          { name: 'Unknown', value: 'unknown', color: '#AAA', progress: 0 }
         ],
-        usersStats: [{
-          checker: {username: 'django'},
-          done: 5,
-          pending: 0,
-          progress: 100
-        }, {checker: {username: 'olivia'}, done: 2, pending: 2, progress: 50}]
+        usersStats: [{ checker: { username: 'django' }, done: 5, pending: 0, progress: 100 }, { checker: { username: 'olivia' }, done: 2, pending: 2, progress: 50 }]
       }
 
       // Configure the local vue
@@ -37,9 +31,9 @@ describe('StatsByRound', () => {
       // Configure the core
       await core.configure()
       // Get router from core
-      const {i18n} = core
+      const { i18n } = core
       // Finally, instanciate the component
-      wrapper = shallowMount(StatsByRound, {attachTo, localVue, propsData, i18n})
+      wrapper = shallowMount(StatsByRound, { attachTo, localVue, propsData, i18n })
     })
 
     it('should display round 1', () => {
@@ -51,7 +45,7 @@ describe('StatsByRound', () => {
       expect(element.attributes('value')).toBe('80')
     })
     it('should display the "no record assigned" message when no user stats', async () => {
-      await wrapper.setProps({usersStats: []})
+      await wrapper.setProps({ usersStats: [] })
       const element = wrapper.find('.stats-by-round__progress__value--no-record')
       expect(element.exists()).toBeTruthy()
     })

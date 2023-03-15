@@ -8,7 +8,7 @@ export default {
     ShortcutListCard,
     TipListCard
   },
-  async created() {
+  async created () {
     if (await this.$core.getUser()) {
       // Bind root events
       this.$root.$on('prophecies::closeTips', this.closeTips)
@@ -21,15 +21,15 @@ export default {
     }
   },
   methods: {
-    goTo(name) {
+    goTo (name) {
       if (this.$route.name !== name) {
-        this.$router.push({name})
+        this.$router.push({ name })
       }
     },
-    goToHistory() {
+    goToHistory () {
       this.goTo('history')
     },
-    toggleModalFn(modalRef) {
+    toggleModalFn (modalRef) {
       return (event = null) => {
         if (event) {
           event.preventDefault()
@@ -37,7 +37,7 @@ export default {
         this.$refs[modalRef].toggle()
       }
     },
-    closeTips() {
+    closeTips () {
       this.$bvModal.hide('modal-tips')
       this.goTo('tip-list')
     }
@@ -57,7 +57,7 @@ export default {
       <shortcut-list-card>
         <template #header>
           <b-btn class="float-right px-2" variant="link" @click="$refs['modal-shortcuts'].toggle()">
-            <x-icon/>
+            <x-icon />
             <span class="sr-only">{{$t('app.close')}}</span>
           </b-btn>
         </template>
@@ -71,16 +71,16 @@ export default {
       ref="modal-tips"
       hide-footer
       hide-header>
-      <tip-list-card>
+      <tip-list-card >
         <template #header>
           <b-btn class="float-right px-2" variant="link" @click="$refs['modal-tips'].toggle()">
-            <x-icon/>
+            <x-icon />
             <span class="sr-only">{{$t('app.close')}}</span>
           </b-btn>
         </template>
       </tip-list-card>
     </b-modal>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -97,7 +97,7 @@ export default {
     line-height: 24px;
 
     &:after {
-      content: "\00a0\00a0";
+        content: "\00a0\00a0";
     }
 
     &__item--dashboard svg {

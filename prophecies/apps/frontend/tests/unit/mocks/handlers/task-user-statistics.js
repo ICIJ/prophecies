@@ -1,4 +1,4 @@
-import {rest} from 'msw'
+import { rest } from 'msw'
 
 export default [
   rest.get('/api/v1/task-user-statistics', (req, res, ctx) => {

@@ -1,6 +1,6 @@
 <script>
-import {camelCase, kebabCase} from 'lodash'
-import Task, {TaskStatusEnum} from '@/models/Task'
+import { camelCase, kebabCase } from 'lodash'
+import Task, { TaskStatusEnum } from '@/models/Task'
 
 export default {
   name: 'TaskStatus',
@@ -10,10 +10,10 @@ export default {
     }
   },
   computed: {
-    classList() {
+    classList  () {
       return [`task-status--${kebabCase(this.status)}`]
     },
-    icon() {
+    icon () {
       switch (this.status) {
         case TaskStatusEnum.OPEN:
           return 'CheckIcon'
@@ -22,19 +22,19 @@ export default {
       }
       return ''
     },
-    task() {
+    task () {
       return Task.find(this.taskId)
     },
-    status() {
+    status () {
       return this.task?.status || TaskStatusEnum.OPEN
     },
-    taskLabelKey() {
+    taskLabelKey () {
       return ['taskStatus', camelCase(this.status)].join('.')
     },
-    taskLabel() {
+    taskLabel () {
       return this.$t(this.taskLabelKey)
     },
-    size() {
+    size () {
       return this.status === TaskStatusEnum.LOCKED ? '1.3x' : '1x'
     }
   }
@@ -43,23 +43,23 @@ export default {
 
 <template>
   <span class="task-status d-flex-inline justify-content-center" :class="classList">
-    <component :is="icon" :size="size"/>
+    <component :is="icon" :size="size" />
     {{ taskLabel }}
   </span>
 </template>
 
 <style lang="scss" scoped>
-.task-status {
-  &--open {
-    color: $success;
-  }
+  .task-status {
+    &--open {
+      color: $success;
+    }
 
-  &--closed {
-    color: $secondary;
-  }
+    &--closed {
+      color: $secondary;
+    }
 
-  &--locked {
-    color: $danger;
+    &--locked {
+      color: $danger;
+    }
   }
-}
 </style>

@@ -5,11 +5,10 @@ import {
 import Core from '@/core'
 
 import TaskRecordReviewTutorial from '@/components/TaskRecordReviewTutorial'
-
 describe('TaskRecordReviewTutorial', () => {
   let wrapper
 
-  function createContainer() {
+  function createContainer () {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -20,7 +19,7 @@ describe('TaskRecordReviewTutorial', () => {
     const localVue = createLocalVue()
     // Configure the local vue
     const core = Core.init(localVue).useAll()
-    const {i18n} = core
+    const { i18n } = core
     // Configure the local vue with plugins
     wrapper = mount(TaskRecordReviewTutorial, {
       attachTo,
@@ -38,7 +37,7 @@ describe('TaskRecordReviewTutorial', () => {
   })
 
   it('should hide the tutorial', async () => {
-    await wrapper.setData({showTutorial: false})
+    await wrapper.setData({ showTutorial: false })
     const tutorialCard = wrapper.find('.task-record-review-tutorial')
     expect(tutorialCard.exists()).toBe(true)
     expect(tutorialCard.isVisible()).toBe(false)
@@ -47,7 +46,7 @@ describe('TaskRecordReviewTutorial', () => {
   it('should not show "previous" button on first step', async () => {
     let previousStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__previous')
     expect(previousStepExists.exists()).toBe(false)
-    await wrapper.setData({stepNumber: 2})
+    await wrapper.setData({ stepNumber: 2 })
     previousStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__previous')
     expect(previousStepExists.exists()).toBe(true)
   })
@@ -59,7 +58,7 @@ describe('TaskRecordReviewTutorial', () => {
     expect(nextStepExists.exists()).toBe(true)
     let skipTutorialExists = wrapper.find('.task-record-review-tutorial-card__buttons__skip')
     expect(skipTutorialExists.exists()).toBe(true)
-    await wrapper.setData({stepNumber: 5})
+    await wrapper.setData({ stepNumber: 5 })
     closeStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__close')
     expect(closeStepExists.exists()).toBe(true)
     nextStepExists = wrapper.find('.task-record-review-tutorial-card__buttons__next')

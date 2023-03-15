@@ -1,4 +1,4 @@
-import {createCore} from '@/core'
+import { createCore } from '@/core'
 import '@/main.scss'
 
 if (process.env.NODE_ENV !== 'test' && window) {
@@ -7,13 +7,13 @@ if (process.env.NODE_ENV !== 'test' && window) {
   prophecies.ready
     // Redirect to the error page
     .catch(error => {
-      const {currentRoute} = prophecies.router
+      const { currentRoute } = prophecies.router
       // Unauthenticated error during initialization:
       // redirect the user to the login page
       if (error?.response?.status === 403 && currentRoute.name !== 'login') {
-        prophecies.router.push({name: 'login'})
+        prophecies.router.push({ name: 'login' })
       } else if (currentRoute.name !== 'error') {
-        prophecies.router.push({name: 'error', params: {error}})
+        prophecies.router.push({ name: 'error', params: { error } })
       }
     })
     .finally(() => {

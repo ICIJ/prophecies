@@ -1,4 +1,4 @@
-import {createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -10,7 +10,7 @@ import TaskRecordReviewHistory from '@/components/TaskRecordReviewHistory'
 describe('TaskRecordReviewHistory', () => {
   let wrapper
 
-  function createContainer() {
+  function createContainer () {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -26,10 +26,10 @@ describe('TaskRecordReviewHistory', () => {
   beforeEach(() => {
     const attachTo = createContainer()
     const localVue = createLocalVue()
-    const propsData = {taskRecordReviewId: '38'}
+    const propsData = { taskRecordReviewId: '38' }
     // Configure the local vue with plugins
-    const {i18n, store, router, wait} = Core.init(localVue).useAll()
-    wrapper = mount(TaskRecordReviewHistory, {attachTo, i18n, localVue, propsData, store, router, wait})
+    const { i18n, store, router, wait } = Core.init(localVue).useAll()
+    wrapper = mount(TaskRecordReviewHistory, { attachTo, i18n, localVue, propsData, store, router, wait })
   })
 
   it('should find the right task record review', () => {
@@ -49,11 +49,11 @@ describe('TaskRecordReviewHistory', () => {
   })
 
   it('should be me', () => {
-    expect(wrapper.vm.isMe({id: '2'})).toBeTruthy()
+    expect(wrapper.vm.isMe({ id: '2' })).toBeTruthy()
   })
 
   it('should not be me', () => {
-    expect(wrapper.vm.isMe({id: '3'})).toBeFalsy()
+    expect(wrapper.vm.isMe({ id: '3' })).toBeFalsy()
   })
 
   it('should show "you" next to the current checker name', () => {
@@ -69,12 +69,12 @@ describe('TaskRecordReviewHistory', () => {
   })
 
   it('should find the name of the alternative value', () => {
-    const {alternativeValueName} = wrapper.vm.$options.filters
+    const { alternativeValueName } = wrapper.vm.$options.filters
     expect(alternativeValueName('DZA')).toBe('Algeria (DZA)')
   })
 
   it('should not find the name of the alternative value and return the value instead', () => {
-    const {alternativeValueName} = wrapper.vm.$options.filters
+    const { alternativeValueName } = wrapper.vm.$options.filters
     expect(alternativeValueName('FRA')).toBe('"FRA"')
   })
 })

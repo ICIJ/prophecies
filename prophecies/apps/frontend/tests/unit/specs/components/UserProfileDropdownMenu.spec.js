@@ -1,8 +1,8 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
-import {server, rest} from '../../mocks/server'
+import { server, rest } from '../../mocks/server'
 import User from '@/models/User'
 
 import UserProfileDropdownMenu from '@/components/UserProfileDropdownMenu'
@@ -36,9 +36,9 @@ describe('UserProfileDropdownMenu', () => {
       }))
       // Configure the local vue with plugins
       const core = Core.init(localVue).useAll()
-      const {i18n} = core
+      const { i18n } = core
       await core.configure()
-      wrapper = shallowMount(UserProfileDropdownMenu, {localVue, i18n})
+      wrapper = shallowMount(UserProfileDropdownMenu, { localVue, i18n })
     })
     it('should have 10 entries', async () => {
       expect(wrapper.findAll('b-dropdown-item-stub')).toHaveLength(10)
@@ -67,10 +67,10 @@ describe('UserProfileDropdownMenu', () => {
       }))
       // Configure the local vue with plugins
       const core = Core.init(localVue).useAll()
-      const {i18n} = core
+      const { i18n } = core
       await core.configure()
 
-      wrapper = shallowMount(UserProfileDropdownMenu, {localVue, i18n})
+      wrapper = shallowMount(UserProfileDropdownMenu, { localVue, i18n })
     })
     it("should mount the olivia's user profile menu", () => {
       expect(wrapper.vm.user.username).toBe('olivia')

@@ -1,4 +1,4 @@
-import {createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
@@ -23,9 +23,9 @@ describe('UserRetrieveTeam', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     const core = Core.init(localVue).useAll()
-    const {i18n, wait, store} = core
+    const { i18n, wait, store } = core
     const stubs = ['router-link', 'app-waiter']
-    const propsData = {username: 'olivia'}
+    const propsData = { username: 'olivia' }
     const options = {
       i18n,
       localVue,

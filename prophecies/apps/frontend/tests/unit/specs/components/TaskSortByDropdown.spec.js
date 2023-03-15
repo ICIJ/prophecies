@@ -12,9 +12,9 @@ describe('TaskSortByDropdown', () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
     const core = Core.init(localVue).useAll()
-    const {wait, store, router, i18n} = core
+    const { wait, store, router, i18n } = core
     const stubs = ['app-waiter']
-    const propsData = {sort: 'name_asc'}
+    const propsData = { sort: 'name_asc' }
     const options = {
       i18n,
       stubs,

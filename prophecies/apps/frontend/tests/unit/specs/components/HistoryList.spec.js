@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import HistoryList from '@/components/HistoryList'
@@ -8,7 +8,7 @@ describe('HistoryList', () => {
 
   const localVue = createLocalVue()
   // Configure the local vue with plugins
-  const {i18n, store, wait} = Core.init(localVue).useAll()
+  const { i18n, store, wait } = Core.init(localVue).useAll()
 
   it('should display a title if available slot', async () => {
     wrapper = await shallowMount(HistoryList, {

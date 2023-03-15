@@ -1,4 +1,4 @@
-import {createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import AppBrand from '@/components/AppBrand'
 import Core from '@/core'
 
@@ -19,7 +19,7 @@ describe('AppBrand', () => {
     i18n = core.i18n
     config = core.config
     router = core.router
-    wrapper = mount(AppBrand, {i18n, localVue, router})
+    wrapper = mount(AppBrand, { i18n, localVue, router })
   })
 
   it('should display the backend value of `appName` as app name', () => {

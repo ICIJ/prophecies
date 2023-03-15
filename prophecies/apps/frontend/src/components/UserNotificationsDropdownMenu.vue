@@ -10,33 +10,33 @@ export default {
     UserNotifications,
     UserNotificationLink
   },
-  beforeCreate() {
+  beforeCreate () {
     // Plan notifications polling and fetch them
     this.$store.dispatch('userNotificationsPoll/startPollAndFetch')
   },
   computed: {
-    notifications() {
+    notifications () {
       return this.$store.getters['userNotificationsPoll/fetchedObjects']
     },
-    notificationIds() {
+    notificationIds () {
       return this.$store.getters['userNotificationsPoll/fetchedIds']
     },
-    unreadNotifications() {
+    unreadNotifications () {
       return this.notifications.filter(n => !n.read)
     },
-    hasUnreadNotifications() {
+    hasUnreadNotifications () {
       return this.unreadNotifications.length > 0
     },
-    username() {
+    username () {
       return User.me()?.username
     },
-    userNotificationsRoute() {
-      const params = {username: this.username}
-      return {name: 'user-retrieve-notifications', params}
+    userNotificationsRoute () {
+      const params = { username: this.username }
+      return { name: 'user-retrieve-notifications', params }
     }
   },
   methods: {
-    async markAllAsRead() {
+    async markAllAsRead () {
       const ids = this.unreadNotifications.map(n => n.id)
       await UserNotification.api().bulkMarkAsRead(ids)
       await this.$store.dispatch('userNotificationsPoll/fetch')
@@ -72,7 +72,7 @@ export default {
         <user-notification-link
           class="dropdown-item py-3"
           :notification-id="notification.id"
-          :key="notification.id"/>
+          :key="notification.id" />
       </template>
     </user-notifications>
     <div class="user-notifications-dropdown-menu__footer border-top">
@@ -84,10 +84,10 @@ export default {
 </template>
 
 <style lang="scss">
-.user-notifications-dropdown-menu {
-  &__list {
-    max-height: 375px;
-    overflow: auto;
+  .user-notifications-dropdown-menu {
+    &__list{
+      max-height: 375px;
+      overflow: auto;
+    }
   }
-}
 </style>

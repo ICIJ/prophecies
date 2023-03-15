@@ -1,5 +1,5 @@
 <script>
-import {groupBy, uniqueId} from 'lodash'
+import { groupBy, uniqueId } from 'lodash'
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
@@ -19,14 +19,14 @@ export default {
       type: [String, Number]
     }
   },
-  created() {
+  created () {
     return this.setup()
   },
   computed: {
-    fetchTipLoader() {
+    fetchTipLoader () {
       return uniqueId('load-tip-')
     },
-    tip() {
+    tip () {
       return Tip
         .query()
         .with('project')
@@ -35,27 +35,27 @@ export default {
         .with('task.project')
         .find(this.tipId)
     },
-    tipsGroupedByProject() {
+    tipsGroupedByProject () {
       return groupBy(this.tips, (tip) => {
         return tip.project.name
       })
     }
   },
   methods: {
-    async setup() {
+    async setup () {
       try {
         await this.waitFor(this.fetchTipLoader, this.fetchTip)
       } catch (error) {
         const title = 'Unable to retrieve the tip'
-        this.$router.replace({name: 'error', params: {title, error}})
+        this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
-    async waitFor(loader, fn) {
+    async waitFor (loader, fn) {
       this.$wait.start(loader)
       await fn()
       this.$wait.end(loader)
     },
-    fetchTip() {
+    fetchTip () {
       return Tip.api().get(this.tipId)
     }
   }
@@ -64,12 +64,12 @@ export default {
 
 <template>
   <div class="tip-retrieve d-flex align-items-start">
-    <app-sidebar class="w-100 sticky-top"/>
+    <app-sidebar class="w-100 sticky-top" />
     <div class="tip-retrieve__container flex-grow-1">
-      <app-header hide-nav/>
+      <app-header hide-nav />
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchTipLoader" waiter-class="my-5 mx-auto d-block">
-          <tip-card class="card card-body shadow" :tip-id="tipId" v-if="tip"/>
+          <tip-card class="card card-body shadow" :tip-id="tipId" v-if="tip" />
         </app-waiter>
       </div>
     </div>

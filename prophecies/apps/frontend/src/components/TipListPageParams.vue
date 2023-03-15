@@ -22,7 +22,7 @@ export default {
     }
   },
   computed: {
-    tips() {
+    tips () {
       return Tip.query()
         .with('project')
         .with('task')
@@ -30,26 +30,26 @@ export default {
         .get()
     },
     projectId_: {
-      get() {
+      get () {
         return this.projectId
       },
-      set(value) {
+      set (value) {
         this.$emit('update:projectId', value)
       }
     },
     taskId_: {
-      get() {
+      get () {
         return this.taskId
       },
-      set(value) {
+      set (value) {
         this.$emit('update:taskId', value)
       }
     },
     creatorId_: {
-      get() {
+      get () {
         return this.creatorId
       },
-      set(value) {
+      set (value) {
         this.$emit('update:creatorId', value)
       }
     }
@@ -68,11 +68,11 @@ export default {
 </template>
 
 <style lang="scss">
-.tip-list-page-params {
-  &__task {
-    &__show-status {
-      font-size: smaller;
+  .tip-list-page-params {
+    &__task {
+      &__show-status {
+        font-size: smaller;
+      }
     }
   }
-}
 </style>

@@ -34,18 +34,18 @@ $lighter: #f5f9fa;
 $dark: darken($primary, 10);
 
 $theme-colors: (
-        icij: #852308,
-        primary: $primary,
-        secondary: $secondary,
-        tertiary: $tertiary,
-        danger: $danger,
-        warning: $warning,
-        success: $success,
-        info: $info,
-        light: $light,
-        lighter: $lighter,
-        dark: $dark,
-        mark: #fff5bd
+  icij: #852308,
+  primary: $primary,
+  secondary: $secondary,
+  tertiary: $tertiary,
+  danger: $danger,
+  warning: $warning,
+  success: $success,
+  info: $info,
+  light: $light,
+  lighter: $lighter,
+  dark: $dark,
+  mark: #fff5bd
 );
 
 // The yiq lightness value that determines when the lightness of color changes from "dark" to "light". Acceptable values are between 0 and 255.
@@ -150,20 +150,20 @@ $modal-content-box-shadow-sm-up: $box-shadow-lg;
 
 
 $grid-breakpoints: (
-        xs: 0,
-        sm: 576px,
-        md: 768px,
-        lg: 992px,
-        xl: 1200px,
-        xxl: 1400px
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
 );
 
 $container-max-widths: (
-        sm: 540px,
-        md: 720px,
-        lg: 960px,
-        xl: 1140px,
-        xxl: 1320px
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px
 );
 
 // Bootstrap variables and mixins must be available everywhere

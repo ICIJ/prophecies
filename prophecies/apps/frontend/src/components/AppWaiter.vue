@@ -38,13 +38,13 @@ export default {
 
 <template>
   <v-wait :for="loader" :transition="transition" :mode="mode" :duration="duration">
-    <b-spinner :small="small" :variant="variant" slot="waiting" :class="waiterClass"/>
-    <slot/>
+    <b-spinner :small="small" :variant="variant" slot="waiting" :class="waiterClass" />
+    <slot />
   </v-wait>
 </template>
 
 <style scoped>
-.spinner-border {
-  animation-duration: 1s;
-}
+  .spinner-border {
+    animation-duration: 1s;
+  }
 </style>

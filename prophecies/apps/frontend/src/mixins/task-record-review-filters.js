@@ -1,8 +1,8 @@
-import {find, get, isMatch, map, range, trim, uniqueId} from 'lodash'
+import { find, get, isMatch, map, range, trim, uniqueId } from 'lodash'
 
 export default {
   methods: {
-    getTaskFilters(task) {
+    getTaskFilters (task) {
       return !task ? {} : {
         predictedValues: {
           allowArbitraryOptions: true,
@@ -41,7 +41,7 @@ export default {
           nullValue: true,
           options: [
             ...task.choiceGroup.choices,
-            {id: '-1', name: 'Not classified yet'}
+            { id: '-1', name: 'Not classified yet' }
           ],
           field: 'id',
           label: 'name'
@@ -52,8 +52,8 @@ export default {
           field: 'value',
           label: 'name',
           options: [
-            {value: '1', label: 'yes', name: 'All rounds reviewed'},
-            {value: '0', label: 'no', name: 'Some rounds reviewed'}
+            { value: '1', label: 'yes', name: 'All rounds reviewed' },
+            { value: '0', label: 'no', name: 'Some rounds reviewed' }
           ]
         },
         priorities: {
@@ -63,7 +63,7 @@ export default {
           label: 'name',
           options: range(1, 4).map(String).map(label => {
             const name = `Priority ${label}`
-            return {label, name}
+            return { label, name }
           })
         },
         rounds: {
@@ -73,7 +73,7 @@ export default {
           label: 'name',
           options: range(1, task.rounds + 1).map(String).map(label => {
             const name = `Round ${label}`
-            return {label, name}
+            return { label, name }
           })
         },
         hasDisagreements: {
@@ -82,8 +82,8 @@ export default {
           label: 'name',
           field: 'value',
           options: [
-            {value: '1', label: 'yes', name: 'Disagree'},
-            {value: '0', label: 'no', name: 'Agree'}
+            { value: '1', label: 'yes', name: 'Disagree' },
+            { value: '0', label: 'no', name: 'Agree' }
           ]
         },
         locked: {
@@ -92,8 +92,8 @@ export default {
           label: 'name',
           field: 'value',
           options: [
-            {value: '1', label: 'yes', name: 'Locked'},
-            {value: '0', label: 'no', name: 'Not locked'}
+            { value: '1', label: 'yes', name: 'Locked' },
+            { value: '0', label: 'no', name: 'Not locked' }
           ]
         },
         hasNotes: {
@@ -102,8 +102,8 @@ export default {
           label: 'name',
           field: 'value',
           options: [
-            {value: '1', label: 'yes', name: 'With notes'},
-            {value: '0', label: 'no', name: 'Without notes'}
+            { value: '1', label: 'yes', name: 'With notes' },
+            { value: '0', label: 'no', name: 'Without notes' }
           ]
         },
         search: {
@@ -114,8 +114,8 @@ export default {
         }
       }
     },
-    getSelectedFiltersAsRouteFilters(filters, selected = {}) {
-      return Object.entries(filters).reduce((params, [filter, {field, param}]) => {
+    getSelectedFiltersAsRouteFilters (filters, selected = {}) {
+      return Object.entries(filters).reduce((params, [filter, { field, param }]) => {
         const filterSelection = this.cleanNullValue(selected[filter] || [], field)
         if (filterSelection.length) {
           if (param.endsWith('__iregex') || param.endsWith('__regex')) {
@@ -128,25 +128,25 @@ export default {
         return params
       }, {})
     },
-    mapRouteQueryToFilterOptions(queryParams, task) {
+    mapRouteQueryToFilterOptions (queryParams, task) {
       const filters = this.getTaskFilters(task)
       return Object.entries(queryParams).map(([queryParam, value]) => {
         const param = this.toFilterParam(queryParam)
-        const [key, filter] = this.findFilterEntry(filters, {param})
-        const {allowArbitraryOptions} = filter
+        const [key, filter] = this.findFilterEntry(filters, { param })
+        const { allowArbitraryOptions } = filter
         // This will look for existing options in the filters
         const options = this.toValuesList(param, value).map(value => {
-          const option = find(filter.options, {[filter.field]: value})
+          const option = find(filter.options, { [filter.field]: value })
           return option || this.toSerializableOption(value, allowArbitraryOptions)
         })
         return [key, options]
       })
     },
-    mapRouteFiltersToAppliedQueryParams(routeFilters, task) {
+    mapRouteFiltersToAppliedQueryParams (routeFilters, task) {
       const filters = this.getTaskFilters(task)
       return Object.entries(routeFilters).reduce((all, [queryParam, value]) => {
         const param = this.toFilterParam(queryParam)
-        const [, filter] = this.findFilterEntry(filters, {param})
+        const [, filter] = this.findFilterEntry(filters, { param })
         if (this.useNullParam(filter, value)) {
           const nullValue = filter.nullValue === undefined ? '-1' : filter.nullValue
           all[this.toQueryParam(filter.nullParam)] = nullValue
@@ -155,7 +155,7 @@ export default {
         return all
       }, {})
     },
-    cleanNullValue(values, field) {
+    cleanNullValue (values, field) {
       // Null value is the last selected, so we only keep that one
       if (get(values, [values.length - 1, field]) === '-1') {
         return values.slice(-1)
@@ -163,45 +163,45 @@ export default {
       // Or we just remove the null value from the list
       return values.filter(value => value[field] !== '-1')
     },
-    useNullParam(filter, value) {
+    useNullParam (filter, value) {
       const values = this.toValuesList(filter.param, value)
       return values.pop() === '-1' && filter.nullParam
     },
-    withoutNullValue(filter, value) {
+    withoutNullValue (filter, value) {
       const values = this.toValuesList(filter.param, value).filter(v => v !== '-1')
       return values.length ? this.toValuesParam(filter.param, values) : null
     },
-    findFilterEntry(filters, source) {
+    findFilterEntry (filters, source) {
       const entries = Object.entries(filters)
       return find(entries, ([key, f]) => isMatch(f, source)) || [null, null]
     },
-    toSerializableOption(value, allowArbitraryOptions = false) {
+    toSerializableOption (value, allowArbitraryOptions = false) {
       const id = allowArbitraryOptions ? uniqueId('arbitrary-') : -1
       const name = value
-      return {id, name, value}
+      return { id, name, value }
     },
-    toValuesList(param, value) {
+    toValuesList (param, value) {
       if (param.endsWith('__iregex') || param.endsWith('__regex')) {
         return trim(value, '()').split('|')
       }
       return value.split(',')
     },
-    toValuesParam(param, values) {
+    toValuesParam (param, values) {
       if (param.endsWith('__iregex') || param.endsWith('__regex')) {
         return `(${values.join('|')})`
       }
       return values.join(',')
     },
-    toFilterParam(key) {
+    toFilterParam (key) {
       return key.split('filter[').pop().split(']').shift()
     },
-    toQueryParam(param) {
+    toQueryParam (param) {
       param = this.toFilterParam(param)
       return `filter[${param}]`
     },
-    isFiltersParam(filters, {key}) {
+    isFiltersParam (filters, { key }) {
       const param = this.toFilterParam(key)
-      const entry = this.findFilterEntry(filters, {param})
+      const entry = this.findFilterEntry(filters, { param })
       return !!entry[0]
     }
   }

@@ -1,6 +1,6 @@
 <script>
-import {directive as onClickaway} from 'vue-clickaway'
-import {find} from 'lodash'
+import { directive as onClickaway } from 'vue-clickaway'
+import { find } from 'lodash'
 
 export default {
   name: 'LightDropdown',
@@ -20,35 +20,35 @@ export default {
   directives: {
     onClickaway
   },
-  data() {
+  data () {
     return {
       show: false
     }
   },
   computed: {
     selectedId_: {
-      get() {
+      get () {
         return this.selectedId
       },
-      set(value) {
+      set (value) {
         this.$emit('update:selectedId', value)
       }
     },
-    selectedItem() {
-      return find(this.items, {id: this.selectedId_})
+    selectedItem () {
+      return find(this.items, { id: this.selectedId_ })
     }
   },
   methods: {
-    toggle() {
+    toggle () {
       this.show = !this.show
     },
-    close() {
+    close () {
       this.show = false
     },
-    select(e) {
+    select (e) {
       this.selectedId_ = e.target.dataset.itemid
     },
-    isActive(itemId) {
+    isActive (itemId) {
       return this.selectedId_ === itemId
     }
   }
@@ -57,39 +57,39 @@ export default {
 
 <template>
   <div
-    class="light-dropdown dropdown"
-    :class="{ show: show }"
+      class="light-dropdown dropdown"
+      :class="{ show: show }"
   >
       <span
-        class="light-dropdown__selected
+      class="light-dropdown__selected
       text-primary
       dropdown-toggle
       font-weight-bold"
-        :class="btnClassList"
-        type="button"
-        id="dropdownMenuButton"
-        v-on-clickaway="close"
-        @click="toggle"
-        aria-haspopup="true"
-        :aria-expanded="!show"
+      :class="btnClassList"
+      type="button"
+      id="dropdownMenuButton"
+      v-on-clickaway="close"
+      @click="toggle"
+      aria-haspopup="true"
+      :aria-expanded="!show"
       >
       {{ selectedItem.name }}
       </span>
-    <ul
+      <ul
       class="light-dropdown__options dropdown-menu dropdown-menu-right"
       :class="{ show: show }"
       aria-labelledby="dropdownMenuButton"
-    >
-      <li
-        v-for="item in items"
-        :key="item.id"
-        @click="select"
-        class="dropdown-item"
-        :class="{ active: isActive(item.id) }"
-        :data-itemid="item.id"
       >
-        {{ item.name }}
+      <li
+          v-for="item in items"
+          :key="item.id"
+          @click="select"
+          class="dropdown-item"
+          :class="{ active: isActive(item.id) }"
+          :data-itemid="item.id"
+      >
+          {{ item.name }}
       </li>
-    </ul>
+      </ul>
   </div>
 </template>

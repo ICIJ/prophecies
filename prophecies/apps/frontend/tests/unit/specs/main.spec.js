@@ -1,13 +1,13 @@
 import Vue from 'vue'
-import {createLocalVue} from '@vue/test-utils'
+import { createLocalVue } from '@vue/test-utils'
 
-import {createCore} from '@/core'
+import { createCore } from '@/core'
 
 // Mock the router's configuration
-jest.mock('@/router', () => ({router: {routes: []}}))
+jest.mock('@/router', () => ({ router: { routes: [] } }))
 
 describe('main', () => {
-  const {localVue} = createLocalVue()
+  const { localVue } = createLocalVue()
   let core = null
   let vm = null
 

@@ -1,8 +1,8 @@
-import {createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
-import {server, rest} from '../../mocks/server'
+import { server, rest } from '../../mocks/server'
 import User from '@/models/User'
 
 import UserRetrieveLanguage from '@/views/UserRetrieveLanguage'
@@ -34,7 +34,7 @@ describe('UserRetrieveLanguage', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     const core = Core.init(localVue).useAll()
-    const {wait, store, router} = core
+    const { wait, store, router } = core
     const stubs = ['router-link', 'app-waiter']
     const options = {
       i18n,

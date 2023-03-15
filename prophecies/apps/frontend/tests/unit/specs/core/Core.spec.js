@@ -1,18 +1,18 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Murmur from '@icij/murmur'
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 
-import {server, rest} from '../../mocks/server'
+import { server, rest } from '../../mocks/server'
 import Core from '@/core'
 import Setting from '@/models/Setting'
 
-jest.mock('@/router', () => ({router: {routes: []}}))
+jest.mock('@/router', () => ({ router: { routes: [] } }))
 jest.mock('@/utils/icons', () => {
-  const BarIcon = {name: 'BarIcon', template: '<i></i>'}
-  const FooIcon = {name: 'FooIcon', template: '<i></i>'}
+  const BarIcon = { name: 'BarIcon', template: '<i></i>' }
+  const FooIcon = { name: 'FooIcon', template: '<i></i>' }
   return {
     ...jest.requireActual('@/utils/icons'),
     BarIcon,
@@ -34,7 +34,7 @@ describe('Core', () => {
     server.use(rest.get('/api/v1/settings', (req, res, ctx) => {
       return res.once(ctx.json({
         data: [
-          {type: 'Setting', id: '1', attributes: {key: 'foo', value: 'bar'}}
+          { type: 'Setting', id: '1', attributes: { key: 'foo', value: 'bar' } }
         ]
       }))
     }))
@@ -56,32 +56,32 @@ describe('Core', () => {
   })
 
   it('should expose the router', () => {
-    const {router} = Core.init(localVue).useAll()
+    const { router } = Core.init(localVue).useAll()
     expect(router).toBeInstanceOf(VueRouter)
   })
 
   it('should expose the VueI18n', () => {
-    const {i18n} = Core.init(localVue).useAll()
+    const { i18n } = Core.init(localVue).useAll()
     expect(i18n).toBeInstanceOf(VueI18n)
   })
 
   it('should expose the store', () => {
-    const {store} = Core.init(localVue).useAll()
+    const { store } = Core.init(localVue).useAll()
     expect(store).toBeInstanceOf(Vuex.Store)
   })
 
   it('should not expose the router if it is not installed', () => {
-    const {router} = Core.init(localVue)
+    const { router } = Core.init(localVue)
     expect(router).not.toBeInstanceOf(VueRouter)
   })
 
   it('should not expose the VueI18n if it is not installed', () => {
-    const {i18n} = Core.init(localVue)
+    const { i18n } = Core.init(localVue)
     expect(i18n).not.toBeInstanceOf(VueI18n)
   })
 
   it('should expose the config from Murmur', () => {
-    const {config} = Core.init(localVue).useAll()
+    const { config } = Core.init(localVue).useAll()
     expect(config).toBe(Murmur.config)
   })
 
@@ -120,7 +120,7 @@ describe('Core', () => {
     server.use(rest.get('/api/v1/settings', (req, res, ctx) => {
       return res.once(ctx.json({
         data: [
-          {type: 'Setting', id: '1', attributes: {key: 'searchEngine', value: 'https://duckduckgo.com'}}
+          { type: 'Setting', id: '1', attributes: { key: 'searchEngine', value: 'https://duckduckgo.com' } }
         ]
       }))
     }))
@@ -132,9 +132,9 @@ describe('Core', () => {
 
   it('should register all icons exported by the @/utils/icons', () => {
     Core.init(localVue)
-    const Component = {render: h => h('bar-icon')}
-    const vm = shallowMount(Component, {localVue})
-    expect(vm.findComponent({name: 'bar-icon'}).exists()).toBeTruthy()
-    expect(vm.findComponent({name: 'foo-icon'}).exists()).toBeFalsy()
+    const Component = { render: h => h('bar-icon') }
+    const vm = shallowMount(Component, { localVue })
+    expect(vm.findComponent({ name: 'bar-icon' }).exists()).toBeTruthy()
+    expect(vm.findComponent({ name: 'foo-icon' }).exists()).toBeFalsy()
   })
 })

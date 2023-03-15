@@ -1,5 +1,5 @@
 <script>
-import {find, mapValues, without} from 'lodash'
+import { find, mapValues, without } from 'lodash'
 import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
 import Task from '@/models/Task'
 
@@ -16,7 +16,7 @@ export default {
     }
   },
   computed: {
-    filters() {
+    filters () {
       const filters = this.getTaskFilters(this.task)
       const selectedOptions = this.mapRouteQueryToFilterOptions(this.routeFilters, this.task)
       // Merge the filter object with the corresponding selected options
@@ -26,7 +26,7 @@ export default {
         return filter
       })
     },
-    task() {
+    task () {
       return Task
         .query()
         .with('checkers')
@@ -37,8 +37,8 @@ export default {
     }
   },
   methods: {
-    deleteFilterOption(filter, option) {
-      const selected = mapValues(this.filters, ({name, selected}) => {
+    deleteFilterOption (filter, option) {
+      const selected = mapValues(this.filters, ({ name, selected }) => {
         if (filter.name === name) {
           return without(selected, option)
         }
@@ -46,9 +46,9 @@ export default {
       })
       const routeFilters = this.getSelectedFiltersAsRouteFilters(this.filters, selected)
       /**
-       * @event update:routeFilters
-       * @param routes query params after deleting an option
-       */
+         * @event update:routeFilters
+         * @param routes query params after deleting an option
+         */
       this.$emit('update:routeFilters', routeFilters)
     }
   }
@@ -59,10 +59,8 @@ export default {
   <div class="task-record-review-applied-filters mb-4">
     <template v-for="filter of filters">
       <template v-for="(option, i) in filter.selected">
-        <b-btn variant="primary" class="task-record-review-applied-filters__item" :key="`${i}-${filter.name}`"
-               :title="filter.name" v-b-tooltip.hover @click="deleteFilterOption(filter, option)">
-          {{ option[filter.label || 'name'] }}
-          <x-icon class="ml-3" size="1x"/>
+        <b-btn variant="primary" class="task-record-review-applied-filters__item" :key="`${i}-${filter.name}`" :title="filter.name"  v-b-tooltip.hover @click="deleteFilterOption(filter, option)">
+          {{ option[filter.label || 'name'] }}<x-icon class="ml-3" size="1x" />
         </b-btn>
       </template>
     </template>
@@ -70,18 +68,18 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-.task-record-review-applied-filters {
-  &__item {
-    font-weight: bold;
-    padding-left: $spacer;
-    padding-right: $spacer;
-    margin-right: $spacer;
-  }
+  .task-record-review-applied-filters {
+    &__item {
+      font-weight: bold;
+      padding-left: $spacer;
+      padding-right: $spacer;
+      margin-right: $spacer;
+    }
 
-  & ::v-deep &__item.btn:hover {
-    background-color: $warning;
-    border-color: $warning;
-    color: text-contrast($warning);
+    & ::v-deep &__item.btn:hover {
+      background-color: $warning;
+      border-color: $warning;
+      color: text-contrast($warning);
+    }
   }
-}
 </style>

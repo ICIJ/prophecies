@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
@@ -17,15 +17,15 @@ describe('UserTaskStatsCard', () => {
   beforeEach(async () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
-    const {i18n} = Core.init(localVue).useAll()
-    const propsData = {taskIds: ['1', '2'], userId: 'django'}
-    wrapper = shallowMount(UserTaskStatsCard, {localVue, propsData, i18n})
+    const { i18n } = Core.init(localVue).useAll()
+    const propsData = { taskIds: ['1', '2'], userId: 'django' }
+    wrapper = shallowMount(UserTaskStatsCard, { localVue, propsData, i18n })
 
     await wrapper.vm.setup()
   })
   it('should show the progress of all open task', async () => {
     const element = wrapper.find('task-stats-card-all-rounds-stub')
-    const {progress, done, pending} = element.attributes()
+    const { progress, done, pending } = element.attributes()
     expect(Number(done)).toBe(7)
     expect(Number(pending)).toBe(98)
     expect(Number(progress)).toBeCloseTo(3.33, 1)
@@ -37,13 +37,13 @@ describe('UserTaskStatsCard', () => {
   })
 
   it('should set the selected option Addresses active', async () => {
-    await wrapper.setData({selectedTaskId: '1'})
+    await wrapper.setData({ selectedTaskId: '1' })
 
     const selected = wrapper.find('.user-task-stats-card__dropdown')
     expect(selected.attributes('selectedid')).toBe('1')
 
     const allrounds = wrapper.find('task-stats-card-all-rounds-stub')
-    const {progress, done, pending} = allrounds.attributes()
+    const { progress, done, pending } = allrounds.attributes()
     expect(Number(done)).toBe(7)
     expect(Number(pending)).toBe(98)
     expect(Number(progress)).toBeCloseTo(6.66, 1)

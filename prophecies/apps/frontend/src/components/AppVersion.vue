@@ -2,7 +2,7 @@
 export default {
   name: 'AppVersion',
   computed: {
-    version() {
+    version () {
       return this.$config.get('version', '0.0.0')
     }
   }

@@ -1,5 +1,5 @@
 <script>
-import {cloneDeep, uniqueId} from 'lodash'
+import { cloneDeep, uniqueId } from 'lodash'
 
 import TaskStatsCard from '@/components/TaskStatsCard'
 
@@ -29,33 +29,33 @@ export default {
       type: String
     }
   },
-  created() {
+  created () {
     return this.setup()
   },
 
   filters: {
-    round(value) {
+    round (value) {
       return Math.round(value)
     }
   },
   methods: {
-    setup() {
+    setup () {
       return this.waitFor(this.fetchTaskUserStatsLoader, [this.fetchTaskUserStats, this.fetchTaskUserChoiceStats])
     },
-    fetchTaskUserStats() {
-      const params = {'filter[task]': this.taskId}
-      return TaskUserStatistics.api().get('', {params})
+    fetchTaskUserStats () {
+      const params = { 'filter[task]': this.taskId }
+      return TaskUserStatistics.api().get('', { params })
     },
-    fetchTaskUserChoiceStats() {
-      const params = {include: 'checker,task.choice_group.choices', 'filter[task]': this.taskId}
-      return TaskUserChoiceStatistics.api().get('', {params})
+    fetchTaskUserChoiceStats () {
+      const params = { include: 'checker,task.choice_group.choices', 'filter[task]': this.taskId }
+      return TaskUserChoiceStatistics.api().get('', { params })
     },
-    async waitFor(loader, fns = []) {
+    async waitFor (loader, fns = []) {
       this.$wait.start(loader)
       await Promise.all(fns.map(fn => fn()))
       this.$wait.end(loader)
     },
-    taskUserStatisticsQuery(round) {
+    taskUserStatisticsQuery (round) {
       let request = TaskUserStatistics.query()
         .with('checker')
         .where('taskId', this.taskId)
@@ -65,7 +65,7 @@ export default {
       }
       return request.get()
     },
-    taskUserChoiceStatisticsQuery(round) {
+    taskUserChoiceStatisticsQuery (round) {
       let request = TaskUserChoiceStatistics
         .query()
         .where('taskId', this.taskId)
@@ -77,7 +77,7 @@ export default {
       }
       return request.get()
     },
-    summary(round) {
+    summary (round) {
       const stats = this.taskUserChoiceStatisticsQuery(round)
 
       const defaultTaskChoices = this.defaultChoicesByTaskId[this.taskId]
@@ -90,7 +90,7 @@ export default {
         return Object.values(defaultTaskChoices[choiceGroupId])
       }
 
-      const statsAcc = {stats: cloneDeep(defaultTaskChoices), count: 0}
+      const statsAcc = { stats: cloneDeep(defaultTaskChoices), count: 0 }
       const cumulatedStats = stats.reduce((acc, checkerStat) => {
         // check if stat choice group is consistent with task choice group
         const statChoiceGroupId = acc.stats[checkerStat.choice.choiceGroupId]
@@ -108,7 +108,7 @@ export default {
       }
       return Object.values(statByChoiceGroup)
     },
-    users(round) {
+    users (round) {
       return this.taskUserStatisticsQuery(round)
         .map(elem => ({
           name: elem.checker.username,
@@ -119,30 +119,27 @@ export default {
     }
   },
   computed: {
-    task() {
+    task () {
       return Task.query()
         .with('choiceGroup.choices')
         .find(this.taskId)
     },
-    defaultChoicesByTaskId() {
+    defaultChoicesByTaskId () {
       const acc = {}
-      acc[this.taskId] = {}
+      acc[this.taskId] = { }
 
       if (this.task.choiceGroup) {
         const choiceGroupId = this.task.choiceGroupId
         const choices = this.task.choiceGroup.choices
         const defaultChoices = choices.reduce((prev, choice) =>
-          ({
-            ...prev,
-            [choice.id]: {id: choice.id, name: choice.name, value: choice.value, color: choice.color, progress: 0}
-          }), {})
-        acc[this.taskId][choiceGroupId] = {...defaultChoices}
+          ({ ...prev, [choice.id]: { id: choice.id, name: choice.name, value: choice.value, color: choice.color, progress: 0 } }), {})
+        acc[this.taskId][choiceGroupId] = { ...defaultChoices }
         return acc
       }
 
       return acc
     },
-    fetchTaskUserStatsLoader() {
+    fetchTaskUserStatsLoader () {
       return uniqueId('load-stats-task-user')
     }
   }
@@ -151,10 +148,10 @@ export default {
 
 <template>
   <task-stats-card class="stats-list__task-card"
-                   :task-id="taskId"
-                   :team="team"
-                   :checker-id="checkerId" extended>
-    <template v-if="fetchTaskUserStatsLoader" v-slot:taskStatsByRound="{stats}">
+  :task-id="taskId"
+  :team="team"
+  :checker-id="checkerId" extended>
+    <template v-if="fetchTaskUserStatsLoader" v-slot:taskStatsByRound="{stats}" >
       <stats-by-round
         v-for="(round,index) in stats.rounds"
         :key="round"
@@ -164,8 +161,8 @@ export default {
         :progress="stats.progress[round]"
         extended
         class="stats-list__task-card__round mx-auto"
-      >
-        <template #users={users}>
+        >
+        <template #users={users} >
           <stats-by-users :users="users" :with-total="team"/>
         </template>
 

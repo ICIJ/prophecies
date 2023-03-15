@@ -15,7 +15,7 @@ export default {
     },
     params: {
       type: Object,
-      default: () => ({})
+      default: () => ({ })
     },
     noProject: {
       type: Boolean
@@ -25,14 +25,14 @@ export default {
     }
   },
   computed: {
-    task() {
+    task () {
       return Task
         .query()
         .with('project')
         .whereId(this.taskId)
         .first()
     },
-    project() {
+    project () {
       return this.task.project
     }
   }
@@ -41,10 +41,10 @@ export default {
 
 <template>
   <span class="task-list-item" v-if="task">
-    <task-link :task-id="taskId" :params="params" class="task-list-item__link font-weight-bold"/>
+    <task-link :task-id="taskId" :params="params" class="task-list-item__link font-weight-bold" />
     <span class="task-list-item__project" v-if="!noProject">
       in {{ project.name }}
     </span>
-    <task-status class="task-list-item__status ml-2" :task-id="taskId" v-if="!noStatus"/>
+    <task-status class="task-list-item__status ml-2" :task-id="taskId" v-if="!noStatus" />
   </span>
 </template>

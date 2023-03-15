@@ -1,4 +1,4 @@
-import {createLocalVue, mount} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 
 import '@/store'
 import Core from '@/core'
@@ -8,7 +8,7 @@ import UserNotification from '@/models/UserNotification'
 jest.useFakeTimers()
 
 describe('UserNotifications', () => {
-  function createContainer() {
+  function createContainer () {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -22,13 +22,13 @@ describe('UserNotifications', () => {
       const localVue = createLocalVue()
       const stubs = ['app-waiter']
       // Configure the local vue with plugins
-      const {i18n, store, wait} = Core.init(localVue).useAll()
+      const { i18n, store, wait } = Core.init(localVue).useAll()
 
-      const {response} = await UserNotification.api().get('')
+      const { response } = await UserNotification.api().get('')
       const notificationIds = response.data.data.map(t => t.id)
-      const propsData = {notificationIds}
+      const propsData = { notificationIds }
 
-      wrapper = mount(UserNotifications, {attachTo, localVue, i18n, propsData, store, stubs, wait})
+      wrapper = mount(UserNotifications, { attachTo, localVue, i18n, propsData, store, stubs, wait })
     })
 
     it('should NOT show the "no notifications" message', () => {
@@ -65,8 +65,8 @@ describe('UserNotifications', () => {
       const localVue = createLocalVue()
       const stubs = ['app-waiter']
       // Configure the local vue with plugins
-      const {i18n, store, wait} = Core.init(localVue).useAll()
-      wrapper = mount(UserNotifications, {attachTo, localVue, i18n, store, stubs, wait})
+      const { i18n, store, wait } = Core.init(localVue).useAll()
+      wrapper = mount(UserNotifications, { attachTo, localVue, i18n, store, stubs, wait })
     })
 
     it('should show the "no notifications" message', () => {

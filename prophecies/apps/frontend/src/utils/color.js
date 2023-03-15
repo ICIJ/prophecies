@@ -1,4 +1,4 @@
-function hexToRgb(hex) {
+function hexToRgb (hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
   return result ? {
     r: parseInt(result[1], 16),
@@ -7,7 +7,7 @@ function hexToRgb(hex) {
   } : null
 }
 
-export function textContrast(n) {
+export function textContrast (n) {
   const rgb = hexToRgb(n)
   if (!rgb) {
     return '#071111' // $body-color

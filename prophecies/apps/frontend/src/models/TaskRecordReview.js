@@ -1,5 +1,5 @@
-import {Model} from '@vuex-orm/core'
-import {defaultHeaders, responseNormalizer} from '@/utils/jsonapi'
+import { Model } from '@vuex-orm/core'
+import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import Choice from '@/models/Choice'
 import Operation from '@/models/Operation'
@@ -10,7 +10,7 @@ import User from '@/models/User'
 export default class TaskRecordReview extends Model {
   static entity = 'TaskRecordReview'
 
-  static fields() {
+  static fields () {
     return {
       id: this.attr(null),
       url: this.string(),
@@ -36,21 +36,21 @@ export default class TaskRecordReview extends Model {
     baseURL: `${settings.apiUrl}/task-record-reviews/`,
     dataTransformer: responseNormalizer,
     actions: {
-      find(id, config = {}) {
+      find (id, config = {}) {
         return this.get(`${id}/`, config)
       },
-      search(query, config = {}) {
-        const params = {...config.params, 'filter[search]': query}
-        return this.get('', {...config, params})
+      search (query, config = {}) {
+        const params = { ...config.params, 'filter[search]': query }
+        return this.get('', { ...config, params })
       },
-      save(id, {attributes = {}, relationships = {}} = {}) {
+      save (id, { attributes = { }, relationships = { } } = { }) {
         const type = 'TaskRecordReview'
-        const data = {type, id, attributes, relationships}
-        return this.put(`${id}/`, {data}, {headers: defaultHeaders()})
+        const data = { type, id, attributes, relationships }
+        return this.put(`${id}/`, { data }, { headers: defaultHeaders() })
       },
-      bulkSelectChoice(ids, {choice, ...attributes}) {
+      bulkSelectChoice (ids, { choice, ...attributes }) {
         const headers = defaultHeaders()
-        const operations = ids.map(id => ({id, method: 'update', payload: '1'}))
+        const operations = ids.map(id => ({ id, method: 'update', payload: '1' }))
         const payloads = [
           {
             id: '1',
@@ -60,7 +60,7 @@ export default class TaskRecordReview extends Model {
                 attributes,
                 relationships: {
                   choice: {
-                    data: {type: 'Choice', id: choice.id}
+                    data: { type: 'Choice', id: choice.id }
                   }
                 }
               }
@@ -69,11 +69,11 @@ export default class TaskRecordReview extends Model {
         ]
         const data = {
           type: 'Operation',
-          attributes: {operations, payloads}
+          attributes: { operations, payloads }
         }
-        return Operation.api().post('', {data}, {headers})
+        return Operation.api().post('', { data }, { headers })
       },
-      cancelChoice(id, {...attributes}) {
+      cancelChoice (id, { ...attributes }) {
         return this.save(id, {
           attributes,
           relationships: {
@@ -83,7 +83,7 @@ export default class TaskRecordReview extends Model {
           }
         })
       },
-      selectChoice(id, {choice, ...attributes}) {
+      selectChoice (id, { choice, ...attributes }) {
         return this.save(id, {
           attributes,
           relationships: {
@@ -99,7 +99,7 @@ export default class TaskRecordReview extends Model {
     }
   }
 
-  get noteWithMentions() {
+  get noteWithMentions () {
     return String(this.note).replace(User.usernamePattern, (match, p1) => {
       if (User.me() && p1 === User.me().username) {
         return `<span class="mention mention--is-me">${match}</span>`
@@ -108,17 +108,17 @@ export default class TaskRecordReview extends Model {
     })
   }
 
-  get editable() {
+  get editable () {
     return this.checkerId === User.me()?.id
   }
 
-  get locked() {
+  get locked () {
     const taskLocked = this.taskId && !Task.find(this.taskId)?.open
     const taskRecordLocked = this.taskRecordId && TaskRecord.find(this.taskRecordId)?.locked
     return !!(taskLocked || taskRecordLocked)
   }
 
-  get bookmarked() {
+  get bookmarked () {
     const taskRecordLocked = this.taskRecordId && TaskRecord.find(this.taskRecordId)?.bookmarked
     return taskRecordLocked
   }
