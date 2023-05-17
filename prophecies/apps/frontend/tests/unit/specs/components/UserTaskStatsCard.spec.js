@@ -4,7 +4,6 @@ import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
 import User from '@/models/User'
-import TaskUserStatistics from '@/models/TaskUserStatistics'
 
 import UserTaskStatsCard from '@/components/UserTaskStatsCard'
 
