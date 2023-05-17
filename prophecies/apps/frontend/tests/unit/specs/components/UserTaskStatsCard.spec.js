@@ -4,6 +4,7 @@ import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
 import User from '@/models/User'
+
 import UserTaskStatsCard from '@/components/UserTaskStatsCard'
 
 describe('UserTaskStatsCard', () => {
@@ -18,7 +19,7 @@ describe('UserTaskStatsCard', () => {
     const localVue = createLocalVue()
     // Configure the local vue with plugins
     const { i18n } = Core.init(localVue).useAll()
-    const propsData = { taskIds: ['1', '2'], userId: 'django' }
+    const propsData = { taskIds: ['1',  '3'], userId: 'django' }
     wrapper = shallowMount(UserTaskStatsCard, { localVue, propsData, i18n })
 
     await wrapper.vm.setup()
@@ -26,11 +27,11 @@ describe('UserTaskStatsCard', () => {
   it('should show the progress of all open task', async () => {
     const element = wrapper.find('task-stats-card-all-rounds-stub')
     const { progress, done, pending } = element.attributes()
-    expect(Number(done)).toBe(7)
-    expect(Number(pending)).toBe(98)
-    expect(Number(progress)).toBeCloseTo(3.33, 1)
-  })
-
+    expect(Number(done)).toBe(15)
+    expect(Number(pending)).toBe(290)
+    expect(Number(progress)).toBeCloseTo(11.76, 1)
+  }) 
+  
   it('should show the dropdown menu with "All open task" selected by default ', () => {
     const element = wrapper.find('.user-task-stats-card__dropdown')
     expect(element.attributes('selectedid')).toBe('0_all')
@@ -58,5 +59,29 @@ describe('UserTaskStatsCard', () => {
 
   it('has the title all records', () => {
     expect(wrapper.text()).toContain('All records')
+  })
+
+  it('has the title all records', () => {
+    expect(wrapper.text()).toContain('All records')
+  })
+
+  describe("User stats of user with no open task",()=>{
+    beforeEach(()=>{
+
+      Task.update({ where: '3', data: { status: 'CLOSED' } })
+      Task.update({ where: '1', data: { status: 'CLOSED' } })
+      const localVue = createLocalVue()
+      // Configure the local vue with plugins
+      const { i18n } = Core.init(localVue).useAll()
+      const propsData = { taskIds: ['1',  '3'], userId: 'django' }
+      wrapper = shallowMount(UserTaskStatsCard, { localVue, propsData, i18n })
+    })
+    it('should show 0 as progress for all open task dropdown item', async () => {
+      const element = wrapper.find('task-stats-card-all-rounds-stub')
+      const { progress, done, pending } = element.attributes()
+      expect(Number(done)).toBe(0)
+      expect(Number(pending)).toBe(0)
+      expect(Number(progress)).toBeCloseTo(0)
+    }) 
   })
 })

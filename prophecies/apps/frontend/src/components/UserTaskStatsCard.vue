@@ -53,9 +53,7 @@ export default {
         .get()
     },
     statsAverageAllStats () {
-      const stats = this.getAverage(this.statsAllOpenTasks)
-      stats.progress /= (this.openTasks.length ?? 1)
-      return stats
+      return this.getAverage(this.statsAllOpenTasks)
     },
     statsAverageByTaskId () {
       return this.openTaskIds.reduce((acc, tId) => {
