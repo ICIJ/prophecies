@@ -1,7 +1,7 @@
 DOCKER_REGISTRY := registry.hub.docker.com
 DOCKER_NAME := icij/prophecies
 PWD := `pwd`
-CURRENT_VERSION ?= `poetry version -s`
+CURRENT_VERSION := $(shell poetry version -s)
 SEMVERS := major minor patch
 FRONT_PREFIX := prophecies/apps/frontend
 
@@ -89,7 +89,7 @@ docker-tag:
 		docker tag $(DOCKER_NAME) $(DOCKER_REGISTRY)/$(DOCKER_NAME):latest
 
 docker-push:
-		docker push $(DOCKER_NAME):${CURRENT_VERSION}
-		docker push $(DOCKER_NAME):latest
+		docker push $(DOCKER_REGISTRY)/$(DOCKER_NAME):${CURRENT_VERSION}
+		docker push $(DOCKER_REGISTRY)/$(DOCKER_NAME):latest
 
 docker-publish: docker-build docker-tag docker-push
