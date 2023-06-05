@@ -1,6 +1,7 @@
 <script>
 import { get } from 'lodash'
 import TaskRecordReview from '@/models/TaskRecordReview'
+import { TaskStatusEnum } from '@/models/Task'
 
 export default {
   name: 'TaskRecordReviewActions',
@@ -31,7 +32,7 @@ export default {
         .find(this.taskRecordReviewId)
     },
     taskIsOpen () {
-      return this.taskStatus === 'OPEN'
+      return this.taskStatus === TaskStatusEnum.OPEN
     },
     taskStatus () {
       return this.taskRecordReview.task.status

@@ -5,6 +5,7 @@ import ChoiceGroup from '@/models/ChoiceGroup'
 import AlternativeValueSelect from '@/components/AlternativeValueSelect'
 import ChoiceGroupButtons from '@/components/ChoiceGroupButtons'
 import TaskRecordReview from '@/models/TaskRecordReview'
+import { TaskStatusEnum } from '@/models/Task'
 
 export default {
   name: 'TaskRecordReviewChoiceForm',
@@ -106,7 +107,7 @@ export default {
       return this.taskRecord.locked || this.taskIsNotOpen
     },
     taskIsNotOpen () {
-      return this.taskRecord.task.status !== 'OPEN'
+      return this.taskRecord.task.status !== TaskStatusEnum.OPEN
     }
   }
 }

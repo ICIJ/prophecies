@@ -1,6 +1,6 @@
 <script>
 import { mean, orderBy, shuffle } from 'lodash'
-import Task from '@/models/Task'
+import Task, { TaskStatusEnum } from '@/models/Task'
 import EmptyPlaceholder from '@/components/EmptyPlaceholder'
 
 export default {
@@ -39,7 +39,7 @@ export default {
     unorderedTasks () {
       // make stats on tasks with at least one record
       return Task.query()
-        .where('status', (value) => value !== 'CLOSED')
+        .where('status', (value) => value !== TaskStatusEnum.CLOSED)
         .where('taskRecordsCount', (value) => value > 0).get()
     },
 
@@ -50,7 +50,7 @@ export default {
     nbClosedTasks () {
       // make stats on tasks with at least one record
       return Task.query()
-        .where('status', (value) => value === 'CLOSED')
+        .where('status', (value) => value === TaskStatusEnum.CLOSED)
         .where('taskRecordsCount', (value) => value > 0).get().length
     },
     meanProgress () {

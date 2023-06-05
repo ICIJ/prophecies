@@ -16,7 +16,7 @@ import TaskRecordReviewTutorial from '@/components/TaskRecordReviewTutorial'
 import EmptyPlaceholder from '@/components/EmptyPlaceholder'
 import taskRecordReviewFiltersMixin from '@/mixins/task-record-review-filters'
 import ChoiceGroup from '@/models/ChoiceGroup'
-import Task from '@/models/Task'
+import Task, { TaskStatusEnum } from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import User from '@/models/User'
 
@@ -214,7 +214,7 @@ export default {
         .find(this.taskId)
     },
     taskIsNotOpened () {
-      return this.task.status !== 'OPEN'
+      return this.task.status !== TaskStatusEnum.OPEN
     },
     taskRecordReviews () {
       return TaskRecordReview
@@ -234,7 +234,7 @@ export default {
       }
     },
     isTaskOpen () {
-      return this.task && this.task.status === 'OPEN'
+      return this.task && this.task.status === TaskStatusEnum.OPEN
     },
     trailingTaskRecordReview () {
       return this.taskRecordReviews[this.taskRecordReviews.length - 1]
