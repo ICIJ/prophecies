@@ -64,8 +64,10 @@ export default {
     statsAverageByOption () {
       if (this.selectedTaskId === ALL__OPEN_TASKS_ID) {
         return this.statsAverageAllStats
+      } else if (this.statsAverageByTaskId[this.selectedTaskId]){
+        return this.statsAverageByTaskId[this.selectedTaskId]
       }
-      return this.statsAverageByTaskId[this.selectedTaskId]
+      return { done: 0,  pending: 0, progress: 0 }
     },
     progressColor () {
       if (this.selectedTaskId === ALL__OPEN_TASKS_ID) {
