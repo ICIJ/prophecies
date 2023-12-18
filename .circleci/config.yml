@@ -33,7 +33,7 @@ workflows:
 jobs:
   test-frontend:
     docker:
-      - image: circleci/node:16-bullseye
+      - image: cimg/node:16.19
     working_directory: ~/repository/
     steps:
       - checkout
@@ -57,7 +57,7 @@ jobs:
 
   test-backend:
     docker:
-      - image: circleci/python:3.9
+      - image: cimg/python:3.9
     working_directory: ~/repository/
     steps:
       - checkout
