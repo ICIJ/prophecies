@@ -120,6 +120,8 @@ STATICFILES_DIRS = [
     project_root.path('apps', 'frontend', 'dist').root,
 ]
 
+MEDIA_ROOT = env.str('MEDIA_ROOT', default=project_root.path('run', 'media'))
+
 # Allow user to update up to 5000 records at the same time
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000
 
