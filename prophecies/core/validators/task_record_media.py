@@ -12,10 +12,10 @@ class MimeTypeValidator:
     def allowed_mine_types():
         from prophecies.core.models import TaskRecordMedia
 
-        return TaskRecordMedia.mine_types()
+        return TaskRecordMedia.mime_types()
 
     def __call__(self, file):
         file.seek(0)
         mine_type = magic.from_buffer(file.read(2048), mime=True)
-        if mine_type not in self.allowed_mine_types():
+        if mine_type not in self.allowed_mime_types():
             raise ValidationError(self.messages["not_supported"])
