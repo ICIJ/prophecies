@@ -1,0 +1,13 @@
+{% extends 'admin/import_export/change_list_export.html' %}
+{% load i18n %}
+
+{% block object-tools-items %}
+  <li>
+    <a class="uploadlink" href="upload/">
+      {% blocktranslate with cl.opts.verbose_name_plural as name %}
+        Import {{ name }}
+      {% endblocktranslate %}
+    </a>
+  </li>
+  {{ block.super }}
+{% endblock %}
