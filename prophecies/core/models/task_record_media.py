@@ -62,7 +62,7 @@ class TaskRecordMedia(models.Model):
 
     @property
     def media_type(self):
-        return TaskRecordMedia.mine_to_media_type(self.mime_type)
+        return TaskRecordMedia.mime_to_media_type(self.mime_type)
 
     @property
     def file_preview_url_with_timestamp(self):
@@ -71,7 +71,7 @@ class TaskRecordMedia(models.Model):
         return None
 
     @staticmethod
-    def mine_to_media_type(mime_type):
+    def mime_to_media_type(mime_type):
         for key, mime_list in TaskRecordMedia.SUPPORTED_MIME_TYPES.items():
             if mime_type in mime_list:
                 return key
@@ -80,10 +80,10 @@ class TaskRecordMedia(models.Model):
     @staticmethod
     def file_to_media_type(file):
         mime_type = magic.from_buffer(file.read(1024), mime=True)
-        return TaskRecordMedia.mine_to_media_type(mime_type)
+        return TaskRecordMedia.mime_to_media_type(mime_type)
 
     @staticmethod
-    def mine_types():
+    def mime_types():
         values = TaskRecordMedia.SUPPORTED_MIME_TYPES.values()
         return [mime for types in values for mime in types]
 
@@ -94,7 +94,7 @@ class TaskRecordMedia(models.Model):
 
     @staticmethod
     # pylint: disable-next=unused-argument
-    def signal_fill_mine_type(sender, instance, **kwargs):
+    def signal_fill_mime_type(sender, instance, **kwargs):
         if instance.file:
             instance.file.seek(0)
             instance.mime_type = magic.from_buffer(instance.file.read(1024), mime=True)
@@ -117,7 +117,7 @@ class TaskRecordMedia(models.Model):
 
 
 signals.post_init.connect(TaskRecordMedia.signal_fill_uid, sender=TaskRecordMedia)
-signals.post_init.connect(TaskRecordMedia.signal_fill_mine_type, sender=TaskRecordMedia)
+signals.post_init.connect(TaskRecordMedia.signal_fill_mime_type, sender=TaskRecordMedia)
 signals.post_init.connect(
     TaskRecordMedia.signal_fill_task_record, sender=TaskRecordMedia
 )

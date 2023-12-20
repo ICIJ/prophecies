@@ -69,7 +69,7 @@ class TaskRecordMediaModelTests(TestCase):
             )
         self.assertEqual(media.uid, "bar")
 
-    def test_signal_fill_mine_type(self):
+    def test_signal_fill_mime_type(self):
         img_path = self.create_test_image("bar.jpg")
         with open(img_path, "rb") as img_file:
             media = TaskRecordMedia.objects.create(
