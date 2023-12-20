@@ -1,10 +1,13 @@
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.urls import include, path, reverse_lazy
 from django.views.generic import TemplateView, RedirectView
 from social_django.models import UserSocialAuth, Nonce, Association
 from constance import config
+
+import debug_toolbar
 
 admin.site.site_header = config.appName
 admin.site.site_title = config.appName
@@ -26,6 +29,5 @@ if not settings.DJANGO_ADMIN_LOGIN:
     urlpatterns = [redirect_login_path] + urlpatterns
 
 if settings.DEBUG:
-    import debug_toolbar
-
-    urlpatterns = [path('__debug__/', include(debug_toolbar.urls)), ] + urlpatterns
+    urlpatterns = urlpatterns + [path('__debug__/', include(debug_toolbar.urls)), ]
+    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
