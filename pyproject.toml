@@ -28,6 +28,7 @@ markdown = "*"
 django-admin-autocomplete-filter = "*"
 django-import-export = "2.7.1"
 setuptools = "^69.0.2"
+python-magic = "^0.4.27"
 
 [tool.poetry.group.dev.dependencies]
 time-machine = "*"
