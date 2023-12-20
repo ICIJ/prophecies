@@ -54,7 +54,7 @@ class TaskRecordMediaUploadFormTests(TestCase):
 
     def test_no_media_creation_with_video_type(self):
         data = {"task": self.task.id, "unique": True, "media_types": ["VIDEO"]}
-        files = {"zip_file": self.build_zip_file(["foo.jpg", "ignored.jpg"])}
+        files = {"zip_file": self.build_zip_file(["foo.jpg", "bar.jpg"])}
         form = TaskRecordMediaUploadForm(data, files)
         form.save()
         self.assertEqual(TaskRecordMedia.objects.count(), 0)

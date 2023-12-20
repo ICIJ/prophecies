@@ -6,6 +6,7 @@ from zipfile import ZipFile
 from django import forms
 from django.core.files import File
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 
 
 from prophecies.core.models import Task, TaskRecordMedia
@@ -65,7 +66,7 @@ class TaskRecordMediaUploadForm(forms.Form):
             if TaskRecordMedia.file_to_media_type(file) in media_types:
                 return self._save_media(file, name)
             return 0, 0, 0
-        except ValidationError:
+        except (ValidationError, IntegrityError, TaskRecordMedia.DoesNotExist):
             return 0, 0, 1
 
     def _extract_file(self, zip_file: ZipFile, name: str) -> File:
