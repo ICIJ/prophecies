@@ -37,8 +37,8 @@ class TaskRecordManager(models.Manager):
 class TaskRecord(models.Model):
     objects = TaskRecordManager()
 
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='task_records')
-    uid = models.CharField(max_length=50, blank=True, null=True, verbose_name='UID',
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='records')
+    uid = models.CharField(max_length=100, blank=True, null=True, verbose_name='UID',
                            help_text="An optional unique identifier used to update task records in bulk")
     original_value = models.TextField(blank=True, null=True, help_text="Original value of the record")
     predicted_value = models.TextField(blank=True, null=True, help_text="Suggested value to be reviewed")
