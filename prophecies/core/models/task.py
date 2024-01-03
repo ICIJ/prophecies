@@ -73,7 +73,7 @@ class Task(models.Model):
     status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.OPEN, max_length=6,
                               help_text="Status of the task. Set to closed or locked will prevent "
                                         "any update of the records.")
-    template_type = models.CharField(max_length=16, choices=TemplateType.choices, default=TemplateType.TEXT, 
+    template_type = models.CharField(max_length=16, choices=TemplateType.choices, default=TemplateType.TEXT,
                                     help_text="Template type to use to display the task.")
     created_at = models.DateTimeField(default=timezone.now)
 
