@@ -1,9 +1,16 @@
+import shutil
+import tempfile
+
+from pathlib import Path
+from PIL import Image
+
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from rest_framework.test import APIClient
-from prophecies.core.models import Choice, ChoiceGroup, Project, Task, TaskRecord, TaskRecordReview, TaskUserStatistics
-from prophecies.core.models.task_record import StatusType
 
+from prophecies.core.models import Choice, ChoiceGroup, Project, Task, TaskRecord, TaskRecordMedia, TaskRecordReview, TaskUserStatistics
+from prophecies.core.models.task_record import StatusType
 
 class TestTaskRecordReview(TestCase):
     client = APIClient()
@@ -27,6 +34,17 @@ class TestTaskRecordReview(TestCase):
         self.task_record_bar = TaskRecord.objects.create(original_value="bar", task=self.task)
         self.task_record_baz = TaskRecord.objects.create(original_value="baz", task=self.task)
         self.task_record_qux = TaskRecord.objects.create(original_value="qux", task=self.task)
+        # Temporary media directory
+        self.temp_media_dir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_media_dir)
+
+    def create_test_image(self, name="test.jpg"):
+        img_path = Path(self.temp_media_dir) / name
+        with Image.new("RGB", (100, 100)) as img:
+            img.save(img_path, "JPEG")
+        return img_path
 
     def test_it_returns_two_task_record_reviews_for_olivia(self):
         TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.olivia)
@@ -409,3 +427,24 @@ class TestTaskRecordReview(TestCase):
         self.assertEqual(len(self.task_record_foo.reviews.pending()), 0)
         self.assertEqual(self.task_record_foo.status, StatusType.PENDING)
         self.assertEqual(len(TaskUserStatistics.objects.all()), 0)
+
+    def test_it_includes_task_record_review_media(self):
+        # Given
+        attribution = TaskRecordReview.objects.create(task_record=self.task_record_foo, checker=self.django)
+        self.client.login(username='django', password='django')
+        request = self.client.get(f'/api/v1/task-record-reviews/{attribution.id}/')
+        img_path = self.create_test_image("foo.jpg")
+        with open(img_path, "rb") as img_file:
+            media = TaskRecordMedia.objects.create(
+                task=self.task,
+                task_record=self.task_record_foo,
+                file=SimpleUploadedFile(
+                    img_path.name, img_file.read(), content_type="image/jpeg"
+                ),
+            )
+        # When
+        request = self.client.get(f'/api/v1/task-record-reviews/{attribution.id}/')
+        # Then
+        included = request.json().get('included', [])
+        self.assertTrue(any(item['type'] == 'TaskRecordMedia' for item in included))
+        self.assertTrue(any(item['id'] == str(media.id) for item in included))
