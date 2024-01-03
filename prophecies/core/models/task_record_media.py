@@ -15,9 +15,16 @@ def task_record_media_directory_path(instance, filename):
     return f"task/{instance.task.id}/{filename}"
 
 
+class TaskRecordMediaManager(models.Manager):
+    def user_scope(self, user):
+        return self.filter(task_record__task__in=user.task.all())
+
+
 class TaskRecordMedia(models.Model):
+    objects = TaskRecordMediaManager()
+
     task = models.ForeignKey(
-        Task, on_delete=models.CASCADE, related_name="task_records"
+        Task, on_delete=models.CASCADE, related_name="task_record_medias"
     )
     task_record = models.ForeignKey(
         TaskRecord,
