@@ -20,26 +20,44 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     user_progress_by_round = serializers.SerializerMethodField()
     user_progress = serializers.SerializerMethodField()
     included_serializers = {
-        'checkers': UserSerializer,
-        'choice_group': ChoiceGroupSerializer,
-        'project': ProjectSerializer,
+        "checkers": UserSerializer,
+        "choice_group": ChoiceGroupSerializer,
+        "project": ProjectSerializer,
     }
 
     class JSONAPIMeta:
-        included_resources = ['project']
+        included_resources = ["project"]
 
     class Meta:
         model = Task
-        fields = ['id', 'url', 'choice_group', 'checkers', 'colors', 'created_at',
-                  'description', 'name', 'project', 'priority', 'rounds', 'embeddable_links',
-                  'task_records_count', 'task_records_done_count',
-                  'user_task_records_count', 'user_task_records_done_count',
-                  'user_progress_by_round', 'user_progress', 'status',
-                  'progress', 'progress_by_round']
+        fields = [
+            "id",
+            "checkers",
+            "choice_group",
+            "colors",
+            "created_at",
+            "description",
+            "embeddable_links",
+            "name",
+            "priority",
+            "progress_by_round",
+            "progress",
+            "project",
+            "rounds",
+            "status",
+            "task_records_count",
+            "task_records_done_count",
+            "template_type",
+            "url",
+            "user_progress_by_round",
+            "user_progress",
+            "user_task_records_count",
+            "user_task_records_done_count"
+        ]
 
     @lru_cache(maxsize=None)
     def get_user_progress_by_round(self, task):
-        checker = self.context.get('request').user
+        checker = self.context.get("request").user
         return task.progress_by_round(checker=checker)
 
     @lru_cache(maxsize=None)
@@ -54,13 +72,13 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 
     @lru_cache(maxsize=None)
     def get_user_task_records_count(self, task):
-        checker = self.context.get('request').user
+        checker = self.context.get("request").user
         filter = dict(task_record__task=task, checker=checker)
         return TaskRecordReview.objects.filter(**filter).count()
 
     @lru_cache(maxsize=None)
     def get_user_task_records_done_count(self, task):
-        checker = self.context.get('request').user
+        checker = self.context.get("request").user
         filter = dict(task_record__task=task, status=StatusType.DONE, checker=checker)
         return TaskRecordReview.objects.filter(**filter).count()
 
@@ -74,15 +92,15 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 class TaskViewSet(views.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     prefetch_for_includes = {
-        'project': ['project', 'project__creator'],
-        'choice_group': ['choice_group', 'choice_group__choices']
+        "project": ["project", "project__creator"],
+        "choice_group": ["choice_group", "choice_group__choices"],
     }
     serializer_class = TaskSerializer
-    search_fields = ['name', 'description']
-    ordering_fields = ['name']
-    filterset_fields = ['name', 'rounds', 'priority', 'checkers']
+    search_fields = ["name", "description"]
+    ordering_fields = ["name"]
+    filterset_fields = ["name", "rounds", "priority", "checkers"]
     pagination_class = None
-    ordering = ['-id']
+    ordering = ["-id"]
     # Queryset is overridden within the `get_queryset` method
     queryset = Task.objects.all()
 
