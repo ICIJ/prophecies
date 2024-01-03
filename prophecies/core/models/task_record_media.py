@@ -109,7 +109,7 @@ class TaskRecordMedia(models.Model):
     @staticmethod
     # pylint: disable-next=unused-argument
     def signal_fill_task_record(sender, instance, **kwargs):
-        if instance.uid and instance.task:
+        if instance.uid and instance.task and instance.task_record is None:
             instance.task_record = instance.task.records.filter(
                 uid=instance.uid
             ).first()
