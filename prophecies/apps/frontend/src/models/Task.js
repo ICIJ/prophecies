@@ -40,6 +40,7 @@ export default class Task extends Model {
       status: this.string(),
       taskRecordsCount: this.number(0),
       taskRecordsDoneCount: this.number(0),
+      templateType: this.string(),
       userProgress: this.number(0),
       userProgressByRound: this.attr(),
       userTaskRecordsCount: this.number(0),
