@@ -1,5 +1,6 @@
 <script>
 import { get, isBoolean, uniqueId } from 'lodash'
+import HapticCopyButton from '@/components/HapticCopyButton'
 import TaskRecordChanges from '@/components/TaskRecordChanges'
 import TaskRecordReviewActions from '@/components/TaskRecordReviewActions'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
@@ -13,6 +14,7 @@ import TaskRecordReview from '@/models/TaskRecordReview'
 export default {
   name: 'TaskRecordReviewCard',
   components: {
+    HapticCopyButton,
     ShortkeyBadge,
     TaskRecordChanges,
     TaskRecordReviewActions,
@@ -269,29 +271,30 @@ export default {
               <div class="row no-gutters">
                 <div class="task-record-review-card__id col-2 font-weight-bold text-nowrap">
                   <b-form-checkbox class="task-record-review-card__id__checkbox" v-model="selectedInput">
-                    {{ taskRecord.id }}
+                    <slot name="id" :task-record="taskRecord">{{ taskRecord.id }}</slot>
                   </b-form-checkbox>
                 </div>
                 <div class="col text-center px-0 pb-3 text-lg-left">
-                  <haptic-copy
-                    :text="taskRecord.originalValue"
-                    class="task-record-review-card__original-value font-weight-bold px-3 py-2"
-                    tooltip-placement="right"
-                    v-b-tooltip.hover.right="'Click to copy'">
-                    {{ taskRecord.originalValue }}
-                    <span class="task-record-review-card__original-value__clipboard ml-1">
-                      <clipboard-icon />
-                    </span>
-                  </haptic-copy>
-                  <b-btn variant="link" class="text-muted px-3" :href="link" v-if="link" target="_blank">
-                    <link-icon size="1x" class="mr-1" />Open link
-                    <span v-if="active">
-                      <shortkey-badge :value="['Ctrl', 'l']" class="ml-2" />
-                    </span>
-                  </b-btn>
+                  <slot name="original-value" :task-record="taskRecord">
+                    <haptic-copy-button
+                      :text="taskRecord.originalValue"
+                      class="task-record-review-card__original-value ml-1" />
+                  </slot>
+                  <slot name="link" :task-record="taskRecord" :link="link" :active="active">
+                    <b-btn variant="link" class="text-muted px-3" :href="link" v-if="link" target="_blank">
+                      <link-icon size="1x" class="mr-1" />Open link
+                      <span v-if="active">
+                        <shortkey-badge :value="['Ctrl', 'l']" class="ml-2" />
+                      </span>
+                    </b-btn>
+                  </slot>
                 </div>
-                <div class="task-record-review-card__predicted-value col-3 font-weight-bold py-3 text-center">
-                  {{ taskRecord.predictedValue }}
+                <div class="task-record-review-card__predicted-value col-3 py-3 text-center">
+                  <slot name="predicted-value" :task-record="taskRecord">
+                    <div class="font-weight-bold">
+                      {{ taskRecord.predictedValue }}
+                    </div>
+                  </slot>
                 </div>
               </div>
             </div>
@@ -416,23 +419,6 @@ export default {
 
     &__original-value {
       text-align: inherit;
-      display: flex;
-
-      &:hover {
-        background: $primary-10;
-      }
-
-      &__clipboard {
-        min-width: 1.2rem;
-        align-self: center;
-        color: $tertiary;
-        opacity: 0;
-        transition: $btn-transition, opacity .15s;
-      }
-
-      &:hover &__clipboard {
-        opacity: 1;
-      }
     }
 
     @include media-breakpoint-down(xxl) {
