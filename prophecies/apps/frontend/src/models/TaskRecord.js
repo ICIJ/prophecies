@@ -3,6 +3,7 @@ import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import User from '@/models/User'
 import Task from '@/models/Task'
+import TaskRecordMedia from '@/models/TaskRecordMedia'
 
 export default class TaskRecord extends Model {
   static entity = 'TaskRecord'
@@ -18,6 +19,7 @@ export default class TaskRecord extends Model {
       locked: this.boolean(),
       lockedById: this.attr(null),
       lockedBy: this.belongsTo(User, 'lockedById'),
+      medias: this.hasMany(TaskRecordMedia, 'taskRecordId'),
       metadata: this.attr(null),
       rounds: this.number(),
       status: this.string(),

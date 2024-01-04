@@ -13,6 +13,7 @@ import Setting from '@/models/Setting'
 import Task from '@/models/Task'
 import TaskChecker from '@/models/TaskChecker'
 import TaskRecord from '@/models/TaskRecord'
+import TaskRecordMedia from '@/models/TaskRecordMedia'
 import TaskRecordReview from '@/models/TaskRecordReview'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
@@ -41,6 +42,7 @@ database.register(Setting)
 database.register(Task)
 database.register(TaskChecker)
 database.register(TaskRecord)
+database.register(TaskRecordMedia)
 database.register(TaskRecordReview)
 database.register(TaskUserStatistics)
 database.register(TaskUserChoiceStatistics)
