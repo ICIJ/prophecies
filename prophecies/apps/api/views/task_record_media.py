@@ -16,11 +16,13 @@ class TaskRecordMediaSerializer(serializers.HyperlinkedModelSerializer):
         model = TaskRecordMedia
         fields = [
             "id",
-            "uid",
-            "url",
+            "file",
+            "media_type",
+            "mime_type",
             "task_id",
             "task_record_id",
-            "file",
+            "uid",
+            "url",
         ]
 
 
