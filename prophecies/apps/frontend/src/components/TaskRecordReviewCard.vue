@@ -278,6 +278,7 @@ export default {
                   <slot name="original-value" :task-record="taskRecord">
                     <haptic-copy-button
                       :text="taskRecord.originalValue"
+                      hover
                       class="task-record-review-card__original-value ml-1" />
                   </slot>
                   <slot name="link" :task-record="taskRecord" :link="link" :active="active">
