@@ -5,6 +5,9 @@ export default {
     text: {
       type: String,
       default: ''
+    },
+    hover: {
+      type: Boolean
     }
   }
 }
@@ -13,6 +16,7 @@ export default {
 <template>
   <haptic-copy
     :text="text"
+    :class="{ 'haptic-copy-button--hover': hover }"
     class="haptic-copy-button font-weight-bold"
     tooltip-placement="right"
     v-b-tooltip.hover.right="'Click to copy'">
@@ -34,6 +38,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding: $spacer-xs $spacer;
+  background: $primary-10;
 
   &:hover {
     background: $primary-10;
@@ -43,12 +48,19 @@ export default {
     min-width: 1.2rem;
     align-self: center;
     color: $tertiary;
-    opacity: 0;
-    transition: $btn-transition, opacity .15s;
 
     .feather {
       height: 1.5em;
     }
+  }
+
+  &--hover &__clipboard {
+    opacity: 0;
+    transition: $btn-transition, opacity .15s;
+  }
+
+  &--hover {
+    background: transparent;
   }
 
   &:focus &__clipboard,
