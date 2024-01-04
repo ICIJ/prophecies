@@ -15,6 +15,14 @@ html {
   font-size: 14px;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-all {
+  pointer-events: all;
+}
+
 .progress {
   position: relative;
 
