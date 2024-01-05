@@ -27,7 +27,7 @@ class ResponseNormalizer {
     return this.recordNormalizer(this.data)
   }
 
-  recordNormalizer ({ id, type, attributes = {}, relationships }, depth = MAX_RELATIONSHIP_DEPTH) {
+  recordNormalizer ({ id, type, attributes = {}, relationships } = {}, depth = MAX_RELATIONSHIP_DEPTH) {
     const included = this.findIncluded({ type, id })
     return {
       id,
