@@ -208,9 +208,124 @@ export default [
             links: {
               self: 'http://localhost/api/v1/task-record-reviews/24/'
             }
-          }
+          },
+          {
+            type: 'TaskRecordReview',
+            id: '40',
+            attributes: {
+              status: 'DONE',
+              note: "Nice",
+              alternativeValue: null,
+              taskId: '3'
+            },
+            relationships: {
+              choice: {
+                data: {
+                  type: 'Choice',
+                  id: '1'
+                }
+              },
+              taskRecord: {
+                data: {
+                  type: 'TaskRecord',
+                  id: '40'
+                }
+              },
+              checker: {
+                data: {
+                  type: 'User',
+                  id: '2'
+                }
+              },
+              collaborators: {
+                data: []
+              },
+              history: {
+                data: []
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/task-record-reviews/40/'
+            }
+          },
         ],
         included: [
+          {
+            type: 'Project',
+            id: '1',
+            attributes: {
+              name: 'Chronos'
+            },
+            relationships: {
+              creator: {
+                data: {
+                  type: 'User',
+                  id: '2'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/projects/1/'
+            }
+          },
+          {
+            type: 'Task',
+            id: '3',
+            attributes: {
+              colors: [
+                '#9e5e00',
+                '#d37d00',
+                '#ff9b09'
+              ],
+              description: 'A list of immatriculations to check',
+              name: 'Immatriculations',
+              priority: 1,
+              rounds: 3,
+              taskRecordsCount: 1000,
+              taskRecordsDoneCount: 500,
+              userTaskRecordsCount: 300,
+              userTaskRecordsDoneCount: 100,
+              userProgressByRound: {
+                1: 100,
+                2: 25,
+                3: 25
+              },
+              userProgress: 45,
+              status: 'CLOSED',
+              templateType: 'MEDIA',
+              progress: 60,
+              progressByRound: {
+                1: 50,
+                2: 25,
+                3: 25
+              }
+            },
+            relationships: {
+              choiceGroup: {
+                data: {
+                  type: 'ChoiceGroup',
+                  id: '1'
+                }
+              },
+              project: {
+                data: {
+                  type: 'Project',
+                  id: '1'
+                }
+              },
+              checkers: {
+                meta: {
+                  count: 1
+                },
+                data: [
+                  {
+                    type: 'User',
+                    id: '2'
+                  }
+                ]
+              }
+            }
+          },
           {
             type: 'Choice',
             id: '1',
@@ -302,7 +417,7 @@ export default [
               task: {
                 data: {
                   type: 'Task',
-                  id: '2'
+                  id: '3'
                 }
               },
               lockedBy: {
@@ -335,6 +450,30 @@ export default [
             },
             links: {
               self: 'http://localhost/api/v1/task-records/5/'
+            }
+          },
+          {
+            type: 'TaskRecord',
+            id: '40',
+            attributes: {
+              originalValue: 'FG123OO',
+              predictedValue: 'FG123OO',
+              link: null,
+              metadata: null,
+              rounds: 3,
+              bookmarked: true,
+              status: 'ASSIGNED'
+            },
+            relationships: {
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '3'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/task-records/40/'
             }
           },
           {

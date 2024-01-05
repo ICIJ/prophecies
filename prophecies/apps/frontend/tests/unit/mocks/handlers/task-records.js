@@ -14,6 +14,30 @@ export default [
         data: [
           {
             type: 'TaskRecord',
+            id: '40',
+            attributes: {
+              originalValue: 'FG123OO',
+              predictedValue: 'FG123OO',
+              link: null,
+              metadata: null,
+              rounds: 3,
+              bookmarked: true,
+              status: 'ASSIGNED'
+            },
+            relationships: {
+              task: {
+                data: {
+                  type: 'Task',
+                  id: '3'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/task-records/40/'
+            }
+          },
+          {
+            type: 'TaskRecord',
             id: '3',
             attributes: {
               originalValue: 'La France',
