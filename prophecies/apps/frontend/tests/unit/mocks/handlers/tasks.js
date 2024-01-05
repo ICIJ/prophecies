@@ -30,6 +30,7 @@ export default [
               },
               userProgress: 50,
               status: 'LOCKED',
+              templateType: 'TEXT',
               progress: 40,
               progressByRound: {
                 1: 50,
@@ -90,6 +91,7 @@ export default [
               },
               userProgress: 45,
               status: 'OPEN',
+              templateType: 'TEXT',
               progress: 60,
               progressByRound: {
                 1: 50,
@@ -154,6 +156,7 @@ export default [
               },
               userProgress: 45,
               status: 'CLOSED',
+              templateType: 'MEDIA',
               progress: 60,
               progressByRound: {
                 1: 50,
@@ -214,6 +217,7 @@ export default [
               },
               userProgress: 45,
               status: 'OPEN',
+              templateType: 'TEXT',
               progress: 60,
               progressByRound: {
                 1: 50,
@@ -274,6 +278,7 @@ export default [
               },
               userProgress: 0,
               status: 'OPEN',
+              templateType: 'TEXT',
               progress: 0,
               progressByRound: {
                 1: 0,
@@ -437,6 +442,7 @@ export default [
             },
             userProgress: 50,
             status: 'LOCKED',
+            templateType: 'TEXT',
             progress: 40,
             progressByRound: {
               1: 50,
@@ -599,6 +605,7 @@ export default [
             },
             userProgress: 45,
             status: 'OPEN',
+            templateType: 'TEXT',
             progress: 60,
             progressByRound: {
               1: 50,
@@ -745,6 +752,296 @@ export default [
             }
           }
         ]
+      })
+    )
+  }),
+  rest.get('/api/v1/tasks/3/', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        type: 'Task',
+        id: '3',
+        attributes: {
+          colors: [
+            '#9e5e00',
+            '#d37d00',
+            '#ff9b09'
+          ],
+          description: 'A list of immatriculations to check',
+          name: 'Immatriculations',
+          priority: 1,
+          rounds: 3,
+          taskRecordsCount: 1000,
+          taskRecordsDoneCount: 500,
+          userTaskRecordsCount: 300,
+          userTaskRecordsDoneCount: 100,
+          userProgressByRound: {
+            1: 100,
+            2: 25,
+            3: 25
+          },
+          userProgress: 45,
+          status: 'CLOSED',
+          templateType: 'MEDIA',
+          progress: 60,
+          progressByRound: {
+            1: 50,
+            2: 25,
+            3: 25
+          }
+        },
+        relationships: {
+          choiceGroup: {
+            data: {
+              type: 'ChoiceGroup',
+              id: '1'
+            }
+          },
+          project: {
+            data: {
+              type: 'Project',
+              id: '1'
+            }
+          },
+          checkers: {
+            meta: {
+              count: 1
+            },
+            data: [
+              {
+                type: 'User',
+                id: '2'
+              }
+            ]
+          }
+        },
+        included: [
+          {
+            type: 'ChoiceGroup',
+            id: '1',
+            attributes: {
+              name: 'Is it correct?'
+            },
+            relationships: {
+              choices: {
+                meta: {
+                  count: 3
+                },
+                data: [
+                  {
+                    type: 'Choice',
+                    id: '1'
+                  },
+                  {
+                    type: 'Choice',
+                    id: '2'
+                  },
+                  {
+                    type: 'Choice',
+                    id: '3'
+                  }
+                ]
+              },
+              alternativeValues: {
+                meta: {
+                  count: 2
+                },
+                data: [
+                  {
+                    type: 'AlternativeValue',
+                    id: '10'
+                  },
+                  {
+                    type: 'AlternativeValue',
+                    id: '11'
+                  }
+                ]
+              }
+            }
+          },
+          {
+            type: 'Project',
+            id: '1',
+            attributes: {
+              name: 'Chronos'
+            },
+            relationships: {
+              creator: {
+                data: {
+                  type: 'User',
+                  id: '2'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/projects/1/'
+            }
+          },
+          {
+            type: 'User',
+            id: '2',
+            attributes: {
+              url: 'http://localhost/api/v1/users/2/',
+              firstName: 'Django',
+              lastName: '',
+              username: 'django',
+              email: 'support@icij.org',
+              emailMd5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
+              isStaff: true
+            },
+            links: {
+              self: 'http://localhost/api/v1/users/2/'
+            }
+          },
+          {
+            type: 'AlternativeValue',
+            id: '10',
+            attributes: {
+              name: 'Albania (ALB)',
+              value: 'ALB'
+            }
+          },
+          {
+            type: 'AlternativeValue',
+            id: '11',
+            attributes: {
+              name: 'Algeria (DZA)',
+              value: 'DZA'
+            }
+          }
+        ],
+        links: {
+          self: 'http://localhost/api/v1/tasks/3/'
+        }
+      })
+    )
+  }),
+  rest.get('/api/v1/tasks/4/', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json( {
+        type: 'Task',
+        id: '4',
+        attributes: {
+          colors: [
+            '#9e5e00',
+            '#d37d00',
+            '#ff9b09'
+          ],
+          description: 'A list of phone numbers to check',
+          name: 'Phones',
+          priority: 4,
+          rounds: 3,
+          taskRecordsCount: 1000,
+          taskRecordsDoneCount: 500,
+          userTaskRecordsCount: 300,
+          userTaskRecordsDoneCount: 100,
+          userProgressByRound: {
+            1: 100,
+            2: 25,
+            3: 25
+          },
+          userProgress: 45,
+          status: 'OPEN',
+          templateType: 'TEXT',
+          progress: 60,
+          progressByRound: {
+            1: 50,
+            2: 25,
+            3: 25
+          }
+        },
+        relationships: {
+          choiceGroup: {
+            data: {
+              type: 'ChoiceGroup',
+              id: '1'
+            }
+          },
+          project: {
+            data: {
+              type: 'Project',
+              id: '1'
+            }
+          },
+          checkers: {
+            meta: {
+              count: 1
+            },
+            data: [
+              {
+                type: 'User',
+                id: '2'
+              }
+            ]
+          }
+        },
+        included: [
+          {
+            type: 'ChoiceGroup',
+            id: '1',
+            attributes: {
+              name: 'Is it correct?'
+            },
+            relationships: {
+              choices: {
+                meta: {
+                  count: 3
+                },
+                data: [
+                  {
+                    type: 'Choice',
+                    id: '1'
+                  },
+                  {
+                    type: 'Choice',
+                    id: '2'
+                  },
+                  {
+                    type: 'Choice',
+                    id: '3'
+                  }
+                ]
+              },
+              alternativeValues: {
+                meta: {
+                  count: 2
+                },
+                data: [
+                  {
+                    type: 'AlternativeValue',
+                    id: '10'
+                  },
+                  {
+                    type: 'AlternativeValue',
+                    id: '11'
+                  }
+                ]
+              }
+            }
+          },
+          {
+            type: 'Project',
+            id: '1',
+            attributes: {
+              name: 'Chronos'
+            },
+            relationships: {
+              creator: {
+                data: {
+                  type: 'User',
+                  id: '2'
+                }
+              }
+            },
+            links: {
+              self: 'http://localhost/api/v1/projects/1/'
+            }
+          }
+        ],
+        links: {
+          self: 'http://localhost/api/v1/tasks/4/'
+        }
       })
     )
   })
