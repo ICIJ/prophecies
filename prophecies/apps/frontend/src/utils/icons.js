@@ -31,6 +31,7 @@ export {
   LinkIcon,
   LockIcon,
   LogOutIcon,
+  Maximize2Icon,
   MessageSquareIcon,
   SearchIcon,
   SettingsIcon,
