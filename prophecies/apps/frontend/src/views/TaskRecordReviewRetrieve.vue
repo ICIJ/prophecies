@@ -4,7 +4,7 @@ import { find, get, uniqueId } from 'lodash'
 import AppBreadcrumb from '@/components/AppBreadcrumb'
 import AppHeader from '@/components/AppHeader'
 import AppWaiter from '@/components/AppWaiter'
-import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
+import TaskRecordReviewCardWrapper from '@/components/TaskRecordReviewCardWrapper'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Task from '@/models/Task'
 import TaskRecordReview from '@/models/TaskRecordReview'
@@ -16,7 +16,7 @@ export default {
     AppBreadcrumb,
     AppHeader,
     AppWaiter,
-    TaskRecordReviewCard,
+    TaskRecordReviewCardWrapper,
     TaskRecordReviewTutorial
 
   },
@@ -133,7 +133,7 @@ export default {
         <task-record-review-tutorial />
         <app-waiter :loader="fetchAllLoader" waiter-class="my-5 mx-auto d-block">
           <template v-if="resolvedTaskRecordReviewId">
-            <task-record-review-card
+            <task-record-review-card-wrapper
               active
               preview-link
               :highlight-note="highlightNote"

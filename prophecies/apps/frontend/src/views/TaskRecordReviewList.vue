@@ -9,7 +9,7 @@ import ShortkeyBadge from '@/components/ShortkeyBadge'
 import TaskRecordReviewAppliedFilters from '@/components/TaskRecordReviewAppliedFilters'
 import TaskRecordReviewAppliedSorting from '@/components/TaskRecordReviewAppliedSorting'
 import TaskRecordReviewBulkChoiceForm from '@/components/TaskRecordReviewBulkChoiceForm'
-import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
+import TaskRecordReviewCardWrapper from '@/components/TaskRecordReviewCardWrapper'
 import TaskRecordReviewFilters from '@/components/TaskRecordReviewFilters'
 import TaskRecordReviewPageParams from '@/components/TaskRecordReviewPageParams'
 import TaskRecordReviewTutorial from '@/components/TaskRecordReviewTutorial'
@@ -31,7 +31,7 @@ export default {
     EmptyPlaceholder,
     ShortkeyBadge,
     TaskRecordReviewBulkChoiceForm,
-    TaskRecordReviewCard,
+    TaskRecordReviewCardWrapper,
     TaskRecordReviewAppliedFilters,
     TaskRecordReviewAppliedSorting,
     TaskRecordReviewFilters,
@@ -220,6 +220,7 @@ export default {
       return TaskRecordReview
         .query()
         .whereIdIn(this.taskRecordReviewIds)
+        .with('taskRecord')
         .get()
     },
     taskRecordReviewsParams () {
@@ -518,7 +519,7 @@ export default {
             <task-record-review-tutorial />
             <app-waiter :loader="fetchTaskRecordReviewsLoader" waiter-class="my-5 mx-auto d-block">
               <div v-for="{ id } in taskRecordReviews" :key="id" class="mb-5">
-                <task-record-review-card
+                <task-record-review-card-wrapper
                   @update="scrollToActiveTaskRecordReviewCard({ id })"
                   @update:selected="selectTaskRecordReview(id, $event)"
                   :task-record-review-id="id"
