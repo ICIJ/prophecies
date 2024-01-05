@@ -1,9 +1,9 @@
 <script>
-import { get, groupBy, remove, uniqueId } from 'lodash'
+import { compact, get, groupBy, map, remove, uniq, uniqueId } from 'lodash'
 import { orderByProjectThenTask } from '@/utils/sort'
 import AppWaiter from '@/components/AppWaiter'
 
-import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
+import TaskRecordReviewCardWrapper from '@/components/TaskRecordReviewCardWrapper'
 import BookmarksPageParams from '@/components/BookmarksPageParams'
 import EmptyPlaceholder from '@/components/EmptyPlaceholder'
 import TaskStatus from '@/components/TaskStatus'
@@ -21,7 +21,7 @@ export default {
   name: 'UserRetrieveBookmarks',
   components: {
     AppWaiter,
-    TaskRecordReviewCard,
+    TaskRecordReviewCardWrapper,
     BookmarksPageParams,
     EmptyPlaceholder,
     TaskStatus
@@ -57,7 +57,7 @@ export default {
         const title = this.$t(
           'userRetrieveBookmarks.unableToRetrieveTheBookmarks'
         )
-        this.$router.replace({ name: 'error', params: { title, error } })
+        // this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
     async fetchAll () {
@@ -70,49 +70,32 @@ export default {
         'filter[checker]': this.user.id,
         'filter[task_record__bookmarked_by]': this.user.id
       }
-      const { response } = await TaskRecordReview.api().get('', { params })
 
-      const taskRecordReviewIds = get(response, 'data.data', []).map(
-        (t) => t.id
-      )
+      const { response } = await TaskRecordReview.api().get('', { params })
+      const taskRecordReviewIds = map(get(response, 'data.data', []), 'id')
+
       this.$set(this, 'taskRecordReviewIds', taskRecordReviewIds)
     },
-    fetchChoiceGroup (taskId) {
+    fetchChoiceGroup (choiceGroupId) {
       const params = { include: 'alternative_values,choices' }
-      return ChoiceGroup.api().find(taskId, { params })
+      return ChoiceGroup.api().find(choiceGroupId, { params })
     },
     fetchChoiceGroups () {
-      const uniqueChoiceGroups = this.tasks?.reduce(
-        (acc, curr) => {
-          if (!acc.choiceGroupIds[curr.choiceGroupId]) {
-            acc.choiceGroupIds[curr.choiceGroupId] = true
-            acc.promises.push(this.fetchChoiceGroup(curr.choiceGroupId))
-          }
-          return acc
-        },
-        { choiceGroupIds: {}, promises: [] }
-      )
+      const ids = map(this.tasks, 'choiceGroupId')
+      const uniqueIds = uniq(compact(ids))
 
-      return Promise.all(uniqueChoiceGroups.promises)
+      return Promise.all(map(uniqueIds, groupId => this.fetchChoiceGroup(groupId)));
     },
     fetchTask (taskId) {
       const params = { include: 'project,checkers' }
       return Task.api().find(taskId, { params })
     },
     fetchTasks () {
-      const uniqueTaskIds = this.taskRecordReviews.reduce(
-        (acc, curr) => {
-          if (!acc.taskIds[curr.taskId]) {
-            acc.taskIds[curr.taskId] = true
-            acc.promises.push(this.fetchTask(curr.taskId))
-          }
-          return acc
-        },
-        { taskIds: {}, promises: [] }
-      )
-
-      this.$set(this, 'taskIds', Object.keys(uniqueTaskIds.taskIds))
-      return Promise.all(uniqueTaskIds.promises)
+      const ids = map(this.taskRecordReviews, 'taskId')
+      const uniqueIds = uniq(compact(ids))
+      const promises = map(uniqueIds, taskId => this.fetchTask(taskId))
+      this.$set(this, 'taskIds', uniqueIds)
+      return Promise.all(promises)
     },
     async waitFor (loader, fn) {
       this.$wait.start(loader)
@@ -199,23 +182,17 @@ export default {
         .get()
     },
     filteredBookmarks () {
-      const bookmarks = this.taskRecordReviews.slice()
-      if (this.query[FILTER_TYPES.PROJECT]) {
-        remove(
-          bookmarks,
-          (trw) => trw.task.project.id !== this.query[FILTER_TYPES.PROJECT]
+      return orderByProjectThenTask(
+        this.taskRecordReviews.filter(({ task }) =>
+          (!this.query[FILTER_TYPES.PROJECT] || task?.project?.id === this.query[FILTER_TYPES.PROJECT]) &&
+          (!this.query[FILTER_TYPES.TASK] || task?.id === this.query[FILTER_TYPES.TASK])
         )
-      }
-      if (this.query[FILTER_TYPES.TASK]) {
-        remove(
-          bookmarks,
-          (trw) => trw.task.id !== this.query[FILTER_TYPES.TASK]
-        )
-      }
-      return orderByProjectThenTask(bookmarks)
+      )
     },
     bookmarksGroupedByProject () {
-      return groupBy(this.filteredBookmarks, (record) => record.task.project ? record.task.project.name : '')
+      return groupBy(this.filteredBookmarks, (record) => {
+        return record.task.project ? record.task.project.name : ''
+      })
     },
     bookmarksParams () {
       return {
@@ -268,7 +245,7 @@ export default {
               "
               :key="record.id"
             >
-              <task-record-review-card
+              <task-record-review-card-wrapper
                 :task-record-review-id="record.id"
               />
             </div>

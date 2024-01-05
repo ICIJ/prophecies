@@ -35,18 +35,19 @@ describe('Bookmarks', () => {
   })
 
   it('should display bookmarked items', async () => {
-    const bookmarks = await wrapper.findAll('task-record-review-card-stub')
-    expect(wrapper.vm.taskRecordReviewIds).toHaveLength(5)
-    expect(bookmarks).toHaveLength(5)
+    const bookmarks = await wrapper.findAll('task-record-review-card-wrapper-stub')
+    expect(wrapper.vm.taskRecordReviewIds).toHaveLength(6)
+    expect(bookmarks).toHaveLength(6)
   })
 
   it('should display bookmarked items grouped by projects then by tasks', async () => {
     const project = await wrapper.findAll('.user-retrieve-bookmarks__project')
+
     expect(project).toHaveLength(2)
     expect(project.at(0).find('h1').text()).toContain('Chronos')
     expect(project.at(1).find('h1').text()).toContain('Demeter')
 
-    expect(wrapper.vm.taskIds).toHaveLength(2)
+    expect(wrapper.vm.taskIds).toHaveLength(3)
     expect(project.at(0).find('h2').text()).toContain('Addresses')
     expect(project.at(1).find('h2').text()).toContain('Shops')
   })
@@ -58,14 +59,14 @@ describe('Bookmarks', () => {
     expect(project).toHaveLength(1)
     expect(project.at(0).find('h1').text()).toContain('Demeter')
     expect(project.at(0).find('h2').text()).toContain('Shops')
-    expect(project.at(0).findAll('task-record-review-card-stub')).toHaveLength(3)
+    expect(project.at(0).findAll('task-record-review-card-wrapper-stub')).toHaveLength(3)
 
     await wrapper.setProps({ query: { 'filter[task]': '1' } })
     project = await wrapper.findAll('.user-retrieve-bookmarks__project')
     expect(project).toHaveLength(1)
     expect(project.at(0).find('h1').text()).toContain('Chronos')
     expect(project.at(0).find('h2').text()).toContain('Addresses')
-    expect(project.at(0).findAll('task-record-review-card-stub')).toHaveLength(2)
+    expect(project.at(0).findAll('task-record-review-card-wrapper-stub')).toHaveLength(2)
   })
 
   it('should show the message "No bookmarks" when list is empty', async () => {

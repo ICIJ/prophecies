@@ -1,13 +1,13 @@
 <script>
 import TaskRecordReview from '@/models/TaskRecordReview'
 import ShortkeyBadge from '@/components/ShortkeyBadge'
-import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
+import TaskRecordReviewCardWrapper from '@/components/TaskRecordReviewCardWrapper'
 
 export default {
   name: 'CinematicView',
   components: {
     ShortkeyBadge,
-    TaskRecordReviewCard
+    TaskRecordReviewCardWrapper
   },
   props: {
     buzy: {
@@ -183,7 +183,7 @@ export default {
     <div class="position-relative">
       <transition :name="transition">
         <div class="cinematic-view__card" :key="id">
-          <task-record-review-card
+          <task-record-review-card-wrapper
             @update="next"
             :task-record-review-id="id"
             :frozen="buzy"

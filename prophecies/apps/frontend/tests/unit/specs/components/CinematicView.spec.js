@@ -30,9 +30,9 @@ describe('CinematicView', () => {
     const propsData = { pageNumber, perPage, taskRecordReviewIds, totalRows }
     wrapper = shallowMount(CinematicView, { attachTo,localVue, propsData, wait, store })
   })
-  
+
   it('should have five reviews', () => {
-    expect(wrapper.vm.taskRecordReviews.count()).toBe(5)
+    expect(wrapper.vm.taskRecordReviews.count()).toBe(6)
   })
 
   it('should have two pending reviews', () => {
@@ -101,7 +101,7 @@ describe('CinematicView', () => {
 
   it('should be on index 5 with the last review', async () => {
     await wrapper.setData({ id: wrapper.vm.taskRecordReviews.last().id })
-    expect(wrapper.vm.progressIndex).toBe(5)
+    expect(wrapper.vm.progressIndex).toBe(6)
   })
 
   it('should be on the first review of the next page', async () => {

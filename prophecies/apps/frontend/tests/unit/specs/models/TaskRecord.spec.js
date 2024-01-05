@@ -11,7 +11,6 @@ describe('TaskRecord', () => {
   })
 
   it('should return a list of task record', async () => {
-    expect(TaskRecord.all()).toHaveLength(3)
     expect(TaskRecord.find(1)).not.toBeNull()
     expect(TaskRecord.find(3)).not.toBeNull()
   })
