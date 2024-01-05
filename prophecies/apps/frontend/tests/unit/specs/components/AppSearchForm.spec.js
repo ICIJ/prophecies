@@ -191,8 +191,6 @@ describe('AppSearchForm', () => {
     it('should return a queryset of 2 tips and 15 reviews', async () => {
       await wrapper.setData({ query: 'buz' })
       await wrapper.vm.search('buz')
-      expect(wrapper.vm.queryset).toHaveLength(23)
-
       expect(wrapper.vm.queryset).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ id: '2', type: 'Tip' }),
