@@ -1,6 +1,7 @@
 <script>
 import { get } from 'lodash'
 
+import TaskRecordMediaView from '@/components/TaskRecordMediaView'
 import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 import HapticCopyButton from '@/components/HapticCopyButton'
 import TaskRecordReview from '@/models/TaskRecordReview'
@@ -29,6 +30,7 @@ export default {
   },
   components: {
     HapticCopyButton,
+    TaskRecordMediaView,
     TaskRecordReviewCard
   },
   computed: {
@@ -40,11 +42,6 @@ export default {
     },
     medias() {
       return get(this, 'taskRecordReview.taskRecord.medias', [])
-    }
-  },
-  methods: {
-    modalMediaId({ id }) {
-      return `modal-task-record-media-${id}`
     }
   }
 }
@@ -61,44 +58,12 @@ export default {
     :frozen="frozen"
     :highlight-note="highlightNote">
     <template #original-value="{ taskRecord }">
-      <div v-for="media in medias" :key="media.id">
+      <div v-for="{ id } in medias" :key="id">
         <div class="task-record-review-card-for-media__media mb-1">
+          <task-record-media-view :task-record-media-id="id" expand />
           <div class="task-record-review-card-for-media__media__original-value">
             <haptic-copy-button :text="taskRecord.originalValue" class="btn-sm py-1 px-2 mx-auto" />
           </div>
-          <template v-if="media.mediaType === 'IMAGE'">
-            <a :href="media.file" target="_blank" v-b-modal="modalMediaId(media)" @click.prevent>
-              <img
-              :alt="taskRecord.originalValue"
-              :src="media.file"
-              class="img-fluid" />
-            </a>
-            <b-modal
-               :id="modalMediaId(media)"
-               content-class="bg-transparent text-center border-0 shadow-none pointer-events-none"
-               header-class="border-0 p-0"
-               dialog-class="mw-100 mx-4 px-3"
-               hide-footer
-               body-class="px-0"
-               lazy
-               size="xl">
-              <template #modal-header="{ close }">
-                <div class="d-flex w-100">
-                  <b-btn class="pointer-events-all px-2 ml-auto text-light" variant="link" @click="close">
-                    <x-icon />
-                    <span class="sr-only">{{ $t('app.close') }}</span>
-                  </b-btn>
-                </div>
-              </template>
-              <div class="pointer-events-all mx-auto d-inline-block">
-                <img
-                  :alt="taskRecord.originalValue"
-                  :src="media.file"
-                  class="img-fluid mb-1 border shadow-lg" />
-                <haptic-copy-button :text="taskRecord.originalValue" class="btn-sm py-1 px-2 mx-auto" />
-              </div>
-            </b-modal>
-          </template>
         </div>
       </div>
     </template>
