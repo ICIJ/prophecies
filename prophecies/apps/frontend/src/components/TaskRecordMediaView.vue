@@ -83,7 +83,7 @@ export default {
         </div>
       </template>
       <div class="pointer-events-all mx-auto d-inline-block">
-        <task-record-media-view :task-record-media-id="taskRecordMediaId" />
+        <task-record-media-view :task-record-media-id="taskRecordMediaId" class="mb-1" />
         <haptic-copy-button :text="taskRecord.originalValue" class="btn-sm py-1 px-2 mx-auto" />
       </div>
     </b-modal>
