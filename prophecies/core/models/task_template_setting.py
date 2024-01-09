@@ -45,11 +45,22 @@ class TaskTemplateSetting(PolymorphicModel):
         Returns:
             list: A list of field names that can be copied.
         """
-        is_field = lambda f: isinstance(f, models.Field)
-        is_related = lambda f: isinstance(f, RelatedField)
-        is_primitive = lambda f: is_field(f) and not is_related(f)
-        is_own = lambda f: f.model is not TaskTemplateSetting
-        is_valid = lambda f: is_primitive(f) and is_own(f)
+
+        def is_field(f):
+            return isinstance(f, models.Field)
+
+        def is_related(f):
+            return isinstance(f, RelatedField)
+
+        def is_primitive(f):
+            return is_field(f) and not is_related(f)
+
+        def is_own(f):
+            return f.model is not TaskTemplateSetting
+
+        def is_valid(f):
+            return is_primitive(f) and is_own(f)
+
         return [f.name for f in cls._meta.get_fields() if is_valid(f)]
 
     def copy_to(self, target, save=True):
