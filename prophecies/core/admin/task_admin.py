@@ -85,6 +85,6 @@ class TaskAdmin(PolymorphicInlineSupportMixin, admin.ModelAdmin):
         template_setting = obj.template_setting.first()
         if template_setting is None:
             return obj.template_type_model.objects.get_or_create(task=obj)
-        elif not isinstance(template_setting, obj.template_type_model):
+        if not isinstance(template_setting, obj.template_type_model):
             return template_setting.convert_or_create(obj.template_type_model)
         return template_setting, False
