@@ -41,6 +41,7 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 # Application definition
 
 INSTALLED_APPS = [
+    "polymorphic",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -123,7 +124,7 @@ STATICFILES_DIRS = [
     project_root.path("apps", "frontend", "dist").root,
 ]
 
-MEDIA_URL = env.str("MEDIA_URL", default='/media/')
+MEDIA_URL = env.str("MEDIA_URL", default="/media/")
 MEDIA_ROOT = env.str("MEDIA_ROOT", default=project_root.path("run", "media"))
 
 # Allow user to update up to 5000 records at the same time
