@@ -34,7 +34,9 @@ class TaskTemplateSetting(PolymorphicModel):
     def for_type(self):
         if not issubclass(self.__class__, TaskTemplateSetting):
             return None
-        return self.__class__.__name__.split("TaskTemplateSettingFor")[-1].capitalize()
+        class_name = self.__class__.__name__
+        type_name = class_name.rsplit("For", maxsplit=1)[-1]
+        return type_name.capitalize()
 
     @classmethod
     def copyable_fields(cls):
