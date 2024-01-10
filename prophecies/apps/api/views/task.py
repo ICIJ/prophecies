@@ -1,12 +1,18 @@
 from functools import lru_cache
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
-from rest_framework_json_api.relations import ResourceRelatedField
-from prophecies.core.models import Task, TaskRecordReview
+from rest_framework_json_api.relations import (
+    ResourceRelatedField,
+    PolymorphicResourceRelatedField,
+)
+from prophecies.core.models import Task, TaskRecordReview, TaskTemplateSetting
 from prophecies.core.models.task_record import StatusType
 from prophecies.apps.api.views.choice_group import ChoiceGroupSerializer
 from prophecies.apps.api.views.project import ProjectSerializer
 from prophecies.apps.api.views.user import UserSerializer
+from prophecies.apps.api.views.task_template_settings import (
+    TaskTemplateSettingSerializer,
+)
 
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
@@ -15,6 +21,11 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     choice_group = ResourceRelatedField(many=False, read_only=True)
     task_records_count = serializers.SerializerMethodField()
     task_records_done_count = serializers.SerializerMethodField()
+    template_setting = PolymorphicResourceRelatedField(
+        TaskTemplateSettingSerializer,
+        queryset=TaskTemplateSetting.objects.all(),
+        many=True,
+    )
     user_task_records_count = serializers.SerializerMethodField()
     user_task_records_done_count = serializers.SerializerMethodField()
     user_progress_by_round = serializers.SerializerMethodField()
@@ -23,10 +34,11 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
         "checkers": UserSerializer,
         "choice_group": ChoiceGroupSerializer,
         "project": ProjectSerializer,
+        "template_setting": TaskTemplateSettingSerializer,
     }
 
     class JSONAPIMeta:
-        included_resources = ["project"]
+        included_resources = ["project", "template_setting"]
 
     class Meta:
         model = Task
@@ -47,12 +59,13 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
             "status",
             "task_records_count",
             "task_records_done_count",
+            "template_setting",
             "template_type",
             "url",
             "user_progress_by_round",
             "user_progress",
             "user_task_records_count",
-            "user_task_records_done_count"
+            "user_task_records_done_count",
         ]
 
     @lru_cache(maxsize=None)
@@ -93,6 +106,7 @@ class TaskViewSet(views.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     prefetch_for_includes = {
         "project": ["project", "project__creator"],
+        "template_setting": ["template_setting"],
         "choice_group": ["choice_group", "choice_group__choices"],
     }
     serializer_class = TaskSerializer
