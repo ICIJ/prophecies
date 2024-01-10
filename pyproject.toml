@@ -21,7 +21,7 @@ django-colorfield = "*"
 django-constance = {extras = [ "database",], version = "2.9.1"}
 django-filter = "*"
 django-crispy-forms = "*"
-djangorestframework-jsonapi = {extras = ["django-polymorphic"], version = "*"}
+djangorestframework-jsonapi = {extras = ["django-polymorphic"], version = "^6.1.0"}
 django-activity-stream = "1.4.1"
 django-jsonfield = "*"
 markdown = "*"
@@ -30,6 +30,7 @@ django-import-export = "2.7.1"
 setuptools = "^69.0.2"
 python-magic = "^0.4.27"
 django-polymorphic = "=3.1.0"
+django-rest-polymorphic = "^0.1.10"
 
 [tool.poetry.group.dev.dependencies]
 time-machine = "*"
