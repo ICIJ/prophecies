@@ -57,7 +57,7 @@ export default {
         const title = this.$t(
           'userRetrieveBookmarks.unableToRetrieveTheBookmarks'
         )
-        // this.$router.replace({ name: 'error', params: { title, error } })
+        this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
     async fetchAll () {
