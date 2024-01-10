@@ -16,6 +16,7 @@ from prophecies.apps.api.views.task_record import TaskRecordViewSet
 from prophecies.apps.api.views.task_record_media import TaskRecordMediaViewSet
 from prophecies.apps.api.views.task_record_review import TaskRecordReviewViewSet
 from prophecies.apps.api.views.task import TaskViewSet
+from prophecies.apps.api.views.task_template_settings import TaskTemplateSettingViewSet
 from prophecies.apps.api.views.user import UserViewSet
 from prophecies.apps.api.views.tip import TipViewSet
 
@@ -37,6 +38,7 @@ router.register(r"projects", ProjectViewSet)
 router.register(r"settings", SettingViewSet, basename="settings")
 router.register(r"operations", OperationViewSet, basename="operations")
 router.register(r"tasks", TaskViewSet)
+router.register(r"task-template-settings", TaskTemplateSettingViewSet)
 router.register(r"task-records", TaskRecordViewSet)
 router.register(r"task-record-media", TaskRecordMediaViewSet)
 router.register(r"task-record-reviews", TaskRecordReviewViewSet)
