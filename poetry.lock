@@ -521,6 +521,23 @@ files = [
 Django = ">=2.1"
 
 [[package]]
+name = "django-rest-polymorphic"
+version = "0.1.10"
+description = "Polymorphic serializers for Django REST Framework."
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-rest-polymorphic-0.1.10.tar.gz", hash = "sha256:2960f58ed9a8bb0d42bc72c8ffaadfbd7f37d2573d42a1cd9a6460f3d572b519"},
+    {file = "django_rest_polymorphic-0.1.10-py2.py3-none-any.whl", hash = "sha256:f3980e3e2af73357e7913f9b1410ef856866bcfcc46903b70fe9621118bb538c"},
+]
+
+[package.dependencies]
+django = "*"
+django-polymorphic = "*"
+djangorestframework = "*"
+six = "*"
+
+[[package]]
 name = "django-webpack-loader"
 version = "2.0.1"
 description = "Transparently use webpack with django"
@@ -1599,4 +1616,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "82a2209157a60dc83376ae25c28096635477717e50c802b3b18e6cb160858cac"
+content-hash = "4e36ea82f7de57580ac83435b6b3646d711b5e68422fc47fb08895bbae7d5f51"
