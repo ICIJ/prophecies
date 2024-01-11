@@ -15,6 +15,10 @@ import TaskChecker from '@/models/TaskChecker'
 import TaskRecord from '@/models/TaskRecord'
 import TaskRecordMedia from '@/models/TaskRecordMedia'
 import TaskRecordReview from '@/models/TaskRecordReview'
+import TaskTemplateSetting from '@/models/TaskTemplateSetting'
+import TaskTemplateSettingForIframe from '@/models/TaskTemplateSettingForIframe'
+import TaskTemplateSettingForMedia from '@/models/TaskTemplateSettingForMedia'
+import TaskTemplateSettingForText from '@/models/TaskTemplateSettingForText'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
 import Tip from '@/models/Tip'
@@ -45,6 +49,10 @@ database.register(TaskRecord)
 database.register(TaskRecordMedia)
 database.register(TaskRecordReview)
 database.register(TaskUserStatistics)
+database.register(TaskTemplateSetting)
+database.register(TaskTemplateSettingForIframe)
+database.register(TaskTemplateSettingForMedia)
+database.register(TaskTemplateSettingForText)
 database.register(TaskUserChoiceStatistics)
 database.register(Tip)
 database.register(User)
