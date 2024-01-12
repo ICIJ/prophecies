@@ -8,6 +8,7 @@ from django.db.models import signals
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+from prophecies.core.models.task_template_setting import TaskTemplateSetting
 from prophecies.core.models.project import Project
 from prophecies.core.models.choice_group import ChoiceGroup
 from prophecies.core.contrib.colors import hex_scale_brightness
@@ -115,6 +116,14 @@ class Task(models.Model):
         choices=TemplateType.choices,
         default=TemplateType.TEXT,
         help_text="Template type to use to display the task.",
+    )
+    template_setting = models.ForeignKey(
+        TaskTemplateSetting,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="task",
+        help_text="Each template type has its own set of settings.",
     )
     created_at = models.DateTimeField(default=timezone.now)
 
