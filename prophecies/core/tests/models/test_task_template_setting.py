@@ -1,9 +1,7 @@
 from django.test import TestCase
 from prophecies.core.models import Task, Project
 from prophecies.core.models.task_template_setting import (
-    TaskTemplateSettingForText as ForText,
     TaskTemplateSettingForMedia as ForMedia,
-    TaskTemplateSettingForIframe as ForIframe,
 )
 
 
