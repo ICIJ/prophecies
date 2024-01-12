@@ -9,7 +9,6 @@ from prophecies.core.models.task_template_setting import (
 
 
 class BaseTaskTemplateSetting(PolymorphicChildModelAdmin):
-    fields = ["task"]
     readonly_fields = ["task"]
 
     def has_module_permission(self, request):
