@@ -123,7 +123,7 @@ class Task(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="task",
-        help_text="Each template type has its own set of settings.",
+        help_text="Each template type has its own set of settings (generated after template template is known)",
     )
     created_at = models.DateTimeField(default=timezone.now)
 

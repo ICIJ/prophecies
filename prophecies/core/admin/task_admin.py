@@ -27,6 +27,11 @@ class TaskAdmin(PolymorphicInlineSupportMixin, admin.ModelAdmin):
     )
     form = TaskAdminForm
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["template_setting"].disabled = True    
+        return form
+
     def task_actions(self, obj):
         path = reverse("admin:core_taskrecord_upload")
         url = f"{path}?task={obj.id}"
