@@ -1,27 +1,14 @@
 from django.db import models
 from django.db.models.fields.related import RelatedField
 from polymorphic.models import PolymorphicModel
-from prophecies.core.models.task import Task
 
 
 class TaskTemplateSetting(PolymorphicModel):
+
     """
     Abstract base class for task template settings, using PolymorphicModel
     to allow for different types of template settings.
     """
-
-    task = models.ForeignKey(
-        Task,
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="template_setting",
-    )
-
-    class Meta:
-        unique_together = (
-            "task_id",
-            "polymorphic_ctype",
-        )
 
     def __str__(self):
         if not self.task:
@@ -81,9 +68,10 @@ class TaskTemplateSetting(PolymorphicModel):
                 setattr(target, field, getattr(self, field))
         if save:
             target.save()
-        return target
+            self.delete()
+        return target, save
 
-    def convert_to(self, cls):
+    def convert_to(self, cls, save=True):
         """
         Converts this instance to an instance of the given TaskTemplateSetting subclass.
 
@@ -98,24 +86,7 @@ class TaskTemplateSetting(PolymorphicModel):
         """
         if not issubclass(cls, TaskTemplateSetting):
             raise ValueError(f"Cannot convert to {cls.__class__.__name__}")
-        return self.copy_to(cls())
-
-    def convert_or_create(self, cls, delete=True):
-        """
-        Converts this instance to an instance of the given subclass, or creates a new instance if not existing.
-
-        Args:
-            cls (TaskTemplateSetting): The subclass to which this instance should be converted or created.
-            delete (bool): If True, this instance is deleted after conversion.
-
-        Returns:
-            tuple: A tuple containing the new or found instance and a boolean indicating if it was created.
-        """
-        new_instance, created = cls.objects.get_or_create(task=self.task)
-        new_instance = self.copy_to(new_instance)
-        if delete:
-            self.delete()
-        return (new_instance, created)
+        return self.copy_to(cls(), save)
 
 
 class TaskTemplateSettingForText(TaskTemplateSetting):

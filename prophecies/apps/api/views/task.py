@@ -24,7 +24,7 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     template_setting = PolymorphicResourceRelatedField(
         TaskTemplateSettingSerializer,
         queryset=TaskTemplateSetting.objects.all(),
-        many=True,
+        many=False,
     )
     user_task_records_count = serializers.SerializerMethodField()
     user_task_records_done_count = serializers.SerializerMethodField()
