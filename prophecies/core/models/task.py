@@ -117,7 +117,7 @@ class Task(models.Model):
         default=TemplateType.TEXT,
         help_text="Template type to use to display the task.",
     )
-    template_setting = models.ForeignKey(
+    template_setting = models.OneToOneField(
         TaskTemplateSetting,
         null=True,
         blank=True,
@@ -285,7 +285,16 @@ class Task(models.Model):
             if instance.creator:
                 action.send(instance.creator, verb="open", target=instance)
 
+    @staticmethod
+    def signal_delete_orphan_template_settings(
+        sender, *args, **kwargs
+    ):  # pylint: disable=unused-argument
+        for task_template_settings in TaskTemplateSetting.objects.all():
+            if not hasattr(task_template_settings, 'task'):
+                task_template_settings.delete()
+
 
 signals.pre_save.connect(Task.signal_log_task_locked, sender=Task)
 signals.pre_save.connect(Task.signal_log_task_closed, sender=Task)
 signals.pre_save.connect(Task.signal_log_task_open, sender=Task)
+signals.post_save.connect(Task.signal_delete_orphan_template_settings, sender=Task)
