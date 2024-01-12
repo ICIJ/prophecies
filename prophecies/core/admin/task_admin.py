@@ -27,9 +27,10 @@ class TaskAdmin(PolymorphicInlineSupportMixin, admin.ModelAdmin):
     )
     form = TaskAdminForm
 
+    # pylint: disable-next=arguments-differ
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        form.base_fields["template_setting"].disabled = True    
+        form.base_fields["template_setting"].disabled = True
         return form
 
     def task_actions(self, obj):
