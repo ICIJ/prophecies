@@ -8,28 +8,27 @@ from prophecies.core.models.task_template_setting import (
 )
 
 
-@admin.register(TaskTemplateSettingForText)
-class TaskTemplateSettingForTextAdmin(PolymorphicChildModelAdmin):
-    base_model = TaskTemplateSettingForText
+class BaseTaskTemplateSetting(PolymorphicChildModelAdmin):
+    fields = ["task"]
+    readonly_fields = ["task"]
 
     def has_module_permission(self, request):
         return False
+
+
+@admin.register(TaskTemplateSettingForText)
+class TaskTemplateSettingForTextAdmin(BaseTaskTemplateSetting):
+    base_model = TaskTemplateSettingForText
 
 
 @admin.register(TaskTemplateSettingForMedia)
-class TaskTemplateSettingForMediaAdmin(PolymorphicChildModelAdmin):
+class TaskTemplateSettingForMediaAdmin(BaseTaskTemplateSetting):
     base_model = TaskTemplateSettingForMedia
-
-    def has_module_permission(self, request):
-        return False
 
 
 @admin.register(TaskTemplateSettingForIframe)
-class TaskTemplateSettingForIframeAdmin(PolymorphicChildModelAdmin):
+class TaskTemplateSettingForIframeAdmin(BaseTaskTemplateSetting):
     base_model = TaskTemplateSettingForIframe
-
-    def has_module_permission(self, request):
-        return False
 
 
 @admin.register(TaskTemplateSetting)
