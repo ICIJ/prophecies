@@ -11,11 +11,9 @@ class TaskTemplateSetting(PolymorphicModel):
     """
 
     def __str__(self):
-        if not self.task:
-            return "Template settings"
         if not issubclass(self.__class__, TaskTemplateSetting):
-            return f"Template settings for {self.task} task"
-        return f"{self.for_type} template settings for {self.task} task"
+            return "Template settings"
+        return f"{self.for_type} template settings"
 
     @property
     def for_type(self):
