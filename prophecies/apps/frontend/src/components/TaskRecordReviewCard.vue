@@ -2,6 +2,7 @@
 import { get, isBoolean, uniqueId } from 'lodash'
 import HapticCopyButton from '@/components/HapticCopyButton'
 import TaskRecordChanges from '@/components/TaskRecordChanges'
+import TaskRecordIframe from '@/components/TaskRecordIframe'
 import TaskRecordReviewActions from '@/components/TaskRecordReviewActions'
 import TaskRecordReviewChoiceForm from '@/components/TaskRecordReviewChoiceForm'
 import TaskRecordReviewHistory from '@/components/TaskRecordReviewHistory'
@@ -17,6 +18,7 @@ export default {
     HapticCopyButton,
     ShortkeyBadge,
     TaskRecordChanges,
+    TaskRecordIframe,
     TaskRecordReviewActions,
     TaskRecordReviewChoiceForm,
     TaskRecordReviewHistory,
@@ -335,14 +337,11 @@ export default {
                   @close="toggleNotes(false)" />
               </b-collapse>
               <b-collapse :visible="showLinkPreview">
-                <iframe
-                  :src="embeddableLinkIfVisible"
-                  class="border"
-                  style="border:0"
-                  loading="lazy"
-                  allowfullscreen
-                  width="100%"
-                  height="400px" />
+                <slot name="embed" :task-record="taskRecord">
+                  <task-record-iframe
+                    :task-record-id="taskRecord.id"
+                    :visible="showLinkPreview" />
+                </slot>
               </b-collapse>
             </div>
           </div>
