@@ -3,6 +3,7 @@ import { get } from 'lodash'
 
 import TaskRecordReview from '@/models/TaskRecordReview'
 import TaskRecordReviewCardForMedia from '@/components/TaskRecordReviewCardForMedia'
+import TaskRecordReviewCardForIframe from '@/components/TaskRecordReviewCardForIframe'
 import TaskRecordReviewCardForText from '@/components/TaskRecordReviewCardForText'
 
 export default {
@@ -32,6 +33,8 @@ export default {
       switch (this.taskTemplateType.toUpperCase()) {
         case 'MEDIA':
           return TaskRecordReviewCardForMedia
+        case 'IFRAME':
+          return TaskRecordReviewCardForIframe
         default:
           return TaskRecordReviewCardForText
       }
