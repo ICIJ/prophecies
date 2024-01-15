@@ -87,7 +87,7 @@ export default {
       return Promise.all(map(uniqueIds, groupId => this.fetchChoiceGroup(groupId)));
     },
     fetchTask (taskId) {
-      const params = { include: 'project,checkers' }
+      const params = { include: 'project,checkers,templateSetting' }
       return Task.api().find(taskId, { params })
     },
     fetchTasks () {

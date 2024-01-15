@@ -1,5 +1,5 @@
 <script>
-import { uniqueId } from 'lodash'
+import { get, uniqueId } from 'lodash'
 import TaskRecordMedia from '@/models/TaskRecordMedia'
 
 import HapticCopyButton from '@/components/HapticCopyButton'
@@ -21,6 +21,8 @@ export default {
     taskRecordMedia() {
       return TaskRecordMedia.query()
         .with('taskRecord')
+        .with('taskRecord.task')
+        .with('taskRecord.task.templateSetting')
         .find(this.taskRecordMediaId)
     },
     taskRecord() {
@@ -34,6 +36,12 @@ export default {
     },
     modalId() {
       return uniqueId(`modal-task-record-media-${this.taskRecordMediaId}-`)
+    },
+    templateSetting() {
+      return get(this, 'taskRecord.task.templateSetting', {})
+    },
+    displayOriginalValue() {
+      return this.templateSetting?.displayOriginalValue
     }
   },
   methods: {
@@ -84,7 +92,7 @@ export default {
       </template>
       <div class="pointer-events-all mx-auto d-inline-block">
         <task-record-media-view :task-record-media-id="taskRecordMediaId" class="mb-1" />
-        <haptic-copy-button :text="taskRecord.originalValue" class="btn-sm py-1 px-2 mx-auto" />
+        <haptic-copy-button v-if="displayOriginalValue" :text="taskRecord.originalValue" class="btn-sm py-1 px-2 mx-auto" />
       </div>
     </b-modal>
   </div>

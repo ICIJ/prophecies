@@ -37,11 +37,19 @@ export default {
     taskRecordReview() {
       return TaskRecordReview.query()
         .with('taskRecord')
+        .with('taskRecord.task')
+        .with('taskRecord.task.templateSetting')
         .with('taskRecord.medias')
         .find(this.taskRecordReviewId)
     },
     medias() {
       return get(this, 'taskRecordReview.taskRecord.medias', [])
+    },
+    templateSetting() {
+      return get(this, 'taskRecordReview.taskRecord.task.templateSetting', {})
+    },
+    displayOriginalValue() {
+      return this.templateSetting?.displayOriginalValue
     }
   }
 }
@@ -61,7 +69,7 @@ export default {
       <div v-for="{ id } in medias" :key="id">
         <div class="task-record-review-card-for-media__media mb-1">
           <task-record-media-view :task-record-media-id="id" expand />
-          <div class="task-record-review-card-for-media__media__original-value">
+          <div v-if="displayOriginalValue" class="task-record-review-card-for-media__media__original-value">
             <haptic-copy-button :text="taskRecord.originalValue" class="btn-sm py-1 px-2 mx-auto" />
           </div>
         </div>

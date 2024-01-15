@@ -288,7 +288,7 @@ export default {
       this.$set(this, 'routeFilters', {})
     },
     async fetchTask () {
-      const params = { include: 'project,checkers' }
+      const params = { include: 'project,checkers,templateSetting' }
       return Task.api().find(this.taskId, { params })
     },
     async fetchChoiceGroup () {
