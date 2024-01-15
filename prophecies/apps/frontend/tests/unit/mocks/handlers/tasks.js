@@ -813,9 +813,25 @@ export default [
                 id: '2'
               }
             ]
+          },
+          templateSetting: {
+              data: {
+                  type: "TaskTemplateSettingForMedia",
+                  id: "10"
+              }
           }
         },
         included: [
+          {
+            type: "TaskTemplateSettingForMedia",
+            id: "10",
+            attributes: {
+              maxWidth: null,
+              maxHeight: null,
+              ratio: null,
+              displayOriginalValue: true
+            }
+          },
           {
             type: 'ChoiceGroup',
             id: '1',
