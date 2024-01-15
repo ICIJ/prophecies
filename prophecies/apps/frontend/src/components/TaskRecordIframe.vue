@@ -14,10 +14,32 @@ export default {
     },
     hidden: {
       type: Boolean
+    },
+    lazy: {
+      type: Boolean
     }
   },
   components: {
     HapticCopyButton,
+  },
+  data () {
+    return {
+      observer: null,
+      isIntersecting: false
+    }
+  },
+  mounted() {
+    if (this.lazy) {
+      this.bindObserver()
+    }
+  },
+  methods: {
+    bindObserver() {
+      this.observer = new IntersectionObserver((entries) => {
+        this.isIntersecting = this.isIntersecting || entries[0].isIntersecting
+      })
+      this.observer.observe(this.$el)
+    }
   },
   computed: {
     taskRecord() {
@@ -33,10 +55,10 @@ export default {
       return get(this, 'taskRecord.embeddableLink')
     },
     embeddableLinkIfVisible() {
-      if (this.hidden) {
-        return 'about:blank'
+      if (this.visible) {
+        return this.embeddableLink
       }
-      return this.embeddableLink
+      return 'about:blank'
     },
     modalId() {
       return uniqueId(`modal-task-record-iframe-${this.taskRecordId}-`)
@@ -48,6 +70,9 @@ export default {
     },
     displayOriginalValue() {
       return this.templateSetting?.displayOriginalValue
+    },
+    visible() {
+      return !this.hidden && (!this.lazy || this.isIntersecting)
     }
   }
 }

@@ -62,7 +62,7 @@ export default {
     :frozen="frozen"
     :highlight-note="highlightNote">
     <template #original-value="{ taskRecord }">
-      <task-record-iframe :task-record-id="taskRecordReview.taskRecordId" expand class="mb-3 " />
+      <task-record-iframe :task-record-id="taskRecordReview.taskRecordId" expand lazy class="mb-3 " />
       <haptic-copy-button v-if="displayOriginalValue" :text="taskRecord.originalValue" class="btn-sm mx-auto py-1 px-2" />
     </template>
     <template #link><span><!-- Disable the display of the record link --></span></template>
