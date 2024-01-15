@@ -4,6 +4,7 @@ import settings from '@/settings'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import Project from '@/models/Project'
 import TaskChecker from '@/models/TaskChecker'
+import TaskTemplateSetting from '@/models/TaskTemplateSetting'
 import User from '@/models/User'
 
 export const TaskStatusEnum = {
@@ -41,6 +42,9 @@ export default class Task extends Model {
       taskRecordsCount: this.number(0),
       taskRecordsDoneCount: this.number(0),
       templateType: this.string(),
+      templateSetting: this.morphTo('templateSettingId', 'templateSettingType'),
+      templateSettingId: this.attr(null),
+      templateSettingType: this.attr(null),
       userProgress: this.number(0),
       userProgressByRound: this.attr(),
       userTaskRecordsCount: this.number(0),
