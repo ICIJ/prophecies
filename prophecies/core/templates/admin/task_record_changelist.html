@@ -1,5 +1,5 @@
 {% extends 'admin/import_export/change_list_export.html' %}
-{% load i18n %}
+{% load i18n admin_list %}
 
 {% block object-tools-items %}
   <li>
@@ -9,5 +9,10 @@
       {% endblocktranslate %}
     </a>
   </li>
+  {{ block.super }}
+{% endblock %}
+
+{% block result_list %}
+  {% pagination cl %}
   {{ block.super }}
 {% endblock %}
