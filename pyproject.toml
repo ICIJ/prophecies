@@ -27,9 +27,9 @@ django-jsonfield = "*"
 markdown = "*"
 django-admin-autocomplete-filter = "*"
 django-import-export = "2.7.1"
-setuptools = "^69.0.2"
+setuptools = "^69.0.3"
 python-magic = "^0.4.27"
-django-polymorphic = "=3.1.0"
+django-polymorphic = "^3.1.0"
 django-rest-polymorphic = "^0.1.10"
 
 [tool.poetry.group.dev.dependencies]
