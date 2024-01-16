@@ -19,6 +19,8 @@ class TaskRecordReviewResource(ExportCsvGeneratorMixin, ModelResource):
 @admin.register(TaskRecordReview)
 class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     resource_class = TaskRecordReviewResource
+    change_list_template = "admin/task_record_review_changelist.html"
+    actions_on_bottom = True
     list_display = ['review_with_details', 'task_with_addon', 'round', 'status_badge']
     list_filter = [
         AutocompleteFilterFactory('task', 'task_record__task'),
