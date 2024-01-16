@@ -61,8 +61,8 @@ INSTALLED_APPS = [
     "constance",
     "import_export",
     "constance.backends.database",
+    "prophecies.core.PropheciesConfig",
     "prophecies.apps.api",
-    "prophecies.core",
 ]
 
 MIDDLEWARE = [

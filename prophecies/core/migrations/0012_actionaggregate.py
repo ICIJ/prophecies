@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-from prophecies.apps import create_aggregate_on_action_save
+from prophecies.core import create_aggregate_on_action_save
 
 
 def create_aggregates(apps, schema_editor):
