@@ -54,7 +54,7 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     ]
     inlines = [TaskRecordReviewInline, ]
     actions = ['assign_action']
-    search_fields = ['original_value', 'predicted_value', 'metadata', 'link']
+    search_fields = ['id', 'uid', 'original_value', 'predicted_value', 'metadata', 'link']
 
     def get_queryset(self, request):
         return super().get_queryset(request) \
