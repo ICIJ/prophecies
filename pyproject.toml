@@ -7,8 +7,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-django = "==3.2.23"
-djangorestframework = "3.13.1"
+django = "==4.2.9"
+djangorestframework = "^3.14"
 django-cors-headers = "*"
 django-debug-toolbar = "*"
 django-environ = "*"
@@ -22,7 +22,7 @@ django-constance = {extras = [ "database",], version = "2.9.1"}
 django-filter = "*"
 django-crispy-forms = "*"
 djangorestframework-jsonapi = {extras = ["django-polymorphic"], version = "^6.1.0"}
-django-activity-stream = "1.4.1"
+django-activity-stream = "^1.4"
 django-jsonfield = "*"
 markdown = "*"
 django-admin-autocomplete-filter = "*"
