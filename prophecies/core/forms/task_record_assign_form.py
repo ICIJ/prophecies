@@ -10,14 +10,16 @@ class TaskRecordAssignForm(forms.Form):
     round = forms.IntegerField(required=False, min_value=1,
                                help_text="Leave empty to select the round automatically "
                                          "based on the latest record's attribution.")
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if 'initial' in kwargs and 'task_records' in kwargs['initial']:
             task_ids = kwargs['initial']['task_records'].values_list('task_id', flat=True)
             tasks = Task.objects.filter(id__in=task_ids)
             self.fields['checker'].queryset = tasks.checkers()
-            self.fields['round'] = forms.IntegerField(required=False, min_value=1, max_value=tasks.min_round(), help_text=self.fields['round'].help_text)
+            self.fields['round'] = forms.IntegerField(required=False, min_value=1, 
+                                                        max_value=tasks.min_round(), 
+                                                        help_text=self.fields['round'].help_text)
 
     def clean(self):
         super().clean()
