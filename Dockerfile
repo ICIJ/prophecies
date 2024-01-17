@@ -5,7 +5,8 @@ RUN mkdir /frontend/
 WORKDIR /frontend/
 COPY ./prophecies/apps/frontend/ /frontend/
 
-RUN yarn
+RUN yarn config set network-timeout 300000
+RUN yarn --non-interactive --production=false
 RUN yarn build
 
 FROM python:3.9
