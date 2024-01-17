@@ -1,6 +1,7 @@
 'use strict';
+
 (function () {
-  if (!django) {
+  if (!window.django) {
     return
   }
 

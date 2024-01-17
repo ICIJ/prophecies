@@ -1,5 +1,10 @@
 'use strict';
+
 (function () {
+  if (!window.django) {
+    return
+  }
+
   const $ = django.jQuery
 
   $.fn.adminSelect2 = function () {
