@@ -1,4 +1,4 @@
-FROM node:14 AS webpack
+FROM node:18 AS webpack
 
 RUN mkdir /frontend/
 WORKDIR /frontend/
