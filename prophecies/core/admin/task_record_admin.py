@@ -1,10 +1,12 @@
 from textwrap import shorten
 from admin_auto_filters.filters import AutocompleteFilterFactory
+from django.db.models.functions import Lower
 from django.contrib import admin, messages
 from django.contrib.admin.helpers import AdminForm
 from django.shortcuts import redirect, render
 from django.urls import path
 from django.utils.html import format_html
+
 from import_export.resources import ModelResource
 
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon, display_task_record_link
@@ -38,9 +40,10 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     resource_class = TaskRecordResource
     change_list_template = "admin/task_record_changelist.html"
     actions_on_bottom = True
+    ordering = ('-id',)
     exclude = ['metadata', 'rounds', 'link', 'status']
     readonly_fields = ['round_count', 'status_badge', 'computed_link', 'metadata_json']
-    list_display = ['task_record_excerpt', 'task_with_addon', 'round_count', 'status_badge']
+    list_display = ['task_record_excerpt', 'original_value_truncated', 'task_with_addon', 'round_count', 'status_badge']
     list_filter = [
         AutocompleteFilterFactory('task', 'task'),
         AutocompleteFilterFactory('project', 'task__project'),
@@ -64,46 +67,51 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
             .prefetch_related('reviews') \
             .prefetch_related('reviews__checker')
 
+    @admin.display(description='Record', ordering='pk')
     def task_record_excerpt(self, task_record):
         record_title = str(task_record)
-        excerpt = shorten(task_record.original_value, width=140, placeholder='...')
         checkers = task_record.checkers_pretty
-        context = dict(record_title=record_title, excerpt=excerpt, checkers=checkers)
+        context = dict(record_title=record_title, checkers=checkers)
         template = """
             <div class="task-record-display">
                 <div>{record_title}</div>
-                <div class="font-weight-light text-quiet">{excerpt}</div>
                 <div class="task-record-display__checkers text-quiet">{checkers}</div>
             </div>
         """
         return format_html(template, **context)
 
-    task_record_excerpt.short_description = "Record"
-
-    def metadata_json(self, task_record):
-        return display_json(task_record.metadata)
-
-    metadata_json.short_description = "Metadata"
-
+    @admin.display(description='Record', ordering='rounds')
     def round_count(self, task_record):
         return f'{task_record.rounds}/{task_record.task.rounds}'
+    
+    @admin.display(description='Original value', ordering=Lower('original_value'))
+    def original_value_truncated(self, task_record):
+        context = dict(
+            original_value=task_record.original_value,
+            original_value_truncated=shorten(task_record.original_value, width=50, placeholder='...')
+        )
+        template = """
+            <span title="{original_value}" class="font-weight-light text-quiet">
+                {original_value_truncated}
+            </span>
+        """
+        return format_html(template, **context)
 
-    round_count.short_description = "Round"
-
-    def computed_link(self, task_record):
-        return display_task_record_link(task_record)
-
-    computed_link.short_description = "Link"
-
-    def status_badge(self, task_record):
-        return display_status(task_record.get_status_display())
-
-    status_badge.short_description = "Status"
-
+    @admin.display(description='Task', ordering='task__name')
     def task_with_addon(self, task_record):
         return display_task_addon(task_record.task)
 
-    task_with_addon.short_description = "Task"
+    @admin.display(description="Status", ordering='status')
+    def status_badge(self, task_record):
+        return display_status(task_record.get_status_display())
+
+    @admin.display(description="Metadata")
+    def metadata_json(self, task_record):
+        return display_json(task_record.metadata)
+
+    @admin.display(description="Link")
+    def computed_link(self, task_record):
+        return display_task_record_link(task_record)
 
     def get_urls(self):
         urls = [
