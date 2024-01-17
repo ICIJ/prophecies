@@ -4,7 +4,7 @@ from django.apps import apps
 from django.core.cache import cache
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import signals, Max
+from django.db.models import signals, Min
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -35,6 +35,9 @@ class TaskQuerySet(models.QuerySet):
         checkers_list = (task.checkers.all() for task in self.all())
         return User.objects.intersection(*checkers_list)
 
+    def min_round(self):
+        return self.aggregate(Min("rounds"))['rounds__min'] or 1
+    
 
 class TaskManager(models.Manager):
     def user_scope(self, user):

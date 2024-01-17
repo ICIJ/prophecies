@@ -42,6 +42,27 @@ class TaskRecordAssignFormTests(TestCase):
         form = TaskRecordAssignForm(initial=initial)
         self.assertEqual(form.fields["checker"].queryset.count(), 1)
 
+    def test_limit_rounds_to_two_for_art(self):
+        task_record_ids = [self.task_record_blue.id]
+        task_records = TaskRecord.objects.filter(id__in=task_record_ids)
+        initial = {"task_records": task_records}
+        form = TaskRecordAssignForm(initial=initial)
+        self.assertEqual(form.fields["round"].max_value, 2)
+
+    def test_limit_rounds_to_three_for_shop(self):
+        task_record_ids = [self.task_record_bakery.id]
+        task_records = TaskRecord.objects.filter(id__in=task_record_ids)
+        initial = {"task_records": task_records}
+        form = TaskRecordAssignForm(initial=initial)
+        self.assertEqual(form.fields["round"].max_value, 3)
+
+    def test_limit_rounds_to_two_for_art_and_shop(self):
+        task_record_ids = [self.task_record_blue.id, self.task_record_bakery.id]
+        task_records = TaskRecord.objects.filter(id__in=task_record_ids)
+        initial = {"task_records": task_records}
+        form = TaskRecordAssignForm(initial=initial)
+        self.assertEqual(form.fields["round"].max_value, 2)
+
     def test_missing_checker_isnt_valid(self):
         task_records = [self.task_record_blue, self.task_record_pink]
         data = {"task_records": task_records, "checker": None}
