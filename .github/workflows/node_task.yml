@@ -1,0 +1,41 @@
+name: Node Task
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: true
+        default: '["16.x"]'
+        type: string
+      command:
+        required: true
+        type: string
+
+jobs:
+  node-job:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 2
+      matrix:
+        node-version: ${{fromJson(inputs.node-version)}}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn' 
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ matrix.node-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install Node dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Run specified command
+        run: ${{ inputs.command }}
