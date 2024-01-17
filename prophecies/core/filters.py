@@ -31,11 +31,11 @@ class TaskRecordFilter(FilterSet):
     def reviewed_filter(self, queryset, name, value):
         if value == '0':
             return queryset \
-                .filter(reviews__status=StatusType.PENDING)
+                .filter(reviews__status=StatusType.UNASSIGNED)
         if value == '1':
             return queryset \
                 .filter(reviews__status=StatusType.DONE) \
-                .exclude(reviews__status=StatusType.PENDING)
+                .exclude(reviews__status=StatusType.UNASSIGNED)
         return queryset
 
 

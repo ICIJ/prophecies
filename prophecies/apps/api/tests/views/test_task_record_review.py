@@ -568,7 +568,7 @@ class TestTaskRecordReview(TestCase):
         self.assertEqual(self.task_record_foo.reviews.count(), 0)
         self.assertEqual(len(self.task_record_foo.reviews.done()), 0)
         self.assertEqual(len(self.task_record_foo.reviews.pending()), 0)
-        self.assertEqual(self.task_record_foo.status, StatusType.PENDING)
+        self.assertEqual(self.task_record_foo.status, StatusType.UNASSIGNED)
         self.assertEqual(len(TaskUserStatistics.objects.all()), 0)
 
     def test_it_includes_task_record_review_media(self):
