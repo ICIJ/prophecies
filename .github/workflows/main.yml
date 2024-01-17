@@ -2,6 +2,10 @@ name: Prophecies - CI
 
 on:
   push:
+    branches:
+      - '*'
+    tags:
+      - '*'
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.head_ref || github.ref }}'
@@ -25,3 +29,39 @@ jobs:
     with:
       node-version: '["16.x", "18.x"]'
       command: make test-front
+
+  docker-publish:
+    needs: [lint-backend, test-backend, test-frontend]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm/v6
+          - linux/arm/v7
+          - linux/arm64
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: icij/prophecies:test-${{ github.ref_name }}
+          registry: registry.hub.docker.com
+          platforms: ${{ matrix.platform }}
