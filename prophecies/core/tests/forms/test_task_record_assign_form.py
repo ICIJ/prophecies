@@ -9,19 +9,38 @@ class TaskRecordAssignFormTests(TestCase):
         self.olivia = User.objects.create(username='olivia')
         self.pierre = User.objects.create(username='pierre')
         self.maxime = User.objects.create(username='maxime')
+        self.soline = User.objects.create(username='soline')
         self.project = Project.objects.create(name='Pencil Papers')
-        self.task = Task.objects.create(name='Art', project=self.project, color='#fe6565', rounds=2)
-        self.task_record_blue = TaskRecord.objects.create(original_value='blue', task=self.task)
-        self.task_record_pink = TaskRecord.objects.create(original_value='pink', task=self.task)
-        self.task.checkers.add(self.olivia)
-        self.task.checkers.add(self.pierre)
-        self.task.checkers.add(self.maxime)
+        self.art = Task.objects.create(name='Art', project=self.project, color='#fe6565', rounds=2)
+        self.shop = Task.objects.create(name='Shop', project=self.project, rounds=3)
+        self.task_record_blue = TaskRecord.objects.create(original_value='blue', task=self.art)
+        self.task_record_pink = TaskRecord.objects.create(original_value='pink', task=self.art)
+        self.art.checkers.add(self.olivia)
+        self.art.checkers.add(self.pierre)
+        self.art.checkers.add(self.maxime)
+        self.task_record_bakery = TaskRecord.objects.create(original_value='bakery', task=self.shop)
+        self.shop.checkers.add(self.maxime)
+        self.shop.checkers.add(self.soline)
 
     def test_is_valid(self):
         task_records = [self.task_record_blue, self.task_record_pink]
         data = {"task_records": task_records, "checker": self.olivia}
         form = TaskRecordAssignForm(data)
         self.assertTrue(form.is_valid())
+
+    def test_show_the_art_checkers(self):
+        task_record_ids = [self.task_record_blue.id, self.task_record_pink.id]
+        task_records = TaskRecord.objects.filter(id__in=task_record_ids)
+        initial = {"task_records": task_records}
+        form = TaskRecordAssignForm(initial=initial)
+        self.assertEqual(form.fields["checker"].queryset.count(), 3)
+
+    def test_show_the_art_and_shop_checker(self):
+        task_record_ids = [self.task_record_blue.id, self.task_record_bakery.id]
+        task_records = TaskRecord.objects.filter(id__in=task_record_ids)
+        initial = {"task_records": task_records}
+        form = TaskRecordAssignForm(initial=initial)
+        self.assertEqual(form.fields["checker"].queryset.count(), 1)
 
     def test_missing_checker_isnt_valid(self):
         task_records = [self.task_record_blue, self.task_record_pink]
@@ -71,8 +90,8 @@ class TaskRecordAssignFormTests(TestCase):
         self.assertEqual(olivia_reviews_count, 2)
 
     def test_it_can_assign_a_record_twice_to_olivia(self):
-        self.task.allow_multiple_checks = True
-        self.task.save()
+        self.art.allow_multiple_checks = True
+        self.art.save()
         task_records = [self.task_record_blue]
         data = {"task_records": task_records, "checker": self.olivia}
         self.assertEqual(TaskRecordAssignForm(data).is_valid(), True)
@@ -80,8 +99,8 @@ class TaskRecordAssignFormTests(TestCase):
         self.assertEqual(TaskRecordAssignForm(data).is_valid(), True)
 
     def test_it_cannot_assign_a_record_twice_to_olivia(self):
-        self.task.allow_multiple_checks = False
-        self.task.save()
+        self.art.allow_multiple_checks = False
+        self.art.save()
         task_records = [self.task_record_blue]
         data = {"task_records": task_records, "checker": self.olivia}
         self.assertEqual(TaskRecordAssignForm(data).is_valid(), True)
