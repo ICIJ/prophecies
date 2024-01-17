@@ -1,16 +1,15 @@
-from textwrap import shorten
 from admin_auto_filters.filters import AutocompleteFilterFactory
-from django.db.models.functions import Lower
 from django.contrib import admin, messages
 from django.contrib.admin.helpers import AdminForm
 from django.shortcuts import redirect, render
+from django.template.defaultfilters import truncatechars
 from django.urls import path
 from django.utils.html import format_html
 
 from import_export.resources import ModelResource
 
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon, display_task_record_link
-from prophecies.core.forms import TaskRecordAssignForm, TaskRecordUploadForm
+from prophecies.core.forms import TaskRecordAssignForm, TaskRecordUploadForm, TaskRecordChangelistForm
 from prophecies.core.models import TaskRecord, TaskRecordReview
 from prophecies.core.admin.filters import DistinctValuesDropdownFilter, ReviewedTaskRecordFilter
 from prophecies.core.mixins import ExportWithCsvStreamMixin, ExportCsvGeneratorMixin
@@ -43,7 +42,8 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     ordering = ('-id',)
     exclude = ['metadata', 'rounds', 'link', 'status']
     readonly_fields = ['round_count', 'status_badge', 'computed_link', 'metadata_json']
-    list_display = ['task_record_excerpt', 'original_value_truncated', 'task_with_addon', 'round_count', 'status_badge']
+    list_display = ['task_record_excerpt', 'original_value', 'task_with_addon', 'round_count', 'status_badge']
+    list_editable = ['original_value']
     list_filter = [
         AutocompleteFilterFactory('task', 'task'),
         AutocompleteFilterFactory('project', 'task__project'),
@@ -60,6 +60,10 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     actions = ['assign_action']
     search_fields = ['id', 'uid', 'original_value', 'predicted_value', 'metadata', 'link']
 
+    def get_changelist_form(self, request, **kwargs):
+        kwargs.setdefault('form', TaskRecordChangelistForm)
+        return super().get_changelist_form(request, **kwargs)
+
     def get_queryset(self, request):
         return super().get_queryset(request) \
             .prefetch_related('task') \
@@ -71,10 +75,13 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     def task_record_excerpt(self, task_record):
         record_title = str(task_record)
         checkers = task_record.checkers_pretty
-        context = dict(record_title=record_title, checkers=checkers)
+        uid = task_record.uid
+        uid_truncated = '' if uid is None else truncatechars(uid, 50)
+        context = dict(record_title=record_title, checkers=checkers, uid=uid, uid_truncated=uid_truncated)
         template = """
             <div class="task-record-display">
                 <div>{record_title}</div>
+                <div title="{uid}" class="font-weight-normal text-quiet text-monospace">{uid_truncated}</div>
                 <div class="task-record-display__checkers text-quiet">{checkers}</div>
             </div>
         """
@@ -83,19 +90,6 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     @admin.display(description='Record', ordering='rounds')
     def round_count(self, task_record):
         return f'{task_record.rounds}/{task_record.task.rounds}'
-
-    @admin.display(description='Original value', ordering=Lower('original_value'))
-    def original_value_truncated(self, task_record):
-        context = dict(
-            original_value=task_record.original_value,
-            original_value_truncated=shorten(task_record.original_value, width=50, placeholder='...')
-        )
-        template = """
-            <span title="{original_value}" class="font-weight-light text-quiet">
-                {original_value_truncated}
-            </span>
-        """
-        return format_html(template, **context)
 
     @admin.display(description='Task', ordering='task__name')
     def task_with_addon(self, task_record):

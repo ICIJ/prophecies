@@ -88,6 +88,12 @@ body {
     font-weight: 600;
 }
 
+#changelist .textarea-autogrow {
+    width: 100%;
+    max-width: 28rem;
+    box-sizing: border-box;
+}
+
 #changelist #changelist-filter li.selected:not(:first-of-type) {
     background: var(--selected-bg);
     font-weight: bold;
