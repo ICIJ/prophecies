@@ -83,7 +83,7 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     @admin.display(description='Record', ordering='rounds')
     def round_count(self, task_record):
         return f'{task_record.rounds}/{task_record.task.rounds}'
-    
+
     @admin.display(description='Original value', ordering=Lower('original_value'))
     def original_value_truncated(self, task_record):
         context = dict(
