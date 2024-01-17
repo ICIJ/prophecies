@@ -17,8 +17,8 @@ class TaskRecordAssignForm(forms.Form):
             task_ids = kwargs['initial']['task_records'].values_list('task_id', flat=True)
             tasks = Task.objects.filter(id__in=task_ids)
             self.fields['checker'].queryset = tasks.checkers()
-            self.fields['round'] = forms.IntegerField(required=False, min_value=1, 
-                                                        max_value=tasks.min_round(), 
+            self.fields['round'] = forms.IntegerField(required=False, min_value=1,
+                                                        max_value=tasks.min_round(),
                                                         help_text=self.fields['round'].help_text)
 
     def clean(self):
