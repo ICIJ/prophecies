@@ -28,14 +28,14 @@ jobs:
 
   docker-publish:
     needs: [lint-backend, test-backend, test-frontend]
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         platform:
           - linux/amd64
-          - linux/arm64
-          - linux/arm/v7
+          - linux/arm64   
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -57,5 +57,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: icij/prophecies:test-${{ github.sha }}
+          tags: icij/prophecies:${{ github.ref_name[1:] }},icij/prophecies:latest
           platforms: ${{ matrix.platform }}
