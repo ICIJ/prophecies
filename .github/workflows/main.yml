@@ -58,6 +58,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: icij/prophecies:test-${{ github.ref_name }}
+          tags: icij/prophecies:test-${{ github.sha }}
           registry: registry.hub.docker.com
           platforms: ${{ matrix.platform }}
