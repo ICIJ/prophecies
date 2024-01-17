@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
 
-:root {
+html[data-theme="light"], html[data-theme="dark"], :root {
     --primary: #235B59;
     --secondary: #31807D;
     --quiet: #515858;
@@ -41,6 +41,20 @@
     --message-error-bg: var(--danger);
 
     --nav-sidebar-width: 305px;
+}
+
+html[data-theme="dark"] {
+    --quiet: #999;
+
+    --body-bg: #212121;
+    --body-fg: #fff;
+    --body-loud-color: #fff;
+    --darkened-bg: #111;
+    --border-color: #444;
+    --hairline-color: var(--border-color);
+    
+    --header-color: #fff;
+    --header-bg: #235B59;
 }
 
 body {
