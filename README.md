@@ -4,7 +4,7 @@ An ICIJ app to conduct data validation and cleaning.
 
 | | Status |
 | ---: | --- |
-| **CI checks** | [![CircleCI](https://circleci.com/gh/ICIJ/prophecies/tree/main.svg?style=shield)](https://circleci.com/gh/ICIJ/prophecies/tree/main) |
+| **CI checks** | [![](https://img.shields.io/github/actions/workflow/status/icij/prophecies/main.yml)](https://github.com/ICIJ/prophecies/actions) |
 | **Docker** | [![Docker](https://img.shields.io/docker/v/icij/prophecies?color=%2350ca22)](https://hub.docker.com/repository/docker/icij/prophecies) |
 | **Code Climate** | [![Maintainability](https://img.shields.io/codeclimate/maintainability/ICIJ/prophecies)](https://codeclimate.com/github/ICIJ/prophecies/maintainability) |
 
