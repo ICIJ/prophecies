@@ -87,7 +87,7 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
         """
         return format_html(template, **context)
 
-    @admin.display(description='Record', ordering='rounds')
+    @admin.display(description='Rounds', ordering='rounds')
     def round_count(self, task_record):
         return f'{task_record.rounds}/{task_record.task.rounds}'
 
