@@ -40,7 +40,7 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root 
           
-      - name: Build PLD
+      - name: Build Prophecies
         run: poetry build
           
       - name: Run the tests with pytest
