@@ -9,13 +9,13 @@ concurrency:
 
 jobs:
   lint-backend:
-    uses: ./.github/workflows/python_tasks.yml
+    uses: ./.github/workflows/python_task.yml
     with:
-      python-version: '["3.9"]'
+      python-version: ["3.9"]
       command: poetry run pylint prophecies
 
   test-backend:
-    uses: ./.github/workflows/python_tasks.yml
+    uses: ./.github/workflows/python_task.yml
     with:
-      python-version: '["3.9", "3.10"]'
+      python-version: ["3.9", "3.10"]
       command: make test-back
