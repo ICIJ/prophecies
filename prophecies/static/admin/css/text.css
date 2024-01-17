@@ -1,3 +1,7 @@
+.text-monospace {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 .text-justify {
     text-align: justify !important;
 }
