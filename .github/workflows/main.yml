@@ -52,10 +52,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
+      - name: Prepare tag name
+        id: prep
+        run: echo "TAG_NAME=$(echo ${GITHUB_REF#refs/tags/v})" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: icij/prophecies:${{ github.ref_name[1:] }},icij/prophecies:latest
+          tags: icij/prophecies:${{ env.TAG_NAME }},icij/prophecies:latest
           platforms: ${{ matrix.platform }}
