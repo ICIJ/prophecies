@@ -4,7 +4,7 @@ from django.apps import apps
 from django.core.cache import cache
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import signals
+from django.db.models import signals, Max
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -30,6 +30,10 @@ class TaskQuerySet(models.QuerySet):
     def user_scope(self, user):
         projects = self.filter(checkers=user).values("project")
         return self.filter(project__in=projects)
+
+    def checkers(self):
+        checkers_list = (task.checkers.all() for task in self.all())
+        return User.objects.intersection(*checkers_list)
 
 
 class TaskManager(models.Manager):
@@ -290,7 +294,7 @@ class Task(models.Model):
         sender, *args, **kwargs
     ):  # pylint: disable=unused-argument
         for task_template_settings in TaskTemplateSetting.objects.all():
-            if not hasattr(task_template_settings, 'task'):
+            if not hasattr(task_template_settings, "task"):
                 task_template_settings.delete()
 
 
