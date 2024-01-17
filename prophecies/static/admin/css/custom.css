@@ -27,6 +27,7 @@ html[data-theme="light"], html[data-theme="dark"], :root {
     --hairline-color: #efefef;
     --border-color: #bebfbf;
     --link-fg: var(--secondary);
+    --link-selected-fg: #31807D;
     --link-hover-color: #31807D;
 
     --header-color: #fff;
