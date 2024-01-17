@@ -12,7 +12,7 @@ from prophecies.core.models.task import Task
 
 
 class StatusType(models.TextChoices):
-    PENDING = 'PENDING', _('Pending')
+    UNASSIGNED = 'UNASSIGNED', _('Unassigned')
     ASSIGNED = 'ASSIGNED', _('Assigned')
     DONE = 'DONE', _('Done')
 
@@ -24,8 +24,8 @@ class TaskRecordManager(models.Manager):
             return None
         return self.filter(uid=uid, task=task).first()
 
-    def pending(self):
-        return self.filter(status=StatusType.PENDING)
+    def unassigned(self):
+        return self.filter(status=StatusType.UNASSIGNED)
 
     def assigned(self):
         return self.filter(status=StatusType.ASSIGNED)
@@ -43,7 +43,7 @@ class TaskRecord(models.Model):
     original_value = models.TextField(blank=True, null=True, help_text="Original value of the record")
     predicted_value = models.TextField(blank=True, null=True, help_text="Suggested value to be reviewed")
     metadata = models.JSONField(blank=True, null=True, help_text="Optional metadata for this record (in JSON)")
-    status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.PENDING, max_length=8,
+    status = models.CharField(blank=True, choices=StatusType.choices, default=StatusType.UNASSIGNED, max_length=10,
                               help_text="Status of the record. Set to done after it passes all task's rounds")
     rounds = models.PositiveIntegerField(default=0, help_text="Number of rounds this record was submitted to")
     priority = models.PositiveIntegerField(default=1, verbose_name="Priority")
@@ -106,7 +106,7 @@ class TaskRecord(models.Model):
 
     def computed_status(self):
         if self.reviews.count() == 0:
-            return StatusType.PENDING
+            return StatusType.UNASSIGNED
         if self.reviews.done().count() >= self.task.rounds:
             return StatusType.DONE
         return StatusType.ASSIGNED
