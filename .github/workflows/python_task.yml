@@ -1,10 +1,11 @@
-name: Python Tasks
+name: Python Task
 
 on:
   workflow_call:
     inputs:
       python-version:
         required: true
+        default: '["3.9"]'
         type: string
       command:
         required: true
@@ -16,7 +17,7 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        python-version: ${{fromJson(inputs.python-version || '["3.9"]')}}
+        python-version: ${{fromJson(inputs.python-version)}}
     steps:
       - uses: actions/checkout@v3
 
