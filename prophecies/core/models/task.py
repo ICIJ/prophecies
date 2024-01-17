@@ -37,7 +37,7 @@ class TaskQuerySet(models.QuerySet):
 
     def min_round(self):
         return self.aggregate(Min("rounds"))['rounds__min'] or 1
-    
+
 
 class TaskManager(models.Manager):
     def user_scope(self, user):
