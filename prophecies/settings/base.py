@@ -20,7 +20,7 @@ BASE_DIR = root()
 sys.path.append(normpath(project_root.path("apps")))
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str(
@@ -114,7 +114,7 @@ WEBPACK_LOADER = {
 WSGI_APPLICATION = "prophecies.wsgi.application"
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = env.str("STATIC_URL", default="/static/")
 STATIC_ROOT = env.str("STATIC_ROOT", default=project_root.path("run", "static"))
@@ -124,14 +124,46 @@ STATICFILES_DIRS = [
     project_root.path("apps", "frontend", "dist").root,
 ]
 
-MEDIA_URL = env.str("MEDIA_URL", default="/media/")
-MEDIA_ROOT = env.str("MEDIA_ROOT", default=project_root.path("run", "media"))
+# Media Storage
+# https://docs.djangoproject.com/en/4.2/topics/files/
+# https://django-dbbackup.readthedocs.io/en/master/storage.html
 
 # Allow user to update up to 5000 records at the same time
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000
+MEDIA_STORAGE = env.str("MEDIA_STORAGE", "FS").upper()
+
+# S3 Storage Configurations
+if MEDIA_STORAGE == "S3":
+    MEDIA_ROOT = env.str("MEDIA_ROOT", default="/media/")
+    MEDIA_URL = env.str("MEDIA_URL", default="https://{AWS_S3_CUSTOM_DOMAIN}/")
+
+    STORAGES = {
+        "default": {
+            "BACKEND": "prophecies.core.storages.S3MediaStorage",
+            "OPTIONS": {
+                "access_key": env("AWS_ACCESS_KEY_ID"),
+                "secret_key": env("AWS_SECRET_ACCESS_KEY"),
+                "bucket_name": env("AWS_STORAGE_BUCKET_NAME"),
+                "region_name": env("AWS_S3_REGION_NAME"),
+                "default_acl": None,
+                "object_parameters": {"CacheControl": "max-age=86400"},
+                "signature_version": env.str("AWS_S3_SIGNATURE_VERSION", "s3v4"),
+                "querystring_expire": env.str("AWS_QUERYSTRING_EXPIRE", "3600"),
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+
+# Filesystem Storage Configurations
+else:
+    MEDIA_URL = env.str("MEDIA_URL", default="/media/")
+    MEDIA_ROOT = env.str("MEDIA_ROOT", default=project_root.path("run", "media"))
+
 
 # Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 # https://github.com/jacobian/dj-database-url#url-schema
 
 DATABASES = {
@@ -298,7 +330,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Cache
-# https://docs.djangoproject.com/en/2.2/topics/cache/
+# https://docs.djangoproject.com/en/4.2/topics/cache/
 # https://django-environ.readthedocs.io/en/latest/index.html#multiple-redis-cache-locations
 CACHES = {"default": env.cache("CACHE_URL", default="dummycache://")}
 
