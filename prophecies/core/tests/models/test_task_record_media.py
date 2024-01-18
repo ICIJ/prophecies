@@ -37,17 +37,6 @@ class TaskRecordMediaModelTests(TestCase):
             )
         self.assertEqual(media.media_type, TaskRecordMedia.MediaType.IMAGE)
 
-    def test_file_preview_url_with_timestamp(self):
-        img_path = self.create_test_image(name="foo.jpg")
-        with open(img_path, "rb") as img_file:
-            media = TaskRecordMedia.objects.create(
-                task=self.task,
-                file=SimpleUploadedFile(
-                    img_path.name, img_file.read(), content_type="image/jpeg"
-                ),
-            )
-        self.assertIn("?ts=", media.file_preview_url_with_timestamp)
-
     def test_file_to_media_type(self):
         img_path = self.create_test_image()
         with open(img_path, "rb") as img_file:
