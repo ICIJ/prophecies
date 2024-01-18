@@ -30,4 +30,6 @@ if not settings.DJANGO_ADMIN_LOGIN:
 
 if settings.DEBUG:
     urlpatterns = urlpatterns + [path('__debug__/', include(debug_toolbar.urls)), ]
+
+if settings.MEDIA_STORAGE == 'FS':
     urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
