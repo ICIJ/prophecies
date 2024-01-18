@@ -9,7 +9,7 @@ class MimeTypeValidator:
     messages = {"not_supported": "File type is not supported."}
 
     @staticmethod
-    def allowed_mine_types():
+    def allowed_mime_types():
         from prophecies.core.models import TaskRecordMedia
 
         return TaskRecordMedia.mime_types()
