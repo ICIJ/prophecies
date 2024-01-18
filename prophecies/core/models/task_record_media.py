@@ -72,9 +72,9 @@ class TaskRecordMedia(models.Model):
         return TaskRecordMedia.mime_to_media_type(self.mime_type)
 
     @property
-    def file_preview_url_with_timestamp(self):
+    def file_preview_url(self):
         if self.file and self.media_type == TaskRecordMedia.MediaType.IMAGE:
-            return f"{self.file.url}?ts={self.updated_at.timestamp()}"
+            return f"{self.file.url}"
         return None
 
     @staticmethod

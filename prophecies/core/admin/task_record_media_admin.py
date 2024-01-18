@@ -43,7 +43,7 @@ class TaskRecordMediaAdmin(admin.ModelAdmin):
 
     @admin.display(description=_("Preview"), ordering="pk")
     def preview(self, media: TaskRecordMedia, width: int = 60):
-        src = media.file_preview_url_with_timestamp
+        src = media.file_preview_url
         src = (
             src
             if src
