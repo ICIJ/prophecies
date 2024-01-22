@@ -42,7 +42,7 @@ class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
         "round",
         "status_badge",
     ]
-    list_editable = ["round", "checker"]
+    list_editable = ["checker"]
     list_filter = [
         AutocompleteFilterFactory("task", "task_record__task"),
         AutocompleteFilterFactory("project", "task_record__task__project"),
