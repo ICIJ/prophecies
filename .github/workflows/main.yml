@@ -30,13 +30,12 @@ jobs:
     needs: [lint-backend, test-backend, test-frontend]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64   
     steps:
+      - name: Prepare env
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV   
+
       - name: Check out code
         uses: actions/checkout@v4
 
@@ -62,4 +61,4 @@ jobs:
           context: .
           push: true
           tags: icij/prophecies:${{ env.TAG_NAME }},icij/prophecies:latest
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
