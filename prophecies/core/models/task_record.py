@@ -63,7 +63,7 @@ class TaskRecord(models.Model):
 
     @cached_property
     def checkers_list(self):
-        checkers = [review.checker for review in self.reviews.all() if review is not None]
+        checkers = [review.checker for review in self.reviews.all()]
         return  list(filter(None, checkers))
 
     @cached_property
