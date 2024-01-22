@@ -39,7 +39,7 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     resource_class = TaskRecordResource
     change_list_template = "admin/task_record_changelist.html"
     actions_on_bottom = True
-    ordering = ('-id',)
+    ordering = ('-pk',)
     exclude = ['metadata', 'rounds', 'link', 'status']
     readonly_fields = ['round_count', 'status_badge', 'computed_link', 'metadata_json']
     list_display = ['task_record_excerpt', 'original_value', 'task_with_addon', 'round_count', 'status_badge']
