@@ -9,7 +9,7 @@ from django.utils.html import format_html
 from import_export.resources import ModelResource
 
 from prophecies.core.contrib.display import display_json, display_status, display_task_addon, display_task_record_link
-from prophecies.core.forms import TaskRecordAssignForm, TaskRecordUploadForm, TaskRecordChangelistForm
+from prophecies.core.forms import TaskRecordAssignForm, TaskRecordUploadForm
 from prophecies.core.models import TaskRecord, TaskRecordReview
 from prophecies.core.admin.filters import DistinctValuesDropdownFilter, ReviewedTaskRecordFilter
 from prophecies.core.mixins import ExportWithCsvStreamMixin, ExportCsvGeneratorMixin
@@ -42,8 +42,7 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     ordering = ('-id',)
     exclude = ['metadata', 'rounds', 'link', 'status']
     readonly_fields = ['round_count', 'status_badge', 'computed_link', 'metadata_json']
-    list_display = ['task_record_excerpt', 'original_value', 'task_with_addon', 'round_count', 'status_badge']
-    list_editable = ['original_value']
+    list_display = ['task_record_excerpt', 'original_value', 'task_with_addon', 'round_count', 'status_badge']    
     list_filter = [
         AutocompleteFilterFactory('task', 'task'),
         AutocompleteFilterFactory('project', 'task__project'),
@@ -59,10 +58,6 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     inlines = [TaskRecordReviewInline, ]
     actions = ['assign_action']
     search_fields = ['id', 'uid', 'original_value', 'predicted_value', 'metadata', 'link']
-
-    def get_changelist_form(self, request, **kwargs):
-        kwargs.setdefault('form', TaskRecordChangelistForm)
-        return super().get_changelist_form(request, **kwargs)
 
     def get_queryset(self, request):
         return super().get_queryset(request) \

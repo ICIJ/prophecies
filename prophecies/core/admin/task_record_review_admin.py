@@ -5,15 +5,29 @@ from django.utils.html import format_html
 from import_export.resources import ModelResource
 
 from prophecies.core.models import TaskRecordReview
-from prophecies.core.contrib.display import display_status, display_task_addon, display_choice
+from prophecies.core.forms import TaskRecordReviewChangelistForm 
+from prophecies.core.contrib.display import (
+    display_status,
+    display_task_addon,
+    display_choice,
+)
 from prophecies.core.mixins import ExportWithCsvStreamMixin, ExportCsvGeneratorMixin
 
 
 class TaskRecordReviewResource(ExportCsvGeneratorMixin, ModelResource):
     class Meta:
         model = TaskRecordReview
-        fields = ('id', 'status', 'checker__username', 'round', 'choice__value',
-                  'note', 'alternative_value', 'task_record__id', 'task_record__uid',)
+        fields = (
+            "id",
+            "status",
+            "checker__username",
+            "round",
+            "choice__value",
+            "note",
+            "alternative_value",
+            "task_record__id",
+            "task_record__uid",
+        )
 
 
 @admin.register(TaskRecordReview)
@@ -21,15 +35,26 @@ class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     resource_class = TaskRecordReviewResource
     change_list_template = "admin/task_record_review_changelist.html"
     actions_on_bottom = True
-    list_display = ['review_with_details', 'task_with_addon', 'round', 'status_badge']
-    list_filter = [
-        AutocompleteFilterFactory('task', 'task_record__task'),
-        AutocompleteFilterFactory('project', 'task_record__task__project'),
-        AutocompleteFilterFactory('checkers', 'checker'),
-        'choice',
-        'status',
-        'round',
+    list_display = [
+        "review_with_details",
+        "task_with_addon",
+        "checker",
+        "round",
+        "status_badge",
     ]
+    list_editable = ["round", "checker"]
+    list_filter = [
+        AutocompleteFilterFactory("task", "task_record__task"),
+        AutocompleteFilterFactory("project", "task_record__task__project"),
+        AutocompleteFilterFactory("checkers", "checker"),
+        "choice",
+        "status",
+        "round",
+    ]
+
+    def get_changelist_form(self, request, **kwargs):
+        kwargs.setdefault("form", TaskRecordReviewChangelistForm)
+        return super().get_changelist_form(request, **kwargs)
 
     # By default, we deactivate adding review to force users to
     # assign them through the "task record" admin page.
@@ -37,17 +62,24 @@ class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
         return False
 
     def get_queryset(self, request):
-        return super().get_queryset(request) \
-            .prefetch_related('checker') \
-            .prefetch_related('choice') \
-            .prefetch_related('task_record') \
-            .prefetch_related('task_record__task') \
-            .prefetch_related('task_record__task__project')
+        return (
+            super()
+            .get_queryset(request)
+            .prefetch_related("checker")
+            .prefetch_related("choice")
+            .prefetch_related("task_record")
+            .prefetch_related("task_record__task")
+            .prefetch_related("task_record__task__project")
+        )
 
     def review_with_details(self, review):
         review_title = str(review)
-        excerpt = shorten(review.task_record.original_value, width=140, placeholder='...') if review.task_record else ''
-        choice = display_choice(review.choice) if review.choice else ''
+        excerpt = (
+            shorten(review.task_record.original_value, width=140, placeholder="...")
+            if review.task_record
+            else ""
+        )
+        choice = display_choice(review.choice) if review.choice else ""
         context = dict(review_title=review_title, excerpt=excerpt, choice=choice)
         template = """
             <div class="task-record-review-display">
@@ -68,6 +100,6 @@ class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     def task_with_addon(self, review):
         if review.task_record:
             return display_task_addon(review.task_record.task)
-        return ''
+        return ""
 
     task_with_addon.short_description = "Task"
