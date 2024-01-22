@@ -62,13 +62,14 @@ class TaskRecord(models.Model):
         return f'Record #{self.id} to be review in {self.task.name}'
 
     @cached_property
-    def checkers(self):
-        return [review.checker for review in self.reviews.all()]
+    def checkers_list(self):
+        checkers = [review.checker for review in self.reviews.all() if review is not None]
+        return  list(filter(None, checkers))
 
     @cached_property
     def checkers_pretty(self):
         # Extract only the usernames
-        usernames = [checker.username for checker in self.checkers]
+        usernames = [checker.username for checker in self.checkers_list]
         count = len(usernames)
         # Use the correct format depending on the count or use `many`
         return {0: lambda u: 'nobody', 1: lambda u: u[0], 2: lambda u: ' and '.join(u), }.\
@@ -98,7 +99,7 @@ class TaskRecord(models.Model):
         return Action.objects.public(self.actions_query | self.reviews_actions_query)
 
     def can_lock(self, user):
-        checkers_ids = [checker.id for checker in self.checkers]
+        checkers_ids = [checker.id for checker in self.checkers_list]
         return not self.locked and user.id in checkers_ids
 
     def can_unlock(self, user):
