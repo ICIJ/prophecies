@@ -71,8 +71,8 @@ set_version:
 		$(MAKE) tag_version
 
 tag_version:
-		git commit -m "build: bump to ${CURRENT_VERSION}" pyproject.toml ${FRONT_PREFIX}/package.json
-		git tag ${CURRENT_VERSION}
+		git commit -m "build: bump to v${CURRENT_VERSION}" pyproject.toml ${FRONT_PREFIX}/package.json
+		git tag v${CURRENT_VERSION}
 
 publish:
 		poetry publish
