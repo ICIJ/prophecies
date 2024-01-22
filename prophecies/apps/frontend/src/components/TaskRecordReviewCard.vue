@@ -42,6 +42,12 @@ export default {
     },
     highlightNote: {
       type: [Boolean, String]
+    },
+    noLink: {
+      type: Boolean
+    },
+    noEmbed: {
+      type: Boolean
     }
   },
   data () {
@@ -283,7 +289,7 @@ export default {
                       hover
                       class="task-record-review-card__original-value ml-1" />
                   </slot>
-                  <slot name="link" :task-record="taskRecord" :link="link" :active="active">
+                  <slot v-if="!noLink" name="link" :task-record="taskRecord" :link="link" :active="active">
                     <b-btn variant="link" class="text-muted px-3" :href="link" v-if="link" target="_blank">
                       <link-icon size="1x" class="mr-1" />Open link
                       <span v-if="active">
@@ -336,7 +342,7 @@ export default {
                   :highlighted-review-id="highlightedReviewId"
                   @close="toggleNotes(false)" />
               </b-collapse>
-              <b-collapse :visible="showLinkPreview">
+              <b-collapse  v-if="!noEmbed" :visible="showLinkPreview">
                 <slot name="embed" :task-record="taskRecord">
                   <task-record-iframe
                     :task-record-id="taskRecord.id"

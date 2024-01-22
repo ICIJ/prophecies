@@ -55,6 +55,8 @@ export default {
   <task-record-review-card
     class="task-record-review-card-for-iframe"
     v-on="$listeners"
+    no-link
+    no-embed
     :task-record-review-id="taskRecordReviewId"
     :active="active"
     :selected="selected"
@@ -65,7 +67,5 @@ export default {
       <task-record-iframe :task-record-id="taskRecordReview.taskRecordId" expand lazy class="mb-3 " />
       <haptic-copy-button v-if="displayOriginalValue" :text="taskRecord.originalValue" class="btn-sm mx-auto py-1 px-2" />
     </template>
-    <template #link><span><!-- Disable the display of the record link --></span></template>
-    <template #embed><span><!-- Disable the display of the embed (cinematic view) --></span></template>
   </task-record-review-card>
 </template>
