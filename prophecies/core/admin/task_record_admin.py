@@ -42,7 +42,7 @@ class TaskRecordAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
     ordering = ('-id',)
     exclude = ['metadata', 'rounds', 'link', 'status']
     readonly_fields = ['round_count', 'status_badge', 'computed_link', 'metadata_json']
-    list_display = ['task_record_excerpt', 'original_value', 'task_with_addon', 'round_count', 'status_badge']    
+    list_display = ['task_record_excerpt', 'original_value', 'task_with_addon', 'round_count', 'status_badge']
     list_filter = [
         AutocompleteFilterFactory('task', 'task'),
         AutocompleteFilterFactory('project', 'task__project'),
