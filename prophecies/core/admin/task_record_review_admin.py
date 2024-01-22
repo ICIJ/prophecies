@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from import_export.resources import ModelResource
 
 from prophecies.core.models import TaskRecordReview
-from prophecies.core.forms import TaskRecordReviewChangelistForm 
+from prophecies.core.forms import TaskRecordReviewChangelistForm
 from prophecies.core.contrib.display import (
     display_status,
     display_task_addon,
@@ -70,6 +70,7 @@ class TaskRecordReviewAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
             .prefetch_related("task_record")
             .prefetch_related("task_record__task")
             .prefetch_related("task_record__task__project")
+            .prefetch_related("task_record__task__checkers")
         )
 
     def review_with_details(self, review):
