@@ -21,6 +21,7 @@ services:
       - WAIT_HOSTS_TIMEOUT=60
       - DATABASE_URL=postgres://postgres:postgres@db/prophecies
       - ALLOWED_HOSTS=0.0.0.0,localhost,web
+      - CSRF_TRUSTED_ORIGINS=http://localhost:8080
       - PORT=8008
       - DEBUG=false
       - SOCIAL_AUTH_PROVIDER_KEY=
