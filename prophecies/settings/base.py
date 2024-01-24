@@ -1,5 +1,5 @@
 import sys
-from os.path import normpath, exists
+from os.path import normpath
 import environ
 
 
@@ -8,10 +8,7 @@ project_root = root.path("prophecies")
 
 # Read .env from the root path and load environment variables
 env = environ.Env()
-env_root = root.path(".env").root
-# Load the .env file only if it exists
-if exists(env_root):
-    env.read_env(env_root)
+env.read_env(root.path(".env").root)
 
 # Build paths inside the project
 BASE_DIR = root()
@@ -335,7 +332,7 @@ USE_TZ = True
 
 # Cache
 # https://docs.djangoproject.com/en/4.2/topics/cache/
-# https://django-environ.readthedocs.io/en/latest/index.html#multiple-redis-cache-locations
+# https://django-environ.readthedocs.io/en/latest/types.html#environ-env-cache-url
 CACHES = {"default": env.cache("CACHE_URL", default="dummycache://")}
 
 # Dynamique settings
