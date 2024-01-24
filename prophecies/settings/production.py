@@ -14,6 +14,7 @@ MIDDLEWARE.remove("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 # Logging
 # https://docs.djangoproject.com/en/4.2/ref/logging/
+# https://github.com/marselester/json-log-formatter
 
 LOGGING = {
     "version": 1,
@@ -21,7 +22,13 @@ LOGGING = {
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
+            "formatter": "json"
         },
+    },
+    "formatters": {
+        "json": {
+            "()": "json_log_formatter.JSONFormatter"
+        }
     },
     "loggers": {
         "django": {
