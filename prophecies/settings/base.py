@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "admin_auto_filters",
     "actstream",
+    "cachalot",
     "debug_toolbar",
     "social_django",
     "rest_framework",
