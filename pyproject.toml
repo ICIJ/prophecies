@@ -34,7 +34,7 @@ django-rest-polymorphic = "^0.1.10"
 boto3 = "^1.34.21"
 django-storages = {extras = ["s3"], version = "^1.14.2"}
 django-cachalot = "^2.6.2"
-django-json-logging = "^0.0.7"
+json-log-formatter = "^0.5.2"
 
 [tool.poetry.group.dev.dependencies]
 time-machine = "*"

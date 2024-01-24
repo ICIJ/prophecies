@@ -530,21 +530,6 @@ Django = ">=2.2"
 tablib = {version = ">=3.0.0", extras = ["html", "ods", "xls", "xlsx", "yaml"]}
 
 [[package]]
-name = "django-json-logging"
-version = "0.0.7"
-description = "Various JSON logging extensions for the Django Framework"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "django_json_logging-0.0.7-py3-none-any.whl", hash = "sha256:3b6d33ee639b3581a88037e61b3c962150c450d55081334ca47b3a28e5266a7d"},
-    {file = "django_json_logging-0.0.7.tar.gz", hash = "sha256:6fcba1b057b4b9f811b4291b33437fef251c018a21d1f6713baab14c245cdfad"},
-]
-
-[package.dependencies]
-django = ">=2.2"
-json-log-formatter = ">=0.3.1,<=0.4.0"
-
-[[package]]
 name = "django-jsonfield"
 version = "1.4.1"
 description = "JSONField for django models"
@@ -803,12 +788,12 @@ files = [
 
 [[package]]
 name = "json-log-formatter"
-version = "0.4.0"
+version = "0.5.2"
 description = "JSON log formatter"
 optional = false
-python-versions = "*"
+python-versions = ">=2.7"
 files = [
-    {file = "JSON-log-formatter-0.4.0.tar.gz", hash = "sha256:3644f30233f22746fd181d1340cc8096520a4f464d18877270b8664554e61f81"},
+    {file = "JSON-log-formatter-0.5.2.tar.gz", hash = "sha256:7b191ae4056468baf2b7445c5ce651bd9ee6b76b4162a479a7d85db6ae029f2d"},
 ]
 
 [[package]]
@@ -1794,4 +1779,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "6cb25b62ad7a0ff0e84444b724bfc369ce1247774e8b1e58aab1ac43a18948af"
+content-hash = "6fe5ea497ee0fffef0bb62c821cb54557239fa2a6962082a949241026c8a4a5b"
