@@ -59,7 +59,7 @@ class TaskRecord(models.Model):
                                            related_name='bookmarked_task_records', blank=True)
 
     def __str__(self):
-        return f'Record #{self.id} to be review in {self.task.name}'
+        return f'Record #{self.id} to be reviewed'
 
     @cached_property
     def checkers(self):
