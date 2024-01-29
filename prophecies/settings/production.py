@@ -1,3 +1,5 @@
+import structlog
+
 from .base import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
 root = environ.Path(__file__) - 3
@@ -14,27 +16,31 @@ MIDDLEWARE.remove("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 # Logging
 # https://docs.djangoproject.com/en/4.2/ref/logging/
-# https://github.com/marselester/json-log-formatter
+# https://django-structlog.readthedocs.io/
 
 LOGGING = {
     "version": 1,
-    "disable_existing_loggers": False,
+    "disable_existing_loggers": True,
+    "formatters": {
+        "json_formatter": {
+            "()": structlog.stdlib.ProcessorFormatter,
+            "processor": structlog.processors.JSONRenderer(),
+        },
+    },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "formatter": "json"
+            "formatter": "json_formatter",
         },
     },
-    "formatters": {
-        "json": {
-            "()": "json_log_formatter.JSONFormatter"
-        }
-    },
     "loggers": {
-        "django": {
+        "django_structlog": {
             "handlers": ["console"],
             "level": env.str("DJANGO_LOG_LEVEL", "INFO"),
-            "propagate": True,
+        },
+        "core": {
+            "handlers": ["console"],
+            "level": env.str("DJANGO_LOG_LEVEL", "INFO"),
         },
     },
 }
