@@ -48,4 +48,6 @@ LOGGING = {
 # Cache
 # https://docs.djangoproject.com/en/4.2/topics/cache/
 # https://django-environ.readthedocs.io/en/latest/types.html#environ-env-cache-url
-CACHES = {"default": env.cache("CACHE_URL", default="locmemcache://")}
+CACHES = {
+    "default": env.cache("CACHE_URL", default="filecache:///code/prophecies/run/cache/")
+}

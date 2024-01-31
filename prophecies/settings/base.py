@@ -248,7 +248,7 @@ SOCIAL_AUTH_IMMUTABLE_USER_FIELDS = [
 SOCIAL_AUTH_URL_NAMESPACE = env.str("SOCIAL_AUTH_URL_NAMESPACE", default="sso")
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/"
 SOCIAL_AUTH_SANITIZE_REDIRECTS = not DEBUG
-SOCIAL_AUTH_LOGIN_URL = "/login/provider"
+SOCIAL_AUTH_LOGIN_URL = env.str("SOCIAL_AUTH_LOGIN_URL", default="/login/provider/")
 
 # All OAuth2 provider's settings
 SOCIAL_AUTH_PROVIDER_HOSTNAME = env.str("SOCIAL_AUTH_PROVIDER_HOSTNAME", default="")
@@ -338,7 +338,12 @@ USE_TZ = True
 # Cache
 # https://docs.djangoproject.com/en/4.2/topics/cache/
 # https://django-environ.readthedocs.io/en/latest/types.html#environ-env-cache-url
-CACHES = {"default": env.cache("CACHE_URL", default="dummycache://")}
+
+CACHES = {
+    "default": env.cache(
+        "CACHE_URL", default=f"filecache://{project_root.path('run', 'cache')}"
+    )
+}
 
 # Dynamique settings
 # https://django-constance.readthedocs.io/en/latest/backends.html#database
@@ -361,7 +366,7 @@ CONSTANCE_CONFIG = {
         "Any trouble logging in?",
         "Help text for the login page. Must be public.",
     ),
-    "loginUrl": (f"{SOCIAL_AUTH_LOGIN_URL}?next=/", "Link to create a user session"),
+    "loginUrl": (SOCIAL_AUTH_LOGIN_URL, "Link to create a user session"),
     "loginWelcome": (
         "Welcome to Prophecies",
         "Title for the login page. Must be public.",
@@ -375,9 +380,12 @@ CONSTANCE_CONFIG = {
     "orgName": ("ICIJ", "Name of the organization deploying this app"),
 }
 
+# A list of explictly public variables
+CONSTANCE_PUBLIC_KEYS = env.list("CONSTANCE_PUBLIC_KEYS", default=["loginUrl"])
+
 # Either or not we should activate Django Admin native login. Activate by
 # default in DEBUG mode.
-DJANGO_ADMIN_LOGIN = env.bool("DEBUG", default=DEBUG)
+DJANGO_ADMIN_LOGIN = env.bool("DJANGO_ADMIN_LOGIN", default=DEBUG)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
