@@ -20,14 +20,18 @@
     {% for item in config_values %}
       <tr class="{% cycle 'row1' 'row2' %}">
         <th>
-                <span class="item-name" id="{{ item.name|slugify }}">
-                    {{ item.name }}
-                    <a class="item-anchor" href="#{{ item.name|slugify }}" title="Link to this setting">¶</a>
-                </span>
+          <span class="item-name" id="{{ item.name|slugify }}">
+            {{ item.name }}
+            <a class="item-anchor" href="#{{ item.name|slugify }}" title="Link to this setting">¶</a>
+          </span>
           <div class="help">{{ item.help_text|linebreaksbr }}</div>
         </th>
         <td>
-          {{ item.visibility_field }}
+          {% if item.forced_public %}
+            <input type="checkbox" checked="checked" disabled="disabled" />
+          {% else %}
+            {{ item.visibility_field }}
+          {% endif %}
         </td>
         <td>
           {{ item.form_field.errors }}

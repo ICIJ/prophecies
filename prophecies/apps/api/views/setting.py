@@ -19,16 +19,15 @@ class SettingViewSet(viewsets.ViewSet):
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
-            return Setting.objects.public()
-        else:
-            return Setting.objects.all_with_env()
+            return Setting.objects.all_public_with_env()
+        return Setting.objects.all_with_env()
 
-    def list(self, request, **kwargs):
+    def list(self, request, **_kwargs):
         settings = self.get_queryset()
         serializer = SettingSerializer(settings, many=True, context={'request': request})
         return Response(serializer.data)
 
-    def retrieve(self, request, pk=None, **kargs):
+    def retrieve(self, request, pk=None, **_kwargs):
         try:
             setting = next(s for s in self.get_queryset() if s.key == pk)
         except StopIteration:

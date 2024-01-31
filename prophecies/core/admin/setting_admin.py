@@ -1,4 +1,5 @@
 from constance.admin import ConstanceAdmin, Config
+from django.conf import settings
 from django.contrib import admin
 
 from prophecies.core.forms import SettingForm
@@ -10,6 +11,7 @@ class SettingAdmin(ConstanceAdmin):
     def get_config_value(self, name, options, form, initial):
         config_value = super().get_config_value(name, options, form, initial)
         config_value['visibility_field'] = form[f'{name}_visibility']
+        config_value['forced_public'] = name in settings.CONSTANCE_PUBLIC_KEYS
         return config_value
 
 # pylint: disable=protected-access
