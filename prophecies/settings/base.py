@@ -29,7 +29,7 @@ SECRET_KEY = env.str(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=True)
-TEMPLATE_DEBUG = DEBUG
+TEMPLATE_DEBUG = env.bool("TEMPLATE_DEBUG", default=DEBUG)
 
 SITE_ID = 1
 
@@ -235,7 +235,7 @@ REST_FRAMEWORK = {
 
 JSON_API_FORMAT_FIELD_NAMES = "camelize"
 
-USE_X_FORWARDED_HOST = DEBUG
+USE_X_FORWARDED_HOST = env.bool("USE_X_FORWARDED_HOST", default=DEBUG)
 
 # Xemx configuration using python-socual-auth
 # https://python-social-auth.readthedocs.io
@@ -375,8 +375,9 @@ CONSTANCE_CONFIG = {
     "orgName": ("ICIJ", "Name of the organization deploying this app"),
 }
 
-# Etheir or not we should activate Django Admin native login
-DJANGO_ADMIN_LOGIN = DEBUG
+# Either or not we should activate Django Admin native login. Activate by
+# default in DEBUG mode.
+DJANGO_ADMIN_LOGIN = env.bool("DEBUG", default=DEBUG)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
