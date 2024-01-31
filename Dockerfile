@@ -18,6 +18,7 @@ ENV POETRY_HOME "/opt/poetry"
 ENV POETRY_VIRTUALENVS_IN_PROJECT true
 ENV POETRY_NO_INTERACTION  1
 ENV PATH "$POETRY_HOME/bin:$PATH"
+ENV DJANGO_SETTINGS_MODULE "prophecies.settings.production"
 
 RUN curl -sSL https://install.python-poetry.org | python3 - -y --version $POETRY_VERSION
 
