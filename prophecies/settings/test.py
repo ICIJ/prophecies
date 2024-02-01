@@ -11,7 +11,12 @@ INSTALLED_APPS.remove("debug_toolbar")
 MIDDLEWARE.remove("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 # Ensure nothing is cached during test
-CACHE_URL = "dummycache://"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+    }
+}
 
 # Hide all constance keys by default
 CONSTANCE_PUBLIC_KEYS = []
