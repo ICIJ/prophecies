@@ -1,5 +1,6 @@
 from django.urls import include, path
 from django.views.generic import RedirectView
+from drf_spectacular.views import SpectacularAPIView
 from rest_framework import routers
 from prophecies.apps.api.views.action import ActionViewSet
 from prophecies.apps.api.views.action_aggregate import ActionAggregateViewSet
@@ -48,6 +49,7 @@ router.register(r"user-notifications", UserNotificationViewSet)
 
 urlpatterns = [
     path("", RedirectView.as_view(url="v1/")),
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("v1/", include(router.urls)),
     path(
         "v1/task-records/<pk>/relationships/actions/",

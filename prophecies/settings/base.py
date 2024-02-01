@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django_structlog",
+    "drf_spectacular",
     "admin_auto_filters",
     "actstream",
     "cachalot",
@@ -219,7 +220,7 @@ REST_FRAMEWORK = {
         "rest_framework_json_api.renderers.BrowsableAPIRenderer",
     ),
     "DEFAULT_METADATA_CLASS": "rest_framework_json_api.metadata.JSONAPIMetadata",
-    "DEFAULT_SCHEMA_CLASS": "rest_framework_json_api.schemas.openapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_FILTER_BACKENDS": (
         "rest_framework_json_api.filters.QueryParameterValidationFilter",
         "rest_framework.filters.SearchFilter",
@@ -231,6 +232,16 @@ REST_FRAMEWORK = {
         "rest_framework_json_api.renderers.JSONRenderer",
     ),
     "TEST_REQUEST_DEFAULT_FORMAT": "vnd.api+json",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Prophecies API",
+    "DESCRIPTION": """Prophecies is a platform to fact check data collaboratively. 
+    It is a free open-source software developed by the International Consortium of Investigative Journalists (ICIJ).
+    """,
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SCHEMA_PATH_PREFIX": '/api/v1',
 }
 
 JSON_API_FORMAT_FIELD_NAMES = "camelize"
