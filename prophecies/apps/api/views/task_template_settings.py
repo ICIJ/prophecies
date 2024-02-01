@@ -44,5 +44,8 @@ class TaskTemplateSettingSerializer(serializers.PolymorphicModelSerializer):
 
 
 class TaskTemplateSettingViewSet(views.ReadOnlyModelViewSet):
+    """
+    A list of template settings, associated with a task.
+    """
     queryset = TaskTemplateSetting.objects.all()
     serializer_class = TaskTemplateSettingSerializer

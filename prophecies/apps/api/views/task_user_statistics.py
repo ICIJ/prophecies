@@ -11,8 +11,8 @@ class TaskUserStatisticsSerializer(serializers.ModelSerializer):
     task = ResourceRelatedField(many=False, read_only=True)
 
     included_serializers = {
-        'checker': UserSerializer,
-        'task': TaskSerializer,
+        "checker": UserSerializer,
+        "task": TaskSerializer,
     }
 
     # class JSONAPIMeta:
@@ -20,27 +20,29 @@ class TaskUserStatisticsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TaskUserStatistics
-        resource_name = 'TaskUserStatistics'
+        resource_name = "TaskUserStatistics"
         fields = [
-            'task',
-            'checker',
-            'round',
-            'done_count',
-            'pending_count',
-            'total_count',
-            'progress',
+            "task",
+            "checker",
+            "round",
+            "done_count",
+            "pending_count",
+            "total_count",
+            "progress",
         ]
 
 
 class TaskUserStatisticsViewSet(views.ReadOnlyModelViewSet):
+    """
+    An aggregation of a user's task.
+    """
+    
     queryset = TaskUserStatistics.objects.all()
     serializer_class = TaskUserStatisticsSerializer
-    resource_name = 'TaskUserStatistics'
+    resource_name = "TaskUserStatistics"
     permission_classes = [IsAuthenticated]
     pagination_class = None
-    filterset_fields = ['task',
-                        'checker',
-                        'round']
+    filterset_fields = ["task", "checker", "round"]
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:

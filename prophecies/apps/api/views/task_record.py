@@ -117,6 +117,10 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TaskRecordViewSet(viewsets.ModelViewSet):
+    """
+    The actual records to check. Those record are always composed of an "original value" and a "predicted value". Checker will have to verify if the predicted value is correct. Each record can be identified uniquely with an optional uid.
+    """
+
     queryset = TaskRecord.objects.all()
     serializer_class = TaskRecordSerializer
     ordering = ["-id"]

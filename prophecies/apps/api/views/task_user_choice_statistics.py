@@ -34,6 +34,9 @@ class TaskUserChoiceStatisticsSerializer(serializers.ModelSerializer):
 
 
 class TaskUserChoiceStatisticsViewSet(views.ReadOnlyModelViewSet):
+    """
+    An aggregation of the choices made by a user within a task.
+    """
     queryset = TaskUserChoiceStatistics.objects.all()
     serializer_class = TaskUserChoiceStatisticsSerializer
     resource_name = 'TaskChoiceStatistics'

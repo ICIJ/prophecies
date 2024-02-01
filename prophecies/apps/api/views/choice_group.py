@@ -9,22 +9,27 @@ from prophecies.apps.api.views.alternative_value import AlternativeValue
 
 class ChoiceGroupSerializer(serializers.ModelSerializer):
     choices = ResourceRelatedField(many=True, queryset=Choice.objects)
-    alternative_values = ResourceRelatedField(many=True, queryset=AlternativeValue.objects)
+    alternative_values = ResourceRelatedField(
+        many=True, queryset=AlternativeValue.objects
+    )
 
     included_serializers = {
-        'choices': ChoiceSerializer,
-        'alternative_values': AlternativeValueSerializer
+        "choices": ChoiceSerializer,
+        "alternative_values": AlternativeValueSerializer,
     }
 
     class JSONAPIMeta:
-        included_resources = ['choices']
+        included_resources = ["choices"]
 
     class Meta:
         model = ChoiceGroup
-        fields = ['id', 'url', 'name', 'choices', 'alternative_values']
+        fields = ["id", "url", "name", "choices", "alternative_values"]
 
 
 class ChoiceGroupViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    A list of options that will be presented to the checker when reviewing a record. For instance "Correct", "Incorrect" and "I don't know". An option can be mark as "requiring an alternative value". For instance if you pick incorrect when reviewing an address, you might have to select the correct country.
+    """
     queryset = ChoiceGroup.objects.all()
     serializer_class = ChoiceGroupSerializer
-    ordering = ['-id']
+    ordering = ["-id"]

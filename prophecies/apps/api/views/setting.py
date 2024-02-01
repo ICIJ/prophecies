@@ -11,6 +11,9 @@ class SettingSerializer(serializers.Serializer):
 
 
 class SettingViewSet(viewsets.ViewSet):
+    """
+    A list of settings for the application. Unauthenticated users can only see "public" settings.
+    """
     serializer_class = SettingSerializer
     pagination_class = None
     resource_name = 'Setting'

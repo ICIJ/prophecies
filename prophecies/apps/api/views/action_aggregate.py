@@ -23,6 +23,9 @@ class ActionAggregateSerializer(serializers.ModelSerializer):
 
 
 class ActionAggregateViewSet(views.ReadOnlyModelViewSet):
+    """
+    Actions aggregated by user and by task.
+    """
     serializer_class = ActionAggregateSerializer
     resource_name = 'ActionAggregate'
     http_method_names = ['get', 'head']

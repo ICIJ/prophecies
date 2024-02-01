@@ -103,6 +103,10 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TaskViewSet(views.ReadOnlyModelViewSet):
+    """
+    Each task, or list of records, that must be verified under a specific set of rules. For instance, a list of "Paintings locations" to check. A task can have many options, including the type of form to use, the type of options present, the number of rounds of checks, etc.
+    """
+
     permission_classes = [IsAuthenticated]
     prefetch_for_includes = {
         "project": ["project", "project__creator"],

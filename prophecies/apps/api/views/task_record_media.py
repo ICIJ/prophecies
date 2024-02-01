@@ -27,6 +27,10 @@ class TaskRecordMediaSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TaskRecordMediaViewSet(views.ModelViewSet):
+    """
+    A list of media associated with a task record (usually by their common uid).
+    """
+    
     resource_name = "TaskRecordMedia"
     serializer_class = TaskRecordMediaSerializer
     http_method_names = ["get"]

@@ -27,6 +27,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Users list, also known as checkers.
+    """
+
     queryset = User.objects
     serializer_class = UserSerializer
     search_fields = ['first_name', 'last_name', 'username']

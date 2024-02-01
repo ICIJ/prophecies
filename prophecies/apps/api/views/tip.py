@@ -27,6 +27,10 @@ class TipSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class TipViewSet(views.ReadOnlyModelViewSet):
+    """
+    A list of tips for end users, associated with a task or a whole project.
+    """
+
     serializer_class = TipSerializer
     prefetch_for_includes = {
         'project': ['project'],

@@ -23,6 +23,10 @@ class UserNotificationSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserNotificationViewSet(views.ModelViewSet):
+    """
+    User notification based on their recorded actions.
+    """
+
     queryset = UserNotification.objects.all()
     prefetch_for_includes = {
         'action': ['action', 'action__actor', 'action__action_object'],
