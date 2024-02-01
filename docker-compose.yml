@@ -2,6 +2,7 @@ version: '3'
 
 volumes:
   shared_static: {}
+  postgresql_data: {}
 
 services:
   nginx:
@@ -15,17 +16,18 @@ services:
         - web
 
   web:
-    image: icij/prophecies
+    build: .
     environment:
-      - WAIT_HOSTS=db:5432
-      - WAIT_HOSTS_TIMEOUT=60
-      - DATABASE_URL=postgres://postgres:postgres@db/prophecies
       - ALLOWED_HOSTS=0.0.0.0,localhost,web
-      - CSRF_TRUSTED_ORIGINS=http://localhost:8080
-      - PORT=8008
+      - CSRF_TRUSTED_ORIGINS=http://localhost:9999
+      - DATABASE_URL=postgres://postgres:postgres@db/prophecies
       - DEBUG=false
-      - SOCIAL_AUTH_PROVIDER_KEY=
-      - SOCIAL_AUTH_PROVIDER_SECRET=
+      - DJANGO_SETTINGS_MODULE=prophecies.settings.production
+      - DJANGO_ADMIN_LOGIN=true
+      - PROPHECIES_APP_LOGIN_URL=/admin/login/?next=/
+      - PORT=8008
+      - WAIT_HOSTS_TIMEOUT=60
+      - WAIT_HOSTS=db:5432
     volumes:
       - shared_static:/code/prophecies/run/static
     depends_on:
@@ -37,8 +39,7 @@ services:
 
   migration:
     build: .
-    image: prophecies
-    command: sh -c "/usr/bin/wait && poetry run python manage.py migrate --noinput"
+    command: sh -c '/usr/bin/wait && poetry run python manage.py migrate --noinput'
     environment:
       - WAIT_HOSTS=db:5432
       - WAIT_HOSTS_TIMEOUT=60
@@ -48,16 +49,17 @@ services:
 
   collectstatic:
     build: .
-    image: prophecies
-    command: sh -c "/usr/bin/wait && poetry run python manage.py collectstatic --noinput"
+    command: poetry run python manage.py collectstatic --noinput
     volumes:
       - shared_static:/code/prophecies/run/static
 
   db:
-    image: "postgres:10.4"
+    image: postgres:16
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: prophecies
     command: postgres -c shared_preload_libraries=pg_stat_statements -c 'pg_stat_statements.track=all'
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
