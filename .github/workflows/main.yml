@@ -30,11 +30,33 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint-backend, test-backend, test-frontend]
     steps:
-      - name: Save OpenAPI schema
-        uses: ./.github/workflows/python_task.yml
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
         with:
-          python-version: '["3.9"]'
-          command: poetry run python manage.py spectacular --file ./openapi-$(poetry version --short)-${GITHUB_SHA}.yml
+          python-version: 3.9
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-3.9-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install Python dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+
+      - name: Save OpenAPI schema
+        run: poetry run python manage.py spectacular --file ./openapi-$(poetry version --short)-${GITHUB_SHA}.yml
 
       - name: Upload OpenAPI schema to artifacts 
         uses: actions/upload-artifact@v4
