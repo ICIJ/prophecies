@@ -1,6 +1,3 @@
-DOCKER_REGISTRY := registry.hub.docker.com
-DOCKER_NAME := icij/prophecies
-PWD := `pwd`
 CURRENT_VERSION := $(shell poetry version -s)
 SEMVERS := major minor patch
 FRONT_PREFIX := prophecies/apps/frontend
@@ -63,33 +60,18 @@ createsuperuser:
 $(SEMVERS):
 		poetry version $@
 		npm version --prefix ${FRONT_PREFIX} $@
-		$(MAKE) tag_version
+		$(MAKE) tag-version
 
-set_version:
+set-version:
 		poetry version ${CURRENT_VERSION}
 		npm version ${CURRENT_VERSION} --prefix ${FRONT_PREFIX}
-		$(MAKE) tag_version
+		$(MAKE) tag-version
 
-tag_version:
+tag-version:
 		git commit -m "build: bump to v${CURRENT_VERSION}" pyproject.toml ${FRONT_PREFIX}/package.json
 		git tag v${CURRENT_VERSION}
 
-publish:
-		poetry publish
+poetry-build:
+		poetry build	
 
-build:
-		poetry build
-
-docker-build:
-		docker build -t $(DOCKER_NAME) .
-
-docker-tag:
-		docker tag $(DOCKER_NAME) $(DOCKER_NAME):${CURRENT_VERSION}
-		docker tag $(DOCKER_NAME) $(DOCKER_REGISTRY)/$(DOCKER_NAME):${CURRENT_VERSION}
-		docker tag $(DOCKER_NAME) $(DOCKER_REGISTRY)/$(DOCKER_NAME):latest
-
-docker-push:
-		docker push $(DOCKER_REGISTRY)/$(DOCKER_NAME):${CURRENT_VERSION}
-		docker push $(DOCKER_REGISTRY)/$(DOCKER_NAME):latest
-
-docker-publish: docker-build docker-tag docker-push
+build: webpack-build poetry-build
