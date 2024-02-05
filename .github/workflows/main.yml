@@ -76,12 +76,14 @@ jobs:
           name: openapi-schemas
 
       - name: Rename OpenAPI schema file to something human readable
-        run: mv openapi-${GITHUB_SHA}.yml openapi-$(poetry version --short).yml
+        run: mv openapi-${GITHUB_SHA}.yml openapi-${GIT_TAG}.yml
       
       - name: Create the release package
         uses: softprops/action-gh-release@v1
         with:
-          files: openapi-$(poetry version --short).yml
+          prerelease: false
+          generate_release_notes: true
+          files: openapi-${GIT_TAG}.yml
 
   docker-publish:
     needs: [build]
