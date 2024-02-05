@@ -56,9 +56,9 @@ jobs:
         run: poetry install --no-interaction --no-root
 
       - name: Save OpenAPI schema
-        run: poetry run python manage.py spectacular --file ./openapi-$(poetry version --short)-${GITHUB_SHA}.yml
+        run: poetry run python manage.py spectacular --file ./openapi-${GITHUB_SHA}.yml
 
-      - name: Upload OpenAPI schema to artifacts 
+      - name: Upload OpenAPI schema to repository's artifacts 
         uses: actions/upload-artifact@v4
         with:
           name: openapi-schemas
@@ -70,14 +70,18 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
-      - name: Prepare release name
-        id: prep
-        run: echo "RELEASE_NAME=$(echo ${GITHUB_REF#refs/tags/v})" >> $GITHUB_ENV
-
       - name: Download all OpenAPI schema artifacts 
         uses: actions/download-artifact@v4
         with:
           name: openapi-schemas
+
+      - name: Rename OpenAPI schema file to something human readable
+        run: mv openapi-${GITHUB_SHA}.yml openapi-$(poetry version --short).yml
+      
+      - name: Create the release package
+        uses: softprops/action-gh-release@v1
+        with:
+          files: openapi-$(poetry version --short).yml
 
   docker-publish:
     needs: [build]
