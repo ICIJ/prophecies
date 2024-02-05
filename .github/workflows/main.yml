@@ -15,12 +15,10 @@ jobs:
       command: poetry run pylint prophecies
 
   test-backend:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: ./.github/workflows/python_task.yml
-        with:
-          python-version: '["3.9", "3.10"]'
-          command: make test-back
+    uses: ./.github/workflows/python_task.yml
+    with:
+      python-version: '["3.9", "3.10"]'
+      command: make test-back
 
   test-frontend:
     uses: ./.github/workflows/node_task.yml
@@ -45,7 +43,7 @@ jobs:
           path: |
             ./openapi-*.yml
       
-  release:
+  package-publish:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     needs: [build]
@@ -60,7 +58,7 @@ jobs:
           name: openapi-schemas
 
   docker-publish:
-    needs: [lint-backend, test-backend, test-frontend]
+    needs: [build]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
