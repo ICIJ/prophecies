@@ -55,6 +55,9 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
+      - name: Create a docs directory 
+        run: mkdir ./docs
+
       - name: Save OpenAPI schema
         run: poetry run python manage.py spectacular --file ./openapi-${GITHUB_SHA}.yml
 
@@ -63,7 +66,31 @@ jobs:
         with:
           name: openapi-schemas
           path: |
-            ./openapi-*.yml
+            openapi-*.yml
+
+      - name: Move and rename OpenAPI schema file to omit the SHA
+        run: mv openapi-${GITHUB_SHA}.yml prophecies/static/docs/openapi.yml
+
+      - name: Upload docs directory to github-pages artifacts 
+        uses: actions/upload-pages-artifact@v2
+        with:
+          name: github-pages
+          path: prophecies/static/docs/
+
+  docs-publish:
+    runs-on: ubuntu-latest
+    needs: [build]
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy artifact from "github-pages" to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 
+    
       
   package-publish:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Prophecies API</title>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://unpkg.com/@stoplight/elements/styles.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@stoplight/elements/web-components.min.js"></script>
+  <style>
+    :root {
+      --font-ui: Poppins, "Poppins", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-prose: var(--font-ui);
+      --font-mono: "SF Mono",ui-monospace,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      --font-code: var(--font-mono);
+
+      --color-canvas-100: #E9EFEE;
+      --color-canvas-200: #fff;
+      --color-primary-tint: #98BFBE;
+
+      --color-primary: #235B59;
+      --color-success: #73B782;
+      --color-danger: #FE6565;
+      --color-warning: #e49c00;
+    }
+
+    :root .sl-inverted, [data-theme="light"] .sl-inverted, [data-theme="light"] .sl-inverted .sl-inverted .sl-inverted {
+      --color-canvas: #142b2a;
+    }
+  </style>
+</head>
+<body>
+  <elements-api apiDescriptionUrl="./openapi.yml" router="hash" layout="responsive" hideTryIt="true" />
+</body>
+</html>
