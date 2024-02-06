@@ -71,10 +71,15 @@ jobs:
       - name: Move and rename OpenAPI schema file to omit the SHA
         run: mv openapi-${GITHUB_SHA}.yml prophecies/static/docs/openapi.yml
 
+      - name: Fix permissions for Github Pages
+        run: |
+          chmod -c -R +rX "prophecies/static/docs/" | while read line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
+
       - name: Upload docs directory to github-pages artifacts 
         uses: actions/upload-pages-artifact@v2
         with:
-          name: github-pages
           path: prophecies/static/docs/
 
   docs-publish:
