@@ -235,7 +235,7 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Prophecies API",
+    "TITLE": "Prophecies",
     "DESCRIPTION": """Prophecies is a platform to fact check data collaboratively. 
     It is a free open-source software developed by the International Consortium of Investigative Journalists (ICIJ).
     """,

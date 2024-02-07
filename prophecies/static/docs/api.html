@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Prophecies API</title>
+  <title>API - Prophecies</title>
   <link rel="preconnect" href="https://unpkg.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,22 +17,30 @@
       --font-mono: "SF Mono",ui-monospace,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
       --font-code: var(--font-mono);
 
-      --color-canvas-100: #E9EFEE;
-      --color-canvas-200: #fff;
-      --color-primary-tint: #98BFBE;
-
+      --color-canvas-100: #e9efee;
+      --color-canvas-200: rgba(255, 255, 255, 0.4);
+      --color-border: rgb(227, 232, 237);
+      
       --color-primary: #235B59;
+      --color-primary-tint: rgba(255, 255, 255, 0.8);
       --color-success: #73B782;
       --color-danger: #FE6565;
       --color-warning: #e49c00;
     }
 
-    :root .sl-inverted, [data-theme="light"] .sl-inverted, [data-theme="light"] .sl-inverted .sl-inverted .sl-inverted {
+    :root .sl-inverted, 
+    [data-theme="light"] .sl-inverted, 
+    [data-theme="light"] .sl-inverted .sl-inverted .sl-inverted {
       --color-canvas: #142b2a;
     }
   </style>
 </head>
 <body>
-  <elements-api apiDescriptionUrl="./openapi.yml" router="hash" layout="responsive" hideTryIt="true" />
+  <elements-api 
+    apiDescriptionUrl="./openapi.yml"
+    logo="./logo.svg"
+    router="hash"
+    layout="responsive"
+    hideTryIt="true" />
 </body>
 </html>
