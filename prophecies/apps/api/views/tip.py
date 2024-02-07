@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
@@ -26,6 +27,16 @@ class TipSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'project', 'creator', 'task']
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List Tips",
+        description="Returns a list of Tips.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get Tip",
+        description="Get a single Tip using an ID.",
+    ),
+)
 class TipViewSet(views.ReadOnlyModelViewSet):
     """
     A list of tips for end users, associated with a task or a whole project.

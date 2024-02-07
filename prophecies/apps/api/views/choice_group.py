@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from prophecies.core.models import Choice, ChoiceGroup
 from prophecies.apps.api.views.choice import ChoiceSerializer
 from prophecies.apps.api.views.alternative_value import AlternativeValueSerializer
@@ -26,6 +27,16 @@ class ChoiceGroupSerializer(serializers.ModelSerializer):
         fields = ["id", "url", "name", "choices", "alternative_values"]
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List ChoiceGroups",
+        description="Returns a list of ChoiceGroups.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get ChoiceGroup",
+        description="Get a single ChoiceGroup using an ID.",
+    ),
+)
 class ChoiceGroupViewSet(viewsets.ReadOnlyModelViewSet):
     """
     A list of options that will be presented to the checker when reviewing a record. For instance "Correct", "Incorrect" and "I don't know". An option can be mark as "requiring an alternative value". For instance if you pick incorrect when reviewing an address, you might have to select the correct country.

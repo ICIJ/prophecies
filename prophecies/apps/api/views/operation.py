@@ -1,6 +1,7 @@
 import json
 
 from io import BytesIO
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import exceptions, serializers, viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -109,6 +110,11 @@ class OperationSerializer(serializers.Serializer):
         return {}
 
 
+@extend_schema_view(
+    create=extend_schema(
+        operation_id="Create Operation"
+    ),
+)
 class OperationViewSet(viewsets.GenericViewSet):
     """
     To create bulk operations. Each operation is defined by a list of
@@ -116,7 +122,7 @@ class OperationViewSet(viewsets.GenericViewSet):
     is identified in the `operations` attribute with and `id` and each `payload`
     uses an arbitrary id as well.
 
-    **Currently this endpoint only supports `update` operations.**
+    **Currently this endpoint only supports `create` operations.**
     """
     serializer_class = OperationSerializer
     resource_name = 'Operation'

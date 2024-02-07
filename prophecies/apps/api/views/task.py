@@ -1,4 +1,5 @@
 from functools import lru_cache
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import (
@@ -102,6 +103,16 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
         return task.records_count
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List Tasks",
+        description="Returns a list of Tasks.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get Task",
+        description="Get a single Task using an ID.",
+    ),
+)
 class TaskViewSet(views.ReadOnlyModelViewSet):
     """
     Each task, or list of records, that must be verified under a specific set of rules. For instance, a list of "Paintings locations" to check. A task can have many options, including the type of form to use, the type of options present, the number of rounds of checks, etc.

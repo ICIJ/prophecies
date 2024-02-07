@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework_json_api import serializers, views
 from prophecies.core.models.task_template_setting import (
     TaskTemplateSetting,
@@ -43,6 +44,16 @@ class TaskTemplateSettingSerializer(serializers.PolymorphicModelSerializer):
         exclude = ("polymorphic_ctype",)
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List TaskTemplateSettings",
+        description="Returns a list of TaskTemplateSettings.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get TaskTemplateSetting",
+        description="Get a single TaskTemplateSetting using an ID.",
+    ),
+)
 class TaskTemplateSettingViewSet(views.ReadOnlyModelViewSet):
     """
     A list of template settings, associated with a task.

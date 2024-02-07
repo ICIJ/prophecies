@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
@@ -15,9 +16,6 @@ class TaskUserStatisticsSerializer(serializers.ModelSerializer):
         "task": TaskSerializer,
     }
 
-    # class JSONAPIMeta:
-    #     included_resources = ['task', 'checker']
-
     class Meta:
         model = TaskUserStatistics
         resource_name = "TaskUserStatistics"
@@ -32,6 +30,16 @@ class TaskUserStatisticsSerializer(serializers.ModelSerializer):
         ]
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List TaskUserStatistics",
+        description="Returns a list of TaskUserStatistics.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get TaskUserStatistic",
+        description="Get a single TaskUserStatistic using an ID.",
+    ),
+)
 class TaskUserStatisticsViewSet(views.ReadOnlyModelViewSet):
     """
     An aggregation of a user's task.

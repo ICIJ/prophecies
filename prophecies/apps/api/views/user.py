@@ -2,6 +2,7 @@ from hashlib import md5
 from django.contrib.auth.models import User
 from django.template.context_processors import csrf
 from prophecies.apps.api.views.action import ActionSerializer
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import exceptions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -26,6 +27,16 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
                   'email_md5', 'is_staff', 'is_superuser', 'csrf_token', 'last_login']
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List Users",
+        description="Returns a list of Users.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get User",
+        description="Get a single User using an ID.",
+    ),
+)
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Users list, also known as checkers.

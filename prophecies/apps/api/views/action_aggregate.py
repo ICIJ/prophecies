@@ -1,6 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from prophecies.core.filters import ActionAggregateFilter
 from prophecies.core.models import ActionAggregate
 from prophecies.apps.api.views.user import UserSerializer
@@ -22,10 +23,17 @@ class ActionAggregateSerializer(serializers.ModelSerializer):
         fields = ('verb', 'date', 'user', 'task', 'count')
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List ActionAggregates",
+        description="Returns a list of ActionAggregates.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get ActionAggregate",
+        description="Get a single ActionAggregate using an ID.",
+    ),
+)
 class ActionAggregateViewSet(views.ReadOnlyModelViewSet):
-    """
-    Actions aggregated by user and by task.
-    """
     serializer_class = ActionAggregateSerializer
     resource_name = 'ActionAggregate'
     http_method_names = ['get', 'head']

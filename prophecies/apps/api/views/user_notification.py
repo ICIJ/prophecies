@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
 from rest_framework import exceptions
@@ -22,6 +23,16 @@ class UserNotificationSerializer(serializers.HyperlinkedModelSerializer):
         included_resources = []
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List UserNotifications",
+        description="Returns a list of UserNotifications.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get UserNotification",
+        description="Get a single UserNotification using an ID.",
+    ),
+)
 class UserNotificationViewSet(views.ModelViewSet):
     """
     User notification based on their recorded actions.

@@ -2,7 +2,7 @@ from pydoc import locate
 from rest_framework import viewsets
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import PolymorphicResourceRelatedField
-from drf_spectacular.utils import extend_schema_serializer
+from drf_spectacular.utils import extend_schema_serializer, extend_schema_view, extend_schema
 from actstream.models import Action
 from django.contrib.auth.models import User
 from prophecies.core.filters import ActionFilter
@@ -85,10 +85,17 @@ class ActionSerializer(serializers.HyperlinkedModelSerializer):
         included_resources = ["actor", "action_object", "target"]
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List Actions",
+        description="Returns a list of Actions.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get Action",
+        description="Get a single Action using an ID.",
+    ),
+)
 class ActionViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    Action performed by an "actor" over a "target" through an "object".
-    """
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
     filterset_class = ActionFilter

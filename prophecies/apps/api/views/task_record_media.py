@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
 
@@ -26,6 +27,16 @@ class TaskRecordMediaSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List TaskRecordMedias",
+        description="Returns a list of TaskRecordMedias.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get TaskRecordMedia",
+        description="Get a single TaskRecordMedia using an ID.",
+    ),
+)
 class TaskRecordMediaViewSet(views.ModelViewSet):
     """
     A list of media associated with a task record (usually by their common uid).

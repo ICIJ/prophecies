@@ -1,4 +1,5 @@
 from actstream import action
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import exceptions, viewsets
 from rest_framework import decorators
 from rest_framework.permissions import IsAuthenticated
@@ -116,11 +117,38 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
         return value
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List TaskRecords",
+        description="Returns a list of TaskRecords.",
+    ),
+    create=extend_schema(
+        operation_id="Create TaskRecord",
+        description="Create a single TaskRecord.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get TaskRecord",
+        description="Get a single TaskRecord using an ID.",
+    ),
+    update=extend_schema(
+        operation_id="Update TaskRecord",
+        description="Update a single TaskRecord using an ID.",
+    ),
+    partial_update=extend_schema(
+        operation_id="Partial Update TaskRecord",
+        description="Partial update a single TaskRecord using an ID.",
+    ),
+    destroy=extend_schema(
+        operation_id="Destroy TaskRecord",
+        description="Destroy a single TaskRecord using an ID.",
+    ),
+    actions=extend_schema(exclude=True),
+    relationships_actions=extend_schema(
+        operation_id="List TaskRecord's Actions",
+        description="List TaskRecord's Actions using an ID.",
+    ),
+)
 class TaskRecordViewSet(viewsets.ModelViewSet):
-    """
-    The actual records to check. Those record are always composed of an "original value" and a "predicted value". Checker will have to verify if the predicted value is correct. Each record can be identified uniquely with an optional uid.
-    """
-
     queryset = TaskRecord.objects.all()
     serializer_class = TaskRecordSerializer
     ordering = ["-id"]

@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework_json_api import serializers, views
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api.relations import ResourceRelatedField
@@ -33,6 +34,16 @@ class TaskUserChoiceStatisticsSerializer(serializers.ModelSerializer):
         ]
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List TaskUserChoiceStatistics",
+        description="Returns a list of TaskUserChoiceStatistics.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get TaskUserChoiceStatistic",
+        description="Get a single TaskUserChoiceStatistic using an ID.",
+    ),
+)
 class TaskUserChoiceStatisticsViewSet(views.ReadOnlyModelViewSet):
     """
     An aggregation of the choices made by a user within a task.

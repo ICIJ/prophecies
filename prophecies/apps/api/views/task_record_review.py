@@ -1,5 +1,6 @@
 from functools import lru_cache
 from actstream import action
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import exceptions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_json_api import serializers, views
@@ -176,6 +177,20 @@ class TaskRecordReviewSerializer(serializers.HyperlinkedModelSerializer):
         return {}
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List TaskRecordReviews",
+        description="Returns a list of TaskRecordReviews.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get TaskRecordReview",
+        description="Get a single TaskRecordReview using an ID.",
+    ),
+    update=extend_schema(
+        operation_id="Update TaskRecordReview",
+        description="Update a single TaskRecordReview using an ID.",
+    ),
+)
 class TaskRecordReviewViewSet(views.ModelViewSet):
     resource_name = "TaskRecordReview"
     serializer_class = TaskRecordReviewSerializer

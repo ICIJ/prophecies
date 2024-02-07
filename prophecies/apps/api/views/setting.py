@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import viewsets, serializers
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
@@ -10,10 +11,17 @@ class SettingSerializer(serializers.Serializer):
     public = serializers.BooleanField()
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List Settings",
+        description="Returns a list of Settings.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get Setting",
+        description="Get a single Setting using an ID or a key.",
+    ),
+)
 class SettingViewSet(viewsets.ViewSet):
-    """
-    A list of settings for the application. Unauthenticated users can only see "public" settings.
-    """
     serializer_class = SettingSerializer
     pagination_class = None
     resource_name = 'Setting'

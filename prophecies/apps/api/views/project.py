@@ -1,12 +1,11 @@
 from django.contrib.auth.models import User
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework_json_api import serializers, views
 from rest_framework_json_api.relations import ResourceRelatedField
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from prophecies.apps.api.views.user import UserSerializer
 from prophecies.core.models.project import Project
-
-from rest_framework_json_api.utils import get_included_resources
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
@@ -23,11 +22,21 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         included_resources = []
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="List Projects",
+        description="Returns a list of Projects.",
+    ),
+    tasks=extend_schema(
+        operation_id="List Project's Tasks",
+        description="List a Project's Tasks  using an ID.",
+    ),
+    retrieve=extend_schema(
+        operation_id="Get Project",
+        description="Get a single Project using an ID.",
+    ),
+)
 class ProjectViewSet(views.ReadOnlyModelViewSet):
-    """
-    A group of tasks to verify. For instance "Pandora Papers" is a project.
-    """
-
     queryset = Project.objects.all()
     select_for_includes = {"creator": ["creator"]}
     serializer_class = ProjectSerializer
