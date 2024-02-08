@@ -235,13 +235,43 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Prophecies",
-    "DESCRIPTION": """Prophecies is a platform to fact check data collaboratively. 
-    It is a free open-source software developed by the International Consortium of Investigative Journalists (ICIJ).
-    """,
+    "EXTERNAL_DOCS": {"url": "https://icij.gitbook.io/prophecies/"},
+    "TAGS": [
+        "fact-checking",
+        "ddj",
+        "data-journalism",
+        "investigative-journalism",
+        "journalism",
+        "jsonapi",
+    ],
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
-    "SCHEMA_PATH_PREFIX": '/api/v1',
+    "SCHEMA_PATH_PREFIX": "/api/v1",
+    "TITLE": "Prophecies",
+    "DESCRIPTION": """
+Developed by the [International Consortium of Investigative Journalists (ICIJ)](https://icij.org), Prophecies is a collaborative, open-source platform for fact-checking data. Leveraging the collective intelligence of its global community, it offers an innovative way to verify information, enhancing reliability in journalism and public knowledge.
+
+#### Key Features
+
+- **Collaborative Fact-Checking:** Engage with a community-driven approach that allows for multiple rounds of verification, upholding high ethical standards in fact-checking.
+- **Open Source:** Access and contribute to our [source code on GitHub](https://github.com/ICIJ/prophecies/) to help improve the platform.
+- **Versatile Data Model:** Adapt to various checking tasks with a flexible data model designed to accommodate diverse fact-checking needs.
+- **API Access:** Easily integrate Prophecies into your projects with our [API](https://icij.gitbook.io/prophecies/), designed for seamless interaction.
+
+#### JSON API Standard
+
+The Prophecies API adheres to the [JSON API standard](http://jsonapi.org/), a specification for building APIs in JSON that optimizes requests and responses for efficient and effective data retrieval. This standard facilitates:
+
+- **Efficient Data Interchange:** Minimizes bandwidth usage by structuring data in a compact and predictable format.
+- **Improved Client-Server Interactions:** Simplifies the development of client-side applications with standardized conventions for requests and responses.
+- **Flexibility:** Supports complex data structures, enabling detailed querying and resource relationships for comprehensive fact-checking tasks.
+
+#### Resources
+
+- **Documentation:** For setup instructions, deployment, development and usage tips, start with our [comprehensive guide](https://icij.gitbook.io/prophecies/).
+- **Support:** Visit our [support page](https://icij.gitbook.io/prophecies/ask-for-help) for assistance.
+
+    """,
 }
 
 JSON_API_FORMAT_FIELD_NAMES = "camelize"

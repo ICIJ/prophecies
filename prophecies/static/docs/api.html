@@ -25,16 +25,19 @@
       --color-border: rgb(227, 232, 237);
       
       --color-primary: #235B59;
+      --color-primary-dark: #142b2a;
       --color-primary-tint: rgba(255, 255, 255, 0.8);
       --color-success: #73B782;
       --color-danger: #FE6565;
       --color-warning: #e49c00;
+
+      --color-text-primary: #235B59;
     }
 
     :root .sl-inverted, 
     [data-theme="light"] .sl-inverted, 
     [data-theme="light"] .sl-inverted .sl-inverted .sl-inverted {
-      --color-canvas: #142b2a;
+      --color-canvas: var(--color-primary-dark);
     }
 
     body {
@@ -81,6 +84,18 @@
     .elements-wrapper elements-api {
       width: 100%;
       display: inline-block;
+    }
+
+    .HttpService {
+      max-width: 750px;
+    }
+
+    .sl-text-heading {
+      font-weight: 700;
+    }
+
+    .sl-badge {
+      border: 0;
     }
   </style>
 </head>
