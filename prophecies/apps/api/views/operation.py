@@ -24,7 +24,7 @@ class PayloadValueFieldSerializer(serializers.Serializer):
             raise serializers.ValidationError("Payload data must define a `type`")
         if value['type'] not in MODEL_VIEWS_MAPPING:
             types = ', '.join(MODEL_VIEWS_MAPPING.keys())
-            raise serializers.ValidationError("Payload type must be one of: %s" % types)
+            raise serializers.ValidationError(f"Payload type must be one of: {types}")
         return value
 
 
@@ -48,8 +48,8 @@ class OperationSerializer(serializers.Serializer):
             payload_id = operation['payload']
             # Validate the operation's payload exists
             if not self.find_payload(payload_id):
-                error = "Payload %s cannot be found in the `payloads` list"
-                raise serializers.ValidationError(error % payload_id)
+                error = f"Payload {payload_id} cannot be found in the `payloads` list"
+                raise serializers.ValidationError(error)
             # Validate the operation's payload data
             serializer = self.payload_serializer_from_operation(operation)
             serializer.is_valid(raise_exception=True)
@@ -115,7 +115,7 @@ class OperationSerializer(serializers.Serializer):
         operation_id="Create Operation"
     ),
 )
-class OperationViewSet(viewsets.ViewSet):
+class OperationViewSet(viewsets.GenericViewSet):
     """
     To create bulk operations. Each operation is defined by a list of
     `operations` and a list of `payloads` to apply to resources. Each resource
