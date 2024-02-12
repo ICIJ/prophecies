@@ -9,7 +9,7 @@ env.read_env(root.path(".env").root)
 
 DEBUG = env.bool("DEBUG", default=False)
 TEMPLATE_DEBUG = env.bool("DEBUG", default=False)
-USE_X_FORWARDED_HOST = False
+USE_X_FORWARDED_HOST = env.bool("USE_X_FORWARDED_HOST", default=False)
 
 INSTALLED_APPS.remove("debug_toolbar")
 MIDDLEWARE.remove("debug_toolbar.middleware.DebugToolbarMiddleware")
