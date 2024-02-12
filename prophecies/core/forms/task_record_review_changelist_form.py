@@ -12,5 +12,5 @@ class TaskRecordReviewChangelistForm(forms.ModelForm):
 
     def __init__(self, *args, instance=None, **kwargs):
         super().__init__(*args, instance=instance, **kwargs)
-        if instance:
+        if instance and instance.task:
             self.fields["checker"].queryset = instance.task.checkers.all()
