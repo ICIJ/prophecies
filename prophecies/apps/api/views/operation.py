@@ -115,7 +115,7 @@ class OperationSerializer(serializers.Serializer):
         operation_id="Create Operation"
     ),
 )
-class OperationViewSet(viewsets.GenericViewSet):
+class OperationViewSet(viewsets.ViewSet):
     """
     To create bulk operations. Each operation is defined by a list of
     `operations` and a list of `payloads` to apply to resources. Each resource
@@ -135,3 +135,6 @@ class OperationViewSet(viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.validated_data)
+
+    def get_queryset(self):
+        return []
