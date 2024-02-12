@@ -11,13 +11,13 @@ jobs:
   lint-backend:
     uses: ./.github/workflows/python_task.yml
     with:
-      python-version: '["3.10.13"]'
+      python-version: '["3.10"]'
       command: poetry run pylint prophecies
 
   test-backend:
     uses: ./.github/workflows/python_task.yml
     with:
-      python-version: '["3.10.13", "3.11", "3.12"]'
+      python-version: '["3.10", "3.11", "3.12"]'
       command: make test-back
 
   test-frontend:
@@ -35,7 +35,7 @@ jobs:
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: "3.10"
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
