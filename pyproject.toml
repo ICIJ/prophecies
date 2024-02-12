@@ -6,7 +6,7 @@ description = "An ICIJ app to conduct data validation and cleaning"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 django = "==4.2.9"
 djangorestframework = "^3.14.0"
 django-cors-headers = "^4.3.1"

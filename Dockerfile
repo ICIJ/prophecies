@@ -1,4 +1,4 @@
-FROM python:3.9 AS poetry
+FROM python:3.10 AS poetry
 FROM node:18 AS webpack
 
 RUN mkdir /frontend/
@@ -9,7 +9,7 @@ RUN yarn config set network-timeout 300000
 RUN yarn --non-interactive --production=false
 RUN yarn build
 
-FROM python:3.9
+FROM python:3.10
 
 ENV PYTHONUNBUFFERED 1
 ENV PORT 8008
