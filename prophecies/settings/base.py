@@ -278,6 +278,12 @@ JSON_API_FORMAT_FIELD_NAMES = "camelize"
 
 USE_X_FORWARDED_HOST = env.bool("USE_X_FORWARDED_HOST", default=DEBUG)
 
+# Conditional tells Django to trust the X-Forwarded-Proto header that comes from a
+# proxy and that the request is guaranteed to be secure (i.e., it originally came in via HTTPS).
+# https://docs.djangoproject.com/en/4.2/ref/settings/#secure-proxy-ssl-header
+if env.bool("SECURE_PROXY_SSL_HEADER", default=False):
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 # Xemx configuration using python-socual-auth
 # https://python-social-auth.readthedocs.io
 
