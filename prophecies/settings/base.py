@@ -284,7 +284,7 @@ USE_X_FORWARDED_HOST = env.bool("USE_X_FORWARDED_HOST", default=DEBUG)
 if env.bool("SECURE_PROXY_SSL_HEADER", default=False):
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-# Xemx configuration using python-socual-auth
+# OAuth configuration using python-social-auth
 # https://python-social-auth.readthedocs.io
 
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ["username", "first_name", "last_name", "email"]
