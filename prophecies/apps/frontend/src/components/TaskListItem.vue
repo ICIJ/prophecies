@@ -15,7 +15,7 @@ export default {
     },
     params: {
       type: Object,
-      default: () => ({ })
+      default: () => ({})
     },
     noProject: {
       type: Boolean
@@ -25,14 +25,10 @@ export default {
     }
   },
   computed: {
-    task () {
-      return Task
-        .query()
-        .with('project')
-        .whereId(this.taskId)
-        .first()
+    task() {
+      return Task.query().with('project').whereId(this.taskId).first()
     },
-    project () {
+    project() {
       return this.task.project
     }
   }
@@ -40,11 +36,9 @@ export default {
 </script>
 
 <template>
-  <span class="task-list-item" v-if="task">
+  <span v-if="task" class="task-list-item">
     <task-link :task-id="taskId" :params="params" class="task-list-item__link font-weight-bold" />
-    <span class="task-list-item__project" v-if="!noProject">
-      in {{ project.name }}
-    </span>
-    <task-status class="task-list-item__status ml-2" :task-id="taskId" v-if="!noStatus" />
+    <span v-if="!noProject" class="task-list-item__project"> in {{ project.name }} </span>
+    <task-status v-if="!noStatus" class="task-list-item__status ml-2" :task-id="taskId" />
   </span>
 </template>

@@ -10,11 +10,7 @@ export default [
             type: 'Task',
             id: '1',
             attributes: {
-              colors: [
-                '#60245c',
-                '#80307b',
-                '#a03c9a'
-              ],
+              colors: ['#60245c', '#80307b', '#a03c9a'],
               description: 'A collection of adresses to fact check.',
               name: 'Addresses',
               priority: 1,
@@ -71,11 +67,7 @@ export default [
             type: 'Task',
             id: '2',
             attributes: {
-              colors: [
-                '#9e5e00',
-                '#d37d00',
-                '#ff9b09'
-              ],
+              colors: ['#9e5e00', '#d37d00', '#ff9b09'],
               description: 'A list of shop to check',
               name: 'Shops',
               priority: 2,
@@ -136,11 +128,7 @@ export default [
             type: 'Task',
             id: '3',
             attributes: {
-              colors: [
-                '#9e5e00',
-                '#d37d00',
-                '#ff9b09'
-              ],
+              colors: ['#9e5e00', '#d37d00', '#ff9b09'],
               description: 'A list of immatriculations to check',
               name: 'Immatriculations',
               priority: 1,
@@ -197,11 +185,7 @@ export default [
             type: 'Task',
             id: '4',
             attributes: {
-              colors: [
-                '#9e5e00',
-                '#d37d00',
-                '#ff9b09'
-              ],
+              colors: ['#9e5e00', '#d37d00', '#ff9b09'],
               description: 'A list of phone numbers to check',
               name: 'Phones',
               priority: 4,
@@ -258,11 +242,7 @@ export default [
             type: 'Task',
             id: '5',
             attributes: {
-              colors: [
-                '#9e5e00',
-                '#d37d00',
-                '#ff9b09'
-              ],
+              colors: ['#9e5e00', '#d37d00', '#ff9b09'],
               description: 'A list of cat names to check',
               name: 'Cats',
               priority: 3,
@@ -422,11 +402,7 @@ export default [
           type: 'Task',
           id: '1',
           attributes: {
-            colors: [
-              '#60245c',
-              '#80307b',
-              '#a03c9a'
-            ],
+            colors: ['#60245c', '#80307b', '#a03c9a'],
             description: 'A collection of adresses to fact check.',
             name: 'Addresses',
             priority: 1,
@@ -585,11 +561,7 @@ export default [
           type: 'Task',
           id: '2',
           attributes: {
-            colors: [
-              '#9e5e00',
-              '#d37d00',
-              '#ff9b09'
-            ],
+            colors: ['#9e5e00', '#d37d00', '#ff9b09'],
             description: 'A list of shop to check',
             name: 'Shops',
             priority: 1,
@@ -762,11 +734,7 @@ export default [
         type: 'Task',
         id: '3',
         attributes: {
-          colors: [
-            '#9e5e00',
-            '#d37d00',
-            '#ff9b09'
-          ],
+          colors: ['#9e5e00', '#d37d00', '#ff9b09'],
           description: 'A list of immatriculations to check',
           name: 'Immatriculations',
           priority: 1,
@@ -815,16 +783,16 @@ export default [
             ]
           },
           templateSetting: {
-              data: {
-                  type: "TaskTemplateSettingForMedia",
-                  id: "10"
-              }
+            data: {
+              type: 'TaskTemplateSettingForMedia',
+              id: '10'
+            }
           }
         },
         included: [
           {
-            type: "TaskTemplateSettingForMedia",
-            id: "10",
+            type: 'TaskTemplateSettingForMedia',
+            id: '10',
             attributes: {
               maxWidth: null,
               maxHeight: null,
@@ -935,15 +903,11 @@ export default [
   rest.get('/api/v1/tasks/4/', (req, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json( {
+      ctx.json({
         type: 'Task',
         id: '4',
         attributes: {
-          colors: [
-            '#9e5e00',
-            '#d37d00',
-            '#ff9b09'
-          ],
+          colors: ['#9e5e00', '#d37d00', '#ff9b09'],
           description: 'A list of phone numbers to check',
           name: 'Phones',
           priority: 4,

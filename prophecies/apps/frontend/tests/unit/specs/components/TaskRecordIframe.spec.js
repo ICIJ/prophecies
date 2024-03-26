@@ -1,4 +1,5 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import '@/store'
 import Core from '@/core'
 import TaskRecord from '@/models/TaskRecord'

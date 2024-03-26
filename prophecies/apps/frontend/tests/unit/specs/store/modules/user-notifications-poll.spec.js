@@ -1,17 +1,16 @@
 import UserNotification from '@/models/UserNotification'
 import { createStore } from '@/store'
 
-
 describe('userNotificationsPoll', () => {
-  let store 
+  let store
 
   // Ensure we advance timers and run all pending job
   // in the PromiseJobs queue.
-  function advanceTimersByTimeAndFlushPromises (ms = 0) {
+  function advanceTimersByTimeAndFlushPromises(ms = 0) {
     jest.advanceTimersByTime(ms)
-    return new Promise(done => jest.requireActual("timers").setTimeout(done, 200))
+    return new Promise((resolve) => jest.requireActual('timers').setTimeout(resolve, 200))
   }
-  
+
   beforeEach(() => {
     jest.useFakeTimers()
     store = createStore()
@@ -45,7 +44,6 @@ describe('userNotificationsPoll', () => {
     expect(store.state.userNotificationsPoll.pollId).toBeTruthy()
   })
 
-
   it('should plan a fetch of the notifications and get them right away', async () => {
     expect(store.state.userNotificationsPoll.pollId).toBeFalsy()
     store.dispatch('userNotificationsPoll/startPollAndFetch')
@@ -59,7 +57,7 @@ describe('userNotificationsPoll', () => {
     await advanceTimersByTimeAndFlushPromises(1e3 * 15)
     expect(store.state.userNotificationsPoll.fetchs).toBe(1)
   })
-  
+
   it('should fetch notifications 2 times in 25 secondes', async () => {
     store.dispatch('userNotificationsPoll/startPoll')
     await advanceTimersByTimeAndFlushPromises(1e3 * 25)
@@ -109,7 +107,7 @@ describe('userNotificationsPoll', () => {
     expect(nn).toHaveLength(0)
   })
 
-  it('should fetch all notifications when starting the poll', done => {
+  it('should fetch all notifications when starting the poll', (done) => {
     store.subscribeAction((action) => {
       if (action.type === 'userNotificationsPoll/fetch') {
         done()
@@ -118,7 +116,7 @@ describe('userNotificationsPoll', () => {
     store.dispatch('userNotificationsPoll/startPollAndFetch')
   })
 
-  it('should fetch only the latest notification after a while when starting the poll', done => {
+  it('should fetch only the latest notification after a while when starting the poll', (done) => {
     store.subscribeAction(async (action) => {
       if (action.type === 'userNotificationsPoll/fetchLatest') {
         advanceTimersByTimeAndFlushPromises().then(done)

@@ -8,6 +8,11 @@ import TaskRecordReview from '@/models/TaskRecordReview'
 
 export default {
   name: 'TaskRecordReviewCardForMedia',
+  components: {
+    HapticCopyButton,
+    TaskRecordMediaView,
+    TaskRecordReviewCard
+  },
   props: {
     taskRecordReviewId: {
       type: [String, Number]
@@ -27,11 +32,6 @@ export default {
     highlightNote: {
       type: [Boolean, String]
     }
-  },
-  components: {
-    HapticCopyButton,
-    TaskRecordMediaView,
-    TaskRecordReviewCard
   },
   computed: {
     taskRecordReview() {
@@ -58,13 +58,14 @@ export default {
 <template>
   <task-record-review-card
     class="task-record-review-card-for-media"
-    v-on="$listeners"
     :task-record-review-id="taskRecordReviewId"
     :active="active"
     :selected="selected"
     :preview-link="previewLink"
     :frozen="frozen"
-    :highlight-note="highlightNote">
+    :highlight-note="highlightNote"
+    v-on="$listeners"
+  >
     <template #original-value="{ taskRecord }">
       <div v-for="{ id } in medias" :key="id">
         <div class="task-record-review-card-for-media__media mb-1">

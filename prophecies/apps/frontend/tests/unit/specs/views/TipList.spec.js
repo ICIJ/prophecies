@@ -9,7 +9,7 @@ import TipCard from '@/components/TipCard'
 describe('Tiplist', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

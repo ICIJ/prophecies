@@ -28,46 +28,46 @@ export default {
       default: () => {}
     }
   },
-  created () {
+  computed: {
+    user() {
+      return this.$config.get('user')
+    },
+    hasCinematicView() {
+      return this.$route?.name === 'task-record-review-list'
+    },
+    hasUnreadNotifications() {
+      return this.unreadNotifications > 0
+    },
+    unreadNotifications() {
+      return UserNotification.query().where('read', false).count()
+    },
+    showTutorial: {
+      get() {
+        return store.state.app.showTutorial
+      },
+      set(isVisible) {
+        store.dispatch('app/showTutorial', isVisible)
+      }
+    }
+  },
+  created() {
     const showTutorial = this.showTutorial !== false
     if (showTutorial !== this.showTutorial) {
       store.dispatch('app/showTutorial', showTutorial)
     }
   },
   methods: {
-    toggleTutorial () {
+    toggleTutorial() {
       this.showTutorial = !this.showTutorial
     },
-    toggleCinematicView () {
+    toggleCinematicView() {
       this.$root.$emit('prophecies::toggleCinematicView')
     },
-    toggleShortcuts () {
+    toggleShortcuts() {
       this.$root.$emit('prophecies::toggleShortcuts')
     },
-    toggleTips () {
+    toggleTips() {
       this.$root.$emit('prophecies::toggleTips')
-    }
-  },
-  computed: {
-    user () {
-      return this.$config.get('user')
-    },
-    hasCinematicView () {
-      return this.$route?.name === 'task-record-review-list'
-    },
-    hasUnreadNotifications () {
-      return this.unreadNotifications > 0
-    },
-    unreadNotifications () {
-      return UserNotification.query().where('read', false).count()
-    },
-    showTutorial: {
-      get () {
-        return store.state.app.showTutorial
-      },
-      set (isVisible) {
-        store.dispatch('app/showTutorial', isVisible)
-      }
     }
   }
 }
@@ -87,7 +87,7 @@ export default {
         <b-navbar-nav class="app-header__nav-right">
           <slot name="nav-right" />
           <template v-if="!hideNav">
-            <b-nav-item @click.prevent="toggleCinematicView" v-if="hasCinematicView">
+            <b-nav-item v-if="hasCinematicView" @click.prevent="toggleCinematicView">
               <film-icon class="mr-2" />
               {{ $t('appHeader.cinematicView') }}
             </b-nav-item>
@@ -103,8 +103,9 @@ export default {
             </b-nav-item>
             <b-nav-item
               :class="{ 'font-weight-bold app-header__nav-right__tutorial--show': showTutorial }"
+              href="#"
               @click="toggleTutorial"
-              href="#">
+            >
               <help-circle-icon class="mr-2" />
               {{ $t('appHeader.tutorial') }}
             </b-nav-item>
@@ -115,10 +116,16 @@ export default {
             class="app-header__nav-right__notifications"
             :class="{ 'app-header__nav-right__notifications--unread': hasUnreadNotifications }"
             toggle-class="app-header__nav-right__notifications__toggler"
-            menu-class="app-header__nav-right__notifications__menu">
+            menu-class="app-header__nav-right__notifications__menu"
+          >
             <template #button-content>
               <bell-icon />
-              <b-badge variant="danger" v-if="hasUnreadNotifications" pill class="app-header__nav-right__notifications__toggler__count">
+              <b-badge
+                v-if="hasUnreadNotifications"
+                variant="danger"
+                pill
+                class="app-header__nav-right__notifications__toggler__count"
+              >
                 {{ unreadNotifications }}
               </b-badge>
             </template>
@@ -141,57 +148,56 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .app-header {
+.app-header {
+  &__nav-left {
+    width: 100%;
 
-    &__nav-left {
+    & ::v-deep &__search-form {
       width: 100%;
-
-      & ::v-deep &__search-form {
-        width: 100%;
-      }
-    }
-
-    & ::v-deep .nav-item .nav-link .feather,
-    & ::v-deep .navbar-text .feather,
-    & ::v-deep .dropdown-item .feather {
-      height: 20px;
-      width: 20px
-    }
-
-    & ::v-deep .nav-item,
-    & ::v-deep .nav-item .nav-link,
-    & ::v-deep .nav-item .dropdown-toggle {
-      display: flex;
-      align-items: center;
-    }
-
-    & ::v-deep &__nav-right .nav-link {
-      white-space: nowrap;
-    }
-
-    & ::v-deep &__nav-right__notifications__menu {
-      width: 360px;
-    }
-
-    & ::v-deep &__nav-right__notifications__toggler {
-      position: relative;
-    }
-
-    & ::v-deep &__nav-right__notifications--unread &__nav-right__notifications__toggler {
-      color: $danger;
-    }
-
-    & ::v-deep &__nav-right__notifications__toggler__count {
-      position: absolute;
-      top: 0;
-      right: $spacer;
-    }
-
-    & ::v-deep &__nav-right__tutorial  {
-      &--show.nav-item .nav-link {
-        color: $primary;
-        margin-left: -3px; /* hack to prevent layout shift when the fond is bold */
-      }
     }
   }
+
+  & ::v-deep .nav-item .nav-link .feather,
+  & ::v-deep .navbar-text .feather,
+  & ::v-deep .dropdown-item .feather {
+    height: 20px;
+    width: 20px;
+  }
+
+  & ::v-deep .nav-item,
+  & ::v-deep .nav-item .nav-link,
+  & ::v-deep .nav-item .dropdown-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  & ::v-deep &__nav-right .nav-link {
+    white-space: nowrap;
+  }
+
+  & ::v-deep &__nav-right__notifications__menu {
+    width: 360px;
+  }
+
+  & ::v-deep &__nav-right__notifications__toggler {
+    position: relative;
+  }
+
+  & ::v-deep &__nav-right__notifications--unread &__nav-right__notifications__toggler {
+    color: $danger;
+  }
+
+  & ::v-deep &__nav-right__notifications__toggler__count {
+    position: absolute;
+    top: 0;
+    right: $spacer;
+  }
+
+  & ::v-deep &__nav-right__tutorial {
+    &--show.nav-item .nav-link {
+      color: $primary;
+      margin-left: -3px; /* hack to prevent layout shift when the fond is bold */
+    }
+  }
+}
 </style>

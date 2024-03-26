@@ -294,11 +294,7 @@ export default [
             type: 'Task',
             id: '1',
             attributes: {
-              colors: [
-                '#25605e',
-                '#31807d',
-                '#3da09c'
-              ],
+              colors: ['#25605e', '#31807d', '#3da09c'],
               createdAt: '2021-11-05T07:03:18Z',
               description: 'Addresses to fact check',
               name: 'Addresses',
@@ -364,11 +360,7 @@ export default [
             type: 'Task',
             id: '3',
             attributes: {
-              colors: [
-                '#f3dd04',
-                '#fcec4e',
-                '#fdf59f'
-              ],
+              colors: ['#f3dd04', '#fcec4e', '#fdf59f'],
               createdAt: '2021-11-05T07:03:18Z',
               description: 'List of shop addresses',
               name: 'Shops',
@@ -466,5 +458,4 @@ export default [
       })
     )
   })
-
 ]

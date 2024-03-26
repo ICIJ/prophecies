@@ -1,7 +1,5 @@
-import {
-  createLocalVue,
-  mount
-} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
+
 import Core from '@/core'
 import TaskStatsCardDetailed from '@/components/TaskStatsCardDetailed'
 import Task from '@/models/Task'
@@ -10,7 +8,7 @@ import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 
 describe('TaskStatsCardDetailed', () => {
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

@@ -1,5 +1,6 @@
 <script>
 import { isObject, find } from 'lodash'
+
 import * as icons from '@/utils/icons'
 
 export default {
@@ -12,16 +13,15 @@ export default {
     title: {
       type: String
     }
-
   },
   computed: {
-    iconComponent () {
+    iconComponent() {
       if (isObject(this.icon)) {
         return this.icon
       }
       return this.matchingIconComponent
     },
-    matchingIconComponent () {
+    matchingIconComponent() {
       return find(icons, ({ name }) => name.startsWith(this.icon))
     }
   }
@@ -29,14 +29,9 @@ export default {
 </script>
 
 <template>
-  <div
-    class="
-      empty-placeholder
-      text-center text-secondary text-small
-    "
-  >
+  <div class="empty-placeholder text-center text-secondary text-small">
     <div v-if="icon && iconComponent" class="text-center p-3 text-secondary">
-        <component :is="iconComponent" class="empty-placeholder__icon mx-auto" size="3x" ></component>
+      <component :is="iconComponent" class="empty-placeholder__icon mx-auto" size="3x"></component>
     </div>
     <slot>
       <p>
@@ -46,13 +41,11 @@ export default {
   </div>
 </template>
 <style lang="scss" scoped>
-  .empty-placeholder{
-
-    &__icon {
-      margin-top: $spacer-xs;
-      max-width: 30px;
-      min-width: 30px;
-    }
-
+.empty-placeholder {
+  &__icon {
+    margin-top: $spacer-xs;
+    max-width: 30px;
+    min-width: 30px;
   }
+}
 </style>

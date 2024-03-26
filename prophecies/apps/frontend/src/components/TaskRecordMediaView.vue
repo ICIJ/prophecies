@@ -1,11 +1,14 @@
 <script>
 import { get, uniqueId } from 'lodash'
-import TaskRecordMedia from '@/models/TaskRecordMedia'
 
+import TaskRecordMedia from '@/models/TaskRecordMedia'
 import HapticCopyButton from '@/components/HapticCopyButton'
 
 export default {
   name: 'TaskRecordMediaView',
+  components: {
+    HapticCopyButton
+  },
   props: {
     taskRecordMediaId: {
       type: [String, Number]
@@ -13,9 +16,6 @@ export default {
     expand: {
       type: Boolean
     }
-  },
-  components: {
-    HapticCopyButton
   },
   computed: {
     taskRecordMedia() {
@@ -57,31 +57,24 @@ export default {
 <template>
   <div class="task-record-media">
     <template v-if="isImage">
-      <a
-        :href="file"
-        class="task-record-media__link"
-        target="_blank"
-        v-b-modal="modalId"
-        @click="mightPrevent">
-        <img
-          :alt="taskRecord.originalValue"
-          :src="file"
-          class="task-record-media__link__view img-fluid" />
+      <a v-b-modal="modalId" :href="file" class="task-record-media__link" target="_blank" @click="mightPrevent">
+        <img :alt="taskRecord.originalValue" :src="file" class="task-record-media__link__view img-fluid" />
         <span v-if="expand" class="task-record-media__link__expand">
           <maximize-2-icon />
         </span>
       </a>
     </template>
     <b-modal
-        v-if="expand"
-        :id="modalId"
-        content-class="bg-transparent text-center border-0 shadow-none pointer-events-none"
-        header-class="border-0 p-0"
-        dialog-class="mw-100 mx-4 px-3"
-        hide-footer
-        body-class="px-0"
-        lazy
-        size="xl">
+      v-if="expand"
+      :id="modalId"
+      content-class="bg-transparent text-center border-0 shadow-none pointer-events-none"
+      header-class="border-0 p-0"
+      dialog-class="mw-100 mx-4 px-3"
+      hide-footer
+      body-class="px-0"
+      lazy
+      size="xl"
+    >
       <template #modal-header="{ close }">
         <div class="d-flex w-100">
           <b-btn class="pointer-events-all px-2 ml-auto text-light" variant="link" @click="close">
@@ -92,7 +85,11 @@ export default {
       </template>
       <div class="pointer-events-all mx-auto d-inline-block">
         <task-record-media-view :task-record-media-id="taskRecordMediaId" class="mb-1" />
-        <haptic-copy-button v-if="displayOriginalValue" :text="taskRecord.originalValue" class="btn-sm py-1 px-2 mx-auto" />
+        <haptic-copy-button
+          v-if="displayOriginalValue"
+          :text="taskRecord.originalValue"
+          class="btn-sm py-1 px-2 mx-auto"
+        />
       </div>
     </b-modal>
   </div>

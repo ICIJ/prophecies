@@ -4,6 +4,9 @@ import { find } from 'lodash'
 
 export default {
   name: 'LightDropdown',
+  directives: {
+    onClickaway
+  },
   props: {
     selectedId: {
       type: String
@@ -14,41 +17,37 @@ export default {
     btnClassList: {
       type: Array,
       default: () => []
-
     }
   },
-  directives: {
-    onClickaway
-  },
-  data () {
+  data() {
     return {
       show: false
     }
   },
   computed: {
     selectedId_: {
-      get () {
+      get() {
         return this.selectedId
       },
-      set (value) {
+      set(value) {
         this.$emit('update:selectedId', value)
       }
     },
-    selectedItem () {
+    selectedItem() {
       return find(this.items, { id: this.selectedId_ })
     }
   },
   methods: {
-    toggle () {
+    toggle() {
       this.show = !this.show
     },
-    close () {
+    close() {
       this.show = false
     },
-    select (e) {
+    select(e) {
       this.selectedId_ = e.target.dataset.itemid
     },
-    isActive (itemId) {
+    isActive(itemId) {
       return this.selectedId_ === itemId
     }
   }
@@ -56,40 +55,34 @@ export default {
 </script>
 
 <template>
-  <div
-      class="light-dropdown dropdown"
-      :class="{ show: show }"
-  >
-      <span
-      class="light-dropdown__selected
-      text-primary
-      dropdown-toggle
-      font-weight-bold"
-      :class="btnClassList"
-      type="button"
+  <div class="light-dropdown dropdown" :class="{ show: show }">
+    <span
       id="dropdownMenuButton"
       v-on-clickaway="close"
-      @click="toggle"
+      class="light-dropdown__selected text-primary dropdown-toggle font-weight-bold"
+      :class="btnClassList"
+      type="button"
       aria-haspopup="true"
       :aria-expanded="!show"
-      >
+      @click="toggle"
+    >
       {{ selectedItem.name }}
-      </span>
-      <ul
+    </span>
+    <ul
       class="light-dropdown__options dropdown-menu dropdown-menu-right"
       :class="{ show: show }"
       aria-labelledby="dropdownMenuButton"
-      >
+    >
       <li
-          v-for="item in items"
-          :key="item.id"
-          @click="select"
-          class="dropdown-item"
-          :class="{ active: isActive(item.id) }"
-          :data-itemid="item.id"
+        v-for="item in items"
+        :key="item.id"
+        class="dropdown-item"
+        :class="{ active: isActive(item.id) }"
+        :data-itemid="item.id"
+        @click="select"
       >
-          {{ item.name }}
+        {{ item.name }}
       </li>
-      </ul>
+    </ul>
   </div>
 </template>

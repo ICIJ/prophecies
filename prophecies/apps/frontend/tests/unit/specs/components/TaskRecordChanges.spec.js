@@ -1,11 +1,12 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import '@/store'
 import Core from '@/core'
 import Action from '@/models/Action'
 import TaskRecordChanges from '@/components/TaskRecordChanges'
 
 describe('TaskRecordChanges', () => {
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

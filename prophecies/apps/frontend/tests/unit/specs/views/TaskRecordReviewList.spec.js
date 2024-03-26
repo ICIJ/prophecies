@@ -1,13 +1,11 @@
-import {
-  createLocalVue,
-  shallowMount
-} from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
+
 import Core from '@/core'
 import TaskRecordReviewList from '@/views/TaskRecordReviewList'
 import Task from '@/models/Task'
 
 describe('TaskRecordReviewList', () => {
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

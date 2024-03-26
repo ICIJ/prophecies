@@ -1,4 +1,5 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
+
 import AppBrand from '@/components/AppBrand'
 import AppSidebar from '@/components/AppSidebar'
 import AppVersion from '@/components/AppVersion'

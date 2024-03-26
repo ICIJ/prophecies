@@ -22,7 +22,7 @@ describe('utils/sort', () => {
     afterAll(() => {
       Tip.deleteAll()
     })
-    it('shouldn\'t sort when project and task aren\'t available', () => {
+    it("shouldn't sort when project and task aren't available", () => {
       const list = Tip.all()
       const sorted = orderByProjectThenTask(list)
       expect(list).toEqual(sorted)

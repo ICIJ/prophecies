@@ -1,5 +1,6 @@
 <script>
 import { get } from 'lodash'
+
 import AppVersion from '@/components/AppVersion'
 import User from '@/models/User'
 
@@ -27,32 +28,32 @@ export default {
     }
   },
   computed: {
-    codeAsString () {
+    codeAsString() {
       return this.code || get(this, 'error.response.status')
     },
-    username () {
+    username() {
       const { username = null } = User.me() || {}
       return username
     },
-    titleAsString () {
+    titleAsString() {
       if (!this.title) {
         return get(this, 'error.response.statusText', this.error)
       }
       return this.title
     },
-    descriptionAsString () {
+    descriptionAsString() {
       if (!this.description) {
         return get(this, 'error.message')
       }
       return this.description
     },
-    helpLink () {
+    helpLink() {
       return this.$config.get('helpLink')
     },
-    logoutLink () {
+    logoutLink() {
       return this.$config.get('logoutUrl')
     },
-    showHeader () {
+    showHeader() {
       return !!this.username
     }
   }
@@ -61,11 +62,13 @@ export default {
 
 <template>
   <div class="error d-flex flex-column">
-    <div class="error__header p-3 text-right" v-if="showHeader">
-      <a class="btn btn-outline-light btn-sm"
-         :href="logoutLink"
-         :title="$t('error.connectedAs', { username })"
-         v-b-tooltip.html>
+    <div v-if="showHeader" class="error__header p-3 text-right">
+      <a
+        v-b-tooltip.html
+        class="btn btn-outline-light btn-sm"
+        :href="logoutLink"
+        :title="$t('error.connectedAs', { username })"
+      >
         {{ $t('error.logout') }}
       </a>
     </div>
@@ -98,63 +101,62 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .error {
-    background: $primary no-repeat right bottom;
-    color: text-contrast($primary);
-    width: 100%;
-    min-height: 100vh;
+.error {
+  background: $primary no-repeat right bottom;
+  color: text-contrast($primary);
+  width: 100%;
+  min-height: 100vh;
 
-    &__container {
-      margin: $spacer auto;
-      text-align: center;
+  &__container {
+    margin: $spacer auto;
+    text-align: center;
 
-      &__heading {
-        display: flex;
+    &__heading {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      &__code {
+        display: inline-flex;
         flex-direction: row;
         align-items: center;
         justify-content: center;
+        background: $danger;
+        border-radius: 1em;
 
-        &__code {
-          display: inline-flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-          background: $danger;
-          border-radius: 1em;
-
-          &__icon {
-            transform: scale(1.1);
-          }
-
-          &__value {
-            font-size: 0.8rem;
-
-            &:empty {
-              display: none;
-            }
-          }
+        &__icon {
+          transform: scale(1.1);
         }
-      }
 
-      &__description {
-        margin-bottom: $spacer * 5;
-      }
+        &__value {
+          font-size: 0.8rem;
 
-      &__links {
-
-        &__item {
-
-          &:not(:last-of-type):after {
-            content: "|";
-            margin: 0 $spacer;
-            color: $light;
-          }
-
-          &, a {
-            color: $light;
+          &:empty {
+            display: none;
           }
         }
       }
     }
+
+    &__description {
+      margin-bottom: $spacer * 5;
+    }
+
+    &__links {
+      &__item {
+        &:not(:last-of-type):after {
+          content: '|';
+          margin: 0 $spacer;
+          color: $light;
+        }
+
+        &,
+        a {
+          color: $light;
+        }
+      }
+    }
   }
+}
 </style>

@@ -1,4 +1,4 @@
-import { createStore, default as defaultStore } from '@/store'
+import defaultStore, { createStore } from '@/store'
 
 describe('store', () => {
   describe('default', () => {
@@ -6,7 +6,7 @@ describe('store', () => {
       expect(defaultStore).toBeInstanceOf(Object)
     })
 
-    it('shouldn\'t be in strict mode', () => {
+    it("shouldn't be in strict mode", () => {
       expect(defaultStore.strict).toBeFalsy()
     })
 
@@ -26,7 +26,7 @@ describe('store', () => {
       expect(store).toBeInstanceOf(Object)
     })
 
-    it('shouldn\'t be in strict mode', () => {
+    it("shouldn't be in strict mode", () => {
       expect(store.strict).toBeFalsy()
     })
 

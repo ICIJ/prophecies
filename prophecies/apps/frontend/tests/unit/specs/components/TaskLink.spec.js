@@ -1,10 +1,10 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import TaskLink from '@/components/TaskLink'
 import Task from '@/models/Task'
 import Core from '@/core'
 
 describe('TaskLink', () => {
-
   beforeAll(async () => {
     await Task.api().get()
   })
@@ -48,7 +48,9 @@ describe('TaskLink', () => {
       await core.configure()
       // Get router from core
       const { i18n, store, router } = core
-      const scopedSlots = { default: '<template slot-scope="{ task }">{{ task.name }} task in {{ task.project.name }}</template>' }
+      const scopedSlots = {
+        default: '<template slot-scope="{ task }">{{ task.name }} task in {{ task.project.name }}</template>'
+      }
       // Finally, instanciate the component
       wrapper = mount(TaskLink, { localVue, propsData, i18n, store, router, scopedSlots })
     })

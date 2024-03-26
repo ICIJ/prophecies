@@ -15,11 +15,12 @@ export default {
 
 <template>
   <haptic-copy
+    v-b-tooltip.hover.right="'Click to copy'"
     :text="text"
     :class="{ 'haptic-copy-button--hover': hover }"
     class="haptic-copy-button font-weight-bold"
     tooltip-placement="right"
-    v-b-tooltip.hover.right="'Click to copy'">
+  >
     <template v-if="$slots.default">
       <slot />
     </template>
@@ -56,7 +57,7 @@ export default {
 
   &--hover &__clipboard {
     opacity: 0;
-    transition: $btn-transition, opacity .15s;
+    transition: $btn-transition, opacity 0.15s;
   }
 
   &--hover {

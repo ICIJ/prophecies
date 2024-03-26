@@ -35,10 +35,9 @@ describe('UserNotification', () => {
   })
 
   it('should have one action object and its nested actionObject', async () => {
-    const { action: { actionObject } } = UserNotification.query()
-      .with('action')
-      .with('action.actionObject')
-      .find('4')
+    const {
+      action: { actionObject }
+    } = UserNotification.query().with('action').with('action.actionObject').find('4')
     expect(actionObject.id).toBe('38')
   })
 })

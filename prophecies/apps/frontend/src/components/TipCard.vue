@@ -1,4 +1,3 @@
-
 <script>
 import { formatDateFromNow, formatDateLong } from '@/utils/date'
 import Tip from '@/models/Tip'
@@ -8,6 +7,14 @@ export default {
   name: 'TipsCard',
   components: {
     UserLink
+  },
+  filters: {
+    formatDateLong(d) {
+      return formatDateLong(d)
+    },
+    formatDateFromNow(d) {
+      return formatDateFromNow(d)
+    }
   },
   props: {
     tipId: {
@@ -23,19 +30,8 @@ export default {
     }
   },
   computed: {
-    tip () {
-      return Tip
-        .query()
-        .with('creator')
-        .find(this.tipId)
-    }
-  },
-  filters: {
-    formatDateLong (d) {
-      return formatDateLong(d)
-    },
-    formatDateFromNow (d) {
-      return formatDateFromNow(d)
+    tip() {
+      return Tip.query().with('creator').find(this.tipId)
     }
   }
 }
@@ -50,17 +46,19 @@ export default {
     </slot>
     <div :class="contentClass['tipDescriptionPadding']" v-html="tip.descriptionHTML"></div>
     <div class="text-right text-secondary">
-      {{ $t("tips.lastModified") }}: <strong>
+      {{ $t('tips.lastModified') }}:
+      <strong>
         <user-link class="text-truncate" :user-id="tip.creator.id" no-card>
           {{ tip.creator.displayName }}
-          <template v-if="tip.creator.isMe">({{$t("tips.you")}})</template>
-        </user-link>
-        </strong>,
+          <template v-if="tip.creator.isMe">({{ $t('tips.you') }})</template>
+        </user-link> </strong
+      >,
       <router-link
+        v-b-tooltip.hover
         :to="{ name: 'tip-retrieve', params: { tipId } }"
         :title="tip.updatedAt | formatDateLong"
-        v-b-tooltip.hover
-        class="text-secondary">
+        class="text-secondary"
+      >
         {{ tip.updatedAt | formatDateFromNow }}
       </router-link>
     </div>

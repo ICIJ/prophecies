@@ -1,14 +1,11 @@
-import {
-  createLocalVue,
-  mount
-} from '@vue/test-utils'
-import Core from '@/core'
+import { createLocalVue, mount } from '@vue/test-utils'
 
+import Core from '@/core'
 import TaskRecordReviewTutorial from '@/components/TaskRecordReviewTutorial'
 describe('TaskRecordReviewTutorial', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

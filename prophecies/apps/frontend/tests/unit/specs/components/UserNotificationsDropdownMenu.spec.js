@@ -1,5 +1,7 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import { server, rest } from '../../mocks/server'
+
 import '@/store'
 import Core from '@/core'
 import User from '@/models/User'
@@ -10,12 +12,11 @@ import UserNotificationsDropdownMenu from '@/components/UserNotificationsDropdow
 jest.useFakeTimers()
 
 describe('UserNotificationsDropdownMenu', () => {
-
   // Ensure we advance timers and run all pending job
   // in the PromiseJobs queue.
   function advanceTimersByTimeAndFlushPromises(ms) {
     jest.advanceTimersByTime(ms)
-    return new Promise(done => jest.requireActual("timers").setTimeout(done, 200))
+    return new Promise((resolve) => jest.requireActual('timers').setTimeout(resolve, 200))
   }
 
   function createContainer() {
@@ -33,14 +34,18 @@ describe('UserNotificationsDropdownMenu', () => {
 
     beforeEach(async () => {
       // Mock notifications endpoint to return nothing
-      server.use(rest.get('/api/v1/user-notifications', (req, res, ctx) => {
-        return res(ctx.json({
-          data: [
-            { id: '13', attributes: { read: true } },
-            { id: '14', attributes: { read: true } }
-          ]
-        }))
-      }))
+      server.use(
+        rest.get('/api/v1/user-notifications', (req, res, ctx) => {
+          return res(
+            ctx.json({
+              data: [
+                { id: '13', attributes: { read: true } },
+                { id: '14', attributes: { read: true } }
+              ]
+            })
+          )
+        })
+      )
       const attachTo = createContainer()
       const localVue = createLocalVue()
       const stubs = ['app-waiter']
@@ -80,9 +85,11 @@ describe('UserNotificationsDropdownMenu', () => {
 
     beforeEach(async () => {
       // Mock notifications endpoint to return nothing
-      server.use(rest.get('/api/v1/user-notifications', (req, res, ctx) => {
-        return res(ctx.json({ data: [] }))
-      }))
+      server.use(
+        rest.get('/api/v1/user-notifications', (req, res, ctx) => {
+          return res(ctx.json({ data: [] }))
+        })
+      )
       const attachTo = createContainer()
       const localVue = createLocalVue()
       const stubs = ['app-waiter']
@@ -109,7 +116,6 @@ describe('UserNotificationsDropdownMenu', () => {
     })
   })
 
-
   describe('with two unread notifications', () => {
     let wrapper
 
@@ -119,14 +125,18 @@ describe('UserNotificationsDropdownMenu', () => {
 
     beforeEach(async () => {
       // Mock notifications endpoint to return nothing
-      server.use(rest.get('/api/v1/user-notifications', (req, res, ctx) => {
-        return res(ctx.json({ 
-          data: [
-            { id: '15', attributes: { read: false } },
-            { id: '16', attributes: { read: false } }
-          ] 
-        }))
-      }))
+      server.use(
+        rest.get('/api/v1/user-notifications', (req, res, ctx) => {
+          return res(
+            ctx.json({
+              data: [
+                { id: '15', attributes: { read: false } },
+                { id: '16', attributes: { read: false } }
+              ]
+            })
+          )
+        })
+      )
       const attachTo = createContainer()
       const localVue = createLocalVue()
       const stubs = ['app-waiter']
@@ -148,7 +158,7 @@ describe('UserNotificationsDropdownMenu', () => {
     })
 
     it('should enable the button to mark all notifications as read', () => {
-      const markAllButton = wrapper.find('.user-notifications-dropdown-menu__mark-all')      
+      const markAllButton = wrapper.find('.user-notifications-dropdown-menu__mark-all')
       expect(markAllButton.attributes('disabled')).toBeFalsy()
     })
   })

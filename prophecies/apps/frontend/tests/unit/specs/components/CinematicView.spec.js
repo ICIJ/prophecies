@@ -1,6 +1,7 @@
 import '@/store'
 
 import { createLocalVue, shallowMount } from '@vue/test-utils'
+
 import Core from '@/core'
 import CinematicView from '@/components/CinematicView'
 import TaskRecordReview from '@/models/TaskRecordReview'
@@ -28,7 +29,7 @@ describe('CinematicView', () => {
     const totalRows = 10
     const perPage = 5
     const propsData = { pageNumber, perPage, taskRecordReviewIds, totalRows }
-    wrapper = shallowMount(CinematicView, { attachTo,localVue, propsData, wait, store })
+    wrapper = shallowMount(CinematicView, { attachTo, localVue, propsData, wait, store })
   })
 
   it('should have five reviews', () => {

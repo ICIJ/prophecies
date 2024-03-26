@@ -1,10 +1,11 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import Shortkey from '@/plugins/Shortkey'
 
 describe('Shortkey', () => {
   describe('a component with one shortkey', () => {
     const data = () => ({ calls: 0 })
-    const template = `<div></div>`
+    const template = '<div></div>'
     const Component = { template, data }
     const localVue = createLocalVue()
     localVue.use(Shortkey)
@@ -85,8 +86,8 @@ describe('Shortkey', () => {
         document.dispatchEvent(event)
         expect(wrapperBar.vm.calls).toBe(0)
         expect(wrapperFoo.vm.calls).toBe(1)
-      })      
-      
+      })
+
       it('should call only one callback function for the current scope', async () => {
         wrapperBar.vm.$shortkey.bind('b', 'bar', () => wrapperBar.vm.calls++)
         wrapperFoo.vm.$shortkey.bind('b', 'foo', () => wrapperFoo.vm.calls++)
@@ -96,8 +97,8 @@ describe('Shortkey', () => {
         document.dispatchEvent(event)
         expect(wrapperBar.vm.calls).toBe(1)
         expect(wrapperFoo.vm.calls).toBe(0)
-      })     
-      
+      })
+
       it('should call only one callback function if the other is deactivated', async () => {
         wrapperBar.vm.$shortkey.bind('c', 'bar', () => wrapperBar.vm.calls++)
         wrapperFoo.vm.$shortkey.bind('c', 'foo', () => wrapperFoo.vm.calls++)

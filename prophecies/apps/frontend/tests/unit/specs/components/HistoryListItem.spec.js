@@ -1,7 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
+
 import '@/store'
 import Core from '@/core'
-
 import HistoryListItem, { ITEM_TYPES } from '@/components/HistoryListItem'
 
 describe('HistoryListItem', () => {

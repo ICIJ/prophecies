@@ -18,7 +18,6 @@ export default {
     AppWaiter,
     TaskRecordReviewCardWrapper,
     TaskRecordReviewTutorial
-
   },
   props: {
     taskId: {
@@ -28,35 +27,23 @@ export default {
       type: [Number, String]
     }
   },
-  data () {
+  data() {
     return {
       resolvedTaskRecordReviewId: null
     }
   },
-  created () {
-    return this.setup()
-  },
-  watch: {
-    taskId () {
-      return this.setup()
-    },
-    taskRecordReviewId () {
-      return this.setup()
-    }
-  },
   computed: {
-    fetchAllLoader () {
+    fetchAllLoader() {
       return uniqueId('load-task-record-review-retrieve-')
     },
-    highlightNote () {
+    highlightNote() {
       if (String(this.$route.query.highlightNote).toLowerCase() === 'true') {
         return this.taskRecordReviewId
       }
       return false
     },
-    task () {
-      return Task
-        .query()
+    task() {
+      return Task.query()
         .with('checkers')
         .with('choiceGroup')
         .with('choiceGroup.alternativeValues')
@@ -64,8 +51,19 @@ export default {
         .find(this.taskId)
     }
   },
+  watch: {
+    taskId() {
+      return this.setup()
+    },
+    taskRecordReviewId() {
+      return this.setup()
+    }
+  },
+  created() {
+    return this.setup()
+  },
   methods: {
-    async setup () {
+    async setup() {
       try {
         await this.waitFor(this.fetchAllLoader, this.fetchAll)
         this.$core.setPageTitle(this.task.name)
@@ -74,20 +72,20 @@ export default {
         this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
-    async fetchAll () {
+    async fetchAll() {
       await this.fetchTask()
       await this.fetchChoiceGroup()
       await this.fetchTaskRecordReview()
     },
-    async fetchTask () {
+    async fetchTask() {
       const params = { include: 'project,checkers,templateSetting' }
       return Task.api().find(this.taskId, { params })
     },
-    async fetchChoiceGroup () {
+    async fetchChoiceGroup() {
       const params = { include: 'alternative_values,choices' }
       return ChoiceGroup.api().find(this.task.choiceGroupId, { params })
     },
-    async fetchTaskRecordReview () {
+    async fetchTaskRecordReview() {
       // User might try to access a TaskRecordReview assigned to another user.
       // We need to find the id of the review assigned to the current user.
       const params = { 'filter[task_record__reviews__id]': this.taskRecordReviewId }
@@ -101,7 +99,7 @@ export default {
       const firstReviewId = reviews[0]?.id || null
       this.resolvedTaskRecordReviewId = userReviewId || firstReviewId
     },
-    async waitFor (loader, fn) {
+    async waitFor(loader, fn) {
       this.$wait.start(loader)
       await fn()
       this.$wait.end(loader)
@@ -137,10 +135,11 @@ export default {
               active
               preview-link
               :highlight-note="highlightNote"
-              :task-record-review-id="resolvedTaskRecordReviewId" />
+              :task-record-review-id="resolvedTaskRecordReviewId"
+            />
           </template>
           <div v-else class="text-center text-muted text-small mx-auto">
-            {{$t('general.unableToFindThisResource')}}
+            {{ $t('general.unableToFindThisResource') }}
           </div>
         </app-waiter>
       </div>

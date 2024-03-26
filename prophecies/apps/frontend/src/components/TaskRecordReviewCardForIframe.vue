@@ -8,6 +8,11 @@ import TaskRecordReview from '@/models/TaskRecordReview'
 
 export default {
   name: 'TaskRecordReviewCardForIframe',
+  components: {
+    HapticCopyButton,
+    TaskRecordIframe,
+    TaskRecordReviewCard
+  },
   props: {
     taskRecordReviewId: {
       type: [String, Number]
@@ -27,11 +32,6 @@ export default {
     highlightNote: {
       type: [Boolean, String]
     }
-  },
-  components: {
-    HapticCopyButton,
-    TaskRecordIframe,
-    TaskRecordReviewCard
   },
   computed: {
     taskRecordReview() {
@@ -54,7 +54,6 @@ export default {
 <template>
   <task-record-review-card
     class="task-record-review-card-for-iframe"
-    v-on="$listeners"
     no-link
     no-embed
     :task-record-review-id="taskRecordReviewId"
@@ -62,10 +61,16 @@ export default {
     :selected="selected"
     :preview-link="previewLink"
     :frozen="frozen"
-    :highlight-note="highlightNote">
+    :highlight-note="highlightNote"
+    v-on="$listeners"
+  >
     <template #original-value="{ taskRecord }">
-      <task-record-iframe :task-record-id="taskRecordReview.taskRecordId" expand lazy class="mb-3 " />
-      <haptic-copy-button v-if="displayOriginalValue" :text="taskRecord.originalValue" class="btn-sm mx-auto py-1 px-2" />
+      <task-record-iframe :task-record-id="taskRecordReview.taskRecordId" expand lazy class="mb-3" />
+      <haptic-copy-button
+        v-if="displayOriginalValue"
+        :text="taskRecord.originalValue"
+        class="btn-sm mx-auto py-1 px-2"
+      />
     </template>
   </task-record-review-card>
 </template>

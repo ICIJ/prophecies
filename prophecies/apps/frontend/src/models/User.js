@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core'
+
 import { responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 
@@ -7,7 +8,7 @@ export default class User extends Model {
   static entity = 'User'
   static usernamePattern = /@([a-zA-Z0-9]{1,15}|project|task)/g
 
-  static fields () {
+  static fields() {
     return {
       id: this.attr(null),
       username: this.attr(''),
@@ -27,9 +28,9 @@ export default class User extends Model {
     baseURL: `${settings.apiUrl}/users/`,
     dataTransformer: responseNormalizer,
     actions: {
-      me () {
+      me() {
         return this.get('me/', {
-          dataTransformer (response) {
+          dataTransformer(response) {
             return { isMe: true, ...responseNormalizer(response) }
           }
         })
@@ -37,12 +38,12 @@ export default class User extends Model {
     }
   }
 
-  static me () {
+  static me() {
     const [user = null] = this.query().where('isMe', true).get()
     return user
   }
 
-  static find (idOrUsername) {
+  static find(idOrUsername) {
     if (isNaN(idOrUsername)) {
       return this.query().where('username', idOrUsername).first()
     }
@@ -52,7 +53,7 @@ export default class User extends Model {
   /**
    * Get first name of the user.
    */
-  get displayName () {
+  get displayName() {
     if (this.firstName) {
       return this.firstName
     }
@@ -62,14 +63,14 @@ export default class User extends Model {
   /**
    * Get full name of the user.
    */
-  get displayFullName () {
+  get displayFullName() {
     if (!this.firstName || !this.lastName) {
       return this.username
     }
     return `${this.firstName} ${this.lastName}`
   }
 
-  toString () {
+  toString() {
     return this.displayName
   }
 }

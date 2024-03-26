@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core'
+
 import { responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import Choice from '@/models/Choice'
@@ -8,7 +9,7 @@ import Task from '@/models/Task'
 export default class TaskUserChoiceStatistics extends Model {
   static entity = 'TaskUserChoiceStatistics'
 
-  static fields () {
+  static fields() {
     return {
       id: this.attr(null),
       taskId: this.attr(null),

@@ -1,10 +1,10 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 
 import '@/store'
-import Core from '@/core'
 import { server, rest } from '../../mocks/server'
-import User from '@/models/User'
 
+import Core from '@/core'
+import User from '@/models/User'
 import UserProfileDropdownMenu from '@/components/UserProfileDropdownMenu'
 
 describe('UserProfileDropdownMenu', () => {
@@ -19,21 +19,25 @@ describe('UserProfileDropdownMenu', () => {
     beforeAll(async () => {
       const localVue = createLocalVue()
       // Mock current user
-      server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
-        return res.once(ctx.json({
-          data: {
-            id: 20,
-            attributes: {
-              username: 'olivia',
-              firstName: 'Olivia',
-              lastName: 'Reinhardt',
-              email: 'engineering@icij.org',
-              emailMd5: '628e9a99d87799e9d434b63d2c3744ca',
-              isStaff: false
-            }
-          }
-        }))
-      }))
+      server.use(
+        rest.get('/api/v1/users/me/', (req, res, ctx) => {
+          return res.once(
+            ctx.json({
+              data: {
+                id: 20,
+                attributes: {
+                  username: 'olivia',
+                  firstName: 'Olivia',
+                  lastName: 'Reinhardt',
+                  email: 'engineering@icij.org',
+                  emailMd5: '628e9a99d87799e9d434b63d2c3744ca',
+                  isStaff: false
+                }
+              }
+            })
+          )
+        })
+      )
       // Configure the local vue with plugins
       const core = Core.init(localVue).useAll()
       const { i18n } = core
@@ -50,21 +54,25 @@ describe('UserProfileDropdownMenu', () => {
     beforeAll(async () => {
       const localVue = createLocalVue()
       // Mock current user
-      server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
-        return res.once(ctx.json({
-          data: {
-            id: 20,
-            attributes: {
-              username: 'olivia',
-              firstName: 'Olivia',
-              lastName: 'Reinhardt',
-              email: 'engineering@icij.org',
-              emailMd5: '628e9a99d87799e9d434b63d2c3744ca',
-              isStaff: true
-            }
-          }
-        }))
-      }))
+      server.use(
+        rest.get('/api/v1/users/me/', (req, res, ctx) => {
+          return res.once(
+            ctx.json({
+              data: {
+                id: 20,
+                attributes: {
+                  username: 'olivia',
+                  firstName: 'Olivia',
+                  lastName: 'Reinhardt',
+                  email: 'engineering@icij.org',
+                  emailMd5: '628e9a99d87799e9d434b63d2c3744ca',
+                  isStaff: true
+                }
+              }
+            })
+          )
+        })
+      )
       // Configure the local vue with plugins
       const core = Core.init(localVue).useAll()
       const { i18n } = core

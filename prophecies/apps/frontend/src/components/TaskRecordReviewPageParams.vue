@@ -17,51 +17,59 @@ export default {
       default: 'task_record__id'
     }
   },
-  data () {
+  data() {
     return {
       intermediaryPageSize: this.pageSize,
       intermediarySort: this.sort
     }
   },
-  watch: {
-    pageSize (value) {
-      this.intermediaryPageSize = value
-    },
-    sort (value) {
-      this.intermediarySort = value
-    }
-  },
   computed: {
-    pageSizeOptions () {
+    pageSizeOptions() {
       return [
         { value: '10', label: '10 by page' },
         { value: '25', label: '25 by page' },
         { value: '50', label: '50 by page' }
       ]
     },
-    sortOptions () {
+    sortOptions() {
       return [
         { value: 'task_record__id', label: this.$t('taskRecordReviewPageParams.idDefault'), $isDefault: true },
         { value: 'task_record__predicted_value', label: this.$t('taskRecordReviewPageParams.predictedValueAZ') },
         { value: '-task_record__predicted_value', label: this.$t('taskRecordReviewPageParams.predictedValueZA') },
         { value: 'task_record__original_value', label: this.$t('taskRecordReviewPageParams.originalValueAZ') },
         { value: '-task_record__original_value', label: this.$t('taskRecordReviewPageParams.originalValueZA') },
-        { value: 'task_record__priority', label: this.$t('taskRecordReviewPageParams.priorityValueLowHigh'), $isDisabled: true },
-        { value: '-task_record__priority', label: this.$t('taskRecordReviewPageParams.priorityValueHighLow'), $isDisabled: true }
+        {
+          value: 'task_record__priority',
+          label: this.$t('taskRecordReviewPageParams.priorityValueLowHigh'),
+          $isDisabled: true
+        },
+        {
+          value: '-task_record__priority',
+          label: this.$t('taskRecordReviewPageParams.priorityValueHighLow'),
+          $isDisabled: true
+        }
       ]
     },
-    selectedPageSizeOption () {
+    selectedPageSizeOption() {
       return find(this.pageSizeOptions, { value: this.intermediaryPageSize })
     },
-    selectedSortOption () {
+    selectedSortOption() {
       return find(this.sortOptions, { value: this.intermediarySort })
     },
-    isDefaultSortOption () {
+    isDefaultSortOption() {
       return this.intermediarySort === this.$options.props.sort.default
     }
   },
+  watch: {
+    pageSize(value) {
+      this.intermediaryPageSize = value
+    },
+    sort(value) {
+      this.intermediarySort = value
+    }
+  },
   methods: {
-    submit () {
+    submit() {
       const pageSize = this.intermediaryPageSize
       const sort = this.intermediarySort
       this.$emit('submit', { pageSize, sort })
@@ -74,51 +82,53 @@ export default {
   <form class="task-record-review-page-params" @submit.prevent="submit">
     <div class="task-record-review-page-params__size task-record-review-page-params__form-group">
       <label class="task-record-review-page-params__form-group__label">
-        {{ $t('taskRecordReviewPageParams.pageSize')}}
+        {{ $t('taskRecordReviewPageParams.pageSize') }}
       </label>
-      <multiselect :allow-empty="false"
-                   :show-labels="false"
-                   :searchable="false"
-                   :options="pageSizeOptions"
-                   :value="selectedPageSizeOption"
-                   @input="intermediaryPageSize = $event.value"
-                   label="label"
-                   track-by="value" />
+      <multiselect
+        :allow-empty="false"
+        :show-labels="false"
+        :searchable="false"
+        :options="pageSizeOptions"
+        :value="selectedPageSizeOption"
+        label="label"
+        track-by="value"
+        @input="intermediaryPageSize = $event.value"
+      />
     </div>
-    <div class="task-record-review-page-params__sort task-record-review-page-params__form-group" :class="{ 'task-record-review-page-params__sort--default': isDefaultSortOption }">
+    <div
+      class="task-record-review-page-params__sort task-record-review-page-params__form-group"
+      :class="{ 'task-record-review-page-params__sort--default': isDefaultSortOption }"
+    >
       <label class="task-record-review-page-params__form-group__label">
-        {{$t('taskRecordReviewPageParams.sortBy')}}
+        {{ $t('taskRecordReviewPageParams.sortBy') }}
       </label>
-      <multiselect :allow-empty="false"
-                   :show-labels="false"
-                   :searchable="false"
-                   :options="sortOptions"
-                   :value="selectedSortOption"
-                   @input="intermediarySort = $event.value"
-                   label="label"
-                   track-by="value" />
+      <multiselect
+        :allow-empty="false"
+        :show-labels="false"
+        :searchable="false"
+        :options="sortOptions"
+        :value="selectedSortOption"
+        label="label"
+        track-by="value"
+        @input="intermediarySort = $event.value"
+      />
     </div>
     <div class="d-flex pt-2">
-      <b-button @click="$emit('cancel')" variant="secondary">
-        Cancel
-      </b-button>
-      <b-button variant="primary" class="ml-auto font-weight-bold" type="submit">
-        Apply
-      </b-button>
+      <b-button variant="secondary" @click="$emit('cancel')"> Cancel </b-button>
+      <b-button variant="primary" class="ml-auto font-weight-bold" type="submit"> Apply </b-button>
     </div>
   </form>
 </template>
 
 <style lang="scss" scoped>
-  .task-record-review-page-params {
+.task-record-review-page-params {
+  &__form-group {
+    display: block;
+    margin-bottom: $spacer;
 
-    &__form-group {
-      display: block;
-      margin-bottom: $spacer;
-
-      &__label {
-        font-weight: bold;
-      }
+    &__label {
+      font-weight: bold;
     }
   }
+}
 </style>

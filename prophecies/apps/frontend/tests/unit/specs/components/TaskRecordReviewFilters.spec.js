@@ -1,4 +1,5 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
+
 import '@/store'
 import Core from '@/core'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -109,7 +110,11 @@ describe('TaskRecordReviewFilters', () => {
   describe('with route filters', () => {
     beforeEach(() => {
       const localVue = createLocalVue()
-      const routeFilters = { choice__in: '1,2', task_record__predicted_value__iregex: '(FRA|DZA)', alternative_value__iregex: '(ALA|ALB)' }
+      const routeFilters = {
+        choice__in: '1,2',
+        task_record__predicted_value__iregex: '(FRA|DZA)',
+        alternative_value__iregex: '(ALA|ALB)'
+      }
       const propsData = { taskId: '1', routeFilters }
       // Configure the local vue with plugins
       const { store, wait } = Core.init(localVue).useAll()

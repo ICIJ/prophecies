@@ -1,8 +1,8 @@
 <script>
-import { compact, get, groupBy, map, remove, uniq, uniqueId } from 'lodash'
+import { compact, get, groupBy, map, uniq, uniqueId } from 'lodash'
+
 import { orderByProjectThenTask } from '@/utils/sort'
 import AppWaiter from '@/components/AppWaiter'
-
 import TaskRecordReviewCardWrapper from '@/components/TaskRecordReviewCardWrapper'
 import BookmarksPageParams from '@/components/BookmarksPageParams'
 import EmptyPlaceholder from '@/components/EmptyPlaceholder'
@@ -38,7 +38,7 @@ export default {
       })
     }
   },
-  data () {
+  data() {
     return {
       projectFilter: this.query[FILTER_TYPES.PROJECT],
       taskFilter: this.query[FILTER_TYPES.TASK],
@@ -46,26 +46,79 @@ export default {
       taskIds: []
     }
   },
-  created () {
+  computed: {
+    projectId: {
+      get() {
+        return this.query[FILTER_TYPES.PROJECT]
+      },
+      set(value) {
+        this.setProjectFilter(value)
+      }
+    },
+    taskId: {
+      get() {
+        return this.query[FILTER_TYPES.TASK]
+      },
+      set(value) {
+        this.setTaskFilter(value)
+      }
+    },
+    fetchBookmarksLoader() {
+      return uniqueId('load-bookmarks-')
+    },
+    tasks() {
+      return Task.query().with('project').with('choiceGroup').whereIdIn(this.taskIds).get()
+    },
+    taskRecordReviews() {
+      return TaskRecordReview.query()
+        .with('task.project')
+        .with('task')
+        .with('taskRecord')
+        .whereIdIn(this.taskRecordReviewIds)
+        .get()
+    },
+    filteredBookmarks() {
+      return orderByProjectThenTask(
+        this.taskRecordReviews.filter(
+          ({ task }) =>
+            (!this.query[FILTER_TYPES.PROJECT] || task?.project?.id === this.query[FILTER_TYPES.PROJECT]) &&
+            (!this.query[FILTER_TYPES.TASK] || task?.id === this.query[FILTER_TYPES.TASK])
+        )
+      )
+    },
+    bookmarksGroupedByProject() {
+      return groupBy(this.filteredBookmarks, (record) => {
+        return record.task.project ? record.task.project.name : ''
+      })
+    },
+    bookmarksParams() {
+      return {
+        [FILTER_TYPES.PROJECT]: this.projectFilter,
+        [FILTER_TYPES.TASK]: this.taskFilter
+      }
+    },
+    user() {
+      return User.find(this.username)
+    }
+  },
+  created() {
     return this.setup()
   },
   methods: {
-    async setup () {
+    async setup() {
       try {
         await this.waitFor(this.fetchBookmarksLoader, this.fetchAll)
       } catch (error) {
-        const title = this.$t(
-          'userRetrieveBookmarks.unableToRetrieveTheBookmarks'
-        )
+        const title = this.$t('userRetrieveBookmarks.unableToRetrieveTheBookmarks')
         this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
-    async fetchAll () {
+    async fetchAll() {
       await this.fetchBookmarks()
       await this.fetchTasks()
       await this.fetchChoiceGroups()
     },
-    async fetchBookmarks () {
+    async fetchBookmarks() {
       const params = {
         'filter[checker]': this.user.id,
         'filter[task_record__bookmarked_by]': this.user.id
@@ -76,36 +129,36 @@ export default {
 
       this.$set(this, 'taskRecordReviewIds', taskRecordReviewIds)
     },
-    fetchChoiceGroup (choiceGroupId) {
+    fetchChoiceGroup(choiceGroupId) {
       const params = { include: 'alternative_values,choices' }
       return ChoiceGroup.api().find(choiceGroupId, { params })
     },
-    fetchChoiceGroups () {
+    fetchChoiceGroups() {
       const ids = map(this.tasks, 'choiceGroupId')
       const uniqueIds = uniq(compact(ids))
 
-      return Promise.all(map(uniqueIds, groupId => this.fetchChoiceGroup(groupId)));
+      return Promise.all(map(uniqueIds, (groupId) => this.fetchChoiceGroup(groupId)))
     },
-    fetchTask (taskId) {
+    fetchTask(taskId) {
       const params = { include: 'project,checkers,templateSetting' }
       return Task.api().find(taskId, { params })
     },
-    fetchTasks () {
+    fetchTasks() {
       const ids = map(this.taskRecordReviews, 'taskId')
       const uniqueIds = uniq(compact(ids))
-      const promises = map(uniqueIds, taskId => this.fetchTask(taskId))
+      const promises = map(uniqueIds, (taskId) => this.fetchTask(taskId))
       this.$set(this, 'taskIds', uniqueIds)
       return Promise.all(promises)
     },
-    async waitFor (loader, fn) {
+    async waitFor(loader, fn) {
       this.$wait.start(loader)
       await fn()
       this.$wait.end(loader)
     },
-    bookmarksGroupedByTaskId (records) {
-      return groupBy(records, (record) => record.task ? record.task.id : '')
+    bookmarksGroupedByTaskId(records) {
+      return groupBy(records, (record) => (record.task ? record.task.id : ''))
     },
-    setProjectFilter (val) {
+    setProjectFilter(val) {
       if (this.projectNotContainingTask(val, this.taskFilter)) {
         this.taskFilter = null
       }
@@ -113,11 +166,8 @@ export default {
       this.projectFilter = val
       this.updateFilters()
     },
-    setTaskFilter (val) {
-      const reviewsOfTask = TaskRecordReview.query()
-        .with('task')
-        .where('taskId', val)
-        .get()
+    setTaskFilter(val) {
+      const reviewsOfTask = TaskRecordReview.query().with('task').where('taskId', val).get()
       // keep the current project filter if no task is selected
       if (reviewsOfTask[0].task.projectId) {
         this.projectFilter = reviewsOfTask[0].task.projectId
@@ -125,83 +175,25 @@ export default {
       this.taskFilter = val
       this.updateFilters()
     },
-    updateFilters () {
+    updateFilters() {
       return this.$router.push({
         name: 'user-retrieve-bookmarks',
         query: this.bookmarksParams,
         username: this.username
       })
     },
-    projectNotContainingTask (projectId, taskId) {
+    projectNotContainingTask(projectId, taskId) {
       const reviewsOfProject = Task.query().where('projectId', projectId).get()
       return reviewsOfProject.filter((t) => t.id === taskId).length === 0
     },
-    taskNotContainingUser (taskId) {
+    taskNotContainingUser(taskId) {
       return TaskRecordReview.query().where('task.id', taskId)
     },
-    taskName (taskId) {
+    taskName(taskId) {
       return Task.find(taskId).name
     },
-    taskClosed (taskId) {
+    taskClosed(taskId) {
       return Task.find(taskId).closed === true
-    }
-  },
-  computed: {
-    projectId: {
-      get () {
-        return this.query[FILTER_TYPES.PROJECT]
-      },
-      set (value) {
-        this.setProjectFilter(value)
-      }
-    },
-    taskId: {
-      get () {
-        return this.query[FILTER_TYPES.TASK]
-      },
-      set (value) {
-        this.setTaskFilter(value)
-      }
-    },
-    fetchBookmarksLoader () {
-      return uniqueId('load-bookmarks-')
-    },
-    tasks () {
-      return Task.query()
-        .with('project')
-        .with('choiceGroup')
-        .whereIdIn(this.taskIds)
-        .get()
-    },
-    taskRecordReviews () {
-      return TaskRecordReview.query()
-        .with('task.project')
-        .with('task')
-        .with('taskRecord')
-        .whereIdIn(this.taskRecordReviewIds)
-        .get()
-    },
-    filteredBookmarks () {
-      return orderByProjectThenTask(
-        this.taskRecordReviews.filter(({ task }) =>
-          (!this.query[FILTER_TYPES.PROJECT] || task?.project?.id === this.query[FILTER_TYPES.PROJECT]) &&
-          (!this.query[FILTER_TYPES.TASK] || task?.id === this.query[FILTER_TYPES.TASK])
-        )
-      )
-    },
-    bookmarksGroupedByProject () {
-      return groupBy(this.filteredBookmarks, (record) => {
-        return record.task.project ? record.task.project.name : ''
-      })
-    },
-    bookmarksParams () {
-      return {
-        [FILTER_TYPES.PROJECT]: this.projectFilter,
-        [FILTER_TYPES.TASK]: this.taskFilter
-      }
-    },
-    user () {
-      return User.find(this.username)
     }
   }
 }
@@ -209,16 +201,9 @@ export default {
 
 <template>
   <div class="user-retrieve-bookmarks">
-    <app-waiter
-      :loader="fetchBookmarksLoader"
-      waiter-class="my-5 mx-auto d-block"
-    >
+    <app-waiter :loader="fetchBookmarksLoader" waiter-class="my-5 mx-auto d-block">
       <template v-if="taskRecordReviewIds.length">
-        <bookmarks-page-params
-          :tasks="tasks"
-          :project-id.sync="projectId"
-          :task-id.sync="taskId"
-        />
+        <bookmarks-page-params :tasks="tasks" :project-id.sync="projectId" :task-id.sync="taskId" />
         <div
           v-for="(projectValue, name) in bookmarksGroupedByProject"
           :key="name"
@@ -226,33 +211,34 @@ export default {
         >
           <h1 class="mb-3 mt-4 text-primary">{{ name }}</h1>
           <div
-            v-for="(taskRecordReviews, taskId) in bookmarksGroupedByTaskId(
-              projectValue
-            )"
-            :key="taskId"
+            v-for="(taskRecordReviewsBookmarked, taskIdBookmarked) in bookmarksGroupedByTaskId(projectValue)"
+            :key="taskIdBookmarked"
             class="user-retrieve-bookmarks__project__task mb-4"
           >
-          <div class="d-flex flex-row my-4 ml-4">
-            <h2 class="text-tertiary">{{ taskName(taskId) }}</h2>
-            <task-status class="mt-0 ml-2" :task-id="taskId" v-if="taskId && taskClosed(taskId)" />
-          </div>
-            <div
-              v-for="record in taskRecordReviews"
-              class="
-                user-retrieve-bookmarks__project__task__record
-                ml-4
-                mb-5
-              "
-              :key="record.id"
-            >
-              <task-record-review-card-wrapper
-                :task-record-review-id="record.id"
+            <div class="d-flex flex-row my-4 ml-4">
+              <h2 class="text-tertiary">{{ taskName(taskIdBookmarked) }}</h2>
+              <task-status
+                v-if="taskIdBookmarked && taskClosed(taskIdBookmarked)"
+                class="mt-0 ml-2"
+                :task-id="taskIdBookmarked"
               />
+            </div>
+            <div
+              v-for="record in taskRecordReviewsBookmarked"
+              :key="record.id"
+              class="user-retrieve-bookmarks__project__task__record ml-4 mb-5"
+            >
+              <task-record-review-card-wrapper :task-record-review-id="record.id" />
             </div>
           </div>
         </div>
       </template>
-      <empty-placeholder v-else class="user-retrieve-bookmarks__empty" icon="BookmarkIcon" :title="$t('userRetrieveBookmarks.noBookmarks')"/>
+      <empty-placeholder
+        v-else
+        class="user-retrieve-bookmarks__empty"
+        icon="BookmarkIcon"
+        :title="$t('userRetrieveBookmarks.noBookmarks')"
+      />
     </app-waiter>
   </div>
 </template>

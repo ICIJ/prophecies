@@ -1,4 +1,5 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
+
 import '@/store'
 import Core from '@/core'
 import HistoryList from '@/components/HistoryList'
@@ -26,7 +27,7 @@ describe('HistoryList', () => {
     expect(elem.text()).toContain('Test Title')
   })
 
-  it('shouldn\'t display a title if unavailable slot', async () => {
+  it("shouldn't display a title if unavailable slot", async () => {
     wrapper = await shallowMount(HistoryList, {
       i18n,
       wait,

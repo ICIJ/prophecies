@@ -8,7 +8,7 @@ import UserNotification from '@/models/UserNotification'
 jest.useFakeTimers()
 
 describe('UserNotifications', () => {
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -25,7 +25,7 @@ describe('UserNotifications', () => {
       const { i18n, store, wait } = Core.init(localVue).useAll()
 
       const { response } = await UserNotification.api().get('')
-      const notificationIds = response.data.data.map(t => t.id)
+      const notificationIds = response.data.data.map((t) => t.id)
       const propsData = { notificationIds }
 
       wrapper = mount(UserNotifications, { attachTo, localVue, i18n, propsData, store, stubs, wait })

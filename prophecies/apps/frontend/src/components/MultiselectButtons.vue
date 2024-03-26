@@ -10,11 +10,11 @@ export default {
   props: {
     value: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     options: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     label: {
       type: String,
@@ -29,41 +29,41 @@ export default {
     }
   },
   computed: {
-    noValues () {
+    noValues() {
       return !this.value.length
     }
   },
   methods: {
-    findOptionIndex (option = null) {
+    findOptionIndex(option = null) {
       if (option === null) {
         return -1
       }
       const tracked = option[this.trackBy]
       return findIndex(this.value, { [this.trackBy]: tracked })
     },
-    isOptionSelected (option = null) {
+    isOptionSelected(option = null) {
       return (option === null && this.noValues) || this.findOptionIndex(option) > -1
     },
-    optionVariant (option = null) {
+    optionVariant(option = null) {
       return this.isOptionSelected(option) ? 'primary' : 'outline-primary'
     },
-    removeOptions () {
+    removeOptions() {
       return this.$emit('update', [])
     },
-    withOption (option) {
+    withOption(option) {
       if (this.multiple) {
         return [...this.value, option]
       }
       return [option]
     },
-    withoutOption (option) {
+    withoutOption(option) {
       if (this.multiple) {
         const index = this.findOptionIndex(option)
         return this.value.filter((_, i) => i !== index)
       }
       return []
     },
-    toggleOption (option) {
+    toggleOption(option) {
       // The option already exist
       if (this.findOptionIndex(option) === -1) {
         return this.$emit('update', this.withOption(option))
@@ -76,9 +76,7 @@ export default {
 
 <template>
   <div class="multiselect-buttons">
-    <b-btn :variant="optionVariant()" class="multiselect-buttons__item" @click="removeOptions()">
-      all
-    </b-btn>
+    <b-btn :variant="optionVariant()" class="multiselect-buttons__item" @click="removeOptions()"> all </b-btn>
     <span v-for="option in options" :key="option[trackBy]">
       <b-btn :variant="optionVariant(option)" class="multiselect-buttons__item" @click="toggleOption(option)">
         {{ option[label] }}
@@ -88,24 +86,23 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .multiselect-buttons {
+.multiselect-buttons {
+  &__item {
+    margin-right: $spacer;
 
-    &__item {
-      margin-right: $spacer;
-
-      &:hover {
-        background-color: $warning;
-        color: text-contrast($warning);
-        border-color: $warning;
-      }
-    }
-
-    &__item.btn-outline-primary {
-      border-color: $border-color;
-    }
-
-    &__item.btn-primary {
-      font-weight: bold;
+    &:hover {
+      background-color: $warning;
+      color: text-contrast($warning);
+      border-color: $warning;
     }
   }
+
+  &__item.btn-outline-primary {
+    border-color: $border-color;
+  }
+
+  &__item.btn-primary {
+    font-weight: bold;
+  }
+}
 </style>

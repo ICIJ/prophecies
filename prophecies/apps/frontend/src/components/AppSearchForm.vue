@@ -11,6 +11,14 @@ import Tip from '@/models/Tip'
 
 export default {
   name: 'AppSearchForm',
+  directives: {
+    onClickaway
+  },
+  components: {
+    AppSearchResults,
+    AppWaiter,
+    ShortkeyBadge
+  },
   props: {
     isNav: {
       type: Boolean
@@ -20,15 +28,7 @@ export default {
       default: '.app-search-form__field__input'
     }
   },
-  directives: {
-    onClickaway
-  },
-  components: {
-    AppSearchResults,
-    AppWaiter,
-    ShortkeyBadge
-  },
-  data () {
+  data() {
     return {
       counts: [],
       query: '',
@@ -39,13 +39,13 @@ export default {
     }
   },
   computed: {
-    is () {
+    is() {
       return this.isNav ? 'b-nav-form' : 'form'
     },
-    isLoading () {
+    isLoading() {
       return this.$wait.is(`app-search-form-load-${this.query}`)
     },
-    classList () {
+    classList() {
       return {
         'app-search-form--has-active-item': this.hasActiveItem,
         'app-search-form--has-query': this.hasQuery,
@@ -53,22 +53,24 @@ export default {
         'app-search-form--is-loading': this.isLoading
       }
     },
-    hasActiveItem () {
+    hasActiveItem() {
       return this.activeItem > -1 && this.activeQuerysetId
     },
-    hasQuery () {
+    hasQuery() {
       return this.query !== ''
     },
-    hasQueryset () {
+    hasQueryset() {
       return !!this.queryset.length
     },
-    searchMethods () {
+    searchMethods() {
       return [this.searchTips, ...this.searchTaskRecordReviewMethodsByTask]
     },
-    searchTaskRecordReviewMethodsByTask () {
+    searchTaskRecordReviewMethodsByTask() {
       // Create one method for each task with at least 1 record
       return Task.query()
-        .where('taskRecordsCount', (value) => { return value > 0 })
+        .where('taskRecordsCount', (value) => {
+          return value > 0
+        })
         .get()
         .map(({ id: taskId }) => {
           return (query, querysetId) => {
@@ -76,7 +78,7 @@ export default {
           }
         })
     },
-    shortkeys () {
+    shortkeys() {
       return {
         activatePreviousItem: 'up',
         activateNextItem: 'down',
@@ -84,29 +86,29 @@ export default {
         focus: 'ctrl+f'
       }
     },
-    tipsToSearch () {
+    tipsToSearch() {
       // Create tips : general tips (no task associated) and tips
       // associated to a task that has at least 1 taskRecordsCount
       return Tip.query()
         .with('task')
         .get()
-        .filter(elem => elem.taskId === null || elem.task?.taskRecordsCount > 0)
+        .filter((elem) => elem.taskId === null || elem.task?.taskRecordsCount > 0)
         .map(({ id: tipId }) => tipId)
     },
-    tipSearchParams () {
+    tipSearchParams() {
       return this.tipsToSearch.length ? { 'filter[id__in]': this.tipsToSearch.join(',') } : {}
     },
-    defaultQuerysetId () {
+    defaultQuerysetId() {
       const maxCount = maxBy(this.counts, 'count')
       return get(maxCount, 'querysetId', null)
     },
-    activeQueryset () {
+    activeQueryset() {
       return filter(this.queryset, { querysetId: this.activeQuerysetId })
     },
-    maxActiveItem () {
+    maxActiveItem() {
       return this.activeQueryset.length - 1
     },
-    activeTaskIdWithQueryset () {
+    activeTaskIdWithQueryset() {
       if (this.hasQueryset && !!this.activeQueryset.length) {
         const activeQS = this.activeQueryset[0]
         if (activeQS.type === 'TaskRecordReview') {
@@ -118,67 +120,67 @@ export default {
     }
   },
   methods: {
-    close () {
+    close() {
       this.activeItem = -1
       this.$el.querySelector(this.searchInputSelector).blur()
       this.isOpen = false
     },
-    focus () {
+    focus() {
       this.$el.querySelector(this.searchInputSelector).focus()
       window.scrollTo({ top: 0, behavior: 'smooth' })
     },
-    mapShortkeys ({ detail: { srcKey: method } }) {
+    mapShortkeys({ detail: { srcKey: method } }) {
       if (method in this.$options.methods) {
         this[method]()
       }
     },
-    activatePreviousItem () {
+    activatePreviousItem() {
       this.activeItem = Math.max(-1, this.activeItem - 1)
       // Move back to the search input
       if (this.activeItem === -1) {
         this.$el.querySelector(this.searchInputSelector).focus()
       }
     },
-    activateNextItem () {
+    activateNextItem() {
       this.activeItem = Math.min(this.maxActiveItem, this.activeItem + 1)
     },
-    collectEntitiesIdAndType ({ response }, querysetId) {
+    collectEntitiesIdAndType({ response }, querysetId) {
       const data = get(response, 'data.data', [])
       return data.map(({ id, type }) => ({ id, type, querysetId }))
     },
-    collectCount ({ response }, querysetId) {
+    collectCount({ response }, querysetId) {
       const cannocialCount = get(response, 'data.data.length', 0)
       const count = get(response, 'data.meta.pagination.count', cannocialCount)
       return { count, querysetId }
     },
-    emptyResultsAndCounts () {
+    emptyResultsAndCounts() {
       this.counts = []
       this.queryset = []
     },
-    isQueryValid (query) {
+    isQueryValid(query) {
       return String(query).length > 1
     },
-    callSearchMethods (query) {
-      return this.searchMethods.map(method => {
+    callSearchMethods(query) {
+      return this.searchMethods.map((method) => {
         // Each method creates a unique id
         const querysetId = uniqueId('qs-')
         return method(query, querysetId)
       })
     },
-    async searchTaskRecordReview (query, querysetId, taskId) {
+    async searchTaskRecordReview(query, querysetId, taskId) {
       const params = { 'filter[taskRecord.task]': taskId }
       const results = await TaskRecordReview.api().search(query, { params })
       const entitiesIdAndType = this.collectEntitiesIdAndType(results, querysetId)
       const count = this.collectCount(results, querysetId)
       return { entitiesIdAndType, count }
     },
-    async searchTips (query, querysetId) {
+    async searchTips(query, querysetId) {
       const results = await Tip.api().search(query, { params: this.tipSearchParams })
       const entitiesIdAndType = this.collectEntitiesIdAndType(results, querysetId)
       const count = this.collectCount(results, querysetId)
       return { entitiesIdAndType, count }
     },
-    async search (query) {
+    async search(query) {
       if (!this.isQueryValid(query)) {
         return this.emptyResultsAndCounts()
       }
@@ -191,8 +193,8 @@ export default {
         // Avoid updating component's data if the query is not current anymore
         if (this.query === query) {
           // Merge values at once
-          this.counts = all.map(qs => qs.count)
-          this.queryset = flatten(all.map(qs => qs.entitiesIdAndType))
+          this.counts = all.map((qs) => qs.count)
+          this.queryset = flatten(all.map((qs) => qs.entitiesIdAndType))
           this.activeQuerysetId = this.defaultQuerysetId
           this.activeItem = -1
           this.isOpen = true
@@ -205,7 +207,7 @@ export default {
       return this.search(query)
     }, 600),
 
-    enterSearchResultsPage (query) {
+    enterSearchResultsPage(query) {
       if (this.activeTaskIdWithQueryset) {
         this.$router.push({ path: `/task-record-reviews/${this.activeTaskIdWithQueryset}?filter[search]=${query}` })
       }
@@ -215,131 +217,131 @@ export default {
 </script>
 
 <template>
-  <component
-    class="app-search-form"
-    v-on-clickaway="close"
-    :is="is"
-    :class="classList"
-    @submit.prevent>
+  <component :is="is" v-on-clickaway="close" class="app-search-form" :class="classList" @submit.prevent>
     <label
-      class="app-search-form__field d-flex align-items-center justify-content-start w-100"
       v-shortkey="shortkeys"
-      @shortkey="mapShortkeys($event)">
+      class="app-search-form__field d-flex align-items-center justify-content-start w-100"
+      @shortkey="mapShortkeys($event)"
+    >
       <app-waiter
         :loader="`app-search-form-load-${query}`"
         :transition="null"
         :waiter-class="null"
         class="app-search-form__field__waiter mr-2"
         small
-        variant="primary">
+        variant="primary"
+      >
         <search-icon class="app-search-form__field__waiter__icon" />
       </app-waiter>
       <b-form-input
+        v-model="query"
+        class="app-search-form__field__input flex-grow-1"
+        :placeholder="$t('appSearchForm.typeYourSearch')"
+        type="search"
         @input="searchWithThrottle(query)"
         @focus="isOpen = true"
         @keyup.enter="enterSearchResultsPage(query)"
         @keyup.up="activatePreviousItem"
         @keyup.down="activateNextItem"
         @keyup.esc="close"
-        class="app-search-form__field__input flex-grow-1"
-        :placeholder="$t('appSearchForm.typeYourSearch')"
-        type="search"
-        v-model="query" />
+      />
       <span class="app-search-form__field__placeholder">
         {{ $t('appHeader.search') }}
         <shortkey-badge
           :value="['Ctrl', 'f']"
-          class="ml-2 app-search-form__field__input__placeholder__shortkey-badge" />
+          class="ml-2 app-search-form__field__input__placeholder__shortkey-badge"
+        />
       </span>
       <span class="app-search-form__field__separator"></span>
       <app-search-results
-        class="app-search-form__field__results"
         v-if="isOpen && hasQueryset && !isLoading"
+        class="app-search-form__field__results"
         :active-item.sync="activeItem"
         :active-queryset-id.sync="activeQuerysetId"
-        @shortkey:enter="enterSearchResultsPage(query)"
         :counts="counts"
         :query="query"
-        :queryset="queryset" />
+        :queryset="queryset"
+        @shortkey:enter="enterSearchResultsPage(query)"
+      />
     </label>
   </component>
 </template>
 
 <style lang="scss" scoped>
-  .app-search-form {
-    position: relative;
+.app-search-form {
+  position: relative;
 
-    & > * {
+  & > * {
+    width: 100%;
+  }
+
+  &__field {
+    padding: $spacer-xs;
+
+    &__waiter {
+      height: 20px;
+      width: 20px;
+      overflow: hidden;
+
+      &__icon {
+        height: 20px;
+        width: 20px;
+      }
+    }
+
+    & &__input {
+      padding: 0;
+      border: 0;
+      height: auto;
+      opacity: 0;
+      position: absolute;
+      left: -9999px;
+
+      .app-search-form--has-query &,
+      &:focus {
+        position: static;
+        opacity: 1;
+        outline: none;
+        box-shadow: none;
+      }
+    }
+
+    .app-search-form--has-query &__placeholder,
+    .app-search-form--has-active-item &__placeholder,
+    &__input:focus ~ &__placeholder {
+      display: none;
+    }
+
+    .app-search-form--has-query &__separator,
+    .app-search-form--has-active-item &__separator,
+    &__input:focus ~ &__separator {
+      display: block;
+    }
+
+    &__placeholder {
+      display: flex;
+      align-items: center;
+    }
+
+    &__separator {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: $warning;
+      height: 7px;
+      max-width: 100px;
       width: 100%;
     }
 
-    &__field {
-      padding: $spacer-xs;
-
-      &__waiter {
-        height: 20px;
-        width: 20px;
-        overflow: hidden;
-
-        &__icon {
-          height: 20px;
-          width: 20px
-        }
-      }
-
-      & &__input {
-        padding: 0;
-        border: 0;
-        height: auto;
-        opacity: 0;
-        position: absolute;
-        left: -9999px;
-
-        .app-search-form--has-query &,
-        &:focus {
-          position: static;
-          opacity: 1;
-          outline: none;
-          box-shadow: none;
-        }
-      }
-
-      .app-search-form--has-query &__placeholder,
-      .app-search-form--has-active-item &__placeholder,
-      &__input:focus ~ &__placeholder {
-        display: none;
-      }
-
-      .app-search-form--has-query &__separator,
-      .app-search-form--has-active-item &__separator,
-      &__input:focus ~ &__separator {
-        display: block;
-      }
-
-      &__placeholder {
-        display: flex;
-        align-items: center;
-      }
-
-      &__separator {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background: $warning;
-        height: 7px;
-        max-width: 100px;
-        width: 100%;
-      }
-
-      &__results {
-        z-index: $zindex-dropdown;
-        position: absolute;
-        top: calc(100% + #{$spacer});
-        left: 0;
-        width: 800px;
-        max-width: 60vw;
-      }
+    &__results {
+      z-index: $zindex-dropdown;
+      position: absolute;
+      top: calc(100% + #{$spacer});
+      left: 0;
+      width: 800px;
+      max-width: 60vw;
     }
   }
+}
 </style>

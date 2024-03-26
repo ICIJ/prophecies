@@ -1,5 +1,6 @@
 import '@/store'
 import { server, rest } from '../../mocks/server'
+
 import Setting from '@/models/Setting'
 
 describe('Setting', () => {
@@ -13,14 +14,18 @@ describe('Setting', () => {
   })
 
   it('should return a list of settings', async () => {
-    server.use(rest.get('/api/v1/settings', (req, res, ctx) => {
-      return res.once(ctx.json({
-        data: [
-          { type: 'Setting', id: '1', attributes: { key: 'foo', value: 1 } },
-          { type: 'Setting', id: '2', attributes: { key: 'bar', value: 2 } }
-        ]
-      }))
-    }))
+    server.use(
+      rest.get('/api/v1/settings', (req, res, ctx) => {
+        return res.once(
+          ctx.json({
+            data: [
+              { type: 'Setting', id: '1', attributes: { key: 'foo', value: 1 } },
+              { type: 'Setting', id: '2', attributes: { key: 'bar', value: 2 } }
+            ]
+          })
+        )
+      })
+    )
     await Setting.api().get()
     expect(Setting.all()).toHaveLength(2)
     expect(Setting.query().where('key', 'foo').first().value).toBe(1)
@@ -29,14 +34,18 @@ describe('Setting', () => {
 
   describe('`allAsObject` static method', () => {
     it('should return an object with all values', async () => {
-      server.use(rest.get('/api/v1/settings', (req, res, ctx) => {
-        return res.once(ctx.json({
-          data: [
-            { type: 'Setting', id: '1', attributes: { key: 'foo', value: 1 } },
-            { type: 'Setting', id: '2', attributes: { key: 'bar', value: 2 } }
-          ]
-        }))
-      }))
+      server.use(
+        rest.get('/api/v1/settings', (req, res, ctx) => {
+          return res.once(
+            ctx.json({
+              data: [
+                { type: 'Setting', id: '1', attributes: { key: 'foo', value: 1 } },
+                { type: 'Setting', id: '2', attributes: { key: 'bar', value: 2 } }
+              ]
+            })
+          )
+        })
+      )
       await Setting.api().get()
       const settings = Setting.allAsObject()
       expect(settings.foo).toBe(1)
@@ -44,14 +53,18 @@ describe('Setting', () => {
     })
 
     it('should convert key to camelCase', async () => {
-      server.use(rest.get('/api/v1/settings', (req, res, ctx) => {
-        return res.once(ctx.json({
-          data: [
-            { type: 'Setting', id: '1', attributes: { key: 'org_name', value: 'ICIJ' } },
-            { type: 'Setting', id: '2', attributes: { key: 'app_name', value: 'Prophecies' } }
-          ]
-        }))
-      }))
+      server.use(
+        rest.get('/api/v1/settings', (req, res, ctx) => {
+          return res.once(
+            ctx.json({
+              data: [
+                { type: 'Setting', id: '1', attributes: { key: 'org_name', value: 'ICIJ' } },
+                { type: 'Setting', id: '2', attributes: { key: 'app_name', value: 'Prophecies' } }
+              ]
+            })
+          )
+        })
+      )
       await Setting.api().get()
       const settings = Setting.allAsObject()
       expect(settings.orgName).toBe('ICIJ')

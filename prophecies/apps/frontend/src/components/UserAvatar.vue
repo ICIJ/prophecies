@@ -1,5 +1,6 @@
 <script>
 import { template } from 'lodash'
+
 import User from '@/models/User'
 
 export default {
@@ -14,10 +15,10 @@ export default {
     }
   },
   computed: {
-    user () {
+    user() {
       return User.find(this.userId)
     },
-    userAvatarUrl () {
+    userAvatarUrl() {
       const interpolate = this.$config.get('templateInterpolate')
       const avatarUrlTemplate = this.$config.get('avatarUrlTemplate')
       const compiled = template(avatarUrlTemplate, { interpolate })

@@ -1,7 +1,5 @@
-import {
-  createLocalVue,
-  mount
-} from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
+
 import Core from '@/core'
 import SortByDropdown from '@/components/SortByDropdown'
 
@@ -17,9 +15,7 @@ describe('SortByDropdown', () => {
 
     const propsData = {
       sort: 'task_id',
-      options: [
-        { value: 'task_id', label: 'ID (default)', $isDefault: true }
-      ]
+      options: [{ value: 'task_id', label: 'ID (default)', $isDefault: true }]
     }
 
     await core.configure()

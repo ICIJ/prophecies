@@ -20,32 +20,32 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .app-breadcrumb {
+.app-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+
+  &__item--dashboard svg {
+    transform: translateY(-0.2em);
+  }
+
+  &__item.list-inline-item {
+    font-size: $font-size-lg;
+    padding-right: $spacer-sm;
+    margin-right: 0;
     display: inline-flex;
     align-items: center;
+    font-weight: 600;
 
-    &__item--dashboard svg {
-      transform: translateY(-0.2em);
-    }
-
-    &__item.list-inline-item {
-      font-size: $font-size-lg;
-      padding-right: $spacer-sm;
-      margin-right: 0;
-      display: inline-flex;
-      align-items: center;
-      font-weight: 600;
-
-      &:not(:last-of-type):after {
-        content: "";
-        background: center right no-repeat;
-        background-size: contain;
-        background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNyIgaGVpZ2h0PSIxMiIgdmlld0JveD0iMCAwIDcgMTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHBhdGggZD0iTTEgMTAuNzIwOUw2IDUuODYwNDRMMSAxIiBzdHJva2U9IiMyMzVCNTkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=);
-        margin-left: $spacer-sm;
-        display: block;
-        height: 1em;
-        width: 0.5em;
-      }
+    &:not(:last-of-type):after {
+      content: '';
+      background: center right no-repeat;
+      background-size: contain;
+      background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNyIgaGVpZ2h0PSIxMiIgdmlld0JveD0iMCAwIDcgMTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHBhdGggZD0iTTEgMTAuNzIwOUw2IDUuODYwNDRMMSAxIiBzdHJva2U9IiMyMzVCNTkiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=);
+      margin-left: $spacer-sm;
+      display: block;
+      height: 1em;
+      width: 0.5em;
     }
   }
+}
 </style>

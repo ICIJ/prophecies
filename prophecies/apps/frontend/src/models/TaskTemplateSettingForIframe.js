@@ -3,7 +3,7 @@ import TaskTemplateSetting from '@/models/TaskTemplateSetting'
 export default class TaskTemplateSettingForIframe extends TaskTemplateSetting {
   static entity = 'TaskTemplateSettingForIframe'
 
-  static fields () {
+  static fields() {
     return {
       ...super.fields(),
       maxWidth: this.number(null),

@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core'
+
 import { defaultHeaders, responseNormalizer } from '@/utils/jsonapi'
 import Action from '@/models/Action'
 import Operation from '@/models/Operation'
@@ -8,7 +9,7 @@ import settings from '@/settings'
 export default class UserNotification extends Model {
   static entity = 'UserNotification'
 
-  static fields () {
+  static fields() {
     return {
       id: this.attr(null),
       recipientId: this.attr(null),
@@ -27,15 +28,15 @@ export default class UserNotification extends Model {
     baseURL: `${settings.apiUrl}/user-notifications/`,
     dataTransformer: responseNormalizer,
     actions: {
-      markAsRead (id) {
+      markAsRead(id) {
         const attributes = { read: true }
         const type = 'UserNotification'
         const data = { attributes, id, type }
         return this.put(`${id}/`, { data }, { headers: defaultHeaders() })
       },
-      bulkMarkAsRead (ids) {
+      bulkMarkAsRead(ids) {
         const headers = defaultHeaders()
-        const operations = ids.map(id => ({ id, method: 'update', payload: '1' }))
+        const operations = ids.map((id) => ({ id, method: 'update', payload: '1' }))
         const payloads = [
           {
             id: '1',
@@ -58,11 +59,11 @@ export default class UserNotification extends Model {
     }
   }
 
-  get i18n () {
+  get i18n() {
     return this.action ? ['notification', this.action.i18n].join('.') : null
   }
 
-  get link () {
+  get link() {
     return this.action ? this.action.link : null
   }
 }

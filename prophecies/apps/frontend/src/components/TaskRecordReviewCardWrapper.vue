@@ -40,11 +40,7 @@ export default {
       }
     },
     taskRecordReview() {
-      return TaskRecordReview
-        .query()
-        .with('taskRecord')
-        .with('taskRecord.task')
-        .find(this.taskRecordReviewId)
+      return TaskRecordReview.query().with('taskRecord').with('taskRecord.task').find(this.taskRecordReviewId)
     },
     task() {
       return get(this, 'taskRecordReview.taskRecord.task')
@@ -58,12 +54,13 @@ export default {
 
 <template>
   <component
-    v-on="$listeners"
     :is="is"
     :task-record-review-id="taskRecordReviewId"
     :active="active"
     :selected="selected"
     :preview-link="previewLink"
     :frozen="frozen"
-    :highlight-note="highlightNote" />
+    :highlight-note="highlightNote"
+    v-on="$listeners"
+  />
 </template>

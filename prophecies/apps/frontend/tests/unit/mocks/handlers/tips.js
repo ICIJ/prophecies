@@ -258,11 +258,7 @@ export default [
             type: 'Task',
             id: '2',
             attributes: {
-              colors: [
-                '#25605e',
-                '#31807d',
-                '#3da09c'
-              ],
+              colors: ['#25605e', '#31807d', '#3da09c'],
               description: 'Checking more stuff',
               name: 'Another Task',
               priority: 1,
@@ -322,11 +318,7 @@ export default [
             type: 'Task',
             id: '3',
             attributes: {
-              colors: [
-                '#5e5906',
-                '#ce970d',
-                '#f8c00a'
-              ],
+              colors: ['#5e5906', '#ce970d', '#f8c00a'],
               description: 'Review Shops',
               name: 'Shops',
               priority: 1,
@@ -369,11 +361,7 @@ export default [
             type: 'Task',
             id: '4',
             attributes: {
-              colors: [
-                '#602541',
-                '#c01764',
-                '#ee0cd9'
-              ],
+              colors: ['#602541', '#c01764', '#ee0cd9'],
               description: 'Review Paintings',
               name: 'Paintings',
               priority: 1,
@@ -416,11 +404,7 @@ export default [
             type: 'Task',
             id: '5',
             attributes: {
-              colors: [
-                '#602541',
-                '#c01764',
-                '#ee0cd9'
-              ],
+              colors: ['#602541', '#c01764', '#ee0cd9'],
               description: 'Review Addresses',
               name: 'Addresses',
               priority: 1,

@@ -1,4 +1,5 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import TaskStatus from '@/components/TaskStatus'
 import Task from '@/models/Task'
 import Core from '@/core'

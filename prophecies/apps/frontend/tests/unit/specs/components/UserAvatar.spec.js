@@ -1,4 +1,5 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import UserAvatar from '@/components/UserAvatar'
 import User from '@/models/User'
 import Core from '@/core'

@@ -30,7 +30,7 @@ export default {
     },
     waiterClass: {
       type: [String, Array, Object],
-      default: () => (['mx-auto', 'my-1', 'd-block'])
+      default: () => ['mx-auto', 'my-1', 'd-block']
     }
   }
 }
@@ -38,13 +38,13 @@ export default {
 
 <template>
   <v-wait :for="loader" :transition="transition" :mode="mode" :duration="duration">
-    <b-spinner :small="small" :variant="variant" slot="waiting" :class="waiterClass" />
+    <b-spinner slot="waiting" :small="small" :variant="variant" :class="waiterClass" />
     <slot />
   </v-wait>
 </template>
 
 <style scoped>
-  .spinner-border {
-    animation-duration: 1s;
-  }
+.spinner-border {
+  animation-duration: 1s;
+}
 </style>

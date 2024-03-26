@@ -1,17 +1,13 @@
 <template>
-    <sort-by-dropdown
-      :sort.sync="sortField"
-      :options="sortOptions"
-      class="task-sort-by-dropdown"
-      >
-      <template #label>
-      </template>
-    </sort-by-dropdown>
+  <sort-by-dropdown :sort.sync="sortField" :options="sortOptions" class="task-sort-by-dropdown">
+    <template #label> </template>
+  </sort-by-dropdown>
 </template>
 
 <script>
 import { find, orderBy } from 'lodash'
-import SortByDropdown from '@/components/SortByDropdown.vue'
+
+import SortByDropdown from '@/components/SortByDropdown'
 import { TaskStatusOrder } from '@/models/Task'
 
 export default {
@@ -30,10 +26,10 @@ export default {
     },
     options: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
-  data () {
+  data() {
     return {
       sortOptions: [
         { value: 'status_asc', label: this.$t('taskSortByDropdown.status'), $isDefault: true, needStatus: true },
@@ -48,44 +44,48 @@ export default {
     }
   },
   computed: {
-    selectedSortOption () {
+    selectedSortOption() {
       return find(this.sortOptions, { value: this.sortField })
     },
-    selectedSortName () {
+    selectedSortName() {
       return this.selectedSortOption.value.split('_')[0]
     },
-    selectedSortOptionOrder () {
+    selectedSortOptionOrder() {
       return this.selectedSortOption.value.split('_')[1]
     },
-    sortByStatus () {
+    sortByStatus() {
       return function (task) {
         return TaskStatusOrder[task.status] === 1
       }
     },
     sortField: {
-      get () {
+      get() {
         const isParamValid = find(this.sortOptions, { value: this.$route.query.sort })
         return isParamValid ? this.$route.query.sort : this.sort
       },
-      set (value) {
+      set(value) {
         const query = { ...this.$route.query, sort: value }
         this.$router.push({ path: this.$route.path, query }, null)
         this.$emit('update:sort', value)
         this.$emit('update:sort-by-cb', this.callbackOrderBy.bind(this))
       }
     },
-    callbackOrderBy () {
+    callbackOrderBy() {
       return (tasks) => {
         if (this.selectedSortName === 'status') {
           return orderBy(tasks, [this.sortByStatus, 'name'], ['asc', 'asc'])
-        } else if (this.selectedSortOption.needStatus) { // adding this condition can help ignoring the closed tasks on priority sorting
-          return orderBy(tasks, [this.sortByStatus, this.selectedSortName, 'name'], ['asc', this.selectedSortOptionOrder, 'asc', 'asc'])
+        } else if (this.selectedSortOption.needStatus) {
+          // adding this condition can help ignoring the closed tasks on priority sorting
+          return orderBy(
+            tasks,
+            [this.sortByStatus, this.selectedSortName, 'name'],
+            ['asc', this.selectedSortOptionOrder, 'asc', 'asc']
+          )
         } else {
           return orderBy(tasks, [this.selectedSortName, 'name'], [this.selectedSortOptionOrder, 'asc'])
         }
       }
     }
-
   }
 }
 </script>

@@ -22,34 +22,30 @@ export default {
     }
   },
   computed: {
-    tips () {
-      return Tip.query()
-        .with('project')
-        .with('task')
-        .with('creator')
-        .get()
+    tips() {
+      return Tip.query().with('project').with('task').with('creator').get()
     },
     projectId_: {
-      get () {
+      get() {
         return this.projectId
       },
-      set (value) {
+      set(value) {
         this.$emit('update:projectId', value)
       }
     },
     taskId_: {
-      get () {
+      get() {
         return this.taskId
       },
-      set (value) {
+      set(value) {
         this.$emit('update:taskId', value)
       }
     },
     creatorId_: {
-      get () {
+      get() {
         return this.creatorId
       },
-      set (value) {
+      set(value) {
         this.$emit('update:creatorId', value)
       }
     }
@@ -59,20 +55,20 @@ export default {
 
 <template>
   <page-params
-    :values='tips'
-    :projectId.sync="projectId_"
-    :taskId.sync="taskId_"
-    :creatorId.sync="creatorId_"
+    :values="tips"
+    :project-id.sync="projectId_"
+    :task-id.sync="taskId_"
+    :creator-id.sync="creatorId_"
     class="tip-list-page-params"
   />
 </template>
 
 <style lang="scss">
-  .tip-list-page-params {
-    &__task {
-      &__show-status {
-        font-size: smaller;
-      }
+.tip-list-page-params {
+  &__task {
+    &__show-status {
+      font-size: smaller;
     }
   }
+}
 </style>

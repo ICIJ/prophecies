@@ -1,10 +1,11 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import UserLink from '@/components/UserLink'
 import User from '@/models/User'
 import Core from '@/core'
 
 describe('UserLink', () => {
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

@@ -1,10 +1,11 @@
 import { Model } from '@vuex-orm/core'
+
 import ChoiceGroup from '@/models/ChoiceGroup'
 
 export default class Choice extends Model {
   static entity = 'Choice'
 
-  static fields () {
+  static fields() {
     return {
       id: this.attr(null),
       name: this.string(),
@@ -17,7 +18,7 @@ export default class Choice extends Model {
     }
   }
 
-  toString () {
+  toString() {
     return this.name
   }
 }

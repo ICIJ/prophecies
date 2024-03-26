@@ -1,5 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import { BTab } from 'bootstrap-vue'
+
 import AppSearchResults from '@/components/AppSearchResults'
 import Core from '@/core'
 import Task from '@/models/Task'

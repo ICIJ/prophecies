@@ -1,6 +1,6 @@
-
 <script>
 import { get, uniqueId } from 'lodash'
+
 import User from '@/models/User'
 import Action from '@/models/Action'
 import Task from '@/models/Task'
@@ -21,18 +21,31 @@ export default {
       default: null
     }
   },
-  data () {
+  data() {
     return {
       isFetching: false,
       actionIds: [],
       count: 0
     }
   },
-  async created () {
+  computed: {
+    fetchHistoryLoader() {
+      return uniqueId('fetch-history-')
+    },
+    user() {
+      return User.find(this.username)
+    }
+  },
+  watch: {
+    pageNumber(value) {
+      return this.setup()
+    }
+  },
+  async created() {
     await this.setup()
   },
   methods: {
-    async setup () {
+    async setup() {
       try {
         this.isFetching = true
         await this.fetchAll()
@@ -43,15 +56,15 @@ export default {
         this.isFetching = false
       }
     },
-    async fetchAll () {
+    async fetchAll() {
       if (this.username && !this.user?.id) {
         return Promise.reject(new Error('User not found'))
       }
       const { response } = await this.fetchHistoryItemsIds(this.user?.id, this.pageSize, this.pageNumber)
-      this.actionIds = get(response, 'data.data', []).map(a => a.id)
+      this.actionIds = get(response, 'data.data', []).map((a) => a.id)
       this.count = get(response, 'data.meta.pagination.count', 0)
     },
-    async fetchHistoryItemsIds (userId, pageSize, pageNumber) {
+    async fetchHistoryItemsIds(userId, pageSize, pageNumber) {
       const userFilterParam = userId ? { 'filter[user_stream]': userId } : undefined
       const paginationParam = pageSize ? { 'page[size]': pageSize, 'page[number]': pageNumber } : undefined
       const actionParams = {
@@ -64,26 +77,12 @@ export default {
       await Task.api().get('', { params: { include: 'project' } })
       return Action.api().get('', { params: actionParams })
     }
-
-  },
-  computed: {
-    fetchHistoryLoader () {
-      return uniqueId('fetch-history-')
-    },
-    user () {
-      return User.find(this.username)
-    }
-  },
-  watch: {
-    pageNumber (value) {
-      return this.setup()
-    }
   }
 }
 </script>
 
 <template>
   <div class="history-fetcher">
-    <slot v-bind="{ actionIds, isFetching, count }"/>
+    <slot v-bind="{ actionIds, isFetching, count }" />
   </div>
 </template>
