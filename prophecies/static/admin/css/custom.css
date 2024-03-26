@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+@import '../../fonts/Inter/stylesheet.css';
+
 
 html[data-theme="light"], html[data-theme="dark"], :root {
     --primary: #235B59;
