@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core'
+
 import { responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import AlternativeValue from '@/models/AlternativeValue'
@@ -7,7 +8,7 @@ import Choice from '@/models/Choice'
 export default class ChoiceGroup extends Model {
   static entity = 'ChoiceGroup'
 
-  static fields () {
+  static fields() {
     return {
       id: this.attr(null),
       name: this.string(),
@@ -20,7 +21,7 @@ export default class ChoiceGroup extends Model {
     baseURL: `${settings.apiUrl}/choice-groups/`,
     dataTransformer: responseNormalizer,
     actions: {
-      find (id, config = {}) {
+      find(id, config = {}) {
         return this.get(`${id}/`, config)
       }
     }

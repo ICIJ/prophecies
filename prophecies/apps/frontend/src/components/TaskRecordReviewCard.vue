@@ -1,5 +1,6 @@
 <script>
 import { get, isBoolean, uniqueId } from 'lodash'
+
 import HapticCopyButton from '@/components/HapticCopyButton'
 import TaskRecordChanges from '@/components/TaskRecordChanges'
 import TaskRecordIframe from '@/components/TaskRecordIframe'
@@ -50,7 +51,7 @@ export default {
       type: Boolean
     }
   },
-  data () {
+  data() {
     return {
       showChanges: false,
       showNotes: false,
@@ -58,29 +59,95 @@ export default {
       actionIds: []
     }
   },
+  computed: {
+    showLinkPreview() {
+      return !this.showNotes && !this.showChanges && this.previewLink && !!this.taskRecord?.embeddableLink
+    },
+    initialHighlightedReviewId() {
+      // If the `highlightNote` is a boolean, we highlight
+      // the current task record review by default
+      if (isBoolean(this.highlightNote)) {
+        return this.highlightNote ? this.taskRecordReviewId : null
+      }
+      return this.highlightNote
+    },
+    isLoading() {
+      return this.frozen || this.$wait.is(this.loader)
+    },
+    selectedInput: {
+      get() {
+        return this.selected
+      },
+      set(value) {
+        return this.$emit('update:selected', value)
+      }
+    },
+    taskRecordReview() {
+      const trr = TaskRecordReview.query().with('taskRecord').find(this.taskRecordReviewId)
+      return trr
+    },
+    taskRecord() {
+      return get(this, 'taskRecordReview.taskRecord')
+    },
+    link() {
+      return get(this, 'taskRecordReview.taskRecord.link')
+    },
+    embeddableLink() {
+      return get(this, 'taskRecordReview.taskRecord.embeddableLink')
+    },
+    embeddableLinkIfVisible() {
+      if (this.showLinkPreview) {
+        return this.embeddableLink
+      }
+      return 'about:blank'
+    },
+    isDone() {
+      return get(this, 'taskRecordReview.status') === 'DONE'
+    },
+    isPending() {
+      return get(this, 'taskRecordReview.status') === 'PENDING'
+    },
+    classList() {
+      return {
+        'task-record-review-card--active': this.active,
+        'task-record-review-card--selected': this.selected,
+        'task-record-review-card--done': this.isDone,
+        'task-record-review-card--pending': this.isPending
+      }
+    },
+    loader() {
+      return uniqueId('loader-task-record-review-')
+    },
+    overlayVariant() {
+      if (this.taskRecordReview.status === 'DONE') {
+        return 'lighter'
+      }
+      return 'white'
+    }
+  },
   watch: {
-    isLoading () {
+    isLoading() {
       this.showChanges = false
       this.showNotes = false
       this.$root.$emit('bv::hide::tooltip')
     },
-    active () {
+    active() {
       this.$shortkey.toggle(this.active)
     }
   },
-  created () {
+  created() {
     this.toggleNotes(!!this.highlightNote, this.initialHighlightedReviewId)
     this.$shortkey.bind('ctrl+l', () => this.openLink())
     this.$shortkey.bind('ctrl+alt+n', () => this.toggleNotes())
     this.$shortkey.toggle(this.active)
   },
   methods: {
-    async selectChoiceWithLoader (data) {
+    async selectChoiceWithLoader(data) {
       this.$wait.start(this.loader)
       await this.selectChoice(data)
       this.$wait.end(this.loader)
     },
-    async selectChoice (data) {
+    async selectChoice(data) {
       try {
         if (data) {
           // We use a dedicated method that will format the data for the JSONAPI spec
@@ -100,7 +167,7 @@ export default {
         this.makeToast(variant, title, message)
       }
     },
-    async lock () {
+    async lock() {
       try {
         await TaskRecord.api().lock(this.taskRecord.id)
         // Let parent component know about the update
@@ -109,12 +176,12 @@ export default {
         this.displayError(error)
       }
     },
-    async lockWithLoader () {
+    async lockWithLoader() {
       this.$wait.start(this.loader)
       await this.lock()
       this.$wait.end(this.loader)
     },
-    async unlock () {
+    async unlock() {
       try {
         await TaskRecord.api().unlock(this.taskRecord.id)
         // Let parent component know about the update
@@ -123,146 +190,77 @@ export default {
         this.displayError(error)
       }
     },
-    async unlockWithLoader () {
+    async unlockWithLoader() {
       this.$wait.start(this.loader)
       await this.unlock()
       this.$wait.end(this.loader)
     },
-    async bookmark () {
+    async bookmark() {
       try {
         await TaskRecord.api().bookmark(this.taskRecord.id)
       } catch (error) {
         this.displayError(error)
       }
     },
-    async unbookmark () {
+    async unbookmark() {
       try {
         await TaskRecord.api().unbookmark(this.taskRecord.id)
       } catch (error) {
         this.displayError(error)
       }
     },
-    async fetchTaskRecordActions () {
+    async fetchTaskRecordActions() {
       const taskRecordId = this.taskRecordReview.taskRecordId
       const { response } = await Action.api().forTaskRecord(taskRecordId)
-      this.actionIds = get(response, 'data.data', []).map(a => a.id)
+      this.actionIds = get(response, 'data.data', []).map((a) => a.id)
     },
-    async fetchTaskRecordActionsWithLoader () {
+    async fetchTaskRecordActionsWithLoader() {
       this.$wait.start(this.loader)
       await this.fetchTaskRecordActions()
       this.$wait.end(this.loader)
     },
-    async fetchAndToggleChanges (toggler = null) {
+    async fetchAndToggleChanges(toggler = null) {
       if (!this.showChanges || toggler) {
         await this.fetchTaskRecordActionsWithLoader()
       }
       this.toggleChanges(toggler)
     },
-    async toggleChanges (toggler = null) {
+    async toggleChanges(toggler = null) {
       this.showChanges = toggler !== null ? !!toggler : !this.showChanges
     },
-    toggleNotes (toggler = null, highlightedReviewId) {
+    toggleNotes(toggler = null, highlightedReviewId) {
       if (!this.showNotes || toggler) {
         this.showChanges = false
         this.highlightedReviewId = highlightedReviewId
       }
       this.showNotes = toggler !== null ? !!toggler : !this.showNotes
     },
-    highlightAndToggleNotes (highlightedReviewId) {
+    highlightAndToggleNotes(highlightedReviewId) {
       if (this.highlightedReviewId !== highlightedReviewId) {
         return this.toggleNotes(true, highlightedReviewId)
       }
       return this.toggleNotes(!this.showNotes, highlightedReviewId)
     },
-    makeToast (variant = null, title, text) {
+    makeToast(variant = null, title, text) {
       this.$bvToast.toast(text, { title, variant, appendToast: true })
     },
-    emitUpdate () {
+    emitUpdate() {
       /**
        * Fired when the task record review is updated
        * @event update
        */
       this.$emit('update')
     },
-    openLink () {
+    openLink() {
       if (this.link) {
         window.open(this.link)
       }
     },
-    displayError (error) {
+    displayError(error) {
       const message = get(error, 'response.data.errors[0].detail')
       const variant = 'warning'
       const title = `⛔ Task record #${this.taskRecord.id}`
       this.makeToast(variant, title, message)
-    }
-  },
-  computed: {
-    showLinkPreview () {
-      return !this.showNotes && !this.showChanges && this.previewLink && !!this.taskRecord?.embeddableLink
-    },
-    initialHighlightedReviewId () {
-      // If the `highlightNote` is a boolean, we highlight
-      // the current task record review by default
-      if (isBoolean(this.highlightNote)) {
-        return this.highlightNote ? this.taskRecordReviewId : null
-      }
-      return this.highlightNote
-    },
-    isLoading () {
-      return this.frozen || this.$wait.is(this.loader)
-    },
-    selectedInput: {
-      get () {
-        return this.selected
-      },
-      set (value) {
-        return this.$emit('update:selected', value)
-      }
-    },
-    taskRecordReview () {
-      const trr = TaskRecordReview
-        .query()
-        .with('taskRecord')
-        .find(this.taskRecordReviewId)
-      return trr
-    },
-    taskRecord () {
-      return get(this, 'taskRecordReview.taskRecord')
-    },
-    link () {
-      return get(this, 'taskRecordReview.taskRecord.link')
-    },
-    embeddableLink () {
-      return get(this, 'taskRecordReview.taskRecord.embeddableLink')
-    },
-    embeddableLinkIfVisible () {
-      if (this.showLinkPreview) {
-        return this.embeddableLink
-      }
-      return 'about:blank'
-    },
-    isDone () {
-      return get(this, 'taskRecordReview.status') === 'DONE'
-    },
-    isPending () {
-      return get(this, 'taskRecordReview.status') === 'PENDING'
-    },
-    classList () {
-      return {
-        'task-record-review-card--active': this.active,
-        'task-record-review-card--selected': this.selected,
-        'task-record-review-card--done': this.isDone,
-        'task-record-review-card--pending': this.isPending
-      }
-    },
-    loader () {
-      return uniqueId('loader-task-record-review-')
-    },
-    overlayVariant () {
-      if (this.taskRecordReview.status === 'DONE') {
-        return 'lighter'
-      }
-      return 'white'
     }
   }
 }
@@ -270,7 +268,7 @@ export default {
 
 <template>
   <b-overlay :show="isLoading" :variant="overlayVariant" rounded="lg">
-    <b-spinner variant="light" slot="overlay" />
+    <b-spinner slot="overlay" variant="light" />
     <div :class="classList" class="task-record-review-card card card-body p-4 container-fluid">
       <div class="row no-gutters">
         <div class="col flex-grow-1">
@@ -278,7 +276,7 @@ export default {
             <div class="col-lg-4">
               <div class="row no-gutters">
                 <div class="task-record-review-card__id col-2 font-weight-bold text-nowrap">
-                  <b-form-checkbox class="task-record-review-card__id__checkbox" v-model="selectedInput">
+                  <b-form-checkbox v-model="selectedInput" class="task-record-review-card__id__checkbox">
                     <slot name="id" :task-record="taskRecord">{{ taskRecord.id }}</slot>
                   </b-form-checkbox>
                 </div>
@@ -287,10 +285,11 @@ export default {
                     <haptic-copy-button
                       :text="taskRecord.originalValue"
                       hover
-                      class="task-record-review-card__original-value ml-1" />
+                      class="task-record-review-card__original-value ml-1"
+                    />
                   </slot>
                   <slot v-if="!noLink" name="link" :task-record="taskRecord" :link="link" :active="active">
-                    <b-btn variant="link" class="text-muted px-3" :href="link" v-if="link" target="_blank">
+                    <b-btn v-if="link" variant="link" class="text-muted px-3" :href="link" target="_blank">
                       <link-icon size="1x" class="mr-1" />Open link
                       <span v-if="active">
                         <shortkey-badge :value="['Ctrl', 'l']" class="ml-2" />
@@ -314,7 +313,8 @@ export default {
                     class="task-record-review-card__choice"
                     :task-record-review-id="taskRecordReviewId"
                     :activate-shortkeys="active"
-                    @submit="selectChoiceWithLoader" />
+                    @submit="selectChoiceWithLoader"
+                  />
                 </div>
                 <div class="col-12 col-xxl-6">
                   <task-record-review-history
@@ -322,7 +322,8 @@ export default {
                     :task-record-review-id="taskRecordReviewId"
                     @toggle-notes="highlightAndToggleNotes($event)"
                     @same="selectChoiceWithLoader"
-                    @cancel="selectChoiceWithLoader" />
+                    @cancel="selectChoiceWithLoader"
+                  />
                 </div>
               </div>
             </div>
@@ -333,20 +334,20 @@ export default {
                 <task-record-changes
                   :action-ids="actionIds"
                   :activate-shortkeys="active"
-                  @close="toggleChanges(false)" />
+                  @close="toggleChanges(false)"
+                />
               </b-collapse>
               <b-collapse :visible="showNotes">
                 <task-record-review-notes
                   :task-record-review-id="taskRecordReviewId"
                   :activate-shortkeys="active"
                   :highlighted-review-id="highlightedReviewId"
-                  @close="toggleNotes(false)" />
+                  @close="toggleNotes(false)"
+                />
               </b-collapse>
-              <b-collapse  v-if="!noEmbed" :visible="showLinkPreview">
+              <b-collapse v-if="!noEmbed" :visible="showLinkPreview">
                 <slot name="embed" :task-record="taskRecord">
-                  <task-record-iframe
-                    :task-record-id="taskRecord.id"
-                    :visible="showLinkPreview" />
+                  <task-record-iframe :task-record-id="taskRecord.id" :visible="showLinkPreview" />
                 </slot>
               </b-collapse>
             </div>
@@ -360,7 +361,8 @@ export default {
             @unlock="unlockWithLoader"
             @toggle-changes="fetchAndToggleChanges()"
             @bookmark="bookmark"
-            @unbookmark="unbookmark"/>
+            @unbookmark="unbookmark"
+          />
         </div>
       </div>
     </div>
@@ -368,80 +370,82 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .task-record-review-card {
+.task-record-review-card {
+  box-shadow: $box-shadow-sm;
+
+  &--active,
+  &--selected {
+    border: 1px solid $primary;
     box-shadow: $box-shadow-sm;
-
-    &--active, &--selected {
-      border: 1px solid $primary;
-      box-shadow: $box-shadow-sm;
-    }
-
-    &--active {
-      box-shadow: $box-shadow-lg;
-    }
-
-    &--done {
-      background: $lighter;
-    }
-
-    &__id {
-      text-align: center;
-      overflow: hidden;
-      width: 100px;
-
-      &__checkbox {
-        padding: 0;
-
-        & ::v-deep label {
-          width: 100%;
-          padding: $spacer 0;
-        }
-
-        & ::v-deep label:before,
-        & ::v-deep label:after {
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-        }
-      }
-
-      &:hover &__checkbox ::v-deep label,
-      .task-record-review-card--selected & &__checkbox ::v-deep label {
-        text-indent: -1000px;
-
-        &:after, &:before {
-          display: block;
-        }
-      }
-
-      &__checkbox ::v-deep label {
-        text-indent: 0px;
-
-        &:after, &:before {
-          display: none;
-        }
-      }
-    }
-
-    &__original-value {
-      text-align: inherit;
-    }
-
-    @include media-breakpoint-down(xxl) {
-      &__choice {
-        margin-bottom: $spacer;
-      }
-    }
-
-    &__actions {
-      min-width: 0;
-      opacity: 0.25;
-    }
-
-    &:hover &__actions,
-    &--active &__actions {
-      opacity: 1;
-    }
-
   }
+
+  &--active {
+    box-shadow: $box-shadow-lg;
+  }
+
+  &--done {
+    background: $lighter;
+  }
+
+  &__id {
+    text-align: center;
+    overflow: hidden;
+    width: 100px;
+
+    &__checkbox {
+      padding: 0;
+
+      & ::v-deep label {
+        width: 100%;
+        padding: $spacer 0;
+      }
+
+      & ::v-deep label:before,
+      & ::v-deep label:after {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    &:hover &__checkbox ::v-deep label,
+    .task-record-review-card--selected & &__checkbox ::v-deep label {
+      text-indent: -1000px;
+
+      &:after,
+      &:before {
+        display: block;
+      }
+    }
+
+    &__checkbox ::v-deep label {
+      text-indent: 0px;
+
+      &:after,
+      &:before {
+        display: none;
+      }
+    }
+  }
+
+  &__original-value {
+    text-align: inherit;
+  }
+
+  @include media-breakpoint-down(xxl) {
+    &__choice {
+      margin-bottom: $spacer;
+    }
+  }
+
+  &__actions {
+    min-width: 0;
+    opacity: 0.25;
+  }
+
+  &:hover &__actions,
+  &--active &__actions {
+    opacity: 1;
+  }
+}
 </style>

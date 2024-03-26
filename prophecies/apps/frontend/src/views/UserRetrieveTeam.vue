@@ -1,12 +1,13 @@
 <script>
 import { orderBy } from 'lodash'
+
 import { formatDateLongAlt } from '@/utils/date'
 import UserTaskStatsCard from '@/components/UserTaskStatsCard'
 import UserCard from '@/components/UserCard'
 import Task from '@/models/Task'
 import User from '@/models/User'
-import AdminBadge from '@/components/AdminBadge.vue'
-import UserLink from '@/components/UserLink.vue'
+import AdminBadge from '@/components/AdminBadge'
+import UserLink from '@/components/UserLink'
 
 export default {
   name: 'UserRetrieveTeam',
@@ -16,44 +17,46 @@ export default {
     UserTaskStatsCard,
     AdminBadge
   },
+  filters: {
+    formatDate(d) {
+      return formatDateLongAlt(d)
+    },
+    isTaskOpen(taskId) {
+      return Task.find(taskId)?.open
+    }
+  },
   props: {
     username: {
       type: String
     }
   },
-  filters: {
-    formatDate (d) {
-      return formatDateLongAlt(d)
-    },
-    isTaskOpen (taskId) {
-      return Task.find(taskId)?.open
-    }
-  },
-  data () {
+  data() {
     return {
       teammateIds: []
     }
   },
-  created () {
-    this.setup()
-  },
   computed: {
-    user () {
+    currentUser() {
       return User.find(this.username)
     }
   },
+  created() {
+    this.setup()
+  },
   methods: {
-    async setup () {
+    async setup() {
       const tms = await this.fetchUserTasks()
       this.teammateIds = orderBy(tms, ['isSuperuser'], 'desc').map((tm) => tm.id)
     },
-    async fetchUserTasks () {
+    async fetchUserTasks() {
       const params = {
-        'filter[checkers]': this.user.id,
+        'filter[checkers]': this.currentUser.id,
         include: 'project,checkers'
       }
-      const { entities: { User: users } } = await Task.api().get('', { params })
-      return users.filter((u) => u.id !== this.user.id)
+      const {
+        entities: { User: users }
+      } = await Task.api().get('', { params })
+      return users.filter((u) => u.id !== this.currentUser.id)
     }
   }
 }
@@ -62,11 +65,7 @@ export default {
 <template>
   <div class="user-retrieve-team container-fluid">
     <div class="row">
-      <div
-        class="col-12 col-xxl-6 mb-5 px-4"
-        v-for="id in teammateIds"
-        :key="id"
-      >
+      <div v-for="id in teammateIds" :key="id" class="col-12 col-xxl-6 mb-5 px-4">
         <user-card class="user-card-team h-100 p-5" :user-id="id" background>
           <template #header="{ user }">
             <div class="d-flex justify-content-between">
@@ -76,10 +75,7 @@ export default {
                   <user-link no-card :user-id="user.id" />
                 </p>
               </div>
-              <div
-                v-if="user.isSuperuser"
-                class="user-retrieve-profile__super-user mb-3"
-              >
+              <div v-if="user.isSuperuser" class="user-retrieve-profile__super-user mb-3">
                 <admin-badge />
               </div>
             </div>
@@ -95,9 +91,7 @@ export default {
 
 <style lang="scss" scoped>
 .user-retrieve-team {
-
   & .user-card {
-
     & .user-card__link {
       margin-top: $spacer;
     }
@@ -107,8 +101,6 @@ export default {
       overflow-y: auto;
       margin-bottom: $spacer-xl;
     }
-
   }
-
 }
 </style>

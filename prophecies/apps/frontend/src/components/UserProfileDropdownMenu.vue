@@ -1,40 +1,40 @@
 <script>
-import AppVersion from './AppVersion.vue'
+import AppVersion from './AppVersion'
 
 export default {
   name: 'UserProfileDropdownMenu',
   components: {
-    AppVersion,
+    AppVersion
   },
   computed: {
-    user () {
+    user() {
       return this.$config.get('user')
     },
-    userRoute () {
+    userRoute() {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-profile', params }
     },
-    activityRoute () {
+    activityRoute() {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-activity', params }
     },
-    notificationsRoute () {
+    notificationsRoute() {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-notifications', params }
     },
-    teamRoute () {
+    teamRoute() {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-team', params }
     },
-    bookmarksRoute () {
+    bookmarksRoute() {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-bookmarks', params }
     },
-    languageRoute () {
+    languageRoute() {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-language', params }
     },
-    historyRoute () {
+    historyRoute() {
       const params = { username: this.user.username }
       return { name: 'user-retrieve-history', params }
     }
@@ -48,19 +48,31 @@ export default {
       <user-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveProfile.title.yours') }}
     </b-dropdown-item>
-    <b-dropdown-item :to="activityRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--activity">
+    <b-dropdown-item
+      :to="activityRoute"
+      class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--activity"
+    >
       <activity-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveActivity.title.yours') }}
     </b-dropdown-item>
-    <b-dropdown-item :to="notificationsRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--notifications">
+    <b-dropdown-item
+      :to="notificationsRoute"
+      class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--notifications"
+    >
       <bell-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveNotifications.title.yours') }}
     </b-dropdown-item>
-    <b-dropdown-item :to="bookmarksRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--bookmarks">
+    <b-dropdown-item
+      :to="bookmarksRoute"
+      class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--bookmarks"
+    >
       <bookmark-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveBookmarks.title.yours') }}
     </b-dropdown-item>
-    <b-dropdown-item :to="historyRoute" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--history">
+    <b-dropdown-item
+      :to="historyRoute"
+      class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--history"
+    >
       <clock-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveHistory.title.yours') }}
     </b-dropdown-item>
@@ -68,17 +80,26 @@ export default {
       <users-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveTeam.title.yours') }}
     </b-dropdown-item>
-    <b-dropdown-item :href="$config.get('apiUrl')" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--api">
+    <b-dropdown-item
+      :href="$config.get('apiUrl')"
+      class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--api"
+    >
       <code-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userProfileDropdownMenu.api') }}
     </b-dropdown-item>
     <template v-if="user.isStaff">
-      <b-dropdown-item :href="$config.get('adminUrl')" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--admin">
+      <b-dropdown-item
+        :href="$config.get('adminUrl')"
+        class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--admin"
+      >
         <trello-icon class="user-profile-dropdown-menu__item__icon" />
         {{ $t('userProfileDropdownMenu.admin') }}
       </b-dropdown-item>
     </template>
-    <b-dropdown-item :href="$config.get('helpLink')" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--help">
+    <b-dropdown-item
+      :href="$config.get('helpLink')"
+      class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--help"
+    >
       <truck-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userProfileDropdownMenu.help') }}
     </b-dropdown-item>
@@ -90,7 +111,10 @@ export default {
       <globe-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userRetrieveLanguage.title.yours') + ' (' + $i18n.locale.toUpperCase() + ')' }}
     </b-dropdown-item>
-    <b-dropdown-item :href="$config.get('logoutUrl')" class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--logout">
+    <b-dropdown-item
+      :href="$config.get('logoutUrl')"
+      class="user-profile-dropdown-menu__item user-profile-dropdown-menu__item--logout"
+    >
       <log-out-icon class="user-profile-dropdown-menu__item__icon" />
       {{ $t('userProfileDropdownMenu.logOut') }}
     </b-dropdown-item>
@@ -102,18 +126,17 @@ export default {
 </template>
 
 <style lang="scss">
-  .user-profile-dropdown-menu {
-    &__item {
-      min-width: 235px;
+.user-profile-dropdown-menu {
+  &__item {
+    min-width: 235px;
 
-      a {
-        padding: $spacer-sm $spacer-lg;
-      }
+    a {
+      padding: $spacer-sm $spacer-lg;
+    }
 
-      &__icon {
-        margin-right: $spacer;
-      }
-
+    &__icon {
+      margin-right: $spacer;
     }
   }
+}
 </style>

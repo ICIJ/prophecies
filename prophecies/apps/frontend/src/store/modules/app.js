@@ -5,29 +5,29 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setRedirectAfterLogin (state, path = null) {
+  setRedirectAfterLogin(state, path = null) {
     if (!path || !path.startsWith('/login')) {
       state.redirectAfterLogin = path
     }
   },
-  setShowTutorial (state, showTutorial) {
+  setShowTutorial(state, showTutorial) {
     state.showTutorial = showTutorial
   },
-  setLocale (state, locale) {
+  setLocale(state, locale) {
     state.locale = locale
   }
 }
 
 export const actions = {
-  popRedirectAfterLogin ({ state: { redirectAfterLogin }, commit }) {
+  popRedirectAfterLogin({ state: { redirectAfterLogin }, commit }) {
     commit('setRedirectAfterLogin', null)
     return redirectAfterLogin
   },
-  showTutorial ({ state: { showTutorial }, commit }, isShown) {
+  showTutorial({ state: { showTutorial }, commit }, isShown) {
     commit('setShowTutorial', isShown)
     return showTutorial
   },
-  locale ({ commit }, locale) {
+  locale({ commit }, locale) {
     commit('setLocale', locale)
   }
 }

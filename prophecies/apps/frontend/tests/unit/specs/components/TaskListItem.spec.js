@@ -1,10 +1,10 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import TaskListItem from '@/components/TaskListItem'
 import Task from '@/models/Task'
 import Core from '@/core'
 
 describe('TaskListItem', () => {
-
   beforeAll(async () => {
     await Task.api().get()
   })

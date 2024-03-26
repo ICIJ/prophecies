@@ -1,20 +1,18 @@
-
 <script>
 import { orderBy, maxBy, find } from 'lodash'
 import moment from 'moment'
 
 import { TaskStatusOrder } from '@/models/Task'
-
 import User from '@/models/User'
 import ActionAggregate from '@/models/ActionAggregate'
 import { formatDate } from '@/utils/date'
-import LightDropdown from '@/components/LightDropdown.vue'
+import LightDropdown from '@/components/LightDropdown'
 
 const ALL__OPEN_TASKS_ID = 'all'
 
 export default {
-  components: { LightDropdown },
   name: 'UserRetrieveActivityChart',
+  components: { LightDropdown },
   props: {
     lastDate: {
       type: Date
@@ -27,7 +25,7 @@ export default {
       default: () => []
     }
   },
-  data () {
+  data() {
     return {
       sortField: 'status_asc',
       sortByCb: (tasks) =>
@@ -36,47 +34,24 @@ export default {
         })
     }
   },
-  methods: {
-    formatDate (d) {
-      return formatDate(d)
-    },
-
-    async waitFor (loader, fns = []) {
-      this.$wait.start(loader)
-      await Promise.all(fns)
-      this.$wait.end(loader)
-    },
-    activityIsSameDay (activityIndex, date) {
-      return (
-        this.activities[activityIndex] &&
-        moment(this.activities[activityIndex].date).isSame(date, 'day')
-      )
-    },
-    activityIsBeforeDay (activityIndex, date) {
-      return (
-        this.activities[activityIndex] &&
-        moment(this.activities[activityIndex].date).isBefore(date)
-      )
-    }
-  },
   computed: {
     selectedTaskId: {
-      get () {
+      get() {
         if (this.dropdownTasksIds.includes(this.$route.query.taskId)) {
           return this.$route.query.taskId
         } else {
           return ALL__OPEN_TASKS_ID
         }
       },
-      set (value) {
+      set(value) {
         const query = { ...this.$route.query, taskId: value }
         this.$router.push({ path: this.$route.path, query }, null)
       }
     },
-    user () {
+    user() {
       return User.find(this.username)
     },
-    dropdownTasks () {
+    dropdownTasks() {
       return [
         {
           id: ALL__OPEN_TASKS_ID,
@@ -85,7 +60,7 @@ export default {
         ...this.tasks
       ]
     },
-    tasks () {
+    tasks() {
       return Object.values(
         this.activities.reduce((prev, curr) => {
           prev[curr.taskId] = curr.task
@@ -93,26 +68,23 @@ export default {
         }, {})
       )
     },
-    dropdownTasksIds () {
+    dropdownTasksIds() {
       return this.dropdownTasks.map((t) => t.id)
     },
-    taskLabel () {
+    taskLabel() {
       return find(this.dropdownTasks, { id: this.selectedTaskId }).name
     },
-    activities () {
-      return ActionAggregate.query()
-        .whereIdIn(this.activityIds)
-        .with('task')
-        .get()
+    activities() {
+      return ActionAggregate.query().whereIdIn(this.activityIds).with('task').get()
     },
-    chartMaxValue () {
+    chartMaxValue() {
       const maxItem = maxBy(this.chartActivitiesByTaskId, 'value')
       if (maxItem) {
         return Math.round(maxItem.value * 1.2)
       }
       return 10
     },
-    chartActivitiesByTaskId () {
+    chartActivitiesByTaskId() {
       if (!this.activities?.length) {
         return []
       }
@@ -131,16 +103,30 @@ export default {
         const size = data.push({ date: currDate.clone(), value: 0 })
         while (this.activityIsSameDay(activityIndex, currDate)) {
           const { count, taskId } = this.activities[activityIndex]
-          if (
-            this.selectedTaskId === ALL__OPEN_TASKS_ID ||
-            this.selectedTaskId === taskId
-          ) {
+          if (this.selectedTaskId === ALL__OPEN_TASKS_ID || this.selectedTaskId === taskId) {
             data[size - 1].value += count
           }
           ++activityIndex
         }
       }
       return data
+    }
+  },
+  methods: {
+    formatDate(d) {
+      return formatDate(d)
+    },
+
+    async waitFor(loader, fns = []) {
+      this.$wait.start(loader)
+      await Promise.all(fns)
+      this.$wait.end(loader)
+    },
+    activityIsSameDay(activityIndex, date) {
+      return this.activities[activityIndex] && moment(this.activities[activityIndex].date).isSame(date, 'day')
+    },
+    activityIsBeforeDay(activityIndex, date) {
+      return this.activities[activityIndex] && moment(this.activities[activityIndex].date).isBefore(date)
     }
   }
 }
@@ -153,34 +139,35 @@ export default {
       <div class="col-8">
         <h2 class="text-primary">Reviewed records per day</h2>
         <p class="text-muted">
-          Number of classified records over the last {{ range }} days<span  v-if="chartActivitiesByTaskId.length"> on
-          {{ taskLabel }}</span>.
+          Number of classified records over the last {{ range }} days<span v-if="chartActivitiesByTaskId.length">
+            on {{ taskLabel }}</span
+          >.
         </p>
       </div>
       <div class="col-4">
         <light-dropdown
-         v-if="chartActivitiesByTaskId.length"
+          v-if="chartActivitiesByTaskId.length"
           class="d-flex flex-row-reverse"
-          :btnClassList="['btn', 'btn-lighter']"
+          :btn-class-list="['btn', 'btn-lighter']"
           :items="dropdownTasks"
-          :selectedId.sync="selectedTaskId"
+          :selected-id.sync="selectedTaskId"
         />
       </div>
     </div>
     <stacked-column-chart
       v-if="chartActivitiesByTaskId.length"
       :data="chartActivitiesByTaskId"
-      :barColors="['var(--column-color)']"
+      :bar-colors="['var(--column-color)']"
       :max-value="chartMaxValue"
       no-tooltips
       hide-legend
       bar-max-width="30px"
       :x-axis-tick-format="formatDate"
-      :fixedHeight="300"
+      :fixed-height="300"
       no-direct-labeling
       class="my-4"
-   />
-    <p class="p-5 text-center" v-else>{{$t('userTaskStatsCard.noActivity')}}</p>
+    />
+    <p v-else class="p-5 text-center">{{ $t('userTaskStatsCard.noActivity') }}</p>
   </div>
 </template>
 <style lang="scss" scoped>

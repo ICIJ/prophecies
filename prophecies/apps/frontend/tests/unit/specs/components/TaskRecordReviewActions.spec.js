@@ -1,4 +1,5 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
+
 import '@/store'
 import Core from '@/core'
 import User from '@/models/User'
@@ -10,7 +11,7 @@ import TaskRecordReviewActions from '@/components/TaskRecordReviewActions'
 describe('TaskRecordReviewActions', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

@@ -6,6 +6,7 @@ import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 
 import { server, rest } from '../../mocks/server'
+
 import Core from '@/core'
 import Setting from '@/models/Setting'
 
@@ -31,13 +32,15 @@ describe('Core', () => {
     // Clear Murmur config
     Murmur.config.set('foo', null)
     // Mock settings
-    server.use(rest.get('/api/v1/settings', (req, res, ctx) => {
-      return res.once(ctx.json({
-        data: [
-          { type: 'Setting', id: '1', attributes: { key: 'foo', value: 'bar' } }
-        ]
-      }))
-    }))
+    server.use(
+      rest.get('/api/v1/settings', (req, res, ctx) => {
+        return res.once(
+          ctx.json({
+            data: [{ type: 'Setting', id: '1', attributes: { key: 'foo', value: 'bar' } }]
+          })
+        )
+      })
+    )
   })
 
   afterEach(() => {
@@ -117,13 +120,15 @@ describe('Core', () => {
   it('should transform settings list into an object', async () => {
     jest.restoreAllMocks()
     // Mock settings
-    server.use(rest.get('/api/v1/settings', (req, res, ctx) => {
-      return res.once(ctx.json({
-        data: [
-          { type: 'Setting', id: '1', attributes: { key: 'searchEngine', value: 'https://duckduckgo.com' } }
-        ]
-      }))
-    }))
+    server.use(
+      rest.get('/api/v1/settings', (req, res, ctx) => {
+        return res.once(
+          ctx.json({
+            data: [{ type: 'Setting', id: '1', attributes: { key: 'searchEngine', value: 'https://duckduckgo.com' } }]
+          })
+        )
+      })
+    )
     const core = new Core(localVue)
     const settings = await core.getSettings()
     expect(settings).toBeInstanceOf(Object)
@@ -132,7 +137,7 @@ describe('Core', () => {
 
   it('should register all icons exported by the @/utils/icons', () => {
     Core.init(localVue)
-    const Component = { render: h => h('bar-icon') }
+    const Component = { render: (h) => h('bar-icon') }
     const vm = shallowMount(Component, { localVue })
     expect(vm.findComponent({ name: 'bar-icon' }).exists()).toBeTruthy()
     expect(vm.findComponent({ name: 'foo-icon' }).exists()).toBeFalsy()

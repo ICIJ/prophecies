@@ -1,9 +1,10 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import '@/store'
+import { get } from 'lodash'
+
 import Core from '@/core'
 import Action from '@/models/Action'
 import HistoryListGroup from '@/components/HistoryListGroup'
-import { get } from 'lodash'
 
 describe('HistoryListGroup', () => {
   let wrapper
@@ -13,7 +14,7 @@ describe('HistoryListGroup', () => {
     // Configure the local vue with plugins
     const { store, i18n } = Core.init(localVue).useAll()
 
-    const actionIds = get(await Action.api().get(), 'response.data.data', []).map(a => a.id)
+    const actionIds = get(await Action.api().get(), 'response.data.data', []).map((a) => a.id)
     const propsData = { actionIds }
 
     wrapper = await shallowMount(HistoryListGroup, {

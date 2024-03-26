@@ -1,7 +1,7 @@
 const BundleTracker = require('webpack-bundle-tracker')
 const { join } = require('path')
 
-const resolve = filepath => join(__dirname, filepath)
+const resolve = (filepath) => join(__dirname, filepath)
 
 module.exports = {
   configureWebpack: {
@@ -29,18 +29,17 @@ module.exports = {
       }
     }
   },
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     // Resource loader configuration:
     // 4 named rules must include this loader
-    ['vue', 'vue-modules', 'normal', 'normal-modules'].forEach(rule => {
-      config.module.rule('scss')
+    ;['vue', 'vue-modules', 'normal', 'normal-modules'].forEach((rule) => {
+      config.module
+        .rule('scss')
         .oneOf(rule)
         .use('sass-resources-loader')
         .loader('sass-resources-loader')
         .options({
-          resources: [
-            resolve('src/utils/_settings.scss')
-          ]
+          resources: [resolve('src/utils/_settings.scss')]
         })
     })
 
@@ -53,8 +52,6 @@ module.exports = {
 
     // Configure the BundleTracker to generate a `webpack-stats.json`.
     // This file is required by django-webpack-loader.
-    config
-      .plugin('BundleTracker')
-      .use(BundleTracker, [{ filename: './dist/webpack-stats.json' }])
+    config.plugin('BundleTracker').use(BundleTracker, [{ filename: './dist/webpack-stats.json' }])
   }
 }

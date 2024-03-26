@@ -1,13 +1,10 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 
-import { server, rest } from '../../mocks/server'
-
 import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
 import ChoiceGroup from '@/models/ChoiceGroup'
 import TaskRecordReview from '@/models/TaskRecordReview'
-
 import TaskRecordReviewCardWrapper from '@/components/TaskRecordReviewCardWrapper'
 import TaskRecordReviewCardForText from '@/components/TaskRecordReviewCardForText'
 import TaskRecordReviewCardForMedia from '@/components/TaskRecordReviewCardForMedia'
@@ -15,7 +12,7 @@ import TaskRecordReviewCardForMedia from '@/components/TaskRecordReviewCardForMe
 describe('TaskRecordReviewCardWrapper', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -28,7 +25,6 @@ describe('TaskRecordReviewCardWrapper', () => {
   })
 
   describe('a review within a task of template type "TEXT"', () => {
-
     beforeEach(() => {
       const attachTo = createContainer()
       const localVue = createLocalVue()
@@ -42,7 +38,6 @@ describe('TaskRecordReviewCardWrapper', () => {
       expect(wrapper.findComponent(TaskRecordReviewCardForText).exists()).toBeTruthy()
       expect(wrapper.findComponent(TaskRecordReviewCardForMedia).exists()).toBeFalsy()
     })
-
   })
 
   describe('a review within a task of template type "MEDIA"', () => {
@@ -59,6 +54,5 @@ describe('TaskRecordReviewCardWrapper', () => {
       expect(wrapper.findComponent(TaskRecordReviewCardForText).exists()).toBeFalsy()
       expect(wrapper.findComponent(TaskRecordReviewCardForMedia).exists()).toBeTruthy()
     })
-
   })
 })

@@ -1,4 +1,5 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
+
 import '@/store'
 import Core from '@/core'
 import ChoiceBadge from '@/components/ChoiceBadge'
@@ -6,7 +7,7 @@ import ChoiceBadge from '@/components/ChoiceBadge'
 describe('ChoiceBadge', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

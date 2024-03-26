@@ -19,7 +19,8 @@ export default [
               originalValue: 'FG123OO',
               predictedValue: 'FG123OO',
               link: null,
-              embeddableLink: "https://datashare-demo.icij.org/#/ds/luxleaks/e4d40cb50f4f21789acafd2d062948258a0f19666d9b4b1b509177e1e7360d58bc547babc5a16c8ecaa72d891477f733/e4d40cb50f4f21789acafd2d062948258a0f19666d9b4b1b509177e1e7360d58bc547babc5a16c8ecaa72d891477f733",
+              embeddableLink:
+                'https://datashare-demo.icij.org/#/ds/luxleaks/e4d40cb50f4f21789acafd2d062948258a0f19666d9b4b1b509177e1e7360d58bc547babc5a16c8ecaa72d891477f733/e4d40cb50f4f21789acafd2d062948258a0f19666d9b4b1b509177e1e7360d58bc547babc5a16c8ecaa72d891477f733',
               metadata: null,
               rounds: 3,
               bookmarked: true,
@@ -44,7 +45,8 @@ export default [
               originalValue: 'La France',
               predictedValue: 'FRA',
               link: 'https://www.openstreetmap.org/search?query=La%20France',
-              embeddableLink: "https://datashare-demo.icij.org/#/ds/luxleaks/a6b7479ab0548fc153db892f22051db15005e3ababfe56beeebb30c4e8037ed257fcec8fe17640fa85986d31fac04a49/a6b7479ab0548fc153db892f22051db15005e3ababfe56beeebb30c4e8037ed257fcec8fe17640fa85986d31fac04a49",
+              embeddableLink:
+                'https://datashare-demo.icij.org/#/ds/luxleaks/a6b7479ab0548fc153db892f22051db15005e3ababfe56beeebb30c4e8037ed257fcec8fe17640fa85986d31fac04a49/a6b7479ab0548fc153db892f22051db15005e3ababfe56beeebb30c4e8037ed257fcec8fe17640fa85986d31fac04a49',
               metadata: null,
               rounds: 3,
               bookmarked: true,
@@ -69,7 +71,8 @@ export default [
               originalValue: 'Germany',
               predictedValue: 'DE',
               link: 'https://www.openstreetmap.org/search?query=Germany',
-              embeddableLink: "https://datashare-demo.icij.org/#/ds/luxleaks/5414ac75076a45f662a4df07e7373e434cb0bc1ae289d12dbb0341fc64e5d8da2fb7d99c1d6b99143ec3b0dbf30beea3/5414ac75076a45f662a4df07e7373e434cb0bc1ae289d12dbb0341fc64e5d8da2fb7d99c1d6b99143ec3b0dbf30beea3",
+              embeddableLink:
+                'https://datashare-demo.icij.org/#/ds/luxleaks/5414ac75076a45f662a4df07e7373e434cb0bc1ae289d12dbb0341fc64e5d8da2fb7d99c1d6b99143ec3b0dbf30beea3/5414ac75076a45f662a4df07e7373e434cb0bc1ae289d12dbb0341fc64e5d8da2fb7d99c1d6b99143ec3b0dbf30beea3',
               metadata: null,
               rounds: 3,
               status: 'ASSIGNED'
@@ -93,7 +96,8 @@ export default [
               originalValue: 'fronce',
               predictedValue: 'France',
               link: 'https://www.openstreetmap.org/search?query=fronce',
-              embeddableLink: "https://datashare-demo.icij.org/#/ds/luxleaks/5414ac75076a45f662a4df07e7373e434cb0bc1ae289d12dbb0341fc64e5d8da2fb7d99c1d6b99143ec3b0dbf30beea3/5414ac75076a45f662a4df07e7373e434cb0bc1ae289d12dbb0341fc64e5d8da2fb7d99c1d6b99143ec3b0dbf30beea3",
+              embeddableLink:
+                'https://datashare-demo.icij.org/#/ds/luxleaks/5414ac75076a45f662a4df07e7373e434cb0bc1ae289d12dbb0341fc64e5d8da2fb7d99c1d6b99143ec3b0dbf30beea3/5414ac75076a45f662a4df07e7373e434cb0bc1ae289d12dbb0341fc64e5d8da2fb7d99c1d6b99143ec3b0dbf30beea3',
               metadata: null,
               rounds: 3,
               bookmarked: false,
@@ -117,11 +121,7 @@ export default [
             type: 'Task',
             id: '1',
             attributes: {
-              colors: [
-                '#60245c',
-                '#80307b',
-                '#a03c9a'
-              ],
+              colors: ['#60245c', '#80307b', '#a03c9a'],
               description: 'A collection of adresses to fact check.',
               name: 'Addresses',
               priority: 1,

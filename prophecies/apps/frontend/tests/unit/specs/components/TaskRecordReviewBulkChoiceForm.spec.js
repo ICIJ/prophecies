@@ -1,4 +1,5 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
@@ -8,7 +9,7 @@ import TaskRecordReviewBulkChoiceForm from '@/components/TaskRecordReviewBulkCho
 describe('TaskRecordReviewBulkChoiceForm', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

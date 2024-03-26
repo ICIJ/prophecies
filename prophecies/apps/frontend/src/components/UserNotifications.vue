@@ -1,5 +1,6 @@
 <script>
 import { uniqueId } from 'lodash'
+
 import AppWaiter from '@/components/AppWaiter'
 import UserNotificationLink from '@/components/UserNotificationLink'
 import EmptyPlaceholder from '@/components/EmptyPlaceholder'
@@ -15,21 +16,28 @@ export default {
   props: {
     notificationIds: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
     fetching: {
       type: Boolean
     }
   },
-  created () {
-    // If the notifications were not fetched yet,
-    // we start the component loader
-    if (this.fetching) {
-      this.$wait.start(this.loader)
+  computed: {
+    loader() {
+      return uniqueId('user-notifications-')
+    },
+    notifications() {
+      return UserNotification.query().whereIdIn(this.notificationIds).orderBy('createdAt', 'desc').get()
+    },
+    unreadNotifications() {
+      return this.notifications.filter((n) => !n.read)
+    },
+    hasUnreadNotifications() {
+      return this.unreadNotifications.length > 0
     }
   },
   watch: {
-    fetching (fetching) {
+    fetching(fetching) {
       // Once the notifications have been fetched,
       // we stop the component loader
       if (!fetching) {
@@ -37,27 +45,16 @@ export default {
       }
     }
   },
-  computed: {
-    loader () {
-      return uniqueId('user-notifications-')
-    },
-    notifications () {
-      return UserNotification
-        .query()
-        .whereIdIn(this.notificationIds)
-        .orderBy('createdAt', 'desc')
-        .get()
-    },
-    unreadNotifications () {
-      return this.notifications.filter(n => !n.read)
-    },
-    hasUnreadNotifications () {
-      return this.unreadNotifications.length > 0
+  created() {
+    // If the notifications were not fetched yet,
+    // we start the component loader
+    if (this.fetching) {
+      this.$wait.start(this.loader)
     }
   },
   methods: {
-    async markAllAsRead () {
-      const ids = this.unreadNotifications.map(n => n.id)
+    async markAllAsRead() {
+      const ids = this.unreadNotifications.map((n) => n.id)
       await UserNotification.api().bulkMarkAsRead(ids)
       this.$store.dispatch('userNotificationsPoll/fetch')
     }
@@ -73,13 +70,17 @@ export default {
         <div class="user-notifications__list">
           <template v-for="notification in notifications">
             <slot name="link" v-bind="{ notification }">
-              <user-notification-link :notification-id="notification.id" :key="notification.id" />
+              <user-notification-link :key="notification.id" :notification-id="notification.id" />
             </slot>
           </template>
         </div>
       </template>
       <template v-else>
-        <empty-placeholder class="user-notifications__empty" icon="BellIcon" :title="$t('userNotifications.noNotification')"/>
+        <empty-placeholder
+          class="user-notifications__empty"
+          icon="BellIcon"
+          :title="$t('userNotifications.noNotification')"
+        />
       </template>
       <slot name="footer" />
     </app-waiter>

@@ -1,4 +1,5 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import ShortkeyBadge from '@/components/ShortkeyBadge'
 
 describe('ShortkeyBadge', () => {
@@ -45,13 +46,17 @@ describe('ShortkeyBadge', () => {
   })
 
   it('should convert the "meta" keyword to "⌘" on Mac', async () => {
-    userAgentGetter.mockReturnValue('Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:77.0) Gecko/20100101 Firefox/77.0')
+    userAgentGetter.mockReturnValue(
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:77.0) Gecko/20100101 Firefox/77.0'
+    )
     await wrapper.setProps({ value: 'meta' })
     expect(wrapper.text()).toBe('⌘')
   })
 
   it('should convert the "meta" keyword to "Ctrl" on Linux', async () => {
-    userAgentGetter.mockReturnValue('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36')
+    userAgentGetter.mockReturnValue(
+      'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36'
+    )
     await wrapper.setProps({ value: 'meta' })
     expect(wrapper.text()).toBe('Ctrl')
   })

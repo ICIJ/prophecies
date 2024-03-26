@@ -1,23 +1,23 @@
 <template>
-    <label :for="dropdownId" class="sort-by-dropdown ">
-      <slot name="label">
-      </slot>
-      <multiselect :allow-empty="false"
-                    :show-labels="false"
-                    :searchable="false"
-                    :options="options"
-                    :value="selectedSortOption"
-                    :placeholder="$t('taskRecordReviewPageParams.sortBy')"
-                    @input="intermediarySort = $event.value"
-                    label="label"
-                    track-by="value"
-                    class="sort-by-dropdown__select "/>
-    </label>
+  <label :for="dropdownId" class="sort-by-dropdown">
+    <slot name="label"> </slot>
+    <multiselect
+      :allow-empty="false"
+      :show-labels="false"
+      :searchable="false"
+      :options="options"
+      :value="selectedSortOption"
+      :placeholder="$t('taskRecordReviewPageParams.sortBy')"
+      label="label"
+      track-by="value"
+      class="sort-by-dropdown__select"
+      @input="intermediarySort = $event.value"
+    />
+  </label>
 </template>
 
 <script>
 import { find, uniqueId } from 'lodash'
-
 import Multiselect from 'vue-multiselect'
 
 export default {
@@ -36,23 +36,23 @@ export default {
     },
     options: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
-  data () {
+  data() {
     return {
       dropdownId: uniqueId('sortByDropdown-')
     }
   },
   computed: {
-    selectedSortOption () {
+    selectedSortOption() {
       return find(this.options, { value: this.intermediarySort })
     },
     intermediarySort: {
-      get () {
+      get() {
         return this.sort
       },
-      set (value) {
+      set(value) {
         this.$emit('update:sort', value)
       }
     }

@@ -6,11 +6,11 @@ import Error from '@/views/Error'
 
 const { i18n, localVue } = Core.init(createLocalVue()).useAll()
 
-describe('Error.vue', () => {
+describe('Error', () => {
   let spyUserMe
   let attachTo
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

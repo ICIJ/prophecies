@@ -8,7 +8,7 @@ export default {
     ShortcutListCard,
     TipListCard
   },
-  async created () {
+  async created() {
     if (await this.$core.getUser()) {
       // Bind root events
       this.$root.$on('prophecies::closeTips', this.closeTips)
@@ -21,15 +21,15 @@ export default {
     }
   },
   methods: {
-    goTo (name) {
+    goTo(name) {
       if (this.$route.name !== name) {
         this.$router.push({ name })
       }
     },
-    goToHistory () {
+    goToHistory() {
       this.goTo('history')
     },
-    toggleModalFn (modalRef) {
+    toggleModalFn(modalRef) {
       return (event = null) => {
         if (event) {
           event.preventDefault()
@@ -37,7 +37,7 @@ export default {
         this.$refs[modalRef].toggle()
       }
     },
-    closeTips () {
+    closeTips() {
       this.$bvModal.hide('modal-tips')
       this.goTo('tip-list')
     }
@@ -48,34 +48,36 @@ export default {
 <template>
   <div class="app">
     <b-modal
+      ref="modal-shortcuts"
       size="md"
       content-class="bg-transparent shadow-none border-0"
       body-class="p-0"
-      ref="modal-shortcuts"
       hide-footer
-      hide-header>
+      hide-header
+    >
       <shortcut-list-card>
         <template #header>
           <b-btn class="float-right px-2" variant="link" @click="$refs['modal-shortcuts'].toggle()">
             <x-icon />
-            <span class="sr-only">{{$t('app.close')}}</span>
+            <span class="sr-only">{{ $t('app.close') }}</span>
           </b-btn>
         </template>
       </shortcut-list-card>
     </b-modal>
     <b-modal
+      id="modal-tips"
+      ref="modal-tips"
       size="md"
       content-class="bg-transparent shadow-none border-0"
       body-class="p-0"
-      id="modal-tips"
-      ref="modal-tips"
       hide-footer
-      hide-header>
-      <tip-list-card >
+      hide-header
+    >
+      <tip-list-card>
         <template #header>
           <b-btn class="float-right px-2" variant="link" @click="$refs['modal-tips'].toggle()">
             <x-icon />
-            <span class="sr-only">{{$t('app.close')}}</span>
+            <span class="sr-only">{{ $t('app.close') }}</span>
           </b-btn>
         </template>
       </tip-list-card>
@@ -97,7 +99,7 @@ export default {
     line-height: 24px;
 
     &:after {
-        content: "\00a0\00a0";
+      content: '\00a0\00a0';
     }
 
     &__item--dashboard svg {
@@ -113,5 +115,4 @@ export default {
     }
   }
 }
-
 </style>

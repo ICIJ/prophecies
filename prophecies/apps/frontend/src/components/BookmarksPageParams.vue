@@ -1,11 +1,5 @@
 <template>
-  <page-params
-    :values='tasks'
-    :projectId.sync="projectId_"
-    :taskId.sync="taskId_"
-    class="bookmarks-page-params"
-  />
-
+  <page-params :values="tasks" :project-id.sync="projectId_" :task-id.sync="taskId_" class="bookmarks-page-params" />
 </template>
 
 <script>
@@ -27,23 +21,23 @@ export default {
     },
     tasks: {
       type: Array,
-      default: () => ([])
+      default: () => []
     }
   },
   computed: {
     projectId_: {
-      get () {
+      get() {
         return this.projectId
       },
-      set (value) {
+      set(value) {
         this.$emit('update:projectId', value)
       }
     },
     taskId_: {
-      get () {
+      get() {
         return this.taskId
       },
-      set (value) {
+      set(value) {
         this.$emit('update:taskId', value)
       }
     }
@@ -52,11 +46,11 @@ export default {
 </script>
 
 <style lang="scss">
-  .bookmarks-page-params {
-    &__task {
-      &__show-status {
-        font-size: smaller;
-      }
+.bookmarks-page-params {
+  &__task {
+    &__show-status {
+      font-size: smaller;
     }
   }
+}
 </style>

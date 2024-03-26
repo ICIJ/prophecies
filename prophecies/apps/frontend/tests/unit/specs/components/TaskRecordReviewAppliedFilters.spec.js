@@ -1,5 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import { BButton } from 'bootstrap-vue'
+
 import '@/store'
 import Core from '@/core'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -10,7 +11,7 @@ import TaskRecordReviewAppliedFilters from '@/components/TaskRecordReviewApplied
 describe('TaskRecordReviewAppliedFilters', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

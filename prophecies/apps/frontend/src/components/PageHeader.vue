@@ -1,5 +1,6 @@
 <script>
 import { isObject, find } from 'lodash'
+
 import * as icons from '@/utils/icons'
 
 export default {
@@ -13,13 +14,13 @@ export default {
     }
   },
   computed: {
-    iconComponent () {
+    iconComponent() {
       if (isObject(this.icon)) {
         return this.icon
       }
       return this.matchingIconComponent
     },
-    matchingIconComponent () {
+    matchingIconComponent() {
       return find(icons, ({ name }) => name.startsWith(this.icon))
     }
   }
@@ -36,19 +37,19 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-  .page-header {
-    display:flex;
+.page-header {
+  display: flex;
 
-    &__icon {
-      margin-top: $spacer-xs;
-      margin-right: $spacer-sm;
-      max-width: 30px;
-      min-width: 30px;
-    }
-
-    &__title {
-      padding-bottom: $spacer-xs;
-      border-bottom: 7px solid $warning;
-    }
+  &__icon {
+    margin-top: $spacer-xs;
+    margin-right: $spacer-sm;
+    max-width: 30px;
+    min-width: 30px;
   }
+
+  &__title {
+    padding-bottom: $spacer-xs;
+    border-bottom: 7px solid $warning;
+  }
+}
 </style>

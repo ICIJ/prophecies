@@ -24,7 +24,6 @@ import TaskUserChoiceStatistics from '@/models/TaskUserChoiceStatistics'
 import Tip from '@/models/Tip'
 import User from '@/models/User'
 import UserNotification from '@/models/UserNotification'
-
 import settings from '@/settings'
 
 // Configure VuexORM to use VuexORMAxios and the correct baseUrl

@@ -1,8 +1,7 @@
 <script>
 import { formatDateLongAlt } from '@/utils/date'
-import User from '@/models/User'
-import UserCard from '@/components/UserCard.vue'
-import AdminBadge from '@/components/AdminBadge.vue'
+import UserCard from '@/components/UserCard'
+import AdminBadge from '@/components/AdminBadge'
 
 export default {
   name: 'UserRetrieveProfile',
@@ -10,19 +9,14 @@ export default {
     UserCard,
     AdminBadge
   },
-  props: {
-    username: {
-      type: String
-    }
-  },
   filters: {
-    formatDate (d) {
+    formatDate(d) {
       return formatDateLongAlt(d)
     }
   },
-  computed: {
-    user () {
-      return User.find(this.username)
+  props: {
+    username: {
+      type: String
     }
   }
 }
@@ -30,16 +24,17 @@ export default {
 
 <template>
   <user-card :username="username" class="user-retrieve-profile">
-    <template #content="{user}">
-      <ul class="list-unstyled mt-5" >
-        <li class="user-retrieve-profile__super-user mb-3" v-if="user.isSuperuser">
-          <admin-badge/>
+    <template #content="{ user }">
+      <ul class="list-unstyled mt-5">
+        <li v-if="user.isSuperuser" class="user-retrieve-profile__super-user mb-3">
+          <admin-badge />
         </li>
         <li class="user-retrieve-profile__email mb-3">
-          Email: <a v-if="user.email" :href="`mailto:${user.email}`">{{ user.email }}</a><template v-else>{{$t('userRetrieveProfile.notProvided')}}</template>
+          Email: <a v-if="user.email" :href="`mailto:${user.email}`">{{ user.email }}</a
+          ><template v-else>{{ $t('userRetrieveProfile.notProvided') }}</template>
         </li>
         <li class="user-retrieve-profile__last-login">
-          {{$t('userRetrieveProfile.lastLogin')}}: {{ user.lastLogin | formatDate }}
+          {{ $t('userRetrieveProfile.lastLogin') }}: {{ user.lastLogin | formatDate }}
         </li>
       </ul>
     </template>

@@ -1,5 +1,6 @@
 import { camelCase, get, template } from 'lodash'
 import { Model } from '@vuex-orm/core'
+
 import { responseNormalizer } from '@/utils/jsonapi'
 import TaskRecord from '@/models/TaskRecord'
 import User from '@/models/User'
@@ -16,7 +17,7 @@ export default class Action extends Model {
     }
   }
 
-  static fields () {
+  static fields() {
     return {
       id: this.attr(null),
       actorId: this.attr(null),
@@ -37,7 +38,7 @@ export default class Action extends Model {
     baseURL: `${settings.apiUrl}/actions/`,
     dataTransformer: responseNormalizer,
     actions: {
-      forTaskRecord (id) {
+      forTaskRecord(id) {
         const { apiConfig } = TaskRecord
         const params = { 'page[size]': 50 }
         return this.get(`${id}/relationships/actions/`, { ...apiConfig, params })
@@ -45,20 +46,20 @@ export default class Action extends Model {
     }
   }
 
-  get i18n () {
+  get i18n() {
     const path = ['actions', this.verb, this.targetType, this.actionObjectType]
-    return path.map(p => p ? camelCase(p) : '*').join('.')
+    return path.map((p) => (p ? camelCase(p) : '*')).join('.')
   }
 
-  get link () {
+  get link() {
     const interpolate = settings.templateInterpolate
     const compiled = template(this.linkTemplate, { interpolate })
     return compiled(this)
   }
 
-  get linkTemplate () {
+  get linkTemplate() {
     const path = [this.verb, this.targetType, this.actionObjectType]
-    const key = path.map(p => p ? camelCase(p) : '*').join('.')
+    const key = path.map((p) => (p ? camelCase(p) : '*')).join('.')
     return get(Action.links, key, null)
   }
 }

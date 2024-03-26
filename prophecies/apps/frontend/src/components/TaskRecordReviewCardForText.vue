@@ -3,6 +3,9 @@ import TaskRecordReviewCard from '@/components/TaskRecordReviewCard'
 
 export default {
   name: 'TaskRecordReviewCardForText',
+  components: {
+    TaskRecordReviewCard
+  },
   props: {
     taskRecordReviewId: {
       type: [String, Number]
@@ -22,20 +25,18 @@ export default {
     highlightNote: {
       type: [Boolean, String]
     }
-  },
-  components: {
-    TaskRecordReviewCard
   }
 }
 </script>
 
 <template>
   <task-record-review-card
-    v-on="$listeners"
     :task-record-review-id="taskRecordReviewId"
     :active="active"
     :selected="selected"
     :preview-link="previewLink"
     :frozen="frozen"
-    :highlight-note="highlightNote" />
+    :highlight-note="highlightNote"
+    v-on="$listeners"
+  />
 </template>

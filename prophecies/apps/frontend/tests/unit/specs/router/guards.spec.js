@@ -1,6 +1,7 @@
 import { createLocalVue } from '@vue/test-utils'
 
 import { server, rest } from '../../mocks/server'
+
 import { Core } from '@/core'
 import User from '@/models/User'
 

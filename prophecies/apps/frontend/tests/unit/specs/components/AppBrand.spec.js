@@ -1,4 +1,5 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import AppBrand from '@/components/AppBrand'
 import Core from '@/core'
 

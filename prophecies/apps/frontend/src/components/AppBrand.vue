@@ -10,17 +10,17 @@
 </template>
 
 <style lang="scss" scoped>
-  .app-brand {
-    display: block;
-    padding: $spacer $spacer-lg 60px;
-    color: $primary;
+.app-brand {
+  display: block;
+  padding: $spacer $spacer-lg 60px;
+  color: $primary;
 
-    &:hover {
-      text-decoration: none;
-    }
-
-    &__org-name {
-      font-weight: 300;
-    }
+  &:hover {
+    text-decoration: none;
   }
+
+  &__org-name {
+    font-weight: 300;
+  }
+}
 </style>

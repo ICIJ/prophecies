@@ -6,7 +6,7 @@ if (process.env.NODE_ENV !== 'test' && window) {
   // Mount the core when it's ready
   prophecies.ready
     // Redirect to the error page
-    .catch(error => {
+    .catch((error) => {
       const { currentRoute } = prophecies.router
       // Unauthenticated error during initialization:
       // redirect the user to the login page

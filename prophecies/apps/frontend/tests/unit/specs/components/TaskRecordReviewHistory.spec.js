@@ -1,4 +1,5 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import '@/store'
 import Core from '@/core'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -10,7 +11,7 @@ import TaskRecordReviewHistory from '@/components/TaskRecordReviewHistory'
 describe('TaskRecordReviewHistory', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div

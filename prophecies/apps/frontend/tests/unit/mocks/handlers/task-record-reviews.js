@@ -214,7 +214,7 @@ export default [
             id: '40',
             attributes: {
               status: 'DONE',
-              note: "Nice",
+              note: 'Nice',
               alternativeValue: null,
               taskId: '3'
             },
@@ -247,7 +247,7 @@ export default [
             links: {
               self: 'http://localhost/api/v1/task-record-reviews/40/'
             }
-          },
+          }
         ],
         included: [
           {
@@ -272,11 +272,7 @@ export default [
             type: 'Task',
             id: '3',
             attributes: {
-              colors: [
-                '#9e5e00',
-                '#d37d00',
-                '#ff9b09'
-              ],
+              colors: ['#9e5e00', '#d37d00', '#ff9b09'],
               description: 'A list of immatriculations to check',
               name: 'Immatriculations',
               priority: 1,

@@ -1,8 +1,8 @@
-import { get, keys, noop, set, union, unset } from 'lodash'
+import { get, keys, noop, set, unset } from 'lodash'
 import hotkeys from 'hotkeys-js'
 
 export default class Shortkey {
-  constructor () {
+  constructor() {
     this.callbacks = {}
     this.active = true
   }
@@ -15,7 +15,7 @@ export default class Shortkey {
       // Ensure the key is not binded already
       this.unbind(keys)
       // Wrap the callback to activate/deactivate shortcut on demand
-      const wrappedCallback = event => this.active ? callback(event) : null
+      const wrappedCallback = (event) => (this.active ? callback(event) : null)
       // Then bind it using Hotkeys
       hotkeys(keys, scope, wrappedCallback)
       // Save the callback to be able to unbind it later
@@ -23,7 +23,7 @@ export default class Shortkey {
     }
   }
 
-  unbind (keys = null, scope = 'all') {
+  unbind(keys = null, scope = 'all') {
     if (!keys) {
       return this.unbindAll(scope)
     }
@@ -31,34 +31,34 @@ export default class Shortkey {
     unset(this.callbacks, [keys, scope])
   }
 
-  unbindAll (scope = 'all') {
-    keys(this.callbacks).forEach(keys => {
+  unbindAll(scope = 'all') {
+    keys(this.callbacks).forEach((keys) => {
       this.unbind(keys, scope)
     })
   }
 
-  setScope (scope = 'all') {
+  setScope(scope = 'all') {
     hotkeys.setScope(scope)
   }
 
-  activate () {
+  activate() {
     this.active = true
   }
 
-  deactivate () {
+  deactivate() {
     this.active = false
   }
-  
-  toggle (active = null) {
+
+  toggle(active = null) {
     this.active = active !== null ? active : !this.active
   }
 
-  static install (Vue) {
+  static install(Vue) {
     Vue.mixin({
-      beforeCreate () {
+      beforeCreate() {
         this.$shortkey = new Shortkey()
       },
-      beforeDestroy () {
+      beforeDestroy() {
         this.$shortkey.unbind()
       }
     })

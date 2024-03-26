@@ -1,10 +1,11 @@
 <script>
 import { orderBy } from 'lodash'
+
 import User from '@/models/User'
 import Task, { TaskStatusEnum } from '@/models/Task'
 import TaskUserStatistics from '@/models/TaskUserStatistics'
 import TaskStatsCardAllRounds from '@/components/TaskStatsCardAllRounds'
-import LightDropdown from '@/components/LightDropdown.vue'
+import LightDropdown from '@/components/LightDropdown'
 
 const ALL__OPEN_TASKS_ID = '0_all'
 export default {
@@ -12,6 +13,11 @@ export default {
   components: {
     TaskStatsCardAllRounds,
     LightDropdown
+  },
+  filters: {
+    round(value) {
+      return Math.round(value)
+    }
   },
   props: {
     taskIds: {
@@ -27,87 +33,82 @@ export default {
       default: undefined
     }
   },
-  filters: {
-    round (value) {
-      return Math.round(value)
-    }
-  },
-  data () {
+  data() {
     return {
       selectedTaskId: ALL__OPEN_TASKS_ID,
       show: false
     }
   },
-  created () {
-    this.setup()
-  },
   computed: {
-    user () {
+    user() {
       const id = this.userId ?? this.username
       return User.find(id)
     },
-    statsAllOpenTasks () {
+    statsAllOpenTasks() {
       return TaskUserStatistics.query()
         .where('checkerId', this.user.id)
-        .where(s => this.openTaskIds.includes(s.taskId))
+        .where((s) => this.openTaskIds.includes(s.taskId))
         .get()
     },
-    statsAverageAllStats () {
+    statsAverageAllStats() {
       return this.getAverage(this.statsAllOpenTasks)
     },
-    statsAverageByTaskId () {
+    statsAverageByTaskId() {
       return this.openTaskIds.reduce((acc, tId) => {
         acc[tId] = this.getAverageByTaskId(tId)
         return acc
       }, {})
     },
-    statsAverageByOption () {
+    statsAverageByOption() {
       if (this.selectedTaskId === ALL__OPEN_TASKS_ID) {
         return this.statsAverageAllStats
-      } else if (this.statsAverageByTaskId[this.selectedTaskId]){
+      } else if (this.statsAverageByTaskId[this.selectedTaskId]) {
         return this.statsAverageByTaskId[this.selectedTaskId]
       }
-      return { done: 0,  pending: 0, progress: 0 }
+      return { done: 0, pending: 0, progress: 0 }
     },
-    progressColor () {
+    progressColor() {
       if (this.selectedTaskId === ALL__OPEN_TASKS_ID) {
         return ''
       }
       const task = Task.find(this.selectedTaskId)
       return task.colors[1]
     },
-    dropdownTasks () {
+    dropdownTasks() {
       return [{ id: ALL__OPEN_TASKS_ID, name: this.$t('userTaskStatsCard.allOpenTasks') }, ...this.openTasks]
     },
-    openTasks () {
+    openTasks() {
       return orderBy(
-        Task
-          .query()
-          .where('status', status => status !== TaskStatusEnum.CLOSED)
+        Task.query()
+          .where('status', (status) => status !== TaskStatusEnum.CLOSED)
           .where('taskRecordsCount', (value) => value > 0)
-          .whereIdIn(this.taskIds).get(),
+          .whereIdIn(this.taskIds)
+          .get(),
         'name'
       )
     },
-    openTaskIds () {
-      return this.openTasks.map(t => t.id)
+    openTaskIds() {
+      return this.openTasks.map((t) => t.id)
     }
   },
+  created() {
+    this.setup()
+  },
   methods: {
-    async setup () {
+    async setup() {
       await this.fetchTaskUserStats(this.user.id)
     },
-    fetchTaskUserStats () {
+    fetchTaskUserStats() {
       const params = { 'filter[checker]': this.user.id }
       return TaskUserStatistics.api().get('', { params })
     },
-    counterReducer (acc, s) {
+    counterReducer(acc, s) {
       acc.done += s.doneCount
       acc.pending += s.pendingCount
       acc.progress += s.progress
       return acc
     },
-    getAverage (stats) {
+    getAverage(stats) {
       const counters = stats.reduce(this.counterReducer, {
         done: 0,
         pending: 0,
@@ -120,14 +121,11 @@ export default {
       }
       return counters
     },
-    getStatsByTaskId (taskId) {
-      return TaskUserStatistics.query()
-        .where('checkerId', this.user.id)
-        .where('taskId', taskId)
-        .get()
+    getStatsByTaskId(taskId) {
+      return TaskUserStatistics.query().where('checkerId', this.user.id).where('taskId', taskId).get()
     },
-    getAverageByTaskId (taskId) {
-      const stats = this.statsAllOpenTasks.filter(s => s.taskId === taskId)
+    getAverageByTaskId(taskId) {
+      const stats = this.statsAllOpenTasks.filter((s) => s.taskId === taskId)
       return this.getAverage(stats)
     }
   }
@@ -144,7 +142,11 @@ export default {
   >
     <template #top>
       <div class="d-flex flex-row-reverse py-1">
-        <light-dropdown class="user-task-stats-card__dropdown" :items="dropdownTasks" :selected-id.sync="selectedTaskId"/>
+        <light-dropdown
+          class="user-task-stats-card__dropdown"
+          :items="dropdownTasks"
+          :selected-id.sync="selectedTaskId"
+        />
       </div>
     </template>
     <template #title> {{ $t('userTaskStatsCard.allRecords') }} </template>

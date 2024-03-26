@@ -1,4 +1,5 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
+
 import StatsByUsers from '@/components/StatsByUsers'
 import Core from '@/core'
 
@@ -7,7 +8,12 @@ describe('StatsByUsers', () => {
     let wrapper
     beforeEach(async () => {
       const localVue = createLocalVue()
-      const propsData = { users: [{ name: 'django', done: 5, pending: 0, progress: 100 }, { name: 'olivia', done: 2, pending: 2, progress: 50 }] }
+      const propsData = {
+        users: [
+          { name: 'django', done: 5, pending: 0, progress: 100 },
+          { name: 'olivia', done: 2, pending: 2, progress: 50 }
+        ]
+      }
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       // Configure the core
@@ -34,7 +40,10 @@ describe('StatsByUsers', () => {
       expect(checkIcon.exists()).toBeTruthy()
     })
     it('computes the stats of given users', () => {
-      const users = [{ name: 'django', done: 5, pending: 0, progress: 100 }, { name: 'olivia', done: 2, pending: 2, progress: 50 }]
+      const users = [
+        { name: 'django', done: 5, pending: 0, progress: 100 },
+        { name: 'olivia', done: 2, pending: 2, progress: 50 }
+      ]
       const total = wrapper.vm.computeStats(users)
       expect(total.done).toEqual(7)
       expect(total.pending).toEqual(2)

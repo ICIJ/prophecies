@@ -1,4 +1,5 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
+
 import StatsByRound from '@/components/StatsByRound'
 import Core from '@/core'
 
@@ -6,7 +7,7 @@ describe('StatsByRound', () => {
   describe('Show stats by round', () => {
     let wrapper
 
-    function createContainer () {
+    function createContainer() {
       const div = document.createElement('div')
       document.body.appendChild(div)
       return div
@@ -23,7 +24,10 @@ describe('StatsByRound', () => {
           { name: 'Correct', value: 'correct', color: '#000', progress: 75 },
           { name: 'Unknown', value: 'unknown', color: '#AAA', progress: 0 }
         ],
-        usersStats: [{ checker: { username: 'django' }, done: 5, pending: 0, progress: 100 }, { checker: { username: 'olivia' }, done: 2, pending: 2, progress: 50 }]
+        usersStats: [
+          { checker: { username: 'django' }, done: 5, pending: 0, progress: 100 },
+          { checker: { username: 'olivia' }, done: 2, pending: 2, progress: 50 }
+        ]
       }
 
       // Configure the local vue

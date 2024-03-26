@@ -1,5 +1,6 @@
 import '@/store'
 import { server, rest } from '../../mocks/server'
+
 import User from '@/models/User'
 
 describe('User', () => {
@@ -14,16 +15,20 @@ describe('User', () => {
     })
 
     it('should return a User instance', async () => {
-      server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
-        return res.once(ctx.json({
-          data: {
-            id: 20,
-            attributes: {
-              username: 'bar'
-            }
-          }
-        }))
-      }))
+      server.use(
+        rest.get('/api/v1/users/me/', (req, res, ctx) => {
+          return res.once(
+            ctx.json({
+              data: {
+                id: 20,
+                attributes: {
+                  username: 'bar'
+                }
+              }
+            })
+          )
+        })
+      )
       await User.api().me()
       expect(User.me()).toBeInstanceOf(User)
       expect(User.me().id).toBe(20)

@@ -3,7 +3,7 @@ import { createLocalVue, mount } from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import Task from '@/models/Task'
-import LightDropdown from '@/components/LightDropdown.vue'
+import LightDropdown from '@/components/LightDropdown'
 
 describe('LightDropdown', () => {
   let wrapper
@@ -19,7 +19,7 @@ describe('LightDropdown', () => {
     const all_ = { id: '0_all', name: 'All open tasks' }
     const [t1, t2] = Task.query().whereIdIn(['1', '2']).get()
     const items = [all_, t1, t2]
-    const propsData = { items: items, selectedId: all_.id }
+    const propsData = { items, selectedId: all_.id }
     wrapper = mount(LightDropdown, { localVue, propsData, i18n })
   })
   it('should show All open task selected', () => {

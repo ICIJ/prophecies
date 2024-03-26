@@ -1,10 +1,14 @@
 <script>
 import { get, uniqueId } from 'lodash'
+
 import TaskRecord from '@/models/TaskRecord'
 import HapticCopyButton from '@/components/HapticCopyButton'
 
 export default {
   name: 'TaskRecordIframe',
+  components: {
+    HapticCopyButton
+  },
   props: {
     taskRecordId: {
       type: [String, Number]
@@ -19,34 +23,15 @@ export default {
       type: Boolean
     }
   },
-  components: {
-    HapticCopyButton,
-  },
-  data () {
+  data() {
     return {
       observer: null,
       isIntersecting: false
     }
   },
-  mounted() {
-    if (this.lazy) {
-      this.bindObserver()
-    }
-  },
-  methods: {
-    bindObserver() {
-      this.observer = new IntersectionObserver((entries) => {
-        this.isIntersecting = this.isIntersecting || entries[0].isIntersecting
-      })
-      this.observer.observe(this.$el)
-    }
-  },
   computed: {
     taskRecord() {
-      return TaskRecord.query()
-        .with('task')
-        .with('task.templateSetting')
-        .find(this.taskRecordId)
+      return TaskRecord.query().with('task').with('task.templateSetting').find(this.taskRecordId)
     },
     templateSetting() {
       return get(this, 'taskRecord.task.templateSetting', {})
@@ -74,6 +59,19 @@ export default {
     visible() {
       return !this.hidden && (!this.lazy || this.isIntersecting)
     }
+  },
+  mounted() {
+    if (this.lazy) {
+      this.bindObserver()
+    }
+  },
+  methods: {
+    bindObserver() {
+      this.observer = new IntersectionObserver((entries) => {
+        this.isIntersecting = this.isIntersecting || entries[0].isIntersecting
+      })
+      this.observer.observe(this.$el)
+    }
   }
 }
 </script>
@@ -87,20 +85,22 @@ export default {
       loading="lazy"
       allowfullscreen
       width="100%"
-      height="100%" />
+      height="100%"
+    />
     <button v-if="expand" v-b-modal="modalId" class="task-record-iframe__expand btn btn-link p-1 m-1">
       <maximize-2-icon />
     </button>
     <b-modal
-        v-if="expand"
-        :id="modalId"
-        content-class="bg-transparent text-center border-0 shadow-none pointer-events-none"
-        header-class="border-0 p-0"
-        dialog-class="mx-auto px-3"
-        hide-footer
-        body-class="px-0"
-        lazy
-        size="lg">
+      v-if="expand"
+      :id="modalId"
+      content-class="bg-transparent text-center border-0 shadow-none pointer-events-none"
+      header-class="border-0 p-0"
+      dialog-class="mx-auto px-3"
+      hide-footer
+      body-class="px-0"
+      lazy
+      size="lg"
+    >
       <template #modal-header="{ close }">
         <div class="d-flex w-100">
           <b-btn class="pointer-events-all px-2 ml-auto text-light" variant="link" @click="close">
@@ -111,7 +111,11 @@ export default {
       </template>
       <div class="pointer-events-all mx-auto d-inline-block w-100">
         <task-record-iframe :task-record-id="taskRecordId" class="mb-3" />
-        <haptic-copy-button v-if="displayOriginalValue" :text="taskRecord.originalValue" class="btn-sm py-1 px-2 mx-auto" />
+        <haptic-copy-button
+          v-if="displayOriginalValue"
+          :text="taskRecord.originalValue"
+          class="btn-sm py-1 px-2 mx-auto"
+        />
       </div>
     </b-modal>
   </div>

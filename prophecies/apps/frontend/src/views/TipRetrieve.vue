@@ -1,5 +1,6 @@
 <script>
 import { groupBy, uniqueId } from 'lodash'
+
 import AppHeader from '@/components/AppHeader'
 import AppSidebar from '@/components/AppSidebar'
 import AppWaiter from '@/components/AppWaiter'
@@ -19,30 +20,24 @@ export default {
       type: [String, Number]
     }
   },
-  created () {
-    return this.setup()
-  },
   computed: {
-    fetchTipLoader () {
+    fetchTipLoader() {
       return uniqueId('load-tip-')
     },
-    tip () {
-      return Tip
-        .query()
-        .with('project')
-        .with('creator')
-        .with('task')
-        .with('task.project')
-        .find(this.tipId)
+    tip() {
+      return Tip.query().with('project').with('creator').with('task').with('task.project').find(this.tipId)
     },
-    tipsGroupedByProject () {
+    tipsGroupedByProject() {
       return groupBy(this.tips, (tip) => {
         return tip.project.name
       })
     }
   },
+  created() {
+    return this.setup()
+  },
   methods: {
-    async setup () {
+    async setup() {
       try {
         await this.waitFor(this.fetchTipLoader, this.fetchTip)
       } catch (error) {
@@ -50,12 +45,12 @@ export default {
         this.$router.replace({ name: 'error', params: { title, error } })
       }
     },
-    async waitFor (loader, fn) {
+    async waitFor(loader, fn) {
       this.$wait.start(loader)
       await fn()
       this.$wait.end(loader)
     },
-    fetchTip () {
+    fetchTip() {
       return Tip.api().get(this.tipId)
     }
   }
@@ -69,7 +64,7 @@ export default {
       <app-header hide-nav />
       <div class="container-fluid p-5">
         <app-waiter :loader="fetchTipLoader" waiter-class="my-5 mx-auto d-block">
-          <tip-card class="card card-body shadow" :tip-id="tipId" v-if="tip" />
+          <tip-card v-if="tip" class="card card-body shadow" :tip-id="tipId" />
         </app-waiter>
       </div>
     </div>

@@ -4,7 +4,6 @@ import '@/store'
 import Core from '@/core'
 import TaskRecord from '@/models/TaskRecord'
 import TaskRecordMedia from '@/models/TaskRecordMedia'
-
 import TaskRecordMediaView from '@/components/TaskRecordMediaView'
 
 jest.mock('lodash', () => ({
@@ -13,7 +12,6 @@ jest.mock('lodash', () => ({
 }))
 
 describe('TaskRecordMediaView', () => {
-
   beforeEach(async () => {
     await TaskRecord.api().get()
     await TaskRecordMedia.api().get()

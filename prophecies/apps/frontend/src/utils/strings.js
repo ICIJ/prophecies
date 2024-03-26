@@ -1,4 +1,4 @@
-export function slugger (value = '') {
+export function slugger(value = '') {
   return value
     .toLowerCase()
     .trim()

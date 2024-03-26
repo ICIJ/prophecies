@@ -1,14 +1,11 @@
-import {
-  createLocalVue,
-  mount
-} from '@vue/test-utils'
-import Core from '@/core'
+import { createLocalVue, mount } from '@vue/test-utils'
 
+import Core from '@/core'
 import TaskRecordReviewTutorialStep from '@/components/TaskRecordReviewTutorialStep'
 describe('TaskRecordReviewTutorialStep', () => {
   let wrapper
 
-  function createContainer () {
+  function createContainer() {
     const div = document.createElement('div')
     document.body.appendChild(div)
     return div
@@ -21,12 +18,11 @@ describe('TaskRecordReviewTutorialStep', () => {
 
     const propsData = {
       number: 1,
-      step:
-        {
-          text: 'Read the content to be checked',
-          class: 'offset-2 col-8 ',
-          width: '130px'
-        },
+      step: {
+        text: 'Read the content to be checked',
+        class: 'offset-2 col-8 ',
+        width: '130px'
+      },
       stepCount: 5
     }
     // Configure the local vue with plugins
@@ -41,7 +37,9 @@ describe('TaskRecordReviewTutorialStep', () => {
     expect(tutorialProgressNumbers.text()).toBe('1/5')
   })
   it('should show 20% progress', () => {
-    const tutorialProgressBar = wrapper.find('.task-record-review-tutorial-step__progression__bar-position .progress .progress-bar')
+    const tutorialProgressBar = wrapper.find(
+      '.task-record-review-tutorial-step__progression__bar-position .progress .progress-bar'
+    )
     expect(tutorialProgressBar.attributes().style).toBe('width: 20%;')
   })
   it('should show the text of the current task', () => {

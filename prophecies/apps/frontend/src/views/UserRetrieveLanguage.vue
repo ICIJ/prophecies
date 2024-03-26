@@ -8,24 +8,24 @@ export default {
   filters: {},
   computed: {
     locale: {
-      get () {
+      get() {
         return store.state.app.locale ?? 'en'
       },
-      set (value) {
+      set(value) {
         store.dispatch('app/locale', value)
         this.$core.loadLocale(value)
       }
     },
-    locales () {
+    locales() {
       return settings.locales
     },
-    loadedLocales () {
+    loadedLocales() {
       return this.$core.loadedLocales
     }
   },
   methods: {
     selectLocale(event) {
-      this.locale=event.currentTarget.id
+      this.locale = event.currentTarget.id
     }
   }
 }
@@ -33,20 +33,19 @@ export default {
 
 <template>
   <div class="user-retrieve-language">
-    <ul
-      class="user-retrieve-language__list p-0"
-    >
+    <ul class="user-retrieve-language__list p-0">
       <li
-        class="user-retrieve-language__list__language list-unstyled py-2"
         v-for="availableLocale in locales"
         :id="availableLocale.key"
+        :key="availableLocale.key"
+        class="user-retrieve-language__list__language list-unstyled py-2"
+        :style="{ cursor: 'pointer' }"
         @click="selectLocale"
-        :style="{cursor: 'pointer'}"
       >
-        <span :class="{invisible: locale !== availableLocale.key}">
+        <span :class="{ invisible: locale !== availableLocale.key }">
           <check-icon size="1.4x" />
         </span>
-        <span class="px-2" :class="{'font-weight-bold': locale === availableLocale.key}">
+        <span class="px-2" :class="{ 'font-weight-bold': locale === availableLocale.key }">
           {{ availableLocale.label }} ({{ availableLocale.key.toUpperCase() }})
         </span>
       </li>

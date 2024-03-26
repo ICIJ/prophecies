@@ -1,10 +1,9 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 
 import '@/store'
-import Core from '@/core'
 import { server, rest } from '../../mocks/server'
-import User from '@/models/User'
 
+import Core from '@/core'
 import UserRetrieveLanguage from '@/views/UserRetrieveLanguage'
 
 describe('UserRetrieveLanguage', () => {
@@ -12,23 +11,27 @@ describe('UserRetrieveLanguage', () => {
   let wrapper
 
   beforeAll(async () => {
-    server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
-      return res.once(ctx.json({
-        data: {
-          id: 20,
-          attributes: {
-            username: 'olivia',
-            firstName: 'Olivia',
-            lastName: 'Reinhardt',
-            email: 'engineering@icij.org',
-            emailMd5: '628e9a99d87799e9d434b63d2c3744ca',
-            lastLogin: '2022-02-04T17:41:43.040505Z',
-            isStaff: true,
-            isSuperuser: true
-          }
-        }
-      }))
-    }))
+    server.use(
+      rest.get('/api/v1/users/me/', (req, res, ctx) => {
+        return res.once(
+          ctx.json({
+            data: {
+              id: 20,
+              attributes: {
+                username: 'olivia',
+                firstName: 'Olivia',
+                lastName: 'Reinhardt',
+                email: 'engineering@icij.org',
+                emailMd5: '628e9a99d87799e9d434b63d2c3744ca',
+                lastLogin: '2022-02-04T17:41:43.040505Z',
+                isStaff: true,
+                isSuperuser: true
+              }
+            }
+          })
+        )
+      })
+    )
   })
 
   beforeEach(async () => {
@@ -46,7 +49,7 @@ describe('UserRetrieveLanguage', () => {
     }
     await core.configure()
     wrapper = mount(UserRetrieveLanguage, options)
-    i18n = core['i18n']
+    i18n = core.i18n
   })
 
   afterEach(async () => {
@@ -58,7 +61,7 @@ describe('UserRetrieveLanguage', () => {
   })
 
   it('should display the supported languages', async () => {
-    const expected = ['English (EN)', 'Français (FR)', 'Español (ES)'];
+    const expected = ['English (EN)', 'Français (FR)', 'Español (ES)']
 
     const languages = wrapper.findAll('.user-retrieve-language__list__language').wrappers
 

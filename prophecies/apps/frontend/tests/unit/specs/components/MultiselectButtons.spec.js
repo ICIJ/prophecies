@@ -1,5 +1,6 @@
 import { BButton } from 'bootstrap-vue'
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import MultiselectButtons from '@/components/MultiselectButtons'
 
 describe('MultiselectButtons', () => {
@@ -15,7 +16,7 @@ describe('MultiselectButtons', () => {
       ]
       const propsData = { multiple: false, options, trackBy: 'id' }
       localVue = createLocalVue()
-      localVue.component('b-btn', BButton)
+      localVue.component('BBtn', BButton)
       wrapper = mount(MultiselectButtons, { localVue, propsData })
     })
 
@@ -29,9 +30,7 @@ describe('MultiselectButtons', () => {
       buttons.at(1).trigger('click')
       expect(wrapper.emitted().update[0][0]).toHaveLength(1)
       expect(wrapper.emitted().update[0][0]).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({ id: 1, name: 'Correct' })
-        ])
+        expect.arrayContaining([expect.objectContaining({ id: 1, name: 'Correct' })])
       )
     })
 
@@ -73,7 +72,7 @@ describe('MultiselectButtons', () => {
       const value = [{ id: 2, name: 'Croissant' }]
       const propsData = { multiple: true, options, value }
       localVue = createLocalVue()
-      localVue.component('b-btn', BButton)
+      localVue.component('BBtn', BButton)
       wrapper = mount(MultiselectButtons, { localVue, propsData })
     })
 

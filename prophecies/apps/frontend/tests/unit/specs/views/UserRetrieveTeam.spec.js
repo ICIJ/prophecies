@@ -3,7 +3,6 @@ import { createLocalVue, mount } from '@vue/test-utils'
 import '@/store'
 import Core from '@/core'
 import User from '@/models/User'
-
 import UserRetrieveTeam from '@/views/UserRetrieveTeam'
 import UserCard from '@/components/UserCard'
 import AdminBadge from '@/components/AdminBadge'

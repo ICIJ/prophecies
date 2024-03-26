@@ -1,5 +1,7 @@
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import { server, rest } from '../../mocks/server'
+
 import AppHeader from '@/components/AppHeader'
 import Core from '@/core'
 import User from '@/models/User'
@@ -19,21 +21,25 @@ describe('AppHeader', () => {
       const attachTo = createContainer()
       localVue = createLocalVue()
       // Mock current user
-      server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
-        return res.once(ctx.json({
-          data: {
-            id: 20,
-            attributes: {
-              username: 'olivia',
-              firstName: 'Olivia',
-              lastName: 'Reinhardt',
-              email: 'engineering@icij.org',
-              emailMd5: '628e9a99d87799e9d434b63d2c3744ca',
-              isStaff: true
-            }
-          }
-        }))
-      }))
+      server.use(
+        rest.get('/api/v1/users/me/', (req, res, ctx) => {
+          return res.once(
+            ctx.json({
+              data: {
+                id: 20,
+                attributes: {
+                  username: 'olivia',
+                  firstName: 'Olivia',
+                  lastName: 'Reinhardt',
+                  email: 'engineering@icij.org',
+                  emailMd5: '628e9a99d87799e9d434b63d2c3744ca',
+                  isStaff: true
+                }
+              }
+            })
+          )
+        })
+      )
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       const { i18n, store, wait, router } = core
@@ -65,21 +71,25 @@ describe('AppHeader', () => {
       const attachTo = createContainer()
       localVue = createLocalVue()
       // Mock current user
-      server.use(rest.get('/api/v1/users/me/', (req, res, ctx) => {
-        return res.once(ctx.json({
-          data: {
-            id: 20,
-            attributes: {
-              username: 'django',
-              firstName: 'Django',
-              lastName: '',
-              email: 'support@icij.org',
-              emailMd5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
-              isStaff: false
-            }
-          }
-        }))
-      }))
+      server.use(
+        rest.get('/api/v1/users/me/', (req, res, ctx) => {
+          return res.once(
+            ctx.json({
+              data: {
+                id: 20,
+                attributes: {
+                  username: 'django',
+                  firstName: 'Django',
+                  lastName: '',
+                  email: 'support@icij.org',
+                  emailMd5: 'd159b514bfc6e718ac0a4ed0487d4d3e',
+                  isStaff: false
+                }
+              }
+            })
+          )
+        })
+      )
       // Configure the local vue
       const core = Core.init(localVue).useAll()
       const { i18n, store, wait } = core

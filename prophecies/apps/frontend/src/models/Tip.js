@@ -1,5 +1,6 @@
 import { Model } from '@vuex-orm/core'
 import { marked } from 'marked'
+
 import { responseNormalizer } from '@/utils/jsonapi'
 import settings from '@/settings'
 import Project from '@/models/Project'
@@ -9,7 +10,7 @@ import User from '@/models/User'
 export default class Tip extends Model {
   static entity = 'Tip'
 
-  static fields () {
+  static fields() {
     return {
       id: this.attr(null),
       name: this.string(),
@@ -29,14 +30,14 @@ export default class Tip extends Model {
     baseURL: `${settings.apiUrl}/tips/`,
     dataTransformer: responseNormalizer,
     actions: {
-      search (query, config = {}) {
+      search(query, config = {}) {
         const params = { ...config.params, 'filter[search]': query }
         return this.get('', { ...config, params })
       }
     }
   }
 
-  get descriptionWithMentions () {
+  get descriptionWithMentions() {
     const string = String(this.description).replace(User.usernamePattern, (match, p1) => {
       if (User.me() && p1 === User.me().username) {
         return `<span class="mention mention--is-me">${match}</span>`
@@ -49,7 +50,7 @@ export default class Tip extends Model {
     return string
   }
 
-  get descriptionHTML () {
+  get descriptionHTML() {
     return marked(this.descriptionWithMentions)
   }
 }

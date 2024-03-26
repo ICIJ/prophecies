@@ -1,5 +1,6 @@
 import { find } from 'lodash'
 import { createLocalVue, mount } from '@vue/test-utils'
+
 import { server, rest } from '../../mocks/server'
 
 import AppSearchForm from '@/components/AppSearchForm'
@@ -8,139 +9,139 @@ import Task from '@/models/Task'
 
 describe('AppSearchForm', () => {
   beforeEach(() => {
-    server.use(rest.get('/api/v1/tips/', (req, res, ctx) => {
-      return res.once(ctx.json({
-        data:
-          [
-            {
-              type: 'Tip',
-              id: '4',
-              attributes: {
-                name: 'tip for test 4',
-                description: 'test description 4',
-                createdAt: '2021-09-02T12:58:16.113007Z',
-                updatedAt: '2021-09-02T12:58:16.113038Z'
+    server.use(
+      rest.get('/api/v1/tips/', (req, res, ctx) => {
+        return res.once(
+          ctx.json({
+            data: [
+              {
+                type: 'Tip',
+                id: '4',
+                attributes: {
+                  name: 'tip for test 4',
+                  description: 'test description 4',
+                  createdAt: '2021-09-02T12:58:16.113007Z',
+                  updatedAt: '2021-09-02T12:58:16.113038Z'
+                },
+                relationships: {
+                  project: {
+                    data: {
+                      type: 'Project',
+                      id: '1'
+                    }
+                  },
+                  creator: {
+                    data: {
+                      type: 'User',
+                      id: '1'
+                    }
+                  },
+                  task: {
+                    data: {
+                      type: 'Task',
+                      id: '2'
+                    }
+                  }
+                }
               },
-              relationships: {
-                project: {
-                  data: {
-                    type: 'Project',
-                    id: '1'
-                  }
+              {
+                type: 'Tip',
+                id: '3',
+                attributes: {
+                  name: 'tip for test 3',
+                  description: 'test description 3',
+                  createdAt: '2021-09-02T12:58:16.113007Z',
+                  updatedAt: '2021-09-02T12:58:16.113038Z'
                 },
-                creator: {
-                  data: {
-                    type: 'User',
-                    id: '1'
+                relationships: {
+                  project: {
+                    data: {
+                      type: 'Project',
+                      id: '1'
+                    }
+                  },
+                  creator: {
+                    data: {
+                      type: 'User',
+                      id: '1'
+                    }
+                  },
+                  task: {
+                    data: {
+                      type: 'Task',
+                      id: '2'
+                    }
                   }
+                }
+              },
+              {
+                type: 'Tip',
+                id: '2',
+                attributes: {
+                  name: 'tip for test 2',
+                  description: 'test description 2',
+                  createdAt: '2021-09-02T12:58:16.113007Z',
+                  updatedAt: '2021-09-02T12:58:16.113038Z'
                 },
-                task: {
-                  data: {
-                    type: 'Task',
-                    id: '2'
+                relationships: {
+                  project: {
+                    data: {
+                      type: 'Project',
+                      id: '1'
+                    }
+                  },
+                  creator: {
+                    data: {
+                      type: 'User',
+                      id: '1'
+                    }
+                  },
+                  task: {
+                    data: null
                   }
                 }
               }
-            },
-            {
-              type: 'Tip',
-              id: '3',
-              attributes: {
-                name: 'tip for test 3',
-                description: 'test description 3',
-                createdAt: '2021-09-02T12:58:16.113007Z',
-                updatedAt: '2021-09-02T12:58:16.113038Z'
-              },
-              relationships: {
-                project: {
-                  data: {
-                    type: 'Project',
-                    id: '1'
-                  }
-                },
-                creator: {
-                  data: {
-                    type: 'User',
-                    id: '1'
-                  }
-                },
-                task: {
-                  data: {
-                    type: 'Task',
-                    id: '2'
+            ],
+            included: [
+              {
+                type: 'Task',
+                id: '2',
+                attributes: {
+                  colors: ['#25605e', '#31807d', '#3da09c'],
+                  description: 'Checking more stuff',
+                  name: 'Another Task',
+                  priority: 1,
+                  rounds: 3,
+                  taskRecordsCount: 1000,
+                  taskRecordsDoneCount: 500,
+                  userTaskRecordsCount: 300,
+                  userTaskRecordsDoneCount: 100,
+                  userProgressByRound: {
+                    1: 100,
+                    2: 25,
+                    3: 25
+                  },
+                  userProgress: 45,
+                  status: 'OPEN',
+                  progress: 60,
+                  progressByRound: {
+                    1: 50,
+                    2: 25,
+                    3: 25
                   }
                 }
               }
-            }, {
-              type: 'Tip',
-              id: '2',
-              attributes: {
-                name: 'tip for test 2',
-                description: 'test description 2',
-                createdAt: '2021-09-02T12:58:16.113007Z',
-                updatedAt: '2021-09-02T12:58:16.113038Z'
-              },
-              relationships: {
-                project: {
-                  data: {
-                    type: 'Project',
-                    id: '1'
-                  }
-                },
-                creator: {
-                  data: {
-                    type: 'User',
-                    id: '1'
-                  }
-                },
-                task: {
-                  data: null
-                }
-              }
-            }
-          ],
-        included: [
-          {
-            type: 'Task',
-            id: '2',
-            attributes: {
-              colors: [
-                '#25605e',
-                '#31807d',
-                '#3da09c'
-              ],
-              description: 'Checking more stuff',
-              name: 'Another Task',
-              priority: 1,
-              rounds: 3,
-              taskRecordsCount: 1000,
-              taskRecordsDoneCount: 500,
-              userTaskRecordsCount: 300,
-              userTaskRecordsDoneCount: 100,
-              userProgressByRound: {
-                1: 100,
-                2: 25,
-                3: 25
-              },
-              userProgress: 45,
-              status: 'OPEN',
-              progress: 60,
-              progressByRound: {
-                1: 50,
-                2: 25,
-                3: 25
-              }
-            }
-          }
-        ]
-      }))
-    }))
+            ]
+          })
+        )
+      })
+    )
   })
 
   describe('with 2 tasks', () => {
     let wrapper
 
-    function createContainer () {
+    function createContainer() {
       const div = document.createElement('div')
       document.body.appendChild(div)
       return div
