@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.5.15",
+  "version": "0.5.16",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -65,7 +65,9 @@
     "env": {
       "node": true
     },
-    "extends": ["@icij/eslint-config"],
+    "extends": [
+      "@icij/eslint-config"
+    ],
     "overrides": [
       {
         "files": [
