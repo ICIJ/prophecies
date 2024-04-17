@@ -1,4 +1,4 @@
-@import '../../fonts/Inter/stylesheet.css';
+@import '../../../apps/frontend/src/assets/fonts/Inter/stylesheet.css';
 
 
 html[data-theme="light"], html[data-theme="dark"], :root {
