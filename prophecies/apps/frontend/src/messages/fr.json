@@ -327,6 +327,12 @@
     },
     "noHistory": "Historique vide"
   },
+  "userRetrieveLanguage": {
+    "title": {
+      "yours": "Langue",
+      "others": "Langue"
+    }
+  },
   "userTaskStatsCard": {
     "allOpenTasks": "Toutes les tâches ouvertes",
     "allRecords": "Toutes les données",
