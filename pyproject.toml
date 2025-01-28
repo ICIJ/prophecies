@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "prophecies"
-version = "0.5.18"
+version = "0.5.19"
 authors = ['ICIJ <engineering@icij.org>']
 description = "An ICIJ app to conduct data validation and cleaning"
 readme = "README.md"
