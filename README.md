@@ -15,7 +15,7 @@ An ICIJ app to conduct data validation and cleaning.
 Required:
 
 * Python 3.10
-* Node 16.x
+* Node 18.x
 * Poetry >= 1.2
 * Yarn 1.x
 

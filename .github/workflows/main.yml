@@ -23,7 +23,7 @@ jobs:
   test-frontend:
     uses: ./.github/workflows/node_task.yml
     with:
-      node-version: '["16.x", "18.x"]'
+      node-version: '["18.x", "20.x"]'
       command: make test-front
 
   build:
