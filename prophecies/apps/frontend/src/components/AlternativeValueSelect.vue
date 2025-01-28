@@ -27,9 +27,12 @@ export default {
       get() {
         if (this.isCanonical) {
           return this.findAlternativeValue({ value: this.alternativeValue })
-        } else if (this.alternativeValue !== null) {
+        }
+
+        if (this.alternativeValue !== null) {
           return this.toSerializableOption(this.alternativeValue)
         }
+
         return null
       },
       set(option = null) {
