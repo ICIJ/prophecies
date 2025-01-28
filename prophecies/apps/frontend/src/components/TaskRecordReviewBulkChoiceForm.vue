@@ -1,5 +1,5 @@
 <script>
-import { find, get } from 'lodash'
+import { some, get } from 'lodash'
 
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -28,6 +28,11 @@ export default {
       default: '.alternative-value-select input'
     }
   },
+  data() {
+    return {
+      alternativeValueChoice: null
+    }
+  },
   computed: {
     alternativeValue: {
       get() {
@@ -42,8 +47,8 @@ export default {
         return get(this, 'taskRecordReview.choiceId', null)
       },
       set(choiceId) {
-        const choice = Choice.find(choiceId)
-        return this.selectChoice(choice)
+        this.alternativeValueChoice = Choice.find(choiceId)
+        return this.selectChoice(this.alternativeValueChoice)
       }
     },
     choiceGroupId() {
@@ -55,9 +60,9 @@ export default {
     task() {
       return Task.find(this.taskId)
     },
-    alternativeValueChoice() {
+    canSelectAlternativeValue() {
       const choices = get(this, 'choiceGroup.choices', [])
-      return find(choices, { requireAlternativeValue: true })
+      return !!some(choices, { requireAlternativeValue: true })
     }
   },
   methods: {
@@ -92,7 +97,7 @@ export default {
       :choice-group-id="choiceGroupId"
     />
     <alternative-value-select
-      v-if="alternativeValueChoice"
+      v-if="canSelectAlternativeValue"
       ref="alternativeValueInput"
       v-model="alternativeValue"
       class="task-record-review-bulk-choice-form__alternative-value"

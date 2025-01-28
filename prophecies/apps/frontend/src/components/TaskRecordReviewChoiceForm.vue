@@ -1,5 +1,5 @@
 <script>
-import { find, get } from 'lodash'
+import { some, get } from 'lodash'
 
 import Choice from '@/models/Choice'
 import ChoiceGroup from '@/models/ChoiceGroup'
@@ -26,6 +26,11 @@ export default {
       default: '.alternative-value-select input'
     }
   },
+  data() {
+    return {
+      alternativeValueChoice: null
+    }
+  },
   computed: {
     alternativeValue: {
       get() {
@@ -40,8 +45,8 @@ export default {
         return get(this, 'taskRecordReview.choiceId', null)
       },
       set(choiceId) {
-        const choice = Choice.find(choiceId)
-        return this.selectChoice(choice)
+        this.alternativeValueChoice = Choice.find(choiceId)
+        return this.selectChoice(this.alternativeValueChoice)
       }
     },
     choiceGroupId() {
@@ -60,10 +65,6 @@ export default {
         .with('taskRecord.task')
         .find(this.taskRecordReviewId)
     },
-    alternativeValueChoice() {
-      const choices = get(this, 'choiceGroup.choices', [])
-      return find(choices, { requireAlternativeValue: true })
-    },
     classList() {
       return {
         'task-record-review-choice-form--has-choice': this.hasChoice,
@@ -76,6 +77,10 @@ export default {
     },
     hasChoice() {
       return this.choiceId !== null
+    },
+    canSelectAlternativeValue() {
+      const choices = get(this, 'choiceGroup.choices', [])
+      return !!some(choices, { requireAlternativeValue: true })
     },
     disable() {
       return this.isLocked || !this.taskRecordReview.editable
@@ -119,7 +124,7 @@ export default {
       :choice-group-id="choiceGroupId"
     />
     <alternative-value-select
-      v-if="alternativeValueChoice"
+      v-if="canSelectAlternativeValue"
       ref="alternativeValueInput"
       v-model="alternativeValue"
       class="task-record-review-choice-form__alternative-value"
