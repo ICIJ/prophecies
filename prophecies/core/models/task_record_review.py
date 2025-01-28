@@ -109,9 +109,9 @@ class TaskRecordReview(models.Model):
 
     class Meta:
         unique_together = ('task_record_id', 'checker_id', 'round')
-        index_together = [
-            ('checker_id', 'round'),
-            ('checker_id', 'round', 'status'),
+        indexes = [
+            models.Index(fields=["checker_id", "round"]),
+            models.Index(fields=["checker_id", "round", "status"]),
         ]
         get_latest_by = 'round'
 
