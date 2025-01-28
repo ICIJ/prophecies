@@ -46,7 +46,7 @@ export default {
       },
       set(choiceId) {
         this.alternativeValueChoice = Choice.find(choiceId)
-        return this.selectChoice(this.alternativeValueChoice)
+        return this.selectChoice(this.alternativeValueChoice, this.alternativeValue)
       }
     },
     choiceGroupId() {
