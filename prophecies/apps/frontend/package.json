@@ -100,5 +100,8 @@
       "vue-cli-service lint",
       "git add"
     ]
+  },
+  "resolutions": {
+    "@achrinza/node-ipc": "9.2.9"
   }
 }
