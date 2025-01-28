@@ -52,6 +52,6 @@ module.exports = {
 
     // Configure the BundleTracker to generate a `webpack-stats.json`.
     // This file is required by django-webpack-loader.
-    config.plugin('BundleTracker').use(BundleTracker, [{ filename: './dist/webpack-stats.json' }])
+    config.plugin('BundleTracker').use(BundleTracker, [{ filename: 'webpack-stats.json', path: './dist' }])
   }
 }
