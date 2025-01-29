@@ -29,6 +29,15 @@ module.exports = {
       }
     }
   },
+  css: {
+    loaderOptions: {
+      scss: {
+        sassOptions: {
+          quietDeps: true
+        }
+      }
+    }
+  },
   chainWebpack: (config) => {
     // Resource loader configuration:
     // 4 named rules must include this loader
