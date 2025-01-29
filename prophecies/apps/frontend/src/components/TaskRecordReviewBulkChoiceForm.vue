@@ -63,6 +63,9 @@ export default {
     canSelectAlternativeValue() {
       const choices = get(this, 'choiceGroup.choices', [])
       return !!some(choices, { requireAlternativeValue: true })
+    },
+    disabledAlternativeValue() {
+      return !this.alternativeValueChoice
     }
   },
   methods: {
@@ -102,6 +105,7 @@ export default {
       v-model="alternativeValue"
       class="task-record-review-bulk-choice-form__alternative-value"
       small
+      :disabled="disabledAlternativeValue"
       :choice-group-id="choiceGroupId"
     />
   </fieldset>

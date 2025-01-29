@@ -20,6 +20,9 @@ export default {
     },
     choiceGroupId: {
       type: [String, Number]
+    },
+    disabled: {
+      type: Boolean
     }
   },
   computed: {
@@ -76,6 +79,7 @@ export default {
     <multiselect
       v-model="alternativeValueOption"
       class="multiselect--md"
+      :disabled="disabled"
       :placeholder="$t('alternativeValueSelect.selectTheCorrectValue')"
       label="name"
       track-by="value"
