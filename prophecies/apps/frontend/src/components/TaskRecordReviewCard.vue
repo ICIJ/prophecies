@@ -63,6 +63,9 @@ export default {
     showLinkPreview() {
       return !this.showNotes && !this.showChanges && this.previewLink && !!this.taskRecord?.embeddableLink
     },
+    canShowLinkPreview() {
+      return !this.noEmbed && this.task.embeddableLinks
+    },
     initialHighlightedReviewId() {
       // If the `highlightNote` is a boolean, we highlight
       // the current task record review by default
@@ -83,11 +86,14 @@ export default {
       }
     },
     taskRecordReview() {
-      const trr = TaskRecordReview.query().with('taskRecord').find(this.taskRecordReviewId)
+      const trr = TaskRecordReview.query().with('taskRecord').with('taskRecord.task').find(this.taskRecordReviewId)
       return trr
     },
     taskRecord() {
       return get(this, 'taskRecordReview.taskRecord')
+    },
+    task() {
+      return get(this, 'taskRecordReview.taskRecord.task')
     },
     link() {
       return get(this, 'taskRecordReview.taskRecord.link')
@@ -345,7 +351,7 @@ export default {
                   @close="toggleNotes(false)"
                 />
               </b-collapse>
-              <b-collapse v-if="!noEmbed" :visible="showLinkPreview">
+              <b-collapse v-if="canShowLinkPreview" :visible="showLinkPreview">
                 <slot name="embed" :task-record="taskRecord">
                   <task-record-iframe :task-record-id="taskRecord.id" :visible="showLinkPreview" />
                 </slot>
