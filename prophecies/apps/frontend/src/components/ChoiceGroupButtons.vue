@@ -98,7 +98,7 @@ export default {
 
 <style lang="scss" scoped>
 .choice-group-buttons {
-  margin: 0 -$spacer-xs;
+  margin: 0 (-$spacer-xs);
   margin-bottom: 0;
 
   &__item {
