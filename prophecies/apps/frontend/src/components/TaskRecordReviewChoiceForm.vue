@@ -92,6 +92,9 @@ export default {
       return this.taskRecord.task.status !== TaskStatusEnum.OPEN
     }
   },
+  mounted() {
+    this.alternativeValueChoice = this.taskRecordReview.choice
+  },
   methods: {
     focusOnAlternativeValueInput() {
       const input = this.$el.querySelector(this.alternativeValueInputSelector)
