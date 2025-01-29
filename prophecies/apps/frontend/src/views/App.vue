@@ -16,7 +16,7 @@ export default {
       this.$root.$on('prophecies::toggleTips', this.toggleModalFn('modal-tips'))
       // Bind keyboard shortcuts
       this.$shortkey.bind('ctrl+k', this.toggleModalFn('modal-shortcuts'))
-      this.$shortkey.bind('ctrl+shift+t', this.toggleModalFn('modal-tips'))
+      this.$shortkey.bind('ctrl+shift+i', this.toggleModalFn('modal-tips'))
       this.$shortkey.bind('ctrl+shift+h', this.goToHistory)
     }
   },

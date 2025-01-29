@@ -99,7 +99,7 @@ export default {
             <b-nav-item @click.prevent="toggleTips">
               <smile-icon class="app-header__nav-right__tips mr-2" />
               {{ $t('appHeader.tips') }}
-              <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2" />
+              <shortkey-badge :value="['Ctrl', 'Shift', 'i']" class="ml-2" />
             </b-nav-item>
             <b-nav-item
               :class="{ 'font-weight-bold app-header__nav-right__tutorial--show': showTutorial }"

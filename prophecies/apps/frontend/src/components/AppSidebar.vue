@@ -36,7 +36,7 @@ export default {
           <b-nav-item :to="{ name: 'tip-list' }">
             <smile-icon class="mr-3" />
             {{ $t('appSidebar.tips') }}
-            <shortkey-badge :value="['Ctrl', 'Shift', 't']" class="ml-2" />
+            <shortkey-badge :value="['Ctrl', 'Shift', 'i']" class="ml-2" />
           </b-nav-item>
           <b-nav-item :to="{ name: 'history' }">
             <clock-icon class="mr-3" />
