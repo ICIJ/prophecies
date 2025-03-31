@@ -4,4 +4,5 @@ from .task_record_review_changelist_form import TaskRecordReviewChangelistForm
 from .task_record_assign_form import TaskRecordAssignForm
 from .task_record_upload_form import TaskRecordUploadForm
 from .task_record_media_upload_form import TaskRecordMediaUploadForm
+from .task_record_media_csv_upload_form import TaskRecordMediaCSVUploadForm
 from .setting_form import SettingForm
