@@ -16,6 +16,12 @@ def task_record_media_directory_path(instance, filename):
 
 
 class TaskRecordMediaManager(models.Manager):
+    def get_by_uid(self, uid, task_record=None):
+        if not uid:
+            return None
+
+        return self.filter(uid=uid, task_record=task_record).first()
+
     def user_scope(self, user):
         return self.filter(task_record__task__in=user.task.all())
 
@@ -102,6 +108,8 @@ class TaskRecordMedia(models.Model):
     @staticmethod
     # pylint: disable-next=unused-argument
     def signal_fill_mime_type(sender, instance, **kwargs):
+        if instance.mime_type:
+            return
         if instance.file:
             instance.file.seek(0)
             instance.mime_type = magic.from_buffer(instance.file.read(1024), mime=True)
@@ -117,6 +125,8 @@ class TaskRecordMedia(models.Model):
     @staticmethod
     # pylint: disable-next=unused-argument
     def signal_fill_size(sender, instance, **kwargs):
+        if instance.width and instance.height:
+            return
         if instance.media_type == TaskRecordMedia.MediaType.IMAGE:
             width, height = get_image_dimensions(instance.file)
             instance.width = width
