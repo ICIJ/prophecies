@@ -3,9 +3,16 @@
 
 {% block object-tools-items %}
   <li>
-    <a class="uploadlink" href="upload/">
+    <a class="uploadlink" href="csv_upload/">
       {% blocktranslate with cl.opts.verbose_name_plural as name %}
-        Import {{ name }}
+        CSV Import
+      {% endblocktranslate %}
+    </a>
+  </li>
+  <li>
+    <a class="uploadlink" href="zip_upload/">
+      {% blocktranslate with cl.opts.verbose_name_plural as name %}
+        ZIP Import
       {% endblocktranslate %}
     </a>
   </li>

@@ -87,7 +87,8 @@ class TaskRecordMediaAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
 
     def get_urls(self):
         urls = [
-            path("upload/", self.upload_view, name="core_taskrecordmedia_upload"),
+            path("csv_upload/", self.upload_view, name="core_taskrecordmedia_upload"),
+            path("zip_upload/", self.upload_view, name="core_taskrecordmedia_upload"),
         ]
         return urls + super().get_urls()
 
@@ -118,21 +119,39 @@ class TaskRecordMediaAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
         return self.upload_form_view(request)
 
     def upload_form_view(self, request, extra_context=None):
-        task = request.GET.get('task')
+        task = request.GET.get("task")
         extra_context = extra_context or {}
-        form = extra_context.get('form', TaskRecordMediaCSVUploadForm(initial={'task': task}))
         title = 'Upload task media records'
-        context = self.build_intermediate_form_context(request=request, form=form, title=title)
+        if "csv_upload" in request.path:
+            form = extra_context.get('form', TaskRecordMediaCSVUploadForm(initial={'task': task}))
+        else:
+            initial = {
+                "task": task,
+                "unique": True,
+                "media_types": TaskRecordMedia.MediaType.values,
+            }
+            form = extra_context.get("form", TaskRecordMediaUploadForm(initial=initial))
+
+        context = self.build_intermediate_form_context(
+            request=request, form=form, title=title
+        )
         return render(request, "admin/upload_form.html", context)
 
     def upload_form_handler(self, request):
-        form = TaskRecordMediaCSVUploadForm(request.POST, request.FILES)
+        # if file in request.FILES contains csv load csv form
+        if "csv" in request.FILES[0].name.lower():
+            form = TaskRecordMediaCSVUploadForm(request.POST, request.FILES)
+        else:
+            form = TaskRecordMediaUploadForm(request.POST, request.FILES)
+
         if form.is_valid():
             # The save method will take care of handling the CSV and creating/updating task records
-            form.save()
-            self.message_user(request, "Your csv file has been imported", messages.INFO)
+            created, updated, ignored = form.save()
+            message = f"Your file has been imported: {created} created, {updated} updated and {ignored} ignored."
+            self.message_user(request, message, messages.INFO)
             # Everything is fine, go back to the list of task records
             return redirect("..")
+
         self.message_user(request, "Unable to import the task media records", messages.ERROR)
-       # Call the same view with the received form
+        # Call the same view with the received form
         return self.upload_form_view(request, extra_context={'form': form})
