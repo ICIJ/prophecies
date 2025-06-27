@@ -40,10 +40,17 @@ class TaskRecordMedia(models.Model):
         related_name="medias",
     )
     file = models.FileField(
-        blank=False,
+        blank=True,
+        null=True,
         max_length=500,
         validators=[MimeTypeValidator()],
         upload_to=task_record_media_directory_path,
+    )
+    file_url = models.URLField(
+        blank=True,
+        null=True,
+        max_length=500,
+        help_text=_("URL to the file, if it is stored externally."),
     )
     uid = models.CharField(blank=False, max_length=500)
     mime_type = models.CharField(blank=False, max_length=128)
@@ -53,8 +60,8 @@ class TaskRecordMedia(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class MediaType(models.TextChoices):
-        IMAGE = "IMAGE", _("Image (jpg, png, gif, ...)")
-        VIDEO = "VIDEO", _("Video (mp4, avi, mov, ...)")
+        IMAGE = "IMAGE", _("Image")
+        VIDEO = "VIDEO", _("Video")
 
     SUPPORTED_MIME_TYPES = {
         MediaType.IMAGE: (
@@ -78,9 +85,17 @@ class TaskRecordMedia(models.Model):
         return TaskRecordMedia.mime_to_media_type(self.mime_type)
 
     @property
+    def file_final_url(self):
+        if self.file_url:
+            return self.file_url
+        if self.file:
+            return self.file.url
+        return None
+
+    @property
     def file_preview_url(self):
-        if self.file and self.media_type == TaskRecordMedia.MediaType.IMAGE:
-            return f"{self.file.url}"
+        if self.file_final_url and self.media_type == TaskRecordMedia.MediaType.IMAGE:
+            return f"{self.file_final_url}"
         return None
 
     @staticmethod
@@ -103,7 +118,7 @@ class TaskRecordMedia(models.Model):
     @staticmethod
     # pylint: disable-next=unused-argument
     def signal_fill_uid(sender, instance, **kwargs):
-        instance.uid = instance.uid or Path(instance.file.name).stem
+        instance.uid = instance.uid or (Path(instance.file.name).stem if instance.file else None)
 
     @staticmethod
     # pylint: disable-next=unused-argument
@@ -118,13 +133,14 @@ class TaskRecordMedia(models.Model):
     # pylint: disable-next=unused-argument
     def signal_fill_task_record(sender, instance, **kwargs):
         if instance.uid and instance.task_id is not None and instance.task_record_id is None:
-            instance.task_record = instance.task.records.filter(
-                uid=instance.uid
-            ).first()
+            uid = instance.uid
+            instance.task_record = instance.task.records.filter(uid=uid).first()
 
     @staticmethod
     # pylint: disable-next=unused-argument
     def signal_fill_size(sender, instance, **kwargs):
+        if not instance.file:
+            return
         if instance.width and instance.height:
             return
         if instance.media_type == TaskRecordMedia.MediaType.IMAGE:
@@ -135,7 +151,5 @@ class TaskRecordMedia(models.Model):
 
 signals.post_init.connect(TaskRecordMedia.signal_fill_uid, sender=TaskRecordMedia)
 signals.post_init.connect(TaskRecordMedia.signal_fill_mime_type, sender=TaskRecordMedia)
-signals.post_init.connect(
-    TaskRecordMedia.signal_fill_task_record, sender=TaskRecordMedia
-)
+signals.post_init.connect(TaskRecordMedia.signal_fill_task_record, sender=TaskRecordMedia)
 signals.post_init.connect(TaskRecordMedia.signal_fill_size, sender=TaskRecordMedia)
