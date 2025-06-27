@@ -9,6 +9,7 @@ class TaskRecordMediaSerializer(serializers.HyperlinkedModelSerializer):
     task_id = serializers.CharField(read_only=True)
     task_record_id = serializers.CharField(read_only=True)
     uid = serializers.CharField()
+    file = serializers.SerializerMethodField()
 
     class JSONAPIMeta:
         included_resources = []
@@ -26,6 +27,9 @@ class TaskRecordMediaSerializer(serializers.HyperlinkedModelSerializer):
             "url",
         ]
 
+    def get_file(self, obj):
+        return obj.file_final_url
+
 
 @extend_schema_view(
     list=extend_schema(
@@ -41,7 +45,7 @@ class TaskRecordMediaViewSet(views.ModelViewSet):
     """
     A list of media associated with a task record (usually by their common uid).
     """
-    
+
     resource_name = "TaskRecordMedia"
     serializer_class = TaskRecordMediaSerializer
     http_method_names = ["get"]

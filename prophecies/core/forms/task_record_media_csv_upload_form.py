@@ -1,62 +1,53 @@
-from django import forms
-from prophecies.core.models import Task, TaskRecord, TaskRecordMedia
-from prophecies.core.forms import AbstractUploadForm
+import csv
+import io
+from typing import Tuple
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError
+
+from prophecies.core.models import TaskRecordMedia
+from prophecies.core.forms import TaskRecordMediaUploadForm
 
 
-class TaskRecordMediaCSVUploadForm(AbstractUploadForm):
-    csv_file = forms.FileField(required=True, label="CSV file")
-    task = forms.ModelChoiceField(required=True, queryset=Task.objects.all())
+class TaskRecordMediaCSVUploadForm(TaskRecordMediaUploadForm):
+    def _read_file_as_csv(self):
+        """
+        Reads the uploaded CSV file and returns a CSV reader object.
+        """
+        csv_file = self.cleaned_data["file"]
+        stream = io.StringIO(csv_file.read().decode("UTF8"), newline=None)
+        return csv.DictReader(stream)
 
-    class Meta:
-        model = TaskRecordMedia
-        csv_columns = [
-            "task_record",
-            "uid",
-            "file",
-            "mime_type",
-            "height",
-            "width",
-            ]
+    def _process_row(self, row: dict) -> Tuple[int, int, int]:
+        """
+        Processes a single row from the CSV file.
+        Returns a tuple with counts of created, updated, and ignored rows.
+        """
+        try:
+            file = row.get("file", None)
+            file_url = row.get("file_url", None)
+            mime_type = row.get("mime_type", None)
+            name = row.get("uid", None)
+            if file is None and file_url is None:
+                raise ValidationError(
+                    "Etheir a file (`file` column) or a file URL (`file_url` column) is required in the CSV row."
+                )
+            if name is None:
+                raise ValidationError(
+                    "The `uid` column is required in the CSV row to match with a task record."
+                )
+            return self._save_media(name, file, file_url, mime_type)
+        except (ValidationError, IntegrityError, TaskRecordMedia.DoesNotExist):
+            return 0, 0, 1
 
-    def row_to_task_record_media(self, task, task_record, row=None):
-        row = {} if row is None else row
-        # tr_obj = TaskRecord.objects.get(id=task_record)
-        opts = {"task": task, "task_record": task_record}
-        # collect allowed model field
-        for field_name in self._meta.csv_columns:
-            if field_name.endswith('_id') or field_name == 'task_record':
-                continue
-            opts[field_name] = row.get(field_name, None)
-        return TaskRecordMedia(**opts)
-
-    def save(self, commit=True):
-        self.full_clean()
-        task = self.cleaned_data["task"]
-        # This list will contain all records to be created
-        queues = {"bulk_update": [], "bulk_create": []}
-        # This list will contain all records to be update
-        # Iterate over all CSV line
-        for row in self.csv_file_reader():
-            # Convert the row to a task record
-            task_record = TaskRecord.objects.get(
-                id=row["task_record"]
-            )
-            task_record_media = self.row_to_task_record_media(task=task,
-                                                              task_record=task_record,
-                                                              row=row)
-            existing_task_record_media = TaskRecordMedia.objects.get_by_uid(
-                uid=row.get("uid"), task_record=task_record
-            )
-            # The task record already exists!
-            if existing_task_record_media:
-                task_record_media.id = existing_task_record_media.id
-                queues["bulk_update"].append(task_record_media)
-            else:
-                queues["bulk_create"].append(task_record_media)
-        # And finally, create and update all the task record at once)
-        if commit:
-            TaskRecordMedia.objects.bulk_create(queues["bulk_create"])
-            TaskRecordMedia.objects.bulk_update(
-                queues["bulk_update"], self._meta.csv_columns
-            )
-        return queues
+    def _process_form_file(self) -> Tuple[int, int, int]:
+        """
+        Processes each row in the  CSV file.
+        Returns a tuple with counts of created, updated, and ignored rows.
+        """
+        created_count, updated_count, ignored_count = 0, 0, 0
+        for row in self._read_file_as_csv():
+            created, updated, ignored = self._process_row(row)
+            created_count += created
+            updated_count += updated
+            ignored_count += ignored
+        return created_count, updated_count, ignored_count

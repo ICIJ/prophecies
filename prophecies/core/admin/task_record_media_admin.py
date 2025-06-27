@@ -43,6 +43,7 @@ class TaskRecordMediaAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
                 "task_record",
                 "uid",
                 "file",
+                "file_url",
                 "mime_type",
                 "height",
                 "width",
@@ -87,8 +88,8 @@ class TaskRecordMediaAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
 
     def get_urls(self):
         urls = [
-            path("csv_upload/", self.upload_view, name="core_taskrecordmedia_upload"),
-            path("zip_upload/", self.upload_view, name="core_taskrecordmedia_upload"),
+            path("upload/csv/", self.upload_view, name="core_taskrecordmedia_upload"),
+            path("upload/zip/", self.upload_view, name="core_taskrecordmedia_upload"),
         ]
         return urls + super().get_urls()
 
@@ -122,27 +123,22 @@ class TaskRecordMediaAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
         task = request.GET.get("task")
         extra_context = extra_context or {}
         title = 'Upload task media records'
-        if "csv_upload" in request.path:
+        if "/upload/csv" in request.path:
             form = extra_context.get('form', TaskRecordMediaCSVUploadForm(initial={'task': task}))
         else:
-            initial = {
-                "task": task,
-                "unique": True,
-                "media_types": TaskRecordMedia.MediaType.values,
-            }
-            form = extra_context.get("form", TaskRecordMediaUploadForm(initial=initial))
+            form = extra_context.get("form", TaskRecordMediaUploadForm(initial={"task": task}))
 
-        context = self.build_intermediate_form_context(
-            request=request, form=form, title=title
-        )
+        context = self.build_intermediate_form_context(request=request, form=form, title=title)
         return render(request, "admin/upload_form.html", context)
 
     def upload_form_handler(self, request):
-        # if file in request.FILES contains csv load csv form
-        if "csv" in request.FILES[0].name.lower():
+        if "file" in request.FILES and request.FILES["file"].content_type == "text/csv":
             form = TaskRecordMediaCSVUploadForm(request.POST, request.FILES)
-        else:
+        elif "file" in request.FILES and request.FILES["file"].content_type == "application/zip":
             form = TaskRecordMediaUploadForm(request.POST, request.FILES)
+        else:
+            self.message_user(request, "Unsupported file type", messages.ERROR)
+            return redirect("../..")
 
         if form.is_valid():
             # The save method will take care of handling the CSV and creating/updating task records
@@ -150,7 +146,7 @@ class TaskRecordMediaAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
             message = f"Your file has been imported: {created} created, {updated} updated and {ignored} ignored."
             self.message_user(request, message, messages.INFO)
             # Everything is fine, go back to the list of task records
-            return redirect("..")
+            return redirect("../..")
 
         self.message_user(request, "Unable to import the task media records", messages.ERROR)
         # Call the same view with the received form
