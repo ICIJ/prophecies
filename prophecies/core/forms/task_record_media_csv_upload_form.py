@@ -9,7 +9,7 @@ class TaskRecordMediaCSVUploadForm(AbstractUploadForm):
 
     class Meta:
         model = TaskRecordMedia
-        csv_columns = [ 
+        csv_columns = [
             "task_record",
             "uid",
             "file",
@@ -41,7 +41,7 @@ class TaskRecordMediaCSVUploadForm(AbstractUploadForm):
             task_record = TaskRecord.objects.get(
                 id=row["task_record"]
             )
-            task_record_media = self.row_to_task_record_media(task=task, 
+            task_record_media = self.row_to_task_record_media(task=task,
                                                               task_record=task_record,
                                                               row=row)
             existing_task_record_media = TaskRecordMedia.objects.get_by_uid(
