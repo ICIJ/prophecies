@@ -5,13 +5,24 @@ from django.urls import path
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import truncatechars
+
+from import_export.resources import ModelResource
+
 from admin_auto_filters.filters import AutocompleteFilterFactory
 from prophecies.core.models import TaskRecordMedia
-from prophecies.core.forms import TaskRecordMediaUploadForm
+from prophecies.core.forms import TaskRecordMediaUploadZipForm
+from prophecies.core.forms import TaskRecordMediaUploadCSVForm
+from prophecies.core.mixins import ExportWithCsvStreamMixin, ExportCsvGeneratorMixin
+
+
+class TaskRecordMediaResource(ExportCsvGeneratorMixin, ModelResource):
+    class Meta:
+        model = TaskRecordMedia
 
 
 @admin.register(TaskRecordMedia)
-class TaskRecordMediaAdmin(admin.ModelAdmin):
+class TaskRecordMediaAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
+    resource_class = TaskRecordMediaResource
     search_fields = [
         "file",
         "task_record__original_value",
@@ -32,6 +43,7 @@ class TaskRecordMediaAdmin(admin.ModelAdmin):
                 "task_record",
                 "uid",
                 "file",
+                "file_url",
                 "mime_type",
                 "height",
                 "width",
@@ -76,7 +88,8 @@ class TaskRecordMediaAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = [
-            path("upload/", self.upload_view, name="core_taskrecordmedia_upload"),
+            path("upload/csv/", self.upload_view, name="core_taskrecordmedia_upload"),
+            path("upload/zip/", self.upload_view, name="core_taskrecordmedia_upload"),
         ]
         return urls + super().get_urls()
 
@@ -109,32 +122,32 @@ class TaskRecordMediaAdmin(admin.ModelAdmin):
     def upload_form_view(self, request, extra_context=None):
         task = request.GET.get("task")
         extra_context = extra_context or {}
-        initial = {
-            "task": task,
-            "unique": True,
-            "media_types": TaskRecordMedia.MediaType.values,
-        }
-        form = extra_context.get("form", TaskRecordMediaUploadForm(initial=initial))
-        title = "Upload task record medias"
-        context = self.build_intermediate_form_context(
-            request=request, form=form, title=title
-        )
+        title = 'Upload task media records'
+        if "/upload/csv" in request.path:
+            form = extra_context.get('form', TaskRecordMediaUploadCSVForm(initial={'task': task}))
+        else:
+            form = extra_context.get("form", TaskRecordMediaUploadZipForm(initial={"task": task}))
+
+        context = self.build_intermediate_form_context(request=request, form=form, title=title)
         return render(request, "admin/upload_form.html", context)
 
     def upload_form_handler(self, request):
-        form = TaskRecordMediaUploadForm(request.POST, request.FILES)
+        if "file" in request.FILES and request.FILES["file"].content_type == "text/csv":
+            form = TaskRecordMediaUploadCSVForm(request.POST, request.FILES)
+        elif "file" in request.FILES and request.FILES["file"].content_type == "application/zip":
+            form = TaskRecordMediaUploadZipForm(request.POST, request.FILES)
+        else:
+            self.message_user(request, "Unsupported file type", messages.ERROR)
+            return redirect("../..")
+
         if form.is_valid():
-            # The save method will take care of handling the zip and upload task record medias
+            # The save method will take care of handling the CSV and creating/updating task records
             created, updated, ignored = form.save()
-            self.message_user(
-                request,
-                f"Your zip file has been imported: {created} created, {updated} updated and {ignored} ignored.",
-                messages.INFO,
-            )
-            # Everything is fine, go back to the list of task record medias
-            return redirect("..")
-        self.message_user(
-            request, "Unable to import the task record medias", messages.ERROR
-        )
+            message = f"Your file has been imported: {created} created, {updated} updated and {ignored} ignored."
+            self.message_user(request, message, messages.INFO)
+            # Everything is fine, go back to the list of task records
+            return redirect("../..")
+
+        self.message_user(request, "Unable to import the task media records", messages.ERROR)
         # Call the same view with the received form
-        return self.upload_form_view(request, extra_context={"form": form})
+        return self.upload_form_view(request, extra_context={'form': form})
