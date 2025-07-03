@@ -17,29 +17,29 @@ class TaskRecordMediaUploadCSVForm(TaskRecordMediaUploadZipForm):
             <p>
                 Upload a CSV file with the following columns:
             </p>
-            <div style="padding-left: 1rem">
+            <div style="padding-left: 0.5rem">
                 <p>
-                    <strong>file</strong>: The file to upload (optional if <var>file_url</var> is provided).
+                    &bullet; <strong>file</strong>: The file to upload (optional if <var>file_url</var> is provided).
                 </p>
                 <p>
-                    <strong>file_url</strong>: The URL  of the file to upload (optional if <var>file</var> is provided).
+                    &bullet;  <strong>file_url</strong>: The URL  of the file to upload (optional if <var>file</var> is provided).
                 </p>
                 <p>
-                    <strong>task_record</strong>: The ID of the task record to associate 
+                    &bullet;  <strong>task_record</strong>: The ID of the task record to associate 
                     with the media (optional if <var>uid</var> is provided).
                 </p>
                 <p>
-                    <strong>uid</strong>: A unique identifier for the media 
+                    &bullet;  <strong>uid</strong>: A unique identifier for the media 
                     (optional if <var>task_record</var> is provided).
                 </p>
                 <p>
-                    <strong>mime_type</strong>: The MIME type of the file (recommended).
+                    &bullet;  <strong>mime_type</strong>: The MIME type of the file (recommended).
                 </p>
                 <p>
-                    <strong>height</strong>: The height of the media file in pixels (recommended).
+                    &bullet;  <strong>height</strong>: The height of the media file in pixels (recommended).
                 </p>
                 <p>
-                    <strong>width</strong>: The width of the media file in pixels (recommended).
+                    &bullet;  <strong>width</strong>: The width of the media file in pixels (recommended).
                 </p>
             </div>
         """),
