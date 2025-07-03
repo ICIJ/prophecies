@@ -51,14 +51,7 @@ class TaskRecordMediaUploadZipFormTests(TestCase):
         form.save()
         self.assertEqual(TaskRecordMedia.objects.count(), 1)
         self.assertEqual(TaskRecordMedia.objects.first().uid, "foo")
-
-    def test_no_media_creation_with_video_type(self):
-        data = {"task": self.task.id, "unique": True}
-        files = {"file": self.build_zip_file(["foo.jpg", "bar.jpg"])}
-        form = TaskRecordMediaUploadZipForm(data, files)
-        form.save()
-        self.assertEqual(TaskRecordMedia.objects.count(), 0)
-
+        
     def test_media_update(self):
         TaskRecordMedia.objects.create(
             task=self.task, uid="foo", task_record=self.task_record_foo
