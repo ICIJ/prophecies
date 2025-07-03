@@ -4,6 +4,7 @@ from pathlib import Path
 from zipfile import ZipFile
 
 from django import forms
+from django.utils.safestring import mark_safe
 from django.core.files import File
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
@@ -14,7 +15,12 @@ from prophecies.core.models import Task, TaskRecordMedia
 
 class TaskRecordMediaUploadZipForm(forms.Form):
     task = forms.ModelChoiceField(queryset=Task.objects.all())
-    file = forms.FileField(label="ZIP file")
+    file = forms.FileField(label="ZIP file", help_text=mark_safe("""
+        <p>
+            Upload a ZIP file containing media files. Each file will be processed and saved as a media record and 
+            associated with the specified task record using the file name as the unique identifier (uid).
+        </p>
+    """))
     unique = forms.BooleanField(
         required=False,
         label="Only one per task record",

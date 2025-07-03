@@ -1,6 +1,8 @@
 import csv
 import io
 from typing import Tuple
+from django import forms
+from django.utils.safestring import mark_safe
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 
@@ -9,6 +11,40 @@ from prophecies.core.forms import TaskRecordMediaUploadZipForm
 
 
 class TaskRecordMediaUploadCSVForm(TaskRecordMediaUploadZipForm):
+    file = forms.FileField(
+        label="CSV file",
+        help_text=mark_safe("""
+            <p>
+                Upload a CSV file with the following columns:
+            </p>
+            <div style="padding-left: 1rem">
+                <p>
+                    <strong>file</strong>: The file to upload (optional if <var>file_url</var> is provided).
+                </p>
+                <p>
+                    <strong>file_url</strong>: The URL  of the file to upload (optional if <var>file</var> is provided).
+                </p>
+                <p>
+                    <strong>task_record</strong>: The ID of the task record to associate 
+                    with the media (optional if <var>uid</var> is provided).
+                </p>
+                <p>
+                    <strong>uid</strong>: A unique identifier for the media 
+                    (optional if <var>task_record</var> is provided).
+                </p>
+                <p>
+                    <strong>mime_type</strong>: The MIME type of the file (recommended).
+                </p>
+                <p>
+                    <strong>height</strong>: The height of the media file in pixels (recommended).
+                </p>
+                <p>
+                    <strong>width</strong>: The width of the media file in pixels (recommended).
+                </p>
+            </div>
+        """),
+    )
+
     def _read_file_as_csv(self):
         """
         Reads the uploaded CSV file and returns a CSV reader object.
