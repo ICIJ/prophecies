@@ -27,15 +27,17 @@ class TaskRecordMediaUploadCSVForm(TaskRecordMediaUploadZipForm):
             file_url = row.get("file_url", None)
             mime_type = row.get("mime_type", None)
             name = row.get("uid", None)
-            if file is None and file_url is None:
+            task_record_id = row.get("task_record", row.get("task_record_id", None))
+            if not file and not file_url:
                 raise ValidationError(
                     "Etheir a file (`file` column) or a file URL (`file_url` column) is required in the CSV row."
                 )
-            if name is None:
+            if not name and not task_record_id:
                 raise ValidationError(
-                    "The `uid` column is required in the CSV row to match with a task record."
+                    # pylint: disable=line-too-long
+                    "Either a unique identifier (`uid` column) or a task record ID (`task_record` or `task_record_id` column) is required in the CSV row."
                 )
-            return self._save_media(name, file, file_url, mime_type)
+            return self._save_media(name, file, file_url, mime_type, task_record_id)
         except (ValidationError, IntegrityError, TaskRecordMedia.DoesNotExist):
             return 0, 0, 1
 

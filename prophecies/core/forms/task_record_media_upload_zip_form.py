@@ -73,15 +73,26 @@ class TaskRecordMediaUploadZipForm(forms.Form):
         return File(BytesIO(file_content), Path(name).name)
 
     def _save_media(
-        self, name: str, file: File = None, file_url: str = None, mime_type: str = None
+        self,
+        name: str,
+        file: File = None,
+        file_url: str = None,
+        mime_type: str = None,
+        task_record_id: int = None,
     ) -> Tuple[int, int, int]:
         """
         Decides whether to create a new media record or update an existing one.
         Returns a tuple with counts of created, updated, and ignored for the file.
         """
         if self.cleaned_data["unique"]:
-            return self._update_or_create_media(name, file, file_url, mime_type)
-        return self._create_new_media(name, file, file_url, mime_type), 0, 0
+            return self._update_or_create_media(
+                name, file, file_url, mime_type, task_record_id
+            )
+        return (
+            self._create_new_media(name, file, file_url, mime_type, task_record_id),
+            0,
+            0,
+        )
 
     def _create_new_media(
         self,
@@ -89,6 +100,7 @@ class TaskRecordMediaUploadZipForm(forms.Form):
         file: File = None,
         file_url: str = None,
         mime_type: str = None,
+        task_record_id: int = None,
     ) -> int:
         """
         Creates a new TaskRecordMedia record with the given file.
@@ -97,6 +109,7 @@ class TaskRecordMediaUploadZipForm(forms.Form):
         uid = Path(name or file_url).stem
         TaskRecordMedia(
             uid=uid,
+            task_record_id=task_record_id,
             file=file,
             file_url=file_url,
             task=self.cleaned_data["task"],
@@ -105,13 +118,23 @@ class TaskRecordMediaUploadZipForm(forms.Form):
         return 1
 
     def _update_or_create_media(
-        self, name: str, file: File = None, file_url: str = None, mime_type: str = None
+        self,
+        name: str,
+        file: File = None,
+        file_url: str = None,
+        mime_type: str = None,
+        task_record_id: int = None,
     ) -> Tuple[int, int]:
         """
         Updates an existing TaskRecordMedia record, or creates a new one if it doesn't exist.
         Returns a tuple with counts of created, updated, and ignored for the file.
         """
-        defaults = {"file": file, "file_url": file_url, "mime_type": mime_type}
+        defaults = {
+            "file": file,
+            "file_url": file_url,
+            "mime_type": mime_type,
+            "task_record_id": task_record_id,
+        }
         task = self.cleaned_data["task"]
         uid = Path(name or file_url).stem
         _media, created = TaskRecordMedia.objects.update_or_create(

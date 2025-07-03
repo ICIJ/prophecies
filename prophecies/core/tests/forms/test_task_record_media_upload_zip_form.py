@@ -51,7 +51,7 @@ class TaskRecordMediaUploadZipFormTests(TestCase):
         form.save()
         self.assertEqual(TaskRecordMedia.objects.count(), 1)
         self.assertEqual(TaskRecordMedia.objects.first().uid, "foo")
-        
+
     def test_media_update(self):
         TaskRecordMedia.objects.create(
             task=self.task, uid="foo", task_record=self.task_record_foo

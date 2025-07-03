@@ -118,7 +118,11 @@ class TaskRecordMedia(models.Model):
     @staticmethod
     # pylint: disable-next=unused-argument
     def signal_fill_uid(sender, instance, **kwargs):
-        instance.uid = instance.uid or (Path(instance.file.name).stem if instance.file else None)
+        if not instance.uid and not instance.task_record_id:
+            if instance.file:
+                instance.uid = Path(instance.file.name).stem
+            elif instance.file_url:
+                instance.uid = Path(instance.file_url).stem
 
     @staticmethod
     # pylint: disable-next=unused-argument
