@@ -7,10 +7,10 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
 from prophecies.core.models import Project, Task, TaskRecordMedia, TaskRecord
-from prophecies.core.forms import TaskRecordMediaUploadForm
+from prophecies.core.forms import TaskRecordMediaUploadZipForm
 
 
-class TaskRecordMediaUploadFormTests(TestCase):
+class TaskRecordMediaUploadZipFormTests(TestCase):
     def setUp(self):
         self.project = Project.objects.create(name="New Project")
         self.task = Task.objects.create(name="Sample Task", project=self.project)
@@ -32,30 +32,30 @@ class TaskRecordMediaUploadFormTests(TestCase):
         return file
 
     def test_valid_form(self):
-        data = {"task": self.task.id, "unique": True, "media_types": ["IMAGE"]}
+        data = {"task": self.task.id, "unique": True}
         files = {"file": self.build_zip_file(["foo.jpg"])}
-        form = TaskRecordMediaUploadForm(data, files)
+        form = TaskRecordMediaUploadZipForm(data, files)
         self.assertTrue(form.is_valid())
 
     def test_media_creation(self):
-        data = {"task": self.task.id, "unique": True, "media_types": ["IMAGE"]}
+        data = {"task": self.task.id, "unique": True}
         files = {"file": self.build_zip_file(["foo.jpg", "bar.jpg"])}
-        form = TaskRecordMediaUploadForm(data, files)
+        form = TaskRecordMediaUploadZipForm(data, files)
         form.save()
         self.assertEqual(TaskRecordMedia.objects.count(), 2)
 
     def test_media_creation_and_one_ignored(self):
-        data = {"task": self.task.id, "unique": True, "media_types": ["IMAGE"]}
+        data = {"task": self.task.id, "unique": True}
         files = {"file": self.build_zip_file(["foo.jpg", "ignored.jpg"])}
-        form = TaskRecordMediaUploadForm(data, files)
+        form = TaskRecordMediaUploadZipForm(data, files)
         form.save()
         self.assertEqual(TaskRecordMedia.objects.count(), 1)
         self.assertEqual(TaskRecordMedia.objects.first().uid, "foo")
 
     def test_no_media_creation_with_video_type(self):
-        data = {"task": self.task.id, "unique": True, "media_types": ["VIDEO"]}
+        data = {"task": self.task.id, "unique": True}
         files = {"file": self.build_zip_file(["foo.jpg", "bar.jpg"])}
-        form = TaskRecordMediaUploadForm(data, files)
+        form = TaskRecordMediaUploadZipForm(data, files)
         form.save()
         self.assertEqual(TaskRecordMedia.objects.count(), 0)
 
@@ -63,9 +63,9 @@ class TaskRecordMediaUploadFormTests(TestCase):
         TaskRecordMedia.objects.create(
             task=self.task, uid="foo", task_record=self.task_record_foo
         )
-        data = {"task": self.task.id, "unique": True, "media_types": ["IMAGE"]}
+        data = {"task": self.task.id, "unique": True}
         files = {"file": self.build_zip_file(["foo.jpg"])}
-        form = TaskRecordMediaUploadForm(data, files)
+        form = TaskRecordMediaUploadZipForm(data, files)
         form.save()
         self.assertEqual(TaskRecordMedia.objects.count(), 1)
         self.assertEqual(TaskRecordMedia.objects.first().uid, "foo")

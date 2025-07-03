@@ -5,10 +5,10 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 
 from prophecies.core.models import TaskRecordMedia
-from prophecies.core.forms import TaskRecordMediaUploadForm
+from prophecies.core.forms import TaskRecordMediaUploadZipForm
 
 
-class TaskRecordMediaCSVUploadForm(TaskRecordMediaUploadForm):
+class TaskRecordMediaUploadCSVForm(TaskRecordMediaUploadZipForm):
     def _read_file_as_csv(self):
         """
         Reads the uploaded CSV file and returns a CSV reader object.

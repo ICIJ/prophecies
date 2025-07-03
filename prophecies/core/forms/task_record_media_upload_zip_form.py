@@ -12,7 +12,7 @@ from django.db import IntegrityError
 from prophecies.core.models import Task, TaskRecordMedia
 
 
-class TaskRecordMediaUploadForm(forms.Form):
+class TaskRecordMediaUploadZipForm(forms.Form):
     task = forms.ModelChoiceField(queryset=Task.objects.all())
     file = forms.FileField(label="ZIP file")
     unique = forms.BooleanField(

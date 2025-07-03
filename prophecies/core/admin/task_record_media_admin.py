@@ -10,8 +10,8 @@ from import_export.resources import ModelResource
 
 from admin_auto_filters.filters import AutocompleteFilterFactory
 from prophecies.core.models import TaskRecordMedia
-from prophecies.core.forms import TaskRecordMediaUploadForm
-from prophecies.core.forms import TaskRecordMediaCSVUploadForm
+from prophecies.core.forms import TaskRecordMediaUploadZipForm
+from prophecies.core.forms import TaskRecordMediaUploadCSVForm
 from prophecies.core.mixins import ExportWithCsvStreamMixin, ExportCsvGeneratorMixin
 
 
@@ -124,18 +124,18 @@ class TaskRecordMediaAdmin(ExportWithCsvStreamMixin, admin.ModelAdmin):
         extra_context = extra_context or {}
         title = 'Upload task media records'
         if "/upload/csv" in request.path:
-            form = extra_context.get('form', TaskRecordMediaCSVUploadForm(initial={'task': task}))
+            form = extra_context.get('form', TaskRecordMediaUploadCSVForm(initial={'task': task}))
         else:
-            form = extra_context.get("form", TaskRecordMediaUploadForm(initial={"task": task}))
+            form = extra_context.get("form", TaskRecordMediaUploadZipForm(initial={"task": task}))
 
         context = self.build_intermediate_form_context(request=request, form=form, title=title)
         return render(request, "admin/upload_form.html", context)
 
     def upload_form_handler(self, request):
         if "file" in request.FILES and request.FILES["file"].content_type == "text/csv":
-            form = TaskRecordMediaCSVUploadForm(request.POST, request.FILES)
+            form = TaskRecordMediaUploadCSVForm(request.POST, request.FILES)
         elif "file" in request.FILES and request.FILES["file"].content_type == "application/zip":
-            form = TaskRecordMediaUploadForm(request.POST, request.FILES)
+            form = TaskRecordMediaUploadZipForm(request.POST, request.FILES)
         else:
             self.message_user(request, "Unsupported file type", messages.ERROR)
             return redirect("../..")
