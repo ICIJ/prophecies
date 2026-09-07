@@ -54,6 +54,20 @@ SOCIAL_AUTH_PROVIDER_GROUPS_FIELD=groups_by_applications.prophecies
 SOCIAL_AUTH_PROVIDER_STAFF_GROUP=icijstaff
 ```
 
+### Demo data
+
+To fill an empty database with a fictional project (3 tasks, 360 records,
+5 users, all with the password `demo`) for screenshots or a walkthrough:
+
+```bash
+make demodata
+```
+
+The fixture lives in `prophecies/apps/api/fixtures/demo.json` and is generated
+by `make demodata-generate`, which runs the `demodata` management command and
+dumps the result. Derived rows (notifications, statistics) are left out of the
+fixture on purpose: the model signals rebuild them on load.
+
 ## Run
 
 To run app inside its virtualenv, use the following command:
@@ -71,7 +85,21 @@ make webpack-serve
 
 Then visit [http://0.0.0.0:9009](http://0.0.0.0:9009)
 
-### Run tests
+#### Demo data
+
+To fill an empty database with a fictional project (3 tasks, 360 records,
+5 users, all with the password `demo`) for screenshots or a walkthrough:
+
+```bash
+make demodata
+```
+
+The fixture lives in `prophecies/apps/api/fixtures/demo.json` and is generated
+by `make demodata-generate`, which runs the `demodata` management command and
+dumps the result. Derived rows (notifications, statistics) are left out of the
+fixture on purpose: the model signals rebuild them on load.
+
+## Run tests
 
 To run the back end tests
 ```

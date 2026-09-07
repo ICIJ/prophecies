@@ -54,6 +54,19 @@ webpack-serve:
 shell:
 		uv run python manage.py shell
 
+# Load the fictional "Aurora Leaks" dataset (demos, screenshots)
+demodata:
+		uv run python manage.py loaddata demo
+
+# Regenerate prophecies/apps/api/fixtures/demo.json from scratch
+demodata-generate:
+		uv run python manage.py demodata
+		uv run python manage.py dumpdata auth.user core \
+			--exclude core.usernotification \
+			--exclude core.taskuserstatistics \
+			--exclude core.taskuserchoicestatistics \
+			--indent 2 -o prophecies/apps/api/fixtures/demo.json
+
 createsuperuser:
 		uv run python manage.py createsuperuser
 

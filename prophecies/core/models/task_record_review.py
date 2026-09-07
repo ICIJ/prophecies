@@ -204,9 +204,9 @@ class TaskRecordReview(models.Model):
 
     @property
     def choice_cancelled(self):
-        if self.pk is not None:
-            instance = TaskRecordReview.objects.get(pk=self.pk)
-            had_choice = instance.choice is not None
+        stored = TaskRecordReview.objects.filter(pk=self.pk).first()
+        if stored is not None:
+            had_choice = stored.choice is not None
             has_no_choice = self.choice is None
             return had_choice and has_no_choice
         return False
@@ -217,9 +217,9 @@ class TaskRecordReview(models.Model):
 
     @property
     def note_changed(self):
-        if self.pk is not None:
-            instance = TaskRecordReview.objects.get(pk=self.pk)
-            return self.note != instance.note
+        stored = TaskRecordReview.objects.filter(pk=self.pk).first()
+        if stored is not None:
+            return self.note != stored.note
         return False
 
     @staticmethod

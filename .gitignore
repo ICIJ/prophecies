@@ -93,3 +93,4 @@ todelete*.txt
 
 !zipped_data/
 pytest.ini
+*.sqlite3.bak*

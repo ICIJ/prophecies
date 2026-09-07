@@ -232,10 +232,12 @@ class Task(models.Model):
 
     @staticmethod
     def has_attribute_changed(current_instance, attribute_name):
-        if current_instance.pk is not None:
-            instance = Task.objects.get(pk=current_instance.pk)
+        # A pk can point to no row yet (a fixture setting its own pk), in which
+        # case there is no stored value to compare with.
+        stored = Task.objects.filter(pk=current_instance.pk).first()
+        if stored is not None:
             return getattr(current_instance, attribute_name) != getattr(
-                instance, attribute_name
+                stored, attribute_name
             )
         return False
 
