@@ -440,6 +440,12 @@ CONSTANCE_PUBLIC_KEYS = env.list("CONSTANCE_PUBLIC_KEYS", default=["loginUrl"])
 # default in DEBUG mode.
 DJANGO_ADMIN_LOGIN = env.bool("DJANGO_ADMIN_LOGIN", default=DEBUG)
 
+# Username to open every request as, which disables the login page and the
+# identity provider entirely. Development convenience: ignored without DEBUG.
+DEV_AUTOLOGIN = env.str("DEV_AUTOLOGIN", default="") if DEBUG else ""
+if DEV_AUTOLOGIN:
+    MIDDLEWARE.append("prophecies.core.middleware.dev_autologin")
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

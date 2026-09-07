@@ -54,6 +54,19 @@ SOCIAL_AUTH_PROVIDER_GROUPS_FIELD=groups_by_applications.prophecies
 SOCIAL_AUTH_PROVIDER_STAFF_GROUP=icijstaff
 ```
 
+### Skipping the login in development
+
+With `DEBUG` on, setting `DEV_AUTOLOGIN` to a username opens every request as
+that user, so neither the login page nor the identity provider is involved:
+
+```
+DEV_AUTOLOGIN=demo
+SOCIAL_AUTH_LOGIN_URL=/admin/login/?next=/
+```
+
+The variable is ignored when `DEBUG` is off, and `SOCIAL_AUTH_LOGIN_URL` points
+the app's login button at Django's own form instead of the SSO provider.
+
 ### Demo data
 
 To fill an empty database with a fictional project (3 tasks, 360 records,
@@ -85,7 +98,20 @@ make webpack-serve
 
 Then visit [http://0.0.0.0:9009](http://0.0.0.0:9009)
 
-#### Demo data
+#### Skipping the login in development
+
+With `DEBUG` on, setting `DEV_AUTOLOGIN` to a username opens every request as
+that user, so neither the login page nor the identity provider is involved:
+
+```
+DEV_AUTOLOGIN=demo
+SOCIAL_AUTH_LOGIN_URL=/admin/login/?next=/
+```
+
+The variable is ignored when `DEBUG` is off, and `SOCIAL_AUTH_LOGIN_URL` points
+the app's login button at Django's own form instead of the SSO provider.
+
+### Demo data
 
 To fill an empty database with a fictional project (3 tasks, 360 records,
 5 users, all with the password `demo`) for screenshots or a walkthrough:
