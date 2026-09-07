@@ -16,10 +16,10 @@ Required:
 
 * Python 3.10
 * Node 18.x
-* Poetry >= 1.2
+* uv >= 0.5
 * Yarn 1.x
 
-To setup a virtualenv with `poetry` and to install required packages:
+To setup a virtualenv with `uv` and to install required packages:
 
 ```bash
 make install
@@ -94,11 +94,10 @@ make test
 Run **one** of these commands depending on the kind of version you need to publish:
 
 ```
-make build # will build the pip deliverables (.egg, .tgz)
+make build # will build the pip deliverables (wheel, .tar.gz)
 make patch # will increment to the next release part (alpha →  beta →  rc)
 make minor
 make major
-make publish # will publish on pypi
 ```
 
 Then the new tag on Github. The CI will take care of shipping the new version on Docker Hub:

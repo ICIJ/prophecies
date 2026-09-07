@@ -1,47 +1,67 @@
-[tool.poetry]
+[project]
 name = "prophecies"
 version = "0.5.20"
-authors = ['ICIJ <engineering@icij.org>']
 description = "An ICIJ app to conduct data validation and cleaning"
+authors = [{ name = "ICIJ", email = "engineering@icij.org" }]
+requires-python = ">=3.10,<4"
 readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "django>=5.1.5,<6",
+    "djangorestframework>=3.15.2,<4",
+    "django-cors-headers>=4.6.0,<5",
+    "django-debug-toolbar>=5.0.1,<6",
+    "django-environ>=0.12.0,<0.13",
+    "social-auth-app-django>=5.4.2,<6",
+    "django-webpack-loader>=3.1.1,<4",
+    "psycopg2-binary>=2.9.10,<3",
+    "gunicorn>=23.0.0,<24",
+    "pillow>=11.1.0,<12",
+    "django-colorfield>=0.12.0,<0.13",
+    "django-constance[database]==2.9.1",
+    "django-filter>=24.3,<25",
+    "django-crispy-forms>=2.3,<3",
+    "djangorestframework-jsonapi[django-polymorphic]>=7.1.0,<8",
+    "django-activity-stream>=2.0.0,<3",
+    "django-jsonfield>=1.4.1,<2",
+    "markdown>=3.7,<4",
+    "django-admin-autocomplete-filter>=0.7.1,<0.8",
+    "django-import-export==2.7.1",
+    "setuptools>=75.8.0,<76",
+    "python-magic>=0.4.27,<0.5",
+    "django-polymorphic>=3.1.0,<4",
+    "django-rest-polymorphic>=0.1.10,<0.2",
+    "boto3>=1.36.7,<2",
+    "django-storages[s3]>=1.14.4,<2",
+    "django-cachalot>=2.7.0,<3",
+    "django-structlog>=9.0.0,<10",
+    "drf-spectacular>=0.28.0,<0.29",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-django = "^5.1.5"
-djangorestframework = "^3.15.2"
-django-cors-headers = "^4.6.0"
-django-debug-toolbar = "^5.0.1"
-django-environ = "^0.12.0"
-social-auth-app-django = "^5.4.2"
-django-webpack-loader = "^3.1.1"
-psycopg2-binary = "^2.9.10"
-gunicorn = "^23.0.0"
-pillow = "^11.1.0"
-django-colorfield = "^0.12.0"
-django-constance = {extras = [ "database",], version = "2.9.1"}
-django-filter = "^24.3"
-django-crispy-forms = "^2.3"
-djangorestframework-jsonapi = {extras = ["django-polymorphic"], version = "^7.1.0"}
-django-activity-stream = "^2.0.0"
-django-jsonfield = "^1.4.1"
-markdown = "^3.7"
-django-admin-autocomplete-filter = "^0.7.1"
-django-import-export = "2.7.1"
-setuptools = "^75.8.0"
-python-magic = "^0.4.27"
-django-polymorphic = "^3.1.0"
-django-rest-polymorphic = "^0.1.10"
-boto3 = "^1.36.7"
-django-storages = {extras = ["s3"], version = "^1.14.4"}
-django-cachalot = "^2.7.0"
-django-structlog = "^9.0.0"
-drf-spectacular = "^0.28.0"
+[dependency-groups]
+dev = [
+    "time-machine>=2.16.0,<3",
+    "pytest-django>=4.9.0,<5",
+    "pylint>=3.3.4,<4",
+]
 
-[tool.poetry.group.dev.dependencies]
-time-machine = "^2.16.0"
-pytest-django = "^4.9.0"
-pylint = "^3.3.4"
+[tool.uv]
+default-groups = "all"
+
+[tool.uv.build-backend]
+module-root = ""
+module-name = "prophecies"
+# node_modules is a build input for webpack, never a package deliverable
+source-exclude = ["**/node_modules", "**/__pycache__", "**/*.pyc"]
+wheel-exclude = ["**/node_modules", "**/__pycache__", "**/*.pyc"]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.9.10,<0.10.0"]
+build-backend = "uv_build"

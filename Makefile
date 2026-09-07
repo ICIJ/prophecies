@@ -1,4 +1,4 @@
-CURRENT_VERSION := $(shell poetry version -s)
+CURRENT_VERSION := $(shell uv version --short)
 SEMVERS := major minor patch
 FRONT_PREFIX := prophecies/apps/frontend
 
@@ -11,31 +11,31 @@ install: install-pip install-yarn
 install-dev: install-pip-dev install-yarn
 
 install-pip-dev:
-		poetry install --with dev
+		uv sync
 
 install-pip:
-		poetry install
+		uv sync --no-dev
 
 install-yarn:
 		yarn
 
 migrate:
-		poetry run python manage.py migrate
+		uv run python manage.py migrate
 
 makemigrations:
-		poetry run python manage.py makemigrations
+		uv run python manage.py makemigrations
 
 run:
-		poetry run python manage.py runserver 0.0.0.0:8008
+		uv run python manage.py runserver 0.0.0.0:8008
 
 update:
-	  poetry update
+	  uv lock --upgrade
 		yarn upgrade
 
 test: test-back test-front
 
 test-back:
-		poetry run python manage.py test --settings=prophecies.settings.test
+		uv run python manage.py test --settings=prophecies.settings.test
 
 test-front:
 		yarn test:unit
@@ -43,7 +43,7 @@ test-front:
 
 # Requires the `entr` binary (can be installed with apt)
 entr-test:
-		find . -name '*.py' | entr poetry run python manage.py test --settings=prophecies.settings.test
+		find . -name '*.py' | entr uv run python manage.py test --settings=prophecies.settings.test
 
 webpack-build:
 		yarn build
@@ -52,26 +52,26 @@ webpack-serve:
 		yarn serve
 
 shell:
-		poetry run python manage.py shell
+		uv run python manage.py shell
 
 createsuperuser:
-		poetry run python manage.py createsuperuser
+		uv run python manage.py createsuperuser
 
 $(SEMVERS):
-		poetry version $@
+		uv version --bump $@
 		npm version --prefix ${FRONT_PREFIX} $@
 		$(MAKE) tag-version
 
 set-version:
-		poetry version ${CURRENT_VERSION}
+		uv version ${CURRENT_VERSION}
 		npm version ${CURRENT_VERSION} --prefix ${FRONT_PREFIX}
 		$(MAKE) tag-version
 
 tag-version:
-		git commit -m "build: bump to v${CURRENT_VERSION}" pyproject.toml ${FRONT_PREFIX}/package.json
+		git commit -m "build: bump to v${CURRENT_VERSION}" pyproject.toml uv.lock ${FRONT_PREFIX}/package.json
 		git tag v${CURRENT_VERSION}
 
-poetry-build:
-		poetry build	
+uv-build:
+		uv build
 
-build: webpack-build poetry-build
+build: webpack-build uv-build
