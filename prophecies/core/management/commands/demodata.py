@@ -11,10 +11,13 @@ Usage::
 """
 
 import random
+from datetime import timedelta
 
+from actstream.models import Action
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from django.utils import timezone
 
 from prophecies.core.models import (
     Choice,
@@ -24,6 +27,7 @@ from prophecies.core.models import (
     TaskRecord,
     TaskRecordReview,
     Tip,
+    UserNotification,
 )
 
 PROJECT_NAME = "Aurora Leaks"
@@ -60,17 +64,37 @@ PEOPLE = (
     ["Lindqvist", "Oyelaran", "Ferrari", "Novak", "Ibrahim", "Costa", "Nakamura"],
 )
 
+# {mention} is filled with a checker other than the note's author
+NOTES = [
+    "Two companies share this address — worth a second look.",
+    "{mention} can you confirm the registry spelling here?",
+    "Source document is unreadable for this row.",
+    "{mention} please double-check this one before we close the round.",
+    "Matches an officer we already cleared in the previous batch.",
+    "The registry lists a different jurisdiction than the filing does.",
+    "Flagging for {mention}: this looks like a nominee address.",
+    "Kept the original: the predicted value drops the suffix.",
+]
+
+# One tip per task, in task order, so every task has something to show
 TIPS = [
-    (
-        "Spotting a nominee director",
-        "A director sitting on **dozens** of unrelated companies at the same "
-        "registered address is usually a nominee, not a decision maker.",
-    ),
     (
         "Jurisdiction vs. address",
         "The registered address is not always in the jurisdiction of "
         "incorporation. Check the incorporation document before flagging a "
         "mismatch as an error.",
+    ),
+    (
+        "Transliterated and reversed names",
+        "Registries store names in any order and any transliteration: "
+        "`OYELARAN, CHIARA` and `Chiara Oyelaran` are the same officer. Mark "
+        "**Misspelled** only when the letters are wrong, not the order.",
+    ),
+    (
+        "Spotting a nominee address",
+        "An address shared by **dozens** of unrelated companies is usually a "
+        "service provider's front desk, not a real office. Leave a note when "
+        "you see one.",
     ),
     (
         "When in doubt, leave a note",
@@ -93,6 +117,12 @@ class Command(BaseCommand):
         parser.add_argument("--seed", type=int, default=42, help="Random seed.")
         parser.add_argument(
             "--records", type=int, default=120, help="Records per task."
+        )
+        parser.add_argument(
+            "--days",
+            type=int,
+            default=21,
+            help="Spread the reviews, tips and activity over this many past days.",
         )
 
     @transaction.atomic
@@ -127,14 +157,16 @@ class Command(BaseCommand):
             self.create_records(rng, task, options["records"])
             self.create_reviews(rng, task)
 
-        for name, description in TIPS:
+        for i, (name, description) in enumerate(TIPS):
             Tip.objects.create(
                 name=name,
                 description=description,
                 project=project,
-                task=rng.choice(tasks),
+                task=tasks[i % len(tasks)],
                 creator=admin,
             )
+
+        self.spread_timestamps(rng, options["days"])
 
         self.stdout.write(
             self.style.SUCCESS(
@@ -143,6 +175,38 @@ class Command(BaseCommand):
                 f"{len(users)} users (password: {PASSWORD})."
             )
         )
+
+    def spread_timestamps(self, rng, days):
+        """Back-date reviews, tips and activity over the last `days` days.
+
+        Everything is created within the same second otherwise, which makes the
+        history and notification feeds look like what they are: one script run.
+        """
+        now = timezone.now()
+
+        def backdated():
+            return now - timedelta(
+                days=rng.randint(0, max(days - 1, 0)),
+                seconds=rng.randint(0, 24 * 3600),
+            )
+
+        for review in TaskRecordReview.objects.all():
+            created = backdated()
+            # update() to bypass auto_now/auto_now_add and the review signals
+            TaskRecordReview.objects.filter(pk=review.pk).update(
+                created_at=created,
+                updated_at=created,
+                note_created_at=created if review.note else None,
+                note_updated_at=created if review.note else None,
+            )
+        for tip in Tip.objects.all():
+            created = backdated()
+            Tip.objects.filter(pk=tip.pk).update(created_at=created, updated_at=created)
+        for action in Action.objects.all():
+            timestamp = backdated()
+            Action.objects.filter(pk=action.pk).update(timestamp=timestamp)
+            # a notification is as old as the action it announces
+            UserNotification.objects.filter(action=action).update(created_at=timestamp)
 
     def task_specs(self):
         """Yield (task kwargs, choices) pairs, one per demo task."""
@@ -153,6 +217,7 @@ class Command(BaseCommand):
                     description="Is the predicted country of incorporation right?",
                     rounds=2,
                     color="#31807D",
+                    record_link_template="https://registry.example.org/company/{uid}",
                 ),
                 "Is the country correct?",
                 [
@@ -167,6 +232,7 @@ class Command(BaseCommand):
                     description="Check the spelling of each officer name.",
                     rounds=3,
                     color="#a4287d",
+                    record_link_template="https://registry.example.org/officer/{uid}",
                 ),
                 "Name check",
                 [
@@ -182,6 +248,7 @@ class Command(BaseCommand):
                     description="Is this address usable as-is?",
                     rounds=1,
                     color="#1f6fb2",
+                    record_link_template="https://registry.example.org/address/{uid}",
                 ),
                 "Address quality",
                 [
@@ -244,13 +311,13 @@ class Command(BaseCommand):
                     review.choice = rng.choice(choices)
                     if review.choice.require_alternative_value:
                         review.alternative_value = record.predicted_value.title()
-                    if rng.random() < 0.06:
-                        review.note = rng.choice(
-                            [
-                                "Two companies share this address — worth a second look.",
-                                "@nadia can you confirm the registry spelling here?",
-                                "Source document is unreadable for this row.",
-                                "@demo please double-check before we close this round.",
-                            ]
+                    if rng.random() < 0.08:
+                        others = [c for c in checkers if c != checker]
+                        # Weight the demo user, so a session logged in as
+                        # "demo" has notifications of its own to show
+                        others += [c for c in others if c.username == "demo"] * 3
+                        other = rng.choice(others)
+                        review.note = rng.choice(NOTES).format(
+                            mention=f"@{other.username}"
                         )
                 review.save()
