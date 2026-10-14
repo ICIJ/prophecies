@@ -2,6 +2,7 @@ from actstream import action
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import exceptions, viewsets
 from rest_framework import decorators
+from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_json_api import serializers
@@ -149,20 +150,23 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
     ),
 )
 class TaskRecordViewSet(viewsets.ModelViewSet):
-    queryset = TaskRecord.objects.all()
+    # Queryset is overridden within the `get_queryset` method
+    queryset = TaskRecord.objects.none()
     serializer_class = TaskRecordSerializer
     ordering = ["-id"]
     permission_classes = [IsAuthenticated]
     filterset_class = TaskRecordFilter
 
-    def get_task_record(self, pk):
-        try:
-            return TaskRecord.objects.get(pk=pk)
-        except TaskRecord.DoesNotExist:
-            raise exceptions.NotFound()
+    def get_queryset(self):
+        """
+        All the task records from tasks the currently authenticated user checks.
+        """
+        if not self.request.user.is_authenticated:
+            return TaskRecord.objects.none()
+        return TaskRecord.objects.user_scope(self.request.user)
 
     @decorators.action(methods=["get"], detail=True)
-    def actions(self, request, pk=None, **_kwargs):
+    def actions(self, request, **_kwargs):
         """
         List of actions performed over this task record.
         """
@@ -170,7 +174,7 @@ class TaskRecordViewSet(viewsets.ModelViewSet):
         # the serialized data is correct (the render uses this view property
         # to find the current type).
         self.resource_name = "Action"
-        queryset = self.get_task_record(pk).actions.order_by("-timestamp").all()
+        queryset = self.get_object().actions.order_by("-timestamp").all()
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = ActionSerializer(page, many=True, context={"request": request})
@@ -183,7 +187,7 @@ class TaskRecordViewSet(viewsets.ModelViewSet):
             raise exceptions.PermissionDenied(
                 detail="You do not have permission to update this resource"
             )
-        if not obj.task.is_open:
+        if request.method not in permissions.SAFE_METHODS and not obj.task.is_open:
             raise exceptions.PermissionDenied(
                 detail="You do not have permission to update a resource from a locked or closed task"
             )
