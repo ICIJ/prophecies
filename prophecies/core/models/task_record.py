@@ -19,6 +19,9 @@ class StatusType(models.TextChoices):
 
 class TaskRecordManager(models.Manager):
 
+    def user_scope(self, user):
+        return self.filter(task__in=user.task.all())
+
     def get_by_uid(self, uid, task=None):
         if not uid:
             return None

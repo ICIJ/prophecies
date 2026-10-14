@@ -225,3 +225,16 @@ class TestTaskRecord(TestCase):
     def test_show_a_pretty_list_of_no_checkers(self):
         task_record = TaskRecord.objects.create(task=self.transactions_task)
         self.assertEqual(task_record.checkers_pretty, 'nobody')
+
+    def test_user_scope_returns_records_of_tasks_the_user_checks(self):
+        olivia = User.objects.create(username='olivia')
+        self.transactions_task.checkers.add(olivia)
+        record = TaskRecord.objects.create(task=self.transactions_task)
+        self.assertEqual(list(TaskRecord.objects.user_scope(olivia)), [record])
+
+    def test_user_scope_excludes_records_of_other_tasks(self):
+        olivia = User.objects.create(username='olivia')
+        self.transactions_task.checkers.add(olivia)
+        other_task = Task.objects.create(name='Addresses', project=self.project)
+        TaskRecord.objects.create(task=other_task)
+        self.assertEqual(TaskRecord.objects.user_scope(olivia).count(), 0)
