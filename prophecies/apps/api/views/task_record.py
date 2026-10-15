@@ -123,10 +123,6 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
         operation_id="List TaskRecords",
         description="Returns a list of TaskRecords.",
     ),
-    create=extend_schema(
-        operation_id="Create TaskRecord",
-        description="Create a single TaskRecord.",
-    ),
     retrieve=extend_schema(
         operation_id="Get TaskRecord",
         description="Get a single TaskRecord using an ID.",
@@ -134,14 +130,6 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
     update=extend_schema(
         operation_id="Update TaskRecord",
         description="Update a single TaskRecord using an ID.",
-    ),
-    partial_update=extend_schema(
-        operation_id="Partial Update TaskRecord",
-        description="Partial update a single TaskRecord using an ID.",
-    ),
-    destroy=extend_schema(
-        operation_id="Destroy TaskRecord",
-        description="Destroy a single TaskRecord using an ID.",
     ),
     actions=extend_schema(exclude=True),
     relationships_actions=extend_schema(
@@ -152,6 +140,7 @@ class TaskRecordSerializer(serializers.HyperlinkedModelSerializer):
 class TaskRecordViewSet(viewsets.ModelViewSet):
     # Queryset is overridden within the `get_queryset` method
     queryset = TaskRecord.objects.none()
+    http_method_names = ["get", "put", "head", "options"]
     serializer_class = TaskRecordSerializer
     ordering = ["-id"]
     permission_classes = [IsAuthenticated]
