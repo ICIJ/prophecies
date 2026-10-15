@@ -2,6 +2,7 @@ from actstream import action
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import exceptions, viewsets
 from rest_framework import decorators
+from rest_framework.generics import get_object_or_404
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -163,7 +164,9 @@ class TaskRecordViewSet(viewsets.ModelViewSet):
         # the serialized data is correct (the render uses this view property
         # to find the current type).
         self.resource_name = "Action"
-        queryset = self.get_object().actions.order_by("-timestamp").all()
+        task_record = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+        self.check_object_permissions(request, task_record)
+        queryset = task_record.actions.order_by("-timestamp").all()
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = ActionSerializer(page, many=True, context={"request": request})
