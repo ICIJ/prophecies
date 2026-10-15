@@ -276,3 +276,35 @@ class TestTaskRecord(TestCase):
         self.client.login(username='django', password='django')
         request = self.client.get(f'/api/v1/task-records/{task_record.id}/relationships/actions/')
         self.assertEqual(request.status_code, 200)
+
+    def test_they_cannot_create_a_record(self):
+        self.client.login(username='django', password='django')
+        payload = {'data': {'type': 'TaskRecord', 'attributes': {'originalValue': 'new'}}}
+        request = self.client.post('/api/v1/task-records/', payload,
+                                   content_type='application/vnd.api+json')
+        self.assertEqual(request.status_code, 405)
+
+    def test_they_cannot_delete_a_record(self):
+        task_record = TaskRecord.objects.create(task=self.task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
+        self.client.login(username='django', password='django')
+        request = self.client.delete(f'/api/v1/task-records/{task_record.id}/')
+        self.assertEqual(request.status_code, 405)
+        self.assertTrue(TaskRecord.objects.filter(id=task_record.id).exists())
+
+    def test_they_cannot_partially_update_a_record(self):
+        task_record = TaskRecord.objects.create(task=self.task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
+        self.client.login(username='django', password='django')
+        payload = {
+            'data': {
+                'type': 'TaskRecord',
+                'id': str(task_record.id),
+                'attributes': {
+                    'locked': True
+                }
+            }
+        }
+        request = self.client.patch(f'/api/v1/task-records/{task_record.id}/', payload,
+                                    content_type='application/vnd.api+json')
+        self.assertEqual(request.status_code, 405)
