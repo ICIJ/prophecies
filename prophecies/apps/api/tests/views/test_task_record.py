@@ -262,3 +262,17 @@ class TestTaskRecord(TestCase):
         self.client.login(username='django', password='django')
         request = self.client.get(f'/api/v1/task-records/{task_record.id}/')
         self.assertEqual(request.status_code, 200)
+
+    def test_they_can_get_a_record_they_do_not_review(self):
+        task_record = TaskRecord.objects.create(task=self.task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
+        self.client.login(username='django', password='django')
+        request = self.client.get(f'/api/v1/task-records/{task_record.id}/')
+        self.assertEqual(request.status_code, 200)
+
+    def test_they_can_get_actions_of_a_record_they_do_not_review(self):
+        task_record = TaskRecord.objects.create(task=self.task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.olivia)
+        self.client.login(username='django', password='django')
+        request = self.client.get(f'/api/v1/task-records/{task_record.id}/relationships/actions/')
+        self.assertEqual(request.status_code, 200)

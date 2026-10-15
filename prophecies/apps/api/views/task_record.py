@@ -183,11 +183,13 @@ class TaskRecordViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def check_object_permissions(self, request, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return
         if not request.user in obj.checkers:
             raise exceptions.PermissionDenied(
                 detail="You do not have permission to update this resource"
             )
-        if request.method not in permissions.SAFE_METHODS and not obj.task.is_open:
+        if not obj.task.is_open:
             raise exceptions.PermissionDenied(
                 detail="You do not have permission to update a resource from a locked or closed task"
             )
