@@ -77,7 +77,7 @@
 
 {% block userlinks %}
   {% if user.is_authenticated %}
-    {% optional_logout request user %}
+    {% optional_logout request user csrf_token %}
     {% if user.is_staff %}
       <li class="navbar-link">
         <a href="{% url 'admin:index' %}">Admin Panel</a>
