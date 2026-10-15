@@ -321,3 +321,10 @@ class TestTaskRecord(TestCase):
         self.client.login(username='django', password='django')
         request = self.client.get('/api/v1/task-records/abc/relationships/actions/')
         self.assertEqual(request.status_code, 404)
+
+    def test_list_hides_records_from_a_sibling_task_of_their_project(self):
+        sibling_task = Task.objects.create(name="addresses", project=self.task.project)
+        TaskRecord.objects.create(task=sibling_task)
+        self.client.login(username='django', password='django')
+        request = self.client.get('/api/v1/task-records/')
+        self.assertEqual(request.json().get('data'), [])
