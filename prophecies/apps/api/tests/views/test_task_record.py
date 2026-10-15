@@ -308,3 +308,16 @@ class TestTaskRecord(TestCase):
         request = self.client.patch(f'/api/v1/task-records/{task_record.id}/', payload,
                                     content_type='application/vnd.api+json')
         self.assertEqual(request.status_code, 405)
+
+    def test_they_can_get_actions_of_a_record_with_a_list_filter(self):
+        task_record = TaskRecord.objects.create(task=self.task)
+        TaskRecordReview.objects.create(task_record=task_record, checker=self.django)
+        self.client.login(username='django', password='django')
+        request = self.client.get(f'/api/v1/task-records/{task_record.id}/relationships/actions/'
+                                  '?filter[reviewed]=1')
+        self.assertEqual(request.status_code, 200)
+
+    def test_actions_of_a_non_numeric_record_id_is_not_found(self):
+        self.client.login(username='django', password='django')
+        request = self.client.get('/api/v1/task-records/abc/relationships/actions/')
+        self.assertEqual(request.status_code, 404)
